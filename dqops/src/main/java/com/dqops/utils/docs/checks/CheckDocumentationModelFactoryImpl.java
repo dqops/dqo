@@ -97,7 +97,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         put("volume", "Evaluates the overall quality of the table by verifying the number of rows.");
         put("timeliness", "Assesses the freshness and staleness of data, as well as data ingestion delay and reload lag for partitioned data.");
         put("accuracy", "Compares the tested table with another (reference) table.");
-        put("sql", "Validate data against user-defined SQL queries at the table level. Checks in this group allow for validation that the set percentage of rows passed a custom SQL expression or that the custom SQL expression is not outside the set range.");
+        put("custom_sql", "Validate data against user-defined SQL queries at the table level. Checks in this group allow for validation that the set percentage of rows passed a custom SQL expression or that the custom SQL expression is not outside the set range.");
         put("availability", "Checks whether the table is accessible and available for use.");
         put("anomaly", "Detects anomalous (unexpected) changes and outliers in the time series of data quality results collected over a period of time.");
         put("schema", "Detects schema drifts such as columns added, removed, reordered or the data types of columns have changed.");
@@ -106,11 +106,11 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
     private static final Map<String, String> COLUMN_CATEGORY_HELP = new LinkedHashMap<>() {{
         put("nulls", "Checks for the presence of null or missing values in a column.");
         put("numeric", "Validates that the data in a numeric column is in the expected format or within predefined ranges.");
-        put("strings", "Validates that the data in a string column match the expected format or pattern.");
+        put("text", "Validates that the data in a string column match the expected format or pattern.");
         put("uniqueness", "Counts the number or percent of duplicate or unique values in a column.");
         put("datetime", "Validates that the data in a date or time column is in the expected format and within predefined ranges.");
         put("pii", "Checks for the presence of sensitive or personally identifiable information (PII) in a column such as email, phone, zip code, IP4 and IP6 addresses.");
-        put("sql", "Validate data against user-defined SQL queries at the column level. Checks in this group allows to validate that the set percentage of rows passed a custom SQL expression or that the custom SQL expression is not outside the set range.");
+        put("custom_sql", "Validate data against user-defined SQL queries at the column level. Checks in this group allows to validate that the set percentage of rows passed a custom SQL expression or that the custom SQL expression is not outside the set range.");
         put("bool", "Calculates the percentage of data in a Boolean format.");
         put("integrity", "Checks the referential integrity of a column against a column in another table.");
         put("anomaly", "Detects anomalous (unexpected) changes and outliers in the time series of data quality results collected over a period of time.");
@@ -175,6 +175,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
     private TableSpec createTableSpec(boolean addAnalyzedColumn) {
         TableSpec tableSpec = new TableSpec();
         tableSpec.setPhysicalTableName(new PhysicalTableName("target_schema", "target_table"));
+        tableSpec.setIncrementalTimeWindow(null);
 
         if (addAnalyzedColumn) {
             ColumnSpec columnSpec = createColumnWithLabel("This is the column that is analyzed for data quality issues");
@@ -369,6 +370,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         if (checkRootContainer.getCheckType() == CheckType.partitioned) {
             trimmedTableSpec.getColumns().put("date_column", createColumnWithLabel("date or datetime column used as a daily or monthly partitioning key, dates (and times) are truncated to a day or a month by the sensor's query for partitioned checks"));
             trimmedTableSpec.getTimestampColumns().setPartitionByColumn("date_column");
+            trimmedTableSpec.setIncrementalTimeWindow(new PartitionIncrementalTimeWindowSpec());
         }
 
         CheckContainerModel allChecksModel = new CheckContainerModel();
