@@ -43,7 +43,7 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_number_below_min_value", o -> o.monthlyPartitionNumberBelowMinValue);
             put("monthly_partition_number_above_max_value", o -> o.monthlyPartitionNumberAboveMaxValue);
             put("monthly_partition_negative_values", o -> o.monthlyPartitionNegativeValues);
-            put("monthly_partition_negative_percent", o -> o.monthlyPartitionNegativeValuesPercent);
+            put("monthly_partition_negative_values_percent", o -> o.monthlyPartitionNegativeValuesPercent);
             put("monthly_partition_number_below_min_value_percent", o -> o.monthlyPartitionNumberBelowMinValuePercent);
             put("monthly_partition_number_above_max_value_percent", o -> o.monthlyPartitionNumberAboveMaxValuePercent);
             put("monthly_partition_number_in_range_percent", o -> o.monthlyPartitionNumberInRangePercent);
@@ -67,7 +67,7 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_invalid_longitude", o -> o.monthlyPartitionInvalidLongitude);
             put("monthly_partition_valid_longitude_percent", o -> o.monthlyPartitionValidLongitudePercent);
             put("monthly_partition_non_negative_values", o -> o.monthlyPartitionNonNegativeValues);
-            put("monthly_partition_non_negative_percent", o -> o.monthlyPartitionNonNegativeValuesPercent);
+            put("monthly_partition_non_negative_values_percent", o -> o.monthlyPartitionNonNegativeValuesPercent);
         }
     };
 

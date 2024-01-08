@@ -54,10 +54,10 @@ public class ColumnTextMonthlyMonitoringChecksSpec extends AbstractCheckCategory
             put("monthly_text_parsable_to_float_percent", o -> o.monthlyTextParsableToFloatPercent);
             put("monthly_text_parsable_to_date_percent", o -> o.monthlyTextParsableToDatePercent);
 
-            put("monthly_text_surrounded_by_whitespace", o -> o.monthlyStringSurroundedByWhitespace);
-            put("monthly_text_surrounded_by_whitespace_percent", o -> o.monthlyStringSurroundedByWhitespacePercent);
-            put("monthly_text_valid_country_code_percent", o -> o.monthlyStringValidCountryCodePercent);
-            put("monthly_text_valid_currency_code_percent", o -> o.monthlyStringValidCurrencyCodePercent);
+            put("monthly_text_surrounded_by_whitespace", o -> o.monthlyTextSurroundedByWhitespace);
+            put("monthly_text_surrounded_by_whitespace_percent", o -> o.monthlyTextSurroundedByWhitespacePercent);
+            put("monthly_text_valid_country_code_percent", o -> o.monthlyTextValidCountryCodePercent);
+            put("monthly_text_valid_currency_code_percent", o -> o.monthlyTextValidCurrencyCodePercent);
         }
     };
 
@@ -100,16 +100,16 @@ public class ColumnTextMonthlyMonitoringChecksSpec extends AbstractCheckCategory
     private ColumnTextParsableToDatePercentCheckSpec monthlyTextParsableToDatePercent;
 
     @JsonPropertyDescription("The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Stores the most recent captured value for each month when the data quality check was evaluated.")
-    private ColumnTextSurroundedByWhitespaceCheckSpec monthlyStringSurroundedByWhitespace;
+    private ColumnTextSurroundedByWhitespaceCheckSpec monthlyTextSurroundedByWhitespace;
 
     @JsonPropertyDescription("Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.")
-    private ColumnTextSurroundedByWhitespacePercentCheckSpec monthlyStringSurroundedByWhitespacePercent;
+    private ColumnTextSurroundedByWhitespacePercentCheckSpec monthlyTextSurroundedByWhitespacePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.")
-    private ColumnTextValidCountryCodePercentCheckSpec monthlyStringValidCountryCodePercent;
+    private ColumnTextValidCountryCodePercentCheckSpec monthlyTextValidCountryCodePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of valid currency codes in a text column does not fall below the minimum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.")
-    private ColumnTextValidCurrencyCodePercentCheckSpec monthlyStringValidCurrencyCodePercent;
+    private ColumnTextValidCurrencyCodePercentCheckSpec monthlyTextValidCurrencyCodePercent;
 
 
     /**
@@ -332,72 +332,72 @@ public class ColumnTextMonthlyMonitoringChecksSpec extends AbstractCheckCategory
      * Returns a minimum string valid dates percent check.
      * @return Minimum string valid dates percent check.
      */
-    public ColumnTextSurroundedByWhitespaceCheckSpec getMonthlyStringSurroundedByWhitespace() {
-        return monthlyStringSurroundedByWhitespace;
+    public ColumnTextSurroundedByWhitespaceCheckSpec getMonthlyTextSurroundedByWhitespace() {
+        return monthlyTextSurroundedByWhitespace;
     }
 
     /**
      * Sets a new definition of a string surrounded by whitespace count check.
-     * @param monthlyStringSurroundedByWhitespace String surrounded by whitespace count check.
+     * @param monthlyTextSurroundedByWhitespace String surrounded by whitespace count check.
      */
-    public void setMonthlyStringSurroundedByWhitespace(ColumnTextSurroundedByWhitespaceCheckSpec monthlyStringSurroundedByWhitespace) {
-        this.setDirtyIf(!Objects.equals(this.monthlyStringSurroundedByWhitespace, monthlyStringSurroundedByWhitespace));
-        this.monthlyStringSurroundedByWhitespace = monthlyStringSurroundedByWhitespace;
-        propagateHierarchyIdToField(monthlyStringSurroundedByWhitespace, "monthly_text_surrounded_by_whitespace");
+    public void setMonthlyTextSurroundedByWhitespace(ColumnTextSurroundedByWhitespaceCheckSpec monthlyTextSurroundedByWhitespace) {
+        this.setDirtyIf(!Objects.equals(this.monthlyTextSurroundedByWhitespace, monthlyTextSurroundedByWhitespace));
+        this.monthlyTextSurroundedByWhitespace = monthlyTextSurroundedByWhitespace;
+        propagateHierarchyIdToField(monthlyTextSurroundedByWhitespace, "monthly_text_surrounded_by_whitespace");
     }
 
     /**
      * Returns a maximum string null placeholder count check.
      * @return Maximum string null placeholder count check.
      */
-    public ColumnTextSurroundedByWhitespacePercentCheckSpec getMonthlyStringSurroundedByWhitespacePercent() {
-        return monthlyStringSurroundedByWhitespacePercent;
+    public ColumnTextSurroundedByWhitespacePercentCheckSpec getMonthlyTextSurroundedByWhitespacePercent() {
+        return monthlyTextSurroundedByWhitespacePercent;
     }
 
     /**
      * Sets a new definition of a string surrounded by whitespace percent check.
-     * @param monthlyStringSurroundedByWhitespacePercent String surrounded by whitespace percent check.
+     * @param monthlyTextSurroundedByWhitespacePercent String surrounded by whitespace percent check.
      */
-    public void setMonthlyStringSurroundedByWhitespacePercent(ColumnTextSurroundedByWhitespacePercentCheckSpec monthlyStringSurroundedByWhitespacePercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyStringSurroundedByWhitespacePercent, monthlyStringSurroundedByWhitespacePercent));
-        this.monthlyStringSurroundedByWhitespacePercent = monthlyStringSurroundedByWhitespacePercent;
-        propagateHierarchyIdToField(monthlyStringSurroundedByWhitespacePercent, "monthly_text_surrounded_by_whitespace_percent");
+    public void setMonthlyTextSurroundedByWhitespacePercent(ColumnTextSurroundedByWhitespacePercentCheckSpec monthlyTextSurroundedByWhitespacePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyTextSurroundedByWhitespacePercent, monthlyTextSurroundedByWhitespacePercent));
+        this.monthlyTextSurroundedByWhitespacePercent = monthlyTextSurroundedByWhitespacePercent;
+        propagateHierarchyIdToField(monthlyTextSurroundedByWhitespacePercent, "monthly_text_surrounded_by_whitespace_percent");
     }
 
     /**
      * Returns a minimum strings in set count check.
      * @return Minimum strings in set count check.
      */
-    public ColumnTextValidCountryCodePercentCheckSpec getMonthlyStringValidCountryCodePercent() {
-        return monthlyStringValidCountryCodePercent;
+    public ColumnTextValidCountryCodePercentCheckSpec getMonthlyTextValidCountryCodePercent() {
+        return monthlyTextValidCountryCodePercent;
     }
 
     /**
      * Sets a new definition of a string valid country code percent check.
-     * @param monthlyStringValidCountryCodePercent String valid country code percent check.
+     * @param monthlyTextValidCountryCodePercent String valid country code percent check.
      */
-    public void setMonthlyStringValidCountryCodePercent(ColumnTextValidCountryCodePercentCheckSpec monthlyStringValidCountryCodePercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyStringValidCountryCodePercent, monthlyStringValidCountryCodePercent));
-        this.monthlyStringValidCountryCodePercent = monthlyStringValidCountryCodePercent;
-        propagateHierarchyIdToField(monthlyStringValidCountryCodePercent, "monthly_text_valid_country_code_percent");
+    public void setMonthlyTextValidCountryCodePercent(ColumnTextValidCountryCodePercentCheckSpec monthlyTextValidCountryCodePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyTextValidCountryCodePercent, monthlyTextValidCountryCodePercent));
+        this.monthlyTextValidCountryCodePercent = monthlyTextValidCountryCodePercent;
+        propagateHierarchyIdToField(monthlyTextValidCountryCodePercent, "monthly_text_valid_country_code_percent");
     }
 
     /**
      * Returns a minimum strings in set percent check.
      * @return Minimum strings in set percent check.
      */
-    public ColumnTextValidCurrencyCodePercentCheckSpec getMonthlyStringValidCurrencyCodePercent() {
-        return monthlyStringValidCurrencyCodePercent;
+    public ColumnTextValidCurrencyCodePercentCheckSpec getMonthlyTextValidCurrencyCodePercent() {
+        return monthlyTextValidCurrencyCodePercent;
     }
 
     /**
      * Sets a new definition of a string valid currency code percent check.
-     * @param monthlyStringValidCurrencyCodePercent String valid currency code percent check.
+     * @param monthlyTextValidCurrencyCodePercent String valid currency code percent check.
      */
-    public void setMonthlyStringValidCurrencyCodePercent(ColumnTextValidCurrencyCodePercentCheckSpec monthlyStringValidCurrencyCodePercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyStringValidCurrencyCodePercent, monthlyStringValidCurrencyCodePercent));
-        this.monthlyStringValidCurrencyCodePercent = monthlyStringValidCurrencyCodePercent;
-        propagateHierarchyIdToField(monthlyStringValidCurrencyCodePercent, "monthly_text_valid_currency_code_percent");
+    public void setMonthlyTextValidCurrencyCodePercent(ColumnTextValidCurrencyCodePercentCheckSpec monthlyTextValidCurrencyCodePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyTextValidCurrencyCodePercent, monthlyTextValidCurrencyCodePercent));
+        this.monthlyTextValidCurrencyCodePercent = monthlyTextValidCurrencyCodePercent;
+        propagateHierarchyIdToField(monthlyTextValidCurrencyCodePercent, "monthly_text_valid_currency_code_percent");
     }
 
 
