@@ -74,34 +74,38 @@ exploring and experimenting with various types of checks and determining the mos
 
 In the previous step we have run profiling checks for imported tables and column using the Advisor. Now, let's review the results.
 
-1. Go to the list of profiling checks by clicking on **Profiling** section, the "crime" table on the tree view and **Profiling checks** tab.
+### Navigate to the Profiling checks editor
 
-    ![Profiling checks list](https://dqops.com/docs/images/getting-started/profiling-checks-list.png)
+To  navigate to the Profiling checks editor, click on **Profiling** section, the "crime" table on the tree view, and **Profiling checks** tab.
 
-    Here you can view the list of all table profiling checks. Noticed the checks that have been activated upon importing new tables have switched on the toggle button.
-    The icons located before the name of each check allow you to: activate and deactivate it, configure settings, run a check, review results, and get more information about it.
- 
-    For activated checks, notice a square next to the name indicating the results of the check runs initiated by the Advisor:
+![Profiling checks list](https://dqops.com/docs/images/getting-started/profiling-checks-list.png)
 
-    - green for a valid result
-    - yellow for a warning
-    - orange for an error
-    - red for a fatal error
+Here you can view the list of all table profiling checks. Noticed the checks that have been activated upon importing new tables have switched on the toggle button.
+The icons located before the name of each check allow you to: activate and deactivate it, configure settings, run a check, review results, and get more information about it.
 
-2. Click the **Results** icon to view more details of the results.
+For activated checks, notice a square next to the name indicating the results of the check runs initiated by the Advisor:
 
-    ![Checking results](https://dqops.com/docs/images/getting-started/checking-results.png)
+- green for a valid result
+- yellow for a warning
+- orange for an error
+- red for a fatal error
 
-    A table will appear with more details about the run check. The check displayed Valid results with the actual value 116 675. 
+### Review the profiling checks results
 
-    You can also review the results of other table checks on the list, as well as review the list of the column-level checks. 
-    Just select the column of interest form the tree view on the left. 
+To review the profiling checks results, click the **Results** icon to view more details of the results.
 
-    On the list of checks you can activate other checks, change their thresholds and run them.
+![Checking results](https://dqops.com/docs/images/getting-started/checking-results.png)
 
-    Note that some activated checks, for example column-level profile_nulls_count and profile_null_percent, do not have thresholds levels set.
-    For those check a [sensor](../../dqo-concepts/sensors/sensors.md) will be executed, and you can view its result on Results details, **Sensor readouts** tab.
-    Based on the results, you can set the threshold for these checks.
+A table will appear with more details about the run check. The check displayed Valid results with the actual value 116 675. 
+
+You can also review the results of other table checks on the list, as well as review the list of the column-level checks. 
+Just select the column of interest form the tree view on the left. 
+
+On the list of checks you can activate other checks, change their thresholds and run them.
+
+Note that some activated checks, for example column-level profile_nulls_count and profile_null_percent, do not have thresholds levels set.
+For those check a [sensor](../../dqo-concepts/sensors/sensors.md) will be executed, and you can view its result on Results details, **Sensor readouts** tab.
+Based on the results, you can set the threshold for these checks.
     
 
 ## Run monitoring checks
