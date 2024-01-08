@@ -10,7 +10,7 @@ You can read [more about incidents and their configuration here](../../working-w
 
 Notifications allow you to monitor data in real-time and receive alerts when active data quality checks exceed alerting thresholds.
 
-A notification contains the most important information about an incident you may want to discover in order to resolve an issue.
+A notification contains the most important information about an incident you may want to review in order to resolve an issue.
 
 
 ## Configure notifications

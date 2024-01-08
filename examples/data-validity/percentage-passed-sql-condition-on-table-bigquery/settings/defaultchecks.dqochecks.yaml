@@ -12,8 +12,13 @@ spec:
         profile_column_count: {}
     column:
       nulls:
-        profile_nulls_count: {}
+        profile_nulls_count:
+          warning:
+            max_count: 1
         profile_nulls_percent: {}
+        profile_not_nulls_count:
+          warning:
+            min_count: 1
   monitoring_daily:
     table:
       volume:
@@ -50,6 +55,9 @@ spec:
           warning:
             max_percent: 10.0
             exact_day: false
+        daily_not_nulls_count:
+          warning:
+            min_count: 1
         daily_not_nulls_percent: {}
       datatype:
         daily_string_datatype_changed:
@@ -63,7 +71,6 @@ spec:
             anomaly_percent: 1.0
       schema:
         daily_column_exists:
-          warning:
-            expected_value: 1
+          warning: {}
         daily_column_type_changed:
           warning: {}

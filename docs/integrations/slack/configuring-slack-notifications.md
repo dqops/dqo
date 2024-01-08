@@ -56,27 +56,24 @@ Slack integration allows you to receive notifications whenever an issue is detec
 
 ## Types of webhooks configuration in DQOps
 
-Configuration of webhooks in DQOps platform can be done in two different ways.
+There are two ways to configure webhooks in the DQOps platform.
 
-First of them is the default webhooks configuration available under Configuration menu, shown on screen below.
+The first method is using the default webhooks configuration available under the Configuration menu, as shown on the screen.
 
-![default-webhooks-page](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configuring-slack-notifications/default-webhooks-page.png)
+![Default webhook configuration](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configuring-slack-notifications/default-webhooks-page.png)
 
-The second way is to configure webhooks on a connection level under the Notifications and Incidents tab, 
-presented in [Configuration steps in DQOps](#configuration-steps-in-dqops) section.
+The second method is configuring webhooks on a connection level under the Notifications and Incidents tab, which is presented
+in the Configuration steps in DQOps section.
 
-DQOps uses both of them when preparing notifications. 
-When the connection does not set the webhook link on it's level,
-the corresponding value from default webhooks is set (e.g. opened incident webhook value).
+DQOps uses the default webhooks configuration by default. If the connection has a different webhooks configuration, this configuration is used.
 
-## Configuration steps in DQOps on a connection level
+## Configure Webhooks on connection level
 
-Here are the steps to add a Webhook URL to DQOps. 
-The example shows the steps to configure webhooks on a connection level, which is similar to the default webhooks.
+To configure webhooks on a connection level in DQOps, follow the steps below. 
 
 1. Open the DQOps application and go to the **Data Sources** section.
 
-    ![dqo-incidents](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configuring-slack-notifications/dqo-incidents.png)
+    ![Navigating to the Incidents section](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configuring-slack-notifications/dqo-incidents.png)
 
 2. In the tree view on the left, select the data source of interest, and select the **Incidents and Notifications** tab.
 
@@ -94,7 +91,7 @@ The example shows the steps to configure webhooks on a connection level, which i
 
         If you would like to receive notification on statuses other than Open, fill in other input fields with Webhook URLs.
 
-## Notification example in Slack
+## Examples of notifications in Slack
 
 Each notification type has a slightly different message.
 

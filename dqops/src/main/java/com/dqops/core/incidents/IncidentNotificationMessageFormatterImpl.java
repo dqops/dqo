@@ -40,7 +40,7 @@ public class IncidentNotificationMessageFormatterImpl implements IncidentNotific
     }
 
     /**
-     * Prepares string for text field of notificaiton message, which is built from multiple fields from it's parameters.
+     * Prepares string for text field of notification message, which is built from multiple fields from its parameters.
      * @param messageParameters A container with parameters that are used to build text field and make up links to application.
      * @return Markdown formatted string
      */

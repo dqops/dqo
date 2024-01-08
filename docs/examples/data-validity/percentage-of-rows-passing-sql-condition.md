@@ -2,7 +2,9 @@
 
 ## Overview
 
-The following example shows how to verify that a minimum percentage of rows passed a custom SQL condition (expression).
+The following example show how you can verify that a minimum percentage of rows passed a custom SQL condition (expression)
+using DQOps platform. By using the [sql_condition_passed_percent](../../../checks/table/sql/sql-condition-passed-percent-on-table.md) table check, we can monitor that
+the percentage of rows passed a custom SQL condition does not fall below the set thresholds. If it does, you will get a warning, error or fatal result.
 
 **PROBLEM**
 
@@ -56,18 +58,19 @@ If the percentage of data falls below 100.0%, a warning alert will be triggered.
 
 The following is a fragment of the `bigquery-public-data.america_health_rankings.ahr` dataset. Some columns were omitted for clarity.
 
-| value | lower_ci | upper_ci | source                                             | source_date |
-|:------|:---------|:---------|:---------------------------------------------------|:------------|
-| 87    | **87**   | **87**   | U.S. Census Bureau, American Community Survey PUMS | 2015-2019   |
-| 87    | **87**   | **87**   | U.S. Census Bureau, American Community Survey PUMS | 2015-2019   |
-| 87    | **86**   | **87**   | U.S. Census Bureau, American Community Survey PUMS | 2015-2019   |
-| 79    | **79**   | **79**   | U.S. Census Bureau, American Community Survey PUMS | 2015-2019   |
-| 87    | **86**   | **87**   | U.S. Census Bureau, American Community Survey PUMS | 2015-2019   |
-| 87    | **87**   | **88**   | U.S. Census Bureau, American Community Survey PUMS | 2015-2019   |
-| 88    | **88**   | **88**   | U.S. Census Bureau, American Community Survey PUMS | 2015-2019   |
-| 77    | **76**   | **77**   | U.S. Census Bureau, American Community Survey PUMS | 2015-2019   |
-| 78    | **78**   | **79**   | U.S. Census Bureau, American Community Survey PUMS | 2015-2019   |
+| value  | lower_ci | upper_ci | source                                                 | source_date   |
+|:-------|:---------|:---------|:-------------------------------------------------------|:--------------|
+| 87     | **87**   | **87**   | U.S. Census Bureau, American Community Survey PUMS     | 2015-2019     |
+| 87     | **87**   | **87**   | U.S. Census Bureau, American Community Survey PUMS     | 2015-2019     |
+| 87     | **86**   | **87**   | U.S. Census Bureau, American Community Survey PUMS     | 2015-2019     |
+| **79** | **82**   | **79**   | **U.S. Census Bureau, American Community Survey PUMS** | **2015-2019** |
+| 87     | **86**   | **87**   | U.S. Census Bureau, American Community Survey PUMS     | 2015-2019     |
+| 87     | **87**   | **88**   | U.S. Census Bureau, American Community Survey PUMS     | 2015-2019     |
+| 88     | **88**   | **88**   | U.S. Census Bureau, American Community Survey PUMS     | 2015-2019     |
+| 77     | **76**   | **77**   | U.S. Census Bureau, American Community Survey PUMS     | 2015-2019     |
+| 78     | **78**   | **79**   | U.S. Census Bureau, American Community Survey PUMS     | 2015-2019     |
 
+You can see that in the fourth row the value in the lower_ci column is bigger than in the upper_ci column. 
 
 ## Running the checks in the example and evaluating the results using the user interface
 
@@ -104,47 +107,49 @@ To execute the check prepared in the example using the [user interface](../../..
 
     ![Run check](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-run-checks1.png)
 
+## Review data quality issues
 
-5. Access the results by clicking the **Results** button.
+To access the results, click on the **Results** button.
 
-    Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
-    The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
-    The Sensor readouts category displays the values obtained by the sensors from the data source.
-    The Execution errors category displays any error that occurred during the check's execution.
+Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
+The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
+The Sensor readouts category displays the values obtained by the sensors from the data source.
+The Execution errors category displays any error that occurred during the check's execution.
 
-    Review the results which should be similar to the one below.
+Review the results which should be similar to the one below.
 
-    ![SQL-condition-passed-percent check results](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-checks-results1.png)
+![SQL-condition-passed-percent check results](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-checks-results1.png)
 
-    The actual value in this example is 92.6%, which is below the minimum threshold level set in the fatal error (95.0%).
-    The check gives a fatal error (notice the red square to the left of the check name).
+The actual value in this example is 92.6%, which is below the minimum threshold level set in the fatal error (95.0%).
+The check gives a fatal error (notice the red square to the left of the check name).
 
+## Review data quality issues on dashboards
 
-6. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
+First you need to synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
 
-    Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
+Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
-7. To review the results on the [data quality dashboards](../../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
-    go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
+To review the results on the [data quality dashboards](../../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
+go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
 
-    Below you can see the results displayed on the **Current validity issues on columns** dashboard located in Data Quality Dimension/Validity group.
-    This dashboard summarizes results from most recently executed checks categorized to Validity dimension.
+Below you can see the results displayed on the **Current validity issues on columns** dashboard located in Data Quality Dimension/Validity group.
+This dashboard summarizes results from most recently executed checks categorized to Validity dimension.
 
-    This dashboard allows filtering data by:
+This dashboard allows filtering data by:
     
-    * time window (from last 7 days to last 3 months)
-    * connection,
-    * schema,
-    * data group,
-    * check category,
-    * check name,
-    * stages,
-    * priorities,
-    * table,
-    * column,
-    * issue severity.
+* time window (from last 7 days to last 3 months)
+* connection,
+* schema,
+* data group,
+* check category,
+* check name,
+* stages,
+* priorities,
+* table,
+* column,
+* issue severity.
     
-    ![SQL-condition-passed-percent results on Current validity issues on columns dashboard](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-checks-results-on-current-validity-issues-dashboard.png)
+![SQL-condition-passed-percent results on Current validity issues on columns dashboard](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-checks-results-on-current-validity-issues-dashboard.png)
 
 ## Change a schedule at the connection level
 
@@ -163,20 +168,45 @@ After importing new tables, DQOps sets the schedule for 12:00 P.M. (noon) every 
 
 4. Select the **Monitoring daily** tab
 
-5. Select the **Run every day at** and change the time, for example, to 10:00. You can also select any other option. 
+5. Select the **Run every day at** and change the time, for example, to 10:00. You can also select any other option.
 
 6. Once you have set the schedule, click on the **Save** button to save your changes.
 
-    By default, scheduler is active. You can turn it off by clicking on notification icon in the top right corner of the screen, and clicking the toggle button.
+   By default, scheduler is active. You can turn it off by clicking on notification icon in the top right corner of the screen, and clicking the toggle button.
 
-    ![Turn off scheduler](https://dqops.com/docs/images/examples/turning-off-scheduler.png)
+   ![Turn off scheduler](https://dqops.com/docs/images/examples/turning-off-scheduler.png)
 
-Once a schedule is set up for a particular connection, it will execute all the checks that have been configured across
-all tables associated with that connection.
+   Once a schedule is set up for a particular connection, it will execute all the checks that have been configured across
+   all tables associated with that connection.
 
-You can [read more about scheduling here](../../../working-with-dqo/schedules/index.md).
+   You can [read more about scheduling here](../../../working-with-dqo/schedules/index.md).
 
-You might also want to check the [Running checks with a scheduler](../../data-quality-monitoring/running-checks-with-a-scheduler.md) example.
+   You might also want to check the [Running checks with a scheduler](../../data-quality-monitoring/running-checks-with-a-scheduler.md) example.
+
+## Review the incidents
+
+When DQOps detect a new issue, it creates a new incident. An incident aggregates data quality issues based on different 
+categories such as a table, data quality, dimension, check category, or check type. 
+To access a summary of incidents that occur during data quality monitoring, navigate to the **Incidents** section.
+
+![Review incidents](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-incidents.png)
+
+On the left side of this screen, there is a list displaying the connections and the number of incidents that have
+occurred for each one. On the right panel, you can view incidents for the connections you have selected, and you can change the status of the incident, 
+as well as filter, sort, and view detailed information about the incidents.
+
+To learn more about incidents go to the [Incidents overview section](../../../working-with-dqo/incidents-and-notifications/incidents.md).
+
+## Notifications
+
+With DQOps you can also receive notifications whenever an issue is detected in  your data and a new incident is created or modified.
+A notification contains the most important information about an incident you may want to review in order to resolve an issue.
+
+An example of notification in Slack is shown below.
+
+![Example of Slack notification](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-slack-notification.png)
+
+Follow the link to learn more about [configuring Slack notification](../../../integrations/slack/configuring-slack-notifications.md). 
 
 ## YAML configuration file
 
