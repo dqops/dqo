@@ -18,7 +18,7 @@ The following reference documentation shows the definition of data quality senso
     of data quality rules.
 
 
-## File format reference 
+## File format references 
 The following reference documentation describes YAML file formats and Parquet schema used by DQOps.
 
  - **DQOps YAML files reference**
@@ -36,8 +36,8 @@ The following reference documentation describes YAML file formats and Parquet sc
 
 
 
-## Other reference
-The remaining reference is found in other parts of the documentation.
+## Other references
+The remaining reference documentation is found in other places.
 
 - [**Data quality check reference**](../checks/index.md) lists all data quality checks supported by DQOps,
   showing also how to configure checks in DQOps YAML files, and what SQL is generated for each data quality check.
