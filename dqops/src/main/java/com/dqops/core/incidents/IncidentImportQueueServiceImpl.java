@@ -97,7 +97,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
             if (connectionIncidentTableUpdater == null) {
                 // create and start a new connection incident loader
                 UserDomainIdentity domainIdentity = this.userDomainIdentityFactory.createDataDomainAdminIdentity(userDomainIdentity.getDataDomainCloud());
-                connectionIncidentTableUpdater = new ConnectionIncidentTableUpdater(domainIdentity, connectionName,
+                connectionIncidentTableUpdater = new ConnectionIncidentTableUpdater(loaderKey, domainIdentity, connectionName,
                         tableIncidentImportBatch, null, null);
                 connectionIncidentLoaders.put(loaderKey, connectionIncidentTableUpdater);
                 connectionIncidentTableUpdater.start();
@@ -126,7 +126,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
             if (connectionIncidentTableUpdater == null) {
                 // create and start a new connection incident loader
                 UserDomainIdentity domainIdentity = this.userDomainIdentityFactory.createDataDomainAdminIdentity(userDomainIdentity.getDataDomainCloud());
-                connectionIncidentTableUpdater = new ConnectionIncidentTableUpdater(domainIdentity, connectionName,
+                connectionIncidentTableUpdater = new ConnectionIncidentTableUpdater(loaderKey, domainIdentity, connectionName,
                         null, incidentStatusChangeParameters, null);
                 connectionIncidentLoaders.put(loaderKey, connectionIncidentTableUpdater);
                 connectionIncidentTableUpdater.start();
@@ -155,7 +155,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
             if (connectionIncidentTableUpdater == null) {
                 // create and start a new connection incident loader
                 UserDomainIdentity domainIdentity = this.userDomainIdentityFactory.createDataDomainAdminIdentity(userDomainIdentity.getDataDomainCloud());
-                connectionIncidentTableUpdater = new ConnectionIncidentTableUpdater(domainIdentity, connectionName,
+                connectionIncidentTableUpdater = new ConnectionIncidentTableUpdater(loaderKey, domainIdentity, connectionName,
                         null, null, incidentIssueUrlChangeParameters);
                 connectionIncidentLoaders.put(loaderKey, connectionIncidentTableUpdater);
                 connectionIncidentTableUpdater.start();
@@ -175,6 +175,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
         private final Queue<IncidentStatusChangeParameters> statusChangeQueue = new LinkedList<>();
         private final Queue<IncidentIssueUrlChangeParameters> issueUrlChangeQueue = new LinkedList<>();
         private final Object loaderLock = new Object();
+        private final DataDomainConnectionKey loaderKey;
         private UserDomainIdentity domainIdentity;
         private String connectionName;
         private IncidentsSnapshot incidentsSnapshot;
@@ -185,17 +186,20 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
 
         /**
          * Creates an incident loader queue for a named connection.
+         * @param loaderKey Loader key under which this object is stored.
          * @param domainIdentity Domain admin identity, identifies the data domain.
          * @param connectionName Target connection name.
          * @param tableIncidentImportBatch Optional table incident import batch to be queued.
          * @param incidentStatusChangeParameters Optional incident status change parameter to be queued.
          * @param incidentIssueUrlChangeParameters Optional incident issueUrl change parameter to be queued.
          */
-        public ConnectionIncidentTableUpdater(UserDomainIdentity domainIdentity,
+        public ConnectionIncidentTableUpdater(DataDomainConnectionKey loaderKey,
+                                              UserDomainIdentity domainIdentity,
                                               String connectionName,
                                               TableIncidentImportBatch tableIncidentImportBatch,
                                               IncidentStatusChangeParameters incidentStatusChangeParameters,
                                               IncidentIssueUrlChangeParameters incidentIssueUrlChangeParameters) {
+            this.loaderKey = loaderKey;
             this.domainIdentity = domainIdentity;
             this.connectionName = connectionName;
             if (tableIncidentImportBatch != null) {
@@ -255,7 +259,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                 while (true) {
                     synchronized (connectionsLock) {
                         if (this.tableIncidentsQueue.isEmpty() && this.statusChangeQueue.isEmpty() && this.issueUrlChangeQueue.isEmpty()) {
-                            connectionIncidentLoaders.remove(connectionName);
+                            connectionIncidentLoaders.remove(this.loaderKey);
                             return;
                         }
                     }
@@ -319,7 +323,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
             }
             catch (Throwable ex) {
                 synchronized (connectionsLock) {
-                    connectionIncidentLoaders.remove(connectionName);
+                    connectionIncidentLoaders.remove(this.loaderKey);
                 }
                 log.error("Failed to load incidents to the incidents table", ex);
             }
