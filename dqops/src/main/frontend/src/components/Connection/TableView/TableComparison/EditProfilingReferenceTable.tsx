@@ -117,7 +117,7 @@ export const EditProfilingReferenceTable = ({
     if (columnCountElem) {
       setShowColumnCount(!!columnCountElem.configured);
     }
-    if (rowCountElem.configured === true) {
+    if (rowCountElem?.configured === true) {
       onChange({
         compare_row_count: {
           warning_difference_percent:
@@ -131,7 +131,7 @@ export const EditProfilingReferenceTable = ({
     } else {
       onChange({ compare_row_count: reference?.default_compare_thresholds });
     }
-    if (columnCountElem.configured === true) {
+    if (columnCountElem?.configured === true) {
       onChange({
         compare_column_count: {
           warning_difference_percent:
@@ -609,7 +609,7 @@ export const EditProfilingReferenceTable = ({
                           checksUI={checksUI}
                           type="row"
                         />
-                      ) : null}
+                      ) : <div className='h-39'></div>}
                       {rowKey ? (
                         <TableLevelResults
                           tableComparisonResults={tableComparisonResults}
@@ -631,7 +631,7 @@ export const EditProfilingReferenceTable = ({
                           checksUI={checksUI}
                           type="column"
                         />
-                      ) : null}
+                      ) : <div className='h-39'></div>}
                       {columnKey ? (
                         <TableLevelResults
                           tableComparisonResults={tableComparisonResults}

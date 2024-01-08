@@ -107,7 +107,8 @@ export default function FirstLineNameConfiguration({
         await TableComparisonsApi.createTableComparisonPartitionedDaily(
           connection,
           schema,
-          table
+          table,
+          requestBody
         )
           .then(() => {
             dispatch(
