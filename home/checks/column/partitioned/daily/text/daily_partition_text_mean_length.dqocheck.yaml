@@ -1,0 +1,9 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: column/text/text_mean_length
+  rule_name: comparison/between_floats
+  help_text: Verifies that the length of a text in a column does not exceed the mean
+    accepted length. Analyzes every daily partition and creates a separate data quality
+    check result with the time period value that identifies the daily partition.

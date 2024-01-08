@@ -1,0 +1,10 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: column/text/text_length_in_range_percent
+  rule_name: comparison/min_percent
+  help_text: The check measures the percentage of those text values with length in
+    the range provided by the user in the column. Analyzes every monthly partition
+    and creates a separate data quality check result with the time period value that
+    identifies the monthly partition.

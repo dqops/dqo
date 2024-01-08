@@ -2,8 +2,9 @@
 apiVersion: dqo/v1
 kind: check
 spec:
-  sensor_name: column/strings/string_valid_currency_code_percent
+  sensor_name: column/text/text_valid_currency_code_percent
   rule_name: comparison/min_percent
-  help_text: Verifies that the percentage of valid currency code in a column does
-    not fall below the minimum accepted percentage. Creates a separate data quality
-    check (and an alert) for each daily partition.
+  help_text: Verifies that the percentage of valid currency codes in a text column
+    does not fall below the minimum accepted percentage. Analyzes every daily partition
+    and creates a separate data quality check result with the time period value that
+    identifies the daily partition.

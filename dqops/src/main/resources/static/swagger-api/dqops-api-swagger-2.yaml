@@ -24684,9 +24684,9 @@ definitions:
       nulls:
         description: "Configuration of null values profilers on a column level."
         $ref: "#/definitions/ColumnNullsStatisticsCollectorsSpec"
-      strings:
-        description: "Configuration of string (text) profilers on a column level."
-        $ref: "#/definitions/ColumnStringsStatisticsCollectorsSpec"
+      text:
+        description: "Configuration of text column profilers on a column level."
+        $ref: "#/definitions/ColumnTextStatisticsCollectorsSpec"
       uniqueness:
         description: "Configuration of profilers that analyse uniqueness of values\
           \ (distinct count)."
@@ -24698,6 +24698,8 @@ definitions:
       sampling:
         description: "Configuration of profilers that collect the column samples."
         $ref: "#/definitions/ColumnSamplingStatisticsCollectorsSpec"
+      strings:
+        $ref: "#/definitions/ColumnTextStatisticsCollectorsSpec"
   ColumnStatisticsModel:
     type: "object"
     properties:
@@ -24771,62 +24773,6 @@ definitions:
         format: "int64"
         description: "The number of the most popular values (with the highest distinct\
           \ count) that are analyzed to find the expected values."
-  ColumnStringsStatisticsCollectorsSpec:
-    type: "object"
-    properties:
-      string_max_length:
-        description: "Configuration of the profiler that finds the maximum string\
-          \ length."
-        $ref: "#/definitions/ColumnStringsStringMaxLengthStatisticsCollectorSpec"
-      string_mean_length:
-        description: "Configuration of the profiler that finds the mean string length."
-        $ref: "#/definitions/ColumnStringsStringMeanLengthStatisticsCollectorSpec"
-      string_min_length:
-        description: "Configuration of the profiler that finds the min string length."
-        $ref: "#/definitions/ColumnStringsStringMinLengthStatisticsCollectorSpec"
-      string_datatype_detect:
-        description: "Configuration of the profiler that detects datatype."
-        $ref: "#/definitions/ColumnStringsStringDatatypeDetectStatisticsCollectorSpec"
-  ColumnStringsStringDatatypeDetectStatisticsCollectorSpec:
-    type: "object"
-    properties:
-      disabled:
-        type: "boolean"
-        description: "Disables this profiler. Only enabled profilers are executed\
-          \ during a profiling process."
-      parameters:
-        description: "Profiler parameters"
-        $ref: "#/definitions/ColumnDatatypeStringDatatypeDetectSensorParametersSpec"
-  ColumnStringsStringMaxLengthStatisticsCollectorSpec:
-    type: "object"
-    properties:
-      disabled:
-        type: "boolean"
-        description: "Disables this profiler. Only enabled profilers are executed\
-          \ during a profiling process."
-      parameters:
-        description: "Profiler parameters"
-        $ref: "#/definitions/ColumnTextTextMaxLengthSensorParametersSpec"
-  ColumnStringsStringMeanLengthStatisticsCollectorSpec:
-    type: "object"
-    properties:
-      disabled:
-        type: "boolean"
-        description: "Disables this profiler. Only enabled profilers are executed\
-          \ during a profiling process."
-      parameters:
-        description: "Profiler parameters"
-        $ref: "#/definitions/ColumnTextTextMeanLengthSensorParametersSpec"
-  ColumnStringsStringMinLengthStatisticsCollectorSpec:
-    type: "object"
-    properties:
-      disabled:
-        type: "boolean"
-        description: "Disables this profiler. Only enabled profilers are executed\
-          \ during a profiling process."
-      parameters:
-        description: "Profiler parameters"
-        $ref: "#/definitions/ColumnTextTextMinLengthSensorParametersSpec"
   ColumnSumAnomalyDifferencingCheckSpec:
     type: "object"
     properties:
@@ -25368,37 +25314,108 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
-      daily_text_length_below_min_length:
-        $ref: "#/definitions/ColumnTextLengthBelowMinLengthCheckSpec"
-      daily_text_max_length:
+      daily_partition_text_max_length:
+        description: "Verifies that the length of a text in a column does not exceed\
+          \ the maximum accepted length. Analyzes every daily partition and creates\
+          \ a separate data quality check result with the time period value that identifies\
+          \ the daily partition."
         $ref: "#/definitions/ColumnTextMaxLengthCheckSpec"
-      daily_text_length_above_max_length:
-        $ref: "#/definitions/ColumnTextLengthAboveMaxLengthCheckSpec"
-      daily_text_length_in_range_percent:
-        $ref: "#/definitions/ColumnTextLengthInRangePercentCheckSpec"
-      daily_text_parsable_to_float_percent:
-        $ref: "#/definitions/ColumnTextParsableToFloatPercentCheckSpec"
-      daily_text_mean_length:
-        $ref: "#/definitions/ColumnTextMeanLengthCheckSpec"
-      daily_text_min_length:
+      daily_partition_text_min_length:
+        description: "Verifies that the length of a text in a column does not fall\
+          \ below the minimum accepted length. Analyzes every daily partition and\
+          \ creates a separate data quality check result with the time period value\
+          \ that identifies the daily partition."
         $ref: "#/definitions/ColumnTextMinLengthCheckSpec"
-      daily_text_parsable_to_date_percent:
-        $ref: "#/definitions/ColumnTextParsableToDatePercentCheckSpec"
-      daily_text_length_above_max_length_percent:
-        $ref: "#/definitions/ColumnTextLengthAboveMaxLengthPercentCheckSpec"
-      daily_text_parsable_to_boolean_percent:
-        $ref: "#/definitions/ColumnTextParsableToBooleanPercentCheckSpec"
-      daily_string_surrounded_by_whitespace:
-        $ref: "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
-      daily_string_valid_country_code_percent:
-        $ref: "#/definitions/ColumnTextValidCountryCodePercentCheckSpec"
-      daily_text_parsable_to_integer_percent:
-        $ref: "#/definitions/ColumnTextParsableToIntegerPercentCheckSpec"
-      daily_string_surrounded_by_whitespace_percent:
-        $ref: "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
-      daily_text_length_below_min_length_percent:
+      daily_partition_text_mean_length:
+        description: "Verifies that the length of a text in a column does not exceed\
+          \ the mean accepted length. Analyzes every daily partition and creates a\
+          \ separate data quality check result with the time period value that identifies\
+          \ the daily partition."
+        $ref: "#/definitions/ColumnTextMeanLengthCheckSpec"
+      daily_partition_text_length_below_min_length:
+        description: "The check counts the number of text values in the column that\
+          \ is below the length defined by the user as a parameter. Analyzes every\
+          \ daily partition and creates a separate data quality check result with\
+          \ the time period value that identifies the daily partition."
+        $ref: "#/definitions/ColumnTextLengthBelowMinLengthCheckSpec"
+      daily_partition_text_length_below_min_length_percent:
+        description: "The check measures the percentage of text values in the column\
+          \ that is below the length defined by the user as a parameter. Analyzes\
+          \ every daily partition and creates a separate data quality check result\
+          \ with the time period value that identifies the daily partition."
         $ref: "#/definitions/ColumnTextLengthBelowMinLengthPercentCheckSpec"
-      daily_string_valid_currency_code_percent:
+      daily_partition_text_length_above_max_length:
+        description: "The check counts the number of text values in the column that\
+          \ is above the length defined by the user as a parameter. Analyzes every\
+          \ daily partition and creates a separate data quality check result with\
+          \ the time period value that identifies the daily partition."
+        $ref: "#/definitions/ColumnTextLengthAboveMaxLengthCheckSpec"
+      daily_partition_text_length_above_max_length_percent:
+        description: "The check measures the percentage of text values in the column\
+          \ that is above the length defined by the user as a parameter. Analyzes\
+          \ every daily partition and creates a separate data quality check result\
+          \ with the time period value that identifies the daily partition."
+        $ref: "#/definitions/ColumnTextLengthAboveMaxLengthPercentCheckSpec"
+      daily_partition_text_length_in_range_percent:
+        description: "The check measures the percentage of those text values with\
+          \ length in the range provided by the user in the column. Analyzes every\
+          \ daily partition and creates a separate data quality check result with\
+          \ the time period value that identifies the daily partition."
+        $ref: "#/definitions/ColumnTextLengthInRangePercentCheckSpec"
+      daily_partition_text_parsable_to_boolean_percent:
+        description: "Verifies that the percentage of text values that are parsable\
+          \ to a boolean value does not fall below the minimum accepted percentage,\
+          \ text values identified as boolean placeholders are: 0, 1, true, false,\
+          \ t, f, yes, no, y, n. Analyzes every daily partition and creates a separate\
+          \ data quality check result with the time period value that identifies the\
+          \ daily partition."
+        $ref: "#/definitions/ColumnTextParsableToBooleanPercentCheckSpec"
+      daily_partition_text_parsable_to_integer_percent:
+        description: "Verifies that the percentage text values that are parsable to\
+          \ an integer value in a column does not fall below the minimum accepted\
+          \ percentage. Analyzes every daily partition and creates a separate data\
+          \ quality check result with the time period value that identifies the daily\
+          \ partition."
+        $ref: "#/definitions/ColumnTextParsableToIntegerPercentCheckSpec"
+      daily_partition_text_parsable_to_float_percent:
+        description: "Verifies that the percentage text values that are parsable to\
+          \ a float value in a column does not fall below the minimum accepted percentage.\
+          \ Analyzes every daily partition and creates a separate data quality check\
+          \ result with the time period value that identifies the daily partition."
+        $ref: "#/definitions/ColumnTextParsableToFloatPercentCheckSpec"
+      daily_partition_text_parsable_to_date_percent:
+        description: "Verifies that the percentage text values that are parsable to\
+          \ a date value in a column does not fall below the minimum accepted percentage.\
+          \ DQOps uses a safe_cast when possible, otherwise the text is verified using\
+          \ a regular expression. Analyzes every daily partition and creates a separate\
+          \ data quality check result with the time period value that identifies the\
+          \ daily partition."
+        $ref: "#/definitions/ColumnTextParsableToDatePercentCheckSpec"
+      daily_partition_string_surrounded_by_whitespace:
+        description: "The check counts the number of text values in the column that\
+          \ are surrounded by whitespace characters and should be trimmed before loading\
+          \ to another table. Analyzes every daily partition and creates a separate\
+          \ data quality check result with the time period value that identifies the\
+          \ daily partition."
+        $ref: "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
+      daily_partition_string_surrounded_by_whitespace_percent:
+        description: "Verifies that the percentage of text values that are surrounded\
+          \ by whitespace characters in a column does not exceed the maximum accepted\
+          \ percentage. Analyzes every daily partition and creates a separate data\
+          \ quality check result with the time period value that identifies the daily\
+          \ partition."
+        $ref: "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
+      daily_partition_string_valid_country_code_percent:
+        description: "Verifies that the percentage of valid country codes in a text\
+          \ column does not fall below the minimum accepted percentage. Analyzes every\
+          \ daily partition and creates a separate data quality check result with\
+          \ the time period value that identifies the daily partition."
+        $ref: "#/definitions/ColumnTextValidCountryCodePercentCheckSpec"
+      daily_partition_string_valid_currency_code_percent:
+        description: "Verifies that the percentage of valid currency codes in a text\
+          \ column does not fall below the minimum accepted percentage. Analyzes every\
+          \ daily partition and creates a separate data quality check result with\
+          \ the time period value that identifies the daily partition."
         $ref: "#/definitions/ColumnTextValidCurrencyCodePercentCheckSpec"
   ColumnTextFoundInSetPercentCheckSpec:
     type: "object"
@@ -26199,38 +26216,109 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
-      monthly_text_length_below_min_length_percent:
-        $ref: "#/definitions/ColumnTextLengthBelowMinLengthPercentCheckSpec"
-      monthly_text_length_below_min_length:
-        $ref: "#/definitions/ColumnTextLengthBelowMinLengthCheckSpec"
-      monthly_text_length_above_max_length:
-        $ref: "#/definitions/ColumnTextLengthAboveMaxLengthCheckSpec"
-      monthly_text_max_length:
+      monthly_partition_text_max_length:
+        description: "Verifies that the length of a text in a column does not exceed\
+          \ the maximum accepted length. Analyzes every monthly partition and creates\
+          \ a separate data quality check result with the time period value that identifies\
+          \ the monthly partition."
         $ref: "#/definitions/ColumnTextMaxLengthCheckSpec"
-      monthly_text_mean_length:
-        $ref: "#/definitions/ColumnTextMeanLengthCheckSpec"
-      monthly_text_min_length:
+      monthly_partition_text_min_length:
+        description: "Verifies that the length of a text in a column does not fall\
+          \ below the minimum accepted length. Analyzes every monthly partition and\
+          \ creates a separate data quality check result with the time period value\
+          \ that identifies the monthly partition."
         $ref: "#/definitions/ColumnTextMinLengthCheckSpec"
-      monthly_text_length_in_range_percent:
-        $ref: "#/definitions/ColumnTextLengthInRangePercentCheckSpec"
-      monthly_text_parsable_to_date_percent:
-        $ref: "#/definitions/ColumnTextParsableToDatePercentCheckSpec"
-      monthly_text_parsable_to_integer_percent:
-        $ref: "#/definitions/ColumnTextParsableToIntegerPercentCheckSpec"
-      monthly_string_valid_currency_code_percent:
-        $ref: "#/definitions/ColumnTextValidCurrencyCodePercentCheckSpec"
-      monthly_text_length_above_max_length_percent:
+      monthly_partition_text_mean_length:
+        description: "Verifies that the length of a text in a column does not exceed\
+          \ the mean accepted length. Analyzes every monthly partition and creates\
+          \ a separate data quality check result with the time period value that identifies\
+          \ the monthly partition."
+        $ref: "#/definitions/ColumnTextMeanLengthCheckSpec"
+      monthly_partition_text_length_below_min_length:
+        description: "The check counts the number of text values in the column that\
+          \ is below the length defined by the user as a parameter. Analyzes every\
+          \ monthly partition and creates a separate data quality check result with\
+          \ the time period value that identifies the monthly partition."
+        $ref: "#/definitions/ColumnTextLengthBelowMinLengthCheckSpec"
+      monthly_partition_text_length_below_min_length_percent:
+        description: "The check measures the percentage of text values in the column\
+          \ that is below the length defined by the user as a parameter. Analyzes\
+          \ every monthly partition and creates a separate data quality check result\
+          \ with the time period value that identifies the monthly partition."
+        $ref: "#/definitions/ColumnTextLengthBelowMinLengthPercentCheckSpec"
+      monthly_partition_text_length_above_max_length:
+        description: "The check counts the number of text values in the column that\
+          \ is above the length defined by the user as a parameter. Analyzes every\
+          \ monthly partition and creates a separate data quality check result with\
+          \ the time period value that identifies the monthly partition."
+        $ref: "#/definitions/ColumnTextLengthAboveMaxLengthCheckSpec"
+      monthly_partition_text_length_above_max_length_percent:
+        description: "The check measures the percentage of text values in the column\
+          \ that is above the length defined by the user as a parameter. Analyzes\
+          \ every monthly partition and creates a separate data quality check result\
+          \ with the time period value that identifies the monthly partition."
         $ref: "#/definitions/ColumnTextLengthAboveMaxLengthPercentCheckSpec"
-      monthly_text_parsable_to_boolean_percent:
+      monthly_partition_text_length_in_range_percent:
+        description: "The check measures the percentage of those text values with\
+          \ length in the range provided by the user in the column. Analyzes every\
+          \ monthly partition and creates a separate data quality check result with\
+          \ the time period value that identifies the monthly partition."
+        $ref: "#/definitions/ColumnTextLengthInRangePercentCheckSpec"
+      monthly_partition_text_parsable_to_boolean_percent:
+        description: "Verifies that the percentage of text values that are parsable\
+          \ to a boolean value does not fall below the minimum accepted percentage,\
+          \ text values identified as boolean placeholders are: 0, 1, true, false,\
+          \ t, f, yes, no, y, n. Analyzes every monthly partition and creates a separate\
+          \ data quality check result with the time period value that identifies the\
+          \ monthly partition."
         $ref: "#/definitions/ColumnTextParsableToBooleanPercentCheckSpec"
-      monthly_string_valid_country_code_percent:
-        $ref: "#/definitions/ColumnTextValidCountryCodePercentCheckSpec"
-      monthly_string_surrounded_by_whitespace:
-        $ref: "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
-      monthly_text_parsable_to_float_percent:
+      monthly_partition_text_parsable_to_integer_percent:
+        description: "Verifies that the percentage text values that are parsable to\
+          \ an integer value in a column does not fall below the minimum accepted\
+          \ percentage. Analyzes every monthly partition and creates a separate data\
+          \ quality check result with the time period value that identifies the monthly\
+          \ partition."
+        $ref: "#/definitions/ColumnTextParsableToIntegerPercentCheckSpec"
+      monthly_partition_text_parsable_to_float_percent:
+        description: "Verifies that the percentage text values that are parsable to\
+          \ a float value in a column does not fall below the minimum accepted percentage.\
+          \ Analyzes every monthly partition and creates a separate data quality check\
+          \ result with the time period value that identifies the monthly partition."
         $ref: "#/definitions/ColumnTextParsableToFloatPercentCheckSpec"
-      monthly_string_surrounded_by_whitespace_percent:
+      monthly_partition_text_parsable_to_date_percent:
+        description: "Verifies that the percentage text values that are parsable to\
+          \ a date value in a column does not fall below the minimum accepted percentage.\
+          \ DQOps uses a safe_cast when possible, otherwise the text is verified using\
+          \ a regular expression. Analyzes every monthly partition and creates a separate\
+          \ data quality check result with the time period value that identifies the\
+          \ monthly partition."
+        $ref: "#/definitions/ColumnTextParsableToDatePercentCheckSpec"
+      monthly_partition_string_surrounded_by_whitespace:
+        description: "The check counts the number of text values in the column that\
+          \ are surrounded by whitespace characters and should be trimmed before loading\
+          \ to another table. Analyzes every monthly partition and creates a separate\
+          \ data quality check result with the time period value that identifies the\
+          \ monthly partition."
+        $ref: "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
+      monthly_partition_string_surrounded_by_whitespace_percent:
+        description: "Verifies that the percentage of text values that are surrounded\
+          \ by whitespace characters in a column does not exceed the maximum accepted\
+          \ percentage. Analyzes every monthly partition and creates a separate data\
+          \ quality check result with the time period value that identifies the monthly\
+          \ partition."
         $ref: "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
+      monthly_partition_string_valid_country_code_percent:
+        description: "Verifies that the percentage of valid country codes in a text\
+          \ column does not fall below the minimum accepted percentage. Analyzes every\
+          \ monthly partition and creates a separate data quality check result with\
+          \ the time period value that identifies the monthly partition."
+        $ref: "#/definitions/ColumnTextValidCountryCodePercentCheckSpec"
+      monthly_partition_string_valid_currency_code_percent:
+        description: "Verifies that the percentage of valid currency codes in a text\
+          \ column does not fall below the minimum accepted percentage. Analyzes every\
+          \ monthly partition and creates a separate data quality check result with\
+          \ the time period value that identifies the monthly partition."
+        $ref: "#/definitions/ColumnTextValidCurrencyCodePercentCheckSpec"
   ColumnTextNotMatchingDatePatternFoundCheckSpec:
     type: "object"
     properties:
@@ -26682,6 +26770,21 @@ definitions:
         description: "Verifies that the percentage of valid currency codes in a text\
           \ column does not fall below the minimum accepted percentage"
         $ref: "#/definitions/ColumnTextValidCurrencyCodePercentCheckSpec"
+  ColumnTextStatisticsCollectorsSpec:
+    type: "object"
+    properties:
+      text_max_length:
+        description: "Configuration of the profiler that finds the maximum text length."
+        $ref: "#/definitions/ColumnTextTextMaxLengthStatisticsCollectorSpec"
+      text_mean_length:
+        description: "Configuration of the profiler that finds the mean text length."
+        $ref: "#/definitions/ColumnTextTextMeanLengthStatisticsCollectorSpec"
+      text_min_length:
+        description: "Configuration of the profiler that finds the min text length."
+        $ref: "#/definitions/ColumnTextTextMinLengthStatisticsCollectorSpec"
+      text_datatype_detect:
+        description: "Configuration of the profiler that detects datatype."
+        $ref: "#/definitions/ColumnTextTextDatatypeDetectStatisticsCollectorSpec"
   ColumnTextSurroundedByWhitespaceCheckSpec:
     type: "object"
     properties:
@@ -26806,6 +26909,16 @@ definitions:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
         $ref: "#/definitions/MaxPercentRule5ParametersSpec"
+  ColumnTextTextDatatypeDetectStatisticsCollectorSpec:
+    type: "object"
+    properties:
+      disabled:
+        type: "boolean"
+        description: "Disables this profiler. Only enabled profilers are executed\
+          \ during a profiling process."
+      parameters:
+        description: "Profiler parameters"
+        $ref: "#/definitions/ColumnDatatypeStringDatatypeDetectSensorParametersSpec"
   ColumnTextTextLengthAboveMaxLengthCountSensorParametersSpec:
     type: "object"
     properties:
@@ -26880,6 +26993,16 @@ definitions:
         type: "string"
         description: "SQL WHERE clause added to the sensor query. Both the table level\
           \ filter and a sensor query filter are added, separated by an AND operator."
+  ColumnTextTextMaxLengthStatisticsCollectorSpec:
+    type: "object"
+    properties:
+      disabled:
+        type: "boolean"
+        description: "Disables this profiler. Only enabled profilers are executed\
+          \ during a profiling process."
+      parameters:
+        description: "Profiler parameters"
+        $ref: "#/definitions/ColumnTextTextMaxLengthSensorParametersSpec"
   ColumnTextTextMeanLengthSensorParametersSpec:
     type: "object"
     properties:
@@ -26887,6 +27010,16 @@ definitions:
         type: "string"
         description: "SQL WHERE clause added to the sensor query. Both the table level\
           \ filter and a sensor query filter are added, separated by an AND operator."
+  ColumnTextTextMeanLengthStatisticsCollectorSpec:
+    type: "object"
+    properties:
+      disabled:
+        type: "boolean"
+        description: "Disables this profiler. Only enabled profilers are executed\
+          \ during a profiling process."
+      parameters:
+        description: "Profiler parameters"
+        $ref: "#/definitions/ColumnTextTextMeanLengthSensorParametersSpec"
   ColumnTextTextMinLengthSensorParametersSpec:
     type: "object"
     properties:
@@ -26894,6 +27027,16 @@ definitions:
         type: "string"
         description: "SQL WHERE clause added to the sensor query. Both the table level\
           \ filter and a sensor query filter are added, separated by an AND operator."
+  ColumnTextTextMinLengthStatisticsCollectorSpec:
+    type: "object"
+    properties:
+      disabled:
+        type: "boolean"
+        description: "Disables this profiler. Only enabled profilers are executed\
+          \ during a profiling process."
+      parameters:
+        description: "Profiler parameters"
+        $ref: "#/definitions/ColumnTextTextMinLengthSensorParametersSpec"
   ColumnTextTextParsableToBooleanPercentSensorParametersSpec:
     type: "object"
     properties:

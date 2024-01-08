@@ -2,8 +2,9 @@
 apiVersion: dqo/v1
 kind: check
 spec:
-  sensor_name: column/strings/string_surrounded_by_whitespace_percent
+  sensor_name: column/text/text_surrounded_by_whitespace_percent
   rule_name: comparison/max_percent
-  help_text: Verifies that the percentage of strings surrounded by whitespace in a
-    column does not exceed the maximum accepted percentage. Creates a separate data
-    quality check (and an alert) for each daily partition.
+  help_text: Verifies that the percentage of text values that are surrounded by whitespace
+    characters in a column does not exceed the maximum accepted percentage. Analyzes
+    every daily partition and creates a separate data quality check result with the
+    time period value that identifies the daily partition.

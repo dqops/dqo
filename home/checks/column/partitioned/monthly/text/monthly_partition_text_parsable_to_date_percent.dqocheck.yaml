@@ -1,0 +1,11 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: column/text/text_parsable_to_date_percent
+  rule_name: comparison/min_percent
+  help_text: "Verifies that the percentage text values that are parsable to a date\
+    \ value in a column does not fall below the minimum accepted percentage. DQOps\
+    \ uses a safe_cast when possible, otherwise the text is verified using a regular\
+    \ expression. Analyzes every monthly partition and creates a separate data quality\
+    \ check result with the time period value that identifies the monthly partition."

@@ -116,7 +116,7 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
      * Returns a maximum string length below check.
      * @return Maximum string length below check.
      */
-    public ColumnTextMaxLengthCheckSpec getMonthlyTextMaxLength() {
+    public ColumnTextMaxLengthCheckSpec getMonthlyPartitionTextMaxLength() {
         return monthlyPartitionTextMaxLength;
     }
 
@@ -124,7 +124,7 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
      * Sets a new definition of a maximum string length check.
      * @param monthlyPartitionTextMaxLength Maximum string length check.
      */
-    public void setMonthlyTextMaxLength(ColumnTextMaxLengthCheckSpec monthlyPartitionTextMaxLength) {
+    public void setMonthlyPartitionTextMaxLength(ColumnTextMaxLengthCheckSpec monthlyPartitionTextMaxLength) {
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionTextMaxLength, monthlyPartitionTextMaxLength));
         this.monthlyPartitionTextMaxLength = monthlyPartitionTextMaxLength;
         propagateHierarchyIdToField(monthlyPartitionTextMaxLength, "monthly_partition_text_max_length");
@@ -134,7 +134,7 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
      * Returns a minimum string length above check.
      * @return Minimum string length above check.
      */
-    public ColumnTextMinLengthCheckSpec getMonthlyTextMinLength() {
+    public ColumnTextMinLengthCheckSpec getMonthlyPartitionTextMinLength() {
         return monthlyPartitionTextMinLength;
     }
 
@@ -142,7 +142,7 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
      * Sets a new definition of a minimum string length check.
      * @param monthlyPartitionTextMinLength Minimum string length check.
      */
-    public void setMonthlyTextMinLength(ColumnTextMinLengthCheckSpec monthlyPartitionTextMinLength) {
+    public void setMonthlyPartitionTextMinLength(ColumnTextMinLengthCheckSpec monthlyPartitionTextMinLength) {
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionTextMinLength, monthlyPartitionTextMinLength));
         this.monthlyPartitionTextMinLength = monthlyPartitionTextMinLength;
         propagateHierarchyIdToField(monthlyPartitionTextMinLength, "monthly_partition_text_min_length");
@@ -152,7 +152,7 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
      * Returns a mean string length between check.
      * @return Mean string length between check.
      */
-    public ColumnTextMeanLengthCheckSpec getMonthlyTextMeanLength() {
+    public ColumnTextMeanLengthCheckSpec getMonthlyPartitionTextMeanLength() {
         return monthlyPartitionTextMeanLength;
     }
 
@@ -160,7 +160,7 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
      * Sets a new definition of a mean string length check.
      * @param monthlyPartitionTextMeanLength Mean string length check.
      */
-    public void setMonthlyTextMeanLength(ColumnTextMeanLengthCheckSpec monthlyPartitionTextMeanLength) {
+    public void setMonthlyPartitionTextMeanLength(ColumnTextMeanLengthCheckSpec monthlyPartitionTextMeanLength) {
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionTextMeanLength, monthlyPartitionTextMeanLength));
         this.monthlyPartitionTextMeanLength = monthlyPartitionTextMeanLength;
         propagateHierarchyIdToField(monthlyPartitionTextMeanLength, "monthly_partition_text_mean_length");
@@ -170,7 +170,7 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
      * Returns a string length below min length count check.
      * @return String length below min length count check.
      */
-    public ColumnTextLengthBelowMinLengthCheckSpec getMonthlyTextLengthBelowMinLength() {
+    public ColumnTextLengthBelowMinLengthCheckSpec getMonthlyPartitionTextLengthBelowMinLength() {
         return monthlyPartitionTextLengthBelowMinLength;
     }
 
@@ -178,7 +178,7 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
      * Sets a new definition of a string length below min length count check.
      * @param monthlyPartitionTextLengthBelowMinLength String length below min length count check.
      */
-    public void setMonthlyTextLengthBelowMinLength(ColumnTextLengthBelowMinLengthCheckSpec monthlyPartitionTextLengthBelowMinLength) {
+    public void setMonthlyPartitionTextLengthBelowMinLength(ColumnTextLengthBelowMinLengthCheckSpec monthlyPartitionTextLengthBelowMinLength) {
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionTextLengthBelowMinLength, monthlyPartitionTextLengthBelowMinLength));
         this.monthlyPartitionTextLengthBelowMinLength = monthlyPartitionTextLengthBelowMinLength;
         propagateHierarchyIdToField(monthlyPartitionTextLengthBelowMinLength, "monthly_partition_text_length_below_min_length");
@@ -188,7 +188,7 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
      * Returns a string length below min length percent check.
      * @return String length below min length percent check.
      */
-    public ColumnTextLengthBelowMinLengthPercentCheckSpec getMonthlyTextLengthBelowMinLengthPercent() {
+    public ColumnTextLengthBelowMinLengthPercentCheckSpec getMonthlyPartitionTextLengthBelowMinLengthPercent() {
         return monthlyPartitionTextLengthBelowMinLengthPercent;
     }
 
@@ -196,7 +196,7 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
      * Sets a new definition of a string length below min length percent check.
      * @param monthlyPartitionTextLengthBelowMinLengthPercent String length below min length percent check.
      */
-    public void setMonthlyTextLengthBelowMinLengthPercent(ColumnTextLengthBelowMinLengthPercentCheckSpec monthlyPartitionTextLengthBelowMinLengthPercent) {
+    public void setMonthlyPartitionTextLengthBelowMinLengthPercent(ColumnTextLengthBelowMinLengthPercentCheckSpec monthlyPartitionTextLengthBelowMinLengthPercent) {
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionTextLengthBelowMinLengthPercent, monthlyPartitionTextLengthBelowMinLengthPercent));
         this.monthlyPartitionTextLengthBelowMinLengthPercent = monthlyPartitionTextLengthBelowMinLengthPercent;
         propagateHierarchyIdToField(monthlyPartitionTextLengthBelowMinLengthPercent, "monthly_partition_text_length_below_min_length_percent");
@@ -206,7 +206,7 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
      * Returns a string length above max length count check.
      * @return String length above max length count check.
      */
-    public ColumnTextLengthAboveMaxLengthCheckSpec getMonthlyTextLengthAboveMaxLength() {
+    public ColumnTextLengthAboveMaxLengthCheckSpec getMonthlyPartitionTextLengthAboveMaxLength() {
         return monthlyPartitionTextLengthAboveMaxLength;
     }
 
@@ -214,7 +214,7 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
      * Sets a new definition of a string length above max length count check.
      * @param monthlyPartitionTextLengthAboveMaxLength String length above max length count check.
      */
-    public void setMonthlyTextLengthAboveMaxLength(ColumnTextLengthAboveMaxLengthCheckSpec monthlyPartitionTextLengthAboveMaxLength) {
+    public void setMonthlyPartitionTextLengthAboveMaxLength(ColumnTextLengthAboveMaxLengthCheckSpec monthlyPartitionTextLengthAboveMaxLength) {
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionTextLengthAboveMaxLength, monthlyPartitionTextLengthAboveMaxLength));
         this.monthlyPartitionTextLengthAboveMaxLength = monthlyPartitionTextLengthAboveMaxLength;
         propagateHierarchyIdToField(monthlyPartitionTextLengthAboveMaxLength, "monthly_partition_text_length_above_max_length");
@@ -224,7 +224,7 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
      * Returns a string length above max length percent check.
      * @return String length above max length percent check.
      */
-    public ColumnTextLengthAboveMaxLengthPercentCheckSpec getMonthlyTextLengthAboveMaxLengthPercent() {
+    public ColumnTextLengthAboveMaxLengthPercentCheckSpec getMonthlyPartitionTextLengthAboveMaxLengthPercent() {
         return monthlyPartitionTextLengthAboveMaxLengthPercent;
     }
 
@@ -232,7 +232,7 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
      * Sets a new definition of a string length above max length percent check.
      * @param monthlyPartitionTextLengthAboveMaxLengthPercent String length above max length percent check.
      */
-    public void setMonthlyTextLengthAboveMaxLengthPercent(ColumnTextLengthAboveMaxLengthPercentCheckSpec monthlyPartitionTextLengthAboveMaxLengthPercent) {
+    public void setMonthlyPartitionTextLengthAboveMaxLengthPercent(ColumnTextLengthAboveMaxLengthPercentCheckSpec monthlyPartitionTextLengthAboveMaxLengthPercent) {
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionTextLengthAboveMaxLengthPercent, monthlyPartitionTextLengthAboveMaxLengthPercent));
         this.monthlyPartitionTextLengthAboveMaxLengthPercent = monthlyPartitionTextLengthAboveMaxLengthPercent;
         propagateHierarchyIdToField(monthlyPartitionTextLengthAboveMaxLengthPercent, "monthly_partition_text_length_above_max_length_percent");
@@ -242,7 +242,7 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
      * Returns a string length in range percent check.
      * @return String length in range percent check.
      */
-    public ColumnTextLengthInRangePercentCheckSpec getMonthlyTextLengthInRangePercent() {
+    public ColumnTextLengthInRangePercentCheckSpec getMonthlyPartitionTextLengthInRangePercent() {
         return monthlyPartitionTextLengthInRangePercent;
     }
 
@@ -250,7 +250,7 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
      * Sets a new definition of a string length in range percent check.
      * @param monthlyPartitionTextLengthInRangePercent String length in range percent check.
      */
-    public void setMonthlyTextLengthInRangePercent(ColumnTextLengthInRangePercentCheckSpec monthlyPartitionTextLengthInRangePercent) {
+    public void setMonthlyPartitionTextLengthInRangePercent(ColumnTextLengthInRangePercentCheckSpec monthlyPartitionTextLengthInRangePercent) {
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionTextLengthInRangePercent, monthlyPartitionTextLengthInRangePercent));
         this.monthlyPartitionTextLengthInRangePercent = monthlyPartitionTextLengthInRangePercent;
         propagateHierarchyIdToField(monthlyPartitionTextLengthInRangePercent, "monthly_partition_text_length_in_range_percent");
@@ -260,7 +260,7 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
      * Returns a minimum string parsable to integer percent check.
      * @return Minimum string parsable to integer percent check.
      */
-    public ColumnTextParsableToBooleanPercentCheckSpec getMonthlyTextParsableToBooleanPercent() {
+    public ColumnTextParsableToBooleanPercentCheckSpec getMonthlyPartitionTextParsableToBooleanPercent() {
         return monthlyPartitionTextParsableToBooleanPercent;
     }
 
@@ -268,7 +268,7 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
      * Sets a new definition of a string boolean placeholder percent check.
      * @param monthlyPartitionTextParsableToBooleanPercent String boolean placeholder percent check.
      */
-    public void setMonthlyTextParsableToBooleanPercent(ColumnTextParsableToBooleanPercentCheckSpec monthlyPartitionTextParsableToBooleanPercent) {
+    public void setMonthlyPartitionTextParsableToBooleanPercent(ColumnTextParsableToBooleanPercentCheckSpec monthlyPartitionTextParsableToBooleanPercent) {
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionTextParsableToBooleanPercent, monthlyPartitionTextParsableToBooleanPercent));
         this.monthlyPartitionTextParsableToBooleanPercent = monthlyPartitionTextParsableToBooleanPercent;
         propagateHierarchyIdToField(monthlyPartitionTextParsableToBooleanPercent, "monthly_partition_text_parsable_to_boolean_percent");
@@ -278,7 +278,7 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
      * Returns a maximum string surrounded by whitespace count check.
      * @return Maximum string surrounded by whitespace count check.
      */
-    public ColumnTextParsableToIntegerPercentCheckSpec getMonthlyTextParsableToIntegerPercent() {
+    public ColumnTextParsableToIntegerPercentCheckSpec getMonthlyPartitionTextParsableToIntegerPercent() {
         return monthlyPartitionTextParsableToIntegerPercent;
     }
 
@@ -286,7 +286,7 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
      * Sets a new definition of a string parsable to integer percent check.
      * @param monthlyPartitionTextParsableToIntegerPercent String parsable to integer percent check.
      */
-    public void setMonthlyTextParsableToIntegerPercent(ColumnTextParsableToIntegerPercentCheckSpec monthlyPartitionTextParsableToIntegerPercent) {
+    public void setMonthlyPartitionTextParsableToIntegerPercent(ColumnTextParsableToIntegerPercentCheckSpec monthlyPartitionTextParsableToIntegerPercent) {
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionTextParsableToIntegerPercent, monthlyPartitionTextParsableToIntegerPercent));
         this.monthlyPartitionTextParsableToIntegerPercent = monthlyPartitionTextParsableToIntegerPercent;
         propagateHierarchyIdToField(monthlyPartitionTextParsableToIntegerPercent, "monthly_partition_text_parsable_to_integer_percent");
@@ -296,7 +296,7 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
      * Returns a maximum string surrounded by whitespace percent check.
      * @return Maximum string surrounded by whitespace percent check.
      */
-    public ColumnTextParsableToFloatPercentCheckSpec getMonthlyTextParsableToFloatPercent() {
+    public ColumnTextParsableToFloatPercentCheckSpec getMonthlyPartitionTextParsableToFloatPercent() {
         return monthlyPartitionTextParsableToFloatPercent;
     }
 
@@ -304,7 +304,7 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
      * Sets a new definition of a string parsable to float percent check.
      * @param monthlyPartitionTextParsableToFloatPercent String parsable to float percent check.
      */
-    public void setMonthlyTextParsableToFloatPercent(ColumnTextParsableToFloatPercentCheckSpec monthlyPartitionTextParsableToFloatPercent) {
+    public void setMonthlyPartitionTextParsableToFloatPercent(ColumnTextParsableToFloatPercentCheckSpec monthlyPartitionTextParsableToFloatPercent) {
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionTextParsableToFloatPercent, monthlyPartitionTextParsableToFloatPercent));
         this.monthlyPartitionTextParsableToFloatPercent = monthlyPartitionTextParsableToFloatPercent;
         propagateHierarchyIdToField(monthlyPartitionTextParsableToFloatPercent, "monthly_partition_text_parsable_to_float_percent");
@@ -314,7 +314,7 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
      * Returns a minimum string valid USA phone percent check.
      * @return Minimum string valid USA phone percent check.
      */
-    public ColumnTextParsableToDatePercentCheckSpec getMonthlyTextParsableToDatePercent() {
+    public ColumnTextParsableToDatePercentCheckSpec getMonthlyPartitionTextParsableToDatePercent() {
         return monthlyPartitionTextParsableToDatePercent;
     }
 
@@ -322,7 +322,7 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
      * Sets a new definition of a string valid dates percent check.
      * @param monthlyPartitionTextParsableToDatePercent String valid dates percent check.
      */
-    public void setMonthlyTextParsableToDatePercent(ColumnTextParsableToDatePercentCheckSpec monthlyPartitionTextParsableToDatePercent) {
+    public void setMonthlyPartitionTextParsableToDatePercent(ColumnTextParsableToDatePercentCheckSpec monthlyPartitionTextParsableToDatePercent) {
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionTextParsableToDatePercent, monthlyPartitionTextParsableToDatePercent));
         this.monthlyPartitionTextParsableToDatePercent = monthlyPartitionTextParsableToDatePercent;
         propagateHierarchyIdToField(monthlyPartitionTextParsableToDatePercent, "monthly_partition_text_parsable_to_date_percent");
@@ -332,7 +332,7 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
      * Returns a minimum string valid dates percent check.
      * @return Minimum string valid dates percent check.
      */
-    public ColumnTextSurroundedByWhitespaceCheckSpec getMonthlyStringSurroundedByWhitespace() {
+    public ColumnTextSurroundedByWhitespaceCheckSpec getMonthlyPartitionStringSurroundedByWhitespace() {
         return monthlyPartitionStringSurroundedByWhitespace;
     }
 
@@ -340,7 +340,7 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
      * Sets a new definition of a string surrounded by whitespace count check.
      * @param monthlyPartitionStringSurroundedByWhitespace String surrounded by whitespace count check.
      */
-    public void setMonthlyStringSurroundedByWhitespace(ColumnTextSurroundedByWhitespaceCheckSpec monthlyPartitionStringSurroundedByWhitespace) {
+    public void setMonthlyPartitionStringSurroundedByWhitespace(ColumnTextSurroundedByWhitespaceCheckSpec monthlyPartitionStringSurroundedByWhitespace) {
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringSurroundedByWhitespace, monthlyPartitionStringSurroundedByWhitespace));
         this.monthlyPartitionStringSurroundedByWhitespace = monthlyPartitionStringSurroundedByWhitespace;
         propagateHierarchyIdToField(monthlyPartitionStringSurroundedByWhitespace, "monthly_partition_text_surrounded_by_whitespace");
@@ -350,7 +350,7 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
      * Returns a maximum string null placeholder count check.
      * @return Maximum string null placeholder count check.
      */
-    public ColumnTextSurroundedByWhitespacePercentCheckSpec getMonthlyStringSurroundedByWhitespacePercent() {
+    public ColumnTextSurroundedByWhitespacePercentCheckSpec getMonthlyPartitionStringSurroundedByWhitespacePercent() {
         return monthlyPartitionStringSurroundedByWhitespacePercent;
     }
 
@@ -358,7 +358,7 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
      * Sets a new definition of a string surrounded by whitespace percent check.
      * @param monthlyPartitionStringSurroundedByWhitespacePercent String surrounded by whitespace percent check.
      */
-    public void setMonthlyStringSurroundedByWhitespacePercent(ColumnTextSurroundedByWhitespacePercentCheckSpec monthlyPartitionStringSurroundedByWhitespacePercent) {
+    public void setMonthlyPartitionStringSurroundedByWhitespacePercent(ColumnTextSurroundedByWhitespacePercentCheckSpec monthlyPartitionStringSurroundedByWhitespacePercent) {
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringSurroundedByWhitespacePercent, monthlyPartitionStringSurroundedByWhitespacePercent));
         this.monthlyPartitionStringSurroundedByWhitespacePercent = monthlyPartitionStringSurroundedByWhitespacePercent;
         propagateHierarchyIdToField(monthlyPartitionStringSurroundedByWhitespacePercent, "monthly_partition_text_surrounded_by_whitespace_percent");
@@ -368,7 +368,7 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
      * Returns a minimum strings in set count check.
      * @return Minimum strings in set count check.
      */
-    public ColumnTextValidCountryCodePercentCheckSpec getMonthlyStringValidCountryCodePercent() {
+    public ColumnTextValidCountryCodePercentCheckSpec getMonthlyPartitionStringValidCountryCodePercent() {
         return monthlyPartitionStringValidCountryCodePercent;
     }
 
@@ -376,7 +376,7 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
      * Sets a new definition of a string valid country code percent check.
      * @param monthlyPartitionStringValidCountryCodePercent String valid country code percent check.
      */
-    public void setMonthlyStringValidCountryCodePercent(ColumnTextValidCountryCodePercentCheckSpec monthlyPartitionStringValidCountryCodePercent) {
+    public void setMonthlyPartitionStringValidCountryCodePercent(ColumnTextValidCountryCodePercentCheckSpec monthlyPartitionStringValidCountryCodePercent) {
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringValidCountryCodePercent, monthlyPartitionStringValidCountryCodePercent));
         this.monthlyPartitionStringValidCountryCodePercent = monthlyPartitionStringValidCountryCodePercent;
         propagateHierarchyIdToField(monthlyPartitionStringValidCountryCodePercent, "monthly_partition_text_valid_country_code_percent");
@@ -386,7 +386,7 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
      * Returns a minimum strings in set percent check.
      * @return Minimum strings in set percent check.
      */
-    public ColumnTextValidCurrencyCodePercentCheckSpec getMonthlyStringValidCurrencyCodePercent() {
+    public ColumnTextValidCurrencyCodePercentCheckSpec getMonthlyPartitionStringValidCurrencyCodePercent() {
         return monthlyPartitionStringValidCurrencyCodePercent;
     }
 
@@ -394,7 +394,7 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
      * Sets a new definition of a string valid currency code percent check.
      * @param monthlyPartitionStringValidCurrencyCodePercent String valid currency code percent check.
      */
-    public void setMonthlyStringValidCurrencyCodePercent(ColumnTextValidCurrencyCodePercentCheckSpec monthlyPartitionStringValidCurrencyCodePercent) {
+    public void setMonthlyPartitionStringValidCurrencyCodePercent(ColumnTextValidCurrencyCodePercentCheckSpec monthlyPartitionStringValidCurrencyCodePercent) {
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringValidCurrencyCodePercent, monthlyPartitionStringValidCurrencyCodePercent));
         this.monthlyPartitionStringValidCurrencyCodePercent = monthlyPartitionStringValidCurrencyCodePercent;
         propagateHierarchyIdToField(monthlyPartitionStringValidCurrencyCodePercent, "monthly_partition_text_valid_currency_code_percent");

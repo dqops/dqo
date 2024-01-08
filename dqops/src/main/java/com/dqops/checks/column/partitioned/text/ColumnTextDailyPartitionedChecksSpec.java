@@ -116,7 +116,7 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
      * Returns a maximum string length below check.
      * @return Maximum string length below check.
      */
-    public ColumnTextMaxLengthCheckSpec getDailyTextMaxLength() {
+    public ColumnTextMaxLengthCheckSpec getDailyPartitionTextMaxLength() {
         return dailyPartitionTextMaxLength;
     }
 
@@ -124,7 +124,7 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
      * Sets a new definition of a maximum string length check.
      * @param dailyPartitionTextMaxLength Maximum string length check.
      */
-    public void setDailyTextMaxLength(ColumnTextMaxLengthCheckSpec dailyPartitionTextMaxLength) {
+    public void setDailyPartitionTextMaxLength(ColumnTextMaxLengthCheckSpec dailyPartitionTextMaxLength) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionTextMaxLength, dailyPartitionTextMaxLength));
         this.dailyPartitionTextMaxLength = dailyPartitionTextMaxLength;
         propagateHierarchyIdToField(dailyPartitionTextMaxLength, "daily_partition_text_max_length");
@@ -134,7 +134,7 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
      * Returns a minimum string length above check.
      * @return Minimum string length above check.
      */
-    public ColumnTextMinLengthCheckSpec getDailyTextMinLength() {
+    public ColumnTextMinLengthCheckSpec getDailyPartitionTextMinLength() {
         return dailyPartitionTextMinLength;
     }
 
@@ -142,7 +142,7 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
      * Sets a new definition of a minimum string length check.
      * @param dailyPartitionTextMinLength Minimum string length check.
      */
-    public void setDailyTextMinLength(ColumnTextMinLengthCheckSpec dailyPartitionTextMinLength) {
+    public void setDailyPartitionTextMinLength(ColumnTextMinLengthCheckSpec dailyPartitionTextMinLength) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionTextMinLength, dailyPartitionTextMinLength));
         this.dailyPartitionTextMinLength = dailyPartitionTextMinLength;
         propagateHierarchyIdToField(dailyPartitionTextMinLength, "daily_partition_text_min_length");
@@ -152,7 +152,7 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
      * Returns a mean string length between check.
      * @return Mean string length between check.
      */
-    public ColumnTextMeanLengthCheckSpec getDailyTextMeanLength() {
+    public ColumnTextMeanLengthCheckSpec getDailyPartitionTextMeanLength() {
         return dailyPartitionTextMeanLength;
     }
 
@@ -160,7 +160,7 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
      * Sets a new definition of a mean string length check.
      * @param dailyPartitionTextMeanLength Mean string length check.
      */
-    public void setDailyTextMeanLength(ColumnTextMeanLengthCheckSpec dailyPartitionTextMeanLength) {
+    public void setDailyPartitionTextMeanLength(ColumnTextMeanLengthCheckSpec dailyPartitionTextMeanLength) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionTextMeanLength, dailyPartitionTextMeanLength));
         this.dailyPartitionTextMeanLength = dailyPartitionTextMeanLength;
         propagateHierarchyIdToField(dailyPartitionTextMeanLength, "daily_partition_text_mean_length");
@@ -170,7 +170,7 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
      * Returns a string length below min length count check.
      * @return String length below min length count check.
      */
-    public ColumnTextLengthBelowMinLengthCheckSpec getDailyTextLengthBelowMinLength() {
+    public ColumnTextLengthBelowMinLengthCheckSpec getDailyPartitionTextLengthBelowMinLength() {
         return dailyPartitionTextLengthBelowMinLength;
     }
 
@@ -178,7 +178,7 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
      * Sets a new definition of a string length below min length count check.
      * @param dailyPartitionTextLengthBelowMinLength String length below min length count check.
      */
-    public void setDailyTextLengthBelowMinLength(ColumnTextLengthBelowMinLengthCheckSpec dailyPartitionTextLengthBelowMinLength) {
+    public void setDailyPartitionTextLengthBelowMinLength(ColumnTextLengthBelowMinLengthCheckSpec dailyPartitionTextLengthBelowMinLength) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionTextLengthBelowMinLength, dailyPartitionTextLengthBelowMinLength));
         this.dailyPartitionTextLengthBelowMinLength = dailyPartitionTextLengthBelowMinLength;
         propagateHierarchyIdToField(dailyPartitionTextLengthBelowMinLength, "daily_partition_text_length_below_min_length");
@@ -188,7 +188,7 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
      * Returns a string length below min length percent check.
      * @return String length below min length percent check.
      */
-    public ColumnTextLengthBelowMinLengthPercentCheckSpec getDailyTextLengthBelowMinLengthPercent() {
+    public ColumnTextLengthBelowMinLengthPercentCheckSpec getDailyPartitionTextLengthBelowMinLengthPercent() {
         return dailyPartitionTextLengthBelowMinLengthPercent;
     }
 
@@ -196,7 +196,7 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
      * Sets a new definition of a string length below min length percent check.
      * @param dailyPartitionTextLengthBelowMinLengthPercent String length below min length percent check.
      */
-    public void setDailyTextLengthBelowMinLengthPercent(ColumnTextLengthBelowMinLengthPercentCheckSpec dailyPartitionTextLengthBelowMinLengthPercent) {
+    public void setDailyPartitionTextLengthBelowMinLengthPercent(ColumnTextLengthBelowMinLengthPercentCheckSpec dailyPartitionTextLengthBelowMinLengthPercent) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionTextLengthBelowMinLengthPercent, dailyPartitionTextLengthBelowMinLengthPercent));
         this.dailyPartitionTextLengthBelowMinLengthPercent = dailyPartitionTextLengthBelowMinLengthPercent;
         propagateHierarchyIdToField(dailyPartitionTextLengthBelowMinLengthPercent, "daily_partition_text_length_below_min_length_percent");
@@ -206,7 +206,7 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
      * Returns a string length above max length count check.
      * @return String length above max length count check.
      */
-    public ColumnTextLengthAboveMaxLengthCheckSpec getDailyTextLengthAboveMaxLength() {
+    public ColumnTextLengthAboveMaxLengthCheckSpec getDailyPartitionTextLengthAboveMaxLength() {
         return dailyPartitionTextLengthAboveMaxLength;
     }
 
@@ -214,7 +214,7 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
      * Sets a new definition of a string length above max length count check.
      * @param dailyPartitionTextLengthAboveMaxLength String length above max length count check.
      */
-    public void setDailyTextLengthAboveMaxLength(ColumnTextLengthAboveMaxLengthCheckSpec dailyPartitionTextLengthAboveMaxLength) {
+    public void setDailyPartitionTextLengthAboveMaxLength(ColumnTextLengthAboveMaxLengthCheckSpec dailyPartitionTextLengthAboveMaxLength) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionTextLengthAboveMaxLength, dailyPartitionTextLengthAboveMaxLength));
         this.dailyPartitionTextLengthAboveMaxLength = dailyPartitionTextLengthAboveMaxLength;
         propagateHierarchyIdToField(dailyPartitionTextLengthAboveMaxLength, "daily_partition_text_length_above_max_length");
@@ -224,7 +224,7 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
      * Returns a string length above max length percent check.
      * @return String length above max length percent check.
      */
-    public ColumnTextLengthAboveMaxLengthPercentCheckSpec getDailyTextLengthAboveMaxLengthPercent() {
+    public ColumnTextLengthAboveMaxLengthPercentCheckSpec getDailyPartitionTextLengthAboveMaxLengthPercent() {
         return dailyPartitionTextLengthAboveMaxLengthPercent;
     }
 
@@ -232,7 +232,7 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
      * Sets a new definition of a string length above max length percent check.
      * @param dailyPartitionTextLengthAboveMaxLengthPercent String length above max length percent check.
      */
-    public void setDailyTextLengthAboveMaxLengthPercent(ColumnTextLengthAboveMaxLengthPercentCheckSpec dailyPartitionTextLengthAboveMaxLengthPercent) {
+    public void setDailyPartitionTextLengthAboveMaxLengthPercent(ColumnTextLengthAboveMaxLengthPercentCheckSpec dailyPartitionTextLengthAboveMaxLengthPercent) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionTextLengthAboveMaxLengthPercent, dailyPartitionTextLengthAboveMaxLengthPercent));
         this.dailyPartitionTextLengthAboveMaxLengthPercent = dailyPartitionTextLengthAboveMaxLengthPercent;
         propagateHierarchyIdToField(dailyPartitionTextLengthAboveMaxLengthPercent, "daily_partition_text_length_above_max_length_percent");
@@ -242,7 +242,7 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
      * Returns a string length in range percent check.
      * @return String length in range percent check.
      */
-    public ColumnTextLengthInRangePercentCheckSpec getDailyTextLengthInRangePercent() {
+    public ColumnTextLengthInRangePercentCheckSpec getDailyPartitionTextLengthInRangePercent() {
         return dailyPartitionTextLengthInRangePercent;
     }
 
@@ -250,7 +250,7 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
      * Sets a new definition of a string length in range percent check.
      * @param dailyPartitionTextLengthInRangePercent String length in range percent check.
      */
-    public void setDailyTextLengthInRangePercent(ColumnTextLengthInRangePercentCheckSpec dailyPartitionTextLengthInRangePercent) {
+    public void setDailyPartitionTextLengthInRangePercent(ColumnTextLengthInRangePercentCheckSpec dailyPartitionTextLengthInRangePercent) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionTextLengthInRangePercent, dailyPartitionTextLengthInRangePercent));
         this.dailyPartitionTextLengthInRangePercent = dailyPartitionTextLengthInRangePercent;
         propagateHierarchyIdToField(dailyPartitionTextLengthInRangePercent, "daily_partition_text_length_in_range_percent");
@@ -260,7 +260,7 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
      * Returns a minimum string parsable to integer percent check.
      * @return Minimum string parsable to integer percent check.
      */
-    public ColumnTextParsableToBooleanPercentCheckSpec getDailyTextParsableToBooleanPercent() {
+    public ColumnTextParsableToBooleanPercentCheckSpec getDailyPartitionTextParsableToBooleanPercent() {
         return dailyPartitionTextParsableToBooleanPercent;
     }
 
@@ -268,7 +268,7 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
      * Sets a new definition of a string boolean placeholder percent check.
      * @param dailyPartitionTextParsableToBooleanPercent String boolean placeholder percent check.
      */
-    public void setDailyTextParsableToBooleanPercent(ColumnTextParsableToBooleanPercentCheckSpec dailyPartitionTextParsableToBooleanPercent) {
+    public void setDailyPartitionTextParsableToBooleanPercent(ColumnTextParsableToBooleanPercentCheckSpec dailyPartitionTextParsableToBooleanPercent) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionTextParsableToBooleanPercent, dailyPartitionTextParsableToBooleanPercent));
         this.dailyPartitionTextParsableToBooleanPercent = dailyPartitionTextParsableToBooleanPercent;
         propagateHierarchyIdToField(dailyPartitionTextParsableToBooleanPercent, "daily_partition_text_parsable_to_boolean_percent");
@@ -278,7 +278,7 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
      * Returns a maximum string surrounded by whitespace count check.
      * @return Maximum string surrounded by whitespace count check.
      */
-    public ColumnTextParsableToIntegerPercentCheckSpec getDailyTextParsableToIntegerPercent() {
+    public ColumnTextParsableToIntegerPercentCheckSpec getDailyPartitionTextParsableToIntegerPercent() {
         return dailyPartitionTextParsableToIntegerPercent;
     }
 
@@ -286,7 +286,7 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
      * Sets a new definition of a string parsable to integer percent check.
      * @param dailyPartitionTextParsableToIntegerPercent String parsable to integer percent check.
      */
-    public void setDailyTextParsableToIntegerPercent(ColumnTextParsableToIntegerPercentCheckSpec dailyPartitionTextParsableToIntegerPercent) {
+    public void setDailyPartitionTextParsableToIntegerPercent(ColumnTextParsableToIntegerPercentCheckSpec dailyPartitionTextParsableToIntegerPercent) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionTextParsableToIntegerPercent, dailyPartitionTextParsableToIntegerPercent));
         this.dailyPartitionTextParsableToIntegerPercent = dailyPartitionTextParsableToIntegerPercent;
         propagateHierarchyIdToField(dailyPartitionTextParsableToIntegerPercent, "daily_partition_text_parsable_to_integer_percent");
@@ -296,7 +296,7 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
      * Returns a maximum string surrounded by whitespace percent check.
      * @return Maximum string surrounded by whitespace percent check.
      */
-    public ColumnTextParsableToFloatPercentCheckSpec getDailyTextParsableToFloatPercent() {
+    public ColumnTextParsableToFloatPercentCheckSpec getDailyPartitionTextParsableToFloatPercent() {
         return dailyPartitionTextParsableToFloatPercent;
     }
 
@@ -304,7 +304,7 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
      * Sets a new definition of a string parsable to float percent check.
      * @param dailyPartitionTextParsableToFloatPercent String parsable to float percent check.
      */
-    public void setDailyTextParsableToFloatPercent(ColumnTextParsableToFloatPercentCheckSpec dailyPartitionTextParsableToFloatPercent) {
+    public void setDailyPartitionTextParsableToFloatPercent(ColumnTextParsableToFloatPercentCheckSpec dailyPartitionTextParsableToFloatPercent) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionTextParsableToFloatPercent, dailyPartitionTextParsableToFloatPercent));
         this.dailyPartitionTextParsableToFloatPercent = dailyPartitionTextParsableToFloatPercent;
         propagateHierarchyIdToField(dailyPartitionTextParsableToFloatPercent, "daily_partition_text_parsable_to_float_percent");
@@ -314,7 +314,7 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
      * Returns a minimum string valid USA phone percent check.
      * @return Minimum string valid USA phone percent check.
      */
-    public ColumnTextParsableToDatePercentCheckSpec getDailyTextParsableToDatePercent() {
+    public ColumnTextParsableToDatePercentCheckSpec getDailyPartitionTextParsableToDatePercent() {
         return dailyPartitionTextParsableToDatePercent;
     }
 
@@ -322,7 +322,7 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
      * Sets a new definition of a string valid dates percent check.
      * @param dailyPartitionTextParsableToDatePercent String valid dates percent check.
      */
-    public void setDailyTextParsableToDatePercent(ColumnTextParsableToDatePercentCheckSpec dailyPartitionTextParsableToDatePercent) {
+    public void setDailyPartitionTextParsableToDatePercent(ColumnTextParsableToDatePercentCheckSpec dailyPartitionTextParsableToDatePercent) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionTextParsableToDatePercent, dailyPartitionTextParsableToDatePercent));
         this.dailyPartitionTextParsableToDatePercent = dailyPartitionTextParsableToDatePercent;
         propagateHierarchyIdToField(dailyPartitionTextParsableToDatePercent, "daily_partition_text_parsable_to_date_percent");
@@ -332,7 +332,7 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
      * Returns a minimum string valid dates percent check.
      * @return Minimum string valid dates percent check.
      */
-    public ColumnTextSurroundedByWhitespaceCheckSpec getDailyStringSurroundedByWhitespace() {
+    public ColumnTextSurroundedByWhitespaceCheckSpec getDailyPartitionStringSurroundedByWhitespace() {
         return dailyPartitionStringSurroundedByWhitespace;
     }
 
@@ -340,7 +340,7 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
      * Sets a new definition of a string surrounded by whitespace count check.
      * @param dailyPartitionStringSurroundedByWhitespace String surrounded by whitespace count check.
      */
-    public void setDailyStringSurroundedByWhitespace(ColumnTextSurroundedByWhitespaceCheckSpec dailyPartitionStringSurroundedByWhitespace) {
+    public void setDailyPartitionStringSurroundedByWhitespace(ColumnTextSurroundedByWhitespaceCheckSpec dailyPartitionStringSurroundedByWhitespace) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionStringSurroundedByWhitespace, dailyPartitionStringSurroundedByWhitespace));
         this.dailyPartitionStringSurroundedByWhitespace = dailyPartitionStringSurroundedByWhitespace;
         propagateHierarchyIdToField(dailyPartitionStringSurroundedByWhitespace, "daily_partition_text_surrounded_by_whitespace");
@@ -350,7 +350,7 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
      * Returns a maximum string null placeholder count check.
      * @return Maximum string null placeholder count check.
      */
-    public ColumnTextSurroundedByWhitespacePercentCheckSpec getDailyStringSurroundedByWhitespacePercent() {
+    public ColumnTextSurroundedByWhitespacePercentCheckSpec getDailyPartitionStringSurroundedByWhitespacePercent() {
         return dailyPartitionStringSurroundedByWhitespacePercent;
     }
 
@@ -358,7 +358,7 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
      * Sets a new definition of a string surrounded by whitespace percent check.
      * @param dailyPartitionStringSurroundedByWhitespacePercent String surrounded by whitespace percent check.
      */
-    public void setDailyStringSurroundedByWhitespacePercent(ColumnTextSurroundedByWhitespacePercentCheckSpec dailyPartitionStringSurroundedByWhitespacePercent) {
+    public void setDailyPartitionStringSurroundedByWhitespacePercent(ColumnTextSurroundedByWhitespacePercentCheckSpec dailyPartitionStringSurroundedByWhitespacePercent) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionStringSurroundedByWhitespacePercent, dailyPartitionStringSurroundedByWhitespacePercent));
         this.dailyPartitionStringSurroundedByWhitespacePercent = dailyPartitionStringSurroundedByWhitespacePercent;
         propagateHierarchyIdToField(dailyPartitionStringSurroundedByWhitespacePercent, "daily_partition_text_surrounded_by_whitespace_percent");
@@ -368,7 +368,7 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
      * Returns a minimum strings in set count check.
      * @return Minimum strings in set count check.
      */
-    public ColumnTextValidCountryCodePercentCheckSpec getDailyStringValidCountryCodePercent() {
+    public ColumnTextValidCountryCodePercentCheckSpec getDailyPartitionStringValidCountryCodePercent() {
         return dailyPartitionStringValidCountryCodePercent;
     }
 
@@ -376,7 +376,7 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
      * Sets a new definition of a string valid country code percent check.
      * @param dailyPartitionStringValidCountryCodePercent String valid country code percent check.
      */
-    public void setDailyStringValidCountryCodePercent(ColumnTextValidCountryCodePercentCheckSpec dailyPartitionStringValidCountryCodePercent) {
+    public void setDailyPartitionStringValidCountryCodePercent(ColumnTextValidCountryCodePercentCheckSpec dailyPartitionStringValidCountryCodePercent) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionStringValidCountryCodePercent, dailyPartitionStringValidCountryCodePercent));
         this.dailyPartitionStringValidCountryCodePercent = dailyPartitionStringValidCountryCodePercent;
         propagateHierarchyIdToField(dailyPartitionStringValidCountryCodePercent, "daily_partition_text_valid_country_code_percent");
@@ -386,7 +386,7 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
      * Returns a minimum strings in set percent check.
      * @return Minimum strings in set percent check.
      */
-    public ColumnTextValidCurrencyCodePercentCheckSpec getDailyStringValidCurrencyCodePercent() {
+    public ColumnTextValidCurrencyCodePercentCheckSpec getDailyPartitionStringValidCurrencyCodePercent() {
         return dailyPartitionStringValidCurrencyCodePercent;
     }
 
@@ -394,7 +394,7 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
      * Sets a new definition of a string valid currency code percent check.
      * @param dailyPartitionStringValidCurrencyCodePercent String valid currency code percent check.
      */
-    public void setDailyStringValidCurrencyCodePercent(ColumnTextValidCurrencyCodePercentCheckSpec dailyPartitionStringValidCurrencyCodePercent) {
+    public void setDailyPartitionStringValidCurrencyCodePercent(ColumnTextValidCurrencyCodePercentCheckSpec dailyPartitionStringValidCurrencyCodePercent) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionStringValidCurrencyCodePercent, dailyPartitionStringValidCurrencyCodePercent));
         this.dailyPartitionStringValidCurrencyCodePercent = dailyPartitionStringValidCurrencyCodePercent;
         propagateHierarchyIdToField(dailyPartitionStringValidCurrencyCodePercent, "daily_partition_text_valid_currency_code_percent");
