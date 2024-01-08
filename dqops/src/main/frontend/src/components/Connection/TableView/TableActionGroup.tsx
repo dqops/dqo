@@ -1,15 +1,11 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import Button from '../../Button';
 import ConfirmDialog from './ConfirmDialog';
-import { JobApiClient, TableApiClient } from '../../../services/apiClient';
+import { TableApiClient } from '../../../services/apiClient';
 import { useTree } from '../../../contexts/treeContext';
 import { useParams } from 'react-router-dom';
 import { CheckTypes } from '../../../shared/routes';
 import AddColumnDialog from '../../CustomTree/AddColumnDialog';
-import {
-  DqoJobHistoryEntryModelStatusEnum,
-  TableColumnsStatisticsModel
-} from '../../../api';
 import SvgIcon from '../../SvgIcon';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
@@ -20,13 +16,13 @@ interface ITableActionGroupProps {
   isUpdating?: boolean;
   isUpdated?: boolean;
   shouldDelete?: boolean;
-  collectStatistic?: boolean;
   addSaveButton?: boolean;
   createDataStream?: boolean;
   maxToCreateDataStream?: boolean;
   createDataStreamFunc?: () => void;
-  statistics?: TableColumnsStatisticsModel;
-  selectedColumns?: string[];
+  collectStatistics?: () => Promise<void>;
+  selectedColumns?: boolean;
+  collectStatisticsSpinner?: boolean
 }
 
 const TableActionGroup = ({
@@ -35,13 +31,13 @@ const TableActionGroup = ({
   isDisabled,
   onUpdate,
   shouldDelete = true,
-  collectStatistic,
   addSaveButton = true,
   createDataStream,
   maxToCreateDataStream,
   createDataStreamFunc,
-  statistics,
-  selectedColumns
+  collectStatistics,
+  selectedColumns,
+  collectStatisticsSpinner
 }: ITableActionGroupProps) => {
   const {
     checkTypes,
@@ -58,13 +54,11 @@ const TableActionGroup = ({
 
   const { deleteData } = useTree();
   const [isAddColumnDialogOpen, setIsAddColumnDialogOpen] = useState(false);
-  const [loadingJob, setLoadingJob] = useState(false);
   const isSourceScreen = checkTypes === CheckTypes.SOURCES;
-  const { job_dictionary_state, userProfile } = useSelector(
+  const { userProfile } = useSelector(
     (state: IRootState) => state.job || {}
   );
-  const [jobId, setJobId] = useState<number>()
-  const job = jobId ? job_dictionary_state[jobId] : undefined
+
   
   const fullPath = `${connection}.${schema}.${table}`;
   
@@ -78,24 +72,6 @@ const TableActionGroup = ({
     deleteData(fullPath);
   };
 
-  const collectStatistics = async () => {
-    try {
-      setLoadingJob(true);
-      await JobApiClient.collectStatisticsOnTable(undefined, false, undefined, {
-        ...statistics?.collect_column_statistics_job_template,
-        columnNames: selectedColumns
-      }).then((res) => setJobId(res.data.jobId?.jobId));
-    } finally {
-      setLoadingJob(false);
-    }
-  };
- 
-  const filteredCollectStatisticsJobs = useMemo(() => {
-    return (job && (
-      job.status === DqoJobHistoryEntryModelStatusEnum.running ||
-      job.status === DqoJobHistoryEntryModelStatusEnum.queued ||
-      job.status === DqoJobHistoryEntryModelStatusEnum.waiting ))
-    }, [job])
 
   return (
     <div className="flex space-x-4 items-center absolute right-2 top-2">
@@ -159,29 +135,28 @@ const TableActionGroup = ({
           />
         </div>
       )}
-      {collectStatistic && (
+      {collectStatistics && (
         <Button
           className="flex items-center gap-x-2 justify-center "
           label={
-            filteredCollectStatisticsJobs
+            collectStatisticsSpinner
               ? 'Collecting...'
-              : selectedColumns?.length !== 0
+              : selectedColumns 
               ? 'Collect statistics on selected'
               : 'Collect Statistics'
           }
-          color={filteredCollectStatisticsJobs ? 'secondary' : 'primary'}
+          color={collectStatisticsSpinner ? 'secondary' : 'primary'}
           leftIcon={
-            filteredCollectStatisticsJobs ? (
+            collectStatisticsSpinner ? (
               <SvgIcon name="sync" className="w-4 h-4 animate-spin" />
             ) : (
               ''
             )
           }
           onClick={collectStatistics}
-          loading={loadingJob}
           disabled={
             userProfile.can_collect_statistics !== true ||
-            filteredCollectStatisticsJobs
+            collectStatisticsSpinner
           }
         />
       )}
