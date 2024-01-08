@@ -15,6 +15,7 @@
  */
 
 package com.dqops.sensors.column.text;
+
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.sensors.AbstractSensorParametersSpec;
@@ -24,7 +25,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 /**
- * Column level sensor that calculates the percentage of rows with string surrounded by whitespace column value.
+ * Column level sensor that calculates the percentage of rows with text values that are surrounded by whitespace characters in an analyzed column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -53,6 +54,6 @@ public class ColumnTextTextSurroundedByWhitespacePercentSensorParametersSpec ext
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/strings/string_surrounded_by_whitespace_percent";
+        return "column/text/text_surrounded_by_whitespace_percent";
     }
 }

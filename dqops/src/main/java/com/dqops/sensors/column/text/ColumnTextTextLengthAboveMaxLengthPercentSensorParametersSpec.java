@@ -16,7 +16,6 @@
 
 package com.dqops.sensors.column.text;
 
-import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.sensors.AbstractSensorParametersSpec;
@@ -29,7 +28,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level sensor that calculates the percentage of values that are longer than a given length in a column.
+ * Column level sensor that calculates the percentage of text values that are longer than a given length in a column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -42,8 +41,7 @@ public class ColumnTextTextLengthAboveMaxLengthPercentSensorParametersSpec exten
     };
 
     @JsonPropertyDescription("This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0")
-    @SampleValues(values = "5")
-    private int maxLength = 0;
+    private int maxLength = 100;
 
     /**
      * Returns the maximum length.
@@ -79,7 +77,7 @@ public class ColumnTextTextLengthAboveMaxLengthPercentSensorParametersSpec exten
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/strings/string_length_above_max_length_percent";
+        return "column/text/text_length_above_max_length_percent";
     }
 
 }

@@ -5,13 +5,9 @@ spec:
   fields:
   - field_name: min_length
     display_name: min_length
-    help_text: Sets a minimal string length
+    help_text: Sets a minimum text length
     data_type: integer
-    sample_values:
-    - 5
   - field_name: max_length
     display_name: max_length
-    help_text: Sets a maximal string length.
+    help_text: Sets a maximum text length
     data_type: integer
-    sample_values:
-    - 10

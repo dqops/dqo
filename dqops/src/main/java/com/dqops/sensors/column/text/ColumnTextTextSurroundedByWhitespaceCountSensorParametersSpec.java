@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 /**
- * Column level sensor that calculates the number of rows with string surrounded by whitespace column value.
+ * Column level sensor that calculates the number of rows with text values that are surrounded by whitespace characters in an analyzed column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -53,6 +53,6 @@ public class ColumnTextTextSurroundedByWhitespaceCountSensorParametersSpec exten
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/strings/string_surrounded_by_whitespace_count";
+        return "column/text/text_surrounded_by_whitespace_count";
     }
 }

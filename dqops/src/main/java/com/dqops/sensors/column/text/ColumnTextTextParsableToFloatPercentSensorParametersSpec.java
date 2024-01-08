@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 /**
- * Column level sensor that calculates the percentage of rows with parsable to float string column value.
+ * Column level sensor that calculates the percentage of rows with text values in an analyzed column that are parsable to a float (numeric) value.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -53,6 +53,6 @@ public class ColumnTextTextParsableToFloatPercentSensorParametersSpec extends Ab
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/strings/string_parsable_to_float_percent";
+        return "column/text/text_parsable_to_float_percent";
     }
 }

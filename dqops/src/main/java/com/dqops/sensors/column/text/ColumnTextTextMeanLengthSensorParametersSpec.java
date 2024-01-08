@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 /**
- * Column level sensor that ensures that the length of string in a column does not exceed the mean accepted length.
+ * Column level sensor that ensures that the length of text values in a column does not exceed the mean accepted length.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -53,6 +53,6 @@ public class ColumnTextTextMeanLengthSensorParametersSpec extends AbstractSensor
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/strings/string_mean_length";
+        return "column/text/text_mean_length";
     }
 }

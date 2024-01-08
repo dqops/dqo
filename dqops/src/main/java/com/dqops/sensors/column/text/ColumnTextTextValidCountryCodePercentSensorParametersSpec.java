@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 /**
- * Column level sensor that calculates the percentage of rows with a valid country code string column value.
+ * Column level sensor that calculates the percentage of rows with text values with a valid country codes in an analyzed column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -53,6 +53,6 @@ public class ColumnTextTextValidCountryCodePercentSensorParametersSpec extends A
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/strings/string_valid_country_code_percent";
+        return "column/text/text_valid_country_code_percent";
     }
 }

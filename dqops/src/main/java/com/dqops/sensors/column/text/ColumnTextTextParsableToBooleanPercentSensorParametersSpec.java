@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 /**
- * Column level sensor that calculates the number of rows with a boolean placeholder text in a text column.
+ * Column level sensor that calculates the number of rows with a text value in a text column that is parsable to a boolean type or is a well-known boolean value placeholder: yes, no, true, false, t, f, y, n, 1, 0.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -53,6 +53,6 @@ public class ColumnTextTextParsableToBooleanPercentSensorParametersSpec extends 
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/strings/string_boolean_placeholder_percent";
+        return "column/text/text_parsable_to_boolean_percent";
     }
 }

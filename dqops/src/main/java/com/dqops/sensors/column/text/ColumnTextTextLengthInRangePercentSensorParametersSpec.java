@@ -15,7 +15,6 @@
  */
 package com.dqops.sensors.column.text;
 
-import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.sensors.AbstractSensorParametersSpec;
@@ -26,7 +25,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 /**
- * Column level sensor that calculates the percentage of strings with a length below the indicated length in a column.
+ * Column level sensor that calculates the percentage of text values with a length below the indicated length in a column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -38,13 +37,45 @@ public class ColumnTextTextLengthInRangePercentSensorParametersSpec extends Abst
         }
     };
 
-    @JsonPropertyDescription("Sets a minimal string length")
-    @SampleValues(values = "5")
-    private int minLength;
+    @JsonPropertyDescription("Sets a minimum text length")
+    private int minLength = 5;
 
-    @JsonPropertyDescription("Sets a maximal string length.")
-    @SampleValues(values = "10")
-    private int maxLength;
+    @JsonPropertyDescription("Sets a maximum text length")
+    private int maxLength = 100;
+
+    /** Returns a minimal string length range.
+     *
+     * @return lowerLengthBound
+     */
+    public int getMinLength() {
+        return minLength;
+    }
+
+    /** Sets a minimal string length range.
+     *
+     * @param minLength
+     */
+    public void setMinLength(int minLength) {
+        this.setDirtyIf(this.minLength != minLength);
+        this.minLength = minLength;
+    }
+
+    /** Returns a maximal string length range.
+     *
+     * @return Return a upperLengthBound
+     */
+    public int getMaxLength() {
+        return maxLength;
+    }
+
+    /** Sets a maximal string length range.
+     *
+     * @param maxLength
+     */
+    public void setMaxLength(int maxLength) {
+        this.setDirtyIf(this.maxLength != maxLength);
+        this.maxLength = maxLength;
+    }
 
     /**
      * Returns the child map on the spec class with all fields.
@@ -62,43 +93,8 @@ public class ColumnTextTextLengthInRangePercentSensorParametersSpec extends Abst
      *
      * @return Sensor definition name.
      */
-
     @Override
     public String getSensorDefinitionName() {
-        return "column/strings/string_length_in_range_percent";
-    }
-
-    /** Returns a maximal string length range.
-     *
-     * @return Return a upperLengthBound
-     */
-    public int getMaxLength() {
-        return maxLength;
-    }
-
-    /** Returns a minimal string length range.
-     *
-     * @return lowerLengthBound
-     */
-    public int getMinLength() {
-        return minLength;
-    }
-
-    /** Sets a maximal string length range.
-     *
-     * @param maxLength
-     */
-    public void setMaxLength(int maxLength) {
-        this.setDirtyIf(this.maxLength != maxLength);
-        this.maxLength = maxLength;
-    }
-
-    /** Sets a minimal string length range.
-     *
-     * @param minLength
-     */
-    public void setMinLength(int minLength) {
-        this.setDirtyIf(this.minLength != minLength);
-        this.minLength = minLength;
+        return "column/text/text_length_in_range_percent";
     }
 }

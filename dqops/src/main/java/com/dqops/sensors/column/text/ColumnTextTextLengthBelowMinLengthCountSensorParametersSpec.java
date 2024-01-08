@@ -16,7 +16,6 @@
 
 package com.dqops.sensors.column.text;
 
-import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.sensors.AbstractSensorParametersSpec;
@@ -29,7 +28,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level sensor that calculates the count of values that are shorter than a given length in a column.
+ * Column level sensor that calculates the count of text values that are shorter than a given length in a column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -42,8 +41,7 @@ public class ColumnTextTextLengthBelowMinLengthCountSensorParametersSpec extends
     };
 
     @JsonPropertyDescription("This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0")
-    @SampleValues(values = "5")
-    private int minLength = 0;
+    private int minLength = 5;
 
     /**
      * Returns the minimum length.
@@ -79,7 +77,6 @@ public class ColumnTextTextLengthBelowMinLengthCountSensorParametersSpec extends
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/strings/string_length_below_min_length_count";
+        return "column/text/text_length_below_min_length_count";
     }
-
 }
