@@ -2,7 +2,7 @@
 
 ## Overview
 
-The following example show how you can verify that a minimum percentage of rows passed a custom SQL condition (expression)
+The following example shows how you can verify that a minimum percentage of rows passed a custom SQL condition (expression)
 using DQOps platform. By using the [sql_condition_passed_percent](../../../checks/table/sql/sql-condition-passed-percent-on-table.md) table check, we can monitor that
 the percentage of rows passed a custom SQL condition does not fall below the set thresholds. If it does, you will get a warning, error or fatal result.
 
