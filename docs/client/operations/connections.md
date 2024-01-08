@@ -1,21 +1,21 @@
-Manages connections to monitored data sources  
+Manages connections to monitored data sources
 
 
-___  
-## bulk_activate_connection_checks  
-Activates all named check on this connection in the locations specified by filter  
+___
+## bulk_activate_connection_checks
+Activates all named check on this connection in the locations specified by filter
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/bulk_activate_connection_checks.py)
-  
+
 
 **PUT**
 ```
-http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkactivate  
+http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkactivate
 ```
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
@@ -24,19 +24,19 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkac
 
 
 
-**Request body**  
-  
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Check search filters and rules configuration|[AllChecksPatchParameters](../../models/connections/#allcheckspatchparameters)| |
+|Check search filters and rules configuration|[AllChecksPatchParameters](../../models/connections.md#allcheckspatchparameters)| |
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/checks/sample_check/bulkactivate^
 		-H "Accept: application/json"^
@@ -47,7 +47,7 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkac
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import bulk_activate_connection_checks
@@ -98,7 +98,7 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkac
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import bulk_activate_connection_checks
@@ -151,7 +151,7 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkac
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import bulk_activate_connection_checks
@@ -205,7 +205,7 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkac
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import bulk_activate_connection_checks
@@ -264,21 +264,21 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkac
 
 
 
-___  
-## bulk_deactivate_connection_checks  
-Deactivates (deletes) all named check on this connection in the locations specified by filter  
+___
+## bulk_deactivate_connection_checks
+Deactivates (deletes) all named check on this connection in the locations specified by filter
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/bulk_deactivate_connection_checks.py)
-  
+
 
 **PUT**
 ```
-http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkdeactivate  
+http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkdeactivate
 ```
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
@@ -287,19 +287,19 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkde
 
 
 
-**Request body**  
-  
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Check search filters and table/column selectors.|[BulkCheckDeactivateParameters](../../models/connections/#bulkcheckdeactivateparameters)| |
+|Check search filters and table/column selectors.|[BulkCheckDeactivateParameters](../../models/connections.md#bulkcheckdeactivateparameters)| |
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/checks/sample_check/bulkdeactivate^
 		-H "Accept: application/json"^
@@ -310,7 +310,7 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkde
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import bulk_deactivate_connection_checks
@@ -341,7 +341,7 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkde
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import bulk_deactivate_connection_checks
@@ -374,7 +374,7 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkde
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import bulk_deactivate_connection_checks
@@ -408,7 +408,7 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkde
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import bulk_deactivate_connection_checks
@@ -447,21 +447,21 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkde
 
 
 
-___  
-## create_connection  
-Creates a new connection  
+___
+## create_connection
+Creates a new connection
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/create_connection.py)
-  
+
 
 **POST**
 ```
-http://localhost:8888/api/connections/{connectionName}  
+http://localhost:8888/api/connections/{connectionName}
 ```
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
@@ -469,19 +469,19 @@ http://localhost:8888/api/connections/{connectionName}
 
 
 
-**Request body**  
-  
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Connection specification|[ConnectionSpec](../../../reference/yaml/ConnectionYaml/#connectionspec)| |
+|Connection specification|[ConnectionSpec](../../../reference/yaml/ConnectionYaml.md#connectionspec)| |
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X POST http://localhost:8888/api/connections/sample_connection^
 		-H "Accept: application/json"^
@@ -492,7 +492,7 @@ http://localhost:8888/api/connections/{connectionName}
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import create_connection
@@ -538,7 +538,7 @@ http://localhost:8888/api/connections/{connectionName}
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import create_connection
@@ -586,7 +586,7 @@ http://localhost:8888/api/connections/{connectionName}
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import create_connection
@@ -635,7 +635,7 @@ http://localhost:8888/api/connections/{connectionName}
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import create_connection
@@ -689,21 +689,21 @@ http://localhost:8888/api/connections/{connectionName}
 
 
 
-___  
-## create_connection_basic  
-Creates a new connection given the basic information.  
+___
+## create_connection_basic
+Creates a new connection given the basic information.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/create_connection_basic.py)
-  
+
 
 **POST**
 ```
-http://localhost:8888/api/connections/{connectionName}/basic  
+http://localhost:8888/api/connections/{connectionName}/basic
 ```
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
@@ -711,19 +711,19 @@ http://localhost:8888/api/connections/{connectionName}/basic
 
 
 
-**Request body**  
-  
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Basic connection model|[ConnectionModel](../../models/Common/#connectionmodel)| |
+|Basic connection model|[ConnectionModel](../../models/Common.md#connectionmodel)| |
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X POST http://localhost:8888/api/connections/sample_connection/basic^
 		-H "Accept: application/json"^
@@ -734,7 +734,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import create_connection_basic
@@ -809,7 +809,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import create_connection_basic
@@ -886,7 +886,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import create_connection_basic
@@ -964,7 +964,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import create_connection_basic
@@ -1047,28 +1047,28 @@ http://localhost:8888/api/connections/{connectionName}/basic
 
 
 
-___  
-## delete_connection  
-Deletes a connection  
+___
+## delete_connection
+Deletes a connection
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/delete_connection.py)
-  
+
 
 **DELETE**
 ```
-http://localhost:8888/api/connections/{connectionName}  
+http://localhost:8888/api/connections/{connectionName}
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[dqo_queue_job_id](../../models/Common/#dqoqueuejobid)||[DqoQueueJobId](../../models/Common/#dqoqueuejobid)|
+|[dqo_queue_job_id](../../models/Common.md#dqoqueuejobid)||[DqoQueueJobId](../../models/Common.md#dqoqueuejobid)|
 
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
@@ -1078,10 +1078,10 @@ http://localhost:8888/api/connections/{connectionName}
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X DELETE http://localhost:8888/api/connections/sample_connection^
 		-H "Accept: application/json"
@@ -1089,7 +1089,7 @@ http://localhost:8888/api/connections/{connectionName}
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import delete_connection
@@ -1107,7 +1107,7 @@ http://localhost:8888/api/connections/{connectionName}
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import delete_connection
@@ -1127,7 +1127,7 @@ http://localhost:8888/api/connections/{connectionName}
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import delete_connection
@@ -1148,7 +1148,7 @@ http://localhost:8888/api/connections/{connectionName}
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import delete_connection
@@ -1173,7 +1173,7 @@ http://localhost:8888/api/connections/{connectionName}
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     {
 	  "jobId" : 10832,
@@ -1182,22 +1182,22 @@ http://localhost:8888/api/connections/{connectionName}
     ```
 
 
-___  
-## get_all_connections  
-Returns a list of connections (data sources)  
+___
+## get_all_connections
+Returns a list of connections (data sources)
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_all_connections.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/connections  
+http://localhost:8888/api/connections
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|connection_model||List[[ConnectionModel](../../models/Common/#connectionmodel)]|
+|connection_model||List[[ConnectionModel](../../models/Common.md#connectionmodel)]|
 
 
 
@@ -1206,10 +1206,10 @@ http://localhost:8888/api/connections
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/connections^
 		-H "Accept: application/json"
@@ -1217,7 +1217,7 @@ http://localhost:8888/api/connections
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_all_connections
@@ -1235,7 +1235,7 @@ http://localhost:8888/api/connections
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_all_connections
@@ -1255,7 +1255,7 @@ http://localhost:8888/api/connections
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_all_connections
@@ -1276,7 +1276,7 @@ http://localhost:8888/api/connections
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_all_connections
@@ -1301,7 +1301,7 @@ http://localhost:8888/api/connections
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     [ {
 	  "connection_name" : "sample_connection",
@@ -1445,28 +1445,28 @@ http://localhost:8888/api/connections
     ```
 
 
-___  
-## get_connection  
-Return the full details of a connection given the connection name  
+___
+## get_connection
+Return the full details of a connection given the connection name
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/connections/{connectionName}  
+http://localhost:8888/api/connections/{connectionName}
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[connection_specification_model](../../models/connections/#connectionspecificationmodel)||[ConnectionSpecificationModel](../../models/connections/#connectionspecificationmodel)|
+|[connection_specification_model](../../models/connections.md#connectionspecificationmodel)||[ConnectionSpecificationModel](../../models/connections.md#connectionspecificationmodel)|
 
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
@@ -1476,10 +1476,10 @@ http://localhost:8888/api/connections/{connectionName}
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/connections/sample_connection^
 		-H "Accept: application/json"
@@ -1487,7 +1487,7 @@ http://localhost:8888/api/connections/{connectionName}
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_connection
@@ -1506,7 +1506,7 @@ http://localhost:8888/api/connections/{connectionName}
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_connection
@@ -1527,7 +1527,7 @@ http://localhost:8888/api/connections/{connectionName}
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_connection
@@ -1549,7 +1549,7 @@ http://localhost:8888/api/connections/{connectionName}
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_connection
@@ -1575,7 +1575,7 @@ http://localhost:8888/api/connections/{connectionName}
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     {
 	  "can_edit" : false
@@ -1583,28 +1583,28 @@ http://localhost:8888/api/connections/{connectionName}
     ```
 
 
-___  
-## get_connection_basic  
-Return the basic details of a connection given the connection name  
+___
+## get_connection_basic
+Return the basic details of a connection given the connection name
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection_basic.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/connections/{connectionName}/basic  
+http://localhost:8888/api/connections/{connectionName}/basic
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[connection_model](../../models/Common/#connectionmodel)||[ConnectionModel](../../models/Common/#connectionmodel)|
+|[connection_model](../../models/Common.md#connectionmodel)||[ConnectionModel](../../models/Common.md#connectionmodel)|
 
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
@@ -1614,10 +1614,10 @@ http://localhost:8888/api/connections/{connectionName}/basic
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/basic^
 		-H "Accept: application/json"
@@ -1625,7 +1625,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_connection_basic
@@ -1644,7 +1644,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_connection_basic
@@ -1665,7 +1665,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_connection_basic
@@ -1687,7 +1687,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_connection_basic
@@ -1713,7 +1713,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     {
 	  "connection_name" : "sample_connection",
@@ -1765,28 +1765,28 @@ http://localhost:8888/api/connections/{connectionName}/basic
     ```
 
 
-___  
-## get_connection_comments  
-Return the comments for a connection  
+___
+## get_connection_comments
+Return the comments for a connection
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection_comments.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/connections/{connectionName}/comments  
+http://localhost:8888/api/connections/{connectionName}/comments
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|comment_spec||List[[CommentSpec](../../models/Common/#commentspec)]|
+|comment_spec||List[[CommentSpec](../../models/Common.md#commentspec)]|
 
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
@@ -1796,10 +1796,10 @@ http://localhost:8888/api/connections/{connectionName}/comments
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/comments^
 		-H "Accept: application/json"
@@ -1807,7 +1807,7 @@ http://localhost:8888/api/connections/{connectionName}/comments
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_connection_comments
@@ -1826,7 +1826,7 @@ http://localhost:8888/api/connections/{connectionName}/comments
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_connection_comments
@@ -1847,7 +1847,7 @@ http://localhost:8888/api/connections/{connectionName}/comments
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_connection_comments
@@ -1869,7 +1869,7 @@ http://localhost:8888/api/connections/{connectionName}/comments
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_connection_comments
@@ -1895,7 +1895,7 @@ http://localhost:8888/api/connections/{connectionName}/comments
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     [ {
 	  "date" : "2007-12-03T10:15:30",
@@ -1913,28 +1913,28 @@ http://localhost:8888/api/connections/{connectionName}/comments
     ```
 
 
-___  
-## get_connection_common_columns  
-Finds common column names that are used on one or more tables. The list of columns is sorted in descending order by column name.  
+___
+## get_connection_common_columns
+Finds common column names that are used on one or more tables. The list of columns is sorted in descending order by column name.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection_common_columns.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/connections/{connectionName}/commoncolumns  
+http://localhost:8888/api/connections/{connectionName}/commoncolumns
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|common_column_model||List[[CommonColumnModel](../../models/connections/#CommonColumnModel)]|
+|common_column_model||List[[CommonColumnModel](../../models/connections.md#CommonColumnModel)]|
 
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
@@ -1944,10 +1944,10 @@ http://localhost:8888/api/connections/{connectionName}/commoncolumns
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/commoncolumns^
 		-H "Accept: application/json"
@@ -1955,7 +1955,7 @@ http://localhost:8888/api/connections/{connectionName}/commoncolumns
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_connection_common_columns
@@ -1974,7 +1974,7 @@ http://localhost:8888/api/connections/{connectionName}/commoncolumns
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_connection_common_columns
@@ -1995,7 +1995,7 @@ http://localhost:8888/api/connections/{connectionName}/commoncolumns
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_connection_common_columns
@@ -2017,7 +2017,7 @@ http://localhost:8888/api/connections/{connectionName}/commoncolumns
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_connection_common_columns
@@ -2043,7 +2043,7 @@ http://localhost:8888/api/connections/{connectionName}/commoncolumns
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     [ {
 	  "tables_count" : 0
@@ -2055,28 +2055,28 @@ http://localhost:8888/api/connections/{connectionName}/commoncolumns
     ```
 
 
-___  
-## get_connection_default_grouping_configuration  
-Return the default data grouping configuration for a connection  
+___
+## get_connection_default_grouping_configuration
+Return the default data grouping configuration for a connection
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection_default_grouping_configuration.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfiguration  
+http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfiguration
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[data_grouping_configuration_spec](../../../reference/yaml/ConnectionYaml/#datagroupingconfigurationspec)||[DataGroupingConfigurationSpec](../../../reference/yaml/ConnectionYaml/#datagroupingconfigurationspec)|
+|[data_grouping_configuration_spec](../../../reference/yaml/ConnectionYaml.md#datagroupingconfigurationspec)||[DataGroupingConfigurationSpec](../../../reference/yaml/ConnectionYaml.md#datagroupingconfigurationspec)|
 
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
@@ -2086,10 +2086,10 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/defaultgroupingconfiguration^
 		-H "Accept: application/json"
@@ -2097,7 +2097,7 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_connection_default_grouping_configuration
@@ -2116,7 +2116,7 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_connection_default_grouping_configuration
@@ -2137,7 +2137,7 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_connection_default_grouping_configuration
@@ -2159,7 +2159,7 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_connection_default_grouping_configuration
@@ -2185,7 +2185,7 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     {
 	  "level_3" : {
@@ -2196,28 +2196,28 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
     ```
 
 
-___  
-## get_connection_incident_grouping  
-Retrieves the configuration of data quality incident grouping and incident notifications  
+___
+## get_connection_incident_grouping
+Retrieves the configuration of data quality incident grouping and incident notifications
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection_incident_grouping.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/connections/{connectionName}/incidentgrouping  
+http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[connection_incident_grouping_spec](../../../reference/yaml/ConnectionYaml/#connectionincidentgroupingspec)||[ConnectionIncidentGroupingSpec](../../../reference/yaml/ConnectionYaml/#connectionincidentgroupingspec)|
+|[connection_incident_grouping_spec](../../../reference/yaml/ConnectionYaml.md#connectionincidentgroupingspec)||[ConnectionIncidentGroupingSpec](../../../reference/yaml/ConnectionYaml.md#connectionincidentgroupingspec)|
 
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
@@ -2227,10 +2227,10 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/incidentgrouping^
 		-H "Accept: application/json"
@@ -2238,7 +2238,7 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_connection_incident_grouping
@@ -2257,7 +2257,7 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_connection_incident_grouping
@@ -2278,7 +2278,7 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_connection_incident_grouping
@@ -2300,7 +2300,7 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_connection_incident_grouping
@@ -2326,7 +2326,7 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     {
 	  "grouping_level" : "table_dimension",
@@ -2344,19 +2344,19 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
     ```
 
 
-___  
-## get_connection_labels  
-Return the labels for a connection  
+___
+## get_connection_labels
+Return the labels for a connection
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection_labels.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/connections/{connectionName}/labels  
+http://localhost:8888/api/connections/{connectionName}/labels
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |string||List[string]|
@@ -2364,8 +2364,8 @@ http://localhost:8888/api/connections/{connectionName}/labels
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
@@ -2375,10 +2375,10 @@ http://localhost:8888/api/connections/{connectionName}/labels
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/labels^
 		-H "Accept: application/json"
@@ -2386,7 +2386,7 @@ http://localhost:8888/api/connections/{connectionName}/labels
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_connection_labels
@@ -2405,7 +2405,7 @@ http://localhost:8888/api/connections/{connectionName}/labels
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_connection_labels
@@ -2426,7 +2426,7 @@ http://localhost:8888/api/connections/{connectionName}/labels
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_connection_labels
@@ -2448,7 +2448,7 @@ http://localhost:8888/api/connections/{connectionName}/labels
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_connection_labels
@@ -2474,48 +2474,48 @@ http://localhost:8888/api/connections/{connectionName}/labels
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     [ "sampleString_1", "sampleString_2", "sampleString_3" ]
     ```
 
 
-___  
-## get_connection_scheduling_group  
-Return the schedule for a connection for a scheduling group  
+___
+## get_connection_scheduling_group
+Return the schedule for a connection for a scheduling group
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection_scheduling_group.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGroup}  
+http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGroup}
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[monitoring_schedule_spec](../../models/Common/#monitoringschedulespec)||[MonitoringScheduleSpec](../../models/Common/#monitoringschedulespec)|
+|[monitoring_schedule_spec](../../models/Common.md#monitoringschedulespec)||[MonitoringScheduleSpec](../../models/Common.md#monitoringschedulespec)|
 
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
-|[scheduling_group](../../models/Common/#checkrunschedulegroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../../models/Common/#checkrunschedulegroup)|:material-check-bold:|
+|[scheduling_group](../../models/Common.md#checkrunschedulegroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../../models/Common.md#checkrunschedulegroup)|:material-check-bold:|
 
 
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schedules/partitioned_daily^
 		-H "Accept: application/json"
@@ -2523,7 +2523,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_connection_scheduling_group
@@ -2543,7 +2543,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_connection_scheduling_group
@@ -2565,7 +2565,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_connection_scheduling_group
@@ -2588,7 +2588,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_connection_scheduling_group
@@ -2615,7 +2615,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     {
 	  "cron_expression" : "0 12 1 * *"
@@ -2623,21 +2623,21 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
     ```
 
 
-___  
-## update_connection  
-Updates an existing connection  
+___
+## update_connection
+Updates an existing connection
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/update_connection.py)
-  
+
 
 **PUT**
 ```
-http://localhost:8888/api/connections/{connectionName}  
+http://localhost:8888/api/connections/{connectionName}
 ```
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
@@ -2645,19 +2645,19 @@ http://localhost:8888/api/connections/{connectionName}
 
 
 
-**Request body**  
-  
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Connection specification|[ConnectionSpec](../../../reference/yaml/ConnectionYaml/#connectionspec)| |
+|Connection specification|[ConnectionSpec](../../../reference/yaml/ConnectionYaml.md#connectionspec)| |
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection^
 		-H "Accept: application/json"^
@@ -2668,7 +2668,7 @@ http://localhost:8888/api/connections/{connectionName}
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import update_connection
@@ -2714,7 +2714,7 @@ http://localhost:8888/api/connections/{connectionName}
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import update_connection
@@ -2762,7 +2762,7 @@ http://localhost:8888/api/connections/{connectionName}
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import update_connection
@@ -2811,7 +2811,7 @@ http://localhost:8888/api/connections/{connectionName}
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import update_connection
@@ -2865,21 +2865,21 @@ http://localhost:8888/api/connections/{connectionName}
 
 
 
-___  
-## update_connection_basic  
-Updates the basic information of a connection  
+___
+## update_connection_basic
+Updates the basic information of a connection
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/update_connection_basic.py)
-  
+
 
 **PUT**
 ```
-http://localhost:8888/api/connections/{connectionName}/basic  
+http://localhost:8888/api/connections/{connectionName}/basic
 ```
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
@@ -2887,19 +2887,19 @@ http://localhost:8888/api/connections/{connectionName}/basic
 
 
 
-**Request body**  
-  
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Connection basic details|[ConnectionModel](../../models/Common/#connectionmodel)| |
+|Connection basic details|[ConnectionModel](../../models/Common.md#connectionmodel)| |
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/basic^
 		-H "Accept: application/json"^
@@ -2910,7 +2910,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import update_connection_basic
@@ -2985,7 +2985,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import update_connection_basic
@@ -3062,7 +3062,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import update_connection_basic
@@ -3140,7 +3140,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import update_connection_basic
@@ -3223,21 +3223,21 @@ http://localhost:8888/api/connections/{connectionName}/basic
 
 
 
-___  
-## update_connection_comments  
-Updates (replaces) the list of comments of a connection  
+___
+## update_connection_comments
+Updates (replaces) the list of comments of a connection
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/update_connection_comments.py)
-  
+
 
 **PUT**
 ```
-http://localhost:8888/api/connections/{connectionName}/comments  
+http://localhost:8888/api/connections/{connectionName}/comments
 ```
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
@@ -3245,19 +3245,19 @@ http://localhost:8888/api/connections/{connectionName}/comments
 
 
 
-**Request body**  
-  
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|List of comments|List[[CommentSpec](../../models/Common/#commentspec)]| |
+|List of comments|List[[CommentSpec](../../models/Common.md#commentspec)]| |
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/comments^
 		-H "Accept: application/json"^
@@ -3268,7 +3268,7 @@ http://localhost:8888/api/connections/{connectionName}/comments
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import update_connection_comments
@@ -3305,7 +3305,7 @@ http://localhost:8888/api/connections/{connectionName}/comments
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import update_connection_comments
@@ -3344,7 +3344,7 @@ http://localhost:8888/api/connections/{connectionName}/comments
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import update_connection_comments
@@ -3384,7 +3384,7 @@ http://localhost:8888/api/connections/{connectionName}/comments
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import update_connection_comments
@@ -3429,21 +3429,21 @@ http://localhost:8888/api/connections/{connectionName}/comments
 
 
 
-___  
-## update_connection_default_grouping_configuration  
-Updates the default data grouping connection of a connection  
+___
+## update_connection_default_grouping_configuration
+Updates the default data grouping connection of a connection
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/update_connection_default_grouping_configuration.py)
-  
+
 
 **PUT**
 ```
-http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfiguration  
+http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfiguration
 ```
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
@@ -3451,19 +3451,19 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
 
 
 
-**Request body**  
-  
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Default data grouping configuration to be assigned to a connection|[DataGroupingConfigurationSpec](../../../reference/yaml/ConnectionYaml/#datagroupingconfigurationspec)| |
+|Default data grouping configuration to be assigned to a connection|[DataGroupingConfigurationSpec](../../../reference/yaml/ConnectionYaml.md#datagroupingconfigurationspec)| |
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/defaultgroupingconfiguration^
 		-H "Accept: application/json"^
@@ -3474,7 +3474,7 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import update_connection_default_grouping_configuration
@@ -3502,7 +3502,7 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import update_connection_default_grouping_configuration
@@ -3532,7 +3532,7 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import update_connection_default_grouping_configuration
@@ -3563,7 +3563,7 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import update_connection_default_grouping_configuration
@@ -3599,21 +3599,21 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
 
 
 
-___  
-## update_connection_incident_grouping  
-Updates (replaces) configuration of incident grouping and notifications on a connection (data source) level.  
+___
+## update_connection_incident_grouping
+Updates (replaces) configuration of incident grouping and notifications on a connection (data source) level.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/update_connection_incident_grouping.py)
-  
+
 
 **PUT**
 ```
-http://localhost:8888/api/connections/{connectionName}/incidentgrouping  
+http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 ```
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
@@ -3621,19 +3621,19 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 
 
 
-**Request body**  
-  
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Incident grouping and notification configuration|[ConnectionIncidentGroupingSpec](../../../reference/yaml/ConnectionYaml/#connectionincidentgroupingspec)| |
+|Incident grouping and notification configuration|[ConnectionIncidentGroupingSpec](../../../reference/yaml/ConnectionYaml.md#connectionincidentgroupingspec)| |
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/incidentgrouping^
 		-H "Accept: application/json"^
@@ -3644,7 +3644,7 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import update_connection_incident_grouping
@@ -3681,7 +3681,7 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import update_connection_incident_grouping
@@ -3720,7 +3720,7 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import update_connection_incident_grouping
@@ -3760,7 +3760,7 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import update_connection_incident_grouping
@@ -3805,21 +3805,21 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 
 
 
-___  
-## update_connection_labels  
-Updates the list of labels of a connection  
+___
+## update_connection_labels
+Updates the list of labels of a connection
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/update_connection_labels.py)
-  
+
 
 **PUT**
 ```
-http://localhost:8888/api/connections/{connectionName}/labels  
+http://localhost:8888/api/connections/{connectionName}/labels
 ```
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
@@ -3827,8 +3827,8 @@ http://localhost:8888/api/connections/{connectionName}/labels
 
 
 
-**Request body**  
-  
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
 |List of labels|List[string]| |
@@ -3836,10 +3836,10 @@ http://localhost:8888/api/connections/{connectionName}/labels
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/labels^
 		-H "Accept: application/json"^
@@ -3850,7 +3850,7 @@ http://localhost:8888/api/connections/{connectionName}/labels
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import update_connection_labels
@@ -3875,7 +3875,7 @@ http://localhost:8888/api/connections/{connectionName}/labels
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import update_connection_labels
@@ -3902,7 +3902,7 @@ http://localhost:8888/api/connections/{connectionName}/labels
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import update_connection_labels
@@ -3930,7 +3930,7 @@ http://localhost:8888/api/connections/{connectionName}/labels
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import update_connection_labels
@@ -3963,42 +3963,42 @@ http://localhost:8888/api/connections/{connectionName}/labels
 
 
 
-___  
-## update_connection_scheduling_group  
-Updates the schedule of a connection for a scheduling group (named schedule for checks with a similar time series configuration)  
+___
+## update_connection_scheduling_group
+Updates the schedule of a connection for a scheduling group (named schedule for checks with a similar time series configuration)
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/update_connection_scheduling_group.py)
-  
+
 
 **PUT**
 ```
-http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGroup}  
+http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGroup}
 ```
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
-|[scheduling_group](../../models/Common/#checkrunschedulegroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../../models/Common/#checkrunschedulegroup)|:material-check-bold:|
+|[scheduling_group](../../models/Common.md#checkrunschedulegroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../../models/Common.md#checkrunschedulegroup)|:material-check-bold:|
 
 
 
 
-**Request body**  
-  
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Monitoring schedule definition to store|[MonitoringScheduleSpec](../../models/Common/#monitoringschedulespec)| |
+|Monitoring schedule definition to store|[MonitoringScheduleSpec](../../models/Common.md#monitoringschedulespec)| |
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/schedules/partitioned_daily^
 		-H "Accept: application/json"^
@@ -4009,7 +4009,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import update_connection_scheduling_group
@@ -4035,7 +4035,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import update_connection_scheduling_group
@@ -4063,7 +4063,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import update_connection_scheduling_group
@@ -4092,7 +4092,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.connections import update_connection_scheduling_group

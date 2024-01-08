@@ -25,11 +25,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 public class MaxMissingRuleParametersSpecTests extends BaseTest {
-    private MaxMissingRule0ParametersSpec sut;
+    private MaxMissingRule0WarningParametersSpec sut;
 
     @BeforeEach
     void setUp() {
-		this.sut = new MaxMissingRule0ParametersSpec();
+		this.sut = new MaxMissingRule0WarningParametersSpec();
     }
 
     @Test

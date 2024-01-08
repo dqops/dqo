@@ -1,21 +1,21 @@
-Sensors definition management  
+Sensors definition management
 
 
-___  
-## create_sensor  
-Creates (adds) a new sensor given sensor information.  
+___
+## create_sensor
+Creates (adds) a new sensor given sensor information.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensors/create_sensor.py)
-  
+
 
 **POST**
 ```
-http://localhost:8888/api/sensors/{fullSensorName}  
+http://localhost:8888/api/sensors/{fullSensorName}
 ```
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |full_sensor_name|Full sensor name|string|:material-check-bold:|
@@ -23,19 +23,19 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 
-**Request body**  
-  
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Dictionary of sensor definitions|[SensorModel](../../models/sensors/#sensormodel)| |
+|Dictionary of sensor definitions|[SensorModel](../../models/sensors.md#sensormodel)| |
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X POST http://localhost:8888/api/sensors/sample_target/sample_category/sample_sensor^
 		-H "Accept: application/json"^
@@ -46,7 +46,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensors import create_sensor
@@ -84,7 +84,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensors import create_sensor
@@ -124,7 +124,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensors import create_sensor
@@ -165,7 +165,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensors import create_sensor
@@ -211,21 +211,21 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 
-___  
-## delete_sensor  
-Deletes a custom sensor definition  
+___
+## delete_sensor
+Deletes a custom sensor definition
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensors/delete_sensor.py)
-  
+
 
 **DELETE**
 ```
-http://localhost:8888/api/sensors/{fullSensorName}  
+http://localhost:8888/api/sensors/{fullSensorName}
 ```
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |full_sensor_name|Full sensor name|string|:material-check-bold:|
@@ -235,10 +235,10 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X DELETE http://localhost:8888/api/sensors/sample_target/sample_category/sample_sensor^
 		-H "Accept: application/json"
@@ -246,7 +246,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensors import delete_sensor
@@ -264,7 +264,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensors import delete_sensor
@@ -284,7 +284,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensors import delete_sensor
@@ -305,7 +305,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensors import delete_sensor
@@ -331,22 +331,22 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 
-___  
-## get_all_sensors  
-Returns a flat list of all sensors available in DQOps, both built-in sensors and user defined or customized sensors.  
+___
+## get_all_sensors
+Returns a flat list of all sensors available in DQOps, both built-in sensors and user defined or customized sensors.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensors/get_all_sensors.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/sensors  
+http://localhost:8888/api/sensors
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|sensor_list_model||List[[SensorListModel](../../models/sensors/#sensorlistmodel)]|
+|sensor_list_model||List[[SensorListModel](../../models/sensors.md#sensorlistmodel)]|
 
 
 
@@ -355,10 +355,10 @@ http://localhost:8888/api/sensors
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/sensors^
 		-H "Accept: application/json"
@@ -366,7 +366,7 @@ http://localhost:8888/api/sensors
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensors import get_all_sensors
@@ -384,7 +384,7 @@ http://localhost:8888/api/sensors
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensors import get_all_sensors
@@ -404,7 +404,7 @@ http://localhost:8888/api/sensors
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensors import get_all_sensors
@@ -425,7 +425,7 @@ http://localhost:8888/api/sensors
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensors import get_all_sensors
@@ -450,7 +450,7 @@ http://localhost:8888/api/sensors
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     [ {
 	  "custom" : false,
@@ -468,28 +468,28 @@ http://localhost:8888/api/sensors
     ```
 
 
-___  
-## get_sensor  
-Returns a sensor model  
+___
+## get_sensor
+Returns a sensor model
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensors/get_sensor.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/sensors/{fullSensorName}  
+http://localhost:8888/api/sensors/{fullSensorName}
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[sensor_model](../../models/sensors/#sensormodel)||[SensorModel](../../models/sensors/#sensormodel)|
+|[sensor_model](../../models/sensors.md#sensormodel)||[SensorModel](../../models/sensors.md#sensormodel)|
 
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |full_sensor_name|Full sensor name|string|:material-check-bold:|
@@ -499,10 +499,10 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/sensors/sample_target/sample_category/sample_sensor^
 		-H "Accept: application/json"
@@ -510,7 +510,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensors import get_sensor
@@ -529,7 +529,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensors import get_sensor
@@ -550,7 +550,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensors import get_sensor
@@ -572,7 +572,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensors import get_sensor
@@ -598,7 +598,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     {
 	  "full_sensor_name" : "sample_target/sample_category/sample_sensor",
@@ -620,22 +620,22 @@ http://localhost:8888/api/sensors/{fullSensorName}
     ```
 
 
-___  
-## get_sensor_folder_tree  
-Returns a tree of all sensors available in DQOps, both built-in sensors and user defined or customized sensors.  
+___
+## get_sensor_folder_tree
+Returns a tree of all sensors available in DQOps, both built-in sensors and user defined or customized sensors.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensors/get_sensor_folder_tree.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/definitions/sensors  
+http://localhost:8888/api/definitions/sensors
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[sensor_folder_model](../../models/sensors/#sensorfoldermodel)||[SensorFolderModel](../../models/sensors/#sensorfoldermodel)|
+|[sensor_folder_model](../../models/sensors.md#sensorfoldermodel)||[SensorFolderModel](../../models/sensors.md#sensorfoldermodel)|
 
 
 
@@ -644,10 +644,10 @@ http://localhost:8888/api/definitions/sensors
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/definitions/sensors^
 		-H "Accept: application/json"
@@ -655,7 +655,7 @@ http://localhost:8888/api/definitions/sensors
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensors import get_sensor_folder_tree
@@ -673,7 +673,7 @@ http://localhost:8888/api/definitions/sensors
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensors import get_sensor_folder_tree
@@ -693,7 +693,7 @@ http://localhost:8888/api/definitions/sensors
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensors import get_sensor_folder_tree
@@ -714,7 +714,7 @@ http://localhost:8888/api/definitions/sensors
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensors import get_sensor_folder_tree
@@ -739,7 +739,7 @@ http://localhost:8888/api/definitions/sensors
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     {
 	  "all_sensors" : [ ]
@@ -747,22 +747,22 @@ http://localhost:8888/api/definitions/sensors
     ```
 
 
-___  
-## update_sensor  
+___
+## update_sensor
 Updates an existing sensor, making a custom sensor definition if it is not present. 
-Removes sensor if custom definition is same as Dqo Home sensor  
+Removes sensor if custom definition is same as Dqo Home sensor
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensors/update_sensor.py)
-  
+
 
 **PUT**
 ```
-http://localhost:8888/api/sensors/{fullSensorName}  
+http://localhost:8888/api/sensors/{fullSensorName}
 ```
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |full_sensor_name|Full sensor name|string|:material-check-bold:|
@@ -770,19 +770,19 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 
-**Request body**  
-  
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Dictionary of sensor definitions|[SensorModel](../../models/sensors/#sensormodel)| |
+|Dictionary of sensor definitions|[SensorModel](../../models/sensors.md#sensormodel)| |
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X PUT http://localhost:8888/api/sensors/sample_target/sample_category/sample_sensor^
 		-H "Accept: application/json"^
@@ -793,7 +793,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensors import update_sensor
@@ -831,7 +831,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensors import update_sensor
@@ -871,7 +871,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensors import update_sensor
@@ -912,7 +912,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensors import update_sensor

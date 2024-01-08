@@ -1,8 +1,0 @@
-# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
-apiVersion: dqo/v1
-kind: check
-spec:
-  sensor_name: column/integrity/foreign_key_not_match_count
-  rule_name: comparison/max_count
-  help_text: Verifies that the number of values in a column that does not match values
-    in another table column does not exceed the set count.

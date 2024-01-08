@@ -84,6 +84,7 @@ nav:
           - Detect empty tables: "examples/data-quality-monitoring/detect-empty-tables.md"
           - Running checks with a scheduler: "examples/data-quality-monitoring/running-checks-with-a-scheduler.md"
   - Working with DQOps:
+      - Daily monitoring of data quality: "working-with-dqo/daily-monitoring-of-data-quality/daily-monitoring-of-data-quality.md"
       - Basic data statistics: "working-with-dqo/basic-data-statistics/basic-data-statistics.md"
       - Run data quality checks: "working-with-dqo/run-data-quality-checks/run-data-quality-checks.md"
       - Review the results of data quality monitoring on dashboards: "working-with-dqo/data-quality-dashboards/data-quality-dashboards.md"
@@ -137,6 +138,7 @@ nav:
 ########## END INCLUDE CLI COMMANDS
 ########## INCLUDE PYTHON CLIENT REFERENCE - DO NOT MODIFY MANUALLY
   - REST API Python client:
+    - 'client/index.md'
     - models:
       - 'client/models/index.md'
       - Common: 'client/models/Common.md'
@@ -153,6 +155,7 @@ nav:
       - incidents: 'client/models/incidents.md'
       - jobs: 'client/models/jobs.md'
       - log_shipping: 'client/models/log_shipping.md'
+      - models: 'client/models/models.md'
       - rules: 'client/models/rules.md'
       - schemas: 'client/models/schemas.md'
       - sensor_readouts: 'client/models/sensor_readouts.md'
@@ -294,14 +297,14 @@ nav:
         - 'checks/column/nulls/index.md'
         - nulls count: 'checks/column/nulls/nulls-count.md'
         - nulls percent: 'checks/column/nulls/nulls-percent.md'
+        - not nulls count: 'checks/column/nulls/not-nulls-count.md'
+        - not nulls percent: 'checks/column/nulls/not-nulls-percent.md'
         - nulls percent anomaly stationary 30 days: 'checks/column/nulls/nulls-percent-anomaly-stationary-30-days.md'
         - nulls percent anomaly stationary: 'checks/column/nulls/nulls-percent-anomaly-stationary.md'
         - nulls percent change: 'checks/column/nulls/nulls-percent-change.md'
         - nulls percent change yesterday: 'checks/column/nulls/nulls-percent-change-yesterday.md'
         - nulls percent change 7 days: 'checks/column/nulls/nulls-percent-change-7-days.md'
         - nulls percent change 30 days: 'checks/column/nulls/nulls-percent-change-30-days.md'
-        - not nulls count: 'checks/column/nulls/not-nulls-count.md'
-        - not nulls percent: 'checks/column/nulls/not-nulls-percent.md'
       - numeric:
         - 'checks/column/numeric/index.md'
         - negative count: 'checks/column/numeric/negative-count.md'

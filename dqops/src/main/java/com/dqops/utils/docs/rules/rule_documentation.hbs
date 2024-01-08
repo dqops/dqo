@@ -6,11 +6,11 @@ ___
 ```
 {{fullRuleName}}
 ```
-**Description**{{#with "  "}}{{.}}{{/with}}
+**Description**
 {{ruleParametersJavaDoc}}
 {{#if definition.spec.fields}}
-**Parameters**{{#with "  "}}{{.}}{{/with}}
-{{#with "  "}}{{.}}{{/with}}
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 {{#each definition.spec.fields}}|{{displayName}}|{{helpText}}|{{replace dataType "_type" ""}}|{{checkmark required}}|{{#each allowedValues}}{{this}}<br/>{{/each}}|
@@ -28,8 +28,8 @@ The rule definition YAML file *{{fullRuleName}}.dqorule.yaml* with the time wind
 {{else}}
 {{/if}}
 {{#if definition.spec.parameters}}
-**Additional rule parameters**{{#with "  "}}{{.}}{{/with}}
-{{#with "  "}}{{.}}{{/with}}
+**Additional rule parameters**
+
 | Parameters name | Value |
 |-----------------|-------|
 {{#each definition.spec.parameters}}|{{@key}}|{{this}}|

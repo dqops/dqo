@@ -16,7 +16,7 @@
 package com.dqops.snowflake.sensors.column.numeric;
 
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.column.checkspecs.numeric.ColumnValueAboveMaxValueCountCheckSpec;
+import com.dqops.checks.column.checkspecs.numeric.ColumnNumberAboveMaxValueCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
@@ -29,7 +29,7 @@ import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
-import com.dqops.sensors.column.numeric.ColumnNumericValueAboveMaxValueCountSensorParametersSpec;
+import com.dqops.sensors.column.numeric.ColumnNumericNumberAboveMaxValueCountSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,9 +39,9 @@ import tech.tablesaw.api.Table;
 
 @SpringBootTest
 public class SnowflakeColumnMaxValueAboveMaxValueCountSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
-    private ColumnNumericValueAboveMaxValueCountSensorParametersSpec sut;
+    private ColumnNumericNumberAboveMaxValueCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnValueAboveMaxValueCountCheckSpec checkSpec;
+    private ColumnNumberAboveMaxValueCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -49,8 +49,8 @@ public class SnowflakeColumnMaxValueAboveMaxValueCountSensorParametersSpecIntegr
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.below_above_value_test, ProviderType.snowflake);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new ColumnNumericValueAboveMaxValueCountSensorParametersSpec();
-        this.checkSpec = new ColumnValueAboveMaxValueCountCheckSpec();
+        this.sut = new ColumnNumericNumberAboveMaxValueCountSensorParametersSpec();
+        this.checkSpec = new ColumnNumberAboveMaxValueCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

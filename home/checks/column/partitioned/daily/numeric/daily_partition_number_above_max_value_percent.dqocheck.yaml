@@ -1,0 +1,9 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: column/numeric/number_above_max_value_percent
+  rule_name: comparison/max_percent
+  help_text: The check counts the percentage of values in the column that is above
+    the value defined by the user as a parameter. Creates a separate data quality
+    check (and an alert) for each daily partition.

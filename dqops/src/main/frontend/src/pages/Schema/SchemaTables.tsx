@@ -114,12 +114,7 @@ export const SchemaTables = () => {
       case CheckTypes.PARTITIONED:
         return [
           { label: 'Daily checks', value: 'daily' },
-          { label: 'Daily table status', value: 'table-quality-status-daily' },
-          { label: 'Monthly checks', value: 'monthly' },
-          {
-            label: 'Monthly table status',
-            value: 'table-quality-status-monthly'
-          }
+          { label: 'Daily table status', value: 'table-quality-status-daily' }
         ];
 
       default:
@@ -149,6 +144,7 @@ export const SchemaTables = () => {
       <th
         className="px-4 text-left cursor-pointer"
         onClick={() => sortTables(key)}
+        key={key}
       >
         <div className="flex">
           {label}

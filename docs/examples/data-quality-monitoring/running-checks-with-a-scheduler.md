@@ -1,5 +1,7 @@
 # Running checks with a scheduler
 
+## Overview
+
 In this example, you will learn how to set different schedules on multiple checks.
 
 **PROBLEM**
@@ -106,7 +108,7 @@ To view and modify individual check-level schedules:
 
 3. Select the **Daily checks** tab on the check editor.
 
-    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../../dqo-concepts/user-interface-overview/user-interface-overview/#check-editor).
+    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../../dqo-concepts/user-interface-overview/user-interface-overview.md#check-editor).
 
 4. Find the [daily_table_availability](../../checks/table/availability/table-availability.md) check in the Availability group, and click on the **Settings** icon.
 

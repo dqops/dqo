@@ -1,7 +1,6 @@
 
-## ProviderSensorDefinitionSpec  
-Specification (configuration) for a provider specific implementation of a data quality sensor or an SQL template.  
-  
+## ProviderSensorDefinitionSpec
+Specification (configuration) for a provider specific implementation of a data quality sensor or an SQL template.
 
 
 
@@ -10,8 +9,9 @@ Specification (configuration) for a provider specific implementation of a data q
 
 
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |type|Sensor implementation type|enum|sql_template<br/>java_class<br/>| | |
@@ -29,12 +29,10 @@ Specification (configuration) for a provider specific implementation of a data q
 
 
 
-___  
+___
 
-## ProviderSensorYaml  
-Provider specific data quality sensor definition YAML schema for a data quality sensor configuration specification.  
-  
-
+## ProviderSensorYaml
+Provider specific data quality sensor definition YAML schema for a data quality sensor configuration specification.
 
 
 
@@ -42,13 +40,15 @@ Provider specific data quality sensor definition YAML schema for a data quality 
 
 
 
-**The structure of this object is described below**  
-  
+
+
+**The structure of this object is described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |api_version||string| | | |
 |kind||enum|default_schedules<br/>settings<br/>default_notifications<br/>rule<br/>sensor<br/>source<br/>check<br/>dashboards<br/>default_checks<br/>table<br/>provider_sensor<br/>file_index<br/>| | |
-|[spec](../ProviderSensorYaml/#ProviderSensorDefinitionSpec)||[ProviderSensorDefinitionSpec](../ProviderSensorYaml/#ProviderSensorDefinitionSpec)| | | |
+|[spec](#ProviderSensorDefinitionSpec)||[ProviderSensorDefinitionSpec](#ProviderSensorDefinitionSpec)| | | |
 
 
 
@@ -58,5 +58,5 @@ Provider specific data quality sensor definition YAML schema for a data quality 
 
 
 
-___  
+___
 

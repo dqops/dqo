@@ -16,12 +16,14 @@
 
 package com.dqops.checks.defaults.services;
 
-import com.dqops.checks.column.checkspecs.anomaly.ColumnAnomalyDifferencingSumCheckSpec;
-import com.dqops.checks.column.checkspecs.anomaly.ColumnAnomalyStationaryMeanCheckSpec;
+import com.dqops.checks.column.checkspecs.anomaly.ColumnSumAnomalyDifferencingCheckSpec;
+import com.dqops.checks.column.checkspecs.anomaly.ColumnMeanAnomalyStationaryCheckSpec;
 import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeStringDatatypeChangedCheckSpec;
 import com.dqops.checks.column.checkspecs.nulls.*;
 import com.dqops.checks.column.checkspecs.schema.ColumnSchemaColumnExistsCheckSpec;
 import com.dqops.checks.column.checkspecs.schema.ColumnSchemaTypeChangedCheckSpec;
+import com.dqops.checks.column.checkspecs.uniqueness.ColumnDistinctCountAnomalyDifferencingCheckSpec;
+import com.dqops.checks.column.monitoring.uniqueness.ColumnUniquenessDailyMonitoringChecksSpec;
 import com.dqops.checks.column.profiling.ColumnNullsProfilingChecksSpec;
 import com.dqops.checks.column.monitoring.anomaly.ColumnAnomalyDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.datatype.ColumnDatatypeDailyMonitoringChecksSpec;
@@ -33,8 +35,8 @@ import com.dqops.checks.defaults.DefaultObservabilityChecksSpec;
 import com.dqops.checks.defaults.DefaultProfilingObservabilityCheckSettingsSpec;
 import com.dqops.checks.table.checkspecs.availability.TableAvailabilityCheckSpec;
 import com.dqops.checks.table.checkspecs.schema.*;
-import com.dqops.checks.table.checkspecs.volume.TableAnomalyDifferencingRowCountCheckSpec;
-import com.dqops.checks.table.checkspecs.volume.TableChangeRowCountCheckSpec;
+import com.dqops.checks.table.checkspecs.volume.TableRowCountAnomalyDifferencingCheckSpec;
+import com.dqops.checks.table.checkspecs.volume.TableRowCountChangeCheckSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.checks.table.profiling.TableSchemaProfilingChecksSpec;
 import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
@@ -82,27 +84,27 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
 
         TableVolumeDailyMonitoringChecksSpec tableVolume = new TableVolumeDailyMonitoringChecksSpec();
         tableVolume.setDailyRowCount(new TableRowCountCheckSpec() {{
-            setWarning(new MinCountRuleWarningParametersSpec());
+            setWarning(new MinCountRule0WarningParametersSpec());
         }});
-        tableVolume.setDailyRowCountChange(new TableChangeRowCountCheckSpec() {{
+        tableVolume.setDailyRowCountChange(new TableRowCountChangeCheckSpec() {{
             setWarning(new ChangePercentRule10ParametersSpec());
         }});
-        tableVolume.setDailyRowCountAnomalyDifferencing(new TableAnomalyDifferencingRowCountCheckSpec() {{
+        tableVolume.setDailyRowCountAnomaly(new TableRowCountAnomalyDifferencingCheckSpec() {{
             setWarning(new AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec());
         }});
         defaultSettings.getTable().setVolume(tableVolume);
 
         ColumnDatatypeDailyMonitoringChecksSpec columnDatatype = new ColumnDatatypeDailyMonitoringChecksSpec();
-        columnDatatype.setDailyStringDatatypeChanged(new ColumnDatatypeStringDatatypeChangedCheckSpec() {{
+        columnDatatype.setDailyDetectedDatatypeInTextChanged(new ColumnDatatypeStringDatatypeChangedCheckSpec() {{
             setWarning(new ValueChangedRuleParametersSpec());
         }});
         defaultSettings.getColumn().setDatatype(columnDatatype);
 
         ColumnAnomalyDailyMonitoringChecksSpec columnAnomaly = new ColumnAnomalyDailyMonitoringChecksSpec();
-        columnAnomaly.setDailySumAnomalyDifferencing(new ColumnAnomalyDifferencingSumCheckSpec() {{
+        columnAnomaly.setDailySumAnomaly(new ColumnSumAnomalyDifferencingCheckSpec() {{
             setWarning(new AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec());
         }});
-        columnAnomaly.setDailyMeanAnomalyStationary(new ColumnAnomalyStationaryMeanCheckSpec() {{
+        columnAnomaly.setDailyMeanAnomaly(new ColumnMeanAnomalyStationaryCheckSpec() {{
             setWarning(new AnomalyStationaryPercentileMovingAverageRule1ParametersSpec());
         }});
         defaultSettings.getColumn().setAnomaly(columnAnomaly);
@@ -138,13 +140,19 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         }});
         columnNulls.setDailyNullsPercent(new ColumnNullsPercentCheckSpec());
         columnNulls.setDailyNotNullsPercent(new ColumnNotNullsPercentCheckSpec());
-        columnNulls.setDailyNullsPercentAnomalyStationary(new ColumnAnomalyStationaryNullPercentCheckSpec() {{
+        columnNulls.setDailyNullsPercentAnomaly(new ColumnNullPercentAnomalyStationaryCheckSpec() {{
             setWarning(new AnomalyStationaryPercentileMovingAverageRule1ParametersSpec());
         }});
-        columnNulls.setDailyNullsPercentChangeYesterday(new ColumnChangeNullPercentSinceYesterdayCheckSpec() {{
+        columnNulls.setDailyNullsPercentChange1Day(new ColumnNullPercentChange1DayCheckSpec() {{
             setWarning(new ChangePercent1DayRule10ParametersSpec());
         }});
         defaultSettings.getColumn().setNulls(columnNulls);
+
+        ColumnUniquenessDailyMonitoringChecksSpec columnUniqueness = new ColumnUniquenessDailyMonitoringChecksSpec();
+        columnUniqueness.setDailyDistinctCountAnomaly(new ColumnDistinctCountAnomalyDifferencingCheckSpec() {{
+            setWarning(new AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec());
+        }});
+        defaultSettings.getColumn().setUniqueness(columnUniqueness);
 
         return defaultSettings;
     }
@@ -157,17 +165,17 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         DefaultProfilingObservabilityCheckSettingsSpec defaultSettings = new DefaultProfilingObservabilityCheckSettingsSpec();
         TableVolumeProfilingChecksSpec tableVolume = new TableVolumeProfilingChecksSpec();
         tableVolume.setProfileRowCount(new TableRowCountCheckSpec() {{
-            setWarning(new MinCountRuleWarningParametersSpec());
+            setWarning(new MinCountRule0WarningParametersSpec());
         }});
         defaultSettings.getTable().setVolume(tableVolume);
 
         TableSchemaProfilingChecksSpec tableSchema = new TableSchemaProfilingChecksSpec();
-        tableSchema.setProfileColumnCount(new TableSchemaColumnCountCheckSpec());
+        tableSchema.setProfileExpectedColumnCount(new TableSchemaColumnCountCheckSpec());
         defaultSettings.getTable().setSchema(tableSchema);
 
         ColumnNullsProfilingChecksSpec columnNulls = new ColumnNullsProfilingChecksSpec();
         columnNulls.setProfileNullsCount(new ColumnNullsCountCheckSpec() {{
-            setWarning(new MaxCountRule1ParametersSpec());
+            setWarning(new MaxCountRule0WarningParametersSpec());
         }});
         columnNulls.setProfileNotNullsCount(new ColumnNotNullsCountCheckSpec() {{
             setWarning(new MinCountRule1ParametersSpec());

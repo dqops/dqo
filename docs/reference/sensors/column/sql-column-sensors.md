@@ -4,11 +4,11 @@
 ```
 column/sql/sql_aggregated_expression
 ```
-**Description**  
+**Description**
 Column level sensor that executes a given SQL expression on a column.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |sql_expression|SQL aggregate expression that returns a numeric value calculated from rows. The expression is evaluated on a whole table or withing a GROUP BY clause for daily partitions and/or data groups. The expression can use {table} and {column} placeholder that are replaced with a full table name and the analyzed column name.|string| ||
@@ -16,9 +16,9 @@ Column level sensor that executes a given SQL expression on a column.
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
@@ -32,7 +32,7 @@ Column level sensor that executes a given SQL expression on a column.
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
@@ -46,7 +46,7 @@ Column level sensor that executes a given SQL expression on a column.
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
@@ -60,7 +60,7 @@ Column level sensor that executes a given SQL expression on a column.
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
@@ -74,7 +74,7 @@ Column level sensor that executes a given SQL expression on a column.
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
@@ -95,7 +95,7 @@ Column level sensor that executes a given SQL expression on a column.
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
@@ -109,7 +109,7 @@ Column level sensor that executes a given SQL expression on a column.
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
@@ -123,7 +123,7 @@ Column level sensor that executes a given SQL expression on a column.
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
@@ -137,7 +137,7 @@ Column level sensor that executes a given SQL expression on a column.
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
@@ -151,7 +151,7 @@ Column level sensor that executes a given SQL expression on a column.
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     SELECT
@@ -178,11 +178,11 @@ ___
 ```
 column/sql/sql_condition_failed_count
 ```
-**Description**  
+**Description**
 Column level sensor that uses a custom SQL condition (an SQL expression that returns a boolean value) to count rows that do not meet the condition.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |sql_condition|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} and {column} placeholder that are replaced with a full table name and the analyzed column name.|string| ||
@@ -190,9 +190,9 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
@@ -213,7 +213,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
@@ -234,7 +234,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
@@ -255,7 +255,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
@@ -276,7 +276,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
@@ -304,7 +304,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
@@ -325,7 +325,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
@@ -346,7 +346,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
@@ -367,7 +367,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
@@ -388,7 +388,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     SELECT
@@ -422,11 +422,11 @@ ___
 ```
 column/sql/sql_condition_failed_percent
 ```
-**Description**  
+**Description**
 Column level sensor that uses a custom SQL condition (an SQL expression that returns a boolean value) to count the percentage of rows that do not meet the condition.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |sql_condition|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} and {column} placeholder that are replaced with a full table name and the analyzed column name.|string| ||
@@ -434,9 +434,9 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
@@ -460,7 +460,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
@@ -484,7 +484,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
@@ -508,7 +508,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
@@ -532,7 +532,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
@@ -563,7 +563,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
@@ -587,7 +587,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
@@ -611,7 +611,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
@@ -635,7 +635,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
@@ -660,7 +660,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     SELECT
@@ -697,11 +697,11 @@ ___
 ```
 column/sql/sql_condition_passed_count
 ```
-**Description**  
+**Description**
 Column level sensor that uses a custom SQL condition (an SQL expression that returns a boolean value) to count rows that meet the condition.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |sql_condition|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} and {column} placeholder that are replaced with a full table name and the analyzed column name.|string| ||
@@ -709,9 +709,9 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
@@ -732,7 +732,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
@@ -753,7 +753,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
@@ -774,7 +774,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
@@ -795,7 +795,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
@@ -823,7 +823,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
@@ -844,7 +844,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
@@ -865,7 +865,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
@@ -886,7 +886,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
@@ -907,7 +907,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     SELECT
@@ -941,11 +941,11 @@ ___
 ```
 column/sql/sql_condition_passed_percent
 ```
-**Description**  
+**Description**
 Column level sensor that uses a custom SQL condition (an SQL expression that returns a boolean value) to count the percentage of rows that meet the condition.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |sql_condition|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} and {column} placeholder that are replaced with a full table name and the analyzed column name.|string| ||
@@ -953,9 +953,9 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
@@ -979,7 +979,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
@@ -1003,7 +1003,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
@@ -1027,7 +1027,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
@@ -1051,7 +1051,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
@@ -1082,7 +1082,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
@@ -1106,7 +1106,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
@@ -1130,7 +1130,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
@@ -1154,7 +1154,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
@@ -1178,7 +1178,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     SELECT

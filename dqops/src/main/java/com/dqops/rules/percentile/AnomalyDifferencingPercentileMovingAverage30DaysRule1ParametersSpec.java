@@ -48,14 +48,12 @@ public class AnomalyDifferencingPercentileMovingAverage30DaysRule1ParametersSpec
             " Set the time window at the threshold level for all severity levels (warning, error, fatal) at once." +
             " The default is a time window of 30 periods (days, etc.), but at least 10 readouts must exist" +
             " to run the calculation.")
-    @SampleValues(values = "0.1")
-    private Double anomalyPercent;
+    private Double anomalyPercent = 1.0;
 
     /**
      * Default constructor.
      */
     public AnomalyDifferencingPercentileMovingAverage30DaysRule1ParametersSpec() {
-        this.anomalyPercent = 1.0;
     }
 
     /**

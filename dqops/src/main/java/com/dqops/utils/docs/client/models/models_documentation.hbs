@@ -1,10 +1,10 @@
 {{#each classObjects}}
-## {{classSimpleName}}{{#with "  "}}{{.}}{{/with}}
-{{classDescription}}{{#with "  "}}{{.}}{{/with}}
-{{#with "  "}}{{.}}{{/with}}
+## {{classSimpleName}}
+{{classDescription}}
 
-**The structure of this object is described below**{{#with "  "}}{{.}}{{/with}}
-{{#with "  "}}{{.}}{{/with}}
+
+**The structure of this object is described below**
+
 {{#if enumValues}}
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
@@ -15,5 +15,5 @@
 {{#each objectFields}}|{{render-type typeModel yamlFieldName}}|{{helpText}}|{{render-type typeModel}}|
 {{/each}}
 {{/if}}
-___{{#with "  "}}{{.}}{{/with}}
+___
 {{/each}}

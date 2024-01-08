@@ -373,9 +373,12 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                 AbstractCheckSpec<?,?,?,?> checkSpecObject = (AbstractCheckSpec<?,?,?,?>)checkFieldInfo.getFieldValueOrNewObject(checkCategoryParentNode);
 
                 CheckListModel checkModel = createCheckBasicModel(checkFieldInfo, checkSpecObject, executionContext, providerType, checkType, checkTimeScale);
-                checkModel.setConfigured(checkIsConfigured);
-                checkModel.setCheckCategory(categoryFieldInfo.getYamlFieldName());
-                checkContainerListModel.getChecks().add(checkModel);
+                if ((checkIsConfigured || checkSpecObject.isStandard()) &&
+                        !Objects.equals(categoryFieldInfo.getYamlFieldName(), AbstractComparisonCheckCategorySpecMap.TIMELINESS_CATEGORY_NAME)) {
+                    checkModel.setConfigured(checkIsConfigured);
+                    checkModel.setCheckCategory(categoryFieldInfo.getYamlFieldName());
+                    checkContainerListModel.getChecks().add(checkModel);
+                }
             }
         }
 
@@ -662,6 +665,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         String checkName = checkFieldInfo != null ? checkFieldInfo.getYamlFieldName() : customCheckDefinitionSpec.getCheckName();
         checkModel.setCheckName(checkName);
         checkModel.setHelpText(checkFieldInfo != null ? checkFieldInfo.getHelpText() : customCheckDefinitionSpec.getHelpText());
+        checkModel.setStandard(customCheckDefinitionSpec != null ? customCheckDefinitionSpec.isStandard() : checkSpec.isStandard());
 
         if (runChecksCategoryTemplate != null) {
             CheckSearchFilters runOneCheckTemplate = runChecksCategoryTemplate.clone();

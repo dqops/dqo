@@ -1,7 +1,11 @@
 # Create and run table comparisons 
 
+## Overview
+
 Table comparison enables you to identify differences between two tables. It is useful when you want to compare datasets
 and validate successful data replication or migration. You can compare tables between any [supported data sources](../../data-sources/index.md).
+
+## Types of comparison checks 
 
 Using Table comparison you can monitor tables using the following comparison checks:
 
@@ -54,12 +58,12 @@ To create a new table comparison, follow these steps:
     checks you want to run, simply click on the checkboxes.
 
     Once you have activated the checks, you can set the severity level for each one. You can choose from three levels: warning, error, and fatal.
-    [Learn more about the severity levels](../../../dqo-concepts/checks/#severity-levels).
+    [Learn more about the severity levels](../../../dqo-concepts/checks.md#severity-levels).
 
     ![Table comparisons severity levels](https://dqops.com/docs/images/working-with-dqo/comparisons/table-comparisions-severity-levels2.png)
     
     When you create a new table comparison a new category of checks named Comparisons/[name of the comparison] is also 
-    created on the [Check editor](../../../dqo-concepts/user-interface-overview/user-interface-overview/#check-editor) with a list of table and column checks.
+    created on the [Check editor](../../../dqo-concepts/user-interface-overview/user-interface-overview.md#check-editor) with a list of table and column checks.
     On the Editor screen you can activate and deactivate comparison checks, set severity levels, run checks and view the results.
 
     ![List of checks](https://dqops.com/docs/images/working-with-dqo/comparisons/comparison-check-editor.png)

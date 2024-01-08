@@ -1,4 +1,5 @@
 import {
+  CheckTemplate,
   ConnectionModelProviderTypeEnum,
   TableComparisonGroupingColumnPairModel,
   TimeWindowFilterParameters
@@ -25,17 +26,14 @@ export type TParameters = {
 };
 
 export interface IFilterTemplate {
-  connection: string;
-  schema: string;
-  activeTab: 'daily' | 'monthly' | undefined;
   tableNamePattern?: string | undefined;
   columnNamePattern?: string | undefined;
   columnDataType?: string | undefined;
   checkTarget?: 'table' | 'column' | undefined;
   checkCategory?: string | undefined;
   checkName?: string | undefined;
-  checkTypes: CheckTypes;
   activeOffCheck?: boolean;
+  selectedCheck?: CheckTemplate
 }
 
 enum CheckTypes {
@@ -128,25 +126,37 @@ export const TABLE_LEVEL_TABS: {
     },
     {
       label: 'Data Groupings',
-      value: 'data-streams'
+      value: 'data-groupings'
     },
     {
       label: 'Date and time columns',
       value: 'timestamps'
+    },
+    {
+      label: 'Incident Configuration',
+      value: 'incident_configuration'
     }
   ],
   [CheckTypes.PROFILING]: [
     {
-      label: 'statistics',
+      label: 'Basic data statistics',
       value: 'statistics'
     },
     {
-      label: 'advanced',
+      label: 'Table preview',
+      value: 'preview'
+    },
+    {
+      label: 'Profiling checks',
       value: 'advanced'
     },
     {
-      label: 'table-comparison',
-      value: 'table-comparison'
+      label: 'Table quality status',
+      value: 'table-quality-status'
+    },
+    {
+      label: 'Table comparisons',
+      value: 'table-comparisons'
     }
   ],
   [CheckTypes.PARTITIONED]: [
@@ -157,6 +167,22 @@ export const TABLE_LEVEL_TABS: {
     {
       label: 'Monthly checks',
       value: 'monthly'
+    },
+    {
+      label: 'Table quality status daily',
+      value: 'table-quality-status-daily'
+    },
+    {
+      label: 'Table quality status monthly',
+      value: 'table-quality-status-monthly'
+    },
+    {
+      label: 'Daily comparisons',
+      value: 'daily_comparisons'
+    },
+    {
+      label: 'Monthly comparisons',
+      value: 'monthly_comparisons'
     }
   ],
   [CheckTypes.MONITORING]: [
@@ -167,6 +193,22 @@ export const TABLE_LEVEL_TABS: {
     {
       label: 'Monthly checks',
       value: 'monthly'
+    },
+    {
+      label: 'Table quality status daily',
+      value: 'table-quality-status-daily'
+    },
+    {
+      label: 'Table quality status monthly',
+      value: 'table-quality-status-monthly'
+    },
+    {
+      label: 'Daily comparisons',
+      value: 'daily_comparisons'
+    },
+    {
+      label: 'Monthly comparisons',
+      value: 'monthly_comparisons'
     }
   ]
 };
@@ -196,10 +238,6 @@ export const COLUMN_LEVEL_TABS: {
     {
       label: 'advanced',
       value: 'advanced'
-    },
-    {
-      label: 'table-comparison',
-      value: 'table-comparison'
     }
   ],
   [CheckTypes.PARTITIONED]: [

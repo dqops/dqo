@@ -1,10 +1,10 @@
 
-## ComparisonCheckResultModel  
-The table comparison check result model for the most recent data comparison run. Identifies the check name and the number of data groupings that passed or failed the comparison.  
-  
+## ComparisonCheckResultModel
+The table comparison check result model for the most recent data comparison run. Identifies the check name and the number of data groupings that passed or failed the comparison.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
@@ -17,29 +17,29 @@ The table comparison check result model for the most recent data comparison run.
 |not_matching_data_groups|A list of not matching data grouping names.|List[string]|
 
 
-___  
+___
 
-## TableComparisonColumnResultsModel  
-The table comparison column results model with the information about the most recent table comparison relating to a single compared column.  
-  
+## TableComparisonColumnResultsModel
+The table comparison column results model with the information about the most recent table comparison relating to a single compared column.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |column_name|Column name|string|
-|column_comparison_results|The dictionary of comparison results between the tables for the specific column. The keys for the dictionary are check names. The values are summaries of the most recent comparison on this column.|Dict[string, [ComparisonCheckResultModel](../table_comparison_results/#comparisoncheckresultmodel)]|
+|column_comparison_results|The dictionary of comparison results between the tables for the specific column. The keys for the dictionary are check names. The values are summaries of the most recent comparison on this column.|Dict[string, [ComparisonCheckResultModel](#comparisoncheckresultmodel)]|
 
 
-___  
+___
 
-## TableComparisonResultsModel  
-The table comparison results model with the summary information about the most recent table comparison that was performed.  
-  
+## TableComparisonResultsModel
+The table comparison results model with the summary information about the most recent table comparison that was performed.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
@@ -47,5 +47,5 @@ The table comparison results model with the summary information about the most r
 |column_comparison_results|The dictionary of comparison results between the tables for each compared column. The keys for the dictionary are the column names. The values are dictionaries of the data quality check names and their results.|Dict[string, [TableComparisonColumnResultsModel](#tablecomparisoncolumnresultsmodel)]|
 
 
-___  
+___
 

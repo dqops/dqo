@@ -1,5 +1,7 @@
 # Delete data quality results
 
+## Overview
+
 In DQOps, there are two ways to delete stored data quality results:
 
 - using the user interface 

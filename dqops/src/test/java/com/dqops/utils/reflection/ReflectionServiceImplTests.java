@@ -20,7 +20,7 @@ import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
-import com.dqops.checks.table.checkspecs.volume.TableAnomalyDifferencingRowCountCheckSpec;
+import com.dqops.checks.table.checkspecs.volume.TableRowCountAnomalyDifferencingCheckSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.metadata.fields.ParameterDataType;
 import com.dqops.metadata.fields.ParameterDefinitionSpec;
@@ -30,11 +30,10 @@ import com.dqops.rules.AbstractRuleParametersSpec;
 import com.dqops.rules.RuleTimeWindowSettingsSpec;
 import com.dqops.rules.averages.PercentMovingAverageRuleParametersSpec;
 import com.dqops.rules.comparison.MinCountRule0ParametersSpec;
-import com.dqops.sensors.column.numeric.ColumnNumericExpectedNumbersInUseCountSensorParametersSpec;
-import com.dqops.sensors.column.strings.ColumnStringsStringLengthInRangePercentSensorParametersSpec;
-import com.dqops.sensors.column.strings.StringsBuiltInDateFormats;
+import com.dqops.sensors.column.acceptedvalues.ColumnNumericExpectedNumbersInUseCountSensorParametersSpec;
+import com.dqops.sensors.column.text.ColumnTextTextLengthInRangePercentSensorParametersSpec;
+import com.dqops.sensors.column.text.TextBuiltInDateFormats;
 import com.dqops.sensors.column.datetime.ColumnDatetimeValueInRangeDatePercentSensorParametersSpec;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -108,7 +107,7 @@ public class ReflectionServiceImplTests extends BaseTest {
 
     @Test
     void reflectClass_whenReflectingSensorParametersSpecification_thenReturnsAllRequestedFields() {
-        ClassInfo classInfo = this.sut.reflectClass(ColumnStringsStringLengthInRangePercentSensorParametersSpec.class);
+        ClassInfo classInfo = this.sut.reflectClass(ColumnTextTextLengthInRangePercentSensorParametersSpec.class);
         Assertions.assertNotNull(classInfo);
         Assertions.assertEquals(3, classInfo.getFields().size());
         Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "minLength")));
@@ -125,9 +124,9 @@ public class ReflectionServiceImplTests extends BaseTest {
 
     @Test
     void createEnumValue_whenEnumFieldGivenWithPropertyName_thenReturnsEnumInfo() {
-        EnumValueInfo enumValue = this.sut.createEnumValue(StringsBuiltInDateFormats.ISO8601);
+        EnumValueInfo enumValue = this.sut.createEnumValue(TextBuiltInDateFormats.ISO8601);
         Assertions.assertNotNull(enumValue);
-        Assertions.assertSame(StringsBuiltInDateFormats.ISO8601, enumValue.getEnumInstance());
+        Assertions.assertSame(TextBuiltInDateFormats.ISO8601, enumValue.getEnumInstance());
         Assertions.assertEquals("ISO8601", enumValue.getJavaName());
         Assertions.assertEquals("YYYY-MM-DD", enumValue.getYamlName());
         Assertions.assertEquals("YYYY-MM-DD", enumValue.getDisplayName());
@@ -369,14 +368,14 @@ public class ReflectionServiceImplTests extends BaseTest {
 
         @JsonProperty("customSerialization_option（笑）")
         @JsonPropertyDescription("Some description.")
-        private TableAnomalyDifferencingRowCountCheckSpec ordinarilyNamedCheck;
+        private TableRowCountAnomalyDifferencingCheckSpec ordinarilyNamedCheck;
 
 
-        public TableAnomalyDifferencingRowCountCheckSpec getOrdinarilyNamedCheck() {
+        public TableRowCountAnomalyDifferencingCheckSpec getOrdinarilyNamedCheck() {
             return ordinarilyNamedCheck;
         }
 
-        public void setOrdinarilyNamedCheck(TableAnomalyDifferencingRowCountCheckSpec ordinarilyNamedCheck) {
+        public void setOrdinarilyNamedCheck(TableRowCountAnomalyDifferencingCheckSpec ordinarilyNamedCheck) {
             this.ordinarilyNamedCheck = ordinarilyNamedCheck;
         }
 

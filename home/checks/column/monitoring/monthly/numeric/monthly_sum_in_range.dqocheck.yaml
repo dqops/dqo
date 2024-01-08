@@ -5,5 +5,6 @@ spec:
   sensor_name: column/numeric/sum
   rule_name: comparison/between_floats
   help_text: Verifies that the sum of all values in a column does not exceed the set
-    range. Stores the most recent row count for each month when the data quality check
+    range. Stores the most recent value for each month when the data quality check
     was evaluated.
+  standard: true

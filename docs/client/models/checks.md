@@ -1,10 +1,10 @@
 
-## CheckDefinitionListModel  
-Check list model that is returned by the REST API.  
-  
+## CheckDefinitionListModel
+Check list model that is returned by the REST API.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
@@ -16,29 +16,29 @@ Check list model that is returned by the REST API.
 |yaml_parsing_error|Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.|string|
 
 
-___  
+___
 
-## CheckDefinitionFolderModel  
-Check list folder model that is returned by the REST API.  
-  
+## CheckDefinitionFolderModel
+Check list folder model that is returned by the REST API.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|folders|A dictionary of nested folders with data quality checks. The keys are the folder names.|Dict[string, [CheckDefinitionFolderModel](../checks/#CheckDefinitionFolderModel)]|
-|checks|List of data quality checks defined in this folder.|List[[CheckDefinitionListModel](../checks/#CheckDefinitionListModel)]|
+|folders|A dictionary of nested folders with data quality checks. The keys are the folder names.|Dict[string, [CheckDefinitionFolderModel](#CheckDefinitionFolderModel)]|
+|checks|List of data quality checks defined in this folder.|List[[CheckDefinitionListModel](#CheckDefinitionListModel)]|
 
 
-___  
+___
 
-## CheckDefinitionModel  
-Check model that is returned by the REST API. Describes a single unique data quality check.  
-  
+## CheckDefinitionModel
+Check model that is returned by the REST API. Describes a single unique data quality check.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
@@ -52,5 +52,5 @@ Check model that is returned by the REST API. Describes a single unique data qua
 |yaml_parsing_error|Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.|string|
 
 
-___  
+___
 

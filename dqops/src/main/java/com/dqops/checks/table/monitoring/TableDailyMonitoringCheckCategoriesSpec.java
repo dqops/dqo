@@ -23,7 +23,7 @@ import com.dqops.checks.table.monitoring.accuracy.TableAccuracyDailyMonitoringCh
 import com.dqops.checks.table.monitoring.availability.TableAvailabilityDailyMonitoringChecksSpec;
 import com.dqops.checks.table.monitoring.comparison.TableComparisonDailyMonitoringChecksSpecMap;
 import com.dqops.checks.table.monitoring.schema.TableSchemaDailyMonitoringChecksSpec;
-import com.dqops.checks.table.monitoring.sql.TableSqlDailyMonitoringChecksSpec;
+import com.dqops.checks.table.monitoring.customsql.TableCustomSqlDailyMonitoringChecksSpec;
 import com.dqops.checks.table.monitoring.volume.TableVolumeDailyMonitoringChecksSpec;
 import com.dqops.checks.table.monitoring.timeliness.TableTimelinessDailyMonitoringChecksSpec;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
@@ -57,7 +57,7 @@ public class TableDailyMonitoringCheckCategoriesSpec extends AbstractRootChecksC
             put("volume", o -> o.volume);
             put("timeliness", o -> o.timeliness);
             put("accuracy", o -> o.accuracy);
-            put("sql", o -> o.sql);
+            put("custom_sql", o -> o.customSql);
             put("availability", o -> o.availability);
             put("schema", o -> o.schema);
             put("comparisons", o -> o.comparisons);
@@ -82,7 +82,7 @@ public class TableDailyMonitoringCheckCategoriesSpec extends AbstractRootChecksC
     @JsonPropertyDescription("Daily monitoring custom SQL checks")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableSqlDailyMonitoringChecksSpec sql;
+    private TableCustomSqlDailyMonitoringChecksSpec customSql;
 
     @JsonPropertyDescription("Daily monitoring table availability checks")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -165,19 +165,19 @@ public class TableDailyMonitoringCheckCategoriesSpec extends AbstractRootChecksC
      *
      * @return Custom sql monitoring.
      */
-    public TableSqlDailyMonitoringChecksSpec getSql() {
-        return sql;
+    public TableCustomSqlDailyMonitoringChecksSpec getCustomSql() {
+        return customSql;
     }
 
     /**
      * Sets a reference to a container of custom sql monitoring.
      *
-     * @param sql Custom sql monitoring.
+     * @param customSql Custom sql monitoring.
      */
-    public void setSql(TableSqlDailyMonitoringChecksSpec sql) {
-        this.setDirtyIf(!Objects.equals(this.sql, sql));
-        this.sql = sql;
-        this.propagateHierarchyIdToField(sql, "sql");
+    public void setCustomSql(TableCustomSqlDailyMonitoringChecksSpec customSql) {
+        this.setDirtyIf(!Objects.equals(this.customSql, customSql));
+        this.customSql = customSql;
+        this.propagateHierarchyIdToField(customSql, "custom_sql");
     }
 
     /**

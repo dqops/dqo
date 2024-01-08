@@ -20,7 +20,8 @@ import {
 } from '../../services/apiClient';
 import {
   getFirstLevelActiveTab,
-  getFirstLevelState
+  getFirstLevelState,
+  getSecondLevelTab
 } from '../../redux/selectors';
 import { CheckTypes, ROUTES } from '../../shared/routes';
 import { useParams } from 'react-router-dom';
@@ -28,6 +29,7 @@ import Tabs from '../../components/Tabs';
 import ColumnStatisticsView from './ColumnStatisticsView';
 import { useHistory } from 'react-router-dom';
 import { IRootState } from '../../redux/reducers';
+import { setActiveFirstLevelUrl } from '../../redux/actions/source.actions';
 
 const tabs = [
   {
@@ -64,7 +66,7 @@ const ColumnProfilingChecksView = ({
   const [checkResultsOverview, setCheckResultsOverview] = useState<
     CheckResultsOverviewDataModel[]
   >([]);
-  const [activeTab, setActiveTab] = useState(tab === 'statistics' || tab === 'advanced' ? tab : 'statistics');
+  const activeTab = getSecondLevelTab(checkTypes, tab);
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const [loadingJob, setLoadingJob] = useState(false);
   const [statistics, setStatistics] = useState<ColumnStatisticsModel>();
@@ -181,6 +183,20 @@ const ColumnProfilingChecksView = ({
   },[job_dictionary_state])
 
   const onChangeTab = (tab: string) => {
+    dispatch(
+      setActiveFirstLevelUrl(
+        checkTypes,
+        firstLevelActiveTab,
+        ROUTES.COLUMN_LEVEL_PAGE(
+          checkTypes,
+          connectionName,
+          schemaName,
+          tableName,
+          columnName,
+          tab
+        )
+      )
+    );
     history.push(
       ROUTES.COLUMN_LEVEL_PAGE(
         checkTypes,
@@ -191,7 +207,6 @@ const ColumnProfilingChecksView = ({
         tab
       )
     );
-    setActiveTab(tab)
   };
 
   return (

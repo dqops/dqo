@@ -1,28 +1,29 @@
-**row count change** checks  
+**row count change** checks
 
-**Description**  
+**Description**
 Table-level check that ensures that the row count changed by a fixed rate since the last readout.
 
 ___
 
-## **profile row count change**  
-  
-**Check description**  
-Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.  
-  
+## **profile row count change**
+
+
+**Check description**
+Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_row_count_change|profiling| |Consistency|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|profile_row_count_change|profiling| |Consistency|[row_count](../../../../reference/sensors/table/volume-table-sensors.md#row-count)|[change_percent](../../../../reference/rules/Change.md#change-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=profile_row_count_change
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=profile_row_count_change
@@ -40,32 +41,15 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_row_count_change
 ```
 
-**Check structure (YAML)**
-
-```yaml
-  profiling_checks:
-    volume:
-      profile_row_count_change:
-        warning:
-          max_percent: 5.0
-        error:
-          max_percent: 5.0
-        fatal:
-          max_percent: 5.0
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
 
-```yaml hl_lines="11-19"
+
+```yaml hl_lines="8-16"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -78,18 +62,12 @@ spec:
           max_percent: 5.0
         fatal:
           max_percent: 5.0
-  columns:
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
+  columns: {}
 
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)
+[row_count](../../../../reference/sensors/table/volume-table-sensors.md#row-count)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -404,22 +382,19 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="11-19 36-41"
+    ```yaml hl_lines="8-16 27-32"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
-      timestamp_columns:
-        event_timestamp_column: col_event_timestamp
-        ingestion_timestamp_column: col_inserted_at
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
@@ -442,12 +417,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             fatal:
               max_percent: 5.0
       columns:
-        col_event_timestamp:
-          labels:
-          - optional column that stores the timestamp when the event/transaction happened
-        col_inserted_at:
-          labels:
-          - optional column that stores the timestamp when row was ingested
         country:
           labels:
           - column used as the first grouping key
@@ -457,7 +426,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)
+    [row_count](../../../../reference/sensors/table/volume-table-sensors.md#row-count)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -801,24 +770,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **daily row count change**  
-  
-**Check description**  
-Verifies that the total row count of the tested table has changed by a fixed rate since the last day with a row count captured.  
-  
+## **daily row count change**
+
+
+**Check description**
+Verifies that the total row count of the tested table has changed by a fixed rate since the last day with a row count captured.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_row_count_change|monitoring|daily|Consistency|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_row_count_change|monitoring|daily|Consistency|[row_count](../../../../reference/sensors/table/volume-table-sensors.md#row-count)|[change_percent](../../../../reference/rules/Change.md#change-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_row_count_change
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_row_count_change
@@ -836,33 +806,15 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_row_count_change
 ```
 
-**Check structure (YAML)**
-
-```yaml
-  monitoring_checks:
-    daily:
-      volume:
-        daily_row_count_change:
-          warning:
-            max_percent: 5.0
-          error:
-            max_percent: 5.0
-          fatal:
-            max_percent: 5.0
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
 
-```yaml hl_lines="11-20"
+
+```yaml hl_lines="8-17"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -876,18 +828,12 @@ spec:
             max_percent: 5.0
           fatal:
             max_percent: 5.0
-  columns:
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
+  columns: {}
 
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)
+[row_count](../../../../reference/sensors/table/volume-table-sensors.md#row-count)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -1202,22 +1148,19 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="11-19 37-42"
+    ```yaml hl_lines="8-16 28-33"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
-      timestamp_columns:
-        event_timestamp_column: col_event_timestamp
-        ingestion_timestamp_column: col_inserted_at
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
@@ -1241,12 +1184,6 @@ Expand the *Configure with data grouping* section to see additional examples for
               fatal:
                 max_percent: 5.0
       columns:
-        col_event_timestamp:
-          labels:
-          - optional column that stores the timestamp when the event/transaction happened
-        col_inserted_at:
-          labels:
-          - optional column that stores the timestamp when row was ingested
         country:
           labels:
           - column used as the first grouping key
@@ -1256,7 +1193,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)
+    [row_count](../../../../reference/sensors/table/volume-table-sensors.md#row-count)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -1600,24 +1537,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **monthly row count change**  
-  
-**Check description**  
-Verifies that the total row count of the tested table has changed by a fixed rate since the last month.  
-  
+## **monthly row count change**
+
+
+**Check description**
+Verifies that the total row count of the tested table has changed by a fixed rate since the last month.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_row_count_change|monitoring|monthly|Consistency|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|monthly_row_count_change|monitoring|monthly|Consistency|[row_count](../../../../reference/sensors/table/volume-table-sensors.md#row-count)|[change_percent](../../../../reference/rules/Change.md#change-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=monthly_row_count_change
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=monthly_row_count_change
@@ -1635,33 +1573,15 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_row_count_change
 ```
 
-**Check structure (YAML)**
-
-```yaml
-  monitoring_checks:
-    monthly:
-      volume:
-        monthly_row_count_change:
-          warning:
-            max_percent: 5.0
-          error:
-            max_percent: 5.0
-          fatal:
-            max_percent: 5.0
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
 
-```yaml hl_lines="11-20"
+
+```yaml hl_lines="8-17"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -1675,18 +1595,12 @@ spec:
             max_percent: 5.0
           fatal:
             max_percent: 5.0
-  columns:
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
+  columns: {}
 
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)
+[row_count](../../../../reference/sensors/table/volume-table-sensors.md#row-count)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -2001,22 +1915,19 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="11-19 37-42"
+    ```yaml hl_lines="8-16 28-33"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
-      timestamp_columns:
-        event_timestamp_column: col_event_timestamp
-        ingestion_timestamp_column: col_inserted_at
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
@@ -2040,12 +1951,6 @@ Expand the *Configure with data grouping* section to see additional examples for
               fatal:
                 max_percent: 5.0
       columns:
-        col_event_timestamp:
-          labels:
-          - optional column that stores the timestamp when the event/transaction happened
-        col_inserted_at:
-          labels:
-          - optional column that stores the timestamp when row was ingested
         country:
           labels:
           - column used as the first grouping key
@@ -2055,7 +1960,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)
+    [row_count](../../../../reference/sensors/table/volume-table-sensors.md#row-count)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -2399,24 +2304,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **daily partition row count change**  
-  
-**Check description**  
-Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.  
-  
+## **daily partition row count change**
+
+
+**Check description**
+Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_row_count_change|partitioned|daily|Consistency|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_partition_row_count_change|partitioned|daily|Consistency|[row_count](../../../../reference/sensors/table/volume-table-sensors.md#row-count)|[change_percent](../../../../reference/rules/Change.md#change-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_partition_row_count_change
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_partition_row_count_change
@@ -2434,33 +2340,16 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_row_count_change
 ```
 
-**Check structure (YAML)**
-
-```yaml
-  partitioned_checks:
-    daily:
-      volume:
-        daily_partition_row_count_change:
-          warning:
-            max_percent: 5.0
-          error:
-            max_percent: 5.0
-          fatal:
-            max_percent: 5.0
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
 
-```yaml hl_lines="12-21"
+
+```yaml hl_lines="10-19"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
   timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
     partition_by_column: date_column
   incremental_time_window:
     daily_partitioning_recent_days: 7
@@ -2476,12 +2365,6 @@ spec:
           fatal:
             max_percent: 5.0
   columns:
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
     date_column:
       labels:
       - "date or datetime column used as a daily or monthly partitioning key, dates\
@@ -2491,7 +2374,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)
+[row_count](../../../../reference/sensors/table/volume-table-sensors.md#row-count)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -2810,22 +2693,20 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="12-20 43-48"
+    ```yaml hl_lines="10-18 35-40"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
       timestamp_columns:
-        event_timestamp_column: col_event_timestamp
-        ingestion_timestamp_column: col_inserted_at
         partition_by_column: date_column
       incremental_time_window:
         daily_partitioning_recent_days: 7
@@ -2850,12 +2731,6 @@ Expand the *Configure with data grouping* section to see additional examples for
               fatal:
                 max_percent: 5.0
       columns:
-        col_event_timestamp:
-          labels:
-          - optional column that stores the timestamp when the event/transaction happened
-        col_inserted_at:
-          labels:
-          - optional column that stores the timestamp when row was ingested
         date_column:
           labels:
           - "date or datetime column used as a daily or monthly partitioning key, dates\
@@ -2870,7 +2745,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)
+    [row_count](../../../../reference/sensors/table/volume-table-sensors.md#row-count)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -3212,24 +3087,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **monthly partition row count change**  
-  
-**Check description**  
-Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.  
-  
+## **monthly partition row count change**
+
+
+**Check description**
+Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_row_count_change|partitioned|monthly|Consistency|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[change_percent](../../../../reference/rules/Change/#change-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|monthly_partition_row_count_change|partitioned|monthly|Consistency|[row_count](../../../../reference/sensors/table/volume-table-sensors.md#row-count)|[change_percent](../../../../reference/rules/Change.md#change-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=monthly_partition_row_count_change
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=monthly_partition_row_count_change
@@ -3247,33 +3123,16 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_partition_row_count_change
 ```
 
-**Check structure (YAML)**
-
-```yaml
-  partitioned_checks:
-    monthly:
-      volume:
-        monthly_partition_row_count_change:
-          warning:
-            max_percent: 5.0
-          error:
-            max_percent: 5.0
-          fatal:
-            max_percent: 5.0
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
 
-```yaml hl_lines="12-21"
+
+```yaml hl_lines="10-19"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
   timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
     partition_by_column: date_column
   incremental_time_window:
     daily_partitioning_recent_days: 7
@@ -3289,12 +3148,6 @@ spec:
           fatal:
             max_percent: 5.0
   columns:
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
     date_column:
       labels:
       - "date or datetime column used as a daily or monthly partitioning key, dates\
@@ -3304,7 +3157,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)
+[row_count](../../../../reference/sensors/table/volume-table-sensors.md#row-count)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -3623,22 +3476,20 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="12-20 43-48"
+    ```yaml hl_lines="10-18 35-40"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
       timestamp_columns:
-        event_timestamp_column: col_event_timestamp
-        ingestion_timestamp_column: col_inserted_at
         partition_by_column: date_column
       incremental_time_window:
         daily_partitioning_recent_days: 7
@@ -3663,12 +3514,6 @@ Expand the *Configure with data grouping* section to see additional examples for
               fatal:
                 max_percent: 5.0
       columns:
-        col_event_timestamp:
-          labels:
-          - optional column that stores the timestamp when the event/transaction happened
-        col_inserted_at:
-          labels:
-          - optional column that stores the timestamp when row was ingested
         date_column:
           labels:
           - "date or datetime column used as a daily or monthly partitioning key, dates\
@@ -3683,7 +3528,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)
+    [row_count](../../../../reference/sensors/table/volume-table-sensors.md#row-count)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"

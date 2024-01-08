@@ -11,3 +11,4 @@ spec:
     \ using a GROUP BY clause and verify that each data grouping has an expected minimum\
     \ number of rows.Stores the most recent captured row count value for each day\
     \ when the row count was evaluated."
+  standard: true

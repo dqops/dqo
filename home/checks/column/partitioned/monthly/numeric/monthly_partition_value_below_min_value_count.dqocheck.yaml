@@ -1,9 +1,0 @@
-# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
-apiVersion: dqo/v1
-kind: check
-spec:
-  sensor_name: column/numeric/value_below_min_value_count
-  rule_name: comparison/max_count
-  help_text: The check counts the number of values in the column that is below the
-    value defined by the user as a parameter. Creates a separate data quality check
-    (and an alert) for each monthly partition.

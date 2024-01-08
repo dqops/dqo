@@ -19,9 +19,9 @@ package com.dqops.cli.commands.check.impl;
 import com.dqops.BaseTest;
 import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.column.checkspecs.numeric.ColumnNegativeCountCheckSpec;
-import com.dqops.checks.column.checkspecs.strings.ColumnStringLengthAboveMaxLengthCountCheckSpec;
+import com.dqops.checks.column.checkspecs.text.ColumnTextLengthAboveMaxLengthCheckSpec;
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
-import com.dqops.checks.column.profiling.ColumnStringsProfilingChecksSpec;
+import com.dqops.checks.column.profiling.ColumnTextProfilingChecksSpec;
 import com.dqops.checks.column.monitoring.ColumnDailyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.column.monitoring.ColumnMonitoringChecksRootSpec;
 import com.dqops.checks.column.monitoring.numeric.ColumnNumericDailyMonitoringChecksSpec;
@@ -154,7 +154,7 @@ public class CheckCliServiceImplTests extends BaseTest {
         TableVolumeProfilingChecksSpec t1volumeChecksSpec = new TableVolumeProfilingChecksSpec();
         TableRowCountCheckSpec t1rowCountSpec = new TableRowCountCheckSpec();
         MinCountRule1ParametersSpec t1rowCountErrorSpec = new MinCountRule1ParametersSpec();
-        MinCountRuleFatalParametersSpec t1rowCountFatalSpec = new MinCountRuleFatalParametersSpec();
+        MinCountRule100FatalParametersSpec t1rowCountFatalSpec = new MinCountRule100FatalParametersSpec();
         t1rowCountErrorSpec.setMinCount(50L);
         t1rowCountFatalSpec.setMinCount(20L);
         t1rowCountSpec.setError(t1rowCountErrorSpec);
@@ -164,16 +164,16 @@ public class CheckCliServiceImplTests extends BaseTest {
         table1.getSpec().setProfilingChecks(t1categoriesSpec);
 
         ColumnProfilingCheckCategoriesSpec col21categoriesSpec = new ColumnProfilingCheckCategoriesSpec();
-        ColumnStringsProfilingChecksSpec col21stringChecksSpec = new ColumnStringsProfilingChecksSpec();
-        ColumnStringLengthAboveMaxLengthCountCheckSpec col21stringLengthAboveCheckSpec = new ColumnStringLengthAboveMaxLengthCountCheckSpec();
-        MaxCountRule10ParametersSpec countRule0ParametersSpec = new MaxCountRule10ParametersSpec();
+        ColumnTextProfilingChecksSpec col21stringChecksSpec = new ColumnTextProfilingChecksSpec();
+        ColumnTextLengthAboveMaxLengthCheckSpec col21stringLengthAboveCheckSpec = new ColumnTextLengthAboveMaxLengthCheckSpec();
+        MaxCountRule0ErrorParametersSpec countRule0ParametersSpec = new MaxCountRule0ErrorParametersSpec();
         countRule0ParametersSpec.setMaxCount(40L);
-        MaxCountRule15ParametersSpec countRule0ParametersSpec1 = new MaxCountRule15ParametersSpec();
+        MaxCountRule100ParametersSpec countRule0ParametersSpec1 = new MaxCountRule100ParametersSpec();
         countRule0ParametersSpec1.setMaxCount(100L);
         col21stringLengthAboveCheckSpec.setError(countRule0ParametersSpec);
         col21stringLengthAboveCheckSpec.setFatal(countRule0ParametersSpec1);
-        col21stringChecksSpec.setProfileStringLengthAboveMaxLengthCount(col21stringLengthAboveCheckSpec);
-        col21categoriesSpec.setStrings(col21stringChecksSpec);
+        col21stringChecksSpec.setProfileTextLengthAboveMaxLength(col21stringLengthAboveCheckSpec);
+        col21categoriesSpec.setText(col21stringChecksSpec);
         col21.setProfilingChecks(col21categoriesSpec);
 
         ColumnMonitoringChecksRootSpec col23monitoringSpec = new ColumnMonitoringChecksRootSpec();
@@ -183,8 +183,8 @@ public class CheckCliServiceImplTests extends BaseTest {
         ColumnNumericDailyMonitoringChecksSpec col23numericChecksSpec = new ColumnNumericDailyMonitoringChecksSpec();
         col23categoriesSpec.setNumeric(col23numericChecksSpec);
         ColumnNegativeCountCheckSpec columnNegativeCountCheckSpec = new ColumnNegativeCountCheckSpec();
-        col23numericChecksSpec.setDailyNegativeCount(columnNegativeCountCheckSpec);
-        MaxCountRule0ParametersSpec col23max1 = new MaxCountRule0ParametersSpec();
+        col23numericChecksSpec.setDailyNegativeValues(columnNegativeCountCheckSpec);
+        MaxCountRule0WarningParametersSpec col23max1 = new MaxCountRule0WarningParametersSpec();
         col23max1.setMaxCount(15L);
         columnNegativeCountCheckSpec.setWarning(col23max1);
 

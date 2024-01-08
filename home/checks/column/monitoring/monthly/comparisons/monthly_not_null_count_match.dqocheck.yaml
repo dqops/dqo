@@ -9,3 +9,4 @@ spec:
     a column in the reference table. The difference must be below defined percentage
     thresholds. Stores the most recent captured value for each month when the data
     quality check was evaluated.
+  standard: true

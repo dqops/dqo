@@ -1,28 +1,29 @@
-**median change 7 days** checks  
+**median change 7 days** checks
 
-**Description**  
+**Description**
 Column level check that ensures that the median in a monitored column has changed by a fixed rate since the last readout from last week.
 
 ___
 
-## **profile median change 7 days**  
-  
-**Check description**  
-Verifies that the median in a column changed in a fixed rate since last readout from last week.  
-  
+## **profile median change 7 days**
+
+
+**Check description**
+Verifies that the median in a column changed in a fixed rate since last readout from last week.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_median_change_7_days|profiling| |Consistency|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[change_percent_7_days](../../../../reference/rules/Change/#change-percent-7-days)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|profile_median_change_7_days|profiling| |Consistency|[percentile](../../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[change_percent_7_days](../../../../reference/rules/Change.md#change-percent-7-days)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=profile_median_change_7_days
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=profile_median_change_7_days
@@ -40,37 +41,15 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_median_change_7_days
 ```
 
-**Check structure (YAML)**
-
-```yaml
-      profiling_checks:
-        anomaly:
-          profile_median_change_7_days:
-            parameters:
-              percentile_value: 0.5
-            warning:
-              max_percent: 5.0
-              exact_day: false
-            error:
-              max_percent: 5.0
-              exact_day: false
-            fatal:
-              max_percent: 5.0
-              exact_day: false
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
 
-```yaml hl_lines="13-26"
+
+```yaml hl_lines="10-23"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -92,17 +71,11 @@ spec:
               exact_day: false
       labels:
       - This is the column that is analyzed for data quality issues
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
 
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)
+[percentile](../../../../reference/sensors/column/numeric-column-sensors.md#percentile)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -674,22 +647,19 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="11-21 44-49"
+    ```yaml hl_lines="8-18 35-40"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
-      timestamp_columns:
-        event_timestamp_column: col_event_timestamp
-        ingestion_timestamp_column: col_inserted_at
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
@@ -720,12 +690,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                   exact_day: false
           labels:
           - This is the column that is analyzed for data quality issues
-        col_event_timestamp:
-          labels:
-          - optional column that stores the timestamp when the event/transaction happened
-        col_inserted_at:
-          labels:
-          - optional column that stores the timestamp when row was ingested
         country:
           labels:
           - column used as the first grouping key
@@ -735,7 +699,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)
+    [percentile](../../../../reference/sensors/column/numeric-column-sensors.md#percentile)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -1334,24 +1298,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **daily median change 7 days**  
-  
-**Check description**  
-Verifies that the median in a column changed in a fixed rate since last readout from last week.  
-  
+## **daily median change 7 days**
+
+
+**Check description**
+Verifies that the median in a column changed in a fixed rate since last readout from last week.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_median_change_7_days|monitoring|daily|Consistency|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[change_percent_7_days](../../../../reference/rules/Change/#change-percent-7-days)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_median_change_7_days|monitoring|daily|Consistency|[percentile](../../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[change_percent_7_days](../../../../reference/rules/Change.md#change-percent-7-days)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_median_change_7_days
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_median_change_7_days
@@ -1369,38 +1334,15 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_median_change_7_days
 ```
 
-**Check structure (YAML)**
-
-```yaml
-      monitoring_checks:
-        daily:
-          anomaly:
-            daily_median_change_7_days:
-              parameters:
-                percentile_value: 0.5
-              warning:
-                max_percent: 5.0
-                exact_day: false
-              error:
-                max_percent: 5.0
-                exact_day: false
-              fatal:
-                max_percent: 5.0
-                exact_day: false
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
 
-```yaml hl_lines="13-27"
+
+```yaml hl_lines="10-24"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -1423,17 +1365,11 @@ spec:
                 exact_day: false
       labels:
       - This is the column that is analyzed for data quality issues
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
 
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)
+[percentile](../../../../reference/sensors/column/numeric-column-sensors.md#percentile)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -2005,22 +1941,19 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="11-21 45-50"
+    ```yaml hl_lines="8-18 36-41"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
-      timestamp_columns:
-        event_timestamp_column: col_event_timestamp
-        ingestion_timestamp_column: col_inserted_at
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
@@ -2052,12 +1985,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                     exact_day: false
           labels:
           - This is the column that is analyzed for data quality issues
-        col_event_timestamp:
-          labels:
-          - optional column that stores the timestamp when the event/transaction happened
-        col_inserted_at:
-          labels:
-          - optional column that stores the timestamp when row was ingested
         country:
           labels:
           - column used as the first grouping key
@@ -2067,7 +1994,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)
+    [percentile](../../../../reference/sensors/column/numeric-column-sensors.md#percentile)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -2666,24 +2593,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **daily partition median change 7 days**  
-  
-**Check description**  
-Verifies that the median in a column changed in a fixed rate since last readout from last week.  
-  
+## **daily partition median change 7 days**
+
+
+**Check description**
+Verifies that the median in a column changed in a fixed rate since last readout from last week.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_median_change_7_days|partitioned|daily|Consistency|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[change_percent_7_days](../../../../reference/rules/Change/#change-percent-7-days)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_partition_median_change_7_days|partitioned|daily|Consistency|[percentile](../../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[change_percent_7_days](../../../../reference/rules/Change.md#change-percent-7-days)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_partition_median_change_7_days
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_partition_median_change_7_days
@@ -2701,38 +2629,16 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_median_change_7_days
 ```
 
-**Check structure (YAML)**
-
-```yaml
-      partitioned_checks:
-        daily:
-          anomaly:
-            daily_partition_median_change_7_days:
-              parameters:
-                percentile_value: 0.5
-              warning:
-                max_percent: 5.0
-                exact_day: false
-              error:
-                max_percent: 5.0
-                exact_day: false
-              fatal:
-                max_percent: 5.0
-                exact_day: false
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
 
-```yaml hl_lines="14-28"
+
+```yaml hl_lines="12-26"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
   timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
     partition_by_column: date_column
   incremental_time_window:
     daily_partitioning_recent_days: 7
@@ -2756,12 +2662,6 @@ spec:
                 exact_day: false
       labels:
       - This is the column that is analyzed for data quality issues
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
     date_column:
       labels:
       - "date or datetime column used as a daily or monthly partitioning key, dates\
@@ -2771,7 +2671,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)
+[percentile](../../../../reference/sensors/column/numeric-column-sensors.md#percentile)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -3343,22 +3243,20 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="12-22 51-56"
+    ```yaml hl_lines="10-20 43-48"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
       timestamp_columns:
-        event_timestamp_column: col_event_timestamp
-        ingestion_timestamp_column: col_inserted_at
         partition_by_column: date_column
       incremental_time_window:
         daily_partitioning_recent_days: 7
@@ -3391,12 +3289,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                     exact_day: false
           labels:
           - This is the column that is analyzed for data quality issues
-        col_event_timestamp:
-          labels:
-          - optional column that stores the timestamp when the event/transaction happened
-        col_inserted_at:
-          labels:
-          - optional column that stores the timestamp when row was ingested
         date_column:
           labels:
           - "date or datetime column used as a daily or monthly partitioning key, dates\
@@ -3411,7 +3303,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)
+    [percentile](../../../../reference/sensors/column/numeric-column-sensors.md#percentile)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"

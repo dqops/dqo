@@ -1,5 +1,7 @@
 # Redshift
 
+## Overview
+
 Amazon Redshift is a fully managed, petabyte-scale data warehouse service in the cloud from Amazon Web Services.  
 Redshift can handle analytic workloads on big data sets stored by a column-oriented DBMS principle
 

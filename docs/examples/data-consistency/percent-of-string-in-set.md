@@ -1,5 +1,7 @@
 # Percent of rows with string values in set
 
+## Overview
+
 Verifies that the percentage of string values from a set in a column does not fall below the minimum accepted percentage.
 
 **PROBLEM**
@@ -14,7 +16,7 @@ with values outside specified set.
 
 **SOLUTION**
 
-We will verify the data using monitoring [string_value_in_set_percent](../../checks/column/strings/string-value-in-set-percent.md) column check.
+We will verify the data using monitoring [string_value_in_set_percent](../../../checks/column/strings/string-value-in-set-percent.md) column check.
 Our data quality check will compare the values in the tested column to a set of accepted values. We accept only
 `services`, `at_home`,and  `teacher` values.
 
@@ -38,7 +40,7 @@ In this example, we will set three minimum percent thresholds levels for the che
 - error: 98
 - fatal: 95
 
-If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../../dqo-concepts/checks/index.md).
 
 **VALUE**
 
@@ -71,9 +73,9 @@ The `Fjob` column of interest contains information about student's father job.
 
 ## Running the checks in the example and evaluating the results using the user interface
 
-A detailed explanation of [how to run the example is described here](../../#running-the-use-cases).
+A detailed explanation of [how to run the example is described here](../../index.md#running-the-use-cases).
 
-To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
+To execute the check prepared in the example using the [user interface](../../../dqo-concepts/user-interface-overview/user-interface-overview.md):
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-string-in-set-percent-checks1.png)
 
@@ -84,12 +86,12 @@ To execute the check prepared in the example using the [user interface](../../dq
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
 
-    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../data-sources/index.md).
+    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../../data-sources/index.md).
 
 
 3. Select the **Daily checks** tab.
 
-    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../../dqo-concepts/user-interface-overview/user-interface-overview/#check-editor).
+    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../../../dqo-concepts/user-interface-overview/user-interface-overview.md#check-editor).
 
     The **daily_string_value_in_set_percent** check has an additional parameter to select the **expected_values** that must
     be present in a string column. In our example, these values are `services`, `at_home` and `teacher`.
@@ -121,7 +123,7 @@ To execute the check prepared in the example using the [user interface](../../dq
 
     Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
-7. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
+7. To review the results on the [data quality dashboards](../../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
     go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
 
     Below you can see the results displayed on the **Current data quality checks results** dashboard located in the Check results group. This dashboard
@@ -172,9 +174,9 @@ After importing new tables, DQOps sets the schedule for 12:00 P.M. (noon) every 
 Once a schedule is set up for a particular connection, it will execute all the checks that have been configured across
 all tables associated with that connection.
 
-You can [read more about scheduling here](../../working-with-dqo/schedules/index.md).
+You can [read more about scheduling here](../../../working-with-dqo/schedules/index.md).
 
-You might also want to check the [Running checks with a scheduler](../data-quality-monitoring/running-checks-with-a-scheduler.md) example.
+You might also want to check the [Running checks with a scheduler](../../data-quality-monitoring/running-checks-with-a-scheduler.md) example.
 
 ## YAML configuration file
 
@@ -188,7 +190,7 @@ In this example, we have set three minimum percent thresholds levels for the che
 
 The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_string_in_set_percent` check is configured.
 
-If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../../dqo-concepts/checks/index.md).
 
 ```yaml hl_lines="12-30"
 apiVersion: dqo/v1
@@ -225,7 +227,7 @@ spec:
 
 ## Running the checks in the example and evaluating the results using DQOps Shell
 
-A detailed explanation of [how to run the example is described here](../../#running-the-use-cases).
+A detailed explanation of [how to run the example is described here](../../index.md#running-the-use-cases).
 
 To execute the check prepared in the example, run the following command in DQOps Shell:
 
@@ -294,14 +296,14 @@ Results returned by the sensor:
 ```
 
 In this example, we have demonstrated how to use DQOps to verify the consistency of data in a column.
-By using the [string_value_in_set_percent](../../checks/column/strings/string-value-in-set-percent.md) column check,
+By using the [string_value_in_set_percent](../../../checks/column/strings/string-value-in-set-percent.md) column check,
 we can monitor that the percentage of string values from a set in a column does not fall below the minimum accepted percentage.
 If it does, you will get a warning, error or fatal result.
 
 ## Next steps
 
-- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
-- For details on the [string_value_in_set_percent check used in this example, go to the check details section](../../checks/column/strings/string-value-in-set-percent.md).
-- DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) and [Slack notifications](../../integrations/slack/configuring-slack-notifications.md).
-- Would you like to add your own connection? Here you can find [information about supported databases and how to add new connection](../../data-sources/index.md).
-- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md) can help you to calculate separate data quality KPI scores for different groups of rows.
+- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../../working-with-dqo/installation/run-dqo-as-docker-container.md).
+- For details on the [string_value_in_set_percent check used in this example, go to the check details section](../../../checks/column/strings/string-value-in-set-percent.md).
+- DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../../working-with-dqo/incidents-and-notifications/incidents.md) and [Slack notifications](../../../integrations/slack/configuring-slack-notifications.md).
+- Would you like to add your own connection? Here you can find [information about supported databases and how to add new connection](../../../data-sources/index.md).
+- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md) can help you to calculate separate data quality KPI scores for different groups of rows.

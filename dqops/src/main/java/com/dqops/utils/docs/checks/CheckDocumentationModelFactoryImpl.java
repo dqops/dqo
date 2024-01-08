@@ -181,13 +181,19 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
             tableSpec.getColumns().put("target_column", columnSpec);
         }
 
+        return tableSpec;
+    }
+
+    /**
+     * Adds timestamp columns used for timeliness checks to the table specification.
+     * @param tableSpec Target table specification to alter.
+     */
+    private void addTimestampColumnsToTable(TableSpec tableSpec) {
         tableSpec.getColumns().put("col_event_timestamp", createColumnWithLabel("optional column that stores the timestamp when the event/transaction happened"));
         tableSpec.getColumns().put("col_inserted_at", createColumnWithLabel("optional column that stores the timestamp when row was ingested"));
         TimestampColumnsSpec timestampColumns = tableSpec.getTimestampColumns();
         timestampColumns.setEventTimestampColumn("col_event_timestamp");
         timestampColumns.setIngestionTimestampColumn("col_inserted_at");
-
-        return tableSpec;
     }
 
     /**
@@ -322,6 +328,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         CheckModel checkModel = similarCheckModel.getCheckModel();
         checkDocumentationModel.setCheckName(checkModel.getCheckName());
         checkDocumentationModel.setCheckType(similarCheckModel.getCheckType().getDisplayName());
+        checkDocumentationModel.setCheckClass(checkModel.isStandard() ? "standard" : "advanced");
         checkDocumentationModel.setTimeScale(similarCheckModel.getTimeScale() != null ? similarCheckModel.getTimeScale().name() : null);
         checkDocumentationModel.setQualityDimension(similarCheckModel.getCheckModel().getQualityDimension());
         checkDocumentationModel.setCheckHelp(checkModel.getHelpText());
@@ -353,6 +360,10 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         }
         else {
             columnSpec.setColumnCheckRootContainer(checkRootContainer);
+        }
+
+        if (Objects.equals(checkCategoryName, AbstractComparisonCheckCategorySpecMap.TIMELINESS_CATEGORY_NAME)) {
+            addTimestampColumnsToTable(trimmedTableSpec);
         }
 
         if (checkRootContainer.getCheckType() == CheckType.partitioned) {

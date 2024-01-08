@@ -21,7 +21,7 @@ import com.dqops.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeDirectFactory;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingServiceImpl;
-import com.dqops.sensors.column.strings.ColumnStringsStringMatchRegexPercentSensorParametersSpec;
+import com.dqops.sensors.column.patterns.ColumnPatternsTextsMatchingRegexPercentSensorParametersSpec;
 import com.dqops.utils.docs.ProviderTypeModel;
 import com.dqops.utils.reflection.ReflectionServiceImpl;
 import org.junit.jupiter.api.Assertions;
@@ -47,7 +47,7 @@ public class SensorDocumentationModelFactoryImplTests extends BaseTest {
 
     @Test
     void createSensorDocumentation_whenCalledForClassWithSensorParameterFields_thenCreatesDocumentationModel() {
-        ColumnStringsStringMatchRegexPercentSensorParametersSpec parametersSpec = new ColumnStringsStringMatchRegexPercentSensorParametersSpec();
+        ColumnPatternsTextsMatchingRegexPercentSensorParametersSpec parametersSpec = new ColumnPatternsTextsMatchingRegexPercentSensorParametersSpec();
         SensorDocumentationModel sensorDocumentation = this.sut.createSensorDocumentation(parametersSpec);
 
         Assertions.assertNotNull(sensorDocumentation);

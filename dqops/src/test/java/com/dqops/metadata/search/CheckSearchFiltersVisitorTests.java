@@ -32,7 +32,7 @@ import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import com.dqops.metadata.traversal.TreeNodeTraversalResult;
-import com.dqops.rules.comparison.MaxCountRule10ParametersSpec;
+import com.dqops.rules.comparison.MaxCountRule0ErrorParametersSpec;
 import com.dqops.rules.comparison.MinCountRule1ParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -218,7 +218,7 @@ public class CheckSearchFiltersVisitorTests extends BaseTest {
         this.columnSpec.setProfilingChecks(new ColumnProfilingCheckCategoriesSpec() {{
             setNulls(new ColumnNullsProfilingChecksSpec() {{
                 setProfileNullsCount(new ColumnNullsCountCheckSpec() {{
-                    setError(new MaxCountRule10ParametersSpec(20L));
+                    setError(new MaxCountRule0ErrorParametersSpec(20L));
                 }});
             }});
         }});

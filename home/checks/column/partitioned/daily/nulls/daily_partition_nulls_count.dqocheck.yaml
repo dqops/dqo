@@ -4,6 +4,8 @@ kind: check
 spec:
   sensor_name: column/nulls/null_count
   rule_name: comparison/max_count
-  help_text: Detects columns with any null values when the max_count=0. Verifies that
-    the number of null values in a column does not exceed the set count. Creates a
-    separate data quality check (and an alert) for each daily partition.
+  help_text: Detects that a column has any null values (with the rule threshold max_count=0).
+    Verifies that the number of null values in a column does not exceed the maximum
+    accepted count. Creates a separate data quality check (and an alert) for each
+    daily partition.
+  standard: true

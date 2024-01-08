@@ -22,7 +22,7 @@ import com.dqops.statistics.StatisticsCollectorTarget;
 import com.dqops.statistics.column.nulls.ColumnNullsStatisticsCollectorsSpec;
 import com.dqops.statistics.column.range.ColumnRangeStatisticsCollectorsSpec;
 import com.dqops.statistics.column.sampling.ColumnSamplingStatisticsCollectorsSpec;
-import com.dqops.statistics.column.strings.ColumnStringsStatisticsCollectorsSpec;
+import com.dqops.statistics.column.text.ColumnTextStatisticsCollectorsSpec;
 import com.dqops.statistics.column.uniqueness.ColumnUniquenessStatisticsCollectorsSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -44,7 +44,7 @@ public class ColumnStatisticsCollectorsRootCategoriesSpec extends AbstractRootSt
     public static final ChildHierarchyNodeFieldMapImpl<ColumnStatisticsCollectorsRootCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootStatisticsCollectorsContainerSpec.FIELDS) {
         {
             put("nulls", o -> o.nulls);
-            put("strings", o -> o.strings);
+            put("text", o -> o.text);
             put("uniqueness", o -> o.uniqueness);
             put("range", o -> o.range);
             put("sampling", o -> o.sampling);
@@ -56,10 +56,10 @@ public class ColumnStatisticsCollectorsRootCategoriesSpec extends AbstractRootSt
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNullsStatisticsCollectorsSpec nulls = new ColumnNullsStatisticsCollectorsSpec();
 
-    @JsonPropertyDescription("Configuration of string (text) profilers on a column level.")
+    @JsonPropertyDescription("Configuration of text column profilers on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsStatisticsCollectorsSpec strings = new ColumnStringsStatisticsCollectorsSpec();
+    private ColumnTextStatisticsCollectorsSpec text = new ColumnTextStatisticsCollectorsSpec();
 
     @JsonPropertyDescription("Configuration of profilers that analyse uniqueness of values (distinct count).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -98,18 +98,18 @@ public class ColumnStatisticsCollectorsRootCategoriesSpec extends AbstractRootSt
      * Returns the configuration of string (text) profilers that analyse text columns.
      * @return Strings profilers specification.
      */
-    public ColumnStringsStatisticsCollectorsSpec getStrings() {
-        return strings;
+    public ColumnTextStatisticsCollectorsSpec getStrings() {
+        return text;
     }
 
     /**
      * Sets a reference to a string (text) profilers category.
-     * @param strings Container of string profilers.
+     * @param text Container of string profilers.
      */
-    public void setStrings(ColumnStringsStatisticsCollectorsSpec strings) {
-        this.setDirtyIf(!Objects.equals(this.strings, strings));
-        this.strings = strings;
-        this.propagateHierarchyIdToField(strings, "strings");
+    public void setStrings(ColumnTextStatisticsCollectorsSpec text) {
+        this.setDirtyIf(!Objects.equals(this.text, text));
+        this.text = text;
+        this.propagateHierarchyIdToField(text, "text");
     }
 
     /**

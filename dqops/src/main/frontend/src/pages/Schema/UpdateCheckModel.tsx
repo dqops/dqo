@@ -12,6 +12,7 @@ import { ConnectionApiClient } from '../../services/apiClient';
 import { IFilterTemplate } from '../../shared/constants';
 import UpdateCheckRuleSensor from './MultiCheck/UpdateCheckRuleSensor';
 import { CheckTypes } from '../../shared/routes';
+import { useParams } from 'react-router-dom';
 
 interface UpdateCheckModelProps {
   open: boolean;
@@ -22,6 +23,7 @@ interface UpdateCheckModelProps {
   selectedData: CheckTemplate[];
   fetchResults: () => void;
   onChangeLoading: (param: boolean) => void;
+  timeScale: 'daily' | 'monthly'
 }
 
 export const UpdateCheckModel = ({
@@ -32,8 +34,15 @@ export const UpdateCheckModel = ({
   filterParameters,
   selectedData,
   onChangeLoading,
-  fetchResults
+  fetchResults,
+  timeScale
 }: UpdateCheckModelProps) => {
+  const {
+    checkTypes,
+    connection,
+    schema
+  }: { checkTypes: CheckTypes; connection: string; schema: string } =
+    useParams();
   const [updatedCheck, setUpdatedCheck] = useState<CheckModel>();
   const [overideConflicts, setOverrideConflicts] = useState(true);
 
@@ -50,25 +59,25 @@ export const UpdateCheckModel = ({
   const bulkActivateChecks = () => {
     onChangeLoading(true);
     const selected_tables_to_columns =
-      filterParameters.checkTarget === 'table'
+      filterParameters?.checkTarget === 'table'
         ? { ...mapTables }
         : { ...mapTableColumns };
     ConnectionApiClient.bulkActivateConnectionChecks(
-      filterParameters.connection,
-      filterParameters.checkName ?? '',
+      connection,
+      filterParameters?.checkName ?? '',
       {
         check_search_filters: {
-          connection: filterParameters.connection,
-          fullTableName: filterParameters.schema + '.*',
-          checkTarget: filterParameters.checkTarget,
-          columnDataType: filterParameters.columnDataType,
-          checkName: filterParameters.checkName,
-          checkCategory: filterParameters.checkCategory,
+          connection: connection,
+          fullTableName: schema + '.*',
+          checkTarget: filterParameters?.checkTarget,
+          columnDataType: filterParameters?.columnDataType,
+          checkName: filterParameters?.checkName,
+          checkCategory: filterParameters?.checkCategory,
           checkType:
-            filterParameters.checkTypes as CheckSearchFiltersCheckTypeEnum,
+            checkTypes as CheckSearchFiltersCheckTypeEnum,
           timeScale:
-            filterParameters.checkTypes !== CheckTypes.PROFILING
-              ? filterParameters.activeTab
+            checkTypes !== CheckTypes.PROFILING
+              ? timeScale
               : undefined
         },
         check_model_patch: updatedCheck,
@@ -83,25 +92,25 @@ export const UpdateCheckModel = ({
   const bulkDeactivateChecks = () => {
     onChangeLoading(true);
     const selected_tables_to_columns =
-      filterParameters.checkTarget === 'table'
+      filterParameters?.checkTarget === 'table'
         ? { ...mapTables }
         : { ...mapTableColumns };
     ConnectionApiClient.bulkDeactivateConnectionChecks(
-      filterParameters.connection,
-      filterParameters.checkName ?? '',
+      connection,
+      filterParameters?.checkName ?? '',
       {
         check_search_filters: {
-          connection: filterParameters.connection,
-          fullTableName: filterParameters.schema + '.*',
-          checkTarget: filterParameters.checkTarget,
-          columnDataType: filterParameters.columnDataType,
-          checkName: filterParameters.checkName,
-          checkCategory: filterParameters.checkCategory,
+          connection: connection,
+          fullTableName: schema + '.*',
+          checkTarget: filterParameters?.checkTarget,
+          columnDataType: filterParameters?.columnDataType,
+          checkName: filterParameters?.checkName,
+          checkCategory: filterParameters?.checkCategory,
           checkType:
-            filterParameters.checkTypes as CheckSearchFiltersCheckTypeEnum,
+            checkTypes as CheckSearchFiltersCheckTypeEnum,
           timeScale:
-            filterParameters.checkTypes !== CheckTypes.PROFILING
-              ? filterParameters.activeTab
+            checkTypes !== CheckTypes.PROFILING
+              ? timeScale
               : undefined
         },
         selected_tables_to_columns
@@ -146,7 +155,7 @@ export const UpdateCheckModel = ({
   }, [selectedData]);
 
   return (
-    <Dialog open={open} handler={onClose} className="min-w-300 max-w-300">
+    <Dialog open={open} handler={onClose} className="min-w-300 max-w-300 flex justify-center flex-col items-center">
       <DialogBody className="pt-10 pb-2 px-8">
         <div className="w-full flex flex-col items-center">
           <h1 className="text-center mb-4 text-gray-700 text-2xl">

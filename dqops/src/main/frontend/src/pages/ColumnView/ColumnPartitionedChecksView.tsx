@@ -16,7 +16,8 @@ import ColumnActionGroup from './ColumnActionGroup';
 import { CheckResultOverviewApi } from "../../services/apiClient";
 import { useHistory, useParams } from "react-router-dom";
 import { CheckTypes, ROUTES } from "../../shared/routes";
-import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
+import { getFirstLevelActiveTab, getFirstLevelState, getSecondLevelTab } from "../../redux/selectors";
+import { setActiveFirstLevelUrl } from '../../redux/actions/source.actions';
 
 const initTabs = [
   {
@@ -36,6 +37,7 @@ const ColumnPartitionedChecksView = () => {
   const dispatch = useActionDispatch();
   const history = useHistory();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
+  const activeTab = getSecondLevelTab(checkTypes, tab);
 
   const {
     dailyPartitionedChecks,
@@ -159,13 +161,22 @@ const ColumnPartitionedChecksView = () => {
     );
   }, [isUpdatedMonthlyPartitionedChecks]);
 
-  useEffect(() => {
-    if (tab !== 'daily' && tab !== 'monthly') {
-      history.push(ROUTES.COLUMN_LEVEL_PAGE(checkTypes, connection, schema, table, column, 'daily'));
-    }
-  }, [tab]);
-
   const onChangeTab = (tab: string) => {
+    dispatch(
+      setActiveFirstLevelUrl(
+        checkTypes,
+        firstLevelActiveTab,
+        ROUTES.COLUMN_LEVEL_PAGE(
+          checkTypes,
+          connection,
+          schema,
+          table,
+          column,
+          tab
+        )
+      )
+    );
+
     history.push(ROUTES.COLUMN_LEVEL_PAGE(checkTypes, connection, schema, table, column, tab));
   };
 
@@ -180,7 +191,7 @@ const ColumnPartitionedChecksView = () => {
         isUpdating={isUpdating}
       />
       <div className="border-b border-gray-300">
-        <Tabs tabs={tabs} activeTab={tab} onChange={onChangeTab} />
+        <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
       </div>
       <div>
         {tab === 'daily' && (

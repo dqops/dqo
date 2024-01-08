@@ -21,10 +21,12 @@ import { useHistory, useParams } from 'react-router-dom';
 import { CheckTypes, ROUTES } from '../../../shared/routes';
 import {
   getFirstLevelActiveTab,
-  getFirstLevelState
+  getFirstLevelState,
+  getSecondLevelTab
 } from '../../../redux/selectors';
 import { TableReferenceComparisons } from './TableComparison/TableReferenceComparisons';
 import TableQualityStatus from './TableQualityStatus/TableQualityStatus';
+import { setActiveFirstLevelUrl } from '../../../redux/actions/source.actions';
 
 const initTabs = [
   {
@@ -76,6 +78,7 @@ const TablePartitionedChecksView = () => {
   const history = useHistory();
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
+  const activeTab = getSecondLevelTab(checkTypes, tab);
 
   const {
     dailyPartitionedChecks,
@@ -189,27 +192,6 @@ const TablePartitionedChecksView = () => {
     );
   }, [isUpdatedMonthlyPartitionedChecks]);
 
-  useEffect(() => {
-    if (
-      tab !== 'daily' &&
-      tab !== 'monthly' &&
-      tab !== 'daily_comparisons' &&
-      tab !== 'monthly_comparisons' &&
-      tab !== 'table-quality-status-daily' &&
-      tab !== 'table-quality-status-monthly'
-    ) {
-      history.push(
-        ROUTES.TABLE_LEVEL_PAGE(
-          checkTypes,
-          connectionName,
-          schemaName,
-          tableName,
-          'daily'
-        )
-      );
-    }
-  }, [tab]);
-
   const getDailyCheckOverview = () => {
     CheckResultOverviewApi.getTablePartitionedChecksOverview(
       connectionName,
@@ -233,6 +215,13 @@ const TablePartitionedChecksView = () => {
   };
 
   const onChangeTab = (tab: string) => {
+    dispatch(
+      setActiveFirstLevelUrl(
+        checkTypes,
+        firstLevelActiveTab,
+        ROUTES.TABLE_LEVEL_PAGE(checkTypes, connectionName, schemaName, tableName, tab)
+      )
+    );
     history.push(
       ROUTES.TABLE_LEVEL_PAGE(
         checkTypes,
@@ -255,7 +244,7 @@ const TablePartitionedChecksView = () => {
         isUpdating={isUpdating}
       />
       <div className="border-b border-gray-300">
-        <Tabs tabs={tabs} activeTab={tab} onChange={onChangeTab} />
+        <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
       </div>
       {tab === 'daily' && (
         <DataQualityChecks

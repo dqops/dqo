@@ -16,7 +16,8 @@ import TableDataGroupingConfiguration from '../../components/Connection/TableVie
 import TimestampsView from '../../components/Connection/TableView/TimestampsView';
 import {
   getFirstLevelActiveTab,
-  getFirstLevelState
+  getFirstLevelState,
+  getSecondLevelTab
 } from '../../redux/selectors';
 import TableNavigation from '../../components/TableNavigation';
 import TableIncidentsNotificationsView from '../../components/Connection/TableView/TableIncidentsNotificationsView';
@@ -59,7 +60,7 @@ const TablePage = () => {
     connection,
     schema,
     table,
-    tab: activeTab,
+    tab,
     checkTypes
   }: {
     connection: string;
@@ -84,6 +85,7 @@ const TablePage = () => {
   } = useSelector(getFirstLevelState(checkTypes));
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const dispatch = useActionDispatch();
+  const activeTab = getSecondLevelTab(checkTypes, tab);
 
   const isMonitoringOnly = useMemo(
     () => checkTypes === CheckTypes.MONITORING,

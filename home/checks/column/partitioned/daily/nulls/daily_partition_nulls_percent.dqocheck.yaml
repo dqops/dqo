@@ -4,6 +4,6 @@ kind: check
 spec:
   sensor_name: column/nulls/null_percent
   rule_name: comparison/max_percent
-  help_text: Verifies that the percentage of null values in a column does not exceed
-    the set percentage. Creates a separate data quality check (and an alert) for each
-    daily partition.
+  help_text: Measures the percent of null values in a column. Raises a data quality
+    exception when the percentage of null values is above the minimum accepted percentage.
+    Creates a separate data quality check (and an alert) for each daily partition.

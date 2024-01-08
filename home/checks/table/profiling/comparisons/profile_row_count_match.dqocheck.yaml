@@ -7,3 +7,4 @@ spec:
   help_text: Verifies that the row count of the tested (parent) table matches the
     row count of the reference table. Compares each group of data with a GROUP BY
     clause.
+  standard: true

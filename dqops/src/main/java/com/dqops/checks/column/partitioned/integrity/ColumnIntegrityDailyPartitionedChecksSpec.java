@@ -20,7 +20,7 @@ import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.column.checkspecs.integrity.ColumnIntegrityForeignKeyMatchPercentCheckSpec;
-import com.dqops.checks.column.checkspecs.integrity.ColumnIntegrityForeignKeyNotMatchCountCheckSpec;
+import com.dqops.checks.column.checkspecs.integrity.ColumnIntegrityLookupKeyNotFoundCountCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -41,52 +41,52 @@ import java.util.Objects;
 public class ColumnIntegrityDailyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnIntegrityDailyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_partition_foreign_key_not_match_count", o -> o.dailyPartitionForeignKeyNotMatchCount);
-            put("daily_partition_foreign_key_match_percent", o -> o.dailyPartitionForeignKeyMatchPercent);
+            put("daily_partition_lookup_key_not_found", o -> o.dailyPartitionLookupKeyNotFound);
+            put("daily_partition_lookup_key_found_percent", o -> o.dailyPartitionLookupKeyFoundPercent);
 
         }
     };
 
     @JsonPropertyDescription("Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnIntegrityForeignKeyNotMatchCountCheckSpec dailyPartitionForeignKeyNotMatchCount;
+    private ColumnIntegrityLookupKeyNotFoundCountCheckSpec dailyPartitionLookupKeyNotFound;
 
     @JsonPropertyDescription("Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnIntegrityForeignKeyMatchPercentCheckSpec dailyPartitionForeignKeyMatchPercent;
+    private ColumnIntegrityForeignKeyMatchPercentCheckSpec dailyPartitionLookupKeyFoundPercent;
 
     /**
      * Returns an integrity value not match count check.
      * @return Integrity value not match count check.
      */
-    public ColumnIntegrityForeignKeyNotMatchCountCheckSpec getDailyPartitionForeignKeyNotMatchCount() {
-        return dailyPartitionForeignKeyNotMatchCount;
+    public ColumnIntegrityLookupKeyNotFoundCountCheckSpec getDailyPartitionLookupKeyNotFound() {
+        return dailyPartitionLookupKeyNotFound;
     }
 
     /**
      * Sets a new definition of an integrity value not match count check.
-     * @param dailyPartitionForeignKeyNotMatchCount Integrity value not match count check.
+     * @param dailyPartitionLookupKeyNotFound Integrity value not match count check.
      */
-    public void setDailyPartitionForeignKeyNotMatchCount(ColumnIntegrityForeignKeyNotMatchCountCheckSpec dailyPartitionForeignKeyNotMatchCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionForeignKeyNotMatchCount, dailyPartitionForeignKeyNotMatchCount));
-        this.dailyPartitionForeignKeyNotMatchCount = dailyPartitionForeignKeyNotMatchCount;
-        propagateHierarchyIdToField(dailyPartitionForeignKeyNotMatchCount, "daily_partition_foreign_key_not_match_count");
+    public void setDailyPartitionLookupKeyNotFound(ColumnIntegrityLookupKeyNotFoundCountCheckSpec dailyPartitionLookupKeyNotFound) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionLookupKeyNotFound, dailyPartitionLookupKeyNotFound));
+        this.dailyPartitionLookupKeyNotFound = dailyPartitionLookupKeyNotFound;
+        propagateHierarchyIdToField(dailyPartitionLookupKeyNotFound, "daily_partition_lookup_key_not_found");
     }
 
     /**
      * Returns an integrity value match percent check.
      * @return Integrity value match percent check.
      */
-    public ColumnIntegrityForeignKeyMatchPercentCheckSpec getDailyPartitionForeignKeyMatchPercent() {
-        return dailyPartitionForeignKeyMatchPercent;
+    public ColumnIntegrityForeignKeyMatchPercentCheckSpec getDailyPartitionLookupKeyFoundPercent() {
+        return dailyPartitionLookupKeyFoundPercent;
     }
 
     /**
      * Sets a new definition of an integrity value match percent check.
-     * @param dailyPartitionForeignKeyMatchPercent Integrity value match percent check.
+     * @param dailyPartitionLookupKeyFoundPercent Integrity value match percent check.
      */
-    public void setDailyPartitionForeignKeyMatchPercent(ColumnIntegrityForeignKeyMatchPercentCheckSpec dailyPartitionForeignKeyMatchPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionForeignKeyMatchPercent, dailyPartitionForeignKeyMatchPercent));
-        this.dailyPartitionForeignKeyMatchPercent = dailyPartitionForeignKeyMatchPercent;
-        propagateHierarchyIdToField(dailyPartitionForeignKeyMatchPercent, "daily_partition_foreign_key_match_percent");
+    public void setDailyPartitionLookupKeyFoundPercent(ColumnIntegrityForeignKeyMatchPercentCheckSpec dailyPartitionLookupKeyFoundPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionLookupKeyFoundPercent, dailyPartitionLookupKeyFoundPercent));
+        this.dailyPartitionLookupKeyFoundPercent = dailyPartitionLookupKeyFoundPercent;
+        propagateHierarchyIdToField(dailyPartitionLookupKeyFoundPercent, "daily_partition_lookup_key_found_percent");
     }
 
     /**

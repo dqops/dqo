@@ -4,6 +4,8 @@ kind: check
 spec:
   sensor_name: column/nulls/not_null_percent
   rule_name: comparison/min_percent
-  help_text: Verifies that the percentage of not nulls in a column does not fall below
-    the minimum accepted percentage. Stores the most recent row count for each month
-    when the data quality check was evaluated.
+  help_text: Measures the percent of not null values in a column. Raises a data quality
+    exception when the percentage of not null values is below a minimum accepted percentage.
+    Stores the most recent row count for each month when the data quality check was
+    evaluated.
+  standard: true

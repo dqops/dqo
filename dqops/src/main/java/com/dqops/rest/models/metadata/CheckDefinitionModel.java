@@ -61,6 +61,13 @@ public class CheckDefinitionModel {
     private String helpText;
 
     /**
+     * This is a standard data quality check that is always shown on the data quality checks editor screen.
+     * Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks.
+     */
+    @JsonPropertyDescription("This is a standard data quality check that is always shown on the data quality checks editor screen. Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks.")
+    private boolean standard;
+
+    /**
      * True when the check is a custom check or is customized by the user.
      */
     @JsonPropertyDescription("This check has is a custom check or was customized by the user.")
@@ -107,6 +114,7 @@ public class CheckDefinitionModel {
         this.ruleName = checkDefinitionSpec.getRuleName();
         this.helpText = checkDefinitionSpec.getHelpText();
         this.yamlParsingError = checkDefinitionSpec.getYamlParsingError();
+        this.standard = checkDefinitionSpec.isStandard();
         this.custom = custom;
         this.builtIn = builtIn;
         this.canEdit = canEdit;
@@ -134,6 +142,10 @@ public class CheckDefinitionModel {
             return false;
         }
 
+        if (checkDefinitionWrapper.getSpec().isStandard() != this.standard) {
+            return false;
+        }
+
         return true;
     }
 
@@ -146,6 +158,7 @@ public class CheckDefinitionModel {
         checkDefinitionSpec.setSensorName(this.sensorName);
         checkDefinitionSpec.setRuleName(this.ruleName);
         checkDefinitionSpec.setHelpText(this.helpText);
+        checkDefinitionSpec.setStandard(this.standard);
 
         return checkDefinitionSpec;
     }
@@ -158,7 +171,8 @@ public class CheckDefinitionModel {
                 setSensorName(SampleStringsRegistry.getFullSensorName());
                 setRuleName(SampleStringsRegistry.getFullRuleName());
                 setHelpText(SampleStringsRegistry.getHelpText());
-                setCustom(false);
+                setStandard(false);
+                setCustom(true);
                 setBuiltIn(false);
                 setCanEdit(true);
             }};

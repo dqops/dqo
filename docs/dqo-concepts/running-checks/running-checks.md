@@ -1,17 +1,20 @@
 # Running data quality checks
+
+## Overview
+
 DQOps supports running data quality checks from the DQOps command-line shell, user interface, Python client
-and triggered directly by a call to a REST API endpoint [run_checks](../../client/operations/jobs.md#run_checks-).
+and triggered directly by a call to a REST API endpoint [run_checks](../../../client/operations/jobs.md#run_checks).
 
 Data quality checks can be also scheduled to run in regular intervals to continuously monitor the data sources.
 DQOps uses an internal job scheduler that is based on a popular Quartz library. The schedules are defined as CRON
 expressions compatible with the Linux CRON format.
 
-Data quality checks can be queued for execution from the [DQOps command-line shell](../command-line-interface/command-line-interface.md)
-by running the [check run](../../command-line-interface/check.md#dqo-check-run) command.
+Data quality checks can be queued for execution from the [DQOps command-line shell](../../command-line-interface/command-line-interface.md)
+by running the [check run](../../../command-line-interface/check.md#dqo-check-run) command.
 It is the easiest way to understand how the data quality check targeting is used.
 
 ## Targeting data sources and tables
-The data quality checks are configured on tables in the [.dqotable.yaml](../../reference/yaml/TableYaml.md) table
+The data quality checks are configured on tables in the [.dqotable.yaml](../../../reference/yaml/TableYaml.md) table
 specification files. The structure of a simplified *DQOps user home* folder with one data source *sales-dwh*
 and one configured table *public.fact_sales* is shown below. We will run all data quality checks configured on that table.
 
@@ -28,18 +31,18 @@ $DQO_USER_HOME
 1. The target data source defined as the nested folder name inside the *$DQO_USER_HOME/sources* folder.
 2. The data source configuration file.
 3. The configuration of the data quality checks for the *public.fact_sales* table. The target table is identified
-   by the file name. The file extension [.dqotable.yaml](../../reference/yaml/TableYaml.md)
+   by the file name. The file extension [.dqotable.yaml](../../../reference/yaml/TableYaml.md)
    identifies a table data quality specification file.
 
 This *DQOps user home* folder has one data source *sales-dwh* that is identified as a folder name inside the
 *$DQO_USER_HOME/sources* folder. 
 The *DQOps user home* stores the configuration of one table *public.fact_sales*. The configuration of the
-data quality checks for this table is stored in the file with a [.dqotable.yaml](../../reference/yaml/TableYaml.md) extension.
+data quality checks for this table is stored in the file with a [.dqotable.yaml](../../../reference/yaml/TableYaml.md) extension.
 The name of the target table is not defined inside the *public.fact_sales.dqotable.yaml*. Instead, the target
 table is identified by the file name, followed by the *.dqotable.yaml* file name extension.
 
-The example below shows how to run data quality checks from the [DQOps command-line shell](../command-line-interface/command-line-interface.md)
-by running the [check run](../../command-line-interface/check.md#dqo-check-run) command.
+The example below shows how to run data quality checks from the [DQOps command-line shell](../../command-line-interface/command-line-interface.md)
+by running the [check run](../../../command-line-interface/check.md#dqo-check-run) command.
 
 ``` { .asc .annotate }
 dqo> check run --connection=sales-dwh(1) --full-table-name=public.fact_sales(2)
@@ -50,7 +53,7 @@ dqo> check run --connection=sales-dwh(1) --full-table-name=public.fact_sales(2)
    schema name part and in the table name part. To run checks in all tables inside a schema, use *target_schema.\**.
    Other examples of supported patterns are: *schema_prefix_\*.target_table*, *\*.fact_\**.
 
-The parameters passed to the [check run](../../command-line-interface/check.md#dqo-check-run) command are:
+The parameters passed to the [check run](../../../command-line-interface/check.md#dqo-check-run) command are:
 
 | Parameter           | Description                                                                                                                                   | Example                             |
 |---------------------|-----------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------|
@@ -92,7 +95,7 @@ dqo> check run --connection=sales-dwh --full-table-name=public.dim_*(1)
 DQOps supports also running checks only on selected columns, running only one data quality check on multiple
 tables or columns. We can also target one type of checks, *profiling*, *monitoring* or *partitioned*.
 
-The [check run](../../command-line-interface/check.md#dqo-check-run) command for running checks on a column,
+The [check run](../../../command-line-interface/check.md#dqo-check-run) command for running checks on a column,
 running only one check or all checks from one type is shown below. 
 
 ``` { .asc .annotate }
@@ -100,19 +103,19 @@ dqo> check run --connection=sales-dwh --full-table-name=public.fact_sales --chec
                --check-type=monitoring(3) --time-scale=daily(4) --category=nulls(5)
 ```
 
-1.  The data quality check name, for example [daily_nulls_percent](../../checks/column/nulls/nulls-percent.md#daily-nulls-percent).
+1.  The data quality check name, for example [daily_nulls_percent](../../../checks/column/nulls/nulls-percent.md#daily-nulls-percent).
 2.  The column name, supports also patters such as *column_name_prefix_\**, *\*_column_name_suffix* or *prefix\*suffix*.
 3.  The data quality check type, supported values are *profiling*, *monitoring* and *partitioned*.
 4.  The time scale for *monitoring* and *partitioned* checks. Supported values are *daily* and *monthly*.
 5.  The category of checks to run.
 
 A selection of the most important targeting filters is shown in the following table. The list of targeting filters is not limited
-to the filters described below. Please consult the [check run command-line command](../../command-line-interface/check.md#dqo-check-run)
+to the filters described below. Please consult the [check run command-line command](../../../command-line-interface/check.md#dqo-check-run)
 to see the full list of supported targeting filters.
 
 | Parameter      | Description                                                                                                        | Example                                                                                       |
 |----------------|--------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
-| `--check`      | The check name. All data quality checks are described in the [Checks](../../checks/index.md) section.              | --check=[daily_nulls_percent](../../checks/column/nulls/nulls-percent.md#daily-nulls-percent) |
+| `--check`      | The check name. All data quality checks are described in the [Checks](../../../checks/index.md) section.              | --check=[daily_nulls_percent](../../../checks/column/nulls/nulls-percent.md#daily-nulls-percent) |
 | `--column`     | The target column name. This parameter supports patterns such as *\*_id*.                                          | --column=customer_id                                                                          |
 | `--check-type` | The check type to run only checks of that type. Supported values are  *profiling*, *monitoring* and *partitioned*. | --check-type=monitoring                                                                       |
 | `--time-scale` | The time scale for *monitoring* and *partitioned* checks. Supported values are *daily* and *monthly*.              | --time-scale=daily                                                                            |
@@ -189,15 +192,15 @@ spec:
             min_count: 1
 ```
 
-In order to run only the [daily_row_count](../../checks/table/volume/row-count.md#daily-row-count-),
-without running the [monthly_row_count](../../checks/table/volume/row-count.md#monthly-row-count-),
+In order to run only the [daily_row_count](../../../checks/table/volume/row-count.md#daily-row-count),
+without running the [monthly_row_count](../../../checks/table/volume/row-count.md#monthly-row-count),
 we can target it with a `--check=` parameter as shown in the following example.
 
 ``` { .asc .annotate }
 dqo> check run --connection=sales-dwh --full-table-name=public.fact_sales --check=daily_row_count(1)
 ```
 
-1. The name of the data quality check to run. Other check names are listed in the [Checks](../../checks/index.md) reference.
+1. The name of the data quality check to run. Other check names are listed in the [Checks](../../../checks/index.md) reference.
 
 
 ## Targeting checks by type
@@ -230,7 +233,7 @@ spec:
 ```
 
 The type of checks is filtered using the `--check-type=` parameter. In order to run only
-[profiling checks](../checks/profiling-checks/profiling-checks.md), we will use the following command.
+[profiling checks](../../checks/profiling-checks/profiling-checks.md), we will use the following command.
 
 ``` { .asc .annotate }
 dqo> check run --connection=sales-dwh --full-table-name=public.fact_sales --check-type=profiling(1)
@@ -315,7 +318,7 @@ dqo> check run --connection=sales-dwh --full-table-name=public.fact_sales --chec
 1.  Selects the *daily* checks. Another supported value is the *monthly* checks.
 
 ### **Running partitioned checks**
-Running [partitioned checks](../checks/partition-checks/partition-checks.md) to analyze partitions is similar
+Running [partitioned checks](../../checks/partition-checks/partition-checks.md) to analyze partitions is similar
 to running *monitoring* checks. We can also select the time scale.
 
 The following example highlights the *partitioned* checks that will be run.
@@ -515,6 +518,6 @@ dqo> check run --connection=sales-dwh --full-table-name=public.fact_sales --chec
 
 ## What's next
 
-- Learn how to [run checks from the user interface](../../working-with-dqo/run-data-quality-checks/run-data-quality-checks.md).
-- Read about how the [check results are stored](../data-storage/data-storage.md).
-- Learn how DQOps [executed the checks](../architecture/check-execution-flow.md).
+- Learn how to [run checks from the user interface](../../../working-with-dqo/run-data-quality-checks/run-data-quality-checks.md).
+- Read about how the [check results are stored](../../data-storage/data-storage.md).
+- Learn how DQOps [executed the checks](../../architecture/check-execution-flow.md).

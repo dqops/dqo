@@ -1,22 +1,22 @@
-Default settings management for configuring the default data quality checks that are configured for all imported tables and columns.  
+Default settings management for configuring the default data quality checks that are configured for all imported tables and columns.
 
 
-___  
-## get_default_data_observability_daily_monitoring_column_checks  
-Returns UI model to show and edit the default configuration of the daily monitoring (Data Observability and monitoring) checks that are configured for all imported columns on a column level.  
+___
+## get_default_data_observability_daily_monitoring_column_checks
+Returns UI model to show and edit the default configuration of the daily monitoring (Data Observability and monitoring) checks that are configured for all imported columns on a column level.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/get_default_data_observability_daily_monitoring_column_checks.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/daily/column  
+http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/daily/column
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/Common/#checkcontainermodel)||[CheckContainerModel](../../models/Common/#checkcontainermodel)|
+|[check_container_model](../../models/Common.md#checkcontainermodel)||[CheckContainerModel](../../models/Common.md#checkcontainermodel)|
 
 
 
@@ -25,10 +25,10 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/daily/column^
 		-H "Accept: application/json"
@@ -36,7 +36,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import get_default_data_observability_daily_monitoring_column_checks
@@ -54,7 +54,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import get_default_data_observability_daily_monitoring_column_checks
@@ -74,7 +74,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import get_default_data_observability_daily_monitoring_column_checks
@@ -95,7 +95,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import get_default_data_observability_daily_monitoring_column_checks
@@ -120,7 +120,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     {
 	  "categories" : [ {
@@ -149,22 +149,22 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
     ```
 
 
-___  
-## get_default_data_observability_daily_monitoring_table_checks  
-Returns UI model to show and edit the default configuration of the daily monitoring (Data Observability and monitoring) checks that are configured for all imported tables on a table level.  
+___
+## get_default_data_observability_daily_monitoring_table_checks
+Returns UI model to show and edit the default configuration of the daily monitoring (Data Observability and monitoring) checks that are configured for all imported tables on a table level.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/get_default_data_observability_daily_monitoring_table_checks.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/daily/table  
+http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/daily/table
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/Common/#checkcontainermodel)||[CheckContainerModel](../../models/Common/#checkcontainermodel)|
+|[check_container_model](../../models/Common.md#checkcontainermodel)||[CheckContainerModel](../../models/Common.md#checkcontainermodel)|
 
 
 
@@ -173,10 +173,10 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/daily/table^
 		-H "Accept: application/json"
@@ -184,7 +184,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import get_default_data_observability_daily_monitoring_table_checks
@@ -202,7 +202,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import get_default_data_observability_daily_monitoring_table_checks
@@ -222,7 +222,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import get_default_data_observability_daily_monitoring_table_checks
@@ -243,7 +243,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import get_default_data_observability_daily_monitoring_table_checks
@@ -268,7 +268,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     {
 	  "categories" : [ {
@@ -297,22 +297,22 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
     ```
 
 
-___  
-## get_default_data_observability_monthly_monitoring_column_checks  
-Returns UI model to show and edit the default configuration of the monthly monitoring (Data Observability end of month scores) checks that are configured for all imported columns on a column level.  
+___
+## get_default_data_observability_monthly_monitoring_column_checks
+Returns UI model to show and edit the default configuration of the monthly monitoring (Data Observability end of month scores) checks that are configured for all imported columns on a column level.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/get_default_data_observability_monthly_monitoring_column_checks.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/monthly/column  
+http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/monthly/column
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/Common/#checkcontainermodel)||[CheckContainerModel](../../models/Common/#checkcontainermodel)|
+|[check_container_model](../../models/Common.md#checkcontainermodel)||[CheckContainerModel](../../models/Common.md#checkcontainermodel)|
 
 
 
@@ -321,10 +321,10 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/monthly/column^
 		-H "Accept: application/json"
@@ -332,7 +332,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import get_default_data_observability_monthly_monitoring_column_checks
@@ -350,7 +350,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import get_default_data_observability_monthly_monitoring_column_checks
@@ -370,7 +370,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import get_default_data_observability_monthly_monitoring_column_checks
@@ -391,7 +391,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import get_default_data_observability_monthly_monitoring_column_checks
@@ -416,7 +416,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     {
 	  "categories" : [ {
@@ -445,22 +445,22 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
     ```
 
 
-___  
-## get_default_data_observability_monthly_monitoring_table_checks  
-Returns UI model to show and edit the default configuration of the monthly monitoring (Data Observability end of month scores) checks that are configured for all imported tables on a table level.  
+___
+## get_default_data_observability_monthly_monitoring_table_checks
+Returns UI model to show and edit the default configuration of the monthly monitoring (Data Observability end of month scores) checks that are configured for all imported tables on a table level.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/get_default_data_observability_monthly_monitoring_table_checks.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/monthly/table  
+http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/monthly/table
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/Common/#checkcontainermodel)||[CheckContainerModel](../../models/Common/#checkcontainermodel)|
+|[check_container_model](../../models/Common.md#checkcontainermodel)||[CheckContainerModel](../../models/Common.md#checkcontainermodel)|
 
 
 
@@ -469,10 +469,10 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/monthly/table^
 		-H "Accept: application/json"
@@ -480,7 +480,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import get_default_data_observability_monthly_monitoring_table_checks
@@ -498,7 +498,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import get_default_data_observability_monthly_monitoring_table_checks
@@ -518,7 +518,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import get_default_data_observability_monthly_monitoring_table_checks
@@ -539,7 +539,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import get_default_data_observability_monthly_monitoring_table_checks
@@ -564,7 +564,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     {
 	  "categories" : [ {
@@ -593,22 +593,22 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
     ```
 
 
-___  
-## get_default_profiling_column_checks  
-Returns UI model to show and edit the default configuration of the profiling checks that are configured for all imported column on a column level.  
+___
+## get_default_profiling_column_checks
+Returns UI model to show and edit the default configuration of the profiling checks that are configured for all imported column on a column level.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/get_default_profiling_column_checks.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/defaults/defaultchecks/profiling/column  
+http://localhost:8888/api/defaults/defaultchecks/profiling/column
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/Common/#checkcontainermodel)||[CheckContainerModel](../../models/Common/#checkcontainermodel)|
+|[check_container_model](../../models/Common.md#checkcontainermodel)||[CheckContainerModel](../../models/Common.md#checkcontainermodel)|
 
 
 
@@ -617,10 +617,10 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/defaults/defaultchecks/profiling/column^
 		-H "Accept: application/json"
@@ -628,7 +628,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import get_default_profiling_column_checks
@@ -646,7 +646,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import get_default_profiling_column_checks
@@ -666,7 +666,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import get_default_profiling_column_checks
@@ -687,7 +687,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import get_default_profiling_column_checks
@@ -712,7 +712,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     {
 	  "categories" : [ {
@@ -741,22 +741,22 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
     ```
 
 
-___  
-## get_default_profiling_table_checks  
-Returns UI model to show and edit the default configuration of the profiling checks that are configured for all imported tables on a table level.  
+___
+## get_default_profiling_table_checks
+Returns UI model to show and edit the default configuration of the profiling checks that are configured for all imported tables on a table level.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/get_default_profiling_table_checks.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/defaults/defaultchecks/profiling/table  
+http://localhost:8888/api/defaults/defaultchecks/profiling/table
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/Common/#checkcontainermodel)||[CheckContainerModel](../../models/Common/#checkcontainermodel)|
+|[check_container_model](../../models/Common.md#checkcontainermodel)||[CheckContainerModel](../../models/Common.md#checkcontainermodel)|
 
 
 
@@ -765,10 +765,10 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/defaults/defaultchecks/profiling/table^
 		-H "Accept: application/json"
@@ -776,7 +776,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import get_default_profiling_table_checks
@@ -794,7 +794,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import get_default_profiling_table_checks
@@ -814,7 +814,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import get_default_profiling_table_checks
@@ -835,7 +835,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import get_default_profiling_table_checks
@@ -860,7 +860,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     {
 	  "categories" : [ {
@@ -889,41 +889,41 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
     ```
 
 
-___  
-## get_default_schedule  
-Returns spec to show and edit the default configuration of schedules.  
+___
+## get_default_schedule
+Returns spec to show and edit the default configuration of schedules.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/get_default_schedule.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}  
+http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[monitoring_schedule_spec](../../models/Common/#monitoringschedulespec)||[MonitoringScheduleSpec](../../models/Common/#monitoringschedulespec)|
+|[monitoring_schedule_spec](../../models/Common.md#monitoringschedulespec)||[MonitoringScheduleSpec](../../models/Common.md#monitoringschedulespec)|
 
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|[scheduling_group](../../models/Common/#checkrunschedulegroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../../models/Common/#checkrunschedulegroup)|:material-check-bold:|
+|[scheduling_group](../../models/Common.md#checkrunschedulegroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../../models/Common.md#checkrunschedulegroup)|:material-check-bold:|
 
 
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/defaults/defaultschedule/partitioned_daily^
 		-H "Accept: application/json"
@@ -931,7 +931,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import get_default_schedule
@@ -950,7 +950,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import get_default_schedule
@@ -971,7 +971,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import get_default_schedule
@@ -993,7 +993,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import get_default_schedule
@@ -1019,7 +1019,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     {
 	  "cron_expression" : "0 12 1 * *"
@@ -1027,22 +1027,22 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
     ```
 
 
-___  
-## get_default_webhooks  
-Returns spec to show and edit the default configuration of webhooks.  
+___
+## get_default_webhooks
+Returns spec to show and edit the default configuration of webhooks.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/get_default_webhooks.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/defaults/defaultwebhooks  
+http://localhost:8888/api/defaults/defaultwebhooks
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[incident_webhook_notifications_spec](../../../reference/yaml/ConnectionYaml/#incidentwebhooknotificationsspec)||[IncidentWebhookNotificationsSpec](../../../reference/yaml/ConnectionYaml/#incidentwebhooknotificationsspec)|
+|[incident_webhook_notifications_spec](../../../reference/yaml/ConnectionYaml.md#incidentwebhooknotificationsspec)||[IncidentWebhookNotificationsSpec](../../../reference/yaml/ConnectionYaml.md#incidentwebhooknotificationsspec)|
 
 
 
@@ -1051,10 +1051,10 @@ http://localhost:8888/api/defaults/defaultwebhooks
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/defaults/defaultwebhooks^
 		-H "Accept: application/json"
@@ -1062,7 +1062,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import get_default_webhooks
@@ -1080,7 +1080,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import get_default_webhooks
@@ -1100,7 +1100,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import get_default_webhooks
@@ -1121,7 +1121,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import get_default_webhooks
@@ -1146,7 +1146,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     {
 	  "incident_opened_webhook_url" : "https://sample_url.com/opened",
@@ -1157,34 +1157,34 @@ http://localhost:8888/api/defaults/defaultwebhooks
     ```
 
 
-___  
-## update_default_data_observability_daily_monitoring_column_checks  
-New configuration of the default daily monitoring (data observability) checks on a column level. These checks will be applied on new columns.  
+___
+## update_default_data_observability_daily_monitoring_column_checks
+New configuration of the default daily monitoring (data observability) checks on a column level. These checks will be applied on new columns.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/update_default_data_observability_daily_monitoring_column_checks.py)
-  
+
 
 **PUT**
 ```
-http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/daily/column  
+http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/daily/column
 ```
 
 
 
 
 
-**Request body**  
-  
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the default configuration of the data observability daily monitoring checks configuration|[CheckContainerModel](../../models/Common/#checkcontainermodel)| |
+|Model with the changes to be applied to the default configuration of the data observability daily monitoring checks configuration|[CheckContainerModel](../../models/Common.md#checkcontainermodel)| |
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X PUT http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/daily/column^
 		-H "Accept: application/json"^
@@ -1195,7 +1195,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_data_observability_daily_monitoring_column_checks
@@ -1247,7 +1247,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_data_observability_daily_monitoring_column_checks
@@ -1301,7 +1301,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_data_observability_daily_monitoring_column_checks
@@ -1356,7 +1356,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_data_observability_daily_monitoring_column_checks
@@ -1416,34 +1416,34 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 
 
-___  
-## update_default_data_observability_daily_monitoring_table_checks  
-New configuration of the default daily monitoring (data observability) checks on a table level. These checks will be applied on new tables.  
+___
+## update_default_data_observability_daily_monitoring_table_checks
+New configuration of the default daily monitoring (data observability) checks on a table level. These checks will be applied on new tables.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/update_default_data_observability_daily_monitoring_table_checks.py)
-  
+
 
 **PUT**
 ```
-http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/daily/table  
+http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/daily/table
 ```
 
 
 
 
 
-**Request body**  
-  
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the default configuration of the data observability daily monitoring checks configuration|[CheckContainerModel](../../models/Common/#checkcontainermodel)| |
+|Model with the changes to be applied to the default configuration of the data observability daily monitoring checks configuration|[CheckContainerModel](../../models/Common.md#checkcontainermodel)| |
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X PUT http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/daily/table^
 		-H "Accept: application/json"^
@@ -1454,7 +1454,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_data_observability_daily_monitoring_table_checks
@@ -1506,7 +1506,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_data_observability_daily_monitoring_table_checks
@@ -1560,7 +1560,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_data_observability_daily_monitoring_table_checks
@@ -1615,7 +1615,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_data_observability_daily_monitoring_table_checks
@@ -1675,34 +1675,34 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 
 
-___  
-## update_default_data_observability_monthly_monitoring_column_checks  
-New configuration of the default monthly monitoring checkpoints on a column level. These checks will be applied on new columns.  
+___
+## update_default_data_observability_monthly_monitoring_column_checks
+New configuration of the default monthly monitoring checkpoints on a column level. These checks will be applied on new columns.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/update_default_data_observability_monthly_monitoring_column_checks.py)
-  
+
 
 **PUT**
 ```
-http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/monthly/column  
+http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/monthly/column
 ```
 
 
 
 
 
-**Request body**  
-  
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the default configuration of the data observability monthly monitoring checks configuration|[CheckContainerModel](../../models/Common/#checkcontainermodel)| |
+|Model with the changes to be applied to the default configuration of the data observability monthly monitoring checks configuration|[CheckContainerModel](../../models/Common.md#checkcontainermodel)| |
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X PUT http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/monthly/column^
 		-H "Accept: application/json"^
@@ -1713,7 +1713,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_data_observability_monthly_monitoring_column_checks
@@ -1765,7 +1765,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_data_observability_monthly_monitoring_column_checks
@@ -1819,7 +1819,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_data_observability_monthly_monitoring_column_checks
@@ -1874,7 +1874,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_data_observability_monthly_monitoring_column_checks
@@ -1934,34 +1934,34 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 
 
-___  
-## update_default_data_observability_monthly_monitoring_table_checks  
-New configuration of the default monthly monitoring checkpoints on a table level. These checks will be applied on new tables.  
+___
+## update_default_data_observability_monthly_monitoring_table_checks
+New configuration of the default monthly monitoring checkpoints on a table level. These checks will be applied on new tables.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/update_default_data_observability_monthly_monitoring_table_checks.py)
-  
+
 
 **PUT**
 ```
-http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/monthly/table  
+http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/monthly/table
 ```
 
 
 
 
 
-**Request body**  
-  
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the default configuration of the data observability monthly monitoring checks configuration|[CheckContainerModel](../../models/Common/#checkcontainermodel)| |
+|Model with the changes to be applied to the default configuration of the data observability monthly monitoring checks configuration|[CheckContainerModel](../../models/Common.md#checkcontainermodel)| |
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X PUT http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/monthly/table^
 		-H "Accept: application/json"^
@@ -1972,7 +1972,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_data_observability_monthly_monitoring_table_checks
@@ -2024,7 +2024,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_data_observability_monthly_monitoring_table_checks
@@ -2078,7 +2078,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_data_observability_monthly_monitoring_table_checks
@@ -2133,7 +2133,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_data_observability_monthly_monitoring_table_checks
@@ -2193,34 +2193,34 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 
 
-___  
-## update_default_profiling_column_checks  
-New configuration of the default profiling checks on a column level. These checks will be applied to new columns.  
+___
+## update_default_profiling_column_checks
+New configuration of the default profiling checks on a column level. These checks will be applied to new columns.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/update_default_profiling_column_checks.py)
-  
+
 
 **PUT**
 ```
-http://localhost:8888/api/defaults/defaultchecks/profiling/column  
+http://localhost:8888/api/defaults/defaultchecks/profiling/column
 ```
 
 
 
 
 
-**Request body**  
-  
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the data quality profiling checks configuration|[CheckContainerModel](../../models/Common/#checkcontainermodel)| |
+|Model with the changes to be applied to the data quality profiling checks configuration|[CheckContainerModel](../../models/Common.md#checkcontainermodel)| |
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X PUT http://localhost:8888/api/defaults/defaultchecks/profiling/column^
 		-H "Accept: application/json"^
@@ -2231,7 +2231,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_profiling_column_checks
@@ -2283,7 +2283,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_profiling_column_checks
@@ -2337,7 +2337,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_profiling_column_checks
@@ -2392,7 +2392,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_profiling_column_checks
@@ -2452,34 +2452,34 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 
 
 
-___  
-## update_default_profiling_table_checks  
-New configuration of the default profiling checks on a table level. These checks will be applied to new tables.  
+___
+## update_default_profiling_table_checks
+New configuration of the default profiling checks on a table level. These checks will be applied to new tables.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/update_default_profiling_table_checks.py)
-  
+
 
 **PUT**
 ```
-http://localhost:8888/api/defaults/defaultchecks/profiling/table  
+http://localhost:8888/api/defaults/defaultchecks/profiling/table
 ```
 
 
 
 
 
-**Request body**  
-  
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the data quality profiling checks configuration|[CheckContainerModel](../../models/Common/#checkcontainermodel)| |
+|Model with the changes to be applied to the data quality profiling checks configuration|[CheckContainerModel](../../models/Common.md#checkcontainermodel)| |
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X PUT http://localhost:8888/api/defaults/defaultchecks/profiling/table^
 		-H "Accept: application/json"^
@@ -2490,7 +2490,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_profiling_table_checks
@@ -2542,7 +2542,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_profiling_table_checks
@@ -2596,7 +2596,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_profiling_table_checks
@@ -2651,7 +2651,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_profiling_table_checks
@@ -2711,41 +2711,41 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 
 
 
-___  
-## update_default_schedules  
-New configuration of the default schedules.  
+___
+## update_default_schedules
+New configuration of the default schedules.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/update_default_schedules.py)
-  
+
 
 **PUT**
 ```
-http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}  
+http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 ```
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|[scheduling_group](../../models/Common/#checkrunschedulegroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../../models/Common/#checkrunschedulegroup)|:material-check-bold:|
+|[scheduling_group](../../models/Common.md#checkrunschedulegroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../../models/Common.md#checkrunschedulegroup)|:material-check-bold:|
 
 
 
 
-**Request body**  
-  
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Spec with default schedules changes to be applied to the default configuration.|[MonitoringScheduleSpec](../../models/Common/#monitoringschedulespec)| |
+|Spec with default schedules changes to be applied to the default configuration.|[MonitoringScheduleSpec](../../models/Common.md#monitoringschedulespec)| |
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X PUT http://localhost:8888/api/defaults/defaultschedule/partitioned_daily^
 		-H "Accept: application/json"^
@@ -2756,7 +2756,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_schedules
@@ -2781,7 +2781,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_schedules
@@ -2808,7 +2808,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_schedules
@@ -2836,7 +2836,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_schedules
@@ -2869,34 +2869,34 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 
 
 
-___  
-## update_default_webhooks  
-New configuration of the default webhooks.  
+___
+## update_default_webhooks
+New configuration of the default webhooks.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/update_default_webhooks.py)
-  
+
 
 **PUT**
 ```
-http://localhost:8888/api/defaults/defaultwebhooks  
+http://localhost:8888/api/defaults/defaultwebhooks
 ```
 
 
 
 
 
-**Request body**  
-  
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Spec with default notification webhooks changes to be applied to the default configuration|[IncidentWebhookNotificationsSpec](../../../reference/yaml/ConnectionYaml/#incidentwebhooknotificationsspec)| |
+|Spec with default notification webhooks changes to be applied to the default configuration|[IncidentWebhookNotificationsSpec](../../../reference/yaml/ConnectionYaml.md#incidentwebhooknotificationsspec)| |
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X PUT http://localhost:8888/api/defaults/defaultwebhooks^
 		-H "Accept: application/json"^
@@ -2907,7 +2907,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_webhooks
@@ -2932,7 +2932,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_webhooks
@@ -2959,7 +2959,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_webhooks
@@ -2987,7 +2987,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.defaults import update_default_webhooks

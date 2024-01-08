@@ -12,13 +12,6 @@ export const getDaysString = (value: string | number) => {
 
 export const wait = (time: number) => new Promise((resolve) => setTimeout(resolve,  time));
 
-export const checkIfTabCouldExist = (checkType: CheckTypes, url: string) : boolean => {
-  const activeTab = url.split("/")[url.split('/').length -1]
-  if (url.startsWith("/" + checkType) && TABLE_LEVEL_TABS[checkType].find((x) => x.value === activeTab)) {
-   return true;
-  }
-  return false;
-}
 export const getLocalDateInUserTimeZone = (date: Date): string => {
   const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const options: Intl.DateTimeFormatOptions = {

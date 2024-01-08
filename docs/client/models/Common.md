@@ -1,27 +1,27 @@
 
-## CheckTimeScale  
-Enumeration of time scale of monitoring and partitioned data quality checks (daily, monthly, etc.)  
-  
+## CheckTimeScale
+Enumeration of time scale of monitoring and partitioned data quality checks (daily, monthly, etc.)
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
 |string|daily<br/>monthly<br/>|
 
-___  
+___
 
-## FieldModel  
-Model of a single field that is used to edit a parameter value for a sensor or a rule. Describes the type of the field and the current value.  
-  
+## FieldModel
+Model of a single field that is used to edit a parameter value for a sensor or a rule. Describes the type of the field and the current value.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[definition](../../../reference/yaml/SensorDefinitionYaml/#parameterdefinitionspec)|Field name that matches the field name (snake_case) used in the YAML specification.|[ParameterDefinitionSpec](../../../reference/yaml/SensorDefinitionYaml/#parameterdefinitionspec)|
+|[definition](../../../reference/yaml/SensorDefinitionYaml.md#parameterdefinitionspec)|Field name that matches the field name (snake_case) used in the YAML specification.|[ParameterDefinitionSpec](../../../reference/yaml/SensorDefinitionYaml.md#parameterdefinitionspec)|
 |optional|Field value is optional and may be null, when false - the field is required and must be filled.|boolean|
 |string_value|Field value for a string field.|string|
 |boolean_value|Field value for a boolean field.|boolean|
@@ -36,31 +36,31 @@ Model of a single field that is used to edit a parameter value for a sensor or a
 |date_value|Field value for an date.|date|
 
 
-___  
+___
 
-## RuleParametersModel  
-Model that returns the form definition and the form data to edit parameters (thresholds) for a rule at a single severity level (low, medium, high).  
-  
+## RuleParametersModel
+Model that returns the form definition and the form data to edit parameters (thresholds) for a rule at a single severity level (low, medium, high).
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |rule_name|Full rule name. This field is for information purposes and could be used to create additional custom checks that are reusing the same data quality rule.|string|
-|rule_parameters|List of fields for editing the rule parameters like thresholds.|List[[FieldModel](../Common/#fieldmodel)]|
+|rule_parameters|List of fields for editing the rule parameters like thresholds.|List[[FieldModel](#fieldmodel)]|
 |disabled|Disable the rule. The rule will not be evaluated. The sensor will also not be executed if it has no enabled rules.|boolean|
 |configured|Returns true when the rule is configured (is not null), so it should be shown in the UI as configured (having values).|boolean|
 
 
-___  
+___
 
-## CheckConfigurationModel  
-Model containing fundamental configuration of a single data quality check.  
-  
+## CheckConfigurationModel
+Model containing fundamental configuration of a single data quality check.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
@@ -68,29 +68,29 @@ Model containing fundamental configuration of a single data quality check.
 |schema_name|Schema name.|string|
 |table_name|Table name.|string|
 |column_name|Column name, if the check is set up on a column.|string|
-|[check_target](../schemas/#CheckTarget)|Check target (table or column).|[CheckTarget](../schemas/#CheckTarget)|
-|[check_type](../table_comparisons/#CheckType)|Check type (profiling, monitoring, partitioned).|[CheckType](../table_comparisons/#CheckType)|
-|[check_time_scale](../Common/#CheckTimeScale)|Check timescale (for monitoring and partitioned checks).|[CheckTimeScale](../Common/#CheckTimeScale)|
+|[check_target](../schemas.md#CheckTarget)|Check target (table or column).|[CheckTarget](../schemas.md#CheckTarget)|
+|[check_type](../table_comparisons.md#CheckType)|Check type (profiling, monitoring, partitioned).|[CheckType](../table_comparisons.md#CheckType)|
+|[check_time_scale](#CheckTimeScale)|Check timescale (for monitoring and partitioned checks).|[CheckTimeScale](#CheckTimeScale)|
 |category_name|Category to which this check belongs.|string|
 |check_name|Check name that is used in YAML file.|string|
 |sensor_parameters|List of fields for editing the sensor parameters.|List[[FieldModel](#fieldmodel)]|
 |table_level_filter|SQL WHERE clause added to the sensor query for every check on this table.|string|
 |sensor_level_filter|SQL WHERE clause added to the sensor query for this check.|string|
 |[warning](#ruleparametersmodel)|Rule parameters for the warning severity rule.|[RuleParametersModel](#ruleparametersmodel)|
-|[error](../Common/#ruleparametersmodel)|Rule parameters for the error severity rule.|[RuleParametersModel](../Common/#ruleparametersmodel)|
-|[fatal](../Common/#ruleparametersmodel)|Rule parameters for the fatal severity rule.|[RuleParametersModel](../Common/#ruleparametersmodel)|
+|[error](#ruleparametersmodel)|Rule parameters for the error severity rule.|[RuleParametersModel](#ruleparametersmodel)|
+|[fatal](#ruleparametersmodel)|Rule parameters for the fatal severity rule.|[RuleParametersModel](#ruleparametersmodel)|
 |disabled|Whether the check has been disabled.|boolean|
 |configured|Whether the check is configured (not null).|boolean|
 
 
-___  
+___
 
-## CheckListModel  
-Simplistic model that returns a single data quality check, its name and &quot;configured&quot; flag.  
-  
+## CheckListModel
+Simplistic model that returns a single data quality check, its name and &quot;configured&quot; flag.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
@@ -100,14 +100,14 @@ Simplistic model that returns a single data quality check, its name and &quot;co
 |configured|True if the data quality check is configured (not null). When saving the data quality check configuration, set the flag to true for storing the check.|boolean|
 
 
-___  
+___
 
-## CheckContainerListModel  
-Simplistic model that returns the list of data quality checks, their names, categories and &quot;configured&quot; flag.  
-  
+## CheckContainerListModel
+Simplistic model that returns the list of data quality checks, their names, categories and &quot;configured&quot; flag.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
@@ -117,30 +117,30 @@ Simplistic model that returns the list of data quality checks, their names, cate
 |can_delete_data|Boolean flag that decides if the current user can delete data (results).|boolean|
 
 
-___  
+___
 
-## RuleThresholdsModel  
-Model that returns the form definition and the form data to edit a single rule with all three threshold levels (low, medium, high).  
-  
+## RuleThresholdsModel
+Model that returns the form definition and the form data to edit a single rule with all three threshold levels (low, medium, high).
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[error](../Common/#ruleparametersmodel)|Rule parameters for the error severity rule.|[RuleParametersModel](../Common/#ruleparametersmodel)|
-|[warning](../Common/#ruleparametersmodel)|Rule parameters for the warning severity rule.|[RuleParametersModel](../Common/#ruleparametersmodel)|
-|[fatal](../Common/#ruleparametersmodel)|Rule parameters for the fatal severity rule.|[RuleParametersModel](../Common/#ruleparametersmodel)|
+|[error](#ruleparametersmodel)|Rule parameters for the error severity rule.|[RuleParametersModel](#ruleparametersmodel)|
+|[warning](#ruleparametersmodel)|Rule parameters for the warning severity rule.|[RuleParametersModel](#ruleparametersmodel)|
+|[fatal](#ruleparametersmodel)|Rule parameters for the fatal severity rule.|[RuleParametersModel](#ruleparametersmodel)|
 
 
-___  
+___
 
-## MonitoringScheduleSpec  
-Monitoring job schedule specification.  
-  
+## MonitoringScheduleSpec
+Monitoring job schedule specification.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
@@ -148,70 +148,70 @@ Monitoring job schedule specification.
 |disabled|Disables the schedule. When the value of this &#x27;disable&#x27; field is false, the schedule is stored in the metadata but it is not activated to run data quality checks.|boolean|
 
 
-___  
+___
 
-## CheckRunScheduleGroup  
-The run check scheduling group (profiling, daily checks, monthly checks, etc), which identifies the configuration of a schedule (cron expression) used schedule these checks on the job scheduler.  
-  
+## CheckRunScheduleGroup
+The run check scheduling group (profiling, daily checks, monthly checks, etc), which identifies the configuration of a schedule (cron expression) used schedule these checks on the job scheduler.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
 |string|monitoring_monthly<br/>profiling<br/>partitioned_daily<br/>monitoring_daily<br/>partitioned_monthly<br/>|
 
-___  
+___
 
-## EffectiveScheduleLevelModel  
-Enumeration of possible levels at which a schedule could be configured.  
-  
+## EffectiveScheduleLevelModel
+Enumeration of possible levels at which a schedule could be configured.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
 |string|check_override<br/>connection<br/>table_override<br/>|
 
-___  
+___
 
-## EffectiveScheduleModel  
-Model of a configured schedule (on connection or table) or schedule override (on check). Describes the CRON expression and the time of the upcoming execution, as well as the duration until this time.  
-  
+## EffectiveScheduleModel
+Model of a configured schedule (on connection or table) or schedule override (on check). Describes the CRON expression and the time of the upcoming execution, as well as the duration until this time.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[schedule_group](../Common/#CheckRunScheduleGroup)|Field value for a schedule group to which this schedule belongs.|[CheckRunScheduleGroup](../Common/#CheckRunScheduleGroup)|
+|[schedule_group](#CheckRunScheduleGroup)|Field value for a schedule group to which this schedule belongs.|[CheckRunScheduleGroup](#CheckRunScheduleGroup)|
 |[schedule_level](#effectiveschedulelevelmodel)|Field value for the level at which the schedule has been configured.|[EffectiveScheduleLevelModel](#effectiveschedulelevelmodel)|
 |cron_expression|Field value for a CRON expression defining the scheduling.|string|
 |disabled|Field value stating if the schedule has been explicitly disabled.|boolean|
 
 
-___  
+___
 
-## ScheduleEnabledStatusModel  
-Enumeration of possible ways a schedule can be configured.  
-  
+## ScheduleEnabledStatusModel
+Enumeration of possible ways a schedule can be configured.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
 |string|not_configured<br/>disabled<br/>overridden_by_checks<br/>enabled<br/>|
 
-___  
+___
 
-## CommentSpec  
-Comment entry. Comments are added when a change was made and the change should be recorded in a persisted format.  
-  
+## CommentSpec
+Comment entry. Comments are added when a change was made and the change should be recorded in a persisted format.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
@@ -220,37 +220,37 @@ Comment entry. Comments are added when a change was made and the change should b
 |comment|Comment text|string|
 
 
-___  
+___
 
-## CommentsListSpec  
-List of comments.  
-  
+## CommentsListSpec
+List of comments.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|self||List[[CommentSpec](../Common/#commentspec)]|
+|self||List[[CommentSpec](#commentspec)]|
 
 
-___  
+___
 
-## CheckSearchFilters  
-Target data quality checks filter, identifies which checks on which tables and columns should be executed.  
-  
+## CheckSearchFilters
+Target data quality checks filter, identifies which checks on which tables and columns should be executed.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |column|The column name. This field accepts search patterns in the format: &#x27;fk_\*&#x27;, &#x27;\*_id&#x27;, &#x27;prefix\*suffix&#x27;.|string|
-|column_data_type|The column data type that was imported from the data source and is stored in the [columns -&gt; column_name -&gt; type_snapshot -&gt; column_type](../../../reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file.|string|
-|column_nullable|Optional filter to find only nullable (when the value is *true*) or not nullable (when the value is *false*) columns, based on the value of the [columns -&gt; column_name -&gt; type_snapshot -&gt; nullable](../../../reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file.|boolean|
-|[check_target](../schemas/#CheckTarget)|The target type of object to run checks. Supported values are: *table* to run only table level checks or *column* to run only column level checks.|[CheckTarget](../schemas/#CheckTarget)|
-|[check_type](../table_comparisons/#CheckType)|The target type of checks to run. Supported values are *profiling*, *monitoring* and *partitioned*.|[CheckType](../table_comparisons/#CheckType)|
-|[time_scale](../Common/#checktimescale)|The time scale of *monitoring* or *partitioned* checks to run. Supports running only *daily* or *monthly* checks. Daily monitoring checks will replace today&#x27;s value for all captured check results.|[CheckTimeScale](../Common/#checktimescale)|
+|column_data_type|The column data type that was imported from the data source and is stored in the [columns -&gt; column_name -&gt; type_snapshot -&gt; column_type](../../../reference/yaml/TableYaml.md#columntypesnapshotspec) field in the *.dqotable.yaml* file.|string|
+|column_nullable|Optional filter to find only nullable (when the value is *true*) or not nullable (when the value is *false*) columns, based on the value of the [columns -&gt; column_name -&gt; type_snapshot -&gt; nullable](../../../reference/yaml/TableYaml.md#columntypesnapshotspec) field in the *.dqotable.yaml* file.|boolean|
+|[check_target](../schemas.md#CheckTarget)|The target type of object to run checks. Supported values are: *table* to run only table level checks or *column* to run only column level checks.|[CheckTarget](../schemas.md#CheckTarget)|
+|[check_type](../table_comparisons.md#CheckType)|The target type of checks to run. Supported values are *profiling*, *monitoring* and *partitioned*.|[CheckType](../table_comparisons.md#CheckType)|
+|[time_scale](#checktimescale)|The time scale of *monitoring* or *partitioned* checks to run. Supports running only *daily* or *monthly* checks. Daily monitoring checks will replace today&#x27;s value for all captured check results.|[CheckTimeScale](#checktimescale)|
 |check_category|The target check category, for example: *nulls*, *volume*, *anomaly*.|string|
 |table_comparison_name|The name of a configured table comparison. When the table comparison is provided, DQOps will only perform table comparison checks that compare data between tables.|string|
 |check_name|The target check name to run only this named check. Uses the short check name which is the name of the deepest folder in the *checks* folder. This field supports search patterns such as: &#x27;profiling_\*&#x27;, &#x27;\*_count&#x27;, &#x27;profiling_\*_percent&#x27;.|string|
@@ -260,57 +260,57 @@ Target data quality checks filter, identifies which checks on which tables and c
 |enabled|A boolean flag to target enabled tables, columns or checks. When the value of this field is not set, the default value of this field is *true*, targeting only tables, columns and checks that are not implicitly disabled.|boolean|
 
 
-___  
+___
 
-## CheckTargetModel  
-Enumeration of possible targets for check model request result.  
-  
+## CheckTargetModel
+Enumeration of possible targets for check model request result.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
 |string|column<br/>table<br/>|
 
-___  
+___
 
-## SimilarCheckModel  
-Describes a single check that is similar to other checks in other check types.  
-  
+## SimilarCheckModel
+Describes a single check that is similar to other checks in other check types.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_target](../schemas/#CheckTarget)|The check target (table or column).|[CheckTarget](../schemas/#CheckTarget)|
-|[check_type](../table_comparisons/#CheckType)|The check type.|[CheckType](../table_comparisons/#CheckType)|
-|[time_scale](../Common/#checktimescale)|The time scale (daily, monthly). The time scale is optional and could be null (for profiling checks).|[CheckTimeScale](../Common/#checktimescale)|
+|[check_target](../schemas.md#CheckTarget)|The check target (table or column).|[CheckTarget](../schemas.md#CheckTarget)|
+|[check_type](../table_comparisons.md#CheckType)|The check type.|[CheckType](../table_comparisons.md#CheckType)|
+|[time_scale](#checktimescale)|The time scale (daily, monthly). The time scale is optional and could be null (for profiling checks).|[CheckTimeScale](#checktimescale)|
 |category|The check&#x27;s category.|string|
 |check_name|The similar check name in another category.|string|
 
 
-___  
+___
 
-## CheckModel  
-Model that returns the form definition and the form data to edit a single data quality check.  
-  
+## CheckModel
+Model that returns the form definition and the form data to edit a single data quality check.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |check_name|Data quality check name that is used in YAML.|string|
 |help_text|Help text that describes the data quality check.|string|
-|sensor_parameters|List of fields for editing the sensor parameters.|List[[FieldModel](../Common/#fieldmodel)]|
+|sensor_parameters|List of fields for editing the sensor parameters.|List[[FieldModel](#fieldmodel)]|
 |sensor_name|Full sensor name. This field is for information purposes and could be used to create additional custom checks that are reusing the same data quality sensor.|string|
 |quality_dimension|Data quality dimension used for tagging the results of this data quality checks.|string|
 |[rule](#rulethresholdsmodel)|Threshold (alerting) rules defined for a check.|[RuleThresholdsModel](#rulethresholdsmodel)|
 |supports_grouping|The data quality check supports a custom data grouping configuration.|boolean|
-|[data_grouping_override](../../../reference/yaml/ConnectionYaml/#datagroupingconfigurationspec)|Data grouping configuration for this check. When a data grouping configuration is assigned at a check level, it overrides the data grouping configuration from the table level. Data grouping is configured in two cases: (1) the data in the table should be analyzed with a GROUP BY condition, to analyze different groups of rows using separate time series, for example a table contains data from multiple countries and there is a &#x27;country&#x27; column used for partitioning. (2) a static data grouping configuration is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). |[DataGroupingConfigurationSpec](../../../reference/yaml/ConnectionYaml/#datagroupingconfigurationspec)|
-|[schedule_override](../Common/#MonitoringScheduleSpec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[MonitoringScheduleSpec](../Common/#MonitoringScheduleSpec)|
+|[data_grouping_override](../../../reference/yaml/ConnectionYaml.md#datagroupingconfigurationspec)|Data grouping configuration for this check. When a data grouping configuration is assigned at a check level, it overrides the data grouping configuration from the table level. Data grouping is configured in two cases: (1) the data in the table should be analyzed with a GROUP BY condition, to analyze different groups of rows using separate time series, for example a table contains data from multiple countries and there is a &#x27;country&#x27; column used for partitioning. (2) a static data grouping configuration is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). |[DataGroupingConfigurationSpec](../../../reference/yaml/ConnectionYaml.md#datagroupingconfigurationspec)|
+|[schedule_override](#MonitoringScheduleSpec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[MonitoringScheduleSpec](#MonitoringScheduleSpec)|
 |[effective_schedule](#effectiveschedulemodel)|Model of configured schedule enabled on the check level.|[EffectiveScheduleModel](#effectiveschedulemodel)|
 |[schedule_enabled_status](#scheduleenabledstatusmodel)|State of the scheduling override for this check.|[ScheduleEnabledStatusModel](#scheduleenabledstatusmodel)|
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)|
@@ -320,7 +320,7 @@ Model that returns the form definition and the form data to edit a single data q
 |configured|True if the data quality check is configured (not null). When saving the data quality check configuration, set the flag to true for storing the check.|boolean|
 |filter|SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator.|string|
 |[run_checks_job_template](#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to start the job.|[CheckSearchFilters](#checksearchfilters)|
-|[data_clean_job_template](../jobs/#DeleteStoredDataQueueJobParameters)|Configured parameters for the &quot;data clean&quot; job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this check.|[DeleteStoredDataQueueJobParameters](../jobs/#DeleteStoredDataQueueJobParameters)|
+|[data_clean_job_template](../jobs.md#DeleteStoredDataQueueJobParameters)|Configured parameters for the &quot;data clean&quot; job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this check.|[DeleteStoredDataQueueJobParameters](../jobs.md#DeleteStoredDataQueueJobParameters)|
 |data_grouping_configuration|The name of a data grouping configuration defined at a table that should be used for this check.|string|
 |[check_target](#checktargetmodel)|Type of the check&#x27;s target (column, table).|[CheckTargetModel](#checktargetmodel)|
 |configuration_requirements_errors|List of configuration errors that must be fixed before the data quality check could be executed.|List[string]|
@@ -330,14 +330,14 @@ Model that returns the form definition and the form data to edit a single data q
 |can_delete_data|Boolean flag that decides if the current user can delete data (results).|boolean|
 
 
-___  
+___
 
-## QualityCategoryModel  
-Model that returns the form definition and the form data to edit all checks within a single category.  
-  
+## QualityCategoryModel
+Model that returns the form definition and the form data to edit all checks within a single category.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
@@ -346,91 +346,91 @@ Model that returns the form definition and the form data to edit all checks with
 |compare_to_column|The name of the column in the reference table that is compared.|string|
 |help_text|Help text that describes the category.|string|
 |checks|List of data quality checks within the category.|List[[CheckModel](#checkmodel)]|
-|[run_checks_job_template](../Common/#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to start the job.|[CheckSearchFilters](../Common/#checksearchfilters)|
-|[data_clean_job_template](../jobs/#DeleteStoredDataQueueJobParameters)|Configured parameters for the &quot;data clean&quot; job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this quality category.|[DeleteStoredDataQueueJobParameters](../jobs/#DeleteStoredDataQueueJobParameters)|
+|[run_checks_job_template](#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to start the job.|[CheckSearchFilters](#checksearchfilters)|
+|[data_clean_job_template](../jobs.md#DeleteStoredDataQueueJobParameters)|Configured parameters for the &quot;data clean&quot; job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this quality category.|[DeleteStoredDataQueueJobParameters](../jobs.md#DeleteStoredDataQueueJobParameters)|
 
 
-___  
+___
 
-## CheckContainerModel  
-Model that returns the form definition and the form data to edit all data quality checks divided by categories.  
-  
+## CheckContainerModel
+Model that returns the form definition and the form data to edit all data quality checks divided by categories.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |categories|List of all data quality categories that contain data quality checks inside.|List[[QualityCategoryModel](#qualitycategorymodel)]|
-|[effective_schedule](../Common/#effectiveschedulemodel)|Model of configured schedule enabled on the check container.|[EffectiveScheduleModel](../Common/#effectiveschedulemodel)|
-|[effective_schedule_enabled_status](../Common/#scheduleenabledstatusmodel)|State of the effective scheduling on the check container.|[ScheduleEnabledStatusModel](../Common/#scheduleenabledstatusmodel)|
+|[effective_schedule](#effectiveschedulemodel)|Model of configured schedule enabled on the check container.|[EffectiveScheduleModel](#effectiveschedulemodel)|
+|[effective_schedule_enabled_status](#scheduleenabledstatusmodel)|State of the effective scheduling on the check container.|[ScheduleEnabledStatusModel](#scheduleenabledstatusmodel)|
 |partition_by_column|The name of the column that partitioned checks will use for the time period partitioning. Important only for partitioned checks.|string|
-|[run_checks_job_template](../Common/#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to start the job.|[CheckSearchFilters](../Common/#checksearchfilters)|
-|[data_clean_job_template](../jobs/#DeleteStoredDataQueueJobParameters)|Configured parameters for the &quot;data clean&quot; job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this check container|[DeleteStoredDataQueueJobParameters](../jobs/#DeleteStoredDataQueueJobParameters)|
+|[run_checks_job_template](#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to start the job.|[CheckSearchFilters](#checksearchfilters)|
+|[data_clean_job_template](../jobs.md#DeleteStoredDataQueueJobParameters)|Configured parameters for the &quot;data clean&quot; job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this check container|[DeleteStoredDataQueueJobParameters](../jobs.md#DeleteStoredDataQueueJobParameters)|
 |can_edit|Boolean flag that decides if the current user can edit the check.|boolean|
 |can_run_checks|Boolean flag that decides if the current user can run checks.|boolean|
 |can_delete_data|Boolean flag that decides if the current user can delete data (results).|boolean|
 
 
-___  
+___
 
-## CheckContainerTypeModel  
-Model identifying the check type and timescale of checks belonging to a container.  
-  
+## CheckContainerTypeModel
+Model identifying the check type and timescale of checks belonging to a container.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_type](../table_comparisons/#CheckType)|Check type.|[CheckType](../table_comparisons/#CheckType)|
-|[check_time_scale](../Common/#checktimescale)|Check timescale.|[CheckTimeScale](../Common/#checktimescale)|
+|[check_type](../table_comparisons.md#CheckType)|Check type.|[CheckType](../table_comparisons.md#CheckType)|
+|[check_time_scale](#checktimescale)|Check timescale.|[CheckTimeScale](#checktimescale)|
 
 
-___  
+___
 
-## CheckTemplate  
-Model depicting a named data quality check that can potentially be enabled, regardless to its position in hierarchy tree.  
-  
+## CheckTemplate
+Model depicting a named data quality check that can potentially be enabled, regardless to its position in hierarchy tree.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_target](../schemas/#CheckTarget)|Check target (table, column)|[CheckTarget](../schemas/#CheckTarget)|
+|[check_target](../schemas.md#CheckTarget)|Check target (table, column)|[CheckTarget](../schemas.md#CheckTarget)|
 |check_category|Data quality check category.|string|
 |check_name|Data quality check name that is used in YAML.|string|
 |help_text|Help text that describes the data quality check.|string|
 |[check_container_type](#checkcontainertypemodel)|Check type with time-scale.|[CheckContainerTypeModel](#checkcontainertypemodel)|
 |sensor_name|Full sensor name.|string|
-|[check_model](../Common/#checkmodel)|Template of the check model with the sensor parameters and rule parameters|[CheckModel](../Common/#checkmodel)|
-|sensor_parameters_definitions|List of sensor parameter fields definitions.|List[[ParameterDefinitionSpec](../../../reference/yaml/SensorDefinitionYaml/#parameterdefinitionspec)]|
-|rule_parameters_definitions|List of threshold (alerting) rule&#x27;s parameters definitions (for a single rule, regardless of severity).|List[[ParameterDefinitionSpec](../../../reference/yaml/SensorDefinitionYaml/#parameterdefinitionspec)]|
+|[check_model](#checkmodel)|Template of the check model with the sensor parameters and rule parameters|[CheckModel](#checkmodel)|
+|sensor_parameters_definitions|List of sensor parameter fields definitions.|List[[ParameterDefinitionSpec](../../../reference/yaml/SensorDefinitionYaml.md#parameterdefinitionspec)]|
+|rule_parameters_definitions|List of threshold (alerting) rule&#x27;s parameters definitions (for a single rule, regardless of severity).|List[[ParameterDefinitionSpec](../../../reference/yaml/SensorDefinitionYaml.md#parameterdefinitionspec)]|
 
 
-___  
+___
 
-## ProviderType  
+## ProviderType
 Data source provider type (dialect type).
-  We will use lower case names to avoid issues with parsing, even if the enum names are not named following the Java naming convention.  
-  
+  We will use lower case names to avoid issues with parsing, even if the enum names are not named following the Java naming convention.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
 |string|snowflake<br/>oracle<br/>postgresql<br/>redshift<br/>sqlserver<br/>trino<br/>spark<br/>databricks<br/>mysql<br/>bigquery<br/>presto<br/>|
 
-___  
+___
 
-## ConnectionModel  
-Connection model returned by the rest api that is limited only to the basic fields, excluding nested nodes.  
-  
+## ConnectionModel
+Connection model returned by the rest api that is limited only to the basic fields, excluding nested nodes.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
@@ -438,23 +438,23 @@ Connection model returned by the rest api that is limited only to the basic fiel
 |connection_hash|Connection hash that identifies the connection using a unique hash code.|long|
 |parallel_jobs_limit|The concurrency limit for the maximum number of parallel SQL queries executed on this connection.|integer|
 |[provider_type](#providertype)|Database provider type (required). Accepts: bigquery, snowflake, etc.|[ProviderType](#providertype)|
-|[bigquery](../../../reference/yaml/ConnectionYaml/#bigqueryparametersspec)|BigQuery connection parameters. Specify parameters in the bigquery section.|[BigQueryParametersSpec](../../../reference/yaml/ConnectionYaml/#bigqueryparametersspec)|
-|[snowflake](../../../reference/yaml/ConnectionYaml/#snowflakeparametersspec)|Snowflake connection parameters.|[SnowflakeParametersSpec](../../../reference/yaml/ConnectionYaml/#snowflakeparametersspec)|
-|[postgresql](../../../reference/yaml/ConnectionYaml/#postgresqlparametersspec)|PostgreSQL connection parameters.|[PostgresqlParametersSpec](../../../reference/yaml/ConnectionYaml/#postgresqlparametersspec)|
-|[redshift](../../../reference/yaml/ConnectionYaml/#redshiftparametersspec)|Redshift connection parameters.|[RedshiftParametersSpec](../../../reference/yaml/ConnectionYaml/#redshiftparametersspec)|
-|[sqlserver](../../../reference/yaml/ConnectionYaml/#sqlserverparametersspec)|SqlServer connection parameters.|[SqlServerParametersSpec](../../../reference/yaml/ConnectionYaml/#sqlserverparametersspec)|
-|[presto](../../../reference/yaml/ConnectionYaml/#prestoparametersspec)|Presto connection parameters.|[PrestoParametersSpec](../../../reference/yaml/ConnectionYaml/#prestoparametersspec)|
-|[trino](../../../reference/yaml/ConnectionYaml/#trinoparametersspec)|Trino connection parameters.|[TrinoParametersSpec](../../../reference/yaml/ConnectionYaml/#trinoparametersspec)|
-|[mysql](../../../reference/yaml/ConnectionYaml/#mysqlparametersspec)|MySQL connection parameters.|[MysqlParametersSpec](../../../reference/yaml/ConnectionYaml/#mysqlparametersspec)|
-|[oracle](../../../reference/yaml/ConnectionYaml/#oracleparametersspec)|Oracle connection parameters.|[OracleParametersSpec](../../../reference/yaml/ConnectionYaml/#oracleparametersspec)|
-|[spark](../../../reference/yaml/ConnectionYaml/#sparkparametersspec)|Spark connection parameters.|[SparkParametersSpec](../../../reference/yaml/ConnectionYaml/#sparkparametersspec)|
-|[databricks](../../../reference/yaml/ConnectionYaml/#databricksparametersspec)|Databricks connection parameters.|[DatabricksParametersSpec](../../../reference/yaml/ConnectionYaml/#databricksparametersspec)|
-|[run_checks_job_template](../Common/#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run all checks within this connection.|[CheckSearchFilters](../Common/#checksearchfilters)|
-|[run_profiling_checks_job_template](../Common/#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run profiling checks within this connection.|[CheckSearchFilters](../Common/#checksearchfilters)|
-|[run_monitoring_checks_job_template](../Common/#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run monitoring checks within this connection.|[CheckSearchFilters](../Common/#checksearchfilters)|
-|[run_partition_checks_job_template](../Common/#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run partition partitioned checks within this connection.|[CheckSearchFilters](../Common/#checksearchfilters)|
-|[collect_statistics_job_template](../jobs/#StatisticsCollectorSearchFilters)|Configured parameters for the &quot;collect statistics&quot; job that should be pushed to the job queue in order to run all statistics collectors within this connection.|[StatisticsCollectorSearchFilters](../jobs/#StatisticsCollectorSearchFilters)|
-|[data_clean_job_template](../jobs/#DeleteStoredDataQueueJobParameters)|Configured parameters for the &quot;data clean&quot; job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this connection.|[DeleteStoredDataQueueJobParameters](../jobs/#DeleteStoredDataQueueJobParameters)|
+|[bigquery](../../../reference/yaml/ConnectionYaml.md#bigqueryparametersspec)|BigQuery connection parameters. Specify parameters in the bigquery section.|[BigQueryParametersSpec](../../../reference/yaml/ConnectionYaml.md#bigqueryparametersspec)|
+|[snowflake](../../../reference/yaml/ConnectionYaml.md#snowflakeparametersspec)|Snowflake connection parameters.|[SnowflakeParametersSpec](../../../reference/yaml/ConnectionYaml.md#snowflakeparametersspec)|
+|[postgresql](../../../reference/yaml/ConnectionYaml.md#postgresqlparametersspec)|PostgreSQL connection parameters.|[PostgresqlParametersSpec](../../../reference/yaml/ConnectionYaml.md#postgresqlparametersspec)|
+|[redshift](../../../reference/yaml/ConnectionYaml.md#redshiftparametersspec)|Redshift connection parameters.|[RedshiftParametersSpec](../../../reference/yaml/ConnectionYaml.md#redshiftparametersspec)|
+|[sqlserver](../../../reference/yaml/ConnectionYaml.md#sqlserverparametersspec)|SqlServer connection parameters.|[SqlServerParametersSpec](../../../reference/yaml/ConnectionYaml.md#sqlserverparametersspec)|
+|[presto](../../../reference/yaml/ConnectionYaml.md#prestoparametersspec)|Presto connection parameters.|[PrestoParametersSpec](../../../reference/yaml/ConnectionYaml.md#prestoparametersspec)|
+|[trino](../../../reference/yaml/ConnectionYaml.md#trinoparametersspec)|Trino connection parameters.|[TrinoParametersSpec](../../../reference/yaml/ConnectionYaml.md#trinoparametersspec)|
+|[mysql](../../../reference/yaml/ConnectionYaml.md#mysqlparametersspec)|MySQL connection parameters.|[MysqlParametersSpec](../../../reference/yaml/ConnectionYaml.md#mysqlparametersspec)|
+|[oracle](../../../reference/yaml/ConnectionYaml.md#oracleparametersspec)|Oracle connection parameters.|[OracleParametersSpec](../../../reference/yaml/ConnectionYaml.md#oracleparametersspec)|
+|[spark](../../../reference/yaml/ConnectionYaml.md#sparkparametersspec)|Spark connection parameters.|[SparkParametersSpec](../../../reference/yaml/ConnectionYaml.md#sparkparametersspec)|
+|[databricks](../../../reference/yaml/ConnectionYaml.md#databricksparametersspec)|Databricks connection parameters.|[DatabricksParametersSpec](../../../reference/yaml/ConnectionYaml.md#databricksparametersspec)|
+|[run_checks_job_template](#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run all checks within this connection.|[CheckSearchFilters](#checksearchfilters)|
+|[run_profiling_checks_job_template](#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run profiling checks within this connection.|[CheckSearchFilters](#checksearchfilters)|
+|[run_monitoring_checks_job_template](#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run monitoring checks within this connection.|[CheckSearchFilters](#checksearchfilters)|
+|[run_partition_checks_job_template](#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run partition partitioned checks within this connection.|[CheckSearchFilters](#checksearchfilters)|
+|[collect_statistics_job_template](../jobs.md#StatisticsCollectorSearchFilters)|Configured parameters for the &quot;collect statistics&quot; job that should be pushed to the job queue in order to run all statistics collectors within this connection.|[StatisticsCollectorSearchFilters](../jobs.md#StatisticsCollectorSearchFilters)|
+|[data_clean_job_template](../jobs.md#DeleteStoredDataQueueJobParameters)|Configured parameters for the &quot;data clean&quot; job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this connection.|[DeleteStoredDataQueueJobParameters](../jobs.md#DeleteStoredDataQueueJobParameters)|
 |can_edit|Boolean flag that decides if the current user can update or delete the connection to the data source.|boolean|
 |can_collect_statistics|Boolean flag that decides if the current user can collect statistics.|boolean|
 |can_run_checks|Boolean flag that decides if the current user can run checks.|boolean|
@@ -462,21 +462,21 @@ Connection model returned by the rest api that is limited only to the basic fiel
 |yaml_parsing_error|Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.|string|
 
 
-___  
+___
 
-## DqoQueueJobId  
-Identifies a single job.  
-  
+## DqoQueueJobId
+Identifies a single job.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |job_id|Job id.|long|
 |job_business_key|Optional job business key that was assigned to the job. A business key is an alternative user assigned unique job identifier used to find the status of a job finding it by the business key.|string|
-|[parent_job_id](../Common/#DqoQueueJobId)|Parent job id. Filled only for nested jobs, for example a sub-job that runs data quality checks on a single table.|[DqoQueueJobId](../Common/#DqoQueueJobId)|
+|[parent_job_id](#DqoQueueJobId)|Parent job id. Filled only for nested jobs, for example a sub-job that runs data quality checks on a single table.|[DqoQueueJobId](#DqoQueueJobId)|
 
 
-___  
+___
 

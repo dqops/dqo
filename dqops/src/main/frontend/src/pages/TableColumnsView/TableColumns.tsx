@@ -6,7 +6,6 @@ import {
 } from '../../api';
 import ConfirmDialog from './ConfirmDialog';
 import { CheckTypes } from '../../shared/routes';
-import { useParams } from 'react-router-dom';
 import { setCreatedDataStream } from '../../redux/actions/definition.actions';
 import { useSelector } from 'react-redux';
 import { getFirstLevelState } from '../../redux/selectors';
@@ -41,18 +40,6 @@ const TableColumns = ({
       [name]: !prevStates[name]
     }));
   };
-
-  const {
-    connection,
-    schema,
-    table
-  }: {
-    connection: string;
-    schema: string;
-    table: string;
-    tab: string;
-    checkTypes: CheckTypes;
-  } = useParams();
   const actionDispatch = useActionDispatch();
   const { loading } = useSelector(getFirstLevelState(CheckTypes.SOURCES));
   const onRemoveColumn = (column: ColumnStatisticsModel) => {
@@ -252,9 +239,6 @@ const TableColumns = ({
           setSortedArray={setSortedArray}
         />
         <TableColumnsBody
-          connection={connection}
-          schema={schema}
-          table={table}
           columns={sortedArray || dataArray}
           objectStates={objectStates}
           statistics={statistics}

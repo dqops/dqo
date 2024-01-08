@@ -1,5 +1,7 @@
 # User interface overview
 
+## Overview
+
 The DQOps web interface is divided into three main areas.
 
 ![The DQOps user interface overview](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/user-interface-overview2.png)
@@ -168,7 +170,8 @@ dimension category to which this check was categorized.
 
 The buttons and icons allow you to:
 
-- Enable and disable checks by using the Switch and Disable button
+- Activate and deactivate checks by using the Switch button 
+- Disable checks by using the Disable button
 - Access check **Settings** where you can set Custom data groupings, modify inclusion/exclusion of check in KPI and SLA, modify the name of the Data Quality Dimension, add SQL WHERE condition, modify scheduling settings, or add Labels.
 
     ![Settings buttons](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/check-settings.png) 

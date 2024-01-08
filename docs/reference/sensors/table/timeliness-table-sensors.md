@@ -4,15 +4,15 @@
 ```
 table/timeliness/data_freshness
 ```
-**Description**  
+**Description**
 Table sensor that runs a query calculating maximum days since the most recent event.
 
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
@@ -56,7 +56,7 @@ Table sensor that runs a query calculating maximum days since the most recent ev
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     
@@ -99,7 +99,7 @@ Table sensor that runs a query calculating maximum days since the most recent ev
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
@@ -141,7 +141,7 @@ Table sensor that runs a query calculating maximum days since the most recent ev
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
@@ -173,7 +173,7 @@ Table sensor that runs a query calculating maximum days since the most recent ev
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
@@ -205,7 +205,7 @@ Table sensor that runs a query calculating maximum days since the most recent ev
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
@@ -256,7 +256,7 @@ Table sensor that runs a query calculating maximum days since the most recent ev
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
@@ -288,7 +288,7 @@ Table sensor that runs a query calculating maximum days since the most recent ev
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
@@ -331,7 +331,7 @@ Table sensor that runs a query calculating maximum days since the most recent ev
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     
@@ -374,7 +374,7 @@ Table sensor that runs a query calculating maximum days since the most recent ev
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
@@ -412,7 +412,7 @@ Table sensor that runs a query calculating maximum days since the most recent ev
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
@@ -469,15 +469,15 @@ ___
 ```
 table/timeliness/data_ingestion_delay
 ```
-**Description**  
+**Description**
 Table sensor that runs a query calculating the time difference in days between the most recent transaction timestamp and the most recent data loading timestamp.
 
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
@@ -526,7 +526,7 @@ Table sensor that runs a query calculating the time difference in days between t
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     
@@ -574,7 +574,7 @@ Table sensor that runs a query calculating the time difference in days between t
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
@@ -619,7 +619,7 @@ Table sensor that runs a query calculating the time difference in days between t
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
@@ -655,7 +655,7 @@ Table sensor that runs a query calculating the time difference in days between t
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
@@ -690,7 +690,7 @@ Table sensor that runs a query calculating the time difference in days between t
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
@@ -746,7 +746,7 @@ Table sensor that runs a query calculating the time difference in days between t
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
@@ -781,7 +781,7 @@ Table sensor that runs a query calculating the time difference in days between t
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
@@ -825,7 +825,7 @@ Table sensor that runs a query calculating the time difference in days between t
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     
@@ -873,7 +873,7 @@ Table sensor that runs a query calculating the time difference in days between t
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
@@ -914,7 +914,7 @@ Table sensor that runs a query calculating the time difference in days between t
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
@@ -976,15 +976,15 @@ ___
 ```
 table/timeliness/data_staleness
 ```
-**Description**  
+**Description**
 Table sensor that runs a query calculating the time difference in days between the current date and most recent data loading timestamp (staleness).
 
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
@@ -1028,7 +1028,7 @@ Table sensor that runs a query calculating the time difference in days between t
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     
@@ -1071,7 +1071,7 @@ Table sensor that runs a query calculating the time difference in days between t
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
@@ -1113,7 +1113,7 @@ Table sensor that runs a query calculating the time difference in days between t
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
@@ -1145,7 +1145,7 @@ Table sensor that runs a query calculating the time difference in days between t
         {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
@@ -1177,7 +1177,7 @@ Table sensor that runs a query calculating the time difference in days between t
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
@@ -1228,7 +1228,7 @@ Table sensor that runs a query calculating the time difference in days between t
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
@@ -1260,7 +1260,7 @@ Table sensor that runs a query calculating the time difference in days between t
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
@@ -1304,7 +1304,7 @@ Table sensor that runs a query calculating the time difference in days between t
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     
@@ -1347,7 +1347,7 @@ Table sensor that runs a query calculating the time difference in days between t
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
@@ -1385,7 +1385,7 @@ Table sensor that runs a query calculating the time difference in days between t
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
@@ -1442,15 +1442,15 @@ ___
 ```
 table/timeliness/partition_reload_lag
 ```
-**Description**  
+**Description**
 Table sensor that runs a query calculating maximum difference in days between ingestion timestamp and event timestamp rows.
 
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
@@ -1503,7 +1503,7 @@ Table sensor that runs a query calculating maximum difference in days between in
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     
@@ -1549,7 +1549,7 @@ Table sensor that runs a query calculating maximum difference in days between in
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
@@ -1602,7 +1602,7 @@ Table sensor that runs a query calculating maximum difference in days between in
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
@@ -1637,7 +1637,7 @@ Table sensor that runs a query calculating maximum difference in days between in
         {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
@@ -1681,7 +1681,7 @@ Table sensor that runs a query calculating maximum difference in days between in
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
@@ -1741,7 +1741,7 @@ Table sensor that runs a query calculating maximum difference in days between in
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     {% macro render_ingestion_event_diff() -%}
@@ -1783,7 +1783,7 @@ Table sensor that runs a query calculating maximum difference in days between in
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
@@ -1836,7 +1836,7 @@ Table sensor that runs a query calculating maximum difference in days between in
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     
@@ -1882,7 +1882,7 @@ Table sensor that runs a query calculating maximum difference in days between in
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
@@ -1932,7 +1932,7 @@ Table sensor that runs a query calculating maximum difference in days between in
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     

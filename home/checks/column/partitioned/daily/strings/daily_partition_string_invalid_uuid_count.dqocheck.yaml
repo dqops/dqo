@@ -1,9 +1,0 @@
-# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
-apiVersion: dqo/v1
-kind: check
-spec:
-  sensor_name: column/strings/string_invalid_uuid_count
-  rule_name: comparison/max_count
-  help_text: Verifies that the number of invalid UUID in a column does not exceed
-    the maximum accepted count. Creates a separate data quality check (and an alert)
-    for each daily partition.

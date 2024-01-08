@@ -4,11 +4,11 @@
 ```
 column/sampling/column_samples
 ```
-**Description**  
+**Description**
 Column level sensor that retrieves a column value samples. Column value sampling is used in profiling and in capturing error samples for failed data quality checks.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |limit|The limit of results that are returned. The default value is 10 sample values with the highest count (the most popular).|integer| ||
@@ -16,9 +16,9 @@ Column level sensor that retrieves a column value samples. Column value sampling
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     WITH column_samples AS (
@@ -46,7 +46,7 @@ Column level sensor that retrieves a column value samples. Column value sampling
     ORDER BY sample_index DESC
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     WITH column_samples AS (
@@ -74,7 +74,7 @@ Column level sensor that retrieves a column value samples. Column value sampling
     ORDER BY sample_index DESC
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     WITH column_samples AS (
@@ -102,7 +102,7 @@ Column level sensor that retrieves a column value samples. Column value sampling
     ORDER BY sample_index DESC
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     WITH column_samples AS (
@@ -130,7 +130,7 @@ Column level sensor that retrieves a column value samples. Column value sampling
     ORDER BY sample_index DESC
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     WITH column_samples AS (
@@ -158,7 +158,7 @@ Column level sensor that retrieves a column value samples. Column value sampling
     ORDER BY sample_table.sample_index DESC
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     WITH column_samples AS (
@@ -186,7 +186,7 @@ Column level sensor that retrieves a column value samples. Column value sampling
     ORDER BY sample_index DESC
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     WITH column_samples AS (
@@ -214,7 +214,7 @@ Column level sensor that retrieves a column value samples. Column value sampling
     ORDER BY sample_index DESC
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     WITH column_samples AS (
@@ -242,7 +242,7 @@ Column level sensor that retrieves a column value samples. Column value sampling
     ORDER BY sample_index DESC
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     WITH column_samples AS (
@@ -270,7 +270,7 @@ Column level sensor that retrieves a column value samples. Column value sampling
     ORDER BY sample_index DESC
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     WITH column_samples AS (

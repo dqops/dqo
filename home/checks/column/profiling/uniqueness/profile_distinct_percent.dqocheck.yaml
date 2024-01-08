@@ -6,3 +6,4 @@ spec:
   rule_name: comparison/min_percent
   help_text: Verifies that the percentage of distinct values in a column does not
     fall below the minimum accepted percent.
+  standard: true

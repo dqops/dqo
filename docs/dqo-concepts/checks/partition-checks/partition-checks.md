@@ -1,5 +1,7 @@
 # Partition checks
 
+## What are partition checks?
+
 In DQOps, the check is a data quality test, which consists of a [data quality sensor](../../sensors/sensors.md) and a
 [data quality rule](../../rules/rules.md).
 

@@ -19,7 +19,7 @@ import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
-import com.dqops.checks.table.checkspecs.volume.TableChangeRowCountCheckSpec;
+import com.dqops.checks.table.checkspecs.volume.TableRowCountChangeCheckSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -60,7 +60,7 @@ public class TableVolumeMonthlyMonitoringChecksSpec extends AbstractCheckCategor
     @JsonPropertyDescription("Verifies that the total row count of the tested table has changed by a fixed rate since the last month.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableChangeRowCountCheckSpec monthlyRowCountChange;
+    private TableRowCountChangeCheckSpec monthlyRowCountChange;
 
     /**
      * Returns the row count check configuration.
@@ -84,7 +84,7 @@ public class TableVolumeMonthlyMonitoringChecksSpec extends AbstractCheckCategor
      * Returns the row count change check.
      * @return Row count change check.
      */
-    public TableChangeRowCountCheckSpec getMonthlyRowCountChange() {
+    public TableRowCountChangeCheckSpec getMonthlyRowCountChange() {
         return monthlyRowCountChange;
     }
 
@@ -92,7 +92,7 @@ public class TableVolumeMonthlyMonitoringChecksSpec extends AbstractCheckCategor
      * Sets a new row count change check.
      * @param monthlyRowCountChange Row count change check.
      */
-    public void setMonthlyRowCountChange(TableChangeRowCountCheckSpec monthlyRowCountChange) {
+    public void setMonthlyRowCountChange(TableRowCountChangeCheckSpec monthlyRowCountChange) {
         this.setDirtyIf(!Objects.equals(this.monthlyRowCountChange, monthlyRowCountChange));
         this.monthlyRowCountChange = monthlyRowCountChange;
         propagateHierarchyIdToField(monthlyRowCountChange, "monthly_row_count_change");

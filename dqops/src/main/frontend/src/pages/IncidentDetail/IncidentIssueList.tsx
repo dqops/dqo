@@ -1,4 +1,4 @@
-import { CheckResultEntryModel, IncidentModel } from "../../api";
+import { CheckResultEntryModel, CheckResultEntryModelTimeGradientEnum, IncidentModel } from "../../api";
 import React, { useState } from "react";
 import SvgIcon from "../../components/SvgIcon";
 import CheckDetails from "../../components/DataQualityChecks/CheckDetails/CheckDetails";
@@ -60,22 +60,26 @@ export const IncidentIssueRow = ({ issue, incidentDetail }: IncidentIssueRowProp
 
   const navigate = () => {
     const {
-      checkType = 'profiling',
       connection = '',
       schema = '',
       table = '',
     } = incidentDetail || {};
-    const columnName = issue.columnName
-    const defaultCheckType = "profiling";
-  
+    const {
+      checkType = CheckTypes.PROFILING,
+      columnName,
+      timeGradient
+    } = issue
+
     let url, value, label;
     if (columnName && columnName.length > 0) {
-      url = ROUTES.COLUMN_LEVEL_PAGE(checkType ?? defaultCheckType, connection , schema, table, columnName, 'detail');
-      value = ROUTES.COLUMN_LEVEL_VALUE(checkType ?? defaultCheckType, connection, schema, table, columnName);
+      url = ROUTES.COLUMN_LEVEL_PAGE(checkType, connection , schema, table, columnName, checkType === CheckTypes.PROFILING ? 'advanced' 
+      : timeGradient === CheckResultEntryModelTimeGradientEnum.month ? 'monthly' : 'daily');
+      value = ROUTES.COLUMN_LEVEL_VALUE(checkType, connection, schema, table, columnName);
       label = columnName;
     } else {
-      url = ROUTES.TABLE_LEVEL_PAGE(checkType ?? defaultCheckType, connection, schema, table, 'advanced');
-      value = ROUTES.TABLE_LEVEL_VALUE(checkType ?? defaultCheckType, connection, schema, table);
+      url = ROUTES.TABLE_LEVEL_PAGE(checkType, connection, schema, table, checkType === CheckTypes.PROFILING ? 'advanced' 
+      : timeGradient === CheckResultEntryModelTimeGradientEnum.month ? 'monthly' : 'daily');
+      value = ROUTES.TABLE_LEVEL_VALUE(checkType, connection, schema, table);
       label = table;
     }
   
@@ -85,7 +89,7 @@ export const IncidentIssueRow = ({ issue, incidentDetail }: IncidentIssueRowProp
       state: {},
       label,
     };  
-    dispatch(addFirstLevelTab(CheckTypes.PROFILING, tabData));
+    dispatch(addFirstLevelTab(checkType as CheckTypes, tabData));
     history.push(url);
   };
 
@@ -103,7 +107,7 @@ export const IncidentIssueRow = ({ issue, incidentDetail }: IncidentIssueRowProp
           </div>
         </td>
         <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
-          <a className="text-blue-700 underline" onClick={navigate}>
+          <a className="text-blue-700 underline cursor-pointer" onClick={navigate}>
             {issue.checkName}
           </a>
         </td>

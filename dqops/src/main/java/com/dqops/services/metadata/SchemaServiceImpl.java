@@ -231,7 +231,7 @@ public class SchemaServiceImpl implements SchemaService {
         List<CheckTemplate> allTemplates = categoryContainers
                 .stream()
                 .map(categoryModel -> {
-                    Map<String, CheckModel> checkNameToExampleCheck = new HashMap<>();
+                    Map<String, CheckModel> checkNameToExampleCheck = new LinkedHashMap<>();
                     for (CheckModel checkModel : categoryModel.getChecks()) {
                         if (!checkNameToExampleCheck.containsKey(checkModel.getCheckName())) {
                             checkNameToExampleCheck.put(checkModel.getCheckName(), checkModel);

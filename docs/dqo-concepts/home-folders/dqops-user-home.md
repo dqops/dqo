@@ -1,4 +1,7 @@
 # DQOps user home
+
+## What is the DQOps user home?
+
 DQOps depends on the local file system to store the configuration files and the data files.
 The folder on the disk where the files are stored is called a `DQOps user home`.
 

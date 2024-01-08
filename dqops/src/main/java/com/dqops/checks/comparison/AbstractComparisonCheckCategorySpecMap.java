@@ -28,6 +28,11 @@ public abstract class AbstractComparisonCheckCategorySpecMap<V extends AbstractC
      */
     public static final String COMPARISONS_CATEGORY_NAME = "comparisons";
 
+    /**
+     * The name of the "timeliness" check category.
+     */
+    public static final String TIMELINESS_CATEGORY_NAME = "timeliness";
+
 
     /**
      * Calls a visitor (using a visitor design pattern) that returns a result.

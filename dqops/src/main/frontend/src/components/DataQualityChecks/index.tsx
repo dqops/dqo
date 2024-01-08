@@ -5,7 +5,8 @@ import {
   CheckContainerModelEffectiveScheduleEnabledStatusEnum,
   CheckModel,
   EffectiveScheduleModelScheduleLevelEnum,
-  QualityCategoryModel
+  QualityCategoryModel,
+  CheckSearchFiltersCheckTypeEnum
 } from '../../api';
 import { useTree } from '../../contexts/treeContext';
 import clsx from 'clsx';
@@ -20,6 +21,8 @@ import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import Button from '../Button';
 import Select from '../Select';
 import { RUN_CHECK_TIME_WINDOW_FILTERS } from '../../shared/constants';
+import { useSelector } from 'react-redux';
+import { getFirstLevelActiveTab } from '../../redux/selectors';
 
 interface IDataQualityChecksProps {
   checksUI?: CheckContainerModel;
@@ -68,7 +71,10 @@ const DataQualityChecks = ({
   );
   const [mode, setMode] = useState<string>();
   const [copyUI, setCopyUI] = useState<CheckContainerModel>();
+  const [showAdvanced, setShowAdvanced] = useState<boolean>(isFiltered === true);
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
+  
   const { sidebarWidth } = useTree();
   const handleChangeDataGrouping = (
     check: CheckModel,
@@ -96,7 +102,7 @@ const DataQualityChecks = ({
 
   useEffect(() => {
     getCheckOverview();
-  }, [checkTypes, connection, schema, table, column, timePartitioned]);
+  }, [checkTypes, connection, schema, table, column, timePartitioned, firstLevelActiveTab]);
 
   const goToSchedule = () => {
     if (
@@ -309,16 +315,39 @@ const DataQualityChecks = ({
         checksUI.categories &&
         !checksUI.categories.find(
           (obj2) =>
-            obj1.checkCategory === obj2.category ||
-            obj1.checkCategory + '/' + obj1.comparisonName === obj2.category
+          obj1.checkCategory + '/' + obj1.comparisonName === obj2.category ||
+          obj1.checkCategory === obj2.category 
         )
     );
-    const customCategory: QualityCategoryModel[] = missingCategory.map((x) => ({
-      category: x.checkCategory
+
+    const customCategory: CheckResultsOverviewDataModel[] = missingCategory.map((x) => ({
+      ...x, checkCategory: x.comparisonName ? x.checkCategory + '/' + x.comparisonName : x.checkCategory
     }));
-    return customCategory ?? [];
+
+    const groupedArray = customCategory.reduce((acc : QualityCategoryModel[], obj) => {
+      const existingCategory = acc.find(item => item.category === obj.checkCategory);
+      
+      if (existingCategory && existingCategory.checks) {
+        existingCategory.checks.push({ check_name: obj.checkName, check_hash: obj.checkHash,
+          run_checks_job_template: {
+            checkType: checkTypes as CheckSearchFiltersCheckTypeEnum,
+            timeScale: tab || timePartitioned
+           } });
+      } else {
+        acc.push({ category: obj.checkCategory, comparison_name: obj.comparisonName, checks: [
+       {check_name: obj.checkName, 
+        check_hash: obj.checkHash,
+        run_checks_job_template: {
+         checkType: checkTypes as CheckSearchFiltersCheckTypeEnum,
+         timeScale: tab || timePartitioned
+        }, 
+      }]});
+    }
+    
+      return acc;
+    }, []);
+    return groupedArray ?? [];
   };
-  console.log(checkResultsOverview);
 
   return (
     <div
@@ -328,7 +357,7 @@ const DataQualityChecks = ({
         minWidth: '100%'
       }}
     >
-      <div className="flex items-center text-sm mb-3 gap-6">
+      <div className="flex items-center text-sm my-3 gap-6">
         {isDefaultEditing !== true && (
           <div className="flex items-center space-x-1 gap-x-4">
             <div className="flex items-center space-x-1">
@@ -450,12 +479,13 @@ const DataQualityChecks = ({
           setCopyUI={setCopyUI}
           onUpdate={onUpdate}
           isDefaultEditing={isDefaultEditing}
+          showAdvanced={showAdvanced}
+          setShowAdvanced={setShowAdvanced}
+          isFiltered = {isFiltered}
         />
         <tbody>
-          {[
-            ...(checksUI?.categories ?? []),
-            ...(isFiltered !== true ? getCustomCategoryBasedOnResults() : [])
-          ].map((category, index) => (
+          {
+            (checksUI?.categories ?? []).map((category, index) => (
             <CheckCategoriesView
               key={index}
               category={category}
@@ -472,8 +502,32 @@ const DataQualityChecks = ({
                 (item) => item.category === category.category
               )}
               isDefaultEditing={isDefaultEditing}
+              showAdvanced={showAdvanced}
+              isFiltered= {isFiltered}
             />
           ))}
+          {isFiltered !== true &&
+          getCustomCategoryBasedOnResults().map((category, index) => (
+          <CheckCategoriesView
+              key={index}
+              category={category}
+              checkResultsOverview={checkResultsOverview}
+              timeWindowFilter={RUN_CHECK_TIME_WINDOW_FILTERS[timeWindow]}
+              handleChangeDataGroupingConfiguration={(check, jIndex) =>
+                handleChangeDataGrouping(check, index, jIndex)
+              }
+              onUpdate={onUpdate}
+              getCheckOverview={getCheckOverview}
+              mode={mode}
+              changeCopyUI={changeCopyUI}
+              copyCategory={copyUI?.categories?.find(
+                (item) => item.category === category.category
+              )}
+              isDefaultEditing={isDefaultEditing}
+              showAdvanced={showAdvanced}
+              isAlreadyDeleted = {true}
+            />
+            ))}
         </tbody>
       </table>
     </div>

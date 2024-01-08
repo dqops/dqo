@@ -101,8 +101,12 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         Table ruleResultsTable = loadRuleResults(loadParameters, connectionName, physicalTableName, userDomainIdentity);
         Table errorsTable = loadErrorsNormalizedToResults(loadParameters, connectionName, physicalTableName, userDomainIdentity);
         Table combinedTable = errorsTable != null ?
-                (ruleResultsTable != null ? errorsTable.append(ruleResultsTable) : errorsTable) :
+                (ruleResultsTable != null ? errorsTable.copy().append(ruleResultsTable) : errorsTable) :
                 ruleResultsTable;
+
+        if (combinedTable == null) {
+            return new CheckResultsOverviewDataModel[0]; // empty array
+        }
 
         if (!Strings.isNullOrEmpty(loadParameters.getCheckName())) {
             TextColumn checkNameColumn = combinedTable.textColumn(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME);
@@ -112,10 +116,6 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         if (!Strings.isNullOrEmpty(loadParameters.getCategory())) {
             TextColumn categoryColumn = combinedTable.textColumn(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
             combinedTable = combinedTable.where(categoryColumn.isEqualTo(loadParameters.getCategory()));
-        }
-
-        if (combinedTable == null) {
-            return new CheckResultsOverviewDataModel[0]; // empty array
         }
 
         Table filteredTable = filterTableToRootChecksContainer(rootChecksContainerSpec, combinedTable);

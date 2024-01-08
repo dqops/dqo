@@ -1,22 +1,22 @@
-Data quality incidents controller that supports loading incidents and changing the status of an incident.  
+Data quality incidents controller that supports loading incidents and changing the status of an incident.
 
 
-___  
-## find_connection_incident_stats  
-Returns a list of connection names with incident statistics - the count of recent open incidents.  
+___
+## find_connection_incident_stats
+Returns a list of connection names with incident statistics - the count of recent open incidents.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/incidents/find_connection_incident_stats.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/incidentstat  
+http://localhost:8888/api/incidentstat
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|incidents_per_connection_model||List[[IncidentsPerConnectionModel](../../models/incidents/#incidentsperconnectionmodel)]|
+|incidents_per_connection_model||List[[IncidentsPerConnectionModel](../../models/incidents.md#incidentsperconnectionmodel)]|
 
 
 
@@ -25,10 +25,10 @@ http://localhost:8888/api/incidentstat
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/incidentstat^
 		-H "Accept: application/json"
@@ -36,7 +36,7 @@ http://localhost:8888/api/incidentstat
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.incidents import find_connection_incident_stats
@@ -54,7 +54,7 @@ http://localhost:8888/api/incidentstat
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.incidents import find_connection_incident_stats
@@ -74,7 +74,7 @@ http://localhost:8888/api/incidentstat
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.incidents import find_connection_incident_stats
@@ -95,7 +95,7 @@ http://localhost:8888/api/incidentstat
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.incidents import find_connection_incident_stats
@@ -120,7 +120,7 @@ http://localhost:8888/api/incidentstat
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     [ {
 	  "openIncidents" : 0
@@ -132,28 +132,28 @@ http://localhost:8888/api/incidentstat
     ```
 
 
-___  
-## find_recent_incidents_on_connection  
-Returns a list of recent data quality incidents.  
+___
+## find_recent_incidents_on_connection
+Returns a list of recent data quality incidents.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/incidents/find_recent_incidents_on_connection.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/incidents/{connectionName}  
+http://localhost:8888/api/incidents/{connectionName}
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|incident_model||List[[IncidentModel](../../models/incidents/#incidentmodel)]|
+|incident_model||List[[IncidentModel](../../models/incidents.md#incidentmodel)]|
 
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
@@ -165,18 +165,18 @@ http://localhost:8888/api/incidents/{connectionName}
 |page|Page number, the first page is 1|long| |
 |limit|Page size, the default is 50 rows|long| |
 |filter|Optional full text search filter that supports *prefix, suffix* and nest*ed filter expressions|string| |
-|[order](../../models/incidents/#incidentsortorder)|Optional sort order, the default sort order is by the number of failed data quality checks|[IncidentSortOrder](../../models/incidents/#incidentsortorder)| |
-|[direction](../../models/incidents/#sortdirection)|Optional sort direction, the default sort direction is ascending|[SortDirection](../../models/incidents/#sortdirection)| |
+|[order](../../models/incidents.md#incidentsortorder)|Optional sort order, the default sort order is by the number of failed data quality checks|[IncidentSortOrder](../../models/incidents.md#incidentsortorder)| |
+|[direction](../../models/incidents.md#sortdirection)|Optional sort direction, the default sort direction is ascending|[SortDirection](../../models/incidents.md#sortdirection)| |
 
 
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/incidents/sample_connection^
 		-H "Accept: application/json"
@@ -184,7 +184,7 @@ http://localhost:8888/api/incidents/{connectionName}
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.incidents import find_recent_incidents_on_connection
@@ -204,7 +204,7 @@ http://localhost:8888/api/incidents/{connectionName}
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.incidents import find_recent_incidents_on_connection
@@ -226,7 +226,7 @@ http://localhost:8888/api/incidents/{connectionName}
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.incidents import find_recent_incidents_on_connection
@@ -249,7 +249,7 @@ http://localhost:8888/api/incidents/{connectionName}
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.incidents import find_recent_incidents_on_connection
@@ -276,7 +276,7 @@ http://localhost:8888/api/incidents/{connectionName}
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     [ {
 	  "year" : 0,
@@ -300,28 +300,28 @@ http://localhost:8888/api/incidents/{connectionName}
     ```
 
 
-___  
-## get_incident  
-Return a single data quality incident&#x27;s details.  
+___
+## get_incident
+Return a single data quality incident&#x27;s details.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/incidents/get_incident.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}  
+http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[incident_model](../../models/incidents/#incidentmodel)||[IncidentModel](../../models/incidents/#incidentmodel)|
+|[incident_model](../../models/incidents.md#incidentmodel)||[IncidentModel](../../models/incidents.md#incidentmodel)|
 
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
@@ -334,10 +334,10 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident^
 		-H "Accept: application/json"
@@ -345,7 +345,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.incidents import get_incident
@@ -367,7 +367,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.incidents import get_incident
@@ -391,7 +391,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.incidents import get_incident
@@ -416,7 +416,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.incidents import get_incident
@@ -445,7 +445,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     {
 	  "year" : 0,
@@ -457,28 +457,28 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
 
-___  
-## get_incident_histogram  
-Generates histograms of data quality issues for each day, returning the number of data quality issues on that day. The other histograms are by a column name and by a check name.  
+___
+## get_incident_histogram
+Generates histograms of data quality issues for each day, returning the number of data quality issues on that day. The other histograms are by a column name and by a check name.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/incidents/get_incident_histogram.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}/histogram  
+http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}/histogram
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[incident_issue_histogram_model](../../models/incidents/#incidentissuehistogrammodel)||[IncidentIssueHistogramModel](../../models/incidents/#incidentissuehistogrammodel)|
+|[incident_issue_histogram_model](../../models/incidents.md#incidentissuehistogrammodel)||[IncidentIssueHistogramModel](../../models/incidents.md#incidentissuehistogrammodel)|
 
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
@@ -496,10 +496,10 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident/histogram^
 		-H "Accept: application/json"
@@ -507,7 +507,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.incidents import get_incident_histogram
@@ -529,7 +529,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.incidents import get_incident_histogram
@@ -553,7 +553,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.incidents import get_incident_histogram
@@ -578,7 +578,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.incidents import get_incident_histogram
@@ -607,7 +607,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     {
 	  "hasProfilingIssues" : false,
@@ -620,28 +620,28 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
 
-___  
-## get_incident_issues  
-Return a paged list of failed data quality check results that are related to an incident.  
+___
+## get_incident_issues
+Return a paged list of failed data quality check results that are related to an incident.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/incidents/get_incident_issues.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}/issues  
+http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}/issues
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_result_entry_model||List[[CheckResultEntryModel](../../models/incidents/#checkresultentrymodel)]|
+|check_result_entry_model||List[[CheckResultEntryModel](../../models/incidents.md#checkresultentrymodel)]|
 
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
@@ -655,18 +655,18 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 |date|Optional filter to return data quality issues only for a given date. The date should be an ISO8601 formatted date, it is treated as the timezone of the DQOps server.|string| |
 |column|Optional column name filter|string| |
 |check|Optional check name filter|string| |
-|[order](../../models/incidents/#checkresultsortorder)|Optional sort order, the default sort order is by the execution date|[CheckResultSortOrder](../../models/incidents/#checkresultsortorder)| |
-|[direction](../../models/incidents/#sortdirection)|Optional sort direction, the default sort direction is ascending|[SortDirection](../../models/incidents/#sortdirection)| |
+|[order](../../models/incidents.md#checkresultsortorder)|Optional sort order, the default sort order is by the execution date|[CheckResultSortOrder](../../models/incidents.md#checkresultsortorder)| |
+|[direction](../../models/incidents.md#sortdirection)|Optional sort direction, the default sort direction is ascending|[SortDirection](../../models/incidents.md#sortdirection)| |
 
 
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident/issues^
 		-H "Accept: application/json"
@@ -674,7 +674,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.incidents import get_incident_issues
@@ -697,7 +697,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.incidents import get_incident_issues
@@ -722,7 +722,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.incidents import get_incident_issues
@@ -748,7 +748,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.incidents import get_incident_issues
@@ -778,7 +778,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     [ {
 	  "id" : "3854372",
@@ -865,21 +865,21 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
 
-___  
-## set_incident_issue_url  
-Changes the incident&#x27;s issueUrl to a new status.  
+___
+## set_incident_issue_url
+Changes the incident&#x27;s issueUrl to a new status.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/incidents/set_incident_issue_url.py)
-  
+
 
 **POST**
 ```
-http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}/issueurl  
+http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}/issueurl
 ```
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
@@ -893,10 +893,10 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X POST http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident/issueurl^
 		-H "Accept: application/json"
@@ -904,7 +904,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.incidents import set_incident_issue_url
@@ -925,7 +925,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.incidents import set_incident_issue_url
@@ -948,7 +948,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.incidents import set_incident_issue_url
@@ -972,7 +972,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.incidents import set_incident_issue_url
@@ -1001,38 +1001,38 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 
-___  
-## set_incident_status  
-Changes the incident&#x27;s status to a new status.  
+___
+## set_incident_status
+Changes the incident&#x27;s status to a new status.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/incidents/set_incident_status.py)
-  
+
 
 **POST**
 ```
-http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}/status  
+http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}/status
 ```
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
 |year|Year when the incident was first seen|long|:material-check-bold:|
 |month|Month when the incident was first seen|long|:material-check-bold:|
 |incident_id|Incident id|string|:material-check-bold:|
-|[status](../../models/incidents/#incidentstatus)|New incident status, supported values: open, acknowledged, resolved, muted|[IncidentStatus](../../models/incidents/#incidentstatus)|:material-check-bold:|
+|[status](../../models/incidents.md#incidentstatus)|New incident status, supported values: open, acknowledged, resolved, muted|[IncidentStatus](../../models/incidents.md#incidentstatus)|:material-check-bold:|
 
 
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X POST http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident/status^
 		-H "Accept: application/json"
@@ -1040,7 +1040,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.incidents import set_incident_status
@@ -1061,7 +1061,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.incidents import set_incident_status
@@ -1084,7 +1084,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.incidents import set_incident_status
@@ -1108,7 +1108,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.incidents import set_incident_status

@@ -1,16 +1,18 @@
-# Airflow integration overview 
+# Airflow integration
+
+## Overview
 
 DQOps integrates with Apache Airflow. 
 
 Operators are available for actions such as:
 
-- **[DqopsRunProfilingChecksOperator](./run-checks-operator.md)** runs data quality checks
-- **[DqopsCollectStatisticsOperator](./collect-statistics-operator.md)** collects basic statistics about tables
-- **[DqopsTableImportOperator](./table-import-operator.md)** imports the table schema to DQOps, 
+- **[DqopsRunProfilingChecksOperator](../run-checks-operator.md)** runs data quality checks
+- **[DqopsCollectStatisticsOperator](../collect-statistics-operator.md)** collects basic statistics about tables
+- **[DqopsTableImportOperator](../table-import-operator.md)** imports the table schema to DQOps, 
   setting up the default data quality checks
-- **[DqopsAssertTableStatusOperator](./table-status-operator.md)** verifies the most recent data quality status of a table,
+- **[DqopsAssertTableStatusOperator](../table-status-operator.md)** verifies the most recent data quality status of a table,
   the operator breaks DAG processing if any **fatal** severity issues are detected in the most recent data quality check run 
-- **[DqopsWaitForJobOperator](./wait-for-job-operator.md)** tracks the execution of long-running tasks
+- **[DqopsWaitForJobOperator](../wait-for-job-operator.md)** tracks the execution of long-running tasks
 
 
 ## DQOps python package for Airflow
@@ -23,7 +25,7 @@ DQOps publishes the package on the official repository Python Package Index (PyP
 
 Start the observation of the data quality at every step of the existing data pipelines.
 Might your technology stack is based on a database that is supported in DQOps. 
-[Check the complete list of the built databases connectors](../../data-sources/index.md).
+[Check the complete list of the built databases connectors](../../../data-sources/index.md).
 
 For an immediate checks setup DQOps platform implements dozens of sensors. 
 Just activate a few of them choosing from the list.

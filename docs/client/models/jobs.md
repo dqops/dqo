@@ -1,10 +1,10 @@
 
-## CollectStatisticsResult  
-  
-  
+## CollectStatisticsResult
 
-**The structure of this object is described below**  
-  
+
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
@@ -16,43 +16,43 @@
 |total_collected_results|The total number of results that were collected.|integer|
 
 
-___  
+___
 
-## DqoJobStatus  
-Job status of a job on the queue.  
-  
+## DqoJobStatus
+Job status of a job on the queue.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
 |string|running<br/>waiting<br/>queued<br/>cancelled<br/>cancel_requested<br/>failed<br/>succeeded<br/>|
 
-___  
+___
 
-## CollectStatisticsQueueJobResult  
-  
-  
+## CollectStatisticsQueueJobResult
 
-**The structure of this object is described below**  
-  
+
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[job_id](../Common/#dqoqueuejobid)|Job id that identifies a job that was started on the DQOps job queue.|[DqoQueueJobId](../Common/#dqoqueuejobid)|
+|[job_id](../Common.md#dqoqueuejobid)|Job id that identifies a job that was started on the DQOps job queue.|[DqoQueueJobId](../Common.md#dqoqueuejobid)|
 |[result](#collectstatisticsresult)|Optional result object that is returned only when the wait parameter was true and the &quot;collect statistics&quot; job has finished. Contains the summary result of collecting basic statistics, including the number of statistics collectors (queries) that managed to capture metrics about the table(s). |[CollectStatisticsResult](#collectstatisticsresult)|
 |[status](#dqojobstatus)|Job status|[DqoJobStatus](#dqojobstatus)|
 
 
-___  
+___
 
-## DeleteStoredDataQueueJobParameters  
-Parameters for the &quot;delete stored data* queue job that deletes data from parquet files stored in DQOps user home&#x27;s *.data* directory.  
-  
+## DeleteStoredDataQueueJobParameters
+Parameters for the &quot;delete stored data* queue job that deletes data from parquet files stored in DQOps user home&#x27;s *.data* directory.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
@@ -78,46 +78,46 @@ Parameters for the &quot;delete stored data* queue job that deletes data from pa
 |collector_target|The type of the target object for which the basic statistics are deleted. Supported values are *table* and *column*.|string|
 
 
-___  
+___
 
-## DqoRoot  
+## DqoRoot
 DQOps root folders in the dqo use home that may be replicated to a remote file system (uploaded to DQOps Cloud or any other cloud).
- It is also used as a lock scope.  
-  
+ It is also used as a lock scope.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
 |string|settings<br/>_indexes<br/>data_errors<br/>sources<br/>data_incidents<br/>credentials<br/>rules<br/>data_sensor_readouts<br/>data_statistics<br/>sensors<br/>checks<br/>data_check_results<br/>_local_settings<br/>|
 
-___  
+___
 
-## ParquetPartitionId  
-Identifies a single partition for hive partitioned tables stored as parquet files.  
-  
+## ParquetPartitionId
+Identifies a single partition for hive partitioned tables stored as parquet files.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |data_domain|Data domain name.|string|
 |[table_type](#dqoroot)|Table type.|[DqoRoot](#dqoroot)|
 |connection_name|Connection name.|string|
-|[table_name](../columns/#physicaltablename)|Table name (schema.table).|[PhysicalTableName](../columns/#physicaltablename)|
+|[table_name](../columns.md#physicaltablename)|Table name (schema.table).|[PhysicalTableName](../columns.md#physicaltablename)|
 |month|The date of teh first day of the month that identifies a monthly partition.|date|
 
 
-___  
+___
 
-## DataDeleteResultPartition  
-Results of the &quot;data delete&quot; job for the monthly partition.  
-  
+## DataDeleteResultPartition
+Results of the &quot;data delete&quot; job for the monthly partition.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
@@ -125,105 +125,105 @@ Results of the &quot;data delete&quot; job for the monthly partition.
 |partition_deleted|True if a whole partition (a parquet file) was deleted instead of removing only selected rows.|boolean|
 
 
-___  
+___
 
-## DeleteStoredDataResult  
-Compiled results of the &quot;data delete&quot;.  
-  
+## DeleteStoredDataResult
+Compiled results of the &quot;data delete&quot;.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |partition_results|Dictionary of partitions that where deleted or updated when the rows were deleted.|Dict[[ParquetPartitionId](#parquetpartitionid), [DataDeleteResultPartition](#datadeleteresultpartition)]|
 
 
-___  
+___
 
-## DeleteStoredDataQueueJobResult  
+## DeleteStoredDataQueueJobResult
 Object returned from the operation that queues a &quot;delete stored data&quot; job. The result contains the job id that was started
- and optionally can also contain a dictionary of partitions that were cleared or deleted if the operation was started with wait&#x3D;true parameter to wait for the &quot;delete stored data&quot; job to finish.  
-  
+ and optionally can also contain a dictionary of partitions that were cleared or deleted if the operation was started with wait&#x3D;true parameter to wait for the &quot;delete stored data&quot; job to finish.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[job_id](../Common/#dqoqueuejobid)|Job id that identifies a job that was started on the DQOps job queue.|[DqoQueueJobId](../Common/#dqoqueuejobid)|
+|[job_id](../Common.md#dqoqueuejobid)|Job id that identifies a job that was started on the DQOps job queue.|[DqoQueueJobId](../Common.md#dqoqueuejobid)|
 |[result](#deletestoreddataresult)|Optional result object that is returned only when the wait parameter was true and the &quot;delete stored data&quot; job has finished. Contains a list of partitions that were deleted or updated.|[DeleteStoredDataResult](#deletestoreddataresult)|
-|[status](../jobs/#dqojobstatus)|Job status|[DqoJobStatus](../jobs/#dqojobstatus)|
+|[status](#dqojobstatus)|Job status|[DqoJobStatus](#dqojobstatus)|
 
 
-___  
+___
 
-## DqoJobType  
-Job type that identifies a job by type.  
-  
+## DqoJobType
+Job type that identifies a job by type.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
 |string|delete_stored_data<br/>import_schema<br/>repair_stored_data<br/>run_scheduled_checks_cron<br/>synchronize_folder<br/>run_checks_on_table<br/>run_checks<br/>collect_statistics<br/>synchronize_multiple_folders<br/>queue_thread_shutdown<br/>collect_statistics_on_table<br/>import_tables<br/>|
 
-___  
+___
 
-## FileSynchronizationDirection  
-Data synchronization direction between a local DQOps Home and DQOps Cloud data quality data warehouse.  
-  
+## FileSynchronizationDirection
+Data synchronization direction between a local DQOps Home and DQOps Cloud data quality data warehouse.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
 |string|download<br/>upload<br/>full<br/>|
 
-___  
+___
 
-## SynchronizeRootFolderParameters  
-Parameter object for starting a file synchronization job. Identifies the folder and direction that should be synchronized.  
-  
+## SynchronizeRootFolderParameters
+Parameter object for starting a file synchronization job. Identifies the folder and direction that should be synchronized.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[folder](../jobs/#dqoroot)||[DqoRoot](../jobs/#dqoroot)|
+|[folder](#dqoroot)||[DqoRoot](#dqoroot)|
 |[direction](#filesynchronizationdirection)||[FileSynchronizationDirection](#filesynchronizationdirection)|
 |force_refresh_native_table||boolean|
 
 
-___  
+___
 
-## SynchronizeRootFolderDqoQueueJobParameters  
-Parameters object for a job that synchronizes one folder with DQOps Cloud.  
-  
+## SynchronizeRootFolderDqoQueueJobParameters
+Parameters object for a job that synchronizes one folder with DQOps Cloud.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |[synchronization_parameter](#synchronizerootfolderparameters)||[SynchronizeRootFolderParameters](#synchronizerootfolderparameters)|
 
 
-___  
+___
 
-## SynchronizeMultipleFoldersDqoQueueJobParameters  
-Simple object for starting multiple folder synchronization jobs with the same configuration.  
-  
+## SynchronizeMultipleFoldersDqoQueueJobParameters
+Simple object for starting multiple folder synchronization jobs with the same configuration.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[direction](../jobs/#filesynchronizationdirection)|File synchronization direction, the default is full synchronization (push local changes and pull other changes from DQOps Cloud).|[FileSynchronizationDirection](../jobs/#filesynchronizationdirection)|
+|[direction](#filesynchronizationdirection)|File synchronization direction, the default is full synchronization (push local changes and pull other changes from DQOps Cloud).|[FileSynchronizationDirection](#filesynchronizationdirection)|
 |force_refresh_native_tables|Force full refresh of native tables in the data quality data warehouse. The default synchronization mode is to refresh only modified data.|boolean|
 |detect_cron_schedules|Scans the yaml files (with the configuration for connections and tables) and detects new cron schedules. Detected cron schedules are registered in the cron (Quartz) job scheduler.|boolean|
 |sources|Synchronize the &quot;sources&quot; folder.|boolean|
@@ -240,14 +240,14 @@ Simple object for starting multiple folder synchronization jobs with the same co
 |synchronize_folder_with_local_changes|Synchronize all folders that have local changes. When this field is set to true, there is no need to enable synchronization of single folders because DQOps will decide which folders need synchronization (to be pushed to the cloud).|boolean|
 
 
-___  
+___
 
-## TimeWindowFilterParameters  
-  
-  
+## TimeWindowFilterParameters
 
-**The structure of this object is described below**  
-  
+
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
@@ -261,18 +261,18 @@ ___
 |to_date_time|Analyze the data until the given date and time (exclusive). The date should be an ISO 8601 date (yyyy-MM-dd). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the end date and time overrides the parameters to disable analyzing today or the current month.|datetime|
 
 
-___  
+___
 
-## RunChecksResult  
-  
-  
+## RunChecksResult
 
-**The structure of this object is described below**  
-  
+
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[highest_severity](../check_results/#ruleseveritylevel)|The highest check severity for the data quality checks executed in this batch.|[RuleSeverityLevel](../check_results/#ruleseveritylevel)|
+|[highest_severity](../check_results.md#ruleseveritylevel)|The highest check severity for the data quality checks executed in this batch.|[RuleSeverityLevel](../check_results.md#ruleseveritylevel)|
 |executed_checks|The total count of all executed checks.|integer|
 |valid_results|The total count of all checks that finished successfully (with no data quality issues).|integer|
 |warnings|The total count of all invalid data quality checks that finished raising a warning.|integer|
@@ -281,64 +281,64 @@ ___
 |execution_errors|The total number of checks that failed to execute due to some execution errors.|integer|
 
 
-___  
+___
 
-## RunChecksParameters  
-  
-  
+## RunChecksParameters
 
-**The structure of this object is described below**  
-  
+
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_search_filters](../Common/#checksearchfilters)|Target data quality checks filter.|[CheckSearchFilters](../Common/#checksearchfilters)|
+|[check_search_filters](../Common.md#checksearchfilters)|Target data quality checks filter.|[CheckSearchFilters](../Common.md#checksearchfilters)|
 |[time_window_filter](#timewindowfilterparameters)|Optional time window filter, configures the time range that is analyzed or the number of recent days/months to analyze for day or month partitioned data.|[TimeWindowFilterParameters](#timewindowfilterparameters)|
 |dummy_execution|Set the value to true when the data quality checks should be executed in a dummy mode (without running checks on the target systems and storing the results). Only the jinja2 sensors will be rendered.|boolean|
 |[run_checks_result](#runchecksresult)|The result of running the check, updated when the run checks job finishes. Contains the count of executed checks.|[RunChecksResult](#runchecksresult)|
 
 
-___  
+___
 
-## RunChecksOnTableParameters  
-  
-  
+## RunChecksOnTableParameters
 
-**The structure of this object is described below**  
-  
+
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |connection|The name of the target connection.|string|
 |max_jobs_per_connection|The maximum number of concurrent &#x27;run checks on table&#x27; jobs that could be run on this connection. Limits the number of concurrent jobs.|integer|
-|[table](../columns/#physicaltablename)|The full physical name (schema.table) of the target table.|[PhysicalTableName](../columns/#physicaltablename)|
-|[check_search_filters](../Common/#checksearchfilters)|Target data quality checks filter.|[CheckSearchFilters](../Common/#checksearchfilters)|
-|[time_window_filter](../jobs/#timewindowfilterparameters)|Optional time window filter, configures the time range that is analyzed or the number of recent days/months to analyze for day or month partitioned data.|[TimeWindowFilterParameters](../jobs/#timewindowfilterparameters)|
+|[table](../columns.md#physicaltablename)|The full physical name (schema.table) of the target table.|[PhysicalTableName](../columns.md#physicaltablename)|
+|[check_search_filters](../Common.md#checksearchfilters)|Target data quality checks filter.|[CheckSearchFilters](../Common.md#checksearchfilters)|
+|[time_window_filter](#timewindowfilterparameters)|Optional time window filter, configures the time range that is analyzed or the number of recent days/months to analyze for day or month partitioned data.|[TimeWindowFilterParameters](#timewindowfilterparameters)|
 |dummy_execution|Set the value to true when the data quality checks should be executed in a dummy mode (without running checks on the target systems and storing the results). Only the jinja2 sensors will be rendered.|boolean|
-|[run_checks_result](../jobs/#runchecksresult)|The result of running the check, updated when the run checks job finishes. Contains the count of executed checks.|[RunChecksResult](../jobs/#runchecksresult)|
+|[run_checks_result](#runchecksresult)|The result of running the check, updated when the run checks job finishes. Contains the count of executed checks.|[RunChecksResult](#runchecksresult)|
 
 
-___  
+___
 
-## StatisticsCollectorTarget  
-  
-  
+## StatisticsCollectorTarget
 
-**The structure of this object is described below**  
-  
+
+
+**The structure of this object is described below**
+
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
 |string|column<br/>table<br/>|
 
-___  
+___
 
-## StatisticsCollectorSearchFilters  
-Hierarchy node search filters for finding enabled statistics collectors (basic profilers) to be started.  
-  
+## StatisticsCollectorSearchFilters
+Hierarchy node search filters for finding enabled statistics collectors (basic profilers) to be started.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
@@ -352,64 +352,64 @@ Hierarchy node search filters for finding enabled statistics collectors (basic p
 |enabled|A boolean flag to target enabled tables, columns or checks. When the value of this field is not set, the default value of this field is *true*, targeting only tables, columns and checks that are not implicitly disabled.|boolean|
 
 
-___  
+___
 
-## StatisticsDataScope  
-Enumeration of possible statistics scopes. &quot;table&quot; - a whole table was profiled, &quot;data_groupings&quot; - groups of rows were profiled.  
-  
+## StatisticsDataScope
+Enumeration of possible statistics scopes. &quot;table&quot; - a whole table was profiled, &quot;data_groupings&quot; - groups of rows were profiled.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
 |string|data_group<br/>table<br/>|
 
-___  
+___
 
-## CollectStatisticsQueueJobParameters  
-  
-  
+## CollectStatisticsQueueJobParameters
 
-**The structure of this object is described below**  
-  
+
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[statistics_collector_search_filters](../jobs/#StatisticsCollectorSearchFilters)|Statistics collectors search filters that identify the type of statistics collector to run.|[StatisticsCollectorSearchFilters](../jobs/#StatisticsCollectorSearchFilters)|
+|[statistics_collector_search_filters](#StatisticsCollectorSearchFilters)|Statistics collectors search filters that identify the type of statistics collector to run.|[StatisticsCollectorSearchFilters](#StatisticsCollectorSearchFilters)|
 |[data_scope](#statisticsdatascope)|The target scope of collecting statistics. Statistics could be collected on a whole table or for each data grouping separately.|[StatisticsDataScope](#statisticsdatascope)|
 |dummy_sensor_execution|Boolean flag that enables a dummy statistics collection (sensors are executed, but the statistics results are not written to the parquet files).|boolean|
-|[collect_statistics_result](../jobs/#collectstatisticsresult)|The summary of the statistics collection job after if finished. Returns the number of collectors analyzed, columns analyzed, statistics results captured.|[CollectStatisticsResult](../jobs/#collectstatisticsresult)|
+|[collect_statistics_result](#collectstatisticsresult)|The summary of the statistics collection job after if finished. Returns the number of collectors analyzed, columns analyzed, statistics results captured.|[CollectStatisticsResult](#collectstatisticsresult)|
 
 
-___  
+___
 
-## CollectStatisticsOnTableQueueJobParameters  
-  
-  
+## CollectStatisticsOnTableQueueJobParameters
 
-**The structure of this object is described below**  
-  
+
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |connection|The name of the target connection.|string|
 |max_jobs_per_connection|The maximum number of concurrent &#x27;run checks on table&#x27; jobs that could be run on this connection. Limits the number of concurrent jobs.|integer|
-|[table](../columns/#physicaltablename)|The full physical name (schema.table) of the target table.|[PhysicalTableName](../columns/#physicaltablename)|
-|[statistics_collector_search_filters](../jobs/#statisticscollectorsearchfilters)|Statistics collectors search filters that identify the type of statistics collector to run.|[StatisticsCollectorSearchFilters](../jobs/#statisticscollectorsearchfilters)|
-|[data_scope](../jobs/#statisticsdatascope)|The target scope of collecting statistics. Statistics could be collected on a whole table or for each data grouping separately.|[StatisticsDataScope](../jobs/#statisticsdatascope)|
+|[table](../columns.md#physicaltablename)|The full physical name (schema.table) of the target table.|[PhysicalTableName](../columns.md#physicaltablename)|
+|[statistics_collector_search_filters](#statisticscollectorsearchfilters)|Statistics collectors search filters that identify the type of statistics collector to run.|[StatisticsCollectorSearchFilters](#statisticscollectorsearchfilters)|
+|[data_scope](#statisticsdatascope)|The target scope of collecting statistics. Statistics could be collected on a whole table or for each data grouping separately.|[StatisticsDataScope](#statisticsdatascope)|
 |dummy_sensor_execution|Boolean flag that enables a dummy statistics collection (sensors are executed, but the statistics results are not written to the parquet files).|boolean|
-|[collect_statistics_result](../jobs/#collectstatisticsresult)|The summary of the statistics collection job after if finished. Returns the number of collectors analyzed, columns analyzed, statistics results captured.|[CollectStatisticsResult](../jobs/#collectstatisticsresult)|
+|[collect_statistics_result](#collectstatisticsresult)|The summary of the statistics collection job after if finished. Returns the number of collectors analyzed, columns analyzed, statistics results captured.|[CollectStatisticsResult](#collectstatisticsresult)|
 
 
-___  
+___
 
-## ImportSchemaQueueJobParameters  
-Parameters for the {@link ImportSchemaQueueJob ImportSchemaQueueJob} job that imports tables from a database.  
-  
+## ImportSchemaQueueJobParameters
+Parameters for the {@link ImportSchemaQueueJob ImportSchemaQueueJob} job that imports tables from a database.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
@@ -418,14 +418,14 @@ Parameters for the {@link ImportSchemaQueueJob ImportSchemaQueueJob} job that im
 |table_name_pattern||string|
 
 
-___  
+___
 
-## ImportTablesQueueJobParameters  
-Parameters for the {@link ImportTablesQueueJob ImportTablesQueueJob} job that imports selected tables from the source database.  
-  
+## ImportTablesQueueJobParameters
+Parameters for the {@link ImportTablesQueueJob ImportTablesQueueJob} job that imports selected tables from the source database.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
@@ -434,14 +434,14 @@ Parameters for the {@link ImportTablesQueueJob ImportTablesQueueJob} job that im
 |table_names|Optional list of table names inside the schema. When the list of tables is empty, all tables are imported.|List[string]|
 
 
-___  
+___
 
-## RepairStoredDataQueueJobParameters  
-Parameters for the {@link RepairStoredDataQueueJob RepairStoredDataQueueJob} job that repairs data stored in user&#x27;s &quot;.data&quot; directory.  
-  
+## RepairStoredDataQueueJobParameters
+Parameters for the {@link RepairStoredDataQueueJob RepairStoredDataQueueJob} job that repairs data stored in user&#x27;s &quot;.data&quot; directory.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
@@ -453,110 +453,110 @@ Parameters for the {@link RepairStoredDataQueueJob RepairStoredDataQueueJob} job
 |repair_sensor_readouts||boolean|
 
 
-___  
+___
 
-## DqoJobEntryParametersModel  
-Model object returned to UI that has typed fields for each supported job parameter type.  
-  
+## DqoJobEntryParametersModel
+Model object returned to UI that has typed fields for each supported job parameter type.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |[synchronize_root_folder_parameters](#synchronizerootfolderdqoqueuejobparameters)||[SynchronizeRootFolderDqoQueueJobParameters](#synchronizerootfolderdqoqueuejobparameters)|
-|[synchronize_multiple_folders_parameters](../jobs/#SynchronizeMultipleFoldersDqoQueueJobParameters)||[SynchronizeMultipleFoldersDqoQueueJobParameters](../jobs/#SynchronizeMultipleFoldersDqoQueueJobParameters)|
-|[run_scheduled_checks_parameters](../Common/#monitoringschedulespec)||[MonitoringScheduleSpec](../Common/#monitoringschedulespec)|
-|[run_checks_parameters](../jobs/#RunChecksParameters)||[RunChecksParameters](../jobs/#RunChecksParameters)|
+|[synchronize_multiple_folders_parameters](#SynchronizeMultipleFoldersDqoQueueJobParameters)||[SynchronizeMultipleFoldersDqoQueueJobParameters](#SynchronizeMultipleFoldersDqoQueueJobParameters)|
+|[run_scheduled_checks_parameters](../Common.md#monitoringschedulespec)||[MonitoringScheduleSpec](../Common.md#monitoringschedulespec)|
+|[run_checks_parameters](#RunChecksParameters)||[RunChecksParameters](#RunChecksParameters)|
 |[run_checks_on_table_parameters](#runchecksontableparameters)||[RunChecksOnTableParameters](#runchecksontableparameters)|
 |[collect_statistics_parameters](#collectstatisticsqueuejobparameters)||[CollectStatisticsQueueJobParameters](#collectstatisticsqueuejobparameters)|
 |[collect_statistics_on_table_parameters](#collectstatisticsontablequeuejobparameters)||[CollectStatisticsOnTableQueueJobParameters](#collectstatisticsontablequeuejobparameters)|
 |[import_schema_parameters](#importschemaqueuejobparameters)||[ImportSchemaQueueJobParameters](#importschemaqueuejobparameters)|
-|[import_table_parameters](../jobs/#ImportTablesQueueJobParameters)||[ImportTablesQueueJobParameters](../jobs/#ImportTablesQueueJobParameters)|
-|[delete_stored_data_parameters](../jobs/#deletestoreddataqueuejobparameters)||[DeleteStoredDataQueueJobParameters](../jobs/#deletestoreddataqueuejobparameters)|
+|[import_table_parameters](#ImportTablesQueueJobParameters)||[ImportTablesQueueJobParameters](#ImportTablesQueueJobParameters)|
+|[delete_stored_data_parameters](#deletestoreddataqueuejobparameters)||[DeleteStoredDataQueueJobParameters](#deletestoreddataqueuejobparameters)|
 |[repair_stored_data_parameters](#repairstoreddataqueuejobparameters)||[RepairStoredDataQueueJobParameters](#repairstoreddataqueuejobparameters)|
 
 
-___  
+___
 
-## DqoJobHistoryEntryModel  
-Model of a single job that was scheduled or has finished. It is stored in the job monitoring service on the history list.  
-  
+## DqoJobHistoryEntryModel
+Model of a single job that was scheduled or has finished. It is stored in the job monitoring service on the history list.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[job_id](../Common/#dqoqueuejobid)||[DqoQueueJobId](../Common/#dqoqueuejobid)|
+|[job_id](../Common.md#dqoqueuejobid)||[DqoQueueJobId](../Common.md#dqoqueuejobid)|
 |[job_type](#dqojobtype)||[DqoJobType](#dqojobtype)|
 |[parameters](#dqojobentryparametersmodel)||[DqoJobEntryParametersModel](#dqojobentryparametersmodel)|
-|[status](../jobs/#dqojobstatus)||[DqoJobStatus](../jobs/#dqojobstatus)|
+|[status](#dqojobstatus)||[DqoJobStatus](#dqojobstatus)|
 |error_message||string|
 
 
-___  
+___
 
-## DqoJobChangeModel  
-Describes a change to the job status or the job queue (such as a new job was added).  
-  
+## DqoJobChangeModel
+Describes a change to the job status or the job queue (such as a new job was added).
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[status](../jobs/#dqojobstatus)||[DqoJobStatus](../jobs/#dqojobstatus)|
-|[job_id](../Common/#dqoqueuejobid)||[DqoQueueJobId](../Common/#dqoqueuejobid)|
+|[status](#dqojobstatus)||[DqoJobStatus](#dqojobstatus)|
+|[job_id](../Common.md#dqoqueuejobid)||[DqoQueueJobId](../Common.md#dqoqueuejobid)|
 |change_sequence||long|
-|[updated_model](../jobs/#dqojobhistoryentrymodel)||[DqoJobHistoryEntryModel](../jobs/#dqojobhistoryentrymodel)|
+|[updated_model](#dqojobhistoryentrymodel)||[DqoJobHistoryEntryModel](#dqojobhistoryentrymodel)|
 
 
-___  
+___
 
-## FolderSynchronizationStatus  
-Enumeration of statuses that identify the synchronization status for each folder that could be synchronized to DQOps Cloud.  
-  
+## FolderSynchronizationStatus
+Enumeration of statuses that identify the synchronization status for each folder that could be synchronized to DQOps Cloud.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
 |string|synchronizing<br/>unchanged<br/>changed<br/>|
 
-___  
+___
 
-## CloudSynchronizationFoldersStatusModel  
-Model that describes the current synchronization status for each folder.  
-  
+## CloudSynchronizationFoldersStatusModel
+Model that describes the current synchronization status for each folder.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |[sources](#foldersynchronizationstatus)|The synchronization status of the &quot;sources&quot; folder.|[FolderSynchronizationStatus](#foldersynchronizationstatus)|
-|[sensors](../jobs/#foldersynchronizationstatus)|The synchronization status of the &quot;sensors&quot; folder.|[FolderSynchronizationStatus](../jobs/#foldersynchronizationstatus)|
-|[rules](../jobs/#foldersynchronizationstatus)|The synchronization status of the &quot;rules&quot; folder.|[FolderSynchronizationStatus](../jobs/#foldersynchronizationstatus)|
-|[checks](../jobs/#foldersynchronizationstatus)|The synchronization status of the &quot;checks&quot; folder.|[FolderSynchronizationStatus](../jobs/#foldersynchronizationstatus)|
-|[settings](../jobs/#foldersynchronizationstatus)|The synchronization status of the &quot;settings&quot; folder.|[FolderSynchronizationStatus](../jobs/#foldersynchronizationstatus)|
-|[credentials](../jobs/#foldersynchronizationstatus)|The synchronization status of the &quot;.credentials&quot; folder.|[FolderSynchronizationStatus](../jobs/#foldersynchronizationstatus)|
-|[data_sensor_readouts](../jobs/#foldersynchronizationstatus)|The synchronization status of the &quot;.data/sensor_readouts&quot; folder.|[FolderSynchronizationStatus](../jobs/#foldersynchronizationstatus)|
-|[data_check_results](../jobs/#foldersynchronizationstatus)|The synchronization status of the &quot;.data/check_results&quot; folder.|[FolderSynchronizationStatus](../jobs/#foldersynchronizationstatus)|
-|[data_statistics](../jobs/#foldersynchronizationstatus)|The synchronization status of the &quot;.data/statistics&quot; folder.|[FolderSynchronizationStatus](../jobs/#foldersynchronizationstatus)|
-|[data_errors](../jobs/#foldersynchronizationstatus)|The synchronization status of the &quot;.data/errors&quot; folder.|[FolderSynchronizationStatus](../jobs/#foldersynchronizationstatus)|
-|[data_incidents](../jobs/#foldersynchronizationstatus)|The synchronization status of the &quot;.data/incidents&quot; folder.|[FolderSynchronizationStatus](../jobs/#foldersynchronizationstatus)|
+|[sensors](#foldersynchronizationstatus)|The synchronization status of the &quot;sensors&quot; folder.|[FolderSynchronizationStatus](#foldersynchronizationstatus)|
+|[rules](#foldersynchronizationstatus)|The synchronization status of the &quot;rules&quot; folder.|[FolderSynchronizationStatus](#foldersynchronizationstatus)|
+|[checks](#foldersynchronizationstatus)|The synchronization status of the &quot;checks&quot; folder.|[FolderSynchronizationStatus](#foldersynchronizationstatus)|
+|[settings](#foldersynchronizationstatus)|The synchronization status of the &quot;settings&quot; folder.|[FolderSynchronizationStatus](#foldersynchronizationstatus)|
+|[credentials](#foldersynchronizationstatus)|The synchronization status of the &quot;.credentials&quot; folder.|[FolderSynchronizationStatus](#foldersynchronizationstatus)|
+|[data_sensor_readouts](#foldersynchronizationstatus)|The synchronization status of the &quot;.data/sensor_readouts&quot; folder.|[FolderSynchronizationStatus](#foldersynchronizationstatus)|
+|[data_check_results](#foldersynchronizationstatus)|The synchronization status of the &quot;.data/check_results&quot; folder.|[FolderSynchronizationStatus](#foldersynchronizationstatus)|
+|[data_statistics](#foldersynchronizationstatus)|The synchronization status of the &quot;.data/statistics&quot; folder.|[FolderSynchronizationStatus](#foldersynchronizationstatus)|
+|[data_errors](#foldersynchronizationstatus)|The synchronization status of the &quot;.data/errors&quot; folder.|[FolderSynchronizationStatus](#foldersynchronizationstatus)|
+|[data_incidents](#foldersynchronizationstatus)|The synchronization status of the &quot;.data/incidents&quot; folder.|[FolderSynchronizationStatus](#foldersynchronizationstatus)|
 
 
-___  
+___
 
-## DqoJobQueueIncrementalSnapshotModel  
-Job history snapshot model that returns only changes after a given change sequence.  
-  
+## DqoJobQueueIncrementalSnapshotModel
+Job history snapshot model that returns only changes after a given change sequence.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
@@ -565,84 +565,84 @@ Job history snapshot model that returns only changes after a given change sequen
 |last_sequence_number||long|
 
 
-___  
+___
 
-## DqoJobQueueInitialSnapshotModel  
-Returns the current snapshot of running jobs.  
-  
+## DqoJobQueueInitialSnapshotModel
+Returns the current snapshot of running jobs.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|jobs||List[[DqoJobHistoryEntryModel](../jobs/#dqojobhistoryentrymodel)]|
-|[folder_synchronization_status](../jobs/#cloudsynchronizationfoldersstatusmodel)||[CloudSynchronizationFoldersStatusModel](../jobs/#cloudsynchronizationfoldersstatusmodel)|
+|jobs||List[[DqoJobHistoryEntryModel](#dqojobhistoryentrymodel)]|
+|[folder_synchronization_status](#cloudsynchronizationfoldersstatusmodel)||[CloudSynchronizationFoldersStatusModel](#cloudsynchronizationfoldersstatusmodel)|
 |last_sequence_number||long|
 
 
-___  
+___
 
-## ImportTablesResult  
-Result object from the {@link ImportTablesQueueJob ImportTablesQueueJob} table import job that returns list of tables that have been imported.  
-  
+## ImportTablesResult
+Result object from the {@link ImportTablesQueueJob ImportTablesQueueJob} table import job that returns list of tables that have been imported.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|source_table_specs|Table schemas (including column schemas) of imported tables.|List[[TableSpec](../../../reference/yaml/TableYaml/#tablespec)]|
+|source_table_specs|Table schemas (including column schemas) of imported tables.|List[[TableSpec](../../../reference/yaml/TableYaml.md#tablespec)]|
 
 
-___  
+___
 
-## ImportTablesQueueJobResult  
+## ImportTablesQueueJobResult
 Object returned from the operation that queues a &quot;import tables&quot; job. The result contains the job id that was started
- and optionally can also contain the result of importing tables if the operation was started with wait&#x3D;true parameter to wait for the &quot;import tables&quot; job to finish.  
-  
+ and optionally can also contain the result of importing tables if the operation was started with wait&#x3D;true parameter to wait for the &quot;import tables&quot; job to finish.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[job_id](../Common/#dqoqueuejobid)|Job id that identifies a job that was started on the DQOps job queue.|[DqoQueueJobId](../Common/#dqoqueuejobid)|
+|[job_id](../Common.md#dqoqueuejobid)|Job id that identifies a job that was started on the DQOps job queue.|[DqoQueueJobId](../Common.md#dqoqueuejobid)|
 |[result](#importtablesresult)|Optional result object that is returned only when the wait parameter was true and the &quot;import tables&quot; job has finished. Contains the summary result of importing tables, including table and column schemas of imported tables. |[ImportTablesResult](#importtablesresult)|
-|[status](../jobs/#dqojobstatus)|Job status|[DqoJobStatus](../jobs/#dqojobstatus)|
+|[status](#dqojobstatus)|Job status|[DqoJobStatus](#dqojobstatus)|
 
 
-___  
+___
 
-## RunChecksQueueJobResult  
-  
-  
+## RunChecksQueueJobResult
 
-**The structure of this object is described below**  
-  
+
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[job_id](../Common/#dqoqueuejobid)|Job id that identifies a job that was started on the DQOps job queue.|[DqoQueueJobId](../Common/#dqoqueuejobid)|
-|[result](../jobs/#runchecksresult)|Optional result object that is returned only when the wait parameter was true and the &quot;run checks&quot; job has finished. Contains the summary result of the data quality checks executed, including the severity of the most severe issue detected. The calling code (the data pipeline) can decide if further processing should be continued.|[RunChecksResult](../jobs/#runchecksresult)|
-|[status](../jobs/#dqojobstatus)|Job status|[DqoJobStatus](../jobs/#dqojobstatus)|
+|[job_id](../Common.md#dqoqueuejobid)|Job id that identifies a job that was started on the DQOps job queue.|[DqoQueueJobId](../Common.md#dqoqueuejobid)|
+|[result](#runchecksresult)|Optional result object that is returned only when the wait parameter was true and the &quot;run checks&quot; job has finished. Contains the summary result of the data quality checks executed, including the severity of the most severe issue detected. The calling code (the data pipeline) can decide if further processing should be continued.|[RunChecksResult](#runchecksresult)|
+|[status](#dqojobstatus)|Job status|[DqoJobStatus](#dqojobstatus)|
 
 
-___  
+___
 
-## SynchronizeMultipleFoldersQueueJobResult  
+## SynchronizeMultipleFoldersQueueJobResult
 Object returned from the operation that queues a &quot;synchronize multiple folders&quot; job. The result contains the job id that was started
- and optionally can also contain the job finish status if the operation was started with wait&#x3D;true parameter to wait for the &quot;synchronize multiple folders&quot; job to finish.  
-  
+ and optionally can also contain the job finish status if the operation was started with wait&#x3D;true parameter to wait for the &quot;synchronize multiple folders&quot; job to finish.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[job_id](../Common/#dqoqueuejobid)|Job id that identifies a job that was started on the DQOps job queue.|[DqoQueueJobId](../Common/#dqoqueuejobid)|
-|[status](../jobs/#dqojobstatus)|Job status|[DqoJobStatus](../jobs/#dqojobstatus)|
+|[job_id](../Common.md#dqoqueuejobid)|Job id that identifies a job that was started on the DQOps job queue.|[DqoQueueJobId](../Common.md#dqoqueuejobid)|
+|[status](#dqojobstatus)|Job status|[DqoJobStatus](#dqojobstatus)|
 
 
-___  
+___
 

@@ -1,10 +1,10 @@
 
-## DashboardSpec  
-Description of a single dashboard that is available in the platform.  
-  
+## DashboardSpec
+Description of a single dashboard that is available in the platform.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
@@ -16,14 +16,14 @@ Description of a single dashboard that is available in the platform.
 |parameters|Key/value dictionary of additional parameters to be passed to the dashboard|Dict[string, string]|
 
 
-___  
+___
 
-## AuthenticatedDashboardModel  
-Model that describes a single authenticated dashboard.  
-  
+## AuthenticatedDashboardModel
+Model that describes a single authenticated dashboard.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
@@ -32,42 +32,42 @@ Model that describes a single authenticated dashboard.
 |authenticated_dashboard_url|Dashboard authenticated url with a short lived refresh token|string|
 
 
-___  
+___
 
-## DashboardListSpec  
-List of dashboards.  
-  
+## DashboardListSpec
+List of dashboards.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|self||List[[DashboardSpec](../dashboards/#dashboardspec)]|
+|self||List[[DashboardSpec](#dashboardspec)]|
 
 
-___  
+___
 
-## DashboardsFolderListSpec  
-List of dashboard folders.  
-  
+## DashboardsFolderListSpec
+List of dashboard folders.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|self||List[[DashboardsFolderSpec](../dashboards/#DashboardsFolderSpec)]|
+|self||List[[DashboardsFolderSpec](#DashboardsFolderSpec)]|
 
 
-___  
+___
 
-## DashboardsFolderSpec  
-Description of a folder with multiple dashboards or other folders.  
-  
+## DashboardsFolderSpec
+Description of a folder with multiple dashboards or other folders.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
@@ -76,5 +76,5 @@ Description of a folder with multiple dashboards or other folders.
 |[folders](#dashboardsfolderlistspec)|List of data quality dashboard folders at this level.|[DashboardsFolderListSpec](#dashboardsfolderlistspec)|
 
 
-___  
+___
 

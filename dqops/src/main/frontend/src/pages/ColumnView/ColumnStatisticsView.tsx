@@ -20,7 +20,7 @@ const initColumnStatisticsObject : Record<string,  TStatistics[]> = {
   "Nulls" : [{type: "Nulls count"}, {type: "Nulls percent"}, {type: "Not nulls count"}, {type: "Not nulls percent"}],
   "Uniqueness" : [{type: "Distinct count"}, {type: "Distinct percent"}, {type: "Duplicate count"}, {type: "Duplicate percent"}],
   "Range" : [{type: "Min value"}, {type: "Max value"}, {type: "Median value"}, {type: "Sum value"}],
-  "strings" : [{type: "String min length"}, {type: "String max length"}, {type: "String mean length"}],
+  "Text" : [{type: "Text min length"}, {type: "Text max length"}, {type: "Text mean length"}],
   "Top most common values" : [],
 }
 
@@ -55,7 +55,7 @@ const ColumnStatisticsView = ({statisticsCollectedIndicator} : {statisticsCollec
           "Nulls": [{ type: "Nulls count" }, { type: "Nulls percent" }, { type: "Not nulls count" }, { type: "Not nulls percent" }],
           "Uniqueness": [{ type: "Distinct count" }, { type: "Distinct percent" }, { type: "Duplicate count" }, { type: "Duplicate percent" }],
           "Range": [{ type: "Min value" }, { type: "Max value" }, { type: "Median value" }, { type: "Sum value" }],
-          "strings": [{ type: "String min length" }, { type: "String max length" }, { type: "String mean length" }],
+          "Text": [{ type: "Text min length" }, { type: "Text max length" }, { type: "Text mean length" }],
           "Top most common values": Array(0)
         };
         setColumnStatistics(newColumnStatistics);
@@ -85,8 +85,8 @@ const ColumnStatisticsView = ({statisticsCollectedIndicator} : {statisticsCollec
   const renderCategory = (value: string) => {
     if (value.toLowerCase() === 'sampling') {
       return "Top most common values"
-    } else if (value.toLowerCase() === 'strings') {
-      return "String length"
+    } else if (value.toLowerCase() === 'text') {
+      return "Text length"
     } 
     return value.replace(/_/g, " ")
                 .replace(/^\w/g, c => c.toUpperCase())
@@ -129,7 +129,7 @@ const ColumnStatisticsView = ({statisticsCollectedIndicator} : {statisticsCollec
       "Nulls": [{ type: "Nulls count" }, { type: "Nulls percent" }, { type: "Not nulls count" }, { type: "Not nulls percent" }],
       "Uniqueness": [{ type: "Distinct count" }, { type: "Distinct percent" }, { type: "Duplicate count" }, { type: "Duplicate percent" }],
       "Range": [{ type: "Min value" }, { type: "Max value" }, { type: "Median value" }, { type: "Sum value" }],
-      "strings": [{ type: "String min length" }, { type: "String max length" }, { type: "String mean length" }],
+      "Text": [{ type: "Text min length" }, { type: "Text max length" }, { type: "Text mean length" }],
       "Top most common values": Array(0)
     };
     const table_statistics_array : TStatistics[] = []
