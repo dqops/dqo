@@ -105,11 +105,7 @@ public class DocumentationFolderPostCorrectorServiceImpl implements Documentatio
 
     protected void pathMappingCorrectionForFile(DocumentationMarkdownFile file) {
         String content = file.getFileContent();
-        Path fileDirectPath = file.getDirectPath();
-        Path workingPath = fileDirectPath;
-//        Path workingPath = fileDirectPath.getFileName().toString().equals("index.md")
-//                ? fileDirectPath.getParent()
-//                : fileDirectPath;
+        Path workingPath = file.getDirectPath();
 
 
         Deque<Function<String, String>> contentModifiers = new ArrayDeque<>();
