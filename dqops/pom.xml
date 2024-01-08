@@ -541,7 +541,6 @@
 			<groupId>com.amazon.athena</groupId>
 			<artifactId>athena-jdbc</artifactId>
 			<version>3.0.0</version>
-			<scope>runtime</scope>
 		</dependency>
 
 		<!-- test dependencies -->

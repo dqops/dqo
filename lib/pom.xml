@@ -111,7 +111,7 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- Oracle and SQL Server drivers are excluded, because they are referenced by dqops project as regular dependencies (not runtime scope), because we need to use some classes or enums -->
+		<!-- Oracle, SQL Server and Athena drivers are excluded, because they are referenced by dqops project as regular dependencies (not runtime scope), because we need to use some classes or enums -->
 
 <!--		<dependency>-->
 <!--			<groupId>com.microsoft.sqlserver</groupId>-->
@@ -124,6 +124,12 @@
 <!--			<version>23.2.0.0</version>-->
 <!--			<scope>runtime</scope>-->
 <!--		</dependency>-->
+		<!--		<dependency>-->
+		<!--			<groupId>com.amazon.athena</groupId>-->
+		<!--			<artifactId>athena-jdbc</artifactId>-->
+		<!--			<version>3.0.0</version>-->
+		<!--			<scope>compile</scope>-->
+		<!--		</dependency>-->
 
 <!--		<dependency>-->
 <!--			<groupId>org.apache.hive</groupId>-->
@@ -164,16 +170,11 @@
 <!--				</exclusion>-->
 <!--			</exclusions>-->
 <!--		</dependency>-->
+
 		<dependency>
 			<groupId>com.databricks</groupId>
 			<artifactId>databricks-jdbc</artifactId>
 			<version>2.6.25</version>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.amazon.athena</groupId>
-			<artifactId>athena-jdbc</artifactId>
-			<version>3.0.0</version>
 			<scope>runtime</scope>
 		</dependency>
 

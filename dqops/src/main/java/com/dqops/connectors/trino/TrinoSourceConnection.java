@@ -16,6 +16,7 @@
 package com.dqops.connectors.trino;
 
 import com.dqops.connectors.ConnectorOperationFailedException;
+import com.dqops.connectors.RowCountLimitExceededException;
 import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
 import com.dqops.connectors.jdbc.JdbcQueryFailedException;
@@ -23,7 +24,9 @@ import com.dqops.core.jobqueue.JobCancellationListenerHandle;
 import com.dqops.core.jobqueue.JobCancellationToken;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
-import com.dqops.metadata.sources.*;
+import com.dqops.metadata.sources.ColumnSpec;
+import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
+import com.dqops.metadata.sources.TableSpec;
 import com.dqops.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
 import org.apache.parquet.Strings;
@@ -31,8 +34,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import tech.tablesaw.api.Table;
+import tech.tablesaw.columns.Column;
 
+import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
@@ -246,6 +253,54 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
             throw new JdbcQueryFailedException(
                     String.format("SQL statement failed: %s, connection: %s, SQL: %s", ex.getMessage(), connectionName, sqlStatement),
                     ex, sqlStatement, connectionName);
+        }
+    }
+
+    @Override
+    public Table executeQuery(String sqlQueryStatement, JobCancellationToken jobCancellationToken, Integer maxRows, boolean failWhenMaxRowsExceeded) {
+        if(this.getConnectionSpec().getTrino().getTrinoEngineType().equals(TrinoEngineType.trino)){
+            return super.executeQuery(sqlQueryStatement, jobCancellationToken, maxRows, failWhenMaxRowsExceeded);
+        } else {
+            return executeQueryForAthena(sqlQueryStatement, jobCancellationToken, maxRows, failWhenMaxRowsExceeded);
+        }
+    }
+
+    private Table executeQueryForAthena(String sqlQueryStatement, JobCancellationToken jobCancellationToken, Integer maxRows, boolean failWhenMaxRowsExceeded) {
+        try {
+            try (Statement statement = this.getJdbcConnection().createStatement()) {
+                if (maxRows != null) {
+                    statement.setMaxRows(failWhenMaxRowsExceeded ? maxRows + 1 : maxRows);
+                }
+
+                try (JobCancellationListenerHandle cancellationListenerHandle =
+                             jobCancellationToken.registerCancellationListener(
+                                     cancellationToken -> RunSilently.run(statement::cancel))) {
+                    try (ResultSet results = statement.executeQuery(sqlQueryStatement)) {
+                        try(AthenaResultSetWrapper trinoResultSet = new AthenaResultSetWrapper(results)){
+                            Table resultTable = Table.read().db(trinoResultSet, sqlQueryStatement);
+                            if (maxRows != null && resultTable.rowCount() > maxRows) {
+                                throw new RowCountLimitExceededException(maxRows);
+                            }
+
+                            for (Column<?> column : resultTable.columns()) {
+                                if (column.name() != null) {
+                                    column.setName(column.name().toLowerCase(Locale.ROOT));
+                                }
+                            }
+                            return resultTable;
+                        }
+                    }
+                }
+                finally {
+                    jobCancellationToken.throwIfCancelled();
+                }
+            }
+        }
+        catch (Exception ex) {
+            String connectionName = this.getConnectionSpec().getConnectionName();
+            throw new JdbcQueryFailedException(
+                    String.format("SQL query failed: %s, connection: %s, SQL: %s", ex.getMessage(), connectionName, sqlQueryStatement),
+                    ex, sqlQueryStatement, connectionName);
         }
     }
 
