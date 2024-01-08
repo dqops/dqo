@@ -66,7 +66,7 @@ export default function TableStatisticsView({
   };
   useEffect(() => {
     fetchRows();
-  }, [connectionName, schemaName, tableName, statistics]);
+  }, [connectionName, schemaName, tableName]);
 
   useEffect(() => {
     setNumberOfSelected(0);

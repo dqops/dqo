@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ColumnApiClient, TableApiClient } from '../../services/apiClient';
-import { useParams } from 'react-router-dom';
 import { ColumnStatisticsModel, StatisticsMetricModel, TableStatisticsModel } from '../../api';
-import { CheckTypes } from '../../shared/routes';
-import { AxiosResponse } from 'axios';
 import { formatNumber } from '../../shared/constants';
 import moment from 'moment';
 import SectionWrapper from '../../components/Dashboard/SectionWrapper';
@@ -16,70 +12,32 @@ type TStatistics = {
     sampleCount?: number
 }   
 
-const initColumnStatisticsObject : Record<string,  TStatistics[]> = {
-  "Nulls" : [{type: "Nulls count"}, {type: "Nulls percent"}, {type: "Not nulls count"}, {type: "Not nulls percent"}],
-  "Uniqueness" : [{type: "Distinct count"}, {type: "Distinct percent"}, {type: "Duplicate count"}, {type: "Duplicate percent"}],
-  "Range" : [{type: "Min value"}, {type: "Max value"}, {type: "Median value"}, {type: "Sum value"}],
-  "Text" : [{type: "Text min length"}, {type: "Text max length"}, {type: "Text mean length"}],
-  "Top most common values" : [],
+type TColumnStatisticsProps = {
+  columnStatisticsProp?: ColumnStatisticsModel;
+  tableStatisticsProp?: TableStatisticsModel;
 }
 
-const ColumnStatisticsView = ({statisticsCollectedIndicator} : {statisticsCollectedIndicator?: boolean}) => {
-  const {
-    connection,
-    schema,
-    table,
-    column
-  }: {
-    checkTypes: CheckTypes;
-    connection: string;
-    schema: string;
-    table: string;
-    column: string;
-  } = useParams();
-  const [columnStatistics, setColumnStatistics] = useState<Record<string, TStatistics[]>>(initColumnStatisticsObject);
+const defaultColumnStatistics: Record<string, TStatistics[]> = {
+  "Nulls": [{ type: "Nulls count" }, { type: "Nulls percent" }, { type: "Not nulls count" }, { type: "Not nulls percent" }],
+  "Uniqueness": [{ type: "Distinct count" }, { type: "Distinct percent" }, { type: "Duplicate count" }, { type: "Duplicate percent" }],
+  "Range": [{ type: "Min value" }, { type: "Max value" }, { type: "Median value" }, { type: "Sum value" }],
+  "Text": [{ type: "Text min length" }, { type: "Text max length" }, { type: "Text mean length" }],
+  "Top most common values": Array(0)
+};
+
+const ColumnStatisticsView = ({columnStatisticsProp, tableStatisticsProp} : TColumnStatisticsProps) => {
+  const [columnStatistics, setColumnStatistics] = useState<Record<string, TStatistics[]>>(defaultColumnStatistics);
   const [tableStatistics, setTableStatistics] = useState<TStatistics[]>([]);
   const [rowCount, setRowCount] = useState<number>()
 
   useEffect(() => {
- 
-    const fetchStatistics = async () => {
-      try {
-        const res: AxiosResponse<ColumnStatisticsModel> = await ColumnApiClient.getColumnStatistics(
-          connection,
-          schema,
-          table,
-          column
-        );
-        const newColumnStatistics: Record<string, TStatistics[]> = {
-          "Nulls": [{ type: "Nulls count" }, { type: "Nulls percent" }, { type: "Not nulls count" }, { type: "Not nulls percent" }],
-          "Uniqueness": [{ type: "Distinct count" }, { type: "Distinct percent" }, { type: "Duplicate count" }, { type: "Duplicate percent" }],
-          "Range": [{ type: "Min value" }, { type: "Max value" }, { type: "Median value" }, { type: "Sum value" }],
-          "Text": [{ type: "Text min length" }, { type: "Text max length" }, { type: "Text mean length" }],
-          "Top most common values": Array(0)
-        };
-        setColumnStatistics(newColumnStatistics);
-        if (res.data.statistics && res.data.statistics?.length > 0) {
-          getColumnStatisticsModel(res.data);
-        } 
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    const fetchRowStatistics = async () => {
-      try {
-        const res: AxiosResponse<TableStatisticsModel> =
-          await TableApiClient.getTableStatistics(connection, schema, table);
-        getTableStatisticsModel(res.data)
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    fetchStatistics();
-    fetchRowStatistics();
-  }, [connection, schema, table, column, statisticsCollectedIndicator]);
+    if (columnStatisticsProp) {
+      getColumnStatisticsModel(columnStatisticsProp)
+    } 
+    if (tableStatisticsProp) {
+      getTableStatisticsModel(tableStatisticsProp)
+    }
+  }, [columnStatisticsProp, tableStatisticsProp]);
 
 
   const renderCategory = (value: string) => {

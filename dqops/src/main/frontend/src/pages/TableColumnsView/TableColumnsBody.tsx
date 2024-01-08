@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { MyData } from './TableColumnsConstans';
 import SvgIcon from '../../components/SvgIcon';
 import { dateToString, formatNumber } from '../../shared/constants';
@@ -10,7 +10,6 @@ import {
   max_unique_value
 } from './TableColumnsUtils';
 import {
-  DqoJobHistoryEntryModelJobTypeEnum,
   DqoJobHistoryEntryModelStatusEnum,
   TableColumnsStatisticsModel
 } from '../../api';
@@ -56,6 +55,10 @@ export default function TableColumnsBody({
     (state: IRootState) => state.job || {}
   );
   const dispatch = useDispatch();
+  const [jobId, setJobId] = useState<number>();
+
+  const job = jobId ? job_dictionary_state[jobId] : undefined;
+
   const collectStatistics = async (
     statistics: TableColumnsStatisticsModel,
     hashValue?: number
@@ -69,7 +72,7 @@ export default function TableColumnsBody({
               undefined,
               statistics?.column_statistics?.at(index)
                 ?.collect_column_statistics_job_template
-            )
+            ).then((res) => setJobId(res.data.jobId?.jobId))
           : ''
       );
   };
@@ -101,21 +104,14 @@ export default function TableColumnsBody({
     history.push(url);
   };
 
-  const filteredJobs = Object.values(job_dictionary_state)?.filter(
-    (x) =>
-      x.jobType === DqoJobHistoryEntryModelJobTypeEnum.collect_statistics &&
-      x.parameters?.collectStatisticsParameters
-        ?.statistics_collector_search_filters?.fullTableName ===
-        schema + '.' + table &&
-      (x.status === DqoJobHistoryEntryModelStatusEnum.running ||
-        x.status === DqoJobHistoryEntryModelStatusEnum.queued ||
-        x.status === DqoJobHistoryEntryModelStatusEnum.waiting)
-  );
-  const filteredColumns = filteredJobs?.flatMap(
-    (x) =>
-      x.parameters?.collectStatisticsParameters
-        ?.statistics_collector_search_filters?.columnNames
-  );
+  const filteredColumns  = useMemo(() => {
+    return (job && (
+      job.status === DqoJobHistoryEntryModelStatusEnum.running ||
+      job.status === DqoJobHistoryEntryModelStatusEnum.queued ||
+      job.status === DqoJobHistoryEntryModelStatusEnum.waiting )) ? 
+      job.parameters?.collectStatisticsParameters
+      ?.statistics_collector_search_filters?.columnNames : [] as string[]
+    }, [job])
 
   return (
     <tbody>

@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import ColumnActionGroup from './ColumnActionGroup';
 import { useSelector } from 'react-redux';
 import {
   CheckResultsOverviewDataModel,
   ColumnStatisticsModel,
-  CheckContainerModel
+  CheckContainerModel,
+  DqoJobHistoryEntryModelStatusEnum,
+  TableStatisticsModel
 } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
@@ -16,7 +18,8 @@ import {
 import {
   CheckResultOverviewApi,
   ColumnApiClient,
-  JobApiClient
+  JobApiClient,
+  TableApiClient
 } from '../../services/apiClient';
 import {
   getFirstLevelActiveTab,
@@ -56,23 +59,19 @@ const ColumnProfilingChecksView = ({
   columnName
 }: IProfilingViewProps) => {
   const { checkTypes, tab }: { checkTypes: CheckTypes, tab: string } = useParams();
-  const { checksUI, isUpdating, isUpdatedChecksUi, loading } = useSelector(
-    getFirstLevelState(checkTypes)
-  );
+  const { checksUI, isUpdating, isUpdatedChecksUi, loading } = useSelector(getFirstLevelState(checkTypes));
+  const activeTab = getSecondLevelTab(checkTypes, tab);
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
   );
   const dispatch = useActionDispatch();
-  const [checkResultsOverview, setCheckResultsOverview] = useState<
-    CheckResultsOverviewDataModel[]
-  >([]);
-  const activeTab = getSecondLevelTab(checkTypes, tab);
-  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
-  const [loadingJob, setLoadingJob] = useState(false);
-  const [statistics, setStatistics] = useState<ColumnStatisticsModel>();
+  const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
+  const [columnStatistics, setColumnStatistics] = useState<ColumnStatisticsModel>();
+  const [tableStatistics, setTableStatistics] = useState<TableStatisticsModel>();
   const [jobId, setJobId] = useState<number>();
+  
   const job = jobId ? job_dictionary_state[jobId] : undefined;
-  const [collectedStatisticsIndicator, setCollectedSatisticsIndicator] = useState(false)
 
   const history = useHistory();
 
@@ -94,11 +93,21 @@ const ColumnProfilingChecksView = ({
       tableName,
       columnName
     ).then((res) => {
-      setStatistics(res.data);
+      setColumnStatistics(res.data);
     });
   };
 
+  const getTableStatistics = async () => {
+    try {
+      await TableApiClient.getTableStatistics(connectionName, schemaName, tableName)
+      .then((res) => setTableStatistics(res.data))
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  
   useEffect(() => {
+    getTableStatistics();
     getColumnStatistics();
   }, [
     checkTypes,
@@ -162,25 +171,27 @@ const ColumnProfilingChecksView = ({
   };
 
   const onCollectStatistics = async () => {
-    try {
-      setLoadingJob(true);
-      const res = await JobApiClient.collectStatisticsOnTable(
-        undefined,
-        false,
-        undefined,
-        statistics?.collect_column_statistics_job_template
-      );
-      setJobId(res.data.jobId?.jobId)
-    } finally {
-      setLoadingJob(false);
-    }
+    await JobApiClient.collectStatisticsOnTable(
+      undefined,
+      false,
+      undefined,
+      columnStatistics?.collect_column_statistics_job_template
+    ).then((res) => setJobId(res.data.jobId?.jobId))
   };
 
+  const filteredCollectStatisticsJobs = useMemo(() => {
+    return (job && (
+      job.status === DqoJobHistoryEntryModelStatusEnum.running ||
+      job.status === DqoJobHistoryEntryModelStatusEnum.queued ||
+      job.status === DqoJobHistoryEntryModelStatusEnum.waiting ))
+    }, [job])
+
   useEffect(() => {
-    if(job && job.status === "succeeded") {
-      setCollectedSatisticsIndicator((prevState) => !prevState)
+    if (job && job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded) {
+      getColumnStatistics()
+      getTableStatistics()
     }
-  },[job_dictionary_state])
+  }, [job]);
 
   const onChangeTab = (tab: string) => {
     dispatch(
@@ -219,10 +230,10 @@ const ColumnProfilingChecksView = ({
         isUpdating={isUpdating}
         isStatistics={activeTab === 'statistics'}
         onCollectStatistics={onCollectStatistics}
-        runningStatistics={loadingJob}
+        collectStatisticsSpinner = {filteredCollectStatisticsJobs}
       />
       <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} className='w-full h-12 overflow-hidden max-w-full'/>
-      {activeTab === 'statistics' && <ColumnStatisticsView statisticsCollectedIndicator={collectedStatisticsIndicator}/>}
+      {activeTab === 'statistics' && <ColumnStatisticsView columnStatisticsProp = {columnStatistics} tableStatisticsProp = {tableStatistics} />}
       {activeTab === 'advanced' && (
         <DataQualityChecks
           onUpdate={onUpdate}
