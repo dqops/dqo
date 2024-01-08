@@ -30,7 +30,7 @@ import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.column.patterns.ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpec;
-import com.dqops.sensors.column.strings.StringsBuiltInDateFormats;
+import com.dqops.sensors.column.text.TextBuiltInDateFormats;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -57,7 +57,7 @@ public class PostgresqlColumnPatternsTextMatchingDatePatternPercentSensorParamet
 
     @Test
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
-        this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "date", this.checkSpec);
 
@@ -71,7 +71,7 @@ public class PostgresqlColumnPatternsTextMatchingDatePatternPercentSensorParamet
 
     @Test
     void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
-        this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.daily);
 
@@ -85,7 +85,7 @@ public class PostgresqlColumnPatternsTextMatchingDatePatternPercentSensorParamet
 
     @Test
     void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
-        this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.monthly);
 
@@ -99,7 +99,7 @@ public class PostgresqlColumnPatternsTextMatchingDatePatternPercentSensorParamet
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
-        this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.daily,"date");
 
@@ -113,7 +113,7 @@ public class PostgresqlColumnPatternsTextMatchingDatePatternPercentSensorParamet
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
-        this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.monthly,"date");
 

@@ -29,7 +29,7 @@ import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.column.patterns.ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpec;
-import com.dqops.sensors.column.strings.StringsBuiltInDateFormats;
+import com.dqops.sensors.column.text.TextBuiltInDateFormats;
 import com.dqops.databricks.BaseDatabricksIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,7 +57,7 @@ public class DatabricksColumnPatternsTextNotMatchingDatePatternCountSensorParame
 
     @Test
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
-        this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "date_iso", this.checkSpec);
 
@@ -71,7 +71,7 @@ public class DatabricksColumnPatternsTextNotMatchingDatePatternCountSensorParame
 
     @Test
     void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
-        this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "date_iso", this.checkSpec, CheckTimeScale.daily);
 
@@ -85,7 +85,7 @@ public class DatabricksColumnPatternsTextNotMatchingDatePatternCountSensorParame
 
     @Test
     void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
-        this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "date_iso", this.checkSpec, CheckTimeScale.monthly);
 
@@ -99,7 +99,7 @@ public class DatabricksColumnPatternsTextNotMatchingDatePatternCountSensorParame
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
-        this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "date_iso", this.checkSpec, CheckTimeScale.daily,"date");
 
@@ -113,7 +113,7 @@ public class DatabricksColumnPatternsTextNotMatchingDatePatternCountSensorParame
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
-        this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "date_iso", this.checkSpec, CheckTimeScale.monthly,"date");
 

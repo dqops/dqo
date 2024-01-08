@@ -31,8 +31,8 @@ import com.dqops.rules.RuleTimeWindowSettingsSpec;
 import com.dqops.rules.averages.PercentMovingAverageRuleParametersSpec;
 import com.dqops.rules.comparison.MinCountRule0ParametersSpec;
 import com.dqops.sensors.column.acceptedvalues.ColumnNumericExpectedNumbersInUseCountSensorParametersSpec;
-import com.dqops.sensors.column.strings.ColumnStringsStringLengthInRangePercentSensorParametersSpec;
-import com.dqops.sensors.column.strings.StringsBuiltInDateFormats;
+import com.dqops.sensors.column.text.ColumnStringsStringLengthInRangePercentSensorParametersSpec;
+import com.dqops.sensors.column.text.TextBuiltInDateFormats;
 import com.dqops.sensors.column.datetime.ColumnDatetimeValueInRangeDatePercentSensorParametersSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -124,9 +124,9 @@ public class ReflectionServiceImplTests extends BaseTest {
 
     @Test
     void createEnumValue_whenEnumFieldGivenWithPropertyName_thenReturnsEnumInfo() {
-        EnumValueInfo enumValue = this.sut.createEnumValue(StringsBuiltInDateFormats.ISO8601);
+        EnumValueInfo enumValue = this.sut.createEnumValue(TextBuiltInDateFormats.ISO8601);
         Assertions.assertNotNull(enumValue);
-        Assertions.assertSame(StringsBuiltInDateFormats.ISO8601, enumValue.getEnumInstance());
+        Assertions.assertSame(TextBuiltInDateFormats.ISO8601, enumValue.getEnumInstance());
         Assertions.assertEquals("ISO8601", enumValue.getJavaName());
         Assertions.assertEquals("YYYY-MM-DD", enumValue.getYamlName());
         Assertions.assertEquals("YYYY-MM-DD", enumValue.getDisplayName());

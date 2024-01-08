@@ -19,10 +19,10 @@ import com.dqops.BaseTest;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.column.checkspecs.numeric.ColumnNegativeCountCheckSpec;
-import com.dqops.checks.column.checkspecs.strings.ColumnStringLengthAboveMaxLengthCountCheckSpec;
+import com.dqops.checks.column.checkspecs.text.ColumnTextLengthAboveMaxLengthCountCheckSpec;
 import com.dqops.checks.column.profiling.ColumnNumericProfilingChecksSpec;
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
-import com.dqops.checks.column.profiling.ColumnStringsProfilingChecksSpec;
+import com.dqops.checks.column.profiling.ColumnTextProfilingChecksSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
@@ -146,8 +146,8 @@ public class SchemasControllerUTTests extends BaseTest {
         table2.getSpec().setProfilingChecks(t2categoriesSpec);
 
         ColumnProfilingCheckCategoriesSpec col21categoriesSpec = new ColumnProfilingCheckCategoriesSpec();
-        ColumnStringsProfilingChecksSpec col21stringChecksSpec = new ColumnStringsProfilingChecksSpec();
-        ColumnStringLengthAboveMaxLengthCountCheckSpec col21stringLengthAboveCheckSpec = new ColumnStringLengthAboveMaxLengthCountCheckSpec();
+        ColumnTextProfilingChecksSpec col21stringChecksSpec = new ColumnTextProfilingChecksSpec();
+        ColumnTextLengthAboveMaxLengthCountCheckSpec col21stringLengthAboveCheckSpec = new ColumnTextLengthAboveMaxLengthCountCheckSpec();
         MaxCountRule0ErrorParametersSpec countRule0ParametersSpec = new MaxCountRule0ErrorParametersSpec();
         countRule0ParametersSpec.setMaxCount(40L);
         MaxCountRule100ParametersSpec countRule0ParametersSpec1 = new MaxCountRule100ParametersSpec();
@@ -155,7 +155,7 @@ public class SchemasControllerUTTests extends BaseTest {
         col21stringLengthAboveCheckSpec.setError(countRule0ParametersSpec);
         col21stringLengthAboveCheckSpec.setFatal(countRule0ParametersSpec1);
         col21stringChecksSpec.setProfileStringLengthAboveMaxLengthCount(col21stringLengthAboveCheckSpec);
-        col21categoriesSpec.setStrings(col21stringChecksSpec);
+        col21categoriesSpec.setText(col21stringChecksSpec);
         col21.setProfilingChecks(col21categoriesSpec);
 
         ColumnProfilingCheckCategoriesSpec col23categoriesSpec = new ColumnProfilingCheckCategoriesSpec();

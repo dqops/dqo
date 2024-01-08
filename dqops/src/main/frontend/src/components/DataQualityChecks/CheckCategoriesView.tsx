@@ -112,10 +112,11 @@ const CheckCategoriesView = ({
                   />
                 )}
                 { 
-                  category.category === 'pii' ? 
-                    category.category.toUpperCase() :
-                      (category.category === 'custom_sql') ? "Custom SQL" :
-                       category.category?.replace(/_/g, ' ').replace(/^\w/, (c) => c.toUpperCase())
+                  category.category === 'pii' ? 'PII' :
+                  category.category === 'custom_sql' ? "Custom SQL" :
+                  category.category === 'datatype' ? "Detected data type" :
+                  category.category === 'datetime' ? "Date and time" :
+                    category.category?.replace(/_/g, ' ').replace(/^\w/, (c) => c.toUpperCase())
                 }
               </div>
             </div>

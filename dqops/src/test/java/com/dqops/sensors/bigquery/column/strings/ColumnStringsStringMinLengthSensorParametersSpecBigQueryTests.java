@@ -17,7 +17,7 @@ package com.dqops.sensors.bigquery.column.strings;
 
 import com.dqops.BaseTest;
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.column.checkspecs.strings.ColumnStringMinLengthCheckSpec;
+import com.dqops.checks.column.checkspecs.text.ColumnTextMinLengthCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -33,7 +33,7 @@ import com.dqops.metadata.timeseries.TimeSeriesMode;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
-import com.dqops.sensors.column.strings.ColumnStringsStringMinLengthSensorParametersSpec;
+import com.dqops.sensors.column.text.ColumnStringsStringMinLengthSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,7 +43,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class ColumnStringsStringMinLengthSensorParametersSpecBigQueryTests extends BaseTest {
     private ColumnStringsStringMinLengthSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnStringMinLengthCheckSpec checkSpec;
+    private ColumnTextMinLengthCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -53,7 +53,7 @@ public class ColumnStringsStringMinLengthSensorParametersSpecBigQueryTests exten
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new ColumnStringMinLengthCheckSpec();
+        this.checkSpec = new ColumnTextMinLengthCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

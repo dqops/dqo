@@ -17,7 +17,7 @@ package com.dqops.sensors.bigquery.column.strings;
 
 import com.dqops.BaseTest;
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.column.checkspecs.strings.ColumnStringSurroundedByWhitespacePercentCheckSpec;
+import com.dqops.checks.column.checkspecs.text.ColumnTextSurroundedByWhitespacePercentCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -33,7 +33,7 @@ import com.dqops.metadata.timeseries.TimeSeriesMode;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
-import com.dqops.sensors.column.strings.ColumnStringsStringSurroundedByWhitespacePercentSensorParametersSpec;
+import com.dqops.sensors.column.text.ColumnStringsStringSurroundedByWhitespacePercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,7 +43,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class ColumnStringsStringSurroundedByWhitespacePercentSensorParametersSpecBigQueryTests extends BaseTest {
     private ColumnStringsStringSurroundedByWhitespacePercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnStringSurroundedByWhitespacePercentCheckSpec checkSpec;
+    private ColumnTextSurroundedByWhitespacePercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -53,7 +53,7 @@ public class ColumnStringsStringSurroundedByWhitespacePercentSensorParametersSpe
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new ColumnStringSurroundedByWhitespacePercentCheckSpec();
+        this.checkSpec = new ColumnTextSurroundedByWhitespacePercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

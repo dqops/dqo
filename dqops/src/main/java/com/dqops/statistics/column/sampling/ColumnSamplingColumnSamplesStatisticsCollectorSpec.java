@@ -19,7 +19,6 @@ import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.sensors.column.sampling.ColumnSamplingColumnSamplesSensorParametersSpec;
-import com.dqops.sensors.column.strings.ColumnStringsStringMaxLengthSensorParametersSpec;
 import com.dqops.statistics.AbstractStatisticsCollectorSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;

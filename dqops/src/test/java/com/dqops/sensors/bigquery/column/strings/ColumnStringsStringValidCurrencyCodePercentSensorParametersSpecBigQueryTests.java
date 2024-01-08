@@ -17,7 +17,7 @@ package com.dqops.sensors.bigquery.column.strings;
 
 import com.dqops.BaseTest;
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.column.checkspecs.strings.ColumnStringValidCurrencyCodePercentCheckSpec;
+import com.dqops.checks.column.checkspecs.text.ColumnTextValidCurrencyCodePercentCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -33,7 +33,7 @@ import com.dqops.metadata.timeseries.TimeSeriesMode;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
-import com.dqops.sensors.column.strings.ColumnStringsStringValidCurrencyCodePercentSensorParametersSpec;
+import com.dqops.sensors.column.text.ColumnStringsStringValidCurrencyCodePercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,7 +44,7 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
     private ColumnStringsStringValidCurrencyCodePercentSensorParametersSpec sut;
     private final String valuesString = "'ALL',\t'AFN',\t'ARS',\t'AWG',\t'AUD',\t'AZN',\t'BSD',\t'BBD',\t'BYN',\t'BZD',\t'BMD',\t'BOB',\t'BAM',\t'BWP',\t'BGN',\t'BRL',\t'BND',\t'KHR',\t'CAD',\t'KYD',\t'CLP',\t'CNY',\t'COP',\t'CRC',\t'HRK',\t'CUP',\t'CZK',\t'DKK',\t'DOP',\t'XCD',\t'EGP',\t'SVC',\t'EUR',\t'FKP',\t'FJD',\t'GHS',\t'GIP',\t'GTQ',\t'GGP',\t'GYD',\t'HNL',\t'HKD',\t'HUF',\t'ISK',\t'INR',\t'IDR',\t'IRR',\t'IMP',\t'ILS',\t'JMD',\t'JPY',\t'JEP',\t'KZT',\t'KPW',\t'KRW',\t'KGS',\t'LAK',\t'LBP',\t'LRD',\t'MKD',\t'MYR',\t'MUR',\t'MXN',\t'MNT',\t'MZN',\t'NAD',\t'NPR',\t'ANG',\t'NZD',\t'NIO',\t'NGN',\t'NOK',\t'OMR',\t'PKR',\t'PAB',\t'PYG',\t'PEN',\t'PHP',\t'PLN',\t'QAR',\t'RON',\t'RUB',\t'SHP',\t'SAR',\t'RSD',\t'SCR',\t'SGD',\t'SBD',\t'SOS',\t'ZAR',\t'LKR',\t'SEK',\t'CHF',\t'SRD',\t'SYP',\t'TWD',\t'THB',\t'TTD',\t'TRY',\t'TVD',\t'UAH',\t'AED',\t'GBP',\t'USD',\t'UYU',\t'UZS',\t'VEF',\t'VND',\t'YER',\t'ZWD',\t'LEK',\t'؋',\t'$',\t'Ƒ',\t'₼',\t'BR',\t'BZ$',\t'$B',\t'KM',\t'P',\t'ЛВ',\t'R$',\t'៛',\t'¥',\t'₡',\t'KN',\t'₱',\t'KČ',\t'KR',\t'RD$', '£',\t'€',\t'¢',\t'Q',\t'L',\t'FT',\t'₹',\t'RP',\t'﷼',\t'₪',\t'J$',\t'₩',\t'₭',\t'ДЕН',\t'RM',\t'₨',\t'₮',\t'د.إ',\t'MT',\t'C$',\t'₦',\t'B/.',\t'GS',\t'S/.', 'ZŁ',\t'LEI',\t'ДИН.',\t'S',\t'R',\t'NT$',\t'฿',\t'TT$',\t'₺',\t'₴',\t'$U',\t'BS',\t'₫', 'Z$'";
     private UserHomeContext userHomeContext;
-    private ColumnStringValidCurrencyCodePercentCheckSpec checkSpec;
+    private ColumnTextValidCurrencyCodePercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -54,7 +54,7 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new ColumnStringValidCurrencyCodePercentCheckSpec();
+        this.checkSpec = new ColumnTextValidCurrencyCodePercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

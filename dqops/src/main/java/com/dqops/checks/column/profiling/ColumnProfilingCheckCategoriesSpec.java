@@ -36,7 +36,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Container of column level, preconfigured checks.
+ * Container of column level, preconfigured profiling checks.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -45,20 +45,20 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
     public static final ChildHierarchyNodeFieldMapImpl<ColumnProfilingCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
             put("nulls", o -> o.nulls);
-            put("blanks", o -> o.blanks);
-            put("numeric", o -> o.numeric);
-            put("strings", o -> o.strings);
-            put("patterns", o -> o.patterns);
-			put("uniqueness", o -> o.uniqueness);
+            put("uniqueness", o -> o.uniqueness);
             put("accepted_values", o -> o.acceptedValues);
-            put("datetime", o -> o.datetime);
+            put("text", o -> o.text);
+            put("blanks", o -> o.blanks);
+            put("patterns", o -> o.patterns);
             put("pii", o -> o.pii);
-            put("custom_sql", o -> o.customSql);
+            put("numeric", o -> o.numeric);
+            put("anomaly", o -> o.anomaly);
+            put("datetime", o -> o.datetime);
             put("bool", o -> o.bool);
             put("integrity", o -> o.integrity);
             put("accuracy", o -> o.accuracy);
+            put("custom_sql", o -> o.customSql);
             put("datatype", o -> o.datatype);
-            put("anomaly", o -> o.anomaly);
             put("schema", o -> o.schema);
             put("comparisons", o -> o.comparisons);
         }
@@ -68,26 +68,6 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNullsProfilingChecksSpec nulls;
-
-    @JsonPropertyDescription("Configuration of column level checks that detect blank and whitespace values.")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnBlanksProfilingChecksSpec blanks;
-
-    @JsonPropertyDescription("Configuration of column level checks that verify numeric values.")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNumericProfilingChecksSpec numeric;
-
-    @JsonPropertyDescription("Configuration of strings checks on a column level.")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsProfilingChecksSpec strings;
-
-    @JsonPropertyDescription("Configuration of pattern match checks on a column level.")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnPatternsProfilingChecksSpec patterns;
 
     @JsonPropertyDescription("Configuration of uniqueness checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -99,20 +79,40 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnAcceptedValuesProfilingChecksSpec acceptedValues;
 
-    @JsonPropertyDescription("Configuration of datetime checks on a column level.")
+    @JsonPropertyDescription("Configuration of column level checks that verify text values.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnDatetimeProfilingChecksSpec datetime;
+    private ColumnTextProfilingChecksSpec text;
+
+    @JsonPropertyDescription("Configuration of column level checks that detect blank and whitespace values.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnBlanksProfilingChecksSpec blanks;
+
+    @JsonPropertyDescription("Configuration of pattern match checks on a column level.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnPatternsProfilingChecksSpec patterns;
 
     @JsonPropertyDescription("Configuration of Personal Identifiable Information (PII) checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnPiiProfilingChecksSpec pii;
 
-    @JsonPropertyDescription("Configuration of SQL checks that use custom SQL aggregated expressions and SQL conditions in data quality checks.")
+    @JsonPropertyDescription("Configuration of column level checks that verify numeric values.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnCustomSqlProfilingChecksSpec customSql;
+    private ColumnNumericProfilingChecksSpec numeric;
+
+    @JsonPropertyDescription("Configuration of anomaly checks on a column level that detect anomalies in numeric columns.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnAnomalyProfilingChecksSpec anomaly;
+
+    @JsonPropertyDescription("Configuration of datetime checks on a column level.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnDatetimeProfilingChecksSpec datetime;
 
     @JsonPropertyDescription("Configuration of booleans checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -129,15 +129,15 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnAccuracyProfilingChecksSpec accuracy;
 
+    @JsonPropertyDescription("Configuration of SQL checks that use custom SQL aggregated expressions and SQL conditions in data quality checks.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnCustomSqlProfilingChecksSpec customSql;
+
     @JsonPropertyDescription("Configuration of datatype checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnDatatypeProfilingChecksSpec datatype;
-
-    @JsonPropertyDescription("Configuration of anomaly checks on a column level.")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnAnomalyProfilingChecksSpec anomaly;
 
     @JsonPropertyDescription("Configuration of schema checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -165,78 +165,6 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
         this.setDirtyIf(!Objects.equals(this.nulls, nulls));
         this.nulls = nulls;
         this.propagateHierarchyIdToField(nulls, "nulls");
-    }
-
-    /**
-     * Returns the blanks check configuration on a column level.
-     * @return Blanks check configuration.
-     */
-    public ColumnBlanksProfilingChecksSpec getBlanks() {
-        return blanks;
-    }
-
-    /**
-     * Sets the blanks check configuration on a column level.
-     * @param blanks New blanks checks configuration.
-     */
-    public void setBlanks(ColumnBlanksProfilingChecksSpec blanks) {
-        this.setDirtyIf(!Objects.equals(this.blanks, blanks));
-        this.blanks = blanks;
-        this.propagateHierarchyIdToField(blanks, "blanks");
-    }
-
-    /**
-     * Returns the negative values check configuration on a column level.
-     * @return Negative values check configuration.
-     */
-    public ColumnNumericProfilingChecksSpec getNumeric() {
-        return numeric;
-    }
-
-    /**
-     * Sets the negative values check configuration on a column level.
-     * @param numeric New negative values checks configuration.
-     */
-    public void setNumeric(ColumnNumericProfilingChecksSpec numeric) {
-        this.setDirtyIf(!Objects.equals(this.numeric, numeric));
-        this.numeric = numeric;
-        this.propagateHierarchyIdToField(numeric, "numeric");
-    }
-
-    /**
-     * Returns the strings check configuration on a column level.
-     * @return Strings check configuration.
-     */
-    public ColumnStringsProfilingChecksSpec getStrings() {
-        return strings;
-    }
-
-    /**
-     * Sets the string check configuration on a column level.
-     * @param strings New string checks configuration.
-     */
-    public void setStrings(ColumnStringsProfilingChecksSpec strings) {
-        this.setDirtyIf(!Objects.equals(this.strings, strings));
-        this.strings = strings;
-        this.propagateHierarchyIdToField(strings, "strings");
-    }
-
-    /**
-     * Returns the pattern match check configuration on a column level.
-     * @return Pattern match check configuration.
-     */
-    public ColumnPatternsProfilingChecksSpec getPatterns() {
-        return patterns;
-    }
-
-    /**
-     * Sets the pattern match check configuration on a column level.
-     * @param patterns New pattern match checks configuration.
-     */
-    public void setPatterns(ColumnPatternsProfilingChecksSpec patterns) {
-        this.setDirtyIf(!Objects.equals(this.patterns, patterns));
-        this.patterns = patterns;
-        this.propagateHierarchyIdToField(patterns, "patterns");
     }
 
     /**
@@ -276,21 +204,57 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
     }
 
     /**
-     * Returns the datetime check configuration on a column level.
-     * @return Datetime check configuration.
+     * Returns the strings check configuration on a column level.
+     * @return Strings check configuration.
      */
-    public ColumnDatetimeProfilingChecksSpec getDatetime() {
-        return datetime;
+    public ColumnTextProfilingChecksSpec getText() {
+        return text;
     }
 
     /**
-     * Sets the datetime check configuration on a column level.
-     * @param datetime New datetime checks configuration.
+     * Sets the string check configuration on a column level.
+     * @param text New string checks configuration.
      */
-    public void setDatetime(ColumnDatetimeProfilingChecksSpec datetime) {
-        this.setDirtyIf(!Objects.equals(this.datetime, datetime));
-        this.datetime = datetime;
-        this.propagateHierarchyIdToField(datetime, "datetime");
+    public void setText(ColumnTextProfilingChecksSpec text) {
+        this.setDirtyIf(!Objects.equals(this.text, text));
+        this.text = text;
+        this.propagateHierarchyIdToField(text, "text");
+    }
+
+    /**
+     * Returns the blanks check configuration on a column level.
+     * @return Blanks check configuration.
+     */
+    public ColumnBlanksProfilingChecksSpec getBlanks() {
+        return blanks;
+    }
+
+    /**
+     * Sets the blanks check configuration on a column level.
+     * @param blanks New blanks checks configuration.
+     */
+    public void setBlanks(ColumnBlanksProfilingChecksSpec blanks) {
+        this.setDirtyIf(!Objects.equals(this.blanks, blanks));
+        this.blanks = blanks;
+        this.propagateHierarchyIdToField(blanks, "blanks");
+    }
+
+    /**
+     * Returns the pattern match check configuration on a column level.
+     * @return Pattern match check configuration.
+     */
+    public ColumnPatternsProfilingChecksSpec getPatterns() {
+        return patterns;
+    }
+
+    /**
+     * Sets the pattern match check configuration on a column level.
+     * @param patterns New pattern match checks configuration.
+     */
+    public void setPatterns(ColumnPatternsProfilingChecksSpec patterns) {
+        this.setDirtyIf(!Objects.equals(this.patterns, patterns));
+        this.patterns = patterns;
+        this.propagateHierarchyIdToField(patterns, "patterns");
     }
 
     /**
@@ -312,21 +276,57 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
     }
 
     /**
-     * Returns the configuration of custom SQL checks.
-     * @return Configuration of custom sql checks.
+     * Returns the negative values check configuration on a column level.
+     * @return Negative values check configuration.
      */
-    public ColumnCustomSqlProfilingChecksSpec getCustomSql() {
-        return customSql;
+    public ColumnNumericProfilingChecksSpec getNumeric() {
+        return numeric;
     }
 
     /**
-     * Sets a reference to the configuration of custom SQL checks.
-     * @param customSql Custom sql checks.
+     * Sets the negative values check configuration on a column level.
+     * @param numeric New negative values checks configuration.
      */
-    public void setCustomSql(ColumnCustomSqlProfilingChecksSpec customSql) {
-        this.setDirtyIf(!Objects.equals(this.customSql, customSql));
-        this.customSql = customSql;
-        this.propagateHierarchyIdToField(customSql, "custom_sql");
+    public void setNumeric(ColumnNumericProfilingChecksSpec numeric) {
+        this.setDirtyIf(!Objects.equals(this.numeric, numeric));
+        this.numeric = numeric;
+        this.propagateHierarchyIdToField(numeric, "numeric");
+    }
+
+    /**
+     * Returns the anomaly check configuration on a column level.
+     * @return Anomaly check configuration.
+     */
+    public ColumnAnomalyProfilingChecksSpec getAnomaly() {
+        return anomaly;
+    }
+
+    /**
+     * Sets the anomaly check configuration on a column level.
+     * @param anomaly New anomaly checks configuration.
+     */
+    public void setAnomaly(ColumnAnomalyProfilingChecksSpec anomaly) {
+        this.setDirtyIf(!Objects.equals(this.anomaly, anomaly));
+        this.anomaly = anomaly;
+        this.propagateHierarchyIdToField(anomaly, "anomaly");
+    }
+
+    /**
+     * Returns the datetime check configuration on a column level.
+     * @return Datetime check configuration.
+     */
+    public ColumnDatetimeProfilingChecksSpec getDatetime() {
+        return datetime;
+    }
+
+    /**
+     * Sets the datetime check configuration on a column level.
+     * @param datetime New datetime checks configuration.
+     */
+    public void setDatetime(ColumnDatetimeProfilingChecksSpec datetime) {
+        this.setDirtyIf(!Objects.equals(this.datetime, datetime));
+        this.datetime = datetime;
+        this.propagateHierarchyIdToField(datetime, "datetime");
     }
 
     /**
@@ -384,6 +384,24 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
     }
 
     /**
+     * Returns the configuration of custom SQL checks.
+     * @return Configuration of custom sql checks.
+     */
+    public ColumnCustomSqlProfilingChecksSpec getCustomSql() {
+        return customSql;
+    }
+
+    /**
+     * Sets a reference to the configuration of custom SQL checks.
+     * @param customSql Custom sql checks.
+     */
+    public void setCustomSql(ColumnCustomSqlProfilingChecksSpec customSql) {
+        this.setDirtyIf(!Objects.equals(this.customSql, customSql));
+        this.customSql = customSql;
+        this.propagateHierarchyIdToField(customSql, "custom_sql");
+    }
+
+    /**
      * Returns the datatype check configuration on a column level.
      * @return Datatype check configuration.
      */
@@ -399,24 +417,6 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
         this.setDirtyIf(!Objects.equals(this.datatype, datatype));
         this.datatype = datatype;
         this.propagateHierarchyIdToField(datatype, "datatype");
-    }
-
-    /**
-     * Returns the anomaly check configuration on a column level.
-     * @return Anomaly check configuration.
-     */
-    public ColumnAnomalyProfilingChecksSpec getAnomaly() {
-        return anomaly;
-    }
-
-    /**
-     * Sets the anomaly check configuration on a column level.
-     * @param anomaly New anomaly checks configuration.
-     */
-    public void setAnomaly(ColumnAnomalyProfilingChecksSpec anomaly) {
-        this.setDirtyIf(!Objects.equals(this.anomaly, anomaly));
-        this.anomaly = anomaly;
-        this.propagateHierarchyIdToField(anomaly, "anomaly");
     }
 
     /**

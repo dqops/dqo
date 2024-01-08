@@ -18,7 +18,7 @@ package com.dqops.sensors.column.patterns;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.sensors.AbstractSensorParametersSpec;
-import com.dqops.sensors.column.strings.StringsBuiltInDateFormats;
+import com.dqops.sensors.column.text.TextBuiltInDateFormats;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -39,13 +39,13 @@ public class ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpec e
     };
 
     @JsonPropertyDescription("Desired date format. Sensor will try to parse the column records and cast the data using this format.")
-    private StringsBuiltInDateFormats dateFormats = StringsBuiltInDateFormats.ISO8601;
+    private TextBuiltInDateFormats dateFormats = TextBuiltInDateFormats.ISO8601;
 
     /**
      * Returns a desired format to parse the date.
      * @return Date format.
      */
-    public StringsBuiltInDateFormats getDateFormats() {
+    public TextBuiltInDateFormats getDateFormats() {
         return dateFormats;
     }
 
@@ -53,7 +53,7 @@ public class ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpec e
      * Sets a desired format to parse the date.
      * @param dateFormats Date format.
      */
-    public void setDateFormats(StringsBuiltInDateFormats dateFormats) {
+    public void setDateFormats(TextBuiltInDateFormats dateFormats) {
         this.setDirtyIf(this.dateFormats != dateFormats);
         this.dateFormats = dateFormats;
     }

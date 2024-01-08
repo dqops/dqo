@@ -34,7 +34,7 @@ import com.dqops.checks.column.monitoring.patterns.ColumnPatternsDailyMonitoring
 import com.dqops.checks.column.monitoring.pii.ColumnPiiDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.schema.ColumnSchemaDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.customsql.ColumnCustomSqlDailyMonitoringChecksSpec;
-import com.dqops.checks.column.monitoring.strings.ColumnStringsDailyMonitoringChecksSpec;
+import com.dqops.checks.column.monitoring.text.ColumnTextDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.uniqueness.ColumnUniquenessDailyMonitoringChecksSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -65,20 +65,20 @@ public class ColumnDailyMonitoringCheckCategoriesSpec extends AbstractRootChecks
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDailyMonitoringCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
             put("nulls", o -> o.nulls);
-            put("blanks", o -> o.blanks);
-            put("numeric", o -> o.numeric);
-            put("strings", o -> o.strings);
-            put("patterns", o -> o.patterns);
             put("uniqueness", o -> o.uniqueness);
             put("accepted_values", o -> o.acceptedValues);
-            put("datetime", o -> o.datetime);
+            put("text", o -> o.text);
+            put("blanks", o -> o.blanks);
+            put("patterns", o -> o.patterns);
             put("pii", o -> o.pii);
-            put("custom_sql", o -> o.customSql);
+            put("numeric", o -> o.numeric);
+            put("anomaly", o -> o.anomaly);
+            put("datetime", o -> o.datetime);
             put("bool", o -> o.bool);
             put("integrity", o -> o.integrity);
             put("accuracy", o -> o.accuracy);
+            put("custom_sql", o -> o.customSql);
             put("datatype", o -> o.datatype);
-            put("anomaly", o -> o.anomaly);
             put("schema", o -> o.schema);
             put("comparisons", o -> o.comparisons);
         }
@@ -89,50 +89,50 @@ public class ColumnDailyMonitoringCheckCategoriesSpec extends AbstractRootChecks
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNullsDailyMonitoringChecksSpec nulls;
 
-    @JsonPropertyDescription("Configuration of column level checks that detect blank and whitespace values.")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnBlanksDailyMonitoringChecksSpec blanks;
-
-    @JsonPropertyDescription("Daily monitoring checks of numeric values in the column")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNumericDailyMonitoringChecksSpec numeric;
-
-    @JsonPropertyDescription("Daily monitoring checks of strings in the column")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsDailyMonitoringChecksSpec strings;
-
-    @JsonPropertyDescription("Daily monitoring checks of pattern matching on a column level.")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnPatternsDailyMonitoringChecksSpec patterns;
-
     @JsonPropertyDescription("Daily monitoring checks of uniqueness in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnUniquenessDailyMonitoringChecksSpec uniqueness;
 
-    @JsonPropertyDescription("Configuration of accepted values checks on a column level.")
+    @JsonPropertyDescription("Configuration of accepted values checks on a column level")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnAcceptedValuesDailyMonitoringChecksSpec acceptedValues;
 
-    @JsonPropertyDescription("Daily monitoring checks of datetime in the column")
+    @JsonPropertyDescription("Daily monitoring checks of text values in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnDatetimeDailyMonitoringChecksSpec datetime;
+    private ColumnTextDailyMonitoringChecksSpec text;
+
+    @JsonPropertyDescription("Configuration of column level checks that detect blank and whitespace values")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnBlanksDailyMonitoringChecksSpec blanks;
+
+    @JsonPropertyDescription("Daily monitoring checks of pattern matching on a column level")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnPatternsDailyMonitoringChecksSpec patterns;
 
     @JsonPropertyDescription("Daily monitoring checks of Personal Identifiable Information (PII) in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnPiiDailyMonitoringChecksSpec pii;
 
-    @JsonPropertyDescription("Daily monitoring checks of custom SQL checks in the column")
+    @JsonPropertyDescription("Daily monitoring checks of numeric values in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnCustomSqlDailyMonitoringChecksSpec customSql;
+    private ColumnNumericDailyMonitoringChecksSpec numeric;
+
+    @JsonPropertyDescription("Daily monitoring checks of anomalies in numeric columns")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnAnomalyDailyMonitoringChecksSpec anomaly;
+
+    @JsonPropertyDescription("Daily monitoring checks of datetime in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnDatetimeDailyMonitoringChecksSpec datetime;
 
     @JsonPropertyDescription("Daily monitoring checks of booleans in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -149,15 +149,15 @@ public class ColumnDailyMonitoringCheckCategoriesSpec extends AbstractRootChecks
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnAccuracyDailyMonitoringChecksSpec accuracy;
 
+    @JsonPropertyDescription("Daily monitoring checks of custom SQL checks in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnCustomSqlDailyMonitoringChecksSpec customSql;
+
     @JsonPropertyDescription("Daily monitoring checks of datatype in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnDatatypeDailyMonitoringChecksSpec datatype;
-
-    @JsonPropertyDescription("Daily monitoring checks of anomaly in the column")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnAnomalyDailyMonitoringChecksSpec anomaly;
 
     @JsonPropertyDescription("Daily monitoring column schema checks")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -168,6 +168,7 @@ public class ColumnDailyMonitoringCheckCategoriesSpec extends AbstractRootChecks
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnComparisonDailyMonitoringChecksSpecMap comparisons = new ColumnComparisonDailyMonitoringChecksSpecMap();
+
 
     /**
      * Returns the container of monitoring for standard data quality checks.
@@ -182,81 +183,9 @@ public class ColumnDailyMonitoringCheckCategoriesSpec extends AbstractRootChecks
      * @param nulls New nulls checks.
      */
     public void setNulls(ColumnNullsDailyMonitoringChecksSpec nulls) {
-		this.setDirtyIf(!Objects.equals(this.nulls, nulls));
+        this.setDirtyIf(!Objects.equals(this.nulls, nulls));
         this.nulls = nulls;
-		this.propagateHierarchyIdToField(nulls, "nulls");
-    }
-
-    /**
-     * Returns the blanks check configuration on a column level.
-     * @return Blanks check configuration.
-     */
-    public ColumnBlanksDailyMonitoringChecksSpec getBlanks() {
-        return blanks;
-    }
-
-    /**
-     * Sets the blanks check configuration on a column level.
-     * @param blanks New blanks checks configuration.
-     */
-    public void setBlanks(ColumnBlanksDailyMonitoringChecksSpec blanks) {
-        this.setDirtyIf(!Objects.equals(this.blanks, blanks));
-        this.blanks = blanks;
-        this.propagateHierarchyIdToField(blanks, "blanks");
-    }
-
-    /**
-     * Returns the container of monitoring for standard data quality checks.
-     * @return Container of row standard data quality monitoring.
-     */
-    public ColumnNumericDailyMonitoringChecksSpec getNumeric() {
-        return numeric;
-    }
-
-    /**
-     * Sets the container of numeric data quality checks (monitoring).
-     * @param numeric New numeric checks.
-     */
-    public void setNumeric(ColumnNumericDailyMonitoringChecksSpec numeric) {
-        this.setDirtyIf(!Objects.equals(this.numeric, numeric));
-        this.numeric = numeric;
-        this.propagateHierarchyIdToField(numeric, "numeric");
-    }
-
-    /**
-     * Returns the container of monitoring for standard data quality checks.
-     * @return Container of row standard data quality monitoring.
-     */
-    public ColumnStringsDailyMonitoringChecksSpec getStrings() {
-        return strings;
-    }
-
-    /**
-     * Sets the container of strings data quality checks (monitoring).
-     * @param strings New strings checks.
-     */
-    public void setStrings(ColumnStringsDailyMonitoringChecksSpec strings) {
-        this.setDirtyIf(!Objects.equals(this.strings, strings));
-        this.strings = strings;
-        this.propagateHierarchyIdToField(strings, "strings");
-    }
-
-    /**
-     * Returns the pattern match check configuration on a column level.
-     * @return Pattern match check configuration.
-     */
-    public ColumnPatternsDailyMonitoringChecksSpec getPatterns() {
-        return patterns;
-    }
-
-    /**
-     * Sets the pattern match check configuration on a column level.
-     * @param patterns New pattern match checks configuration.
-     */
-    public void setPatterns(ColumnPatternsDailyMonitoringChecksSpec patterns) {
-        this.setDirtyIf(!Objects.equals(this.patterns, patterns));
-        this.patterns = patterns;
-        this.propagateHierarchyIdToField(patterns, "patterns");
+        this.propagateHierarchyIdToField(nulls, "nulls");
     }
 
     /**
@@ -299,18 +228,54 @@ public class ColumnDailyMonitoringCheckCategoriesSpec extends AbstractRootChecks
      * Returns the container of monitoring for standard data quality checks.
      * @return Container of row standard data quality monitoring.
      */
-    public ColumnDatetimeDailyMonitoringChecksSpec getDatetime() {
-        return datetime;
+    public ColumnTextDailyMonitoringChecksSpec getText() {
+        return text;
     }
 
     /**
-     * Sets the container of datetime data quality checks (monitoring).
-     * @param datetime New datetime checks.
+     * Sets the container of strings data quality checks (monitoring).
+     * @param text New strings checks.
      */
-    public void setDatetime(ColumnDatetimeDailyMonitoringChecksSpec datetime) {
-        this.setDirtyIf(!Objects.equals(this.datetime, datetime));
-        this.datetime = datetime;
-        this.propagateHierarchyIdToField(datetime, "datetime");
+    public void setText(ColumnTextDailyMonitoringChecksSpec text) {
+        this.setDirtyIf(!Objects.equals(this.text, text));
+        this.text = text;
+        this.propagateHierarchyIdToField(text, "text");
+    }
+
+    /**
+     * Returns the blanks check configuration on a column level.
+     * @return Blanks check configuration.
+     */
+    public ColumnBlanksDailyMonitoringChecksSpec getBlanks() {
+        return blanks;
+    }
+
+    /**
+     * Sets the blanks check configuration on a column level.
+     * @param blanks New blanks checks configuration.
+     */
+    public void setBlanks(ColumnBlanksDailyMonitoringChecksSpec blanks) {
+        this.setDirtyIf(!Objects.equals(this.blanks, blanks));
+        this.blanks = blanks;
+        this.propagateHierarchyIdToField(blanks, "blanks");
+    }
+
+    /**
+     * Returns the pattern match check configuration on a column level.
+     * @return Pattern match check configuration.
+     */
+    public ColumnPatternsDailyMonitoringChecksSpec getPatterns() {
+        return patterns;
+    }
+
+    /**
+     * Sets the pattern match check configuration on a column level.
+     * @param patterns New pattern match checks configuration.
+     */
+    public void setPatterns(ColumnPatternsDailyMonitoringChecksSpec patterns) {
+        this.setDirtyIf(!Objects.equals(this.patterns, patterns));
+        this.patterns = patterns;
+        this.propagateHierarchyIdToField(patterns, "patterns");
     }
 
     /**
@@ -332,21 +297,57 @@ public class ColumnDailyMonitoringCheckCategoriesSpec extends AbstractRootChecks
     }
 
     /**
-     * Returns the container of custom SQL checks that use custom SQL expressions in checks.
-     * @return Custom SQL checks.
+     * Returns the container of monitoring for standard data quality checks.
+     * @return Container of row standard data quality monitoring.
      */
-    public ColumnCustomSqlDailyMonitoringChecksSpec getCustomSql() {
-        return customSql;
+    public ColumnNumericDailyMonitoringChecksSpec getNumeric() {
+        return numeric;
     }
 
     /**
-     * Sets a reference to a container of custom SQL checks.
-     * @param customSql Custom SQL checks.
+     * Sets the container of numeric data quality checks (monitoring).
+     * @param numeric New numeric checks.
      */
-    public void setCustomSql(ColumnCustomSqlDailyMonitoringChecksSpec customSql) {
-        this.setDirtyIf(!Objects.equals(this.customSql, customSql));
-        this.customSql = customSql;
-        this.propagateHierarchyIdToField(customSql, "custom_sql");
+    public void setNumeric(ColumnNumericDailyMonitoringChecksSpec numeric) {
+        this.setDirtyIf(!Objects.equals(this.numeric, numeric));
+        this.numeric = numeric;
+        this.propagateHierarchyIdToField(numeric, "numeric");
+    }
+
+    /**
+     * Returns the container of monitoring for standard data quality checks.
+     * @return Container of anomaly data quality monitoring.
+     */
+    public ColumnAnomalyDailyMonitoringChecksSpec getAnomaly() {
+        return anomaly;
+    }
+
+    /**
+     * Sets the container of anomaly data quality checks (monitoring).
+     * @param anomaly New anomaly checks.
+     */
+    public void setAnomaly(ColumnAnomalyDailyMonitoringChecksSpec anomaly) {
+        this.setDirtyIf(!Objects.equals(this.anomaly, anomaly));
+        this.anomaly = anomaly;
+        this.propagateHierarchyIdToField(anomaly, "anomaly");
+    }
+
+    /**
+     * Returns the container of monitoring for standard data quality checks.
+     * @return Container of row standard data quality monitoring.
+     */
+    public ColumnDatetimeDailyMonitoringChecksSpec getDatetime() {
+        return datetime;
+    }
+
+    /**
+     * Sets the container of datetime data quality checks (monitoring).
+     * @param datetime New datetime checks.
+     */
+    public void setDatetime(ColumnDatetimeDailyMonitoringChecksSpec datetime) {
+        this.setDirtyIf(!Objects.equals(this.datetime, datetime));
+        this.datetime = datetime;
+        this.propagateHierarchyIdToField(datetime, "datetime");
     }
 
     /**
@@ -404,6 +405,24 @@ public class ColumnDailyMonitoringCheckCategoriesSpec extends AbstractRootChecks
     }
 
     /**
+     * Returns the container of custom SQL checks that use custom SQL expressions in checks.
+     * @return Custom SQL checks.
+     */
+    public ColumnCustomSqlDailyMonitoringChecksSpec getCustomSql() {
+        return customSql;
+    }
+
+    /**
+     * Sets a reference to a container of custom SQL checks.
+     * @param customSql Custom SQL checks.
+     */
+    public void setCustomSql(ColumnCustomSqlDailyMonitoringChecksSpec customSql) {
+        this.setDirtyIf(!Objects.equals(this.customSql, customSql));
+        this.customSql = customSql;
+        this.propagateHierarchyIdToField(customSql, "custom_sql");
+    }
+
+    /**
      * Returns the container of monitoring for standard data quality checks.
      * @return Container of row standard data quality monitoring.
      */
@@ -419,24 +438,6 @@ public class ColumnDailyMonitoringCheckCategoriesSpec extends AbstractRootChecks
         this.setDirtyIf(!Objects.equals(this.datatype, datatype));
         this.datatype = datatype;
         this.propagateHierarchyIdToField(datatype, "datatype");
-    }
-
-    /**
-     * Returns the container of monitoring for standard data quality checks.
-     * @return Container of anomaly data quality monitoring.
-     */
-    public ColumnAnomalyDailyMonitoringChecksSpec getAnomaly() {
-        return anomaly;
-    }
-
-    /**
-     * Sets the container of anomaly data quality checks (monitoring).
-     * @param anomaly New anomaly checks.
-     */
-    public void setAnomaly(ColumnAnomalyDailyMonitoringChecksSpec anomaly) {
-        this.setDirtyIf(!Objects.equals(this.anomaly, anomaly));
-        this.anomaly = anomaly;
-        this.propagateHierarchyIdToField(anomaly, "anomaly");
     }
 
     /**
@@ -475,6 +476,7 @@ public class ColumnDailyMonitoringCheckCategoriesSpec extends AbstractRootChecks
         this.comparisons = comparisons;
         this.propagateHierarchyIdToField(comparisons, "comparisons");
     }
+
 
     /**
      * Returns the child map on the spec class with all fields.

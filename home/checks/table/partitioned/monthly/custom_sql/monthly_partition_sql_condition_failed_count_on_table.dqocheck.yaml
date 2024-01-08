@@ -6,3 +6,4 @@ spec:
   rule_name: comparison/max_count
   help_text: Verifies that a set number of rows failed a custom SQL condition (expression).
     Creates a separate data quality check (and an alert) for each monthly partition.
+  standard: true

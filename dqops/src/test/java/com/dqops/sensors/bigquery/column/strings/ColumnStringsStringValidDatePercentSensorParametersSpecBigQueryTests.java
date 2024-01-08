@@ -17,7 +17,7 @@ package com.dqops.sensors.bigquery.column.strings;
 
 import com.dqops.BaseTest;
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.column.checkspecs.strings.ColumnStringValidDatesPercentCheckSpec;
+import com.dqops.checks.column.checkspecs.text.ColumnTextValidDatesPercentCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -33,7 +33,7 @@ import com.dqops.metadata.timeseries.TimeSeriesMode;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
-import com.dqops.sensors.column.strings.ColumnStringsStringValidDatePercentSensorParametersSpec;
+import com.dqops.sensors.column.text.ColumnStringsStringValidDatePercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,7 +43,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class ColumnStringsStringValidDatePercentSensorParametersSpecBigQueryTests extends BaseTest {
     private ColumnStringsStringValidDatePercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnStringValidDatesPercentCheckSpec checkSpec;
+    private ColumnTextValidDatesPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -53,7 +53,7 @@ public class ColumnStringsStringValidDatePercentSensorParametersSpecBigQueryTest
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new ColumnStringValidDatesPercentCheckSpec();
+        this.checkSpec = new ColumnTextValidDatesPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

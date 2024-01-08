@@ -34,7 +34,7 @@ import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.column.patterns.ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpec;
-import com.dqops.sensors.column.strings.StringsBuiltInDateFormats;
+import com.dqops.sensors.column.text.TextBuiltInDateFormats;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -112,7 +112,7 @@ public class ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpecBig
 
     @Test
     void renderSensorWithDateType_whenProfilingNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
 
@@ -145,7 +145,7 @@ public class ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpecBig
 
     @Test
     void renderSensorWithMonthDayYearDateType_whenProfilingNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        this.sut.setDateFormats(StringsBuiltInDateFormats.MonthDayYear);
+        this.sut.setDateFormats(TextBuiltInDateFormats.MonthDayYear);
         SensorExecutionRunParameters runParameters = this.getRunParametersProfilingWithMonthDayYearDateType();
         runParameters.setTimeSeries(null);
 
@@ -177,7 +177,7 @@ public class ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpecBig
 
     @Test
     void renderSensorWithDayMonthYearDateType_whenProfilingNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        this.sut.setDateFormats(StringsBuiltInDateFormats.DayMonthYear);
+        this.sut.setDateFormats(TextBuiltInDateFormats.DayMonthYear);
         SensorExecutionRunParameters runParameters = this.getRunParametersProfilingWithDayMonthYearDateType();
         runParameters.setTimeSeries(null);
 
@@ -209,7 +209,7 @@ public class ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpecBig
 
     @Test
     void renderSensorWithYearMonthDayDateType_whenProfilingNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        this.sut.setDateFormats(StringsBuiltInDateFormats.YearMonthDay);
+        this.sut.setDateFormats(TextBuiltInDateFormats.YearMonthDay);
         SensorExecutionRunParameters runParameters = this.getRunParametersProfilingWithYearMonthDayDateType();
         runParameters.setTimeSeries(null);
 
@@ -241,7 +241,7 @@ public class ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpecBig
 
     @Test
     void renderSensorWithMonthNameDayYearDateType_whenProfilingNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        this.sut.setDateFormats(StringsBuiltInDateFormats.MonthNameDayYear);
+        this.sut.setDateFormats(TextBuiltInDateFormats.MonthNameDayYear);
         SensorExecutionRunParameters runParameters = this.getRunParametersProfilingWithMonthNameDayYearDateType();
         runParameters.setTimeSeries(null);
 
@@ -273,7 +273,7 @@ public class ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpecBig
 
     @Test
     void renderSensor_whenProfilingOneTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
@@ -313,7 +313,7 @@ public class ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpecBig
 
     @Test
     void renderSensor_whenMonitoringDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = this.getRunParametersMonitoring(CheckTimeScale.monthly);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -348,7 +348,7 @@ public class ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpecBig
 
     @Test
     void renderSensor_whenPartitionedDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date");
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -386,7 +386,7 @@ public class ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpecBig
 
     @Test
     void renderSensor_whenProfilingNoTimeSeriesOneDataStream_thenRendersCorrectSql() {
-        this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
         runParameters.setDataGroupings(
@@ -424,7 +424,7 @@ public class ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpecBig
 
     @Test
     void renderSensor_whenMonitoringDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
-        this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = this.getRunParametersMonitoring(CheckTimeScale.monthly);
         runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
@@ -463,7 +463,7 @@ public class ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpecBig
 
     @Test
     void renderSensor_whenPartitionedDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
-        this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date");
         runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
@@ -505,7 +505,7 @@ public class ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpecBig
 
     @Test
     void renderSensor_whenProfilingOneTimeSeriesThreeDataStream_thenRendersCorrectSql() {
-        this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
@@ -553,7 +553,7 @@ public class ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpecBig
 
     @Test
     void renderSensor_whenMonitoringDefaultTimeSeriesThreeDataStream_thenRendersCorrectSql() {
-        this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = this.getRunParametersMonitoring(CheckTimeScale.monthly);
         runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
@@ -596,7 +596,7 @@ public class ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpecBig
 
     @Test
     void renderSensor_whenPartitionedDefaultTimeSeriesThreeDataStream_thenRendersCorrectSql() {
-        this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date");
         runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(

@@ -17,7 +17,7 @@ package com.dqops.sensors.bigquery.column.strings;
 
 import com.dqops.BaseTest;
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.column.checkspecs.strings.ColumnStringParsableToIntegerPercentCheckSpec;
+import com.dqops.checks.column.checkspecs.text.ColumnTextParsableToIntegerPercentCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -33,7 +33,7 @@ import com.dqops.metadata.timeseries.TimeSeriesMode;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
-import com.dqops.sensors.column.strings.ColumnStringsStringParsableToIntegerPercentSensorParametersSpec;
+import com.dqops.sensors.column.text.ColumnStringsStringParsableToIntegerPercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,7 +43,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class ColumnStringsStringParsableToIntegerPercentSensorParametersSpecBigQueryTests extends BaseTest {
     private ColumnStringsStringParsableToIntegerPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnStringParsableToIntegerPercentCheckSpec checkSpec;
+    private ColumnTextParsableToIntegerPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -53,7 +53,7 @@ public class ColumnStringsStringParsableToIntegerPercentSensorParametersSpecBigQ
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new ColumnStringParsableToIntegerPercentCheckSpec();
+        this.checkSpec = new ColumnTextParsableToIntegerPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

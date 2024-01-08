@@ -79,7 +79,7 @@ public class DefaultProfilingColumnObservabilityCheckSettingsSpec extends Abstra
     @JsonPropertyDescription("The default configuration of strings checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsProfilingChecksSpec strings;
+    private ColumnTextProfilingChecksSpec strings;
 
     @JsonPropertyDescription("The default configuration of uniqueness checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -157,7 +157,7 @@ public class DefaultProfilingColumnObservabilityCheckSettingsSpec extends Abstra
      * Returns the strings check configuration on a column level.
      * @return Strings check configuration.
      */
-    public ColumnStringsProfilingChecksSpec getStrings() {
+    public ColumnTextProfilingChecksSpec getStrings() {
         return strings;
     }
 
@@ -165,7 +165,7 @@ public class DefaultProfilingColumnObservabilityCheckSettingsSpec extends Abstra
      * Sets the string check configuration on a column level.
      * @param strings New string checks configuration.
      */
-    public void setStrings(ColumnStringsProfilingChecksSpec strings) {
+    public void setStrings(ColumnTextProfilingChecksSpec strings) {
         this.setDirtyIf(!Objects.equals(this.strings, strings));
         this.strings = strings;
         this.propagateHierarchyIdToField(strings, "strings");
@@ -352,7 +352,7 @@ public class DefaultProfilingColumnObservabilityCheckSettingsSpec extends Abstra
         }
 
         if (this.strings != null && !this.strings.isDefault() && dataTypeCategory == DataTypeCategory.string) {
-            this.getColumnCheckCategories(targetColumn).setStrings(this.strings.deepClone());
+            this.getColumnCheckCategories(targetColumn).setText(this.strings.deepClone());
         }
 
         if (this.uniqueness != null && !this.uniqueness.isDefault()) {
