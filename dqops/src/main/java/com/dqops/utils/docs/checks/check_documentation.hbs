@@ -14,33 +14,33 @@ ___
 
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|{{checkName}}|{{checkType}}|{{#if timeScale}}{{timeScale}}{{else}} {{/if}}|{{qualityDimension}}|[{{sensor.sensorName}}](../../../../reference/sensors/{{target}}/{{sensor.category}}-{{target}}-sensors.md#{{replace sensor.sensorName "_" "-"}})|[{{rule.ruleName}}](../../../../reference/rules/{{capitalizeFirst rule.category}}.md#{{replace rule.ruleName "_" "-"}})|
+|{{checkName}}|{{checkType}}|{{#if timeScale}}{{timeScale}}{{else}} {{/if}}|{{qualityDimension}}|[{{sensor.sensorName}}](../../../reference/sensors/{{target}}/{{sensor.category}}-{{target}}-sensors.md#{{replace sensor.sensorName "_" "-"}})|[{{rule.ruleName}}](../../../reference/rules/{{capitalizeFirst rule.category}}.md#{{replace rule.ruleName "_" "-"}})|
 
-**Activate check (Shell)**
-Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+??? example "Managing {{replace checkName  "_" " "}} check from DQOps shell"
 
-```
-dqo> check activate -c=connection_name -ch={{checkName}}
-```
+    === "Activate check"
 
-**Run check (Shell)**
-Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
-```
-dqo> check run -ch={{checkName}}
-```
+        ```
+        dqo> check activate -c=connection_name -ch={{checkName}}
+        ```
 
-It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+    === "Run check on connection"
 
-```
-dqo> check run -c=connection_name -ch={{checkName}}
-```
+        Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
-It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+        ```
+        dqo> check run -c=connection_name -ch={{checkName}}
+        ```
 
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -ch={{checkName}}
-```
+    === "Run check on table"
+
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters
+
+        ```
+        dqo> check run -c=connection_name -t=schema_name.table_name -ch={{checkName}}
+        ```
 
 **Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
@@ -50,29 +50,32 @@ The sample *schema_name.table_name.dqotable.yaml* file with the check configured
 {{{sampleYaml}}}
 ```
 
-Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[{{sensor.sensorName}}](../../../../reference/sensors/{{target}}/{{sensor.category}}-{{target}}-sensors.md#{{replace sensor.sensorName "_" "-"}})
-[sensor](../../../dqo-concepts/sensors/sensors.md).
+??? info "Samples of generated SQL queries for each data source type"
 
-{{#each providerTemplates~}}
+    Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
+    [{{sensor.sensorName}}](../../../reference/sensors/{{target}}/{{sensor.category}}-{{target}}-sensors.md#{{replace sensor.sensorName "_" "-"}})
+    [sensor](../../../dqo-concepts/sensors/sensors.md).
 
-??? example "{{{providerTypeModel.providerTypeDisplayName}}}"
+    {{#each providerTemplates~}}
 
-    === "Sensor template for {{{providerTypeModel.providerTypeDisplayName}}}"
+    ??? example "{{{providerTypeModel.providerTypeDisplayName}}}"
 
-        ```sql+jinja
-        {{#each listOfJinjaTemplate~}}
-        {{{this}}}
-        {{/each~}}
-        ```
-    === "Rendered SQL for {{{providerTypeModel.providerTypeDisplayName}}}"
+        === "Sensor template for {{{providerTypeModel.providerTypeDisplayName}}}"
 
-        ```sql
-        {{#each listOfRenderedTemplate~}}
-        {{{this}}}
-        {{/each~}}
-        ```
-{{/each~}}
+            ```sql+jinja
+            {{#each listOfJinjaTemplate~}}
+            {{{this}}}
+            {{/each~}}
+            ```
+        === "Rendered SQL for {{{providerTypeModel.providerTypeDisplayName}}}"
+
+            ```sql
+            {{#each listOfRenderedTemplate~}}
+            {{{this}}}
+            {{/each~}}
+            ```
+    {{/each~}}
+
 {{#if splitSampleYamlWithDataStreams}}
 
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
@@ -89,7 +92,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [{{sensor.sensorName}}](../../../../reference/sensors/{{target}}/{{sensor.category}}-{{target}}-sensors.md#{{replace sensor.sensorName "_" "-"}})
+    [{{sensor.sensorName}}](../../../reference/sensors/{{target}}/{{sensor.category}}-{{target}}-sensors.md#{{replace sensor.sensorName "_" "-"}})
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     {{#each providerTemplatesDataStreams~}}

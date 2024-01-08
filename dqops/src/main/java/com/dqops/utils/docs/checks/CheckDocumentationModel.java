@@ -57,6 +57,11 @@ public class CheckDocumentationModel {
     private String timeScale;
 
     /**
+     * Check class - "standard" or "advanced".
+     */
+    private String checkClass;
+
+    /**
      * Check quality dimension (Availability, Consistency, etc.).
      */
     private String qualityDimension;

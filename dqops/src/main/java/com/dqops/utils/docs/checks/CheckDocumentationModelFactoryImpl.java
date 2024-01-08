@@ -328,6 +328,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         CheckModel checkModel = similarCheckModel.getCheckModel();
         checkDocumentationModel.setCheckName(checkModel.getCheckName());
         checkDocumentationModel.setCheckType(similarCheckModel.getCheckType().getDisplayName());
+        checkDocumentationModel.setCheckClass(checkModel.isStandard() ? "standard" : "advanced");
         checkDocumentationModel.setTimeScale(similarCheckModel.getTimeScale() != null ? similarCheckModel.getTimeScale().name() : null);
         checkDocumentationModel.setQualityDimension(similarCheckModel.getCheckModel().getQualityDimension());
         checkDocumentationModel.setCheckHelp(checkModel.getHelpText());
