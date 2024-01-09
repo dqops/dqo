@@ -17,8 +17,8 @@ Entry requirements include:
 
 The below DAG uses three tasks: 
 
-- [run checks](run-checks-operator.md),
-- [wait for run checks execution](wait-for-job-operator.md),
+- [run checks](./run-checks-operator.md),
+- [wait for run checks execution](./wait-for-job-operator.md),
 - load data.
 
 The code snippet does not contain the configuration of the data loading operator.
@@ -149,7 +149,7 @@ Finally, the DAG execution should finish uninterrupted as presented on the scree
 ## What's next
 
 - [Learn about webhooks notifications](../webhooks/index.md)
-- [Learn about collect statistics operator](collect-statistics-operator.md)
-- [Learn about wait for job operator](wait-for-job-operator.md)
-- [Learn about table import operator](table-import-operator.md)
-- [Learn about table status operator](table-status-operator.md)
+- [Learn about collect statistics operator](./collect-statistics-operator.md)
+- [Learn about wait for job operator](./wait-for-job-operator.md)
+- [Learn about table import operator](./table-import-operator.md)
+- [Learn about table status operator](./table-status-operator.md)

@@ -3,7 +3,7 @@
 ## Overview
 
 The following example shows how you can verify that a minimum percentage of rows passed a custom SQL condition (expression)
-using DQOps platform. By using the [sql_condition_passed_percent](../../../checks/table/sql/sql-condition-passed-percent-on-table.md) table check, we can monitor that
+using DQOps platform. By using the [sql_condition_passed_percent](../../checks/table/custom_sql/sql-condition-passed-percent-on-table.md) table check, we can monitor that
 the percentage of rows passed a custom SQL condition does not fall below the set thresholds. If it does, you will get a warning, error or fatal result.
 
 **PROBLEM**
@@ -16,7 +16,7 @@ Data is based on public-use data sets, such as the U.S. Census and the Centers f
 the world’s largest, annual population-based telephone survey of over 400,000 people.
 
 We want to verify that the upper_ci column is always greater or equal to the lower_ci column.
-The check result should tell us if we have any rows not matching an SQL expression `upper_ci >=lower_ci` evaluated on each row.
+The check result should tell us if we have any rows not matching an SQL expression `upper_ci >= lower_ci` evaluated on each row.
 
 The SQL query that can calculate the percentage of rows that passed the check should look like the one below:
 
@@ -38,7 +38,7 @@ We want to verify that the percent of rows passed a custom SQL condition (expres
 **SOLUTION**
 
 We will verify the data of `bigquery-public-data.america_health_rankings.ahr` using monitoring
-[sql_condition_passed_percent](../../../checks/table/sql/sql-condition-passed-percent-on-table.md) table check.
+[sql_condition_passed_percent](../../checks/table/custom_sql/sql-condition-passed-percent-on-table.md) table check.
 Our goal is to verify if the percentage of rows passed a custom SQL condition does not fall below the set thresholds.
 
 In this example, we will set three minimum percentage thresholds levels for the check:
@@ -47,7 +47,7 @@ In this example, we will set three minimum percentage thresholds levels for the 
 - error: 99.0%
 - fatal: 95.0%
 
-If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
 
 **VALUE**
 
@@ -74,9 +74,9 @@ You can see that in the fourth row the value in the lower_ci column is bigger th
 
 ## Run checks in the example using the user interface
 
-A detailed explanation of [how to run the example is described here](../../index.md#running-the-use-cases).
+A detailed explanation of [how to run the example is described here](../index.md#running-the-use-cases).
 
-To execute the check prepared in the example using the [user interface](../../../dqo-concepts/user-interface-overview/user-interface-overview.md):
+To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-sql-condition-passed-percent-on-table-checks1.png)
 
@@ -87,7 +87,7 @@ To execute the check prepared in the example using the [user interface](../../..
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
 
-    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../../data-sources/index.md).
+    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../data-sources/index.md).
 
 
 3. Select the **Daily checks** tab.
@@ -96,9 +96,9 @@ To execute the check prepared in the example using the [user interface](../../..
     has additional parameter sql_condition that allows you to input a SQL condition (expression) that returns true or false.
     The condition is evaluated for each row. The expression can use {table} placeholder that is replaced with a full table name.
     
-    The condition in our example is `upper_ci >=lower_ci`
+    The condition in our example is `upper_ci >= lower_ci`
 
-    Learn more about [navigating the check editor](../../../../dqo-concepts/user-interface-overview/user-interface-overview.md#check-editor).
+    Learn more about [navigating the check editor](../../dqo-concepts/user-interface-overview/user-interface-overview.md#check-editor).
 
 
 4. Run the activated check using the **Run check** button.
@@ -129,7 +129,7 @@ First you need to synchronize the results with your DQOps cloud account using th
 
 Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
-To review the results on the [data quality dashboards](../../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
+To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
 go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
 
 Below you can see the results displayed on the **Current validity issues on columns** dashboard located in Data Quality Dimension/Validity group.
@@ -179,9 +179,9 @@ After importing new tables, DQOps sets the schedule for 12:00 P.M. (noon) every 
    Once a schedule is set up for a particular connection, it will execute all the checks that have been configured across
    all tables associated with that connection.
 
-   You can [read more about scheduling here](../../../working-with-dqo/schedules/index.md).
+   You can [read more about scheduling here](../../working-with-dqo/schedules/index.md).
 
-   You might also want to check the [Running checks with a scheduler](../../data-quality-monitoring/running-checks-with-a-scheduler.md) example.
+   You might also want to check the [Running checks with a scheduler](../data-quality-monitoring/running-checks-with-a-scheduler.md) example.
 
 ## Review the incidents
 
@@ -195,7 +195,7 @@ On the left side of this screen, there is a list displaying the connections and 
 occurred for each one. On the right panel, you can view incidents for the connections you have selected, and you can change the status of the incident, 
 as well as filter, sort, and view detailed information about the incidents.
 
-To learn more about incidents go to the [Incidents overview section](../../../working-with-dqo/incidents-and-notifications/incidents.md).
+To learn more about incidents go to the [Incidents overview section](../../working-with-dqo/incidents-and-notifications/incidents.md).
 
 ## Notifications
 
@@ -206,7 +206,7 @@ An example of notification in Slack is shown below.
 
 ![Example of Slack notification](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-slack-notification.png)
 
-Follow the link to learn more about [configuring Slack notification](../../../integrations/slack/configuring-slack-notifications.md). 
+Follow the link to learn more about [configuring Slack notification](../../integrations/slack/configuring-slack-notifications.md). 
 
 ## YAML configuration file
 
@@ -220,7 +220,7 @@ In this example, we have set three minimum percentage thresholds levels for the 
 
 The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_sql_condition_passed_percent` check is configured.
 
-If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
 
 ```yaml hl_lines="7-28"
 apiVersion: dqo/v1
@@ -231,10 +231,10 @@ spec:
     monthly_partitioning_recent_months: 1
   monitoring_checks:
     daily:
-      sql:
+      custom_sql:
         daily_sql_condition_passed_percent_on_table:
           parameters:
-            sql_condition: upper_ci >=lower_ci
+            sql_condition: upper_ci >= lower_ci
           warning:
             min_percent: 100.0
           error:
@@ -250,7 +250,7 @@ spec:
 
 ## Running the checks in the example and evaluating the results using DQOps Shell
 
-A detailed explanation of [how to run the example is described here](../../index.md#running-the-use-cases).
+A detailed explanation of [how to run the example is described here](../index.md#running-the-use-cases).
 
 To execute the check prepared in the example, run the following command in DQOps Shell:
 
@@ -308,7 +308,7 @@ threshold level set in the Fatal error (95.0%).
 
 ```
 **************************************************
-Finished executing a sensor for a check sql_condition_passed_percent_on_table on the table america_health_rankings.ahr using a sensor definition table/sql/sql_condition_passed_percent, sensor result count: 1
+Finished executing a sensor for a check sql_condition_passed_percent_on_table on the table america_health_rankings.ahr using a sensor definition table/custom_sql/sql_condition_passed_percent, sensor result count: 1
 
 Results returned by the sensor:
 +----------------+------------------------+------------------------+
@@ -319,7 +319,7 @@ Results returned by the sensor:
 **************************************************
 ```
 
-The expression `upper_ci >=lower_ci` was false for almost 7.4% rows probably because the column upper_ci or lower_ci is NULL so the expression was false. 
+The expression `upper_ci >= lower_ci` was false for almost 7.4% rows probably because the column upper_ci or lower_ci is NULL so the expression was false. 
 
 Let's update the SQL expression and count rows with NULL values as valid.
 
@@ -332,7 +332,7 @@ spec:
     monthly_partitioning_recent_months: 1
   monitoring_checks:
     daily:
-      sql:
+      custom_sql:
         daily_sql_condition_passed_percent_on_table:
           parameters:
             sql_condition: upper_ci >= lower_ci or upper_ci is NULL or lower_ci is
@@ -361,13 +361,13 @@ spec:
 ```
 
 In this example, we have demonstrated how to use DQOps to verify the validity of data in a table.
-By using the [sql_condition_passed_percent](../../../checks/table/sql/sql-condition-passed-percent-on-table.md) table check, we can monitor that
+By using the [sql_condition_passed_percent](../../checks/table/custom_sql/sql-condition-passed-percent-on-table.md) table check, we can monitor that
 the percentage of rows passed a custom SQL condition does not fall below the set thresholds. If it does, you will get a warning, error or fatal result.
 
 ## Next steps
 
-- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../../working-with-dqo/installation/run-dqo-as-docker-container.md).
-- For details on the [sql_condition_passed_percent check used in this example, go to the check details section](../../../checks/table/sql/sql-condition-passed-percent-on-table.md).
-- You might be interested in another validity check that [evaluates that the percentage of strings matching the date format regex in a column does not exceed the maximum accepted percentage](../percentage-of-strings-matching-date-regex.md).
-- Would you like to add your own connection? Here you can find [information about supported databases and how to add new connection](../../../data-sources/index.md).
-- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md) can help you to calculate separate data quality KPI scores for different groups of rows.
+- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
+- For details on the [sql_condition_passed_percent check used in this example, go to the check details section](../../checks/table/custom_sql/sql-condition-passed-percent-on-table.md).
+- You might be interested in another validity check that [evaluates that the percentage of strings matching the date format regex in a column does not exceed the maximum accepted percentage](./percentage-of-strings-matching-date-regex.md).
+- Would you like to add your own connection? Here you can find [information about supported databases and how to add new connection](../../data-sources/index.md).
+- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md) can help you to calculate separate data quality KPI scores for different groups of rows.
