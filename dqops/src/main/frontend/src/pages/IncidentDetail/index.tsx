@@ -468,14 +468,14 @@ export const IncidentDetail = () => {
                             : incidentDetail?.issueUrl}
                         </Tooltip>
                       </a>
-                      <IconButton
-                        color="teal"
-                        size="sm"
-                        onClick={() => () => setOpen(true)}
-                        className="!shadow-none"
-                      >
-                        <SvgIcon name="edit" className="w-4" />
-                      </IconButton>
+                    <IconButton
+                      color="teal"
+                      size="sm"
+                      onClick={() => setOpen(true)}
+                      className="!shadow-none"
+                    >
+                      <SvgIcon name="edit" className="w-4" />
+                    </IconButton>
                     </div>
                   ) : (
                     <IconButton
