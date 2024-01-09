@@ -1,5 +1,7 @@
 # DQOps run checks example with the Dbt Core 
 
+## Integration example
+
 The Airflow's DAG configuration presents the use of the dbt core with DQOps. 
 The example runs the load process in DbtCloud preceded by the assert table status task. 
 After the load execution table status is being refreshed by execution of the run checks task with an additional wait for job.

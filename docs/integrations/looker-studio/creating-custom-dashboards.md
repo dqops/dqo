@@ -8,7 +8,7 @@ provides the tools for creating your own customized dashboard to house your data
 This guide will walk you through creating a dashboard in DQOps, starting with setting up an account in Looker Studio, 
 granting the necessary permissions, authorizations, and finally copying the completed dashboard to add your data.
 
-## Creating an account in Looker Studio
+## Create an account in Looker Studio
 
 To begin using Looker Studio and creating dashboards, you will need a Looker Studio account. If you have a Google account
 with a Gmail or another address, you may use this account to log in to Looker Studio.
@@ -19,7 +19,7 @@ surname, and date of birth. Once your account is created, log in to Looker Studi
 
 ![Signing in to Looker Studio](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/sign-in-to-looker-studio-o.png)
 
-## Granting permissions
+## Grant permissions
 
 After logging in to Looker Studio, open the DQOps application, go to the Data Quality Dashboards section, and select the
 dashboard that you want to modify. Once you have chosen your dashboard, scroll down to the bottom of the page and click 
@@ -41,58 +41,63 @@ An editor group is a group that can be set up for each Google account. The owner
 group members according to their roles. Once the owner adds your email address to the editor group, the grant access icon
 will disappear, and you can proceed with the configuration process.
 
-## Copying the dashboard and authorize accesses
+## Copy the dashboard
 
 Our next step is to duplicate the dashboard and create a new one based on it. To do so, we need to click on the vertical
 three dots icon and select **Make a copy**.
  
-![Copying dashboard](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/dashboard-make-a-copy.png)
+![Copying the dashboard](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/dashboard-make-a-copy.png)
 
 If this is your first time creating a dashboard, you need to complete your account setup by filling in your country and company name.
 
-![country_and_company](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/country-and-company.png)
+![Complete the account settings - country and company](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/country-and-company.png)
 
 After setting the country and company, you need to select the consents. As shown in the image below, these consents include
 permission to receive tips and recommendations, product updates, etc. We should mark the consents that we feel are necessary.
 
-![points of agreement](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/points-of-agreement.png)
+![Complete the account settings - permissions](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/points-of-agreement.png)
 
 After completing the account setup, select the vertical three dots icon and select **Make a copy**.
  
-![generate_your_dashboard](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/generate-your-dashboard.png)
+![Copying the dashboard](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/generate-your-dashboard.png)
 
-Now, you should see a copy if the selected dashboard but without any data. Now you need to authorize access to the data.
+Now, you should see a copy if the selected dashboard but without any data.
 
-![no_data](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/no-data.png)
+## Authorize access to dashboard
 
-Select **Resources** in the menu in the top and then select **Manage added the data sources**.
+After making a copy of the dashboard, now you need to authorize access to the data.
 
-![manage_added_data_sources](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/manage-added-data-sources.png)
+![Dashboard with no data](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/no-data.png)
+
+Select **Resources** in the menu in the top and then select **Manage added data sources**.
+
+![Manage added data sources](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/manage-added-data-sources.png)
 
 This will take you to the editing panel where you can set the parameters. Click the **Edit** option to go through the subsequent authorization steps.
 
-![edit](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/edit.png)
+![Edit dashboard parameters](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/edit.png)
 
 Looker Studio requires authorization to connect to data, so click on the **Authorize** button.
 You will then be prompted to select the account you want to log in with - choose the Looker Studio account that you selected
 at the beginning. After that, select **Authorize** again and confirm access to the account by selecting **Allow**.
 
-![select_authorize-s](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/select-authorize-s.png)
+![Authorize access to the account](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/select-authorize-s.png)
 
-On the screen with parameter settings, select **Allow Enter DQOps AI API Key for Looker Studio** option, enter the parameter value as 0, and click on the **Reconnect** button in the top right corner.
+On the screen with parameter settings, check the **Allow "Enter DQOps API Key for Looker Studio" to be modified in reports** option,
+enter the parameter value as 0, and click on the **Reconnect** button in the top right corner.
 
 ![Allow](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/allow-s.png)
 
 A pop-up window should appear asking **Allow parameter sharing?**. Select **Allow** to give permission for report editors
 to modify the parameter values.
 
-![allow_parameter_sharing](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/allow-parameter-sharing.png)
+![Allow parameter sharing](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/allow-parameter-sharing.png)
  
 Confirm connection changes by clicking **Apply** on a pop-up window that will appear.
  
-![apply_connection_changes](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/apply-connection-changes.png)
+![Apply connection changes](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/apply-connection-changes.png)
 
-## Configuring the data model
+## Configure the data model
 
 After confirmation, a screen will open where you can see the data model and parameters in the dashboard. 
 The dashboard can use the [check_results](../../reference/parquetfiles/check_results.md) table as a source.
@@ -108,7 +113,7 @@ the [Parquet files references](../../reference/parquetfiles/check_results.md) se
 To return to the dashboard view, click **Done** in the top right corner.
 
 
-## Setting up dashboards parameters
+## Set up dashboards parameters
 
 DQOps user interface passes parameters to the dashboards. The most important parameter is `ds0.token`, 
 which receives an access token to the DQOps Cloud Data Quality Data Warehouse.
@@ -137,7 +142,7 @@ is usable only when DQOps uses interface passes the access token to access the D
 Once you have completed the configuration steps, you can edit the dashboard and complete the dashboard according to your needs.
 
 
-## Getting the embeddable dashboard url
+## Get the embeddable dashboard url
 DQOps shows the Looker Studio dashboards embedded in an IFRAME HTML element.
 Looker Studio dashboards cannot be embedded inside an IFRAME if the default dashboard url is copied from the browser
 when editing the dashboard. When using a non-embeddable dashboard url, the dashboard will not open correctly in DQOps.
@@ -150,16 +155,16 @@ the "File -> Embed report" screen shown below.
 You will need this embeddable url in the next step to add the dashboard to the dashboards list file.
 
 
-## Adding the dashboard to DQOps
+## Add the dashboard to DQOps
 
 Finally, to make the dashboard visible, you need to add it to the dashboard list YAML configuration file in DQOps. 
-It is the *settings/dashboardslist.dqodashboards.yaml* file in
+The dashboard list is located in the *settings/dashboardslist.dqodashboards.yaml* file in
 the [DQOps user home](../../dqo-concepts/home-folders/dqops-user-home.md) folder.
-The file format of the dashboard list specification file
-is defined in the [dasboards YAML reference](../../reference/yaml/DashboardYaml.md) documentation.
+
+The file format of the dashboard list specification file is defined in the [dashboards YAML reference](../../reference/yaml/DashboardYaml.md) documentation.
 When the dashboard's url is added to the dashboard list file, it will become visible in the user interface.
 
-Open the *settings/dashboardslist.dqodashboards.yaml* file in Visual Studio Code. An empty file should be present
+Open the *settings/dashboardslist.dqodashboards.yaml* file in the Visual Studio Code. An empty file should be present
 in the *[DQOps user home](../../dqo-concepts/home-folders/dqops-user-home.md)/settings* folder
 that is initialized when DQOps is started for the first time.
 
@@ -300,7 +305,7 @@ After completing the yaml file with the list of dashboards, save the changes.
 Your dashboard will be visible in the **Data Quality Dashboards** section in the DQOps user interface.
 
 
-## Changing built-in dashboards
+## Change built-in dashboards
 If any of the DQOps built-in dashboard does not serve your purpose and you need to change the layout, 
 reorder the filters or add new sections, simply make a copy of the dashboard following this manual up to the
 section of [Adding the dashboard to DQOps](#adding-the-dashboard-to-dqops). 

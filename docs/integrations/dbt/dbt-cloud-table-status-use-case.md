@@ -1,5 +1,7 @@
 # DQOps table status example with the DbtCloud
 
+## Integration example
+
 The Airflow's DAG configuration presents the use of the DbtCloud with the DQOps' table status operator.
 The example executes the load job in DbtCloud preceded by the table status Airflow operator that verifies the overall status of the table based on checks defined in DQOps on this table.
 
