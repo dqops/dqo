@@ -48,7 +48,7 @@ by running the [check run](../../../command-line-interface/check.md#dqo-check-ru
 dqo> check run --connection=sales-dwh(1) --full-table-name=public.fact_sales(2)
 ```
 
-1. The target data source name. Supports patterns such as *name_prefix_\**.
+1. The target data source name. Support patterns such as *name_prefix_\**.
 2. The target table name provided as a *schema.table* name. The name supports patterns both in the
    schema name part and in the table name part. To run checks in all tables inside a schema, use *target_schema.\**.
    Other examples of supported patterns are: *schema_prefix_\*.target_table*, *\*.fact_\**.
