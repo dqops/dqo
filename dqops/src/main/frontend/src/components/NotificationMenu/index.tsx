@@ -101,64 +101,63 @@ const NotificationMenu = () => {
     }
   };
 
-  const setNewJobArray = (): jobInterface[] => {
+  const getNewJobArray =  (): jobInterface[] => {
+    const jobDictionaryLookup: Record<string, any> = {};
+    Object.values(job_dictionary_state).forEach((y) => {
+      const jobId = y.jobId?.jobId;
+      if (jobId) {
+        jobDictionaryLookup[jobId] = y;
+      }
+    });
+  
     const newArray: jobInterface[] = data
       .filter((z) => z.item.jobId?.parentJobId?.jobId === undefined)
       .map((x) => ({
         errorMessage: x.item.errorMessage,
         jobId: {
           jobId: x.item.jobId?.jobId,
-          createdAt: x.item.jobId?.createdAt
+          createdAt: x.item.jobId?.createdAt,
         },
         jobType: x.item.jobType,
         parameters: x.item.parameters,
         status: x.item.status,
         statusChangedAt: x.item.statusChangedAt,
         childs: data
-          .filter(
-            (y) => y.item.jobId?.parentJobId?.jobId === x.item.jobId?.jobId
-          )
-          .map((y) => y.item)
+          .filter((y) => y.item.jobId?.parentJobId?.jobId === x.item.jobId?.jobId)
+          .map((y) => y.item),
       }));
-
+  
     const updatedArray: jobInterface[] = newArray.map((x) => {
       if (x.jobType === undefined) {
         return {
           ...x,
-          jobType: (
-            Object.values(job_dictionary_state).find(
-              (y) => y.jobId?.jobId === x.jobId?.jobId
-            ) as any
-          )?.updatedModel?.jobType
+          jobType: jobDictionaryLookup[x.jobId?.jobId ?? 0]?.updatedModel?.jobType,
         };
       }
       return x;
     });
-
+  
     const updatedChildArray: jobInterface[] = updatedArray.map((x) => {
       if (x.childs) {
         const updatedChilds = x.childs.map((z) => {
           if (z.jobType === undefined) {
             return {
               ...z,
-              jobType: (
-                Object.values(job_dictionary_state).find(
-                  (y) => y.jobId?.jobId === z.jobId?.jobId
-                ) as any
-              )?.updatedModel?.jobType
+              jobType: jobDictionaryLookup[z.jobId?.jobId ?? 0]?.updatedModel?.jobType,
             };
           }
           return z;
         });
         return { ...x, childs: updatedChilds };
       }
-
+  
       return x;
     });
-
+  
     return updatedChildArray;
   };
-  console.log(job_dictionary_state, setNewJobArray())
+  
+  // console.log(job_dictionary_state, setNewJobArray())
 
   return (
     <Popover placement="bottom-end" open={isOpen} handler={toggleOpen}>
@@ -187,7 +186,7 @@ const NotificationMenu = () => {
         style={{ position: 'relative', zIndex: '100000' }}
       >
         <div className="border-b border-gray-300 text-gray-700 font-semibold pb-2 text-xl flex flex-col gap-y-2 px-4 relative">
-          <div onClick={() => setNewJobArray()}>
+          <div onClick={() => getNewJobArray()}>
             Notifications ({data.length})
           </div>
           <div className="flex items-center gap-x-3 text-sm">
@@ -206,7 +205,7 @@ const NotificationMenu = () => {
           </div>
         </div>
         <div className="overflow-x-hidden max-h-100 py-4 px-4 relative">
-          {setNewJobArray().map((notification: any, index) =>
+          {getNewJobArray().map((notification: any, index) =>
             notification.type === 'error' ? (
               <ErrorItem error={notification} key={index} />
             ) : (

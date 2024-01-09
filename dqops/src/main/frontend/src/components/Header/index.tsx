@@ -29,7 +29,7 @@ import {
   setAdvisorJobId
 } from '../../redux/actions/job.actions';
 import { Tooltip } from '@material-tailwind/react';
-import { DqoJobChangeModelStatusEnum, DqoJobHistoryEntryModelJobTypeEnum } from '../../api';
+import { DqoJobChangeModelStatusEnum } from '../../api';
 
 const Header = () => {
   const history = useHistory();
@@ -59,7 +59,7 @@ const Header = () => {
   );
   const selectedTab = tabs?.find((item) => item.value === activeTab);
   const match = useRouteMatch();
-  const { isAdvisorOpen, job_dictionary_state, advisorObject, advisorJobId } =
+  const { isAdvisorOpen, job_dictionary_state, advisorJobId } =
     useSelector((state: IRootState) => state.job);
 
   const onClick = (newCheckTypes: CheckTypes) => () => {
@@ -166,56 +166,19 @@ const Header = () => {
 
   const onCloseAdvisor = () => {
     dispatch(toggleAdvisor(false));
-    dispatch(setAdvisorJobId(0))
-  };
-
-  useEffect(() => {
-    if (
-      Object.values(job_dictionary_state)
-        .filter((x) => x.jobType === DqoJobHistoryEntryModelJobTypeEnum.import_tables)
-        .find(
-          (y) =>
-            y.status === DqoJobChangeModelStatusEnum.queued ||
-            y.status === DqoJobChangeModelStatusEnum.waiting ||
-            y.status === DqoJobChangeModelStatusEnum.running
-        )
-    ) {
-      dispatch(
-        setAdvisorJobId(
-          Number(
-            Object.keys(job_dictionary_state).find(
-              (key) =>
-                job_dictionary_state[key] ===
-                Object.values(job_dictionary_state)
-                  .filter((x) => x.jobType === DqoJobHistoryEntryModelJobTypeEnum.import_tables)
-                  ?.find(
-                    (y) =>
-                    y.status === DqoJobChangeModelStatusEnum.queued ||
-                    y.status === DqoJobChangeModelStatusEnum.waiting ||
-                    y.status === DqoJobChangeModelStatusEnum.running
-                  )
-            )
-          )
-        )
-      );
-      dispatch(
-        setAdvisorObject(
-          Object.values(job_dictionary_state).find(
-            (x) => x.jobType === DqoJobHistoryEntryModelJobTypeEnum.import_tables
-          )?.parameters?.importTableParameters ?? {}
-        )
-      );
-    }
-  }, [job_dictionary_state]);
+    dispatch(setAdvisorJobId(0));
+    dispatch(setAdvisorObject({}));
+  }
 
   useEffect(() => {
     if (
       advisorJobId !== 0 &&
       job_dictionary_state[advisorJobId].status === DqoJobChangeModelStatusEnum.succeeded
     ) {
+      dispatch(setAdvisorObject(job_dictionary_state[advisorJobId]?.parameters?.importTableParameters ?? {}));
       dispatch(toggleAdvisor(true));
     }
-  }, [advisorObject]);
+  }, [job_dictionary_state[advisorJobId]]);
 
   return (
     <div className="fixed top-0 left-0 right-0 min-h-16 max-h-16 bg-white shadow-header flex items-center justify-between z-10 border-b border-gray-300 px-4">
