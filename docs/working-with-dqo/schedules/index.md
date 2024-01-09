@@ -12,7 +12,7 @@ on these [different check types, please refer to the DQOps Concepts section](../
 
 ## Configure a schedule at connection and table level
 
-To set up or modify a schedule for the entire connection, follow these steps:
+To set up or modify a schedule for the entire connection or table, follow these steps:
 
 ![Navigating to schedule configuration](https://dqops.com/docs/images/working-with-dqo/schedules/navigating-to-schedule-configuration.png)
 

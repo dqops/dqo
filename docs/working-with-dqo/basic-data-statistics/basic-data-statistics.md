@@ -7,11 +7,33 @@ valuable in deciding which data quality checks and threshold levels should be se
 
 You have the option to collect statistics either on the table or column summary view or on an individual column level.
 
-## Summary statistics description
+## Collect and view statistics
+
+### **Navigate to the Basic data statistics section**
+
+To navigate to the Basic data statistics section:
+
+1. Click on to the **Profiling** section. 
+
+2. Select the desired data source from the tree view on the left.
+
+3. Choose a table or column for which you wish to collect statistics. The **Basic data statistics** tab is the default selection for this section.
+
+    ![Navigate to statistics section](https://dqops.com/docs/images/working-with-dqo/statistics/table-statistics2.png)
+
+
+### **Collect and view summary statistics** 
+
+To collect statistics for the entire table, click the **Collect statistics** button in the upper right-hand corner. 
+You can also select the check button in front of the column name to choose the columns for which you want to run statistics..   
+To collect statistics for a single column, click the **bar chart icon** located in the **Action** column.
+
+![Collect statistics](https://dqops.com/docs/images/working-with-dqo/statistics/collect-statistics2.png)
+
+Upon completion of the statistics collection, the results will be displayed. You can filter the columns by simply clicking on
+the sorting icon next to any column header
 
 The table or column summary statistics include the following fields.
-
-![Summary statistics view](https://dqops.com/docs/images/working-with-dqo/statistics/summary-statistics-view.png)
 
 In the **Table Statistics** box:
 
@@ -33,46 +55,27 @@ In the summary table:
 - **Distinct count**: The number of distinct values in the column. The color of the field indicates the relative number of distinct values and helps identify low-cardinality columns.
 - **Action**: Buttons that allow you to collect statistics for the individual column or delete the column.
 
-At the level of a single column, statistics provide more information and are grouped into:
+
+![Statistics results](https://dqops.com/docs/images/working-with-dqo/statistics/statistics-results2.png)
+
+### **View detailed statistics**
+
+To view detailed statistics, click on the name of the column or navigate to the single column on the tree view.
+
+![Navigate to detailed statistics](https://dqops.com/docs/images/working-with-dqo/statistics/view-detailed-statistics2.png)
+
+At the level of a single column, statistics provide more information than in the summary statistics and are grouped into:
 
 - **Nulls**: Displays the nulls and not-nulls count and percentage.
-- **Uniqueness**: Shows distinct and duplicate count and percentage. 
+- **Uniqueness**: Shows distinct and duplicate count and percentage.
 - **Range**: Shows minimum, maximum, median, and sum.
 - **String length**: For string data types, shows the minimum, maximum and mean length of the string values.
 - **Top most common values**: Shows the top most popular values in the column.
 
+Below there is a sample view of statistics at the level of a single column.
 Note that the results displayed may vary depending on the data type.
 
-## Collect and view statistics
-
-To collect and view statistics follow these steps:
-
-1. Navigate to the **Profiling** section. 
-
-2. Select the desired data source from the tree view on the left.
-
-3. Choose a table or column for which you wish to collect statistics. The **Basic data statistics** tab is the default selection for this section.
-
-    ![Navigate to statistics section](https://dqops.com/docs/images/working-with-dqo/statistics/table-statistics2.png)
-
-4. To collect statistics for the entire table, click the **Collect statistics** button in the upper right-hand corner. 
-    You can also select the check button in front of the column name to choose the columns for which you want to run statistics..   
-    To collect statistics for a single column, click the **bar chart icon** located in the **Action** column.
-
-    ![Collect statistics](https://dqops.com/docs/images/working-with-dqo/statistics/collect-statistics2.png)
-
-5. Upon completion of the statistics collection, the results will be displayed. You can filter the columns by simply clicking on
-    the sorting icon next to any column header
-
-    ![Statistics results](https://dqops.com/docs/images/working-with-dqo/statistics/statistics-results2.png)
-
-6. To view detailed statistics, click on the name of the column or navigate to the single column on the tree view.
-
-    ![Navigate to detailed statistics](https://dqops.com/docs/images/working-with-dqo/statistics/view-detailed-statistics2.png)
-
-    Below there is a sample view of statistics at the level of a single column.
-
-    ![Column-level statistics](https://dqops.com/docs/images/working-with-dqo/statistics/view-column-statistics.png)
+![Column-level statistics](https://dqops.com/docs/images/working-with-dqo/statistics/view-column-statistics.png)
 
 
 ## What's next
