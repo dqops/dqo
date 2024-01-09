@@ -75,7 +75,7 @@
 	<repositories>
 		<repository>
 			<id>local-dqops</id>
-			<url>file://${pom.basedir}/../lib/jdbc-drivers/</url>
+			<url>file://${project.basedir}/../lib/jdbc-drivers/</url>
 		</repository>
 	</repositories>
 

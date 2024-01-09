@@ -86,6 +86,9 @@ public class PythonRuleRunner extends AbstractRuleRunner {
         ruleInput.setRuleModuleLastModified(ruleDefinitionFindResult.getRulePythonFileLastModified());
 
         PythonRuleCallOutput output = this.pythonCallerService.executePythonHomeScript(ruleInput, evaluateRulesModule, PythonRuleCallOutput.class);
+        if (output == null) {
+            return null;
+        }
 
         if (output.getError() != null) {
             throw new PythonExecutionException("Data quality rule " + absolutePathToPythonRule + " failed to execute, error: " + output.getError());

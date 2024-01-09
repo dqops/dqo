@@ -113,6 +113,10 @@ public class PythonCallerServiceImpl implements PythonCallerService, DisposableB
 
         synchronized (this.processDictionaryLock) {
             for (int retry = 0; retry < 10; retry++) {
+                if (this.pythonModuleProcesses == null) {
+                    return null; // closing
+                }
+
                 availableProcessesStack = this.pythonModuleProcesses.get(pythonFilePathInHome);
                 if (availableProcessesStack == null) {
                     availableProcessesStack = new Stack<>();
@@ -150,8 +154,8 @@ public class PythonCallerServiceImpl implements PythonCallerService, DisposableB
         catch (Exception ex) {
             // when the process fails, we want to stat a new process
             streamingPythonProcess.close();
-            log.error("Python process failed: " + ex.getMessage(), ex);
-            throw new PythonExecutionException("Python process failed: " + ex.getMessage(), ex);
+            log.error("Python process failed: " + ex.getMessage() + " when running " + pythonFilePathInHome + " Python file", ex);
+            throw new PythonExecutionException("Python process failed: " + ex.getMessage() + " when running " + pythonFilePathInHome + " Python file", ex);
         }
     }
 

@@ -65,7 +65,7 @@ public class PrestoParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("Presto database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String password;
 
-    @CommandLine.Option(names = {"-A"}, description = "Presto additional properties that are added to the JDBC connection string")
+    @CommandLine.Option(names = {"-E"}, description = "Presto additional properties that are added to the JDBC connection string")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, String> properties;
 
