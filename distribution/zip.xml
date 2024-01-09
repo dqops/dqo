@@ -117,9 +117,5 @@
             <source>${project.basedir}/../dqops/${project.build.directory}/dqo-dqops-${project.version}.jar</source>
             <outputDirectory>/jars</outputDirectory>
         </file>
-        <file>
-            <source>${project.basedir}/../lib/jdbc-drivers/athena-jdbc-3.0.0-with-dependencies.jar</source>
-            <outputDirectory>/jars</outputDirectory>
-        </file>
     </files>
 </assembly>

@@ -74,8 +74,8 @@
 
 	<repositories>
 		<repository>
-			<id>local-dqops</id>
-			<url>file://${project.basedir}/../lib/jdbc-drivers/</url>
+			<id>local-repository</id>
+			<url>file://${project.basedir}/../lib/repository/</url>
 		</repository>
 	</repositories>
 
@@ -538,11 +538,9 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.amazon.athena</groupId>
+			<groupId>com-amazon-athena</groupId>
 			<artifactId>athena-jdbc</artifactId>
 			<version>3.0.0</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/../lib/jdbc-drivers/athena-jdbc-3.0.0-with-dependencies.jar</systemPath>
 		</dependency>
 
 		<!-- test dependencies -->

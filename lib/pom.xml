@@ -51,8 +51,8 @@
 
 	<repositories>
 		<repository>
-			<id>local-dqops</id>
-			<url>file://${pom.basedir}/jdbc-drivers/</url>
+			<id>local-repository</id>
+			<url>file://${project.basedir}/repository/</url>
 		</repository>
 	</repositories>
 
@@ -110,6 +110,13 @@
 			<version>434</version>
 			<scope>runtime</scope>
 		</dependency>
+		<dependency>
+			<groupId>com-amazon-athena</groupId>
+			<artifactId>athena-jdbc</artifactId>
+			<version>3.0.0</version>
+			<scope>runtime</scope>
+		</dependency>
+
 
 		<!-- Oracle, SQL Server and Athena drivers are excluded, because they are referenced by dqops project as regular dependencies (not runtime scope), because we need to use some classes or enums -->
 
@@ -199,28 +206,6 @@
 							</descriptors>
 							<outputDirectory>${project.build.directory}/output</outputDirectory>
 							<appendAssemblyId>false</appendAssemblyId>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.0.2</version>
-				<executions>
-					<execution>
-						<id>copy-remaining-jdbc-drivers</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${project.build.directory}/output/${project.build.finalName}/jars</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${project.basedir}/jdbc-drivers</directory>
-								</resource>
-							</resources>
 						</configuration>
 					</execution>
 				</executions>
