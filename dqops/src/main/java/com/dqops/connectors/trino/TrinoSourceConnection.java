@@ -193,6 +193,11 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
 
     }
 
+    /**
+     * Creates a create table statement for athena that use an exernal table filled with data from a csv file located in AWS S3.
+     * @param tableSpec Table specification with the physical table name, column names and physical column data types.
+     * @return Ready to execute sql statement.
+     */
     String generateCreateTableSqlStatementForAthena(TableSpec tableSpec){
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("CREATE EXTERNAL TABLE IF NOT EXISTS ");
