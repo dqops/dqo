@@ -47,6 +47,10 @@ import java.util.Properties;
 @Component("trino-connection")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
+
+    private final static Object initializeLock = new Object();
+    private static boolean athenaInitialized = false;
+
     /**
      * Injection constructor for the trino connection.
      * @param jdbcConnectionPool Jdbc connection pool.
@@ -116,11 +120,8 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
     }
 
     private HikariConfig makeHikariConfigForAthena(TrinoParametersSpec trinoSpec, SecretValueLookupContext secretValueLookupContext){
-        try {
-            Class.forName("com.amazon.athena.jdbc.AthenaDriver");   // todo: lazy registering
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        initializeAthenaDriver();
+
         HikariConfig hikariConfig = new HikariConfig();
         hikariConfig.setJdbcUrl("jdbc:athena://");
 
@@ -152,6 +153,23 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
         hikariConfig.setDataSourceProperties(dataSourceProperties);
 
         return hikariConfig;
+    }
+
+    /**
+     * Athena Driver has missing Driver in META-INF/services jar path. It cannot be automatically registered.
+     */
+    private static void initializeAthenaDriver(){
+        if(athenaInitialized){
+            return;
+        }
+        try {
+            synchronized (initializeLock){
+                Class.forName("com.amazon.athena.jdbc.AthenaDriver");   // todo: lazy registering
+                TrinoSourceConnection.athenaInitialized = true;
+            }
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
