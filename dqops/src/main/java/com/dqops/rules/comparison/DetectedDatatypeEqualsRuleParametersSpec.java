@@ -34,27 +34,26 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class DatatypeEqualsRuleParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<DatatypeEqualsRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class DetectedDatatypeEqualsRuleParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<DetectedDatatypeEqualsRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("Expected data type code, the data type codes are: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.")
-    @SampleValues(values = "1")
-    private Integer expectedDatatype;
+    @JsonPropertyDescription("Expected data type code, the values for the sensor's actual values are: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - texts, 7 - mixed data types.")
+    private DetectedDatatypeCategory expectedDatatype;
 
     /**
      * Creates the default object that expects a correct data type.
      */
-    public DatatypeEqualsRuleParametersSpec() {
+    public DetectedDatatypeEqualsRuleParametersSpec() {
     }
 
     /**
      * Creates the rule, given an expected data type code.
-     * @param expectedDatatype Expected data type code (1..7).
+     * @param expectedDatatype Expected data type category.
      */
-    public DatatypeEqualsRuleParametersSpec(Integer expectedDatatype) {
+    public DetectedDatatypeEqualsRuleParametersSpec(DetectedDatatypeCategory expectedDatatype) {
         this.expectedDatatype = expectedDatatype;
     }
 
@@ -62,7 +61,7 @@ public class DatatypeEqualsRuleParametersSpec extends AbstractRuleParametersSpec
      * Returns the expected data type code.
      * @return Expected data type code.
      */
-    public Integer getExpectedDatatype() {
+    public DetectedDatatypeCategory getExpectedDatatype() {
         return expectedDatatype;
     }
 
@@ -70,7 +69,7 @@ public class DatatypeEqualsRuleParametersSpec extends AbstractRuleParametersSpec
      * Sets the expected data type code.
      * @param expectedDatatype Expected data type code.
      */
-    public void setExpectedDatatype(Integer expectedDatatype) {
+    public void setExpectedDatatype(DetectedDatatypeCategory expectedDatatype) {
         this.setDirtyIf(!Objects.equals(this.expectedDatatype, expectedDatatype));
         this.expectedDatatype = expectedDatatype;
     }
@@ -92,6 +91,6 @@ public class DatatypeEqualsRuleParametersSpec extends AbstractRuleParametersSpec
      */
     @Override
     public String getRuleDefinitionName() {
-        return "comparison/datatype_equals";
+        return "comparison/detected_datatype_equals";
     }
 }

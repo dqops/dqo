@@ -41,7 +41,6 @@ public class MinCountRule1ParametersSpec extends AbstractRuleParametersSpec {
     };
 
     @JsonPropertyDescription("Minimum accepted value for the actual_value returned by the sensor (inclusive).")
-    @SampleValues(values = "1")
     private Long minCount = 1L;
 
     /**

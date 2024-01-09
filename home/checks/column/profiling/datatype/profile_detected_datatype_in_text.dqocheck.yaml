@@ -3,7 +3,7 @@ apiVersion: dqo/v1
 kind: check
 spec:
   sensor_name: column/datatype/string_datatype_detect
-  rule_name: comparison/datatype_equals
+  rule_name: comparison/detected_datatype_equals
   help_text: "Detects the data type of text values stored in the column. The sensor\
     \ returns the code of the detected type of column data: 1 - integers, 2 - floats,\
     \ 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.\
