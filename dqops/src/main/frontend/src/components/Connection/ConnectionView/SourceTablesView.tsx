@@ -7,7 +7,7 @@ import ConnectionActionGroup from './ConnectionActionGroup';
 import Checkbox from '../../Checkbox';
 import Button from '../../Button';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import { toggleAdvisor } from '../../../redux/actions/job.actions';
+import { setAdvisorJobId, toggleAdvisor } from '../../../redux/actions/job.actions';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import { setCurrentJobId } from '../../../redux/actions/source.actions';
@@ -84,7 +84,7 @@ const SourceTablesView = ({
         res.data?.jobId?.jobId ?? 0
       )
     );
-    
+    dispatch(setAdvisorJobId(res.data?.jobId?.jobId ?? 0));
     setJobId(res.data?.jobId?.jobId);
     dispatch(toggleAdvisor(true)); 
   };
@@ -108,6 +108,7 @@ const SourceTablesView = ({
       )
     );
     setJobId(res.data?.jobId?.jobId);
+    dispatch(setAdvisorJobId(res.data?.jobId?.jobId ?? 0));
     dispatch(toggleAdvisor(true));
   };
 
@@ -120,7 +121,7 @@ const SourceTablesView = ({
   };
 
   useEffect(() => {
-    if(jobId !== 0 && jobId!== undefined && job?.status==="succeeded"){
+    if (jobId !== 0 && jobId!== undefined && job?.status==="succeeded") {
       fetchSourceTables()
     }
   }, [job?.status])

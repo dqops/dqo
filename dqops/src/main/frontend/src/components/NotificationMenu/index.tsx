@@ -11,18 +11,13 @@ import { IRootState } from '../../redux/reducers';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { setCronScheduler, toggleMenu } from '../../redux/actions/job.actions';
 
-import { useError, IError } from '../../contexts/errrorContext';
+import { useError} from '../../contexts/errrorContext';
 import JobItem from './JobItem';
 import ErrorItem from './ErrorItem';
 import moment from 'moment';
 import { JobApiClient } from '../../services/apiClient';
 import Switch from '../Switch';
-import { DqoJobHistoryEntryModel } from '../../api';
 import clsx from 'clsx';
-
-interface jobInterface extends Omit<DqoJobHistoryEntryModel, 'childs'> {
-  childs?: DqoJobHistoryEntryModel[];
-}
 
 const NotificationMenu = () => {
   const { job_dictionary_state, isOpen, isCronScheduled, userProfile } = useSelector(
@@ -45,37 +40,86 @@ const NotificationMenu = () => {
     }
     return notification.item.date;
   };
+  
 
   useEffect(() => {
     getData();
   }, []);
-
-  const data = useMemo(() => {
+  const [data, jobs] = useMemo(() => {
     const jobsData = Object.values(job_dictionary_state)
-      .sort((a, b) => {
-        return (b.jobId?.jobId || 0) - (a.jobId?.jobId || 0);
-      })
+      .sort((a, b) => (b.jobId?.jobId || 0) - (a.jobId?.jobId || 0))
       .map((item) => ({ type: 'job', item }));
-
-    const errorData = errors.map((item: IError) => ({ type: 'error', item }));
-
+  
+    const errorData = errors.map((item : any) => ({ type: 'error', item }));
+  
     const newData = jobsData.concat(errorData);
-
+  
     newData.sort((a, b) => {
       const date1 = getNotificationDate(a);
       const date2 = getNotificationDate(b);
-
+  
       return moment(date1).isBefore(moment(date2)) ? 1 : -1;
     });
-
-    return newData;
-  }, [job_dictionary_state, errors]);
-
-  const [sizeOfNot, setSizeOfNot] = useState<number>(data.length);
-
-  const eventHandler = () => {
-    setSizeOfNot(data.length);
-  };
+  
+    const data = newData;
+  
+    const newJobArray = data
+      .filter((z) => z.item.jobId?.parentJobId?.jobId === undefined)
+      .map((x) => ({
+        errorMessage: x.item.errorMessage,
+        jobId: {
+          jobId: x.item.jobId?.jobId,
+          createdAt: x.item.jobId?.createdAt
+        },
+        jobType: x.item.jobType,
+        parameters: x.item.parameters,
+        status: x.item.status,
+        statusChangedAt: x.item.statusChangedAt,
+        childs: data
+          .filter(
+            (y) => y.item.jobId?.parentJobId?.jobId === x.item.jobId?.jobId
+          )
+          .map((y) => y.item)
+      }));
+  
+    const updatedArray = newJobArray.map((x) => {
+      if (x.jobType === undefined) {
+        return {
+          ...x,
+          jobType: (
+            Object.values(job_dictionary_state).find(
+              (y) => y.jobId?.jobId === x.jobId?.jobId
+            ) as any
+          )?.updatedModel?.jobType
+        };
+      }
+      return x;
+    });
+  
+    const updatedChildArray = updatedArray.map((x) => {
+      if (x.childs) {
+        const updatedChilds = x.childs.map((z) => {
+          if (z.jobType === undefined) {
+            return {
+              ...z,
+              jobType: (
+                Object.values(job_dictionary_state).find(
+                  (y) => y.jobId?.jobId === z.jobId?.jobId
+                ) as any
+              )?.updatedModel?.jobType
+            };
+          }
+          return z;
+        });
+        return { ...x, childs: updatedChilds };
+      }
+  
+      return x;
+    });
+    return [data, updatedChildArray] as const;
+  }, [isOpen]);
+  
+  const [showNewIcon, setShowNewIcon] = useState(false);
 
   const getData = async () => {
     const res = await JobApiClient.isCronSchedulerRunning();
@@ -101,63 +145,9 @@ const NotificationMenu = () => {
     }
   };
 
-  const setNewJobArray = (): jobInterface[] => {
-    const newArray: jobInterface[] = data
-      .filter((z) => z.item.jobId?.parentJobId?.jobId === undefined)
-      .map((x) => ({
-        errorMessage: x.item.errorMessage,
-        jobId: {
-          jobId: x.item.jobId?.jobId,
-          createdAt: x.item.jobId?.createdAt
-        },
-        jobType: x.item.jobType,
-        parameters: x.item.parameters,
-        status: x.item.status,
-        statusChangedAt: x.item.statusChangedAt,
-        childs: data
-          .filter(
-            (y) => y.item.jobId?.parentJobId?.jobId === x.item.jobId?.jobId
-          )
-          .map((y) => y.item)
-      }));
-
-    const updatedArray: jobInterface[] = newArray.map((x) => {
-      if (x.jobType === undefined) {
-        return {
-          ...x,
-          jobType: (
-            Object.values(job_dictionary_state).find(
-              (y) => y.jobId?.jobId === x.jobId?.jobId
-            ) as any
-          )?.updatedModel?.jobType
-        };
-      }
-      return x;
-    });
-
-    const updatedChildArray: jobInterface[] = updatedArray.map((x) => {
-      if (x.childs) {
-        const updatedChilds = x.childs.map((z) => {
-          if (z.jobType === undefined) {
-            return {
-              ...z,
-              jobType: (
-                Object.values(job_dictionary_state).find(
-                  (y) => y.jobId?.jobId === z.jobId?.jobId
-                ) as any
-              )?.updatedModel?.jobType
-            };
-          }
-          return z;
-        });
-        return { ...x, childs: updatedChilds };
-      }
-
-      return x;
-    });
-
-    return updatedChildArray;
-  };
+  useEffect(() => {
+    setShowNewIcon(true)
+  }, [job_dictionary_state])
 
   return (
     <Popover placement="bottom-end" open={isOpen} handler={toggleOpen}>
@@ -167,16 +157,16 @@ const NotificationMenu = () => {
           ripple={false}
           variant="text"
         >
-          <div className="relative" onClick={() => eventHandler()}>
+          <div className="relative" onClick={() => setShowNewIcon(false)}> 
             <SvgIcon name="bell" className="w-5 h-5 text-gray-700" />
             <span
               className={
-                sizeOfNot !== data.length && data.length !== 0
+                showNewIcon && data.length !== 0
                   ? 'absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 rounded-full bg-teal-500 text-white px-1 py-0.5 text-xxs'
                   : ''
               }
             >
-              {sizeOfNot !== data.length && data.length !== 0 ? 'New' : ''}
+              {showNewIcon && data.length !== 0 ? 'New' : ''}
             </span>
           </div>
         </IconButton>
@@ -186,8 +176,8 @@ const NotificationMenu = () => {
         style={{ position: 'relative', zIndex: '100000' }}
       >
         <div className="border-b border-gray-300 text-gray-700 font-semibold pb-2 text-xl flex flex-col gap-y-2 px-4 relative">
-          <div onClick={() => setNewJobArray()}>
-            Notifications ({data.length})
+          <div>
+            Notifications ({Object.keys(job_dictionary_state).length})
           </div>
           <div className="flex items-center gap-x-3 text-sm">
             <div className="whitespace-no-wrap">Jobs scheduler </div>
@@ -205,7 +195,7 @@ const NotificationMenu = () => {
           </div>
         </div>
         <div className="overflow-x-hidden max-h-100 py-4 px-4 relative">
-          {setNewJobArray().map((notification: any, index) =>
+          {jobs.map((notification: any, index) =>
             notification.type === 'error' ? (
               <ErrorItem error={notification} key={index} />
             ) : (
