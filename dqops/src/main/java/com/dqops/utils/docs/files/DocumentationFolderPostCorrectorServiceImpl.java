@@ -111,6 +111,7 @@ public class DocumentationFolderPostCorrectorServiceImpl implements Documentatio
 //                ? fileDirectPath.getParent()
 //                : fileDirectPath;
 
+
         Deque<Function<String, String>> contentModifiers = new ArrayDeque<>();
         contentModifiers.add(this::pathDelimiterStyleCorrection);
 

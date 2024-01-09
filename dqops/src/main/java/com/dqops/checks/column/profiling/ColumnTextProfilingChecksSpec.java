@@ -54,10 +54,10 @@ public class ColumnTextProfilingChecksSpec extends AbstractCheckCategorySpec {
             put("profile_text_parsable_to_float_percent", o -> o.profileTextParsableToFloatPercent);
             put("profile_text_parsable_to_date_percent", o -> o.profileTextParsableToDatePercent);
 
-            put("profile_text_surrounded_by_whitespace", o -> o.profileStringSurroundedByWhitespace);
-            put("profile_text_surrounded_by_whitespace_percent", o -> o.profileStringSurroundedByWhitespacePercent);
-            put("profile_text_valid_country_code_percent", o -> o.profileStringValidCountryCodePercent);
-            put("profile_text_valid_currency_code_percent", o -> o.profileStringValidCurrencyCodePercent);
+            put("profile_text_surrounded_by_whitespace", o -> o.profileTextSurroundedByWhitespace);
+            put("profile_text_surrounded_by_whitespace_percent", o -> o.profileTextSurroundedByWhitespacePercent);
+            put("profile_text_valid_country_code_percent", o -> o.profileTextValidCountryCodePercent);
+            put("profile_text_valid_currency_code_percent", o -> o.profileTextValidCurrencyCodePercent);
         }
     };
 
@@ -99,16 +99,16 @@ public class ColumnTextProfilingChecksSpec extends AbstractCheckCategorySpec {
     private ColumnTextParsableToDatePercentCheckSpec profileTextParsableToDatePercent;
 
     @JsonPropertyDescription("The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table")
-    private ColumnTextSurroundedByWhitespaceCheckSpec profileStringSurroundedByWhitespace;
+    private ColumnTextSurroundedByWhitespaceCheckSpec profileTextSurroundedByWhitespace;
 
     @JsonPropertyDescription("Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage")
-    private ColumnTextSurroundedByWhitespacePercentCheckSpec profileStringSurroundedByWhitespacePercent;
+    private ColumnTextSurroundedByWhitespacePercentCheckSpec profileTextSurroundedByWhitespacePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage")
-    private ColumnTextValidCountryCodePercentCheckSpec profileStringValidCountryCodePercent;
+    private ColumnTextValidCountryCodePercentCheckSpec profileTextValidCountryCodePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of valid currency codes in a text column does not fall below the minimum accepted percentage")
-    private ColumnTextValidCurrencyCodePercentCheckSpec profileStringValidCurrencyCodePercent;
+    private ColumnTextValidCurrencyCodePercentCheckSpec profileTextValidCurrencyCodePercent;
 
 
     /**
@@ -331,72 +331,72 @@ public class ColumnTextProfilingChecksSpec extends AbstractCheckCategorySpec {
      * Returns a minimum string valid dates percent check.
      * @return Minimum string valid dates percent check.
      */
-    public ColumnTextSurroundedByWhitespaceCheckSpec getProfileStringSurroundedByWhitespace() {
-        return profileStringSurroundedByWhitespace;
+    public ColumnTextSurroundedByWhitespaceCheckSpec getProfileTextSurroundedByWhitespace() {
+        return profileTextSurroundedByWhitespace;
     }
 
     /**
      * Sets a new definition of a string surrounded by whitespace count check.
-     * @param profileStringSurroundedByWhitespace String surrounded by whitespace count check.
+     * @param profileTextSurroundedByWhitespace String surrounded by whitespace count check.
      */
-    public void setProfileStringSurroundedByWhitespace(ColumnTextSurroundedByWhitespaceCheckSpec profileStringSurroundedByWhitespace) {
-        this.setDirtyIf(!Objects.equals(this.profileStringSurroundedByWhitespace, profileStringSurroundedByWhitespace));
-        this.profileStringSurroundedByWhitespace = profileStringSurroundedByWhitespace;
-        propagateHierarchyIdToField(profileStringSurroundedByWhitespace, "profile_text_surrounded_by_whitespace");
+    public void setProfileTextSurroundedByWhitespace(ColumnTextSurroundedByWhitespaceCheckSpec profileTextSurroundedByWhitespace) {
+        this.setDirtyIf(!Objects.equals(this.profileTextSurroundedByWhitespace, profileTextSurroundedByWhitespace));
+        this.profileTextSurroundedByWhitespace = profileTextSurroundedByWhitespace;
+        propagateHierarchyIdToField(profileTextSurroundedByWhitespace, "profile_text_surrounded_by_whitespace");
     }
 
     /**
      * Returns a maximum string null placeholder count check.
      * @return Maximum string null placeholder count check.
      */
-    public ColumnTextSurroundedByWhitespacePercentCheckSpec getProfileStringSurroundedByWhitespacePercent() {
-        return profileStringSurroundedByWhitespacePercent;
+    public ColumnTextSurroundedByWhitespacePercentCheckSpec getProfileTextSurroundedByWhitespacePercent() {
+        return profileTextSurroundedByWhitespacePercent;
     }
 
     /**
      * Sets a new definition of a string surrounded by whitespace percent check.
-     * @param profileStringSurroundedByWhitespacePercent String surrounded by whitespace percent check.
+     * @param profileTextSurroundedByWhitespacePercent String surrounded by whitespace percent check.
      */
-    public void setProfileStringSurroundedByWhitespacePercent(ColumnTextSurroundedByWhitespacePercentCheckSpec profileStringSurroundedByWhitespacePercent) {
-        this.setDirtyIf(!Objects.equals(this.profileStringSurroundedByWhitespacePercent, profileStringSurroundedByWhitespacePercent));
-        this.profileStringSurroundedByWhitespacePercent = profileStringSurroundedByWhitespacePercent;
-        propagateHierarchyIdToField(profileStringSurroundedByWhitespacePercent, "profile_text_surrounded_by_whitespace_percent");
+    public void setProfileTextSurroundedByWhitespacePercent(ColumnTextSurroundedByWhitespacePercentCheckSpec profileTextSurroundedByWhitespacePercent) {
+        this.setDirtyIf(!Objects.equals(this.profileTextSurroundedByWhitespacePercent, profileTextSurroundedByWhitespacePercent));
+        this.profileTextSurroundedByWhitespacePercent = profileTextSurroundedByWhitespacePercent;
+        propagateHierarchyIdToField(profileTextSurroundedByWhitespacePercent, "profile_text_surrounded_by_whitespace_percent");
     }
 
     /**
      * Returns a minimum strings in set count check.
      * @return Minimum strings in set count check.
      */
-    public ColumnTextValidCountryCodePercentCheckSpec getProfileStringValidCountryCodePercent() {
-        return profileStringValidCountryCodePercent;
+    public ColumnTextValidCountryCodePercentCheckSpec getProfileTextValidCountryCodePercent() {
+        return profileTextValidCountryCodePercent;
     }
 
     /**
      * Sets a new definition of a string valid country code percent check.
-     * @param profileStringValidCountryCodePercent String valid country code percent check.
+     * @param profileTextValidCountryCodePercent String valid country code percent check.
      */
-    public void setProfileStringValidCountryCodePercent(ColumnTextValidCountryCodePercentCheckSpec profileStringValidCountryCodePercent) {
-        this.setDirtyIf(!Objects.equals(this.profileStringValidCountryCodePercent, profileStringValidCountryCodePercent));
-        this.profileStringValidCountryCodePercent = profileStringValidCountryCodePercent;
-        propagateHierarchyIdToField(profileStringValidCountryCodePercent, "profile_text_valid_country_code_percent");
+    public void setProfileTextValidCountryCodePercent(ColumnTextValidCountryCodePercentCheckSpec profileTextValidCountryCodePercent) {
+        this.setDirtyIf(!Objects.equals(this.profileTextValidCountryCodePercent, profileTextValidCountryCodePercent));
+        this.profileTextValidCountryCodePercent = profileTextValidCountryCodePercent;
+        propagateHierarchyIdToField(profileTextValidCountryCodePercent, "profile_text_valid_country_code_percent");
     }
 
     /**
      * Returns a minimum strings in set percent check.
      * @return Minimum strings in set percent check.
      */
-    public ColumnTextValidCurrencyCodePercentCheckSpec getProfileStringValidCurrencyCodePercent() {
-        return profileStringValidCurrencyCodePercent;
+    public ColumnTextValidCurrencyCodePercentCheckSpec getProfileTextValidCurrencyCodePercent() {
+        return profileTextValidCurrencyCodePercent;
     }
 
     /**
      * Sets a new definition of a string valid currency code percent check.
-     * @param profileStringValidCurrencyCodePercent String valid currency code percent check.
+     * @param profileTextValidCurrencyCodePercent String valid currency code percent check.
      */
-    public void setProfileStringValidCurrencyCodePercent(ColumnTextValidCurrencyCodePercentCheckSpec profileStringValidCurrencyCodePercent) {
-        this.setDirtyIf(!Objects.equals(this.profileStringValidCurrencyCodePercent, profileStringValidCurrencyCodePercent));
-        this.profileStringValidCurrencyCodePercent = profileStringValidCurrencyCodePercent;
-        propagateHierarchyIdToField(profileStringValidCurrencyCodePercent, "profile_text_valid_currency_code_percent");
+    public void setProfileTextValidCurrencyCodePercent(ColumnTextValidCurrencyCodePercentCheckSpec profileTextValidCurrencyCodePercent) {
+        this.setDirtyIf(!Objects.equals(this.profileTextValidCurrencyCodePercent, profileTextValidCurrencyCodePercent));
+        this.profileTextValidCurrencyCodePercent = profileTextValidCurrencyCodePercent;
+        propagateHierarchyIdToField(profileTextValidCurrencyCodePercent, "profile_text_valid_currency_code_percent");
     }
 
 

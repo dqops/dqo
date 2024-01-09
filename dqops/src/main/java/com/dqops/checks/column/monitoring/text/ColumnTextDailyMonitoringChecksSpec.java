@@ -54,10 +54,10 @@ public class ColumnTextDailyMonitoringChecksSpec extends AbstractCheckCategorySp
             put("daily_text_parsable_to_float_percent", o -> o.dailyTextParsableToFloatPercent);
             put("daily_text_parsable_to_date_percent", o -> o.dailyTextParsableToDatePercent);
 
-            put("daily_text_surrounded_by_whitespace", o -> o.dailyStringSurroundedByWhitespace);
-            put("daily_text_surrounded_by_whitespace_percent", o -> o.dailyStringSurroundedByWhitespacePercent);
-            put("daily_text_valid_country_code_percent", o -> o.dailyStringValidCountryCodePercent);
-            put("daily_text_valid_currency_code_percent", o -> o.dailyStringValidCurrencyCodePercent);
+            put("daily_text_surrounded_by_whitespace", o -> o.dailyTextSurroundedByWhitespace);
+            put("daily_text_surrounded_by_whitespace_percent", o -> o.dailyTextSurroundedByWhitespacePercent);
+            put("daily_text_valid_country_code_percent", o -> o.dailyTextValidCountryCodePercent);
+            put("daily_text_valid_currency_code_percent", o -> o.dailyTextValidCurrencyCodePercent);
         }
     };
 
@@ -99,16 +99,16 @@ public class ColumnTextDailyMonitoringChecksSpec extends AbstractCheckCategorySp
     private ColumnTextParsableToDatePercentCheckSpec dailyTextParsableToDatePercent;
 
     @JsonPropertyDescription("The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnTextSurroundedByWhitespaceCheckSpec dailyStringSurroundedByWhitespace;
+    private ColumnTextSurroundedByWhitespaceCheckSpec dailyTextSurroundedByWhitespace;
 
     @JsonPropertyDescription("Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnTextSurroundedByWhitespacePercentCheckSpec dailyStringSurroundedByWhitespacePercent;
+    private ColumnTextSurroundedByWhitespacePercentCheckSpec dailyTextSurroundedByWhitespacePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnTextValidCountryCodePercentCheckSpec dailyStringValidCountryCodePercent;
+    private ColumnTextValidCountryCodePercentCheckSpec dailyTextValidCountryCodePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of valid currency codes in a text column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnTextValidCurrencyCodePercentCheckSpec dailyStringValidCurrencyCodePercent;
+    private ColumnTextValidCurrencyCodePercentCheckSpec dailyTextValidCurrencyCodePercent;
 
 
     /**
@@ -331,72 +331,72 @@ public class ColumnTextDailyMonitoringChecksSpec extends AbstractCheckCategorySp
      * Returns a minimum string valid dates percent check.
      * @return Minimum string valid dates percent check.
      */
-    public ColumnTextSurroundedByWhitespaceCheckSpec getDailyStringSurroundedByWhitespace() {
-        return dailyStringSurroundedByWhitespace;
+    public ColumnTextSurroundedByWhitespaceCheckSpec getDailyTextSurroundedByWhitespace() {
+        return dailyTextSurroundedByWhitespace;
     }
 
     /**
      * Sets a new definition of a string surrounded by whitespace count check.
-     * @param dailyStringSurroundedByWhitespace String surrounded by whitespace count check.
+     * @param dailyTextSurroundedByWhitespace String surrounded by whitespace count check.
      */
-    public void setDailyStringSurroundedByWhitespace(ColumnTextSurroundedByWhitespaceCheckSpec dailyStringSurroundedByWhitespace) {
-        this.setDirtyIf(!Objects.equals(this.dailyStringSurroundedByWhitespace, dailyStringSurroundedByWhitespace));
-        this.dailyStringSurroundedByWhitespace = dailyStringSurroundedByWhitespace;
-        propagateHierarchyIdToField(dailyStringSurroundedByWhitespace, "daily_text_surrounded_by_whitespace");
+    public void setDailyTextSurroundedByWhitespace(ColumnTextSurroundedByWhitespaceCheckSpec dailyTextSurroundedByWhitespace) {
+        this.setDirtyIf(!Objects.equals(this.dailyTextSurroundedByWhitespace, dailyTextSurroundedByWhitespace));
+        this.dailyTextSurroundedByWhitespace = dailyTextSurroundedByWhitespace;
+        propagateHierarchyIdToField(dailyTextSurroundedByWhitespace, "daily_text_surrounded_by_whitespace");
     }
 
     /**
      * Returns a maximum string null placeholder count check.
      * @return Maximum string null placeholder count check.
      */
-    public ColumnTextSurroundedByWhitespacePercentCheckSpec getDailyStringSurroundedByWhitespacePercent() {
-        return dailyStringSurroundedByWhitespacePercent;
+    public ColumnTextSurroundedByWhitespacePercentCheckSpec getDailyTextSurroundedByWhitespacePercent() {
+        return dailyTextSurroundedByWhitespacePercent;
     }
 
     /**
      * Sets a new definition of a string surrounded by whitespace percent check.
-     * @param dailyStringSurroundedByWhitespacePercent String surrounded by whitespace percent check.
+     * @param dailyTextSurroundedByWhitespacePercent String surrounded by whitespace percent check.
      */
-    public void setDailyStringSurroundedByWhitespacePercent(ColumnTextSurroundedByWhitespacePercentCheckSpec dailyStringSurroundedByWhitespacePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyStringSurroundedByWhitespacePercent, dailyStringSurroundedByWhitespacePercent));
-        this.dailyStringSurroundedByWhitespacePercent = dailyStringSurroundedByWhitespacePercent;
-        propagateHierarchyIdToField(dailyStringSurroundedByWhitespacePercent, "daily_text_surrounded_by_whitespace_percent");
+    public void setDailyTextSurroundedByWhitespacePercent(ColumnTextSurroundedByWhitespacePercentCheckSpec dailyTextSurroundedByWhitespacePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyTextSurroundedByWhitespacePercent, dailyTextSurroundedByWhitespacePercent));
+        this.dailyTextSurroundedByWhitespacePercent = dailyTextSurroundedByWhitespacePercent;
+        propagateHierarchyIdToField(dailyTextSurroundedByWhitespacePercent, "daily_text_surrounded_by_whitespace_percent");
     }
 
     /**
      * Returns a minimum strings in set count check.
      * @return Minimum strings in set count check.
      */
-    public ColumnTextValidCountryCodePercentCheckSpec getDailyStringValidCountryCodePercent() {
-        return dailyStringValidCountryCodePercent;
+    public ColumnTextValidCountryCodePercentCheckSpec getDailyTextValidCountryCodePercent() {
+        return dailyTextValidCountryCodePercent;
     }
 
     /**
      * Sets a new definition of a string valid country code percent check.
-     * @param dailyStringValidCountryCodePercent String valid country code percent check.
+     * @param dailyTextValidCountryCodePercent String valid country code percent check.
      */
-    public void setDailyStringValidCountryCodePercent(ColumnTextValidCountryCodePercentCheckSpec dailyStringValidCountryCodePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyStringValidCountryCodePercent, dailyStringValidCountryCodePercent));
-        this.dailyStringValidCountryCodePercent = dailyStringValidCountryCodePercent;
-        propagateHierarchyIdToField(dailyStringValidCountryCodePercent, "daily_text_valid_country_code_percent");
+    public void setDailyTextValidCountryCodePercent(ColumnTextValidCountryCodePercentCheckSpec dailyTextValidCountryCodePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyTextValidCountryCodePercent, dailyTextValidCountryCodePercent));
+        this.dailyTextValidCountryCodePercent = dailyTextValidCountryCodePercent;
+        propagateHierarchyIdToField(dailyTextValidCountryCodePercent, "daily_text_valid_country_code_percent");
     }
 
     /**
      * Returns a minimum strings in set percent check.
      * @return Minimum strings in set percent check.
      */
-    public ColumnTextValidCurrencyCodePercentCheckSpec getDailyStringValidCurrencyCodePercent() {
-        return dailyStringValidCurrencyCodePercent;
+    public ColumnTextValidCurrencyCodePercentCheckSpec getDailyTextValidCurrencyCodePercent() {
+        return dailyTextValidCurrencyCodePercent;
     }
 
     /**
      * Sets a new definition of a string valid currency code percent check.
-     * @param dailyStringValidCurrencyCodePercent String valid currency code percent check.
+     * @param dailyTextValidCurrencyCodePercent String valid currency code percent check.
      */
-    public void setDailyStringValidCurrencyCodePercent(ColumnTextValidCurrencyCodePercentCheckSpec dailyStringValidCurrencyCodePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyStringValidCurrencyCodePercent, dailyStringValidCurrencyCodePercent));
-        this.dailyStringValidCurrencyCodePercent = dailyStringValidCurrencyCodePercent;
-        propagateHierarchyIdToField(dailyStringValidCurrencyCodePercent, "daily_text_valid_currency_code_percent");
+    public void setDailyTextValidCurrencyCodePercent(ColumnTextValidCurrencyCodePercentCheckSpec dailyTextValidCurrencyCodePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyTextValidCurrencyCodePercent, dailyTextValidCurrencyCodePercent));
+        this.dailyTextValidCurrencyCodePercent = dailyTextValidCurrencyCodePercent;
+        propagateHierarchyIdToField(dailyTextValidCurrencyCodePercent, "daily_text_valid_currency_code_percent");
     }
     
 

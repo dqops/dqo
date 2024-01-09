@@ -51,12 +51,12 @@ public class ColumnAnomalyProfilingChecksSpec extends AbstractCheckCategorySpec 
             put("profile_mean_change_30_days", o -> o.profileMeanChange30Days);
 
             put("profile_median_change", o -> o.profileMedianChange);
-            put("profile_median_change_yesterday", o -> o.profileMedianChange1Day);
+            put("profile_median_change_1_day", o -> o.profileMedianChange1Day);
             put("profile_median_change_7_days", o -> o.profileMedianChange7Days);
             put("profile_median_change_30_days", o -> o.profileMedianChange30Days);
 
             put("profile_sum_change", o -> o.profileSumChange);
-            put("profile_sum_change_yesterday", o -> o.profileSumChange1Day);
+            put("profile_sum_change_1_day", o -> o.profileSumChange1Day);
             put("profile_sum_change_7_days", o -> o.profileSumChange7Days);
             put("profile_sum_change_30_days", o -> o.profileSumChange30Days);
         }

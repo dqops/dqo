@@ -54,10 +54,10 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
             put("monthly_partition_text_parsable_to_float_percent", o -> o.monthlyPartitionTextParsableToFloatPercent);
             put("monthly_partition_text_parsable_to_date_percent", o -> o.monthlyPartitionTextParsableToDatePercent);
 
-            put("monthly_partition_text_surrounded_by_whitespace", o -> o.monthlyPartitionStringSurroundedByWhitespace);
-            put("monthly_partition_text_surrounded_by_whitespace_percent", o -> o.monthlyPartitionStringSurroundedByWhitespacePercent);
-            put("monthly_partition_text_valid_country_code_percent", o -> o.monthlyPartitionStringValidCountryCodePercent);
-            put("monthly_partition_text_valid_currency_code_percent", o -> o.monthlyPartitionStringValidCurrencyCodePercent);
+            put("monthly_partition_text_surrounded_by_whitespace", o -> o.monthlyPartitionTextSurroundedByWhitespace);
+            put("monthly_partition_text_surrounded_by_whitespace_percent", o -> o.monthlyPartitionTextSurroundedByWhitespacePercent);
+            put("monthly_partition_text_valid_country_code_percent", o -> o.monthlyPartitionTextValidCountryCodePercent);
+            put("monthly_partition_text_valid_currency_code_percent", o -> o.monthlyPartitionTextValidCurrencyCodePercent);
         }
     };
 
@@ -100,16 +100,16 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
     private ColumnTextParsableToDatePercentCheckSpec monthlyPartitionTextParsableToDatePercent;
 
     @JsonPropertyDescription("The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.")
-    private ColumnTextSurroundedByWhitespaceCheckSpec monthlyPartitionStringSurroundedByWhitespace;
+    private ColumnTextSurroundedByWhitespaceCheckSpec monthlyPartitionTextSurroundedByWhitespace;
 
     @JsonPropertyDescription("Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.")
-    private ColumnTextSurroundedByWhitespacePercentCheckSpec monthlyPartitionStringSurroundedByWhitespacePercent;
+    private ColumnTextSurroundedByWhitespacePercentCheckSpec monthlyPartitionTextSurroundedByWhitespacePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.")
-    private ColumnTextValidCountryCodePercentCheckSpec monthlyPartitionStringValidCountryCodePercent;
+    private ColumnTextValidCountryCodePercentCheckSpec monthlyPartitionTextValidCountryCodePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of valid currency codes in a text column does not fall below the minimum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.")
-    private ColumnTextValidCurrencyCodePercentCheckSpec monthlyPartitionStringValidCurrencyCodePercent;
+    private ColumnTextValidCurrencyCodePercentCheckSpec monthlyPartitionTextValidCurrencyCodePercent;
 
 
     /**
@@ -332,72 +332,72 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
      * Returns a minimum string valid dates percent check.
      * @return Minimum string valid dates percent check.
      */
-    public ColumnTextSurroundedByWhitespaceCheckSpec getMonthlyPartitionStringSurroundedByWhitespace() {
-        return monthlyPartitionStringSurroundedByWhitespace;
+    public ColumnTextSurroundedByWhitespaceCheckSpec getMonthlyPartitionTextSurroundedByWhitespace() {
+        return monthlyPartitionTextSurroundedByWhitespace;
     }
 
     /**
      * Sets a new definition of a string surrounded by whitespace count check.
-     * @param monthlyPartitionStringSurroundedByWhitespace String surrounded by whitespace count check.
+     * @param monthlyPartitionTextSurroundedByWhitespace String surrounded by whitespace count check.
      */
-    public void setMonthlyPartitionStringSurroundedByWhitespace(ColumnTextSurroundedByWhitespaceCheckSpec monthlyPartitionStringSurroundedByWhitespace) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringSurroundedByWhitespace, monthlyPartitionStringSurroundedByWhitespace));
-        this.monthlyPartitionStringSurroundedByWhitespace = monthlyPartitionStringSurroundedByWhitespace;
-        propagateHierarchyIdToField(monthlyPartitionStringSurroundedByWhitespace, "monthly_partition_text_surrounded_by_whitespace");
+    public void setMonthlyPartitionTextSurroundedByWhitespace(ColumnTextSurroundedByWhitespaceCheckSpec monthlyPartitionTextSurroundedByWhitespace) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionTextSurroundedByWhitespace, monthlyPartitionTextSurroundedByWhitespace));
+        this.monthlyPartitionTextSurroundedByWhitespace = monthlyPartitionTextSurroundedByWhitespace;
+        propagateHierarchyIdToField(monthlyPartitionTextSurroundedByWhitespace, "monthly_partition_text_surrounded_by_whitespace");
     }
 
     /**
      * Returns a maximum string null placeholder count check.
      * @return Maximum string null placeholder count check.
      */
-    public ColumnTextSurroundedByWhitespacePercentCheckSpec getMonthlyPartitionStringSurroundedByWhitespacePercent() {
-        return monthlyPartitionStringSurroundedByWhitespacePercent;
+    public ColumnTextSurroundedByWhitespacePercentCheckSpec getMonthlyPartitionTextSurroundedByWhitespacePercent() {
+        return monthlyPartitionTextSurroundedByWhitespacePercent;
     }
 
     /**
      * Sets a new definition of a string surrounded by whitespace percent check.
-     * @param monthlyPartitionStringSurroundedByWhitespacePercent String surrounded by whitespace percent check.
+     * @param monthlyPartitionTextSurroundedByWhitespacePercent String surrounded by whitespace percent check.
      */
-    public void setMonthlyPartitionStringSurroundedByWhitespacePercent(ColumnTextSurroundedByWhitespacePercentCheckSpec monthlyPartitionStringSurroundedByWhitespacePercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringSurroundedByWhitespacePercent, monthlyPartitionStringSurroundedByWhitespacePercent));
-        this.monthlyPartitionStringSurroundedByWhitespacePercent = monthlyPartitionStringSurroundedByWhitespacePercent;
-        propagateHierarchyIdToField(monthlyPartitionStringSurroundedByWhitespacePercent, "monthly_partition_text_surrounded_by_whitespace_percent");
+    public void setMonthlyPartitionTextSurroundedByWhitespacePercent(ColumnTextSurroundedByWhitespacePercentCheckSpec monthlyPartitionTextSurroundedByWhitespacePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionTextSurroundedByWhitespacePercent, monthlyPartitionTextSurroundedByWhitespacePercent));
+        this.monthlyPartitionTextSurroundedByWhitespacePercent = monthlyPartitionTextSurroundedByWhitespacePercent;
+        propagateHierarchyIdToField(monthlyPartitionTextSurroundedByWhitespacePercent, "monthly_partition_text_surrounded_by_whitespace_percent");
     }
 
     /**
      * Returns a minimum strings in set count check.
      * @return Minimum strings in set count check.
      */
-    public ColumnTextValidCountryCodePercentCheckSpec getMonthlyPartitionStringValidCountryCodePercent() {
-        return monthlyPartitionStringValidCountryCodePercent;
+    public ColumnTextValidCountryCodePercentCheckSpec getMonthlyPartitionTextValidCountryCodePercent() {
+        return monthlyPartitionTextValidCountryCodePercent;
     }
 
     /**
      * Sets a new definition of a string valid country code percent check.
-     * @param monthlyPartitionStringValidCountryCodePercent String valid country code percent check.
+     * @param monthlyPartitionTextValidCountryCodePercent String valid country code percent check.
      */
-    public void setMonthlyPartitionStringValidCountryCodePercent(ColumnTextValidCountryCodePercentCheckSpec monthlyPartitionStringValidCountryCodePercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringValidCountryCodePercent, monthlyPartitionStringValidCountryCodePercent));
-        this.monthlyPartitionStringValidCountryCodePercent = monthlyPartitionStringValidCountryCodePercent;
-        propagateHierarchyIdToField(monthlyPartitionStringValidCountryCodePercent, "monthly_partition_text_valid_country_code_percent");
+    public void setMonthlyPartitionTextValidCountryCodePercent(ColumnTextValidCountryCodePercentCheckSpec monthlyPartitionTextValidCountryCodePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionTextValidCountryCodePercent, monthlyPartitionTextValidCountryCodePercent));
+        this.monthlyPartitionTextValidCountryCodePercent = monthlyPartitionTextValidCountryCodePercent;
+        propagateHierarchyIdToField(monthlyPartitionTextValidCountryCodePercent, "monthly_partition_text_valid_country_code_percent");
     }
 
     /**
      * Returns a minimum strings in set percent check.
      * @return Minimum strings in set percent check.
      */
-    public ColumnTextValidCurrencyCodePercentCheckSpec getMonthlyPartitionStringValidCurrencyCodePercent() {
-        return monthlyPartitionStringValidCurrencyCodePercent;
+    public ColumnTextValidCurrencyCodePercentCheckSpec getMonthlyPartitionTextValidCurrencyCodePercent() {
+        return monthlyPartitionTextValidCurrencyCodePercent;
     }
 
     /**
      * Sets a new definition of a string valid currency code percent check.
-     * @param monthlyPartitionStringValidCurrencyCodePercent String valid currency code percent check.
+     * @param monthlyPartitionTextValidCurrencyCodePercent String valid currency code percent check.
      */
-    public void setMonthlyPartitionStringValidCurrencyCodePercent(ColumnTextValidCurrencyCodePercentCheckSpec monthlyPartitionStringValidCurrencyCodePercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringValidCurrencyCodePercent, monthlyPartitionStringValidCurrencyCodePercent));
-        this.monthlyPartitionStringValidCurrencyCodePercent = monthlyPartitionStringValidCurrencyCodePercent;
-        propagateHierarchyIdToField(monthlyPartitionStringValidCurrencyCodePercent, "monthly_partition_text_valid_currency_code_percent");
+    public void setMonthlyPartitionTextValidCurrencyCodePercent(ColumnTextValidCurrencyCodePercentCheckSpec monthlyPartitionTextValidCurrencyCodePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionTextValidCurrencyCodePercent, monthlyPartitionTextValidCurrencyCodePercent));
+        this.monthlyPartitionTextValidCurrencyCodePercent = monthlyPartitionTextValidCurrencyCodePercent;
+        propagateHierarchyIdToField(monthlyPartitionTextValidCurrencyCodePercent, "monthly_partition_text_valid_currency_code_percent");
     }
 
 
