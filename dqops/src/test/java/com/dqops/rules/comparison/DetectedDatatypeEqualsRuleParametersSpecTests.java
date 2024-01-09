@@ -24,17 +24,17 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class DatatypeEqualsRuleParametersSpecTests extends BaseTest {
-    private DatatypeEqualsRuleParametersSpec sut;
+public class DetectedDatatypeEqualsRuleParametersSpecTests extends BaseTest {
+    private DetectedDatatypeEqualsRuleParametersSpec sut;
 
     @BeforeEach
     void setUp() {
-        this.sut = new DatatypeEqualsRuleParametersSpec();
+        this.sut = new DetectedDatatypeEqualsRuleParametersSpec();
     }
 
     @Test
     void executeRule_whenActualValueIsEqualExpectedDatatype_thenReturnsPassed() {
-        this.sut.setExpectedDatatype(2);
+        this.sut.setExpectedDatatype(DetectedDatatypeCategory.floats);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(2.0, this.sut);
         Assertions.assertTrue(ruleExecutionResult.getPassed());
         Assertions.assertEquals(2.0, ruleExecutionResult.getExpectedValue());
@@ -44,7 +44,7 @@ public class DatatypeEqualsRuleParametersSpecTests extends BaseTest {
 
     @Test
     void executeRule_whenActualValueIsEqualNotExpectedDatatype_thenReturnsPassed() {
-        this.sut.setExpectedDatatype(2);
+        this.sut.setExpectedDatatype(DetectedDatatypeCategory.floats);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(3.0, this.sut);
         Assertions.assertFalse(ruleExecutionResult.getPassed());
         Assertions.assertEquals(2.0, ruleExecutionResult.getExpectedValue());

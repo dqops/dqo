@@ -7,6 +7,8 @@ and through which its quality can be quantified. While different experts have pr
 and there is no standardization of their names or descriptions, almost all of them include some version of accuracy, completeness, 
 consistency, timeliness, uniqueness and validity.
 
+### Data quality dimension categories
+
 The following table explains the typical data quality dimensions and data quality issues that can be detected with those dimensions.
 The full list of data quality dimensions can be found in [Dimensions of Data Quality (DDQ) Research Paper](https://www.dama-nl.org/wp-content/uploads/2020/09/DDQ-Dimensions-of-Data-Quality-Research-Paper-version-1.2-d.d.-3-Sept-2020.pdf) 
 published by DAMA NL Foundation.

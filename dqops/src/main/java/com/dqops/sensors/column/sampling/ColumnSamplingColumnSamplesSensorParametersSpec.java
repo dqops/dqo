@@ -41,7 +41,6 @@ public class ColumnSamplingColumnSamplesSensorParametersSpec extends AbstractSen
     };
 
     @JsonPropertyDescription("The limit of results that are returned. The default value is 10 sample values with the highest count (the most popular).")
-    @SampleValues(values = { "10" })
     private Integer limit = 10;
 
     /**

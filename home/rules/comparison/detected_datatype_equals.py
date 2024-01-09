@@ -16,11 +16,22 @@
 
 from datetime import datetime
 from typing import Sequence
+from enum import IntEnum
+
+
+class DetectedDatatypeCategory(IntEnum):
+    integers = 1
+    floats = 2
+    dates = 3
+    timestamps = 4
+    booleans = 5
+    texts = 6
+    mixed = 7
 
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
-class EqualsRuleParametersSpec:
-    expected_datatype: int
+class DetectedDatatypeEqualsRuleParametersSpec:
+    expected_datatype: str
 
 
 class HistoricDataPoint:
@@ -38,7 +49,7 @@ class RuleTimeWindowSettingsSpec:
 # rule execution parameters, contains the sensor value (actual_value) and the rule parameters
 class RuleExecutionRunParameters:
     actual_value: float
-    parameters: EqualsRuleParametersSpec
+    parameters: DetectedDatatypeEqualsRuleParametersSpec
     time_period_local: datetime
     previous_readouts: Sequence[HistoricDataPoint]
     time_window: RuleTimeWindowSettingsSpec
@@ -61,10 +72,10 @@ class RuleExecutionResult:
 
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    if not hasattr(rule_parameters, 'actual_value'):
+    if not hasattr(rule_parameters, 'actual_value') or not hasattr(rule_parameters.parameters, 'expected_datatype'):
         return RuleExecutionResult()
 
-    expected_value = rule_parameters.parameters.expected_datatype
+    expected_value = getattr(DetectedDatatypeCategory, rule_parameters.parameters.expected_datatype).value
     lower_bound = expected_value
     upper_bound = expected_value
     passed = (expected_value == rule_parameters.actual_value)

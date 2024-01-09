@@ -19,7 +19,7 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.rules.comparison.DatatypeEqualsRuleParametersSpec;
+import com.dqops.rules.comparison.DetectedDatatypeEqualsRuleParametersSpec;
 import com.dqops.sensors.column.datatype.ColumnDatatypeStringDatatypeDetectSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -40,7 +40,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnDetectedDatatypeInTextCheckSpec extends
-        AbstractCheckSpec<ColumnDatatypeStringDatatypeDetectSensorParametersSpec, DatatypeEqualsRuleParametersSpec, DatatypeEqualsRuleParametersSpec, DatatypeEqualsRuleParametersSpec> {
+        AbstractCheckSpec<ColumnDatatypeStringDatatypeDetectSensorParametersSpec, DetectedDatatypeEqualsRuleParametersSpec, DetectedDatatypeEqualsRuleParametersSpec, DetectedDatatypeEqualsRuleParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDetectedDatatypeInTextCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -54,17 +54,17 @@ public class ColumnDetectedDatatypeInTextCheckSpec extends
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check, detects that the data type of values stored in a column matches an expected data type code (1..7).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private DatatypeEqualsRuleParametersSpec warning;
+    private DetectedDatatypeEqualsRuleParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for a row count that raises a data quality error (alert), detects that the data type of values stored in a column matches an expected data type code (1..7).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private DatatypeEqualsRuleParametersSpec error;
+    private DetectedDatatypeEqualsRuleParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem, detects that the data type of values stored in a column matches an expected data type code (1..7).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private DatatypeEqualsRuleParametersSpec fatal;
+    private DetectedDatatypeEqualsRuleParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -91,7 +91,7 @@ public class ColumnDetectedDatatypeInTextCheckSpec extends
      * @return Warning severity rule parameters.
      */
     @Override
-    public DatatypeEqualsRuleParametersSpec getWarning() {
+    public DetectedDatatypeEqualsRuleParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -99,7 +99,7 @@ public class ColumnDetectedDatatypeInTextCheckSpec extends
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(DatatypeEqualsRuleParametersSpec warning) {
+    public void setWarning(DetectedDatatypeEqualsRuleParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -111,7 +111,7 @@ public class ColumnDetectedDatatypeInTextCheckSpec extends
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public DatatypeEqualsRuleParametersSpec getError() {
+    public DetectedDatatypeEqualsRuleParametersSpec getError() {
         return this.error;
     }
 
@@ -119,7 +119,7 @@ public class ColumnDetectedDatatypeInTextCheckSpec extends
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(DatatypeEqualsRuleParametersSpec error) {
+    public void setError(DetectedDatatypeEqualsRuleParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -131,7 +131,7 @@ public class ColumnDetectedDatatypeInTextCheckSpec extends
      * @return Fatal severity rule parameters.
      */
     @Override
-    public DatatypeEqualsRuleParametersSpec getFatal() {
+    public DetectedDatatypeEqualsRuleParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -139,7 +139,7 @@ public class ColumnDetectedDatatypeInTextCheckSpec extends
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(DatatypeEqualsRuleParametersSpec fatal) {
+    public void setFatal(DetectedDatatypeEqualsRuleParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");

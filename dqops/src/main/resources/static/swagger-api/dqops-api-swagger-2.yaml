@@ -17099,17 +17099,17 @@ definitions:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check, detects that the data type\
           \ of values stored in a column matches an expected data type code (1..7)."
-        $ref: "#/definitions/DatatypeEqualsRuleParametersSpec"
+        $ref: "#/definitions/DetectedDatatypeEqualsRuleParametersSpec"
       error:
         description: "Default alerting threshold for a row count that raises a data\
           \ quality error (alert), detects that the data type of values stored in\
           \ a column matches an expected data type code (1..7)."
-        $ref: "#/definitions/DatatypeEqualsRuleParametersSpec"
+        $ref: "#/definitions/DetectedDatatypeEqualsRuleParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem, detects that the data type of\
           \ values stored in a column matches an expected data type code (1..7)."
-        $ref: "#/definitions/DatatypeEqualsRuleParametersSpec"
+        $ref: "#/definitions/DetectedDatatypeEqualsRuleParametersSpec"
   ColumnDistinctCountAnomalyDifferencingCheckSpec:
     type: "object"
     properties:
@@ -28655,15 +28655,6 @@ definitions:
           type: "string"
       database:
         type: "string"
-  DatatypeEqualsRuleParametersSpec:
-    type: "object"
-    properties:
-      expected_datatype:
-        type: "integer"
-        format: "int32"
-        description: "Expected data type code, the data type codes are: 1 - integers,\
-          \ 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 -\
-          \ mixed data types."
   DefaultSchedulesSpec:
     type: "object"
     properties:
@@ -28812,6 +28803,22 @@ definitions:
           \ the rows were deleted."
         additionalProperties:
           $ref: "#/definitions/DataDeleteResultPartition"
+  DetectedDatatypeEqualsRuleParametersSpec:
+    type: "object"
+    properties:
+      expected_datatype:
+        type: "string"
+        description: "Expected data type code, the values for the sensor's actual\
+          \ values are: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans,\
+          \ 6 - texts, 7 - mixed data types."
+        enum:
+        - "integers"
+        - "floats"
+        - "dates"
+        - "timestamps"
+        - "booleans"
+        - "texts"
+        - "mixed"
   DqoCloudUserModel:
     type: "object"
     properties:
