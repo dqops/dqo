@@ -34,7 +34,7 @@ To navigate to the BigQuery connection settings:
 
     ![Selecting BigQuery database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-bigquery.png)
 
-### **Filling in the connection settings**
+### **Fill in the connection settings**
 
 After navigating to the BigQuery connection settings, you will need to fill in the connection details.
 
