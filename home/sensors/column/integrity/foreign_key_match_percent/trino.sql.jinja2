@@ -2,7 +2,7 @@
 
 {%- macro render_foreign_table(foreign_table) -%}
 {%- if foreign_table.find(".") < 0 -%}
-   {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+   {{ lib.quote_identifier(lib.macro_catalog_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
 {%- else -%}
    {{ foreign_table }}
 {%- endif -%}
