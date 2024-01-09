@@ -9,9 +9,10 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import SvgIcon from '../../SvgIcon';
 import { useDashboard } from '../../../contexts/dashboardContext';
-import { DashboardsFolderSpec } from '../../../api';
+import { DashboardsFolderSpec, DashboardSpec } from '../../../api';
 import { getDashboardTooltipState } from '../../../redux/actions/dashboard.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import Switch from '../../Switch';
 
 interface FolderLevelProps {
   folder: DashboardsFolderSpec;
@@ -22,18 +23,26 @@ const LeftView = () => {
   const [selected, setSelected] = useState('');
   const sidebarRef = useRef<HTMLDivElement>(null);
   const [isResizing, setIsResizing] = useState(false);
+  const [showAdvanced, setShowAdvanced] = useState(localStorage.getItem('show-advanced-dashboards') === 'true');
   const { dashboardFolders } = useSelector(
     (state: IRootState) => state?.dashboard
   );
   const { openDashboardFolder, sidebarWidth, setSidebarWidth } = useDashboard();
   const dispatch = useActionDispatch();
-  const startResizing = useCallback(() => {
+  const startResizing = useCallback((mouseDownEvent: MouseEvent) => {
     setIsResizing(true);
+    mouseDownEvent.preventDefault();
+    mouseDownEvent.stopPropagation();
   }, []);
 
   const stopResizing = useCallback(() => {
     setIsResizing(false);
   }, []);
+
+  const showAdvancedChanged = (advanced : boolean) => {
+    setShowAdvanced(advanced);
+    localStorage.setItem('show-advanced-dashboards', advanced ? 'true' : 'false');
+  };
 
   useEffect(() => {
     openDashboardFolder(dashboardFolders.map((item) => item.folder_name));
@@ -48,6 +57,8 @@ const LeftView = () => {
         if (newWidth < 240 || newWidth > 700) return;
 
         setSidebarWidth(newWidth);
+        mouseMoveEvent.preventDefault();
+        mouseMoveEvent.stopPropagation();
       }
     },
     [isResizing]
@@ -126,36 +137,42 @@ const LeftView = () => {
         </div>
         {!!dashboardStatus[key] && (
           <div className="pl-5">
-            {folder.folders?.map((f, index) => (
+            {folder.folders
+              ?.map((folder, index) => [folder, index] as [folder: DashboardsFolderSpec, index: number])
+              ?.filter((folderIndexTuple) => showAdvanced || folderIndexTuple[0].standard)
+              ?.map((folderIndexTuple) => (
               <FolderLevel
-                folder={f}
-                key={`${f.folder_name}-${index}`}
+                folder={folderIndexTuple[0]}
+                key={`${folderIndexTuple[0].folder_name}-${folderIndexTuple[1]}`}
                 parents={[...parents, folder]}
               />
             ))}
-            {folder?.dashboards?.map((dashboard, jIndex) => (
+            {folder?.dashboards
+               ?.map((dashboard : DashboardSpec, jIndex : number) => [dashboard, jIndex] as [dashboard: DashboardSpec, jIndex: number])
+               ?.filter((dashboardIndexTuple) => showAdvanced || dashboardIndexTuple[0].standard)
+               ?.map((dashboardIndexTuple) => (
               <div
-                key={jIndex}
+                key={dashboardIndexTuple[1]}
                 className={
-                  selected === [key, dashboard?.dashboard_name].join('-')
+                  selected === [key, dashboardIndexTuple[0]?.dashboard_name].join('-')
                     ? 'group cursor-pointer flex space-x-1.5 items-center mb-1 h-5 bg-gray-300 hover:bg-gray-300 relative'
                     : 'group cursor-pointer flex space-x-1.5 items-center mb-1 h-5 hover:bg-gray-300 relative'
                 }
                 onMouseDown={() => {
                   changeActiveTab(
-                    dashboard,
+                    dashboardIndexTuple[0],
                     folder.folder_name,
                     parents,
                     [
                       key,
-                      dashboard?.dashboard_name ? dashboard?.dashboard_name : ''
+                      dashboardIndexTuple[0]?.dashboard_name ? dashboardIndexTuple[0]?.dashboard_name : ''
                     ].join('-'),
                     true
                   );
                   setSelected(
                     [
                       key,
-                      dashboard?.dashboard_name ? dashboard?.dashboard_name : ''
+                      dashboardIndexTuple[0]?.dashboard_name ? dashboardIndexTuple[0]?.dashboard_name : ''
                     ].join('-')
                   );
                 }}
@@ -166,13 +183,13 @@ const LeftView = () => {
                   onMouseEnter={(e) =>
                     handleMouseEnter(
                       e,
-                      dashboard?.dashboard_name ?? '',
-                      dashboard.url ?? ''
+                      dashboardIndexTuple[0]?.dashboard_name ?? '',
+                      dashboardIndexTuple[0].url ?? ''
                     )
                   }
                   onMouseLeave={() => handleMouseLeave()}
                 >
-                  {dashboard?.dashboard_name}
+                  {dashboardIndexTuple[0]?.dashboard_name}
                 </div>
               </div>
             ))}
@@ -188,17 +205,28 @@ const LeftView = () => {
       ref={sidebarRef}
       style={{ width: sidebarWidth }}
     >
-      {dashboardFolders.map((folder, index) => (
+      <div className="w-full h-12 flex items-left gap-x-4">
+        <Switch
+          checked={showAdvanced}
+          onChange={showAdvancedChanged}
+        />
+        Show advanced dashboards
+      </div>
+
+      {dashboardFolders
+        ?.map((folder, index) => [folder, index] as [folder: DashboardsFolderSpec, index: number])
+        ?.filter((folderIndexTuple) => showAdvanced || folderIndexTuple[0].standard)
+        ?.map((folderIndexTuple) => (
         <FolderLevel
-          folder={folder}
-          key={`${folder.folder_name}-${index}`}
+          folder={folderIndexTuple[0]}
+          key={`${folderIndexTuple[0].folder_name}-${folderIndexTuple[1]}`}
           parents={[]}
         />
       ))}
 
       <div
         className="cursor-ew-resize fixed bottom-0 w-2 transform -translate-x-1/2 z-20 top-16"
-        onMouseDown={startResizing}
+        onMouseDown={(event) => startResizing(event as any)}
         style={{ left: sidebarWidth, userSelect: 'none' }}
       />
     </div>

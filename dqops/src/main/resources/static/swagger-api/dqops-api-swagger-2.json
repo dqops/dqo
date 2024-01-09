@@ -22509,7 +22509,7 @@
           }
         },
         "daily_nulls_count" : {
-          "description" : "Detects that a column has any null values (with the rule threshold max_count=0). Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnNullsCountCheckSpec"
         },
         "daily_nulls_percent" : {
@@ -22517,7 +22517,7 @@
           "$ref" : "#/definitions/ColumnNullsPercentCheckSpec"
         },
         "daily_not_nulls_count" : {
-          "description" : "Detects columns that are empty and have no values (with the rule threshold min_count=1). Verifies that the number of not null values in a column does not exceed the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Detects empty columns. The default rule min_count=1 verifies that the column has any values. Verifies that the number of not null values in a column does not exceed the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnNotNullsCountCheckSpec"
         },
         "daily_not_nulls_percent" : {
@@ -22557,7 +22557,7 @@
           }
         },
         "daily_partition_nulls_count" : {
-          "description" : "Detects that a column has any null values (with the rule threshold max_count=0). Verifies that the number of null values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.",
           "$ref" : "#/definitions/ColumnNullsCountCheckSpec"
         },
         "daily_partition_nulls_percent" : {
@@ -22565,7 +22565,7 @@
           "$ref" : "#/definitions/ColumnNullsPercentCheckSpec"
         },
         "daily_partition_not_nulls_count" : {
-          "description" : "Detects columns that are empty and have no values (with the rule threshold min_count=1). Verifies that the number of not null values in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Detects empty columns. The default rule min_count=1 verifies that the column has any values. Verifies that the number of not null values in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.",
           "$ref" : "#/definitions/ColumnNotNullsCountCheckSpec"
         },
         "daily_partition_not_nulls_percent" : {
@@ -22605,7 +22605,7 @@
           }
         },
         "monthly_nulls_count" : {
-          "description" : "Detects that a column has any null values (with the rule threshold max_count=0). Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.",
+          "description" : "Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnNullsCountCheckSpec"
         },
         "monthly_nulls_percent" : {
@@ -22633,7 +22633,7 @@
           }
         },
         "monthly_partition_nulls_count" : {
-          "description" : "Detects that a column has any null values (with the rule threshold max_count=0). Verifies that the number of null values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.",
           "$ref" : "#/definitions/ColumnNullsCountCheckSpec"
         },
         "monthly_partition_nulls_percent" : {
@@ -22641,7 +22641,7 @@
           "$ref" : "#/definitions/ColumnNullsPercentCheckSpec"
         },
         "monthly_partition_not_nulls_count" : {
-          "description" : "Detects columns that are empty and have no values (with the rule threshold min_count=1). Verifies that the number of not null values in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Detects empty columns. The default rule min_count=1 verifies that the column has any values. Verifies that the number of not null values in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.",
           "$ref" : "#/definitions/ColumnNotNullsCountCheckSpec"
         },
         "monthly_partition_not_nulls_percent" : {
@@ -22805,7 +22805,7 @@
           }
         },
         "profile_nulls_count" : {
-          "description" : "Detects that a column has any null values (with the rule threshold max_count=0). Verifies that the number of null values in a column does not exceed the maximum accepted count.",
+          "description" : "Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count.",
           "$ref" : "#/definitions/ColumnNullsCountCheckSpec"
         },
         "profile_nulls_percent" : {
@@ -22813,7 +22813,7 @@
           "$ref" : "#/definitions/ColumnNullsPercentCheckSpec"
         },
         "profile_not_nulls_count" : {
-          "description" : "Detects columns that are empty and have no values (with the rule threshold min_count=1). Verifies that the number of not null values in a column does not exceed the minimum accepted count.",
+          "description" : "Detects empty columns. The default rule min_count=1 verifies that the column has any values. Verifies that the number of not null values in a column does not exceed the minimum accepted count.",
           "$ref" : "#/definitions/ColumnNotNullsCountCheckSpec"
         },
         "profile_not_nulls_percent" : {
@@ -26746,19 +26746,19 @@
           "description" : "Verifies that the percentage text values that are parsable to a date value in a column does not fall below the minimum accepted percentage. DQOps uses a safe_cast when possible, otherwise the text is verified using a regular expression. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnTextParsableToDatePercentCheckSpec"
         },
-        "daily_string_surrounded_by_whitespace" : {
+        "daily_text_surrounded_by_whitespace" : {
           "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
         },
-        "daily_string_surrounded_by_whitespace_percent" : {
+        "daily_text_surrounded_by_whitespace_percent" : {
           "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
         },
-        "daily_string_valid_country_code_percent" : {
+        "daily_text_valid_country_code_percent" : {
           "description" : "Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnTextValidCountryCodePercentCheckSpec"
         },
-        "daily_string_valid_currency_code_percent" : {
+        "daily_text_valid_currency_code_percent" : {
           "description" : "Verifies that the percentage of valid currency codes in a text column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnTextValidCurrencyCodePercentCheckSpec"
         }
@@ -26822,19 +26822,19 @@
           "description" : "Verifies that the percentage text values that are parsable to a date value in a column does not fall below the minimum accepted percentage. DQOps uses a safe_cast when possible, otherwise the text is verified using a regular expression. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.",
           "$ref" : "#/definitions/ColumnTextParsableToDatePercentCheckSpec"
         },
-        "daily_partition_string_surrounded_by_whitespace" : {
+        "daily_partition_text_surrounded_by_whitespace" : {
           "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.",
           "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
         },
-        "daily_partition_string_surrounded_by_whitespace_percent" : {
+        "daily_partition_text_surrounded_by_whitespace_percent" : {
           "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.",
           "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
         },
-        "daily_partition_string_valid_country_code_percent" : {
+        "daily_partition_text_valid_country_code_percent" : {
           "description" : "Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.",
           "$ref" : "#/definitions/ColumnTextValidCountryCodePercentCheckSpec"
         },
-        "daily_partition_string_valid_currency_code_percent" : {
+        "daily_partition_text_valid_currency_code_percent" : {
           "description" : "Verifies that the percentage of valid currency codes in a text column does not fall below the minimum accepted percentage. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.",
           "$ref" : "#/definitions/ColumnTextValidCurrencyCodePercentCheckSpec"
         }
@@ -27514,19 +27514,19 @@
           "description" : "Verifies that the percentage text values that are parsable to a date value in a column does not fall below the minimum accepted percentage. DQOps uses a safe_cast when possible, otherwise the text is verified using a regular expression. Stores the most recent captured value for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnTextParsableToDatePercentCheckSpec"
         },
-        "monthly_string_surrounded_by_whitespace" : {
+        "monthly_text_surrounded_by_whitespace" : {
           "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Stores the most recent captured value for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
         },
-        "monthly_string_surrounded_by_whitespace_percent" : {
+        "monthly_text_surrounded_by_whitespace_percent" : {
           "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
         },
-        "monthly_string_valid_country_code_percent" : {
+        "monthly_text_valid_country_code_percent" : {
           "description" : "Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnTextValidCountryCodePercentCheckSpec"
         },
-        "monthly_string_valid_currency_code_percent" : {
+        "monthly_text_valid_currency_code_percent" : {
           "description" : "Verifies that the percentage of valid currency codes in a text column does not fall below the minimum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnTextValidCurrencyCodePercentCheckSpec"
         }
@@ -27590,19 +27590,19 @@
           "description" : "Verifies that the percentage text values that are parsable to a date value in a column does not fall below the minimum accepted percentage. DQOps uses a safe_cast when possible, otherwise the text is verified using a regular expression. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.",
           "$ref" : "#/definitions/ColumnTextParsableToDatePercentCheckSpec"
         },
-        "monthly_partition_string_surrounded_by_whitespace" : {
+        "monthly_partition_text_surrounded_by_whitespace" : {
           "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.",
           "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
         },
-        "monthly_partition_string_surrounded_by_whitespace_percent" : {
+        "monthly_partition_text_surrounded_by_whitespace_percent" : {
           "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.",
           "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
         },
-        "monthly_partition_string_valid_country_code_percent" : {
+        "monthly_partition_text_valid_country_code_percent" : {
           "description" : "Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.",
           "$ref" : "#/definitions/ColumnTextValidCountryCodePercentCheckSpec"
         },
-        "monthly_partition_string_valid_currency_code_percent" : {
+        "monthly_partition_text_valid_currency_code_percent" : {
           "description" : "Verifies that the percentage of valid currency codes in a text column does not fall below the minimum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.",
           "$ref" : "#/definitions/ColumnTextValidCurrencyCodePercentCheckSpec"
         }
@@ -28002,19 +28002,19 @@
           "description" : "Verifies that the percentage text values that are parsable to a date value in a column does not fall below the minimum accepted percentage. DQOps uses a safe_cast when possible, otherwise the text is verified using a regular expression",
           "$ref" : "#/definitions/ColumnTextParsableToDatePercentCheckSpec"
         },
-        "profile_string_surrounded_by_whitespace" : {
+        "profile_text_surrounded_by_whitespace" : {
           "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table",
           "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
         },
-        "profile_string_surrounded_by_whitespace_percent" : {
+        "profile_text_surrounded_by_whitespace_percent" : {
           "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage",
           "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
         },
-        "profile_string_valid_country_code_percent" : {
+        "profile_text_valid_country_code_percent" : {
           "description" : "Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage",
           "$ref" : "#/definitions/ColumnTextValidCountryCodePercentCheckSpec"
         },
-        "profile_string_valid_currency_code_percent" : {
+        "profile_text_valid_currency_code_percent" : {
           "description" : "Verifies that the percentage of valid currency codes in a text column does not fall below the minimum accepted percentage",
           "$ref" : "#/definitions/ColumnTextValidCurrencyCodePercentCheckSpec"
         }
@@ -28965,7 +28965,7 @@
           "description" : "Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.",
           "$ref" : "#/definitions/ColumnDistinctCountChangeCheckSpec"
         },
-        "profile_change_distinct_percent" : {
+        "profile_distinct_percent_change" : {
           "description" : "Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout.",
           "$ref" : "#/definitions/ColumnDistinctPercentChangeCheckSpec"
         },
@@ -28981,15 +28981,15 @@
           "description" : "Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last month.",
           "$ref" : "#/definitions/ColumnDistinctCountChange30DaysCheckSpec"
         },
-        "profile_change_distinct_percent_1_day" : {
+        "profile_distinct_percent_change_1_day" : {
           "description" : "Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from yesterday.",
           "$ref" : "#/definitions/ColumnDistinctPercentChange1DayCheckSpec"
         },
-        "profile_change_distinct_percent_7_days" : {
+        "profile_distinct_percent_change_7_days" : {
           "description" : "Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last week.",
           "$ref" : "#/definitions/ColumnDistinctPercentChange7DaysCheckSpec"
         },
-        "profile_change_distinct_percent_30_days" : {
+        "profile_distinct_percent_change_30_days" : {
           "description" : "Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last month.",
           "$ref" : "#/definitions/ColumnDistinctPercentChange30DaysCheckSpec"
         }
@@ -29674,6 +29674,10 @@
           "format" : "int32",
           "description" : "Dashboard height (px)"
         },
+        "standard" : {
+          "type" : "boolean",
+          "description" : "Shows the dashboard always in the data quality dashboard section. The dashboards that are not 'standard' are advanced dashboards, hidden initially."
+        },
         "disable_thumbnail" : {
           "type" : "boolean",
           "description" : "Disables showing a thumbnail. A thumbnail url for Looker Studio dashboards is generated by adding /thumbnail to the end of the dashboard's url. It is a Google generated thumbnail of the dashboard."
@@ -29693,6 +29697,10 @@
         "folder_name" : {
           "type" : "string",
           "description" : "Folder name"
+        },
+        "standard" : {
+          "type" : "boolean",
+          "description" : "Always shows this schema tree node because it contains standard dashboards. Set the value to false to show this folder only when advanced dashboards are enabled."
         },
         "dashboards" : {
           "type" : "array",
