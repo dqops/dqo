@@ -541,6 +541,12 @@
 			<groupId>com-amazon-athena</groupId>
 			<artifactId>athena-jdbc</artifactId>
 			<version>3.0.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<!-- test dependencies -->
