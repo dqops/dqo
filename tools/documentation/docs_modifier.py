@@ -23,4 +23,4 @@ def main():
 
 main()
 
-# python docs_modificator.py C:\dev\dqoado\site
+# python docs_modifier.py C:\dev\dqoado\site
