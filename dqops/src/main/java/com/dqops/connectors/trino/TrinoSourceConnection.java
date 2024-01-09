@@ -156,7 +156,8 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
     }
 
     /**
-     * Athena Driver has missing Driver in META-INF/services jar path. It cannot be automatically registered.
+     * Athena JDBC Driver has missing java.sql.Driver in META-INF/services jar path.
+     * It cannot be automatically registered, so the method does it manually.
      */
     private static void initializeAthenaDriver(){
         if(athenaInitialized){
@@ -164,7 +165,7 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
         }
         try {
             synchronized (initializeLock){
-                Class.forName("com.amazon.athena.jdbc.AthenaDriver");   // todo: lazy registering
+                Class.forName("com.amazon.athena.jdbc.AthenaDriver");
                 TrinoSourceConnection.athenaInitialized = true;
             }
         } catch (ClassNotFoundException e) {
