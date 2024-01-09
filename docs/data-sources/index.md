@@ -5,7 +5,7 @@ source connection. A data source connection specifies the parameters needed to c
 location and authentication information. The data source connection information for each data source type may be different.
 Some data sources use existing database connection APIs (such as ODBC/JDBC), and others have proprietary APIs.
 
-In DQOps, you can add a new data source connection through the GUI, command line or DQOps shell. For information on the 
+In DQOps, you can add a new data source connection through the user interface, command line or DQOps shell. For information on the 
 parameters you need to specify, see the document dedicated to each data source.
 
 DQOps supports the following types of data sources.
