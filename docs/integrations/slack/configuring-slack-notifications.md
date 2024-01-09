@@ -10,64 +10,73 @@ Slack integration allows you to receive notifications whenever an issue is detec
 
 ## Configuration steps in Slack API
 
-1. Open Slack webpage
+### **Create a new app**
 
-    Open the slack API webpage: [https://api.slack.com/apps](https://api.slack.com/apps) and select the app you would like to receive notifications.
+1. Open the Slack API webpage: [https://api.slack.com/apps](https://api.slack.com/apps) and select the app you would like to receive notifications.
     
-    In case you have not already created a Slack app or want to configure notifications with a new Slack app, select the **Create New App button**. 
-    It will trigger a pop-up window with the app creation.
+    In case you have not already created a Slack app or want to configure notifications with a new Slack app, select the **Create an App** button. 
+    This will open the pop-up window where you can create a new app.
 
-    ![slack-api](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configuring-slack-notifications/slack-api-1.png)
+    ![Create a new app](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configuring-slack-notifications/slack-api-1.png)
 
-    Next, select the **From scratch**. 
+2. Select the **From scratch** option. 
 
-    ![slack-api](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configuring-slack-notifications/slack-api-2.png)
+    ![Create a new app from scratch](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configuring-slack-notifications/slack-api-2.png)
 
-    On a final window fill the **App Name** as DQOps Notifications and pick a workspace to integrate notifications.
+3. On the final window, add the **App Name** as **DQOps Notifications** and pick a workspace to integrate notifications.
 
-    ![slack-api](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configuring-slack-notifications/slack-api-3.png)
-
-2. Enable Incoming Webhooks in the Features section
-
-    To be able to receive **Incoming Webhooks** messages on Slack you need to enable this feature on the Slack API webpage using the ON/OFF toggle button.
-
-    You can find more information about [sending messages using Incoming Webhooks here](https://api.slack.com/messaging/webhooks)
-
-    ![activate-incoming-webhook](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configuring-slack-notifications/activate-incoming-webhook.png)
+    ![Name app and choose workspace](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configuring-slack-notifications/slack-api-3.png)
 
 
-3. Create a new webhook URL or copy an existing one that you will paste into the DQOps at the later steps.
-    You can find Webhooks at the bottom of the same page.
+### **Enable Webhooks in the new app**
 
-    !!! warning "Test the webhook"
-   
-        We suggest testing if the set Webhooks configuration is correct by running a sample curl command in the command line.
+Select the **Features** section on the left and activate incoming Webhooks by clicking on the toggle button on the right.
+
+You can find more information about [sending messages using Incoming Webhooks here](https://api.slack.com/messaging/webhooks)
+
+![Enable incoming webhooks](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configuring-slack-notifications/activate-incoming-webhook.png)
+
+### **Create a new webhook URL**
+
+Create a new Webhook URL by clicking the **Add New Webhook to Workspace button**
+
+![Create a new Webhook URL](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configuring-slack-notifications/copy-webhook.png)
+
+
+!!! warning "Test the webhook"
+       
+    We suggest testing if the set Webhooks configuration is correct by running a sample curl command in the command line.
       
-        Soon after executing the curl command, you should get a message in Slack
+Soon after executing the curl command, you should get a message in Slack
 
-    ![copy-webhook](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configuring-slack-notifications/copy-webhook.png)
+Slack application supports configuration of multiple webhooks within a single app.
 
-    Slack application supports configuration of multiple webhooks within a single app.
-
-    !!! tip "Use different Slack channels"
-
-        You can divide connections or even different statuses of incidents and link them to different Slack channels within a single Slack application.
+!!! tip "Use different Slack channels"
+    
+    You can divide connections or even different statuses of incidents and link them to different Slack channels within a single Slack application.
 
 
-## Types of webhooks configuration in DQOps
+## Webhooks configuration in DQOps
 
-There are two ways to configure webhooks in the DQOps platform.
-
-The first method is using the default webhooks configuration available under the Configuration menu, as shown on the screen.
-
-![Default webhook configuration](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configuring-slack-notifications/default-webhooks-page.png)
+There are two ways to configure webhooks in the DQOps platform. The first method is using the default webhooks 
+configuration available under the Configuration menu.
 
 The second method is configuring webhooks on a connection level under the Notifications and Incidents tab, which is presented
 in the Configuration steps in DQOps section.
 
 DQOps uses the default webhooks configuration by default. If the connection has a different webhooks configuration, this configuration is used.
 
-## Configure Webhooks on connection level
+
+### Configure Default webhooks configuration
+
+You can configure default webhooks configuration for all connections.  
+Simply go to the **Configuration** section and select the **Default webhooks** from the tree view on the left. Add the 
+Webhook URLs generated in Slack to appropriate input fields. 
+
+![Default webhook configuration](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configuring-slack-notifications/default-webhooks-page.png)
+
+
+### Configure Webhooks on connection level
 
 To configure webhooks on a connection level in DQOps, follow the steps below. 
 
@@ -77,7 +86,7 @@ To configure webhooks on a connection level in DQOps, follow the steps below.
 
 2. In the tree view on the left, select the data source of interest, and select the **Incidents and Notifications** tab.
 
-    The url path part can be also used : /sources/connection/**[connection_name]**/incidents
+    The URL path part can be also used : /sources/connection/**[connection_name]**/incidents
 
     Remember to replace [connection_name] with your connection name, created in DQOps application.
 
@@ -101,7 +110,7 @@ to the support team that is monitoring and assessing new data quality incidents.
 or a 2nd level support team.
 
 This type of notification should be configured in the **A new incident was opened (detected)** field on
-the [webhook configuration](../webhooks/index.md) page. The Slack webhook url for this parameter should
+the [webhook configuration](../webhooks/index.md) page. The Slack webhook URL for this parameter should
 point to the Slack channel used by the 2nd level support team that is monitoring and reviewing new data quality incidents.
 
 A new incident preview in Slack is shown below.
@@ -115,7 +124,7 @@ Changing the incident status to **Acknowledged** is the next status in the incid
 that the incident was acknowledged (confirmed), and is assigned to the engineering team (the 3rd level support) to be fixed. 
 
 This type of notification should be configured in the **An incident was acknowledged** field on
-the [webhook configuration](../webhooks/index.md) page. The Slack webhook url for this parameter should
+the [webhook configuration](../webhooks/index.md) page. The Slack webhook URL for this parameter should
 point to the Slack channel used by the 3nd level support team that is fixing data quality incidents.
 
 An acknowledged incident preview in Slack is shown below.
@@ -126,14 +135,14 @@ The difference from the message published for a new incident is subtle.
 Only the **Acknowledged**, **Resolved** and **Muted** status messages differ in the title.
 
 
-## Setting incident base url
+## Set the incident base URL
 
-The **View in DQOps** link will open an incident url in DQOps. If your DQOps instance is running in production mode
-and the DQOps web interface is assigned a host name, the base url must be configured. The default base url of DQOps
+The **View in DQOps** link will open an incident URL in DQOps. If your DQOps instance is running in production mode
+and the DQOps web interface is assigned a host name, the base URL must be configured. The default base URL of DQOps
 is derived from the port number configured using the [--server.port](../../command-line-interface/dqo.md#--server.port) parameter.
-When no additional configuration is applied, the incident url will look like *http://localhost:8888/incidents/bigquery-public-data/2023/10/70cc4354-344f-bf9c-9bab-34ffae2f1179*.
+When no additional configuration is applied, the incident URL will look like *http://localhost:8888/incidents/bigquery-public-data/2023/10/70cc4354-344f-bf9c-9bab-34ffae2f1179*.
 
-The *http://localhost:8888/* base url can be configured when starting DQOps using
+The *http://localhost:8888/* base URL can be configured when starting DQOps using
 the [--dqo.instance.return-base-url](../../command-line-interface/dqo.md#--dqo.instance.return-base-url) startup parameter
 as shown in the following example.
 
@@ -141,6 +150,6 @@ as shown in the following example.
 dqo> dqo --dqo.instance.return-base-url=https://dqops.mycompany.com/ run
 ```
 
-The base url for a DQOps Cloud SaaS instance is already configured, 
+The base URL for a DQOps Cloud SaaS instance is already configured, 
 and the base address is *https://&lt;customer&gt;.us.dqops.com* for instances hosted in the USA. 
 

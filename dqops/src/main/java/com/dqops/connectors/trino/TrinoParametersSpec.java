@@ -45,17 +45,17 @@ public class TrinoParametersSpec extends BaseProviderParametersSpec
         }
     };
 
-    @CommandLine.Option(names = {"--trino-host"}, description = "Trino host name")
+    @CommandLine.Option(names = {"--trino-engine"}, description = "Trino engine type.")
+    @JsonPropertyDescription("Trino engine type. Supports also a ${TRINO_ENGINE} configuration with a custom environment variable.")
+    private TrinoEngineType trinoEngineType;
+
+    @CommandLine.Option(names = {"--trino-host"}, description = "Trino host name.")
     @JsonPropertyDescription("Trino host name. Supports also a ${TRINO_HOST} configuration with a custom environment variable.")
     private String host;
 
-    @CommandLine.Option(names = {"--trino-port"}, description = "Trino port number")
+    @CommandLine.Option(names = {"--trino-port"}, description = "Trino port number.")
     @JsonPropertyDescription("Trino port number. The default port is 8080. Supports also a ${TRINO_PORT} configuration with a custom environment variable.")
     private String port;
-
-    @CommandLine.Option(names = {"--trino-database"}, description = "Trino database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    @JsonPropertyDescription("Trino database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    private String database;
 
     @CommandLine.Option(names = {"--trino-user"}, description = "Trino user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     @JsonPropertyDescription("Trino user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
@@ -69,6 +69,43 @@ public class TrinoParametersSpec extends BaseProviderParametersSpec
     @CommandLine.Option(names = {"-T"}, description = "Trino additional properties that are added to the JDBC connection string")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, String> properties;
+
+    @CommandLine.Option(names = {"--athena-region"}, description = "The AWS Athena Region where queries will be run. Supports also a ${ATHENA_REGION} configuration with a custom environment variable.")
+    @JsonPropertyDescription("The AWS Region where queries will be run. Supports also a ${ATHENA_REGION} configuration with a custom environment variable.")
+    private String athenaRegion;
+
+    @CommandLine.Option(names = {"--trino-catalog"}, description = "The Trino catalog that contains the databases and the tables that will be accessed with the driver. Supports also a ${TRINO_CATALOG} configuration with a custom environment variable.")
+    @JsonPropertyDescription("The catalog that contains the databases and the tables that will be accessed with the driver. Supports also a ${TRINO_CATALOG} configuration with a custom environment variable.")
+    private String catalog;
+
+    @CommandLine.Option(names = {"--athena-work-group"}, description = "The Athena WorkGroup in which queries will run. Supports also a ${ATHENA_WORK_GROUP} configuration with a custom environment variable.")
+    @JsonPropertyDescription("The workgroup in which queries will run. Supports also a ${ATHENA_WORK_GROUP} configuration with a custom environment variable.")
+    private String athenaWorkGroup;
+
+    @CommandLine.Option(names = {"--athena-output-location"}, description = "The location in Amazon S3 where query results will be stored. Supports also a ${ATHENA_OUTPUT_LOCATION} configuration with a custom environment variable.")
+    @JsonPropertyDescription("The location in Amazon S3 where query results will be stored. Supports also a ${ATHENA_OUTPUT_LOCATION} configuration with a custom environment variable.")
+    private String athenaOutputLocation;
+
+    @CommandLine.Option(names = {"-A"}, description = "Athena additional properties that are added to the JDBC connection string")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private Map<String, String> athenaProperties;
+
+    /**
+     * Returns the trino engine type.
+     * @return Trino engine type.
+     */
+    public TrinoEngineType getTrinoEngineType() {
+        return trinoEngineType;
+    }
+
+    /**
+     * Sets the trino engine type.
+     * @param trinoEngineType New trino engine type.
+     */
+    public void setTrinoEngineType(TrinoEngineType trinoEngineType) {
+        setDirtyIf(!Objects.equals(this.trinoEngineType, trinoEngineType));
+        this.trinoEngineType = trinoEngineType;
+    }
 
     /**
      * Returns the host name.
@@ -102,23 +139,6 @@ public class TrinoParametersSpec extends BaseProviderParametersSpec
     public void setPort(String port) {
         setDirtyIf(!Objects.equals(this.port, port));
         this.port = port;
-    }
-
-    /**
-     * Returns a physical database name.
-     * @return Physical database name.
-     */
-    public String getDatabase() {
-        return database;
-    }
-
-    /**
-     * Sets a physical database name.
-     * @param database Physical database name.
-     */
-    public void setDatabase(String database) {
-        setDirtyIf(!Objects.equals(this.database, database));
-        this.database = database;
     }
 
     /**
@@ -172,6 +192,102 @@ public class TrinoParametersSpec extends BaseProviderParametersSpec
         this.properties = properties != null ? Collections.unmodifiableMap(properties) : null;
     }
 
+
+    /**
+     * Returns the Athena's AWS Region.
+     * @return Athena's AWS Region.
+     */
+    public String getAthenaRegion() {
+        return athenaRegion;
+    }
+
+    /**
+     * Sets Athena's AWS Region.
+     * @param athenaRegion Athena's AWS Region.
+     */
+    public void setAthenaRegion(String athenaRegion) {
+        setDirtyIf(!Objects.equals(this.athenaRegion, athenaRegion));
+        this.athenaRegion = athenaRegion;
+    }
+
+    /**
+     * Returns the catalog
+     * @return The catalog name.
+     */
+    public String getCatalog() {
+        return catalog;
+    }
+
+    /**
+     * Sets the catalog name.
+     * @param catalog The catalog name.
+     */
+    public void setCatalog(String catalog) {
+        setDirtyIf(!Objects.equals(this.catalog, catalog));
+        this.catalog = catalog;
+    }
+
+    /**
+     * Returns a high level container name that contian schemas.
+     * @return High level container name that contian schemas.
+     */
+    @Override
+    public String getDatabase(){
+        return getCatalog();
+    }
+
+    /**
+     * Returns the Athena's WorkGroup
+     * @return Athena's WorkGroup.
+     */
+    public String getAthenaWorkGroup() {
+        return athenaWorkGroup;
+    }
+
+    /**
+     * Sets Athena's WorkGroup.
+     * @param athenaWorkGroup Athena's WorkGroup.
+     */
+    public void setAthenaWorkGroup(String athenaWorkGroup) {
+        setDirtyIf(!Objects.equals(this.athenaWorkGroup, athenaWorkGroup));
+        this.athenaWorkGroup = athenaWorkGroup;
+    }
+
+    /**
+     * Returns the Athena's OutputLocation
+     * @return Athena's OutputLocation.
+     */
+    public String getAthenaOutputLocation() {
+        return athenaOutputLocation;
+    }
+
+    /**
+     * Sets Athena's OutputLocation.
+     * @param athenaOutputLocation Athena's OutputLocation.
+     */
+    public void setAthenaOutputLocation(String athenaOutputLocation) {
+        setDirtyIf(!Objects.equals(this.athenaOutputLocation, athenaOutputLocation));
+        this.athenaOutputLocation = athenaOutputLocation;
+    }
+
+    /**
+     * Returns a key/value map of additional properties that are included in the JDBC connection string.
+     * @return Key/value dictionary of additional JDBC properties.
+     */
+    public Map<String, String> getAthenaProperties() {
+        return athenaProperties;
+    }
+
+    /**
+     * Sets a dictionary of additional connection parameters for AWS Athena that are added to the JDBC connection string.
+     * @param athenaProperties Key/value dictionary with extra parameters.
+     */
+    public void setAthenaProperties(Map<String, String> athenaProperties) {
+        setDirtyIf(!Objects.equals(this.athenaProperties, athenaProperties));
+        this.athenaProperties = athenaProperties != null ? Collections.unmodifiableMap(athenaProperties) : null;
+    }
+
+
     /**
      * Returns the child map on the spec class with all fields.
      *
@@ -199,12 +315,20 @@ public class TrinoParametersSpec extends BaseProviderParametersSpec
      */
     public TrinoParametersSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
         TrinoParametersSpec cloned = this.deepClone();
+
+        cloned.trinoEngineType = TrinoEngineType.valueOf(secretValueProvider.expandValue(cloned.trinoEngineType.toString(), lookupContext));
+
         cloned.host = secretValueProvider.expandValue(cloned.host, lookupContext);
         cloned.port = secretValueProvider.expandValue(cloned.port, lookupContext);
-        cloned.database = secretValueProvider.expandValue(cloned.database, lookupContext);
         cloned.user = secretValueProvider.expandValue(cloned.user, lookupContext);
         // cloned.password = secretValueProvider.expandValue(cloned.password, lookupContext);
         cloned.properties = secretValueProvider.expandProperties(cloned.properties, lookupContext);
+
+        cloned.athenaRegion = secretValueProvider.expandValue(cloned.athenaRegion, lookupContext);
+        cloned.catalog = secretValueProvider.expandValue(cloned.catalog, lookupContext);
+        cloned.athenaWorkGroup = secretValueProvider.expandValue(cloned.athenaWorkGroup, lookupContext);
+        cloned.athenaOutputLocation = secretValueProvider.expandValue(cloned.athenaOutputLocation, lookupContext);
+        cloned.athenaProperties = secretValueProvider.expandProperties(cloned.athenaProperties, lookupContext);
 
         return cloned;
     }

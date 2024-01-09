@@ -76,6 +76,13 @@
         </dependencies>
     </dependencyManagement>
 
+    <repositories>
+        <repository>
+            <id>local-dqops</id>
+            <url>file://${pom.basedir}/lib/jdbc-drivers/</url>
+        </repository>
+    </repositories>
+
     <build>
         <pluginManagement>
             <plugins>

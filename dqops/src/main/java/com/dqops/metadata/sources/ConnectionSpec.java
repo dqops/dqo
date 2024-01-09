@@ -614,6 +614,9 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
             if (cloned.spark != null) {
                 cloned.spark = cloned.spark.expandAndTrim(secretValueProvider, secretValueLookupContext);
             }
+            if (cloned.databricks != null) {
+                cloned.databricks = cloned.databricks.expandAndTrim(secretValueProvider, secretValueLookupContext);
+            }
             if (cloned.incidentGrouping != null) {
                 cloned.incidentGrouping = cloned.incidentGrouping.expandAndTrim(secretValueProvider, secretValueLookupContext);
             }

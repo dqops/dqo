@@ -22,6 +22,8 @@ table that will be used in the **GROUP BY** clause to identify each group of dat
 
 ## Set up data grouping using the user interface
 
+### **Set up data grouping at the data source level**
+
 To set up the default data grouping configuration template at the **data source level**, follow the steps below.
 
 1. In the DQOps user interface, go to the **Data Source** section, select the data source of interest in the tree view on the left,
@@ -39,8 +41,9 @@ To set up the default data grouping configuration template at the **data source 
 The default data grouping configuration added at the data source level will be copied to the data grouping configuration of all the 
 tables that will be **imported in the future**. Note that this configuration does not affect tables that have already been imported.
 
+### **Set up data grouping at the table level**
 
-To set up data grouping configuration at a **table level**:
+To set up data grouping configuration at the **table level**:
 
 1.  In the DQOps user interface, go to the **Data Source** section, select the table of interest in the tree view on the left,
     and select the **Data Grouping** tab.
@@ -71,12 +74,15 @@ To set up data grouping configuration at a **table level**:
 
 
 ## Set up data grouping configuration using the DQOps Shell
+
 For the purpose of this section, we will show how to edit a *.dqotable.yaml* file directly from the DQOps command-line shell
 by opening Visual Studio Code as an editor.
 
 In order to fully take advantage of code completion for DQOps YAML files, please follow
 the [Visual Studio Code configuration guide](../../integrations/visual-studio-code/index.md) to learn how to install
 required extensions.
+
+### **Set up data grouping at the data source level**
 
 To set up a default data grouping configuration at the data source level, follow the steps below.
 This default setting is not used on tables on the data source. DQOps uses this configuration only once, when the
@@ -144,6 +150,8 @@ data grouping configuration is copied to the *.dqotable.yaml* file.
         max_incident_length_days: 60
         mute_for_days: 60
     ```
+
+### **Set up data grouping at the table level**
 
 To set up a data grouping configuration at the table level
 

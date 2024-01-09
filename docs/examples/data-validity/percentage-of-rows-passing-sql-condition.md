@@ -72,7 +72,7 @@ The following is a fragment of the `bigquery-public-data.america_health_rankings
 
 You can see that in the fourth row the value in the lower_ci column is bigger than in the upper_ci column. 
 
-## Running the checks in the example and evaluating the results using the user interface
+## Run checks in the example using the user interface
 
 A detailed explanation of [how to run the example is described here](../../index.md#running-the-use-cases).
 

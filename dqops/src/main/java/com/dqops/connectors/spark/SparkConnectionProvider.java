@@ -182,11 +182,12 @@ public class SparkConnectionProvider extends AbstractSqlConnectionProvider {
     /**
      * Proposes a physical (provider specific) column type that is able to store the data of the given Tablesaw column.
      *
+     * @param connectionSpec Connection specification if the settings are database version specific.
      * @param dataColumn Tablesaw column with data that should be stored.
      * @return Column type snapshot.
      */
     @Override
-    public ColumnTypeSnapshotSpec proposePhysicalColumnType(Column<?> dataColumn) {
+    public ColumnTypeSnapshotSpec proposePhysicalColumnType(ConnectionSpec connectionSpec, Column<?> dataColumn) {
         ColumnType columnType = dataColumn.type();
 
         if (columnType == ColumnType.SHORT) {

@@ -56,10 +56,11 @@ public interface ConnectionProvider {
 
     /**
      * Proposes a physical (provider specific) column type that is able to store the data of the given Tablesaw column.
+     * @param connectionSpec Connection specification if the settings are database version specific.
      * @param dataColumn Tablesaw column with data that should be stored.
      * @return Column type snapshot.
      */
-    ColumnTypeSnapshotSpec proposePhysicalColumnType(Column<?> dataColumn);
+    ColumnTypeSnapshotSpec proposePhysicalColumnType(ConnectionSpec connectionSpec, Column<?> dataColumn);
 
     /**
      * Formats a constant for the target database.

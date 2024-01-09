@@ -13,14 +13,16 @@ For more information about [different categories of checks, see DQOps concepts s
 
 ## Run data quality checks using the user interface
 
-1. In DQOps user interface navigate to the check section **Profiling**, **Monitoring checks** or **Partition checks** at the top of the screen.
-    To learn more about [different types of checks go to the concept section](../../../dqo-concepts/checks/index.md#types-of-checks). 
+### **Navigate to the check editor**
+
+To navigate to the checks editor:
+
+1. Click on the **Profiling**, **Monitoring checks** or **Partition checks** section at the top of the screen.
 
     ![Navigate to check section](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/navigate-to-the-check-section2.png)
    
 2. On the tree view on the left, select a table or column of interest by expanding the connection.
-    This will open a **Check editor** screen when you can work with checks. 
-    Check out the Concept section to learn more about the [Check editor screen](../../../dqo-concepts/user-interface-overview/user-interface-overview.md#check-editor).
+    This will open a [**Check editor**](../../../dqo-concepts/user-interface-overview/user-interface-overview.md#check-editor) screen when you can work with checks. 
 
     ![Select a table or column of interest](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/select-a-table-or-colum-of-interest2.png)
    
@@ -33,18 +35,21 @@ For more information about [different categories of checks, see DQOps concepts s
 
     The right side of the table allows setting different threshold levels (severity levels). [Learn more about threshold levels ](../../../dqo-concepts/checks/index.md#issue-severity-levels)
 
+### **Run a check**
 
-3. Enable the check of interest by clicking the switch button next to the name of the check in the list on the right.
+To run a check:
+
+1. Enable the check of interest by clicking the switch button next to the name of the check in the list on the right.
 
     ![Enable check](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/enable-check2.png)
 
-4. Set the threshold levels or leave default values. Set parameters if the check has any. Click the **Save** button in the upper right corner.
+2. Set the threshold levels or leave default values. Set parameters if the check has any. Click the **Save** button in the upper right corner.
     
     You can read more about [threshold severity levels in DQOps concepts section](../../../dqo-concepts/checks/index.md#issue-severity-levels).
 
     ![Set threshold levels](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/set-threshold-levels2.png)
 
-5. Run data quality check by clicking the **Run Check** icon
+3. Run data quality check by clicking the **Run Check** icon
 
     ![Enable check](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/run-check2.png)
 
@@ -62,25 +67,27 @@ For more information about [different categories of checks, see DQOps concepts s
 
     This check run resulted in a valid result. The daily_row_count sensor readout was 18 155, which was higher than the min_count error threshold 1 000.
 
-6. To view detailed check results, sensor readouts, and execution errors, click on the **Results** icon.
+### **View detailed check results**
 
-    ![Checking results](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/detailed-check-results.png)
+To view detailed check results, sensor readouts, and execution errors, click on the **Results** icon.
 
-    A table will appear with detailed information about the run check. You can filter the table by data group and month 
-    using the dropdowns. Additionally, you can switch between the table and chart view by clicking on the icons on the 
-    right of the month filter dropdown. To close the detailed results view, click on the **Results** icon again or use 
-    the X button on the right.
+![Checking results](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/detailed-check-results.png)
 
-    [Learn here how to delete data quality results](../../delete-data-quality-results/delete-data-quality-results.md).
+A table will appear with detailed information about the run check. You can filter the table by data group and month 
+using the dropdowns. Additionally, you can switch between the table and chart view by clicking on the icons on the 
+right of the month filter dropdown. To close the detailed results view, click on the **Results** icon again or use 
+the X button on the right.
 
-7. Synchronize locally stored results with your DQOps Cloud account to be able to view the results on the dashboards.
+[Learn here how to delete data quality results](../../delete-data-quality-results/delete-data-quality-results.md).
 
-    To synchronize all the data click on the **Synchronize** button in the upper right corner of the navigation menu.
+Synchronize locally stored results with your DQOps Cloud account to be able to view the results on the dashboards.
 
-    You can learn here how to [Review the results of data quality monitoring on dashboards.](../../data-quality-dashboards/data-quality-dashboards.md)
+To synchronize all the data click on the **Synchronize** button in the upper right corner of the navigation menu.
+
+You can learn here how to [Review the results of data quality monitoring on dashboards.](../../data-quality-dashboards/data-quality-dashboards.md)
 
 
-### **Configure date or datetime column for partition checks**
+## Configure date or datetime column for partition checks
 
 Partition checks measure data quality for each daily or monthly partition by creating a separate data quality score.
 
@@ -102,7 +109,7 @@ To configure the date or datetime column:
 4. Click the Save button in the upper right corner.
 
 
-### **Configure event and ingestion timestamp columns for timeliness checks**
+## Configure event and ingestion timestamp columns for timeliness checks
 
 To run timeliness checks you need to configure event and/or ingestion timestamp columns.
 

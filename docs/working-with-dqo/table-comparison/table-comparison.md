@@ -54,29 +54,32 @@ To create a new table comparison, follow these steps:
 
     ![Select columns checks](https://dqops.com/docs/images/working-with-dqo/comparisons/selecting-columns-checks2.png)
 
-6. The right part of the comparison screen has a list of comparison checks which you can run. To activate the comparison 
-    checks you want to run, simply click on the checkboxes.
-
-    Once you have activated the checks, you can set the severity level for each one. You can choose from three levels: warning, error, and fatal.
-    [Learn more about the severity levels](../../../dqo-concepts/checks.md#severity-levels).
-
-    ![Table comparisons severity levels](https://dqops.com/docs/images/working-with-dqo/comparisons/table-comparisions-severity-levels2.png)
-    
-    When you create a new table comparison a new category of checks named Comparisons/[name of the comparison] is also 
-    created on the [Check editor](../../../dqo-concepts/user-interface-overview/user-interface-overview.md#check-editor) with a list of table and column checks.
-    On the Editor screen you can activate and deactivate comparison checks, set severity levels, run checks and view the results.
-
-    ![List of checks](https://dqops.com/docs/images/working-with-dqo/comparisons/comparison-check-editor.png)
-
-8. After making all the necessary  adjustments, click the **Save** button to save the changes.  
-
 ## Run table comparison
+
+The right part of the comparison screen has a list of comparison checks which you can run. To activate the comparison 
+checks you want to run, simply click on the checkboxes.
+
+Once you have activated the checks, you can set the severity level for each one. You can choose from three levels: warning, error, and fatal.
+[Learn more about the severity levels](../../../dqo-concepts/checks.md#severity-levels).
+
+![Table comparisons severity levels](https://dqops.com/docs/images/working-with-dqo/comparisons/table-comparisions-severity-levels2.png)
+    
+When you create a new table comparison a new category of checks named Comparisons/[name of the comparison] is also 
+created on the [Check editor](../../../dqo-concepts/user-interface-overview/user-interface-overview.md#check-editor) with a list of table and column checks.
+On the Editor screen you can activate and deactivate comparison checks, set severity levels, run checks and view the results.
+
+![List of checks](https://dqops.com/docs/images/working-with-dqo/comparisons/comparison-check-editor.png)
+
+After making all the necessary adjustments, click the **Save** button to save the changes.  
 
 Once all the required elements have been set, run the comparison between two tables by clicking the **Compare Tables** button. 
 After completion of the job, the checkbox will be highlighted with the color of the result: green for valid, yellow for 
 warning, orange for error and red for fatal. 
 
 ![Results](https://dqops.com/docs/images/working-with-dqo/comparisons/results2.png)
+
+
+## View detailed results of table comparison
 
 By expanding the rows, you can view the more detailed results. Additionally, if you set the grouping columns, you will 
 be able to view a list of mismatches in the data groupings.
@@ -87,6 +90,7 @@ In a situation when you see the results for a table comparison checks that have 
 the old results by clicking the **Delete results** button. 
 
 ![Deleting results](https://dqops.com/docs/images/working-with-dqo/comparisons/delete-results2.png)
+
 
 ## Deleting table comparison
 

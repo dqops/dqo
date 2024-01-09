@@ -1,5 +1,7 @@
 # DQOps run checks example with the DbtCloud
 
+## Integration example
+
 The Airflow's DAG configuration presents the use of the DbtCloud with the DQOps' run checks operator. 
 The example executes the load job in DbtCloud surrounded by data quality verification of a single table, 
 done before and after loading the data. 

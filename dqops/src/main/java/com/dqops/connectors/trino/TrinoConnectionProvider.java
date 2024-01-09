@@ -53,7 +53,7 @@ public class TrinoConnectionProvider extends AbstractSqlConnectionProvider {
      */
     @Autowired
     public TrinoConnectionProvider(BeanFactory beanFactory,
-                                    TrinoProviderDialectSettings dialectSettings) {
+                                   TrinoProviderDialectSettings dialectSettings) {
         this.beanFactory = beanFactory;
         this.dialectSettings = dialectSettings;
     }
@@ -105,6 +105,18 @@ public class TrinoConnectionProvider extends AbstractSqlConnectionProvider {
             connectionSpec.setTrino(trinoSpec);
         }
 
+        TrinoEngineType trinoEngineType = terminalReader.promptEnum("Trino engine type (--trino-engine)", TrinoEngineType.class, null, false);
+//        String trinoEngine = terminalReader.prompt("Trino engine type (--trino-engine)", "${TRINO_ENGINE}", true);
+        trinoSpec.setTrinoEngineType(trinoEngineType);
+
+        switch (trinoEngineType){
+            case trino -> promptForTrinoConnectionParameters(trinoSpec, isHeadless, terminalReader);
+            case athena -> promptForAthenaConnectionParameters(trinoSpec, isHeadless, terminalReader);
+        }
+
+    }
+
+    private void promptForTrinoConnectionParameters(TrinoParametersSpec trinoSpec, boolean isHeadless, TerminalReader terminalReader) {
         if (Strings.isNullOrEmpty(trinoSpec.getHost())) {
             if (isHeadless) {
                 throw new CliRequiredParameterMissingException("--trino-host");
@@ -121,14 +133,6 @@ public class TrinoConnectionProvider extends AbstractSqlConnectionProvider {
             trinoSpec.setPort(terminalReader.prompt("Trino port number (--trino-port)", "${TRINO_PORT}", false));
         }
 
-        if (Strings.isNullOrEmpty(trinoSpec.getDatabase())) {
-            if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--trino-database");
-            }
-
-            trinoSpec.setDatabase(terminalReader.prompt("Trino database name (--trino-database)", "${TRINO_DATABASE}", false));
-        }
-
         if (Strings.isNullOrEmpty(trinoSpec.getUser())) {
             if (isHeadless) {
                 throw new CliRequiredParameterMissingException("--trino-user");
@@ -137,24 +141,50 @@ public class TrinoConnectionProvider extends AbstractSqlConnectionProvider {
             trinoSpec.setUser(terminalReader.prompt("Trino user name (--trino-user)", "${TRINO_USER}", false));
         }
 
-//        if (Strings.isNullOrEmpty(trinoSpec.getPassword())) {
-//            if (isHeadless) {
-//                throw new CliRequiredParameterMissingException("--trino-password");
-//            }
-//
-//            trinoSpec.setPassword(terminalReader.prompt("Trino user password (--trino-password)", "${TRINO_PASSWORD}", false));
-//        }
+    }
+
+    private void promptForAthenaConnectionParameters(TrinoParametersSpec trinoSpec, boolean isHeadless, TerminalReader terminalReader) {
+        if (Strings.isNullOrEmpty(trinoSpec.getAthenaRegion())) {
+            if (isHeadless) {
+                throw new CliRequiredParameterMissingException("--athena-region");
+            }
+            trinoSpec.setAthenaRegion(terminalReader.prompt(" (--athena-region)", "${ATHENA_REGION}", false));
+        }
+
+        if (Strings.isNullOrEmpty(trinoSpec.getCatalog())) {
+            if (isHeadless) {
+                throw new CliRequiredParameterMissingException("--athena-catalog");
+            }
+            trinoSpec.setCatalog(terminalReader.prompt(" (--athena-catalog)", "${ATHENA_CATALOG}", false));
+        }
+
+        if (Strings.isNullOrEmpty(trinoSpec.getAthenaWorkGroup())) {
+            if (isHeadless) {
+                throw new CliRequiredParameterMissingException("--athena-work-group");
+            }
+            trinoSpec.setAthenaWorkGroup(terminalReader.prompt(" (--athena-work-group)", "${ATHENA_WORK_GROUP}", false));
+        }
+
+        if (Strings.isNullOrEmpty(trinoSpec.getAthenaOutputLocation())) {
+            if (isHeadless) {
+                throw new CliRequiredParameterMissingException("--athena-output-location");
+            }
+            trinoSpec.setAthenaOutputLocation(terminalReader.prompt(" (--athena-output-location)", "${ATHENA_OUTPUT_LOCATION}", false));
+        }
+
     }
 
     /**
      * Proposes a physical (provider specific) column type that is able to store the data of the given Tablesaw column.
      *
+     * @param connectionSpec Connection specification if the settings are database version specific.
      * @param dataColumn Tablesaw column with data that should be stored.
      * @return Column type snapshot.
      */
     @Override
-    public ColumnTypeSnapshotSpec proposePhysicalColumnType(Column<?> dataColumn) {
+    public ColumnTypeSnapshotSpec proposePhysicalColumnType(ConnectionSpec connectionSpec, Column<?> dataColumn) {
         ColumnType columnType = dataColumn.type();
+        TrinoEngineType trinoEngineType = connectionSpec.getTrino().getTrinoEngineType();
 
         if (columnType == ColumnType.SHORT) {
             return new ColumnTypeSnapshotSpec("SMALLINT");
@@ -166,13 +196,17 @@ public class TrinoConnectionProvider extends AbstractSqlConnectionProvider {
             return new ColumnTypeSnapshotSpec("BIGINT");
         }
         else if (columnType == ColumnType.FLOAT) {
-            return new ColumnTypeSnapshotSpec("REAL");
+            if(trinoEngineType.equals(TrinoEngineType.trino)){
+                return new ColumnTypeSnapshotSpec("REAL");
+            } else {
+                return new ColumnTypeSnapshotSpec("FLOAT");
+            }
         }
         else if (columnType == ColumnType.BOOLEAN) {
             return new ColumnTypeSnapshotSpec("BOOLEAN");
         }
         else if (columnType == ColumnType.STRING) {
-            return new ColumnTypeSnapshotSpec("VARCHAR");
+            return new ColumnTypeSnapshotSpec("VARCHAR", 255);
         }
         else if (columnType == ColumnType.DOUBLE) {
             return new ColumnTypeSnapshotSpec("DOUBLE");
@@ -190,7 +224,7 @@ public class TrinoConnectionProvider extends AbstractSqlConnectionProvider {
             return new ColumnTypeSnapshotSpec("TIMESTAMP");
         }
         else if (columnType == ColumnType.TEXT) {
-            return new ColumnTypeSnapshotSpec("VARCHAR");
+            return new ColumnTypeSnapshotSpec("VARCHAR", 255);
         }
         else {
             throw new NoSuchElementException("Unsupported column type: " + columnType.name());

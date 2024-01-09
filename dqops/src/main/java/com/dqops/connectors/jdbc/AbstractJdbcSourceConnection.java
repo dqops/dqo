@@ -30,6 +30,7 @@ import tech.tablesaw.columns.Column;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Locale;
 
@@ -131,7 +132,7 @@ public abstract class AbstractJdbcSourceConnection extends AbstractSqlSourceConn
                              jobCancellationToken.registerCancellationListener(
                                      cancellationToken -> RunSilently.run(statement::cancel))) {
                     try (ResultSet results = statement.executeQuery(sqlQueryStatement)) {
-                        Table resultTable = Table.read().db(results, sqlQueryStatement);
+                        Table resultTable = rawTableResultFromResultSet(results, sqlQueryStatement);
                         if (maxRows != null && resultTable.rowCount() > maxRows) {
                             throw new RowCountLimitExceededException(maxRows);
                         }
@@ -155,6 +156,18 @@ public abstract class AbstractJdbcSourceConnection extends AbstractSqlSourceConn
                     String.format("SQL query failed: %s, connection: %s, SQL: %s", ex.getMessage(), connectionName, sqlQueryStatement),
                     ex, sqlQueryStatement, connectionName);
         }
+    }
+
+    /**
+     * Creates the tablesaw's Table from the ResultSet for the query execution
+     * @param results               ResultSet object that contains the data produced by a query
+     * @param sqlQueryStatement     SQL statement that returns a row set.
+     * @return Tabular result captured from the query.
+     * @throws SQLException
+     */
+    protected Table rawTableResultFromResultSet(ResultSet results, String sqlQueryStatement) throws SQLException {
+        Table resultTable = Table.read().db(results, sqlQueryStatement);
+        return resultTable;
     }
 
     /**
