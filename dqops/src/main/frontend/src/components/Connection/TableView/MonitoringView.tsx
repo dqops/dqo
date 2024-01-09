@@ -112,7 +112,7 @@ const MonitoringView = () => {
   }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName]);
 
   const onUpdate = async () => {
-    if (tab === 'daily' || tab === 'daily_comparisons') {
+    if (activeTab === 'daily' || activeTab === 'daily_comparisons') {
       if (!dailyMonitoring) return;
 
       await dispatch(
@@ -215,12 +215,12 @@ const MonitoringView = () => {
     });
   };
 
-  const onChangeTab = (tab: string) => {
+  const onChangeTab = (activeTab: string) => {
     dispatch(
       setActiveFirstLevelUrl(
         checkTypes,
         firstLevelActiveTab,
-        ROUTES.TABLE_LEVEL_PAGE(checkTypes, connectionName, schemaName, tableName, tab)
+        ROUTES.TABLE_LEVEL_PAGE(checkTypes, connectionName, schemaName, tableName, activeTab)
       )
     );
     history.push(
@@ -229,14 +229,14 @@ const MonitoringView = () => {
         connectionName,
         schemaName,
         tableName,
-        tab
+        activeTab
       )
     );
   };
 
   return (
     <div className="flex-grow min-h-0 flex flex-col">
-      {tab !== 'daily_comparisons' && tab !== 'monthly_comparisons' && (
+      {(activeTab === 'daily' || activeTab === 'monthly') && (
         <TableActionGroup
           shouldDelete={false}
           onUpdate={onUpdate}
@@ -247,7 +247,7 @@ const MonitoringView = () => {
       <div className="border-b border-gray-300">
         <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
       </div>
-      {tab === 'daily' && (
+      {activeTab === 'daily' && (
         <DataQualityChecks
           onUpdate={onUpdate}
           checksUI={dailyMonitoring}
@@ -257,7 +257,7 @@ const MonitoringView = () => {
           loading={loading}
         />
       )}
-      {tab === 'monthly' && (
+      {activeTab === 'monthly' && (
         <DataQualityChecks
           onUpdate={onUpdate}
           checksUI={monthlyMonitoring}
@@ -267,13 +267,13 @@ const MonitoringView = () => {
           loading={loading}
         />
       )}
-      {tab === 'table-quality-status-daily' && (
+      {activeTab === 'table-quality-status-daily' && (
         <TableQualityStatus timeScale="daily" />
       )}
-      {tab === 'table-quality-status-monthly' && (
+      {activeTab === 'table-quality-status-monthly' && (
         <TableQualityStatus timeScale="monthly" />
       )}
-      {tab === 'daily_comparisons' && (
+      {activeTab === 'daily_comparisons' && (
         <TableReferenceComparisons
           checkTypes={checkTypes}
           timePartitioned="daily"
@@ -281,7 +281,7 @@ const MonitoringView = () => {
           onUpdateChecks={onUpdate}
         />
       )}
-      {tab === 'monthly_comparisons' && (
+      {activeTab === 'monthly_comparisons' && (
         <TableReferenceComparisons
           checkTypes={checkTypes}
           timePartitioned="monthly"

@@ -17099,17 +17099,17 @@ definitions:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check, detects that the data type\
           \ of values stored in a column matches an expected data type code (1..7)."
-        $ref: "#/definitions/DatatypeEqualsRuleParametersSpec"
+        $ref: "#/definitions/DetectedDatatypeEqualsRuleParametersSpec"
       error:
         description: "Default alerting threshold for a row count that raises a data\
           \ quality error (alert), detects that the data type of values stored in\
           \ a column matches an expected data type code (1..7)."
-        $ref: "#/definitions/DatatypeEqualsRuleParametersSpec"
+        $ref: "#/definitions/DetectedDatatypeEqualsRuleParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem, detects that the data type of\
           \ values stored in a column matches an expected data type code (1..7)."
-        $ref: "#/definitions/DatatypeEqualsRuleParametersSpec"
+        $ref: "#/definitions/DetectedDatatypeEqualsRuleParametersSpec"
   ColumnDistinctCountAnomalyDifferencingCheckSpec:
     type: "object"
     properties:
@@ -20311,15 +20311,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxPercentRule100ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a set percentage of rows with\
           \ non-negative value in a column that raises a data quality alert"
-        $ref: "#/definitions/MaxPercentRule99ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxPercentRule95ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule5ParametersSpec"
   ColumnNotNullsCountCheckSpec:
     type: "object"
     properties:
@@ -21299,16 +21299,16 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxPercentRule100ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a maximum number of rows with\
           \ values with a value above the indicated by the user value in a column\
           \ that raises a data quality error (alert)."
-        $ref: "#/definitions/MaxPercentRule99ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxPercentRule95ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule5ParametersSpec"
   ColumnNumberBelowMinValueCheckSpec:
     type: "object"
     properties:
@@ -21423,16 +21423,16 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxPercentRule100ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a maximum number of rows with\
           \ values with a value below the indicated by the user value in a column\
           \ that raises a data quality error (alert)."
-        $ref: "#/definitions/MaxPercentRule99ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxPercentRule95ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule5ParametersSpec"
   ColumnNumberFoundInSetPercentCheckSpec:
     type: "object"
     properties:
@@ -21553,15 +21553,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MinPercentRule0WarningParametersSpec"
+        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
       error:
         description: "Default alerting threshold for set percentage of values from\
           \ range in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MinPercentRule0ErrorParametersSpec"
+        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/MinPercentRule5ParametersSpec"
+        $ref: "#/definitions/MinPercentRule95ParametersSpec"
   ColumnNumericDailyMonitoringChecksSpec:
     type: "object"
     properties:
@@ -25599,16 +25599,16 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxPercentRule100ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a maximum percentage of rows\
           \ with strings with a length above the indicated by the user length in a\
           \ column that raises a data quality error (alert)."
-        $ref: "#/definitions/MaxPercentRule99ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxPercentRule95ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule5ParametersSpec"
   ColumnTextLengthBelowMinLengthCheckSpec:
     type: "object"
     properties:
@@ -25723,16 +25723,16 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxPercentRule100ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a maximum percentage of rows\
           \ with strings with a length below the indicated by the user length in a\
           \ column that raises a data quality error (alert)."
-        $ref: "#/definitions/MaxPercentRule99ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxPercentRule95ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule5ParametersSpec"
   ColumnTextLengthInRangePercentCheckSpec:
     type: "object"
     properties:
@@ -28655,15 +28655,6 @@ definitions:
           type: "string"
       database:
         type: "string"
-  DatatypeEqualsRuleParametersSpec:
-    type: "object"
-    properties:
-      expected_datatype:
-        type: "integer"
-        format: "int32"
-        description: "Expected data type code, the data type codes are: 1 - integers,\
-          \ 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 -\
-          \ mixed data types."
   DefaultSchedulesSpec:
     type: "object"
     properties:
@@ -28812,6 +28803,22 @@ definitions:
           \ the rows were deleted."
         additionalProperties:
           $ref: "#/definitions/DataDeleteResultPartition"
+  DetectedDatatypeEqualsRuleParametersSpec:
+    type: "object"
+    properties:
+      expected_datatype:
+        type: "string"
+        description: "Expected data type code, the values for the sensor's actual\
+          \ values are: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans,\
+          \ 6 - texts, 7 - mixed data types."
+        enum:
+        - "integers"
+        - "floats"
+        - "dates"
+        - "timestamps"
+        - "booleans"
+        - "texts"
+        - "mixed"
   DqoCloudUserModel:
     type: "object"
     properties:
@@ -29719,31 +29726,7 @@ definitions:
         format: "double"
         description: "Maximum accepted value for the actual_value returned by the\
           \ sensor (inclusive)."
-  MaxPercentRule100ParametersSpec:
-    type: "object"
-    properties:
-      max_percent:
-        type: "number"
-        format: "double"
-        description: "Maximum accepted value for the actual_value returned by the\
-          \ sensor (inclusive)."
   MaxPercentRule5ParametersSpec:
-    type: "object"
-    properties:
-      max_percent:
-        type: "number"
-        format: "double"
-        description: "Maximum accepted value for the actual_value returned by the\
-          \ sensor (inclusive)."
-  MaxPercentRule95ParametersSpec:
-    type: "object"
-    properties:
-      max_percent:
-        type: "number"
-        format: "double"
-        description: "Maximum accepted value for the actual_value returned by the\
-          \ sensor (inclusive)."
-  MaxPercentRule99ParametersSpec:
     type: "object"
     properties:
       max_percent:
@@ -29783,22 +29766,6 @@ definitions:
         format: "int64"
         description: "Minimum accepted value for the actual_value returned by the\
           \ sensor (inclusive)."
-  MinPercentRule0ErrorParametersSpec:
-    type: "object"
-    properties:
-      min_percent:
-        type: "number"
-        format: "double"
-        description: "Minimum accepted value for the actual_value returned by the\
-          \ sensor (inclusive)."
-  MinPercentRule0WarningParametersSpec:
-    type: "object"
-    properties:
-      min_percent:
-        type: "number"
-        format: "double"
-        description: "Minimum accepted value for the actual_value returned by the\
-          \ sensor (inclusive)."
   MinPercentRule100ErrorParametersSpec:
     type: "object"
     properties:
@@ -29808,14 +29775,6 @@ definitions:
         description: "Minimum accepted value for the actual_value returned by the\
           \ sensor (inclusive)."
   MinPercentRule100WarningParametersSpec:
-    type: "object"
-    properties:
-      min_percent:
-        type: "number"
-        format: "double"
-        description: "Minimum accepted value for the actual_value returned by the\
-          \ sensor (inclusive)."
-  MinPercentRule5ParametersSpec:
     type: "object"
     properties:
       min_percent:

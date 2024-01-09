@@ -88,7 +88,7 @@ public class ColumnTextTextMaxLengthSensorParametersSpecBigQueryTests extends Ba
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/strings/string_max_length", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/text/text_max_length", this.sut.getSensorDefinitionName());
     }
 
     @Test

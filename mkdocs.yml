@@ -412,6 +412,7 @@ nav:
         - anomaly stationary distinct count: 'checks/column/uniqueness/anomaly-stationary-distinct-count.md'
 ########## END INCLUDE CHECK REFERENCE
   - Reference:
+    - 'reference/index.md'
 ########## INCLUDE SENSOR REFERENCE - DO NOT MODIFY MANUALLY
     - Sensors:
       - 'reference/sensors/index.md'

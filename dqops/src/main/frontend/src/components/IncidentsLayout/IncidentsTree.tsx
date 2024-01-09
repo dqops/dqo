@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Button from "../Button";
 import { useActionDispatch } from "../../hooks/useActionDispatch";
-import { getConnections, addFirstLevelTab, closeFirstLevelTab } from "../../redux/actions/incidents.actions";
+import { getConnections, addFirstLevelTab } from "../../redux/actions/incidents.actions";
 import { useSelector } from "react-redux";
 import { IRootState } from "../../redux/reducers";
 import SvgIcon from "../SvgIcon";
@@ -25,12 +25,6 @@ const IncidentsTree = () => {
   };
 
   const openFirstLevelTab = (connection: IncidentsPerConnectionModel) => {
-    if (connection.connection === selectedConnection) {
-      return;
-    }
-    if(activeTab === '/incidents/new-tab') {
-      dispatch(closeFirstLevelTab('/incidents/new-tab'));
-    }
     const url = ROUTES.INCIDENT_CONNECTION(connection?.connection ?? "")
     dispatch(addFirstLevelTab({
       url,

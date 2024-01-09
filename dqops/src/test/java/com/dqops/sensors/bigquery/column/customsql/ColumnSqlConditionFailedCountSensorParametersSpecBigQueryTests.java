@@ -102,7 +102,7 @@ public class ColumnSqlConditionFailedCountSensorParametersSpecBigQueryTests exte
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/sql/sql_condition_failed_count", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/custom_sql/sql_condition_failed_count", this.sut.getSensorDefinitionName());
     }
 
     @Test

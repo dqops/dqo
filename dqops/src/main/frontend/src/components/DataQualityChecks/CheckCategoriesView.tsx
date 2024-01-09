@@ -18,6 +18,8 @@ import { getFirstLevelActiveTab } from '../../redux/selectors';
 import { IRootState } from '../../redux/reducers';
 import { clsx } from 'clsx';
 
+type CheckIndexTuple = [check: CheckModel, index: number];
+
 interface CheckCategoriesViewProps {
   category: QualityCategoryModel;
   checkResultsOverview: CheckResultsOverviewDataModel[];
@@ -161,16 +163,20 @@ const CheckCategoriesView = ({
       </tr>
       {category.checks &&
         isExtended &&
-          category.checks.filter((check) => showAdvanced || check.standard || check.configured || isAlreadyDeleted || isFiltered)
-          .map((check, index) => (
+          category.checks.map((check, index) => {
+            const checkIndexPair: CheckIndexTuple = [check, index];
+            return checkIndexPair;
+          })
+          .filter((tuple) => showAdvanced || tuple[0].standard || tuple[0].configured || isAlreadyDeleted || isFiltered)
+          .map((tuple) => (
           <CheckListItem
-            check={check}
-            key={index}
+            check={tuple[0]}
+            key={tuple[1]}
             onChange={(item) =>
-              handleChangeDataGroupingConfiguration(item, index)
+              handleChangeDataGroupingConfiguration(item, tuple[1])
             }
             checkResult={checkResultsOverview.find(
-              (item) => item.checkHash === check.check_hash
+              (item) => item.checkHash === tuple[0].check_hash
             )}
             getCheckOverview={getCheckOverview}
             onUpdate={onUpdate}
@@ -179,13 +185,13 @@ const CheckCategoriesView = ({
             changeCopyUI={(value) =>
               changeCopyUI(
                 category.category ?? '',
-                check.check_name ?? '',
+                tuple[0].check_name ?? '',
                 value
               )
             }
             checkedCopyUI={
               copyCategory?.checks?.find(
-                (item) => item.check_name === check.check_name
+                (item) => item.check_name === tuple[0].check_name
               )?.configured
             }
             category={category.category}

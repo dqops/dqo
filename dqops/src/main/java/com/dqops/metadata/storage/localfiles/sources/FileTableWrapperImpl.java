@@ -140,11 +140,14 @@ public class FileTableWrapperImpl extends TableWrapperImpl {
             case ADDED:
 				this.connectionFolderNode.addChildFile(fileNameWithExt, newFileContent);
 				this.getSpec().clearDirty(true);
+                break;
+
             case MODIFIED:
                 FileTreeNode modifiedFileNode = this.connectionFolderNode.getChildFileByFileName(fileNameWithExt);
                 modifiedFileNode.changeContent(newFileContent);
 				this.getSpec().clearDirty(true);
                 break;
+
             case TO_BE_DELETED:
 				this.connectionFolderNode.deleteChildFile(fileNameWithExt);
                 break;

@@ -88,7 +88,7 @@ public class ColumnNumericIntegerInRangePercentSensorParametersSpecBigQueryTests
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/numeric/values_in_range_integers_percent", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/numeric/integer_in_range_percent", this.sut.getSensorDefinitionName());
     }
 
     @Test

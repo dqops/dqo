@@ -88,7 +88,7 @@ public class ColumnNumericNumberBelowMinValuePercentSensorParametersSpecBigQuery
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/numeric/value_below_min_value_percent", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/numeric/number_below_min_value_percent", this.sut.getSensorDefinitionName());
     }
 
     @Test

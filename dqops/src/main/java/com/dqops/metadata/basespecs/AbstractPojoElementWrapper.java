@@ -57,6 +57,9 @@ public abstract class AbstractPojoElementWrapper<K, V> extends AbstractSpec
      * @return Model object.
      */
     public V getObject() {
+        if (this.status == InstanceStatus.NOT_TOUCHED) {
+            this.status = InstanceStatus.LOAD_IN_PROGRESS;
+        }
         return object;
     }
 
@@ -70,10 +73,10 @@ public abstract class AbstractPojoElementWrapper<K, V> extends AbstractSpec
 			setDirty();
         }
 
-        if (this.status == InstanceStatus.NOT_TOUCHED) {
+        if (this.status == InstanceStatus.LOAD_IN_PROGRESS) {
             this.status = InstanceStatus.UNCHANGED;
         } else {
-            if (this.object == null && object != null && (this.status == InstanceStatus.UNCHANGED || this.status == InstanceStatus.DELETED)) {
+            if (this.object == null && object != null && (this.status == InstanceStatus.UNCHANGED || this.status == InstanceStatus.DELETED || this.status == InstanceStatus.NOT_TOUCHED)) {
                 this.status = InstanceStatus.ADDED;
             } else if (this.object != null) {
                 if (this.status == InstanceStatus.ADDED) {
@@ -112,7 +115,7 @@ public abstract class AbstractPojoElementWrapper<K, V> extends AbstractSpec
             return;
         }
 
-        if (this.status == InstanceStatus.UNCHANGED || this.status == InstanceStatus.NOT_TOUCHED) {
+        if (this.status == InstanceStatus.UNCHANGED || this.status == InstanceStatus.NOT_TOUCHED || this.status == InstanceStatus.LOAD_IN_PROGRESS) {
 			this.status = InstanceStatus.MODIFIED;
 			this.setDirty();
         }
@@ -140,11 +143,11 @@ public abstract class AbstractPojoElementWrapper<K, V> extends AbstractSpec
      * this method and perform a store specific serialization.
      */
     public void flush() {
-        if (this.status == InstanceStatus.NOT_TOUCHED) {
+        if (this.status == InstanceStatus.NOT_TOUCHED || this.status == InstanceStatus.LOAD_IN_PROGRESS) {
             return;
         }
 
-        if (this.object != null && this.status == InstanceStatus.UNCHANGED) {
+        if (this.object != null && (this.status == InstanceStatus.UNCHANGED || this.status == InstanceStatus.ADDED)) {
 			this.setStatus(InstanceStatus.MODIFIED);
 			this.clearDirty(true);
         }

@@ -106,7 +106,7 @@ public class ColumnStringsExpectedTextValuesInUseCountSensorParametersSpecBigQue
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/strings/expected_strings_in_use_count", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/accepted_values/expected_text_values_in_use_count", this.sut.getSensorDefinitionName());
     }
 
     @Test

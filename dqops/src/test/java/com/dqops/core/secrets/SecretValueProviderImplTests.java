@@ -16,6 +16,12 @@
 package com.dqops.core.secrets;
 
 import com.dqops.BaseTest;
+import com.dqops.core.filesystem.virtual.FileContent;
+import com.dqops.data.local.LocalDqoUserHomePathProviderObjectMother;
+import com.dqops.metadata.credentials.SharedCredentialWrapper;
+import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
+import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
+import com.dqops.metadata.userhome.UserHome;
 import com.dqops.utils.BeanFactoryObjectMother;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -65,6 +71,19 @@ public class SecretValueProviderImplTests extends BaseTest {
         Assertions.assertNotNull(expanded);
         Assertions.assertFalse(expanded.startsWith("sm://"));
         Assertions.assertNotEquals("", expanded);
+    }
+
+    @Test
+    void expandValue_whenSharedSecret_thenReturnsExpandedSharedSecret() {
+        UserHomeContext defaultHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContext();
+        UserHome userHome = defaultHomeContext.getUserHome();
+        SharedCredentialWrapper sharedSecretWrapper = userHome.getCredentials().createAndAddNew("tested_secret.txt");
+        sharedSecretWrapper.setObject(new FileContent("mysecret"));
+        defaultHomeContext.flush();
+
+        this.secretValueLookupContext = new SecretValueLookupContext(userHome);
+        String expanded = this.sut.expandValue("${credential://tested_secret.txt}", this.secretValueLookupContext);
+        Assertions.assertEquals("mysecret", expanded);
     }
 
 //    @Test

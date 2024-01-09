@@ -88,7 +88,7 @@ public class ColumnTextTextLengthAboveMaxLengthPercentSensorParametersSpecBigQue
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/strings/string_length_above_max_length_percent", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/text/text_length_above_max_length_percent", this.sut.getSensorDefinitionName());
     }
 
     @Test
@@ -103,7 +103,7 @@ public class ColumnTextTextLengthAboveMaxLengthPercentSensorParametersSpecBigQue
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(%s) >= 0
+                            WHEN LENGTH(%s) > 100
                                 THEN 1
                             ELSE 0
                         END
@@ -138,7 +138,7 @@ public class ColumnTextTextLengthAboveMaxLengthPercentSensorParametersSpecBigQue
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(%s) >= 0
+                            WHEN LENGTH(%s) > 100
                                 THEN 1
                             ELSE 0
                         END
@@ -171,7 +171,7 @@ public class ColumnTextTextLengthAboveMaxLengthPercentSensorParametersSpecBigQue
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(%s) >= 0
+                            WHEN LENGTH(%s) > 100
                                 THEN 1
                             ELSE 0
                         END
@@ -204,7 +204,7 @@ public class ColumnTextTextLengthAboveMaxLengthPercentSensorParametersSpecBigQue
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(%s) >= 0
+                            WHEN LENGTH(%s) > 100
                                 THEN 1
                             ELSE 0
                         END
@@ -244,7 +244,7 @@ public class ColumnTextTextLengthAboveMaxLengthPercentSensorParametersSpecBigQue
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(%s) >= 0
+                            WHEN LENGTH(%s) > 100
                                 THEN 1
                             ELSE 0
                         END
@@ -279,7 +279,7 @@ public class ColumnTextTextLengthAboveMaxLengthPercentSensorParametersSpecBigQue
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(%s) >= 0
+                            WHEN LENGTH(%s) > 100
                                 THEN 1
                             ELSE 0
                         END
@@ -316,7 +316,7 @@ public class ColumnTextTextLengthAboveMaxLengthPercentSensorParametersSpecBigQue
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(%s) >= 0
+                            WHEN LENGTH(%s) > 100
                                 THEN 1
                             ELSE 0
                         END
@@ -363,7 +363,7 @@ public class ColumnTextTextLengthAboveMaxLengthPercentSensorParametersSpecBigQue
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(%s) >= 0
+                            WHEN LENGTH(%s) > 100
                                 THEN 1
                             ELSE 0
                         END
@@ -404,7 +404,7 @@ public class ColumnTextTextLengthAboveMaxLengthPercentSensorParametersSpecBigQue
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(%s) >= 0
+                            WHEN LENGTH(%s) > 100
                                 THEN 1
                             ELSE 0
                         END
@@ -445,7 +445,7 @@ public class ColumnTextTextLengthAboveMaxLengthPercentSensorParametersSpecBigQue
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(%s) >= 0
+                            WHEN LENGTH(%s) > 100
                                 THEN 1
                             ELSE 0
                         END

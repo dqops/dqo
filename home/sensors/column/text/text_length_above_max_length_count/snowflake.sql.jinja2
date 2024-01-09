@@ -3,7 +3,7 @@
 SELECT
     SUM(
         CASE
-            WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+            WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) > {{(parameters.max_length)}}
                 THEN 1
             ELSE 0
         END

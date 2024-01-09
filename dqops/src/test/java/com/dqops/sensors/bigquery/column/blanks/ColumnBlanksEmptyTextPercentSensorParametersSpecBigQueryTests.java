@@ -88,7 +88,7 @@ public class ColumnBlanksEmptyTextPercentSensorParametersSpecBigQueryTests exten
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/strings/string_empty_percent", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/blanks/empty_text_percent", this.sut.getSensorDefinitionName());
     }
 
     @Test

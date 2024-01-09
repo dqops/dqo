@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import TableActionGroup from './TableActionGroup';
 import { useSelector } from 'react-redux';
@@ -22,7 +22,6 @@ import Tabs from '../../Tabs';
 import TableStatisticsView from '../../../pages/TableStatisticsView';
 import {
   DataGroupingConfigurationSpec,
-  DqoJobHistoryEntryModelJobTypeEnum,
   DqoJobHistoryEntryModelStatusEnum,
   TableColumnsStatisticsModel
 } from '../../../api';
@@ -31,7 +30,8 @@ import { setCreatedDataStream } from '../../../redux/actions/definition.actions'
 import { addFirstLevelTab, setActiveFirstLevelUrl } from '../../../redux/actions/source.actions';
 import {
   ColumnApiClient,
-  DataGroupingConfigurationsApi
+  DataGroupingConfigurationsApi,
+  JobApiClient
 } from '../../../services/apiClient';
 import { TableReferenceComparisons } from './TableComparison/TableReferenceComparisons';
 import { IRootState } from '../../../redux/reducers';
@@ -64,6 +64,9 @@ const ProfilingView = () => {
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const activeTab = getSecondLevelTab(checkTypes, tab);
+  const { job_dictionary_state } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
 
   const [nameOfDataStream, setNameOfDataStream] = useState<string>('');
   const [levels, setLevels] = useState<DataGroupingConfigurationSpec>({});
@@ -71,11 +74,10 @@ const ProfilingView = () => {
   const history = useHistory();
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
   const [selectedColumns, setSelectedColumns] = useState<Array<string>>();
-  const [filteredJob, setFilteredJob] = useState<number>();
+  const [jobId, setJobId] = useState<number>();
 
-  const { job_dictionary_state } = useSelector(
-    (state: IRootState) => state.job || {}
-  );
+  const job = jobId ? job_dictionary_state[jobId] : undefined;
+
   const fetchColumns = async () => {
     try {
       await ColumnApiClient.getColumnsStatistics(
@@ -83,7 +85,6 @@ const ProfilingView = () => {
         schemaName,
         tableName
       ).then((res) => setStatistics(res.data));
-      setFilteredJob(undefined);
     } catch (err) {
       console.error(err);
     }
@@ -225,33 +226,31 @@ const ProfilingView = () => {
     );
   };
 
+  const collectStatistics = async () => {
+      await JobApiClient.collectStatisticsOnTable(undefined, false, undefined, {
+        ...statistics?.collect_column_statistics_job_template,
+        columnNames: selectedColumns
+      }).then((res) => setJobId(res.data.jobId?.jobId));
+  };
+ 
+  const filteredCollectStatisticsJobs = useMemo(() => {
+    return (job && (
+      job.status === DqoJobHistoryEntryModelStatusEnum.running ||
+      job.status === DqoJobHistoryEntryModelStatusEnum.queued ||
+      job.status === DqoJobHistoryEntryModelStatusEnum.waiting ))
+    }, [job])
+
+    
   useEffect(() => {
-    setFilteredJob(
-      Object.values(job_dictionary_state)?.find(
-        (x) =>
-          x.jobType === DqoJobHistoryEntryModelJobTypeEnum.collect_statistics &&
-          x.parameters?.collectStatisticsParameters
-            ?.statistics_collector_search_filters?.fullTableName ===
-            schemaName + '.' + tableName &&
-          (x.status === DqoJobHistoryEntryModelStatusEnum.running ||
-            x.status === DqoJobHistoryEntryModelStatusEnum.queued ||
-            x.status === DqoJobHistoryEntryModelStatusEnum.waiting)
-      )?.jobId?.jobId
-    );
-    if (filteredJob) {
-      if (
-        job_dictionary_state[filteredJob ?? '']?.status ===
-        DqoJobHistoryEntryModelStatusEnum.succeeded
-      ) {
-        fetchColumns();
-      }
+    if (job && job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded) {
+      fetchColumns();
     }
-  }, [job_dictionary_state]);
+  }, [job]);
 
   return (
     <div className="flex-grow min-h-0 flex flex-col">
       <div className="border-b border-gray-300">
-        <Tabs tabs={TABLE_LEVEL_TABS[CheckTypes.PROFILING]} activeTab={tab} onChange={onChangeTab} />
+        <Tabs tabs={TABLE_LEVEL_TABS[CheckTypes.PROFILING]} activeTab={activeTab} onChange={onChangeTab} />
       </div>
       {activeTab === 'statistics' && (
         <TableActionGroup
@@ -259,13 +258,13 @@ const ProfilingView = () => {
           onUpdate={onUpdate}
           isUpdated={isUpdatedChecksUi}
           isUpdating={isUpdating}
-          collectStatistic={true}
           addSaveButton={false}
           createDataStream={selected > 0 && selected <= 9 && true}
           createDataStreamFunc={postDataStream}
           maxToCreateDataStream={selected > 9 && true}
-          statistics={statistics}
-          selectedColumns={selectedColumns}
+          collectStatistics = {collectStatistics}
+          selectedColumns={selectedColumns && selectedColumns?.length > 0}
+          collectStatisticsSpinner={filteredCollectStatisticsJobs}
         />
       )}
       {activeTab === 'advanced' && (

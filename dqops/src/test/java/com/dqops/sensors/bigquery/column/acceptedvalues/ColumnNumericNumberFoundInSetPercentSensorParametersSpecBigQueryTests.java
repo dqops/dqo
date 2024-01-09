@@ -105,7 +105,7 @@ public class ColumnNumericNumberFoundInSetPercentSensorParametersSpecBigQueryTes
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/numeric/number_value_in_set_percent", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/accepted_values/number_found_in_set_percent", this.sut.getSensorDefinitionName());
     }
 
     @Test

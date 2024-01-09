@@ -161,7 +161,7 @@ $DQO_USER_HOME
     └─...   
 ```
 
-1.  The [.dqotable.yaml](../../reference/yaml/TableYaml.md) files are named as the *&lt;schema_name&gt;.&lt;table_name&gt;.dqotable.yaml*.
+The [.dqotable.yaml](../../reference/yaml/TableYaml.md) files are named as the *&lt;schema_name&gt;.&lt;table_name&gt;.dqotable.yaml*.
 
 Storing the configuration of the data quality checks in a file named after the table name simplifies migration
 of the table versions or between environments. When a similar table is present in another data source

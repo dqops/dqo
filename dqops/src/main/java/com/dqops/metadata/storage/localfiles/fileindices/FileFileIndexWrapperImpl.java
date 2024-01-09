@@ -116,11 +116,14 @@ public class FileFileIndexWrapperImpl extends FileIndexWrapperImpl {
             case ADDED:
 				this.indicesFolderNode.addChildFile(fileNameWithExt, newFileContent);
 				this.getSpec().clearDirty(true);
+                break;
+
             case MODIFIED:
                 FileTreeNode modifiedFileNode = this.indicesFolderNode.getChildFileByFileName(fileNameWithExt);
                 modifiedFileNode.changeContent(newFileContent);
 				this.getSpec().clearDirty(true);
                 break;
+
             case TO_BE_DELETED:
 				this.indicesFolderNode.deleteChildFile(fileNameWithExt);
                 break;

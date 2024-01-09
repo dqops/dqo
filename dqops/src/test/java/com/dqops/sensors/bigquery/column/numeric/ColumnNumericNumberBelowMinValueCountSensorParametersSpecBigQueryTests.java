@@ -88,7 +88,7 @@ public class ColumnNumericNumberBelowMinValueCountSensorParametersSpecBigQueryTe
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/numeric/value_below_min_value_count", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/numeric/number_below_min_value_count", this.sut.getSensorDefinitionName());
     }
 
     @Test

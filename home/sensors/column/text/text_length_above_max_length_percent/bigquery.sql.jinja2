@@ -47,7 +47,7 @@ SELECT
         WHEN COUNT(*) = 0 THEN 100.0
         ELSE 100.0 * SUM(
             CASE
-                WHEN LENGTH({{ render_column_cast_to_string('analyzed_table')}}) >= {{(parameters.max_length)}}
+                WHEN LENGTH({{ render_column_cast_to_string('analyzed_table')}}) > {{(parameters.max_length)}}
                     THEN 1
                 ELSE 0
             END

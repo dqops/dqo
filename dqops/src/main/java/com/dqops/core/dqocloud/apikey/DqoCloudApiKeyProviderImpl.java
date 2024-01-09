@@ -16,6 +16,7 @@
 package com.dqops.core.dqocloud.apikey;
 
 import com.dqops.core.configuration.DqoCloudConfigurationProperties;
+import com.dqops.core.configuration.DqoUserConfigurationProperties;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
@@ -46,6 +47,7 @@ import java.util.Map;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class DqoCloudApiKeyProviderImpl implements DqoCloudApiKeyProvider {
     private DqoCloudConfigurationProperties dqoCloudConfigurationProperties;
+    private DqoUserConfigurationProperties dqoUserConfigurationProperties;
     private UserHomeContextFactory userHomeContextFactory;
     private SecretValueProvider secretValueProvider;
     private JsonSerializer jsonSerializer;
@@ -55,16 +57,19 @@ public class DqoCloudApiKeyProviderImpl implements DqoCloudApiKeyProvider {
     /**
      * Default injection constructor.
      * @param dqoCloudConfigurationProperties DQOps Cloud configuration properties.
+     * @param dqoUserConfigurationProperties Configuration properties with the default user home.
      * @param userHomeContextFactory User home context factory - required to load the user settings.
      * @param secretValueProvider Secret value provider - used to resolve expressions in the settings.
      * @param jsonSerializer Json serializer - used to decode the API key.
      */
     @Autowired
     public DqoCloudApiKeyProviderImpl(DqoCloudConfigurationProperties dqoCloudConfigurationProperties,
+                                      DqoUserConfigurationProperties dqoUserConfigurationProperties,
                                       UserHomeContextFactory userHomeContextFactory,
                                       SecretValueProvider secretValueProvider,
                                       JsonSerializer jsonSerializer) {
         this.dqoCloudConfigurationProperties = dqoCloudConfigurationProperties;
+        this.dqoUserConfigurationProperties = dqoUserConfigurationProperties;
         this.userHomeContextFactory = userHomeContextFactory;
         this.secretValueProvider = secretValueProvider;
         this.jsonSerializer = jsonSerializer;
@@ -80,7 +85,12 @@ public class DqoCloudApiKeyProviderImpl implements DqoCloudApiKeyProvider {
         try {
             DqoCloudApiKey cachedApiKeyPerDomain;
             synchronized (this.lock) {
-                cachedApiKeyPerDomain = userIdentity != null ? this.cachedApiKeysPerDomain.get(userIdentity.getDataDomainCloud()) : null;
+                if (userIdentity != null) {
+                    String dataDomainCloud = userIdentity.getDataDomainCloud();
+                    cachedApiKeyPerDomain = this.cachedApiKeysPerDomain.get(dataDomainCloud);
+                } else {
+                    cachedApiKeyPerDomain = this.cachedApiKeysPerDomain.get(this.dqoUserConfigurationProperties.getDefaultDataDomain());
+                }
 
                 if (cachedApiKeyPerDomain != null) {
                     return cachedApiKeyPerDomain;

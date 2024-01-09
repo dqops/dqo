@@ -105,7 +105,7 @@ public class ColumnNumericExpectedNumbersInUseCountSensorParametersSpecBigQueryT
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/numeric/expected_numbers_in_use_count", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/accepted_values/expected_numbers_in_use_count", this.sut.getSensorDefinitionName());
     }
 
     @Test

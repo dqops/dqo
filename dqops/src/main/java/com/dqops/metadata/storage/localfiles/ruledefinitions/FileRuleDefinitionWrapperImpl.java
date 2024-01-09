@@ -180,6 +180,8 @@ public class FileRuleDefinitionWrapperImpl extends RuleDefinitionWrapperImpl {
                 if (this.getRulePythonModuleContent() != null && this.getRulePythonModuleContent().getTextContent() != null) {
 					this.customRuleFolderNode.addChildFile(pythonModuleFileNameWithExt, this.getRulePythonModuleContent().clone());
                 }
+                break;
+
             case MODIFIED:
                 FileTreeNode modifiedFileNode = this.customRuleFolderNode.getChildFileByFileName(specFileNameWithExt);
                 modifiedFileNode.changeContent(newSpecFileContent);
@@ -200,6 +202,7 @@ public class FileRuleDefinitionWrapperImpl extends RuleDefinitionWrapperImpl {
                     }
                 }
                 break;
+
             case TO_BE_DELETED:
 				this.customRuleFolderNode.deleteChildFile(specFileNameWithExt);
                 FileTreeNode pythonModuleFileToDelete = this.customRuleFolderNode.getChildFileByFileName(pythonModuleFileNameWithExt);

@@ -15,6 +15,7 @@
  */
 package com.dqops.rules.comparison;
 
+import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
@@ -27,49 +28,50 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
+ * Data quality rule that verifies that a data quality check readout of a string_datatype_detect (the data type detection) matches an expected data type.
+ * The supported values are in the range 1..7, which are: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class MinPercentRule5ParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<MinPercentRule5ParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class DetectedDatatypeEqualsRuleParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<DetectedDatatypeEqualsRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("Minimum accepted value for the actual_value returned by the sensor (inclusive).")
-    private Double minPercent = 5.0;
+    @JsonPropertyDescription("Expected data type code, the values for the sensor's actual values are: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - texts, 7 - mixed data types.")
+    private DetectedDatatypeCategory expectedDatatype;
 
     /**
-     * Default constructor, the minimum accepted value is 0.
+     * Creates the default object that expects a correct data type.
      */
-    public MinPercentRule5ParametersSpec() {
+    public DetectedDatatypeEqualsRuleParametersSpec() {
     }
 
     /**
-     * Creates a rule with a given value.
-     * @param minPercent Minimum accepted value.
+     * Creates the rule, given an expected data type code.
+     * @param expectedDatatype Expected data type category.
      */
-    public MinPercentRule5ParametersSpec(Double minPercent) {
-        this.minPercent = minPercent;
+    public DetectedDatatypeEqualsRuleParametersSpec(DetectedDatatypeCategory expectedDatatype) {
+        this.expectedDatatype = expectedDatatype;
     }
 
     /**
-     * Minimum value for a data quality check readout, for example a minimum row count.
-     * @return Minimum value for a data quality check readout.
+     * Returns the expected data type code.
+     * @return Expected data type code.
      */
-    public Double getMinPercent() {
-        return minPercent;
+    public DetectedDatatypeCategory getExpectedDatatype() {
+        return expectedDatatype;
     }
 
     /**
-     * Changes the minimum value (threshold) for a data quality readout.
-     * @param minPercent Minimum value.
+     * Sets the expected data type code.
+     * @param expectedDatatype Expected data type code.
      */
-    public void setMinPercent(Double minPercent) {
-        this.setDirtyIf(!Objects.equals(this.minPercent, minPercent));
-        this.minPercent = minPercent;
+    public void setExpectedDatatype(DetectedDatatypeCategory expectedDatatype) {
+        this.setDirtyIf(!Objects.equals(this.expectedDatatype, expectedDatatype));
+        this.expectedDatatype = expectedDatatype;
     }
 
     /**
@@ -89,6 +91,6 @@ public class MinPercentRule5ParametersSpec extends AbstractRuleParametersSpec {
      */
     @Override
     public String getRuleDefinitionName() {
-        return "comparison/min_percent";
+        return "comparison/detected_datatype_equals";
     }
 }

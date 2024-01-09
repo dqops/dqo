@@ -30,10 +30,27 @@ import java.time.Instant;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = false)
 public class PythonRuleCallInput {
+    private String dataDomainModule;
     private String ruleModulePath;
     private String homePath;
     private Instant ruleModuleLastModified;
     private RuleExecutionRunParameters ruleParameters;
+
+    /**
+     * Returns the data domain name.
+     * @return Data domain name.
+     */
+    public String getDataDomainModule() {
+        return dataDomainModule;
+    }
+
+    /**
+     * Sets the data domain name.
+     * @param dataDomainModule Data domain name.
+     */
+    public void setDataDomainModule(String dataDomainModule) {
+        this.dataDomainModule = dataDomainModule;
+    }
 
     /**
      * Returns the path to a rule module (python file).

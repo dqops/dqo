@@ -115,7 +115,7 @@ public class CheckExecutionServiceImplTests extends BaseTest {
         ColumnProfilingCheckCategoriesSpec columnProfilingCheckCategoriesSpec = new ColumnProfilingCheckCategoriesSpec();
         ColumnNullsProfilingChecksSpec columnNullsProfilingChecksSpec = new ColumnNullsProfilingChecksSpec();
         ColumnNullsCountCheckSpec columnNullsCountCheckSpec = new ColumnNullsCountCheckSpec();
-        columnNullsCountCheckSpec.setError(new MaxCountRule0ErrorParametersSpec());
+        columnNullsCountCheckSpec.setError(new MaxCountRule0ErrorParametersSpec(10L));
         columnNullsProfilingChecksSpec.setProfileNullsCount(columnNullsCountCheckSpec);
         columnProfilingCheckCategoriesSpec.setNulls(columnNullsProfilingChecksSpec);
         columnSpec.setProfilingChecks(columnProfilingCheckCategoriesSpec);

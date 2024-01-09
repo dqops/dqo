@@ -39,34 +39,9 @@ The right side of the navigation bar provides access to the main settings and so
 - **Help** - Links to the support page, documentation, DQOps account manager and configuration parameters settings set at 
     the start of DQOps. You can change the configuration settings by [setting command line arguments at the start of the application](../../command-line-interface/dqo.md).
 - **Synchronize** - Synchronize locally stored results with your DQOps Cloud account.
-- **Notifications** - View DQOps notifications and enable/disable the scheduler. The Notifications icon displays **NEW** tag, when there is a new notification.
+- **[Notifications](#notifications)** - View DQOps notifications and enable/disable the scheduler. The Notifications icon displays **NEW** tag, when there is a new notification.
 - **User account** - Provide information about your account, current limits and access to the DQOps Cloud account. 
 
-### **Notifications**
-
-Notifications provide a log of all completed tasks, such as running checks, gathering statistics, importing metadata, 
-synchronizing folders, etc. 
-
-![DQOps Notifications](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/notification-panel.png)
-
-You can use the notifications to access a complete log of all jobs that have been executed. This log allows you to check
-the status of each action, which can be "succeeded," "failed," "running," "waiting," "queued," or "canceled." 
-Additionally, you can expand each job entry to view sub-jobs and access more detailed information about specific tasks.
-
-**Main functions of notifications:**
-
-- In the top part of notifications window you can start and stop the scheduler. You can [learn more about scheduling here](../../working-with-dqo/schedules/index.md). 
-
-    ![DQOps job scheduler](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/job-scheduler.png)
-
-- If the job is queued or running you can cancel or stop it by clicking the X button.
-
-    ![DQOps canceling job](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/cancel-job.png)
-
-- You can view the result of executed checks by simply hovering on run checks job. Color of the square represents the highest
-    severity status of the results (green for a valid result, yellow for a warning, orange for an error and red for a fatal error).
-
-    ![DQOps job results](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/job-results.png)
 
 ## Tree view
 
@@ -79,31 +54,11 @@ contains the list of checks.
 Clicking on an object in the tree view displays settings, statistics or a list of table or column data quality checks on
 the main workspace. Clicking on an object always opens a new tab in the main workspace.
 
+### **Profiling, Monitoring Checks and Partition Checks tree view**
+
 In the **Profiling**, **Monitoring Checks** and **Partition Checks** sections, when you configure checks on any table or column, this
 table or column is displayed in bold on the tree view. In the **Data Source** section the bolded column or table name indicates
 that there is a check configured on any category.
-
-The tree view in the **Data Quality Dashboards** section displays the list of built-in dashboards divided into categories.
-When you hover your cursor over a dashboard name, thumbnails will appear.
-
-![DQOps tree view - dashboards](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tree-view-dashboards.png)
-
-The tree view in the **Incidents** section displays a list of all added sources and the number of open incidents for the last 15 days (including today) in brackets.
-
-![DQOps tree view  - Incidents](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tree-view-incidents.png)
-
-In the **Configuration** section, the tree view displays a list of all built-in data quality sensors, rules and data 
-quality checks that can be customized. The tree view in this section also provides access to the configuration of the following:
-
-- **Default checks configuration:** This allows you to configure checks that are automatically activated after importing new tables.
-- **Manage users:** This allows you to add new users and manage their roles.
-- **Default schedules:** This allows you to [configure schedules](../../working-with-dqo/schedules/index.md) that are automatically set after importing new tables.
-- **Defaults webhooks:** This allows you to [configure webhooks](../../integrations/webhooks/index.md).
-- **Shared credentials:** This allows you to add and manage shared credentials.
-
-![DQOps tree view - Configuration](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tree-view-configuration.png)
-
-### **Tree view menu**
 
 ![DQOps tree view menu](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tree-view-menu.png)
 
@@ -117,6 +72,34 @@ and **Partition Checks** sections opens a menu that allows to run the following 
 - Refresh connection, schema, table or column
 - Delete connection, schema, table or column
 - Delete data
+
+### **Data Quality Dashboards tree view**
+
+The tree view in the **Data Quality Dashboards** section displays the list of built-in dashboards divided into categories.
+When you hover your cursor over a dashboard name, thumbnails will appear.
+
+![DQOps tree view - dashboards](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tree-view-dashboards.png)
+
+
+### **Incidents tree view**
+
+The tree view in the **Incidents** section displays a list of all added sources and the number of open incidents for the last 15 days (including today) in brackets.
+
+![DQOps tree view  - Incidents](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tree-view-incidents.png)
+
+
+### **Configuration tree view**
+
+In the **Configuration** section, the tree view displays a list of all built-in data quality sensors, rules and data 
+quality checks that can be customized. The tree view in this section also provides access to the configuration of the following:
+
+- **Default checks configuration:** This allows you to configure checks that are automatically activated after importing new tables.
+- **Manage users:** This allows you to add new users and manage their roles.
+- **Default schedules:** This allows you to [configure schedules](../../working-with-dqo/schedules/index.md) that are automatically set after importing new tables.
+- **Defaults webhooks:** This allows you to [configure webhooks](../../integrations/webhooks/index.md).
+- **Shared credentials:** This allows you to add and manage shared credentials.
+
+![DQOps tree view - Configuration](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tree-view-configuration.png)
 
 ## Main workspace
 
@@ -147,7 +130,8 @@ Below we explain the main elements of the workspace in the **Profiling**, **Moni
 
 
 The top section of this workspace contains quick links that allow you to switch between different sections 
-while keeping the same level in the tree. For instance, if you are in the monitoring section on a table and click the 
+while keeping the same level in the tree. The quick links section is hidden by default and can be expanded by clicking on the **<** arrow.
+For instance, if you are in the monitoring section on a table and click the 
 **Partition checks >** link, you will be directed to the Partition check section on the same table. Linking works the 
 same when you are on the column level.
 
@@ -159,7 +143,8 @@ Under tabs selection, there is information about the set schedule configuration.
 section, there is additional information about the date partitioning column.
 
 The table with data quality checks contains a list of checks divided into different data quality subcategories that you
-can expand and collapse by clicking on an arrow. [Learn more about the different check subcategories.](../../checks/index.md)
+can expand and collapse by clicking on an arrow. [Learn more about the different check subcategories.](../../checks/index.md).
+By clicking on the **Show advanced checks** checkbox you can view all checks available in DQOps. 
 
 The right side of the table allows setting different threshold levels (severity levels). [Learn more about threshold levels ](../checks/index.md#issue-severity-levels)
 
@@ -219,6 +204,29 @@ You can view the list of executed checks by clicking on the arrow. Hovering over
 
 ![Table quality status - detailed checks view](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/table-quality-status-detailed-checks-view.png)
 
+## Notifications
+
+Notifications provide a log of all completed tasks, such as running checks, gathering statistics, importing metadata,
+synchronizing folders, etc.
+
+![DQOps Notifications](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/notification-panel.png)
+
+You can use the notifications to access a complete log of all jobs that have been executed. This log allows you to check
+the status of each action, which can be "succeeded," "failed," "running," "waiting," "queued," or "canceled."
+Additionally, you can expand each job entry to view sub-jobs and access more detailed information about specific tasks.
+
+In the top part of notifications window you can start and stop the scheduler. You can [learn more about scheduling here](../../working-with-dqo/schedules/index.md).
+
+![DQOps job scheduler](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/job-scheduler.png)
+
+If the job is queued or running you can cancel or stop it by clicking the X button.
+
+![DQOps canceling job](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/cancel-job.png)
+
+You can view the result of executed checks by simply hovering on run checks job. Color of the square represents the highest
+  severity status of the results (green for a valid result, yellow for a warning, orange for an error and red for a fatal error).
+
+![DQOps job results](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/job-results.png)
 
 ## What's next
 

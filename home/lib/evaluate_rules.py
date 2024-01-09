@@ -46,6 +46,7 @@ class RuleExecutionRunParameters:
 
 
 class PythonRuleCallInput:
+    data_domain_module: str
     rule_module_path: str
     home_path: str
     rule_parameters: any
@@ -95,7 +96,8 @@ class RuleRunner:
 
             if rule_module_path not in self.rule_modules or self.rule_modules[rule_module_path].rule_module_last_modified != rule_module_last_modified:
                 rules_folder_index = rule_module_path.rfind('rules')
-                rule_module_name = rule_module_path[rules_folder_index + len('rules') + 1: -3] \
+                rule_module_name = request.data_domain_module + '.' + \
+                    rule_module_path[rules_folder_index + len('rules') + 1: -3] \
                     .replace('\\', '.').replace('/', '.')
                 rule_module = self.import_source_file(rule_module_path, rule_module_name)
                 self.rule_modules[rule_module_path] = LoadedModule(rule_module, rule_module_last_modified)

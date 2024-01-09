@@ -132,11 +132,14 @@ public class FileConnectionWrapperImpl extends ConnectionWrapperImpl {
             case ADDED:
 				this.connectionFolderNode.addChildFile(SpecFileNames.CONNECTION_SPEC_FILE_NAME_YAML, newFileContent);
 				this.getSpec().clearDirty(true);
+                break;
+
             case MODIFIED:
                 FileTreeNode modifiedFileNode = this.connectionFolderNode.getChildFileByFileName(SpecFileNames.CONNECTION_SPEC_FILE_NAME_YAML);
                 modifiedFileNode.changeContent(newFileContent);
 				this.getSpec().clearDirty(true);
                 break;
+
             case TO_BE_DELETED:
 				this.connectionFolderNode.deleteChildFile(SpecFileNames.CONNECTION_SPEC_FILE_NAME_YAML);
 				this.connectionFolderNode.setDeleteOnFlush(true); // will remove the whole folder for the source

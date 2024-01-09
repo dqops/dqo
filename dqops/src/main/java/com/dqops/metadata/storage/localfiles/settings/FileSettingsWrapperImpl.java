@@ -53,7 +53,7 @@ public class FileSettingsWrapperImpl extends SettingsWrapperImpl {
 	@Override
 	public LocalSettingsSpec getSpec() {
 		LocalSettingsSpec spec = super.getSpec();
-		if (spec == null && this.getStatus() == InstanceStatus.NOT_TOUCHED) {
+		if (spec == null && this.getStatus() == InstanceStatus.LOAD_IN_PROGRESS) {
 			FileTreeNode fileNode = this.settingsFolderNode.getChildFileByFileName(SpecFileNames.LOCAL_SETTINGS_SPEC_FILE_NAME_YAML);
 			if (fileNode != null) {
 				FileContent fileContent = fileNode.getContent();
@@ -111,6 +111,8 @@ public class FileSettingsWrapperImpl extends SettingsWrapperImpl {
 			case ADDED:
 				this.settingsFolderNode.addChildFile(fileNameWithExt, newFileContent);
 				this.getSpec().clearDirty(true);
+				break;
+
 			case MODIFIED:
 				FileTreeNode modifiedFileNode = this.settingsFolderNode.getChildFileByFileName(fileNameWithExt);
 				if (modifiedFileNode != null) {
@@ -121,6 +123,7 @@ public class FileSettingsWrapperImpl extends SettingsWrapperImpl {
 				}
 				this.getSpec().clearDirty(true);
 				break;
+
 			case TO_BE_DELETED:
 				this.settingsFolderNode.deleteChildFile(fileNameWithExt);
 				break;

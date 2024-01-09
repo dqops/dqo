@@ -88,7 +88,7 @@ public class ColumnBlanksBlankNullPlaceholderTextCountSensorParametersSpecBigQue
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/strings/string_null_placeholder_count", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/blanks/null_placeholder_text_count", this.sut.getSensorDefinitionName());
     }
 
     @Test

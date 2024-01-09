@@ -38,7 +38,7 @@ public class AbstractElementWrapperTests extends BaseTest {
         TestableElementWrapper sut = new TestableElementWrapper("abc");
         TestableSpec model = new TestableSpec("model");
         sut.setSpec(model);
-        Assertions.assertEquals(InstanceStatus.UNCHANGED, sut.getStatus());
+        Assertions.assertEquals(InstanceStatus.ADDED, sut.getStatus());
         Assertions.assertSame(model, sut.getSpec());
     }
 
@@ -50,7 +50,7 @@ public class AbstractElementWrapperTests extends BaseTest {
 
         TestableSpec newModel = new TestableSpec("newmodel");
         sut.setSpec(newModel);
-        Assertions.assertEquals(InstanceStatus.MODIFIED, sut.getStatus());
+        Assertions.assertEquals(InstanceStatus.ADDED, sut.getStatus());
         Assertions.assertSame(newModel, sut.getSpec());
     }
 

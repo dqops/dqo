@@ -88,7 +88,7 @@ public class ColumnNumericNumberAboveMaxValueCountSensorParametersSpecBigQueryTe
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/numeric/value_above_max_value_count", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/numeric/number_above_max_value_count", this.sut.getSensorDefinitionName());
     }
 
     @Test

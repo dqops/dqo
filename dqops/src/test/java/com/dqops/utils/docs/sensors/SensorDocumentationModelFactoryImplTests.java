@@ -53,16 +53,16 @@ public class SensorDocumentationModelFactoryImplTests extends BaseTest {
         Assertions.assertNotNull(sensorDocumentation);
         Assertions.assertEquals("Column level sensor that calculates the percent of values that fit to a regex in a column.", sensorDocumentation.getSensorParametersJavaDoc());
         Assertions.assertEquals("column", sensorDocumentation.getTarget());
-        Assertions.assertEquals("strings", sensorDocumentation.getCategory());
-        Assertions.assertEquals("string_match_regex_percent", sensorDocumentation.getSensorName());
-        Assertions.assertEquals("column/strings/string_match_regex_percent", sensorDocumentation.getFullSensorName());
+        Assertions.assertEquals("patterns", sensorDocumentation.getCategory());
+        Assertions.assertEquals("texts_matching_regex_percent", sensorDocumentation.getSensorName());
+        Assertions.assertEquals("column/patterns/texts_matching_regex_percent", sensorDocumentation.getFullSensorName());
 
         Assertions.assertNotNull(sensorDocumentation.getSqlTemplates());
-        Assertions.assertEquals(8,sensorDocumentation.getSqlTemplates().keySet().size());
+        Assertions.assertEquals(11,sensorDocumentation.getSqlTemplates().keySet().size());
         Assertions.assertTrue(sensorDocumentation.getSqlTemplates().keySet().stream()
                 .map(ProviderTypeModel::getProviderTypeName)
                 .anyMatch(provider -> provider.equals("bigquery")));
-        Assertions.assertEquals(8,sensorDocumentation.getSqlTemplates().values().size());
+        Assertions.assertEquals(11,sensorDocumentation.getSqlTemplates().values().size());
 
         Assertions.assertNotNull(sensorDocumentation.getDefinition());
         Assertions.assertEquals(1, sensorDocumentation.getDefinition().getSpec().getFields().size());
