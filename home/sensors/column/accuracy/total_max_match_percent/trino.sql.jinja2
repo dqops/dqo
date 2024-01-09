@@ -2,7 +2,7 @@
 
 {%- macro render_referenced_table(referenced_table) -%}
 {%- if referenced_table.find(".") < 0 -%}
-   {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+   {{ lib.quote_identifier(lib.macro_catalog_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
 {%- else -%}
    {{ referenced_table }}
 {%- endif -%}
