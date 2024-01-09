@@ -110,8 +110,13 @@ public class TrinoConnectionProvider extends AbstractSqlConnectionProvider {
         trinoSpec.setTrinoEngineType(trinoEngineType);
 
         switch (trinoEngineType){
-            case trino -> promptForTrinoConnectionParameters(trinoSpec, isHeadless, terminalReader);
-            case athena -> promptForAthenaConnectionParameters(trinoSpec, isHeadless, terminalReader);
+            case trino:
+                promptForTrinoConnectionParameters(trinoSpec, isHeadless, terminalReader);
+                break;
+
+            case athena:
+                promptForAthenaConnectionParameters(trinoSpec, isHeadless, terminalReader);
+                break;
         }
 
     }

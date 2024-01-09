@@ -184,13 +184,15 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
         TrinoEngineType trinoEngineType = this.getConnectionSpec().getTrino().getTrinoEngineType();
 
         switch (trinoEngineType){
-            case trino -> super.createTable(tableSpec);
-            case athena -> {
+            case trino:
+                super.createTable(tableSpec);
+                break;
+
+            case athena:
                 String createTableSql = generateCreateTableSqlStatementForAthena(tableSpec);
                 this.executeCommand(createTableSql, JobCancellationToken.createDummyJobCancellationToken());
-            }
+                break;
         }
-
     }
 
     /**
@@ -289,9 +291,14 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
     protected Table rawTableResultFromResultSet(ResultSet results, String sqlQueryStatement) throws SQLException {
         TrinoEngineType trinoEngineType = this.getConnectionSpec().getTrino().getTrinoEngineType();
         switch (trinoEngineType){
-            case trino -> {return super.rawTableResultFromResultSet(results, sqlQueryStatement);}
-            case athena -> {return this.rawTableResultFromResultSetForAthena(results, sqlQueryStatement);}
-            default -> throw new RuntimeException(String.format("Trino engine type of %s is not supported.", trinoEngineType.toString()));
+            case trino:
+                return super.rawTableResultFromResultSet(results, sqlQueryStatement);
+
+            case athena:
+                return this.rawTableResultFromResultSetForAthena(results, sqlQueryStatement);
+
+            default:
+                throw new RuntimeException(String.format("Trino engine type of %s is not supported.", trinoEngineType.toString()));
         }
     }
 
