@@ -53,7 +53,7 @@ public class TrinoConnectionProvider extends AbstractSqlConnectionProvider {
      */
     @Autowired
     public TrinoConnectionProvider(BeanFactory beanFactory,
-                                    TrinoProviderDialectSettings dialectSettings) {
+                                   TrinoProviderDialectSettings dialectSettings) {
         this.beanFactory = beanFactory;
         this.dialectSettings = dialectSettings;
     }
@@ -177,12 +177,14 @@ public class TrinoConnectionProvider extends AbstractSqlConnectionProvider {
     /**
      * Proposes a physical (provider specific) column type that is able to store the data of the given Tablesaw column.
      *
+     * @param connectionSpec Connection specification if the settings are database version specific.
      * @param dataColumn Tablesaw column with data that should be stored.
      * @return Column type snapshot.
      */
     @Override
-    public ColumnTypeSnapshotSpec proposePhysicalColumnType(Column<?> dataColumn) {
+    public ColumnTypeSnapshotSpec proposePhysicalColumnType(ConnectionSpec connectionSpec, Column<?> dataColumn) {
         ColumnType columnType = dataColumn.type();
+        TrinoEngineType trinoEngineType = connectionSpec.getTrino().getTrinoEngineType();
 
         if (columnType == ColumnType.SHORT) {
             return new ColumnTypeSnapshotSpec("SMALLINT");
@@ -194,13 +196,17 @@ public class TrinoConnectionProvider extends AbstractSqlConnectionProvider {
             return new ColumnTypeSnapshotSpec("BIGINT");
         }
         else if (columnType == ColumnType.FLOAT) {
-            return new ColumnTypeSnapshotSpec("REAL");
+            if(trinoEngineType.equals(TrinoEngineType.trino)){
+                return new ColumnTypeSnapshotSpec("REAL");
+            } else {
+                return new ColumnTypeSnapshotSpec("FLOAT");
+            }
         }
         else if (columnType == ColumnType.BOOLEAN) {
             return new ColumnTypeSnapshotSpec("BOOLEAN");
         }
         else if (columnType == ColumnType.STRING) {
-            return new ColumnTypeSnapshotSpec("VARCHAR");
+            return new ColumnTypeSnapshotSpec("VARCHAR", 255);
         }
         else if (columnType == ColumnType.DOUBLE) {
             return new ColumnTypeSnapshotSpec("DOUBLE");
@@ -218,7 +224,7 @@ public class TrinoConnectionProvider extends AbstractSqlConnectionProvider {
             return new ColumnTypeSnapshotSpec("TIMESTAMP");
         }
         else if (columnType == ColumnType.TEXT) {
-            return new ColumnTypeSnapshotSpec("VARCHAR");
+            return new ColumnTypeSnapshotSpec("VARCHAR", 255);
         }
         else {
             throw new NoSuchElementException("Unsupported column type: " + columnType.name());

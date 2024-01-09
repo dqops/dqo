@@ -187,7 +187,8 @@ public class SampleTableMetadataObjectMother {
                 columnSpec.setTypeSnapshot(userProposedType);
             }
             else {
-                ColumnTypeSnapshotSpec providerProposedTypeSnapshot = connectionProvider.proposePhysicalColumnType(dataColumn);
+                ColumnTypeSnapshotSpec providerProposedTypeSnapshot = connectionProvider
+                        .proposePhysicalColumnType(connectionSpec, dataColumn);
                 columnSpec.setTypeSnapshot(providerProposedTypeSnapshot);
             }
 
@@ -198,7 +199,7 @@ public class SampleTableMetadataObjectMother {
     }
 
     /**
-     * Creates a sample table metadata with a non-existing table that cannot used for sql execution.
+     * Creates a sample table metadata with a non-existing table that cannot be used for sql execution.
      * Schema and table name should not point to the existing table.
      * @param schemaName A schema name.
      * @param tableName Imagined table name that should not exist in real database.
