@@ -158,6 +158,7 @@ const NotificationMenu = () => {
 
     return updatedChildArray;
   };
+  console.log(job_dictionary_state, setNewJobArray())
 
   return (
     <Popover placement="bottom-end" open={isOpen} handler={toggleOpen}>
