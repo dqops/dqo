@@ -9,7 +9,7 @@ specific to the current platform. DQOps runs on Windows, Linux and MacOS. Both x
 !!! note "Running DQOps as a server"
 
     DQOps python package is a quick option to run a local, non-production instance.
-    Please choose a [Docker distribution](run-dqo-as-docker-container.md) to run DQOps as a long-running production instance
+    Please choose a [Docker distribution](./run-dqo-as-docker-container.md) to run DQOps as a long-running production instance
     that can monitor the data quality at all times.
 
 

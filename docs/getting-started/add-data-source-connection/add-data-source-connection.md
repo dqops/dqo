@@ -2,12 +2,12 @@
 
 ## Overview
 
-After [installation and starting DQOps](../../installation/installation.md), we describe how to add a connection to [BigQuery public dataset Austin Crime Data](https://console.cloud.google.com/marketplace/details/city-of-austin/austin-crime) 
+After [installation and starting DQOps](../installation/installation.md), we describe how to add a connection to [BigQuery public dataset Austin Crime Data](https://console.cloud.google.com/marketplace/details/city-of-austin/austin-crime) 
 using the user interface.
 
 For a full description of how to add a data source connection to other providers or add connection using the command-line shell,
-see [Working with DQOps section](../../../data-sources/index.md).
-You can find more information about [navigating the DQOps user interface here](../../../dqo-concepts/user-interface-overview/user-interface-overview.md). 
+see [Working with DQOps section](../../data-sources/index.md).
+You can find more information about [navigating the DQOps user interface here](../../dqo-concepts/user-interface-overview/user-interface-overview.md). 
 
 ## Prerequisite credentials
 
@@ -15,7 +15,7 @@ To add a connection to a BigQuery data source to DQOps you need the following:
 
 - A BiqQuery service account with **BigQuery > BigQuery Job User** permission. [You can create a free trial Google Cloud account here](https://cloud.google.com/free).
 - A service account key in JSON format for JSON key authentication. For details refer to [Create and delete service account keys](https://cloud.google.com/iam/docs/keys-create-delete).
-- A working [Google Cloud CLI](https://cloud.google.com/sdk/docs/install) if you want to use [Google Application Credentials authentication](../../../data-sources/bigquery.md#using-google-application-credentials-authentication).
+- A working [Google Cloud CLI](https://cloud.google.com/sdk/docs/install) if you want to use [Google Application Credentials authentication](../../data-sources/bigquery.md#using-google-application-credentials-authentication).
 
 We have chosen to use BigQuery data source for this getting started guide, because public BigQuery datasets are freely available
 and you can query them within the GCP FREE tier monthly limit.
@@ -41,7 +41,7 @@ After navigating to the BigQuery connection settings, you will need to fill in t
 ![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-bigquery.png)
 
 | BigQuery connection settings                                                                               | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | 
-|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Connection name                                                                                            | The name of the connection that will be created in DQO. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters, hyphens and underscore. For example, "**testconnection**"                                                                                                                                                                                                              |
 | Source GCP project ID                                                                                      | Name of the project that has datasets that will be imported. In our example, it is "**bigquery-public-data**".                                                                                                                                                                                                                                                                                                                                                                                                 |
 | Authentication mode to the Google Cloud                                                                    | Type of authentication mode to the Google Cloud. You can select from the 3 options:<br/>- Google Application Credentials,<br/>- JSON Key Content<br/> - JSON Key Path                                                                                                                                                                                                                                                                                                                                          |
@@ -71,7 +71,7 @@ Now we can import schemas and tables.
 
 ## Initiate automatic monitoring and review scheduling
 
-Once new tables are imported, DQOps automatically activates [profiling and monitoring checks](../../../dqo-concepts/checks/index.md).
+Once new tables are imported, DQOps automatically activates [profiling and monitoring checks](../../dqo-concepts/checks/index.md).
 These checks include row count,
 table availability and checks detecting schema changes. They are scheduled to run daily at 12:00 p.m.
 
@@ -107,32 +107,30 @@ There are several tabs to explore in the **Data sources** section that differs d
 The following tabs are shown at the connection level:
 
 - **Connection** - provide details about the connection parameters.
-- **Schedule** - allows setting schedule for running checks. [Learn how to configure schedules](../../../working-with-dqo/schedules/index.md).
+- **Schedule** - allows setting schedule for running checks. [Learn how to configure schedules](../../working-with-dqo/schedules/index.md).
 - **Comments** - allows adding comments to your connection.
 - **Labels** - allows adding labels to your connection.
 - **Schemas** - displays currently imported schemas and allows importing more schemas and tables.
-- **Default grouping template** - allows setting up data grouping globally at the data source level. [Learn how to configure data grouping](../../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md).
-- **Incidents and notifications** - allows configuring incidents and Webhooks for notifications. [Learn more about incidents](../../../working-with-dqo/incidents-and-notifications/incidents.md) that let you keep track of the issues that arise during data quality monitoring. [Learn how to configure notifications](../../../integrations/webhooks/index.md) whenever a new incident is created or modified.
+- **Default grouping template** - allows setting up data grouping globally at the data source level. [Learn how to configure data grouping](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md).
+- **Incidents and notifications** - allows configuring incidents and Webhooks for notifications. [Learn more about incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) that let you keep track of the issues that arise during data quality monitoring. [Learn how to configure notifications](../../integrations/webhooks/index.md) whenever a new incident is created or modified.
 
 ## Explore the table-level tabs in the Data sources section
 
 At the table level in the **Data sources** section, there are the following tabs:
 
 - **Table** - provide details about the table and allows you to add filter, priority or stage name (for example, "Ingestion").
-- **Schedule** - allows setting schedule for running checks. [Learn how to configure schedules](../../../working-with-dqo/schedules/index.md).
+- **Schedule** - allows setting schedule for running checks. [Learn how to configure schedules](../../working-with-dqo/schedules/index.md).
 - **Comments** - allows adding comments to your tables.
 - **Labels** - allows adding labels to your tables.
-- **Data groupings** - allows setting up data grouping at the table level. [Learn how to configure data grouping](../../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md).
-- **Date and time columns** - allows [configuring event and ingestion timestamp columns for timeliness checks](../../../working-with-dqo/run-data-quality-checks/run-data-quality-checks.md#configure-event-and-ingestion-timestamp-columns-for-timeliness-checks), as well as [date or datetime column for partition checks](../../../working-with-dqo/run-data-quality-checks/run-data-quality-checks.md#configure-date-or-datetime-column-for-partition-checks).
-- **Incident configuration** - allows configuring incidents. [Learn more about incidents](../../../working-with-dqo/incidents-and-notifications/incidents.md) that let you keep track of the issues that arise during data quality monitoring.
+- **Data groupings** - allows setting up data grouping at the table level. [Learn how to configure data grouping](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md).
+- **Date and time columns** - allows [configuring event and ingestion timestamp columns for timeliness checks](../../working-with-dqo/run-data-quality-checks/run-data-quality-checks.md#configure-event-and-ingestion-timestamp-columns-for-timeliness-checks), as well as [date or datetime column for partition checks](../../working-with-dqo/run-data-quality-checks/run-data-quality-checks.md#configure-date-or-datetime-column-for-partition-checks).
+- **Incident configuration** - allows configuring incidents. [Learn more about incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) that let you keep track of the issues that arise during data quality monitoring.
 
 You can check the details of the imported table by expanding the tree view on the left and selecting the "crime" table.
 
 ![Reviewing table details](https://dqops.com/docs/images/getting-started/reviewing-table-details.png)
 
-
-
 ## Next step
 
 Now that you have connected a data source and initiated automatic monitoring,
-it is time to [review the results and run additional checks](../../review-results-and-run-monitoring-checks/review-results-and-run-monitoring-checks.md).
+it is time to [review the results and run additional checks](../review-results-and-run-monitoring-checks/review-results-and-run-monitoring-checks.md).
