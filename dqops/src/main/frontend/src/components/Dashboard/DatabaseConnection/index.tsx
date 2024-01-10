@@ -231,7 +231,12 @@ const DatabaseConnection = ({
     ),
     [ConnectionModelProviderTypeEnum.trino]: (
       <TrinoConnection
-        trino={{ ...database.trino, port: '8080', trino_engine_type: nameOfDatabase?.toLowerCase() as TrinoParametersSpecTrinoEngineTypeEnum }}
+        trino={{ ...database.trino, 
+          port: '8080', 
+          trino_engine_type: nameOfDatabase?.toLowerCase() as TrinoParametersSpecTrinoEngineTypeEnum,
+          catalog: (nameOfDatabase?.toLowerCase() as TrinoParametersSpecTrinoEngineTypeEnum == TrinoParametersSpecTrinoEngineTypeEnum.athena ? 'awsdatacatalog' : ''),
+          athena_work_group: 'primary'
+        }}
         onChange={(trino) => onChange({ ...database, trino })}
         sharedCredentials={sharedCredentials}
       />
