@@ -118,9 +118,30 @@ spec:
       - folder_name: Completeness
         standard: true
         dashboards:
+          - dashboard_name: Columns with null values - counts
+            url: https://lookerstudio.google.com/embed/reporting/d7d38ccd-8ec6-468e-a2e3-5a1b027ae7fc/page/c5B8C
+            width: 1400
+            height: 1800
+            parameters:
+              ds0.token: '%DQO_CLOUD_TOKEN%'
+              ds0.p_check_type: profiling
+          - dashboard_name: Columns with null values - percents
+            url: https://lookerstudio.google.com/embed/reporting/dd053c15-57dd-4b66-914d-6f8fa83da8a2/page/c5B8C
+            width: 1400
+            height: 1800
+            parameters:
+              ds0.token: '%DQO_CLOUD_TOKEN%'
+              ds0.p_check_type: profiling
           - dashboard_name: Current completeness issues on columns
             standard: true
             url: https://lookerstudio.google.com/embed/reporting/848f6a5a-eaf9-4128-be75-d02be19434e2/page/c5B8C
+            width: 1400
+            height: 1800
+            parameters:
+              ds0.token: '%DQO_CLOUD_TOKEN%'
+              ds0.p_check_type: profiling
+          - dashboard_name: Empty columns
+            url: https://lookerstudio.google.com/embed/reporting/7d40a825-34e9-44cc-be48-53fe766e3b63/page/c5B8C
             width: 1400
             height: 1800
             parameters:
@@ -255,7 +276,7 @@ spec:
         - folder_name: Table-level issues
           dashboards:
             - dashboard_name: Summary of changes in columns
-              url: https://lookerstudio.google.com/embed/reporting/1549a291-a238-481a-867d-1c3017a8a2e4/page/c5B8C
+              url: https://lookerstudio.google.com/embed/reporting/56f157c0-1a5d-4336-a689-5bd63e4865f5/page/c5B8C
               width: 1400
               height: 1800
               parameters:
@@ -514,9 +535,30 @@ spec:
       - folder_name: Completeness
         standard: true
         dashboards:
+        - dashboard_name: Columns with null values - counts
+          url: https://lookerstudio.google.com/embed/reporting/d7d38ccd-8ec6-468e-a2e3-5a1b027ae7fc/page/c5B8C
+          width: 1400
+          height: 1800
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: monitoring
+        - dashboard_name: Columns with null values - percents
+          url: https://lookerstudio.google.com/embed/reporting/dd053c15-57dd-4b66-914d-6f8fa83da8a2/page/c5B8C
+          width: 1400
+          height: 1800
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: monitoring
         - dashboard_name: Current completeness issues on columns
           standard: true
           url: https://lookerstudio.google.com/embed/reporting/848f6a5a-eaf9-4128-be75-d02be19434e2/page/c5B8C
+          width: 1400
+          height: 1800
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: monitoring
+        - dashboard_name: Empty columns
+          url: https://lookerstudio.google.com/embed/reporting/7d40a825-34e9-44cc-be48-53fe766e3b63/page/c5B8C
           width: 1400
           height: 1800
           parameters:
@@ -654,7 +696,7 @@ spec:
           dashboards:
             - dashboard_name: Summary of changes in columns
               standard: true
-              url: https://lookerstudio.google.com/embed/reporting/1549a291-a238-481a-867d-1c3017a8a2e4/page/c5B8C
+              url: https://lookerstudio.google.com/embed/reporting/56f157c0-1a5d-4336-a689-5bd63e4865f5/page/c5B8C
               width: 1400
               height: 1800
               parameters:
@@ -906,6 +948,27 @@ spec:
       - folder_name: Completeness
         standard: true
         dashboards:
+          - dashboard_name: Columns with null values - counts
+            url: https://lookerstudio.google.com/embed/reporting/d7d38ccd-8ec6-468e-a2e3-5a1b027ae7fc/page/c5B8C
+            width: 1400
+            height: 1800
+            parameters:
+              ds0.token: '%DQO_CLOUD_TOKEN%'
+              ds0.p_check_type: partitioned
+          - dashboard_name: Columns with null values - percents
+            url: https://lookerstudio.google.com/embed/reporting/dd053c15-57dd-4b66-914d-6f8fa83da8a2/page/c5B8C
+            width: 1400
+            height: 1800
+            parameters:
+              ds0.token: '%DQO_CLOUD_TOKEN%'
+              ds0.p_check_type: partitioned
+          - dashboard_name: Empty columns
+            url: https://lookerstudio.google.com/embed/reporting/7d40a825-34e9-44cc-be48-53fe766e3b63/page/c5B8C
+            width: 1400
+            height: 1800
+            parameters:
+              ds0.token: '%DQO_CLOUD_TOKEN%'
+              ds0.p_check_type: partitioned
           - dashboard_name: Partition completeness status
             url: https://lookerstudio.google.com/embed/reporting/df39a605-73cd-4f7c-956f-56389914c97a/page/c5B8C
             width: 1400
