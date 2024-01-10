@@ -56,7 +56,7 @@ public class MysqlColumnTextTextLengthBelowMinLengthPercentSensorParametersSpecI
 
     @Test
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
-        this.sut.setMinLength(3);
+        this.sut.setMinLength(4);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "text", this.checkSpec);
@@ -71,7 +71,7 @@ public class MysqlColumnTextTextLengthBelowMinLengthPercentSensorParametersSpecI
 
     @Test
     void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
-        this.sut.setMinLength(3);
+        this.sut.setMinLength(4);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "text", this.checkSpec, CheckTimeScale.daily);
@@ -86,7 +86,7 @@ public class MysqlColumnTextTextLengthBelowMinLengthPercentSensorParametersSpecI
 
     @Test
     void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
-        this.sut.setMinLength(3);
+        this.sut.setMinLength(4);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "text", this.checkSpec, CheckTimeScale.monthly);
@@ -101,7 +101,7 @@ public class MysqlColumnTextTextLengthBelowMinLengthPercentSensorParametersSpecI
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
-        this.sut.setMinLength(3);
+        this.sut.setMinLength(4);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "text", this.checkSpec, CheckTimeScale.daily,"date");
@@ -116,7 +116,7 @@ public class MysqlColumnTextTextLengthBelowMinLengthPercentSensorParametersSpecI
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
-        this.sut.setMinLength(3);
+        this.sut.setMinLength(4);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "text", this.checkSpec, CheckTimeScale.monthly,"date");
