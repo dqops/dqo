@@ -56,4 +56,9 @@ public class RuleDocumentationModel {
      * Rule definition wrapper.
      */
     private RuleDefinitionWrapper definition;
+
+    /**
+     * The source code of the rule (Python).
+     */
+    private String pythonSourceCode;
 }

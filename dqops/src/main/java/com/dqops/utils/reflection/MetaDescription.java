@@ -13,35 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.utils.docs.cli;
+package com.dqops.utils.reflection;
 
-import lombok.Data;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * Documentation model about one single CLI command.
+ * Annotation for classes that returns the test used in the meta description of documentation pages.
  */
-@Data
-public class CliRootCommandDocumentationModel {
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
+public @interface MetaDescription {
     /**
-     * The name of the first command.
+     * The content of the meta description tag to be used in the documentation.
+     * @return Meta description content.
      */
-    private String rootCommandName;
-
-    /**
-     * The header of the root command.
-     */
-    private String rootCommandHeader;
-
-    /**
-     * The description of the root command.
-     */
-    private String rootCommandDescription;
-
-    /**
-     * List of commands.
-     */
-    private List<CliCommandDocumentationModel> commands = new ArrayList<>();
+    String values();
 }

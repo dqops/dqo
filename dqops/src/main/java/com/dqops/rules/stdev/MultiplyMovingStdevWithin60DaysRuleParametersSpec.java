@@ -29,7 +29,7 @@ import java.util.Objects;
 
 /**
  * Data quality rule that verifies if a data quality sensor readout value
- * doesn't excessively deviate from the moving average of a time window.
+ * doesn't excessively deviate from the moving average within a time window.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

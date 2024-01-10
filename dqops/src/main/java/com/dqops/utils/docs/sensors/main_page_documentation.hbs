@@ -3,7 +3,9 @@
 **{{helpText}}**
 
 {{#each sensorTargets}}
-{{#if (gt sensorTargets.length 1)}}## {{capitalizeFirst this}} sensors{{/if}}
+{{#if (gt sensorTargets.length 1)}}
+## {{capitalizeFirst this}} sensors{{/if}}
+
 {{#each sensors}}
 {{#if (eq target ../this)}}
 ### **{{category}}**
@@ -15,4 +17,5 @@
 {{else}}
 {{/if}}
 {{/each}}
+
 {{/each}}

@@ -1,32 +1,46 @@
-# {{category}}
-___
+# Data quality {{category}} rules
+The list of {{category}} [data quality rules](/docs/dqo-concepts/rules/rules.md) supported by DQOps. The source code is found in the *[$DQO_HOME](/docs/dqo-concepts/architecture/dqops-architecture.md#dqops-home)/rules/{{category}}* folder in the DQOps distribution.
+
 {{#each ruleDocumentationModels}}
-## **{{replace ruleName "_" " "}}**
-**Full rule name**
-```
-{{fullRuleName}}
-```
-**Description**
+---
+
+## {{replace ruleName "_" " "}}
 {{ruleParametersJavaDoc}}
+
+**Rule summary**
+
+The {{replace ruleName "_" " "}} data quality rule is described below.
+
+| Category | Full rule name | Rule specification source code | Python source code |
+| ---------|----------------|--------------------|--------------------|
+| {{category}} | `{{fullRuleName}}` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/{{fullRuleName}}.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/{{fullRuleName}}.py) |
+
 {{#if definition.spec.fields}}
-**Parameters**
+**Rule parameters**
+
+The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-{{#each definition.spec.fields}}|{{displayName}}|{{helpText}}|{{replace dataType "_type" ""}}|{{checkmark required}}|{{#each allowedValues}}{{this}}<br/>{{/each}}|
+{{#each definition.spec.fields}}|`{{displayName}}`|{{helpText}}|{{replace dataType "_type" ""}}|{{checkmark required}}|{{#each allowedValues}}{{this}}<br/>{{/each}}|
 {{/each}}
 {{else}}
 {{/if}}
+
 {{#if ruleExample}}
 **Rule definition YAML**
 
 The rule definition YAML file *{{fullRuleName}}.dqorule.yaml* with the time window and rule parameters configuration is shown below.
 
-```yaml
-{{ruleExample}}
-```
+??? abstract "Please expand to see the content of the .dqorule.yaml file"
+
+    ```yaml
+    {{{ruleExample}}}
+    ```
+
 {{else}}
 {{/if}}
+
 {{#if definition.spec.parameters}}
 **Additional rule parameters**
 
@@ -36,28 +50,33 @@ The rule definition YAML file *{{fullRuleName}}.dqorule.yaml* with the time wind
 {{/each}}
 {{else}}
 {{/if}}
-**Rule implementation (Python)**
 
-The code sample below shows the content of the  *{{fullRuleName}}.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+**Rule source code**
 
-```python
-{{{replace definition.rulePythonModuleContent.textContent '#
-# Copyright © 2021 DQOps (support@dqops.com)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
+Please expand the section below to see the Python source code for the *{{fullRuleName}}* rule.
+The file is found in the *[$DQO_HOME](/docs/dqo-concepts/architecture/dqops-architecture.md#dqops-home)/rules/{{fullRuleName}}.py* file in the DQOps distribution.
 
-' ""}}}
-```
-___
+??? abstract "Rule source code"
+
+    ```python
+    {{{replace pythonSourceCode '#
+    # Copyright © 2021 DQOps (support@dqops.com)
+    #
+    # Licensed under the Apache License, Version 2.0 (the "License");
+    # you may not use this file except in compliance with the License.
+    # You may obtain a copy of the License at
+    #
+    #     http://www.apache.org/licenses/LICENSE-2.0
+    #
+    # Unless required by applicable law or agreed to in writing, software
+    # distributed under the License is distributed on an "AS IS" BASIS,
+    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    # See the License for the specific language governing permissions and
+    # limitations under the License.
+    #
+
+    ' ""}}}
+    ```
+
+
 {{/each}}

@@ -1,20 +1,28 @@
-**{{replace primaryCheckName "_" " "}}** checks
+# {{replace primaryCheckName "_" " "}} data quality checks
 {{#if checkSpecClassJavaDoc}}
-**Description**
 {{checkSpecClassJavaDoc}}
 {{else}}
 {{/if}}
+
 ___
+The **{{replace primaryCheckName "_" " "}}** data quality check has the following variants for each
+[type of data quality](/docs/dqo-concepts/checks/index.md#types-of-checks) checks supported by DQOps.
+
 {{#each allChecks}}
-## **{{replace checkName  "_" " "}}**
+## {{replace checkName  "_" " "}}
 
 
 **Check description**
+
 {{checkHelp}}
 
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |{{checkName}}|{{checkType}}|{{#if timeScale}}{{timeScale}}{{else}} {{/if}}|{{qualityDimension}}|[{{sensor.sensorName}}](../../../reference/sensors/{{target}}/{{sensor.category}}-{{target}}-sensors.md#{{replace sensor.sensorName "_" "-"}})|[{{rule.ruleName}}](../../../reference/rules/{{capitalizeFirst rule.category}}.md#{{replace rule.ruleName "_" "-"}})|
+
+**Command-line examples**
+
+Please expand the section below to see the DQOps command-line examples to run or activate the {{replace checkName  "_" " "}} data quality check.
 
 ??? example "Managing {{replace checkName  "_" " "}} check from DQOps shell"
 
@@ -42,7 +50,8 @@ ___
         dqo> check run -c=connection_name -t=schema_name.table_name -ch={{checkName}}
         ```
 
-**Sample configuration (YAML)**
+**YAML configuration**
+
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
@@ -115,24 +124,31 @@ Expand the *Configure with data grouping* section to see additional examples for
 {{/if}}
 {{#if runOnConnectionCliCommand}}
 **CLI command to run check on connection**
+
 ```
 {{runOnConnectionCliCommand}}
 ```
+
 {{else}}
 {{/if}}
 {{#if runOnTableCliCommand}}
 **CLI command to run check on table**
+
 ```
 {{runOnTableCliCommand}}
 ```
+
 {{else}}
 {{/if}}
 {{#if runOnColumnCliCommand}}
 **CLI command to run check on column**
+
 ```
 {{runOnColumnCliCommand}}
 ```
+
 {{else}}
 {{/if}}
 ___
+
 {{/each}}
