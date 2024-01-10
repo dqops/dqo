@@ -126,8 +126,8 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
         hikariConfig.setJdbcUrl("jdbc:athena://");
 
         Properties dataSourceProperties = new Properties();
-        if (trinoSpec.getAthenaProperties() != null) {
-            dataSourceProperties.putAll(trinoSpec.getAthenaProperties());
+        if (trinoSpec.getProperties() != null) {
+            dataSourceProperties.putAll(trinoSpec.getProperties());
         }
 
         String region = this.getSecretValueProvider().expandValue(trinoSpec.getAthenaRegion(), secretValueLookupContext);

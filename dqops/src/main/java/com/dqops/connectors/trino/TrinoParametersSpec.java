@@ -86,10 +86,6 @@ public class TrinoParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("The location in Amazon S3 where query results will be stored. Supports also a ${ATHENA_OUTPUT_LOCATION} configuration with a custom environment variable.")
     private String athenaOutputLocation;
 
-    @CommandLine.Option(names = {"-A"}, description = "Athena additional properties that are added to the JDBC connection string")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private Map<String, String> athenaProperties;
-
     /**
      * Returns the trino engine type.
      * @return Trino engine type.
@@ -271,24 +267,6 @@ public class TrinoParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
-     * Returns a key/value map of additional properties that are included in the JDBC connection string.
-     * @return Key/value dictionary of additional JDBC properties.
-     */
-    public Map<String, String> getAthenaProperties() {
-        return athenaProperties;
-    }
-
-    /**
-     * Sets a dictionary of additional connection parameters for AWS Athena that are added to the JDBC connection string.
-     * @param athenaProperties Key/value dictionary with extra parameters.
-     */
-    public void setAthenaProperties(Map<String, String> athenaProperties) {
-        setDirtyIf(!Objects.equals(this.athenaProperties, athenaProperties));
-        this.athenaProperties = athenaProperties != null ? Collections.unmodifiableMap(athenaProperties) : null;
-    }
-
-
-    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -328,7 +306,6 @@ public class TrinoParametersSpec extends BaseProviderParametersSpec
         cloned.catalog = secretValueProvider.expandValue(cloned.catalog, lookupContext);
         cloned.athenaWorkGroup = secretValueProvider.expandValue(cloned.athenaWorkGroup, lookupContext);
         cloned.athenaOutputLocation = secretValueProvider.expandValue(cloned.athenaOutputLocation, lookupContext);
-        cloned.athenaProperties = secretValueProvider.expandProperties(cloned.athenaProperties, lookupContext);
 
         return cloned;
     }
