@@ -34813,10 +34813,6 @@ definitions:
         description: "The location in Amazon S3 where query results will be stored.\
           \ Supports also a ${ATHENA_OUTPUT_LOCATION} configuration with a custom\
           \ environment variable."
-      athena_properties:
-        type: "object"
-        additionalProperties:
-          type: "string"
       database:
         type: "string"
   ValueChangedRuleParametersSpec:
