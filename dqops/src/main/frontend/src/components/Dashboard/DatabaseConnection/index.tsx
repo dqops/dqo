@@ -318,7 +318,8 @@ const DatabaseConnection = ({
             name={nameOfDatabase.toLowerCase().replace(/\s/g, '')}
             className={clsx(
               'mb-3 w-20 text-blue-500',
-              nameOfDatabase === 'Spark' && 'w-35'
+              nameOfDatabase === 'Spark' && 'w-35',
+              nameOfDatabase === 'Trino' && 'w-13',
             )}
           />
         ) : (
