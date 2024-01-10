@@ -143,7 +143,7 @@ Under tabs selection, there is information about the set schedule configuration.
 section, there is additional information about the date partitioning column.
 
 The table with data quality checks contains a list of checks divided into different data quality subcategories that you
-can expand and collapse by clicking on an arrow. [Learn more about the different check subcategories.](../../checks/index.md).
+can expand and collapse by clicking on an arrow. [Learn more about the different check subcategories](../../checks/index.md).
 By clicking on the **Show advanced checks** checkbox you can view all checks available in DQOps. 
 
 The right side of the table allows setting different threshold levels (severity levels). [Learn more about threshold levels ](../checks/index.md#issue-severity-levels)
@@ -215,16 +215,22 @@ You can use the notifications to access a complete log of all jobs that have bee
 the status of each action, which can be "succeeded," "failed," "running," "waiting," "queued," or "canceled."
 Additionally, you can expand each job entry to view sub-jobs and access more detailed information about specific tasks.
 
+### **Enable and disable scheduler**
+
 In the top part of notifications window you can start and stop the scheduler. You can [learn more about scheduling here](../../working-with-dqo/schedules/index.md).
 
 ![DQOps job scheduler](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/job-scheduler.png)
+
+### **Cancel a queued or running job**
 
 If the job is queued or running you can cancel or stop it by clicking the X button.
 
 ![DQOps canceling job](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/cancel-job.png)
 
+### **Run checks summary**
+
 You can view the result of executed checks by simply hovering on run checks job. Color of the square represents the highest
-  severity status of the results (green for a valid result, yellow for a warning, orange for an error and red for a fatal error).
+severity status of the results (green for a valid result, yellow for a warning, orange for an error and red for a fatal error).
 
 ![DQOps job results](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/job-results.png)
 
