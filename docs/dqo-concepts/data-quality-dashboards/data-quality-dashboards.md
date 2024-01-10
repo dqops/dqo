@@ -294,7 +294,7 @@ schema change:
     - Column type changed
 
 **Summary of changes in columns** is a representative of Schema changes group. This dashboard summarizes issues obtained
-from all table-level schema change checks ([column count](../../checks/table/schema/column-count.md),
+from all table-level schema change checks ([expected column count](../../checks/table/schema/expected-column-count.md),
 [column count changed](../../checks/table/schema/column-count-changed.md), [column list changed](../../checks/table/schema/column-list-changed.md),
 [column list or order changed,](../../checks/table/schema/column-list-or-order-changed.md),
 [column types changed](../../checks/table/schema/column-types-changed.md)). 

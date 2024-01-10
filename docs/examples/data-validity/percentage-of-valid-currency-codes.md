@@ -12,7 +12,7 @@ The `valid_currency_code` column contains currency code data. We want to verify 
 
 **SOLUTION**
 
-We will verify the data of using monitoring [string_valid_currency_code_percent](../../../checks/column/strings/string-valid-currency-code-percent.md) column check.
+We will verify the data of using monitoring [text_valid_currency_code_percent](../../checks/column/text/text-valid-currency-code-percent.md) column check.
 Our goal is to verify if the percentage of valid currency code values in the `valid_currency_code` column does not fall below the set thresholds.
 
 In this example, we will set three minimum percentage thresholds levels for the check:
@@ -21,7 +21,7 @@ In this example, we will set three minimum percentage thresholds levels for the 
 - error: 65.0%
 - fatal: 55.0%
 
-If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
 
 **VALUE**
 
@@ -61,9 +61,9 @@ The `valid_currency_code` column of interest contains valid and invalid currency
 
 ## Running the checks in the example and evaluating the results using the user interface
 
-A detailed explanation of [how to run the example is described here](../../index.md#running-the-use-cases).
+A detailed explanation of [how to run the example is described here](../index.md#running-the-use-cases).
 
-To execute the check prepared in the example using the [user interface](../../../dqo-concepts/user-interface-overview/user-interface-overview.md):
+To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-string-valid-currency-code-percent-checks1.png)
 
@@ -74,12 +74,12 @@ To execute the check prepared in the example using the [user interface](../../..
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
 
-    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../../data-sources/index.md).
+    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../data-sources/index.md).
 
 
 3. Select the **Daily checks** tab.
 
-    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../../dqo-concepts/user-interface-overview/user-interface-overview.md#check-editor).
+    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../dqo-concepts/user-interface-overview/user-interface-overview.md#check-editor).
 
 
 4. Run the activated check using the **Run check** button.
@@ -108,7 +108,7 @@ To execute the check prepared in the example using the [user interface](../../..
 
     Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
-7. To review the results on the [data quality dashboards](../../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
+7. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
     go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
 
     Below you can see the results displayed on the **History of validity issues** dashboard located in Data Quality Dimension/Validity group.
@@ -159,9 +159,9 @@ After importing new tables, DQOps sets the schedule for 12:00 P.M. (noon) every 
 Once a schedule is set up for a particular connection, it will execute all the checks that have been configured across
 all tables associated with that connection.
 
-You can [read more about scheduling here](../../../working-with-dqo/schedules/index.md).
+You can [read more about scheduling here](../../working-with-dqo/schedules/index.md).
 
-You might also want to check the [Running checks with a scheduler](../../data-quality-monitoring/running-checks-with-a-scheduler.md) example.
+You might also want to check the [Running checks with a scheduler](../data-quality-monitoring/running-checks-with-a-scheduler.md) example.
 
 ## YAML configuration file
 
@@ -173,9 +173,9 @@ In this example, we have set three minimum percentage thresholds levels for the 
 - error: 65.0%
 - fatal: 55.0%
 
-The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_string_valid_currency_code_percent` check is configured.
+The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_text_valid_currency_code_percent` check is configured.
 
-If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
 
 ```yaml hl_lines="16-29"
 apiVersion: dqo/v1
@@ -199,8 +199,8 @@ spec:
         nullable: true
       monitoring_checks:
         daily:
-          strings:
-            daily_string_valid_currency_code_percent:
+          text:
+            daily_text_valid_currency_code_percent:
               warning:
                 min_percent: 75.0
               error:
@@ -211,7 +211,7 @@ spec:
 
 ## Running the checks in the example and evaluating the results using DQOps Shell
 
-A detailed explanation of [how to run the example is described here](../../index.md#running-the-use-cases).
+A detailed explanation of [how to run the example is described here](../index.md#running-the-use-cases).
 
 To execute the check prepared in the example, run the following command in DQOps Shell:
 
@@ -268,7 +268,7 @@ threshold level set in the error (65.0%).
 
 ```
 **************************************************
-Finished executing a sensor for a check string_valid_currency_code_percent on the table dqo_ai_test_data.nulls_and_uniqueness_8591349191461738589 using a sensor definition column/strings/string_valid_currency_code_percent, sensor result count: 1
+Finished executing a sensor for a check text_valid_currency_code_percent on the table dqo_ai_test_data.nulls_and_uniqueness_8591349191461738589 using a sensor definition column/text/text_valid_currency_code_percent, sensor result count: 1
 
 Results returned by the sensor:
 +------------+------------------------+------------------------+
@@ -280,13 +280,13 @@ Results returned by the sensor:
 ```
 
 In this example, we have demonstrated how to use DQOps to verify the validity of data in a column.
-By using the [string_valid_currency_code_percent](../../../checks/column/strings/string-valid-currency-code-percent.md) column check, we can monitor that
+By using the [text_valid_currency_code_percent](../../checks/column/text/text-valid-currency-code-percent.md) column check, we can monitor that
 the percentage of valid currency code strings in the monitored column does not fall below set thresholds. If it does, you will get a warning, error or fatal results.
 
 ## Next steps
 
-- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../../working-with-dqo/installation/run-dqo-as-docker-container.md).
-- For details on the [string_valid_currency_code_percent check used in this example, go to the check details section](../../../checks/column/strings/string-valid-currency-code-percent.md).
-- You might be interested in another validity check that [evaluates that the percentage of valid latitude and longitude values are above the set threshold](../percentage-of-valid-latitude-and-longitude.md).
-- Would you like to add your own connection? Here you can find [information about supported databases and how to add new connection](../../../data-sources/index.md).
-- DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../../working-with-dqo/incidents-and-notifications/incidents.md) and [Slack notifications](../../../integrations/slack/configuring-slack-notifications.md).
+- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
+- For details on the [text_valid_currency_code_percent check used in this example, go to the check details section](../../checks/column/text/text-valid-currency-code-percent.md).
+- You might be interested in another validity check that [evaluates that the percentage of valid latitude and longitude values are above the set threshold](./percentage-of-valid-latitude-and-longitude.md).
+- Would you like to add your own connection? Here you can find [information about supported databases and how to add new connection](../../data-sources/index.md).
+- DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) and [Slack notifications](../../integrations/slack/configuring-slack-notifications.md).

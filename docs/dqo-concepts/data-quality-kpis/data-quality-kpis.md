@@ -32,13 +32,13 @@ all stakeholders, including the data teams, data stewards, data owners, data pro
 
 Beside calculating the data quality KPI for each physical and logical groups of data, the KPI must also support identifying the type
 of data quality issue. For that purpose, all data quality check results are attributed with the name
-of a [data quality dimension](../../data-quality-dimensions/data-quality-dimensions.md), allowing to identify the type of problem.
+of a [data quality dimension](../data-quality-dimensions/data-quality-dimensions.md), allowing to identify the type of problem.
 
 
 ## Data quality score formula
-DQOps calculates data quality KPIs as a percentage of passed [data quality checks](../../checks/index.md) out of all executed checks.
-The result of measuring the data quality KPI for two data quality checks, [daily_nulls_percent](../../../checks/column/nulls/nulls-percent.md#daily-nulls-percent)
-and [daily_duplicate_percent](../../../checks/column/uniqueness/duplicate-percent.md#daily-duplicate-percent) on
+DQOps calculates data quality KPIs as a percentage of passed [data quality checks](../checks/index.md) out of all executed checks.
+The result of measuring the data quality KPI for two data quality checks, [daily_nulls_percent](../../checks/column/nulls/nulls-percent.md#daily-nulls-percent)
+and [daily_duplicate_percent](../../checks/column/uniqueness/duplicate-percent.md#daily-duplicate-percent) on
 5 columns over the period of 10 days is shown below.
 
 ![Data quality score formula](https://dqops.com/docs/images/concepts/data-quality-kpis/data_quality_kpi_calculation_formula_min.png)
@@ -47,7 +47,7 @@ Passed data quality checks are shown as green boxes. Data quality issues that de
 are shown as orange (*error* severity issue) and red (*fatal* severity issue) boxes.
 
 ### **Issue severity levels**
-DQOps supports configuring [data quality rules](../../rules/rules.md) at three severity levels:
+DQOps supports configuring [data quality rules](../rules/rules.md) at three severity levels:
 
 - *warning* severity issues are dedicated for anomalies and less severe data quality issues that the data producer
   (the data owner) should not be accountable, because those type of issues are expected.
@@ -114,7 +114,7 @@ is the best way to gain secure financing for data projects.
 
 !!! tip "Reaching 100% data quality KPI"
 
-    ![A step-by-step guide to improve data quality](../../../images/dqops-ebook-open-with-process.png "A step-by-step guide to improve data quality"){ width="300"; align=left }
+    ![A step-by-step guide to improve data quality](../../images/dqops-ebook-open-with-process.png "A step-by-step guide to improve data quality"){ width="300"; align=left }
 
     DQOps team has written an eBook ["A step-by-step guide to improve data quality"](https://dqops.com/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/)
     that describes their experience in data cleansing and data quality monitoring using DQOps. 
@@ -150,8 +150,8 @@ DQOps uses numeric priorities (1, 2, 3, ...) configured on the table's metadata 
 
 
 ### **Profile tables**
-Profile the data sources by calculating [basic statistics](../../../working-with-dqo/basic-data-statistics/basic-data-statistics.md)
-and running [profiling checks](../../checks/profiling-checks/profiling-checks.md). Profiling checks in DQOps are designed
+Profile the data sources by calculating [basic statistics](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md)
+and running [profiling checks](../checks/profiling-checks/profiling-checks.md). Profiling checks in DQOps are designed
 to be run once a month to capture the initial data quality KPI score. During the data profiling stage, you will probably
 activate a lot of ~150+ data quality checks supported by DQOps, just to see if they pass. In our experience, when all profiling checks
 that are reasonable are activated, only 40% of checks pass (the data quality KPI is only 40%). The remaining 60% of failed
@@ -160,7 +160,7 @@ of the data source is incomplete, or simply wrong parameters were passed
 to data quality rules, expecting to have <20% of null values in a column, while the column is sparse and mostly empty.
     
 In order to exclude the results of the invalid profiling checks from the initial data quality KPI score,
-you can open the  [delete data quality results](../../../working-with-dqo/delete-data-quality-results/delete-data-quality-results.md) popup and delete any combination of data quality results.
+you can open the  [delete data quality results](../../working-with-dqo/delete-data-quality-results/delete-data-quality-results.md) popup and delete any combination of data quality results.
 If the orphaned results of failed data quality checks are not removed, they will decrease the data quality profiling KPIs.
 
 The profiling KPI scorecard dashboard is shown below. The dashboard can be found in the Data Quality Dashboards -> Profiling -> Profiling data quality KPIs section.
@@ -169,7 +169,7 @@ The profiling KPI scorecard dashboard is shown below. The dashboard can be found
 
 Once you finish the data profiling, you will know which data quality issues are real issues, and which failed profiling checks
 should not be measured because some columns could be incomplete. The selected list of profiling checks should be activated
-as [monitoring](../../checks/monitoring-checks/monitoring-checks.md) and [partitioned](../../checks/partition-checks/partition-checks.md) checks.
+as [monitoring](../checks/monitoring-checks/monitoring-checks.md) and [partitioned](../checks/partition-checks/partition-checks.md) checks.
 
 ### **Activate monitoring checks**
 Choose which profiling checks should be used for monitoring and measuring the data quality KPI. Activate those checks
@@ -239,7 +239,7 @@ Those areas should be measured at least daily or after each data loading operati
 The level of compliance can be measured with a data quality KPI that proves that both the data producer ensured that the
 data is compliant, and the data consumer reviewed the compliance with data quality checks to ensure that the data has not been corrupted on the way.
 
-DQOps data quality checks that are defined in [.dqotable.yaml](../../../reference/yaml/TableYaml.md#tableyaml) files are a simple way
+DQOps data quality checks that are defined in [.dqotable.yaml](../../reference/yaml/TableYaml.md#tableyaml) files are a simple way
 to define the data contract that could be shared between the data publisher and the data consumer, also ensuring the compliance with KPIs. 
 
 ### **Sharing data**
@@ -264,15 +264,15 @@ The data publishers who should verify the quality of published data are
 The team or organization who receives data is called a data consumer. The data consumer can integrate DQOps as part of the data pipeline
 to ensure that no *fatal* severity issues are detected, and the total data quality KPI meets the target.
 
-Please review the samples in the [integration with Airflow](../../../integrations/airflow/index.md) article
-in the [integrations](../../../integrations/index.md) section.
+Please review the samples in the [integration with Airflow](../../integrations/airflow/index.md) article
+in the [integrations](../../integrations/index.md) section.
 
 
 ## Aggregation of data quality KPIs
 
 ### **Monthly KPI aggregation**
 The default data quality KPI aggregation scale used by data quality dashboards in DQOps is monthly aggregation.
-The data quality dashboards are grouping [data quality check results](../../../reference/parquetfiles/check_results.md) on the
+The data quality dashboards are grouping [data quality check results](../../reference/parquetfiles/check_results.md) on the
 *time_period* column, which stores the day or month when the data quality check was executed.
 
 The data quality KPIs in monthly periods are calculated as the percentage of passed data quality checks, that were executed during the month.
@@ -320,14 +320,14 @@ as shown in the following table.
 
 
 ### **By groups of rows**
-Additionally, data quality KPIs can be calculated for each [data group](../../data-grouping/data-grouping.md). 
+Additionally, data quality KPIs can be calculated for each [data group](../data-grouping/data-grouping.md). 
 
 Tracking data quality for groups of rows identified by a discriminator column enables to identify data received from different
 data sources, but finally aggregated into a single table. The discriminator column could be a country name, state name, vendor name,
 or a supplier name.
 
 DQOps supports running data quality checks as SQL queries with a **GROUP BY** clause. Please read about data segmentation
-in [the concept of data grouping](../../data-grouping/data-grouping.md) article.
+in [the concept of data grouping](../data-grouping/data-grouping.md) article.
 
 The following data quality KPI formula shows how DQOps measures the score for each group of rows, when the data is grouped by a *state* column
 that contains US state names.
@@ -363,7 +363,7 @@ DQOps supports also calculating data quality KPIs for groups of tables. This typ
 - tables are grouped by geography (country, state, etc.)
 - business owner
 
-Please read the concept of [data grouping by tags](../../data-grouping/data-grouping.md#grouping-similar-tables) article to see how to assign tags to tables.
+Please read the concept of [data grouping by tags](../data-grouping/data-grouping.md#grouping-similar-tables) article to see how to assign tags to tables.
 
 The following data quality KPI formula shows how DQOps can measure timeliness for tables tagged by a state name.
 
@@ -371,7 +371,7 @@ The following data quality KPI formula shows how DQOps can measure timeliness fo
 
 
 ## What's next
-- Look at some built-in [data quality KPI dashboards](../../data-quality-dashboards/data-quality-dashboards.md#data-quality-kpis) 
-- Read about [build-in data quality dashboards](../../data-quality-dashboards/data-quality-dashboards.md)
-- Learn how to [review results of data quality monitoring results on dashboards](../../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
-- Find out how data quality [KPIs are measured incrementally for partitioned data](../incremental-data-quality-monitoring.md)
+- Look at some built-in [data quality KPI dashboards](../data-quality-dashboards/data-quality-dashboards.md#data-quality-kpis) 
+- Read about [build-in data quality dashboards](../data-quality-dashboards/data-quality-dashboards.md)
+- Learn how to [review results of data quality monitoring results on dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
+- Find out how data quality [KPIs are measured incrementally for partitioned data](./incremental-data-quality-monitoring.md)

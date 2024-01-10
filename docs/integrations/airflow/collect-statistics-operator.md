@@ -132,8 +132,8 @@ Status field is the DqoJobStatus enum, which have one of values:
 
 ## What's next
 
-- [Learn about run checks operator](run-checks-operator.md)
-- [Learn how to use run checks operator](run-checks-use-case.md)
-- [Learn about table import operator](table-import-operator.md)
-- [Learn about table status operator](table-status-operator.md)
-- [Learn about wait for job operator](wait-for-job-operator.md)
+- [Learn about run checks operator](./run-checks-operator.md)
+- [Learn how to use run checks operator](./run-checks-use-case.md)
+- [Learn about table import operator](./table-import-operator.md)
+- [Learn about table status operator](./table-status-operator.md)
+- [Learn about wait for job operator](./wait-for-job-operator.md)

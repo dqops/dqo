@@ -106,10 +106,7 @@ public class DocumentationFolderPostCorrectorServiceImpl implements Documentatio
     protected void pathMappingCorrectionForFile(DocumentationMarkdownFile file) {
         String content = file.getFileContent();
         Path fileDirectPath = file.getDirectPath();
-        Path workingPath = fileDirectPath;
-//        Path workingPath = fileDirectPath.getFileName().toString().equals("index.md")
-//                ? fileDirectPath.getParent()
-//                : fileDirectPath;
+        Path workingPath = fileDirectPath.getParent();
 
 
         Deque<Function<String, String>> contentModifiers = new ArrayDeque<>();
@@ -163,8 +160,8 @@ public class DocumentationFolderPostCorrectorServiceImpl implements Documentatio
 
             String matchString = match.group();
             String pathSubstitute = relativeNewPath.toString().replace('\\', '/');
-            if (!pathSubstitute.isEmpty()) {
-                pathSubstitute = pathSubstitute + "/";
+            if (!pathSubstitute.startsWith("../")) {
+                pathSubstitute = "./" + pathSubstitute;
             }
             String correctedMatch = matchString.replace(match.group(1), pathSubstitute);
 

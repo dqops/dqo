@@ -25,7 +25,7 @@ environmental and socioeconomic data to determine national health benchmarks and
 
 **SOLUTION**
 
-We will verify the data using monitoring [table_availability](../../../checks/table/availability/table-availability.md) check.
+We will verify the data using monitoring [table_availability](../../checks/table/availability/table-availability.md) check.
 Our goal is to verify that table availability check failures do not exceed the set thresholds.
 In this check, you can only get two values in the result 1 or 0. If you get a value of 1, it means the table exists and is available, so the result is valid. 
 
@@ -41,7 +41,7 @@ In this example, we will set the following maximum failures for the check:
 - error: 5
 - fatal: 10
 
-If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
 
 **VALUE**
 
@@ -49,9 +49,9 @@ If the number of failures exceeds 0, a warning alert will be triggered.
 
 ## Running the checks in the example and evaluating the results using the user interface
 
-A detailed explanation of [how to run the example is described here](../../index.md#running-the-use-cases).
+A detailed explanation of [how to run the example is described here](../index.md#running-the-use-cases).
 
-To execute the check prepared in the example using the [user interface](../../../dqo-concepts/user-interface-overview/user-interface-overview.md):
+To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-table-availability-checks1.png)
 
@@ -62,12 +62,12 @@ To execute the check prepared in the example using the [user interface](../../..
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
 
-    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../../data-sources/index.md).
+    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../data-sources/index.md).
 
 
 3. Select the **Daily checks** tab.
 
-    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../../../dqo-concepts/user-interface-overview/user-interface-overview.md#check-editor).
+    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../dqo-concepts/user-interface-overview/user-interface-overview.md#check-editor).
 
 
 4. Run the activated check using the **Run check** button.
@@ -96,11 +96,11 @@ To execute the check prepared in the example using the [user interface](../../..
 
     Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
-7. To review the results on the [data quality dashboards](../../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
+7. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
     go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
 
     Below you can see the results displayed on the **Current table availability** dashboard located in the Data Quality Dimension/Availability group. 
-    This dashboard summarizes results from [table_availability](../../../checks/table/availability/table-availability.md) checks.
+    This dashboard summarizes results from [table_availability](../../checks/table/availability/table-availability.md) checks.
     Because we did not detect any issues there is no data on the tables. You can view the Correct results by clicking on
     the checkbox **Only availability issues** and show also correct results. 
 
@@ -130,7 +130,7 @@ In this example, we have set maximum failures for the check:
 
 The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_table_availability` check is configured.
 
-If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
 
 ```yaml hl_lines="7-21"
 apiVersion: dqo/v1
@@ -167,7 +167,7 @@ spec:
 
 ## Running the checks in the example and evaluating the results using DQOps Shell
 
-A detailed explanation of [how to run the example is described here](../../index.md#running-the-use-cases).
+A detailed explanation of [how to run the example is described here](../index.md#running-the-use-cases).
 
 To execute the check prepared in the example, run the following command in DQOps Shell:
 
@@ -238,13 +238,13 @@ Results returned by the sensor:
 ```
 
 In this example, we have demonstrated how to use DQOps to verify the availability of a table in the database. 
-By using the [table_availability](../../../checks/table/availability/table-availability.md) check,
+By using the [table_availability](../../checks/table/availability/table-availability.md) check,
 we can monitor whether the tables exist and are available. 
 
 ## Next steps
 
-- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../../working-with-dqo/installation/run-dqo-as-docker-container.md).
-- For details on the [table_availability check used in this example, go to the check details section](../../../checks/table/availability/table-availability.md).
-- DQOps provides you with summary statistics about your table and column. This information can be valuable in deciding which data quality checks and threshold levels should be set to monitor data quality. For more details about [Basic data statistics, click here](../../../working-with-dqo/basic-data-statistics/basic-data-statistics.md). 
-- DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../../working-with-dqo/incidents-and-notifications/incidents.md) and [Slack notifications](../../../integrations/slack/configuring-slack-notifications.md).
-- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md) can help you to calculate separate data quality KPI scores for different groups of rows.
+- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
+- For details on the [table_availability check used in this example, go to the check details section](../../checks/table/availability/table-availability.md).
+- DQOps provides you with summary statistics about your table and column. This information can be valuable in deciding which data quality checks and threshold levels should be set to monitor data quality. For more details about [Basic data statistics, click here](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md). 
+- DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) and [Slack notifications](../../integrations/slack/configuring-slack-notifications.md).
+- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md) can help you to calculate separate data quality KPI scores for different groups of rows.
