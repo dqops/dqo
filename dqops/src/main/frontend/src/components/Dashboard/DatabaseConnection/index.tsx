@@ -6,7 +6,8 @@ import {
   ConnectionModelProviderTypeEnum,
   ConnectionTestModel,
   ConnectionTestModelConnectionTestResultEnum,
-  SharedCredentialListModel
+  SharedCredentialListModel,
+  TrinoParametersSpecTrinoEngineTypeEnum
 } from '../../../api';
 import {
   ConnectionApiClient,
@@ -230,7 +231,7 @@ const DatabaseConnection = ({
     ),
     [ConnectionModelProviderTypeEnum.trino]: (
       <TrinoConnection
-        trino={{ ...database.trino, port: '8080' }}
+        trino={{ ...database.trino, port: '8080', trino_engine_type: nameOfDatabase?.toLowerCase() as TrinoParametersSpecTrinoEngineTypeEnum }}
         onChange={(trino) => onChange({ ...database, trino })}
         sharedCredentials={sharedCredentials}
       />

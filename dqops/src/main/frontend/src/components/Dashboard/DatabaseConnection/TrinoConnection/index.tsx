@@ -3,16 +3,29 @@ import React from 'react';
 import SectionWrapper from '../../SectionWrapper';
 import {
   TrinoParametersSpec,
-  SharedCredentialListModel
+  SharedCredentialListModel,
+  TrinoParametersSpecTrinoEngineTypeEnum
 } from '../../../../api';
 import JdbcPropertiesView from '../JdbcProperties';
 import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
+import Select from '../../../Select';
 
 interface ITrinoConnectionProps {
   trino?: TrinoParametersSpec;
   onChange?: (obj: TrinoParametersSpec) => void;
   sharedCredentials?: SharedCredentialListModel[];
 }
+
+const options = [
+  {
+    label: 'Trino',
+    value: TrinoParametersSpecTrinoEngineTypeEnum.trino
+  },
+  {
+    label: 'AWS Athena',
+    value: TrinoParametersSpecTrinoEngineTypeEnum.athena
+  }
+];
 
 const TrinoConnection = ({
   trino,
@@ -21,7 +34,6 @@ const TrinoConnection = ({
 }: ITrinoConnectionProps) => {
   const handleChange = (obj: Partial<TrinoParametersSpec>) => {
     if (!onChange) return;
-
     onChange({
       ...trino,
       ...obj
@@ -30,33 +42,81 @@ const TrinoConnection = ({
 
   return (
     <SectionWrapper title="Trino connection parameters" className="mb-4">
-      <FieldTypeInput
-        data={sharedCredentials}
-        label="Host"
+      <Select
+        label="Trino engine type"
+        options={options}
         className="mb-4"
-        value={trino?.host}
-        onChange={(value) => handleChange({ host: value })}
+        value={
+          trino?.trino_engine_type ||
+          TrinoParametersSpecTrinoEngineTypeEnum.trino
+        }
+        onChange={(value) => handleChange({ trino_engine_type: value })}
+        disabled
       />
-      <FieldTypeInput
+      { trino?.trino_engine_type === TrinoParametersSpecTrinoEngineTypeEnum.trino && 
+      <>
+        <FieldTypeInput
+          data={sharedCredentials}
+          label="Host"
+          className="mb-4"
+          value={trino?.host}
+          onChange={(value) => handleChange({ host: value })}
+        />  
+
+        <FieldTypeInput
+          data={sharedCredentials}
+          label="Port"
+          className="mb-4"
+          value={trino?.port}
+          onChange={(value) => handleChange({ port: value })}
+          />
+        <FieldTypeInput
+          data={sharedCredentials}
+          label="Database"
+            className="mb-4"
+            value={trino?.database}
+            onChange={(value) => handleChange({ database: value })}
+          />
+        <FieldTypeInput
+          data={sharedCredentials}
+          label="User name"
+          className="mb-4"
+          value={trino?.user}
+          onChange={(value) => handleChange({ user: value })}
+        />
+      </>
+      }
+      { trino?.trino_engine_type === TrinoParametersSpecTrinoEngineTypeEnum.athena && 
+      <>
+        <FieldTypeInput
         data={sharedCredentials}
-        label="Port"
+        label="Athena Region"
         className="mb-4"
-        value={trino?.port}
-        onChange={(value) => handleChange({ port: value })}
-      />
+          value={trino?.athena_region}
+          onChange={(value) => handleChange({ athena_region: value })}
+        />
+        <FieldTypeInput
+          data={sharedCredentials}
+          label="Athena WorkGroup"
+          className="mb-4"
+          value={trino?.athena_work_group}
+          onChange={(value) => handleChange({ athena_work_group: value })}
+        />
+        <FieldTypeInput
+          data={sharedCredentials}
+          label="Athena OutputLocation"
+          className="mb-4"
+          value={trino?.athena_output_location}
+          onChange={(value) => handleChange({ athena_output_location: value })}
+        />
+      </>
+      }
       <FieldTypeInput
-        data={sharedCredentials}
-        label="Database"
-        className="mb-4"
-        value={trino?.database}
-        onChange={(value) => handleChange({ database: value })}
-      />
-      <FieldTypeInput
-        data={sharedCredentials}
-        label="User name"
-        className="mb-4"
-        value={trino?.user}
-        onChange={(value) => handleChange({ user: value })}
+                data={sharedCredentials}
+                label="Catalog"
+                className="mb-4"
+                value={trino?.catalog}
+                onChange={(value) => handleChange({ catalog: value })}
       />
       <JdbcPropertiesView
         properties={trino?.properties}
