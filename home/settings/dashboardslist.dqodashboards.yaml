@@ -283,7 +283,7 @@ spec:
                 ds0.token: '%DQO_CLOUD_TOKEN%'
                 ds0.p_check_type: profiling
             - dashboard_name: Expected vs actual column count
-              url: https://lookerstudio.google.com/embed/reporting/bd903d6c-0f44-442c-8ada-44637954a15a/page/c5B8C
+              url: https://lookerstudio.google.com/embed/reporting/a9526438-18b6-423d-bb73-7748bf707de7/page/c5B8C
               width: 1400
               height: 2000
               parameters:
@@ -704,7 +704,7 @@ spec:
                 ds0.p_check_type: monitoring
             - dashboard_name: Expected vs actual column count
               standard: true
-              url: https://lookerstudio.google.com/embed/reporting/bd903d6c-0f44-442c-8ada-44637954a15a/page/c5B8C
+              url: https://lookerstudio.google.com/embed/reporting/a9526438-18b6-423d-bb73-7748bf707de7/page/c5B8C
               width: 1400
               height: 2000
               parameters:
