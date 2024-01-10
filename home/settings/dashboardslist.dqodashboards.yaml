@@ -118,6 +118,14 @@ spec:
         - folder_name: Completeness
           standard: true
           dashboards:
+            - dashboard_name: Current completeness issues on columns
+              standard: true
+              url: https://lookerstudio.google.com/embed/reporting/848f6a5a-eaf9-4128-be75-d02be19434e2/page/c5B8C
+              width: 1400
+              height: 1800
+              parameters:
+                ds0.token: '%DQO_CLOUD_TOKEN%'
+                ds0.p_check_type: profiling
             - dashboard_name: Columns with null values - counts
               url: https://lookerstudio.google.com/embed/reporting/d7d38ccd-8ec6-468e-a2e3-5a1b027ae7fc/page/c5B8C
               width: 1400
@@ -127,14 +135,6 @@ spec:
                 ds0.p_check_type: profiling
             - dashboard_name: Columns with null values - percents
               url: https://lookerstudio.google.com/embed/reporting/dd053c15-57dd-4b66-914d-6f8fa83da8a2/page/c5B8C
-              width: 1400
-              height: 1800
-              parameters:
-                ds0.token: '%DQO_CLOUD_TOKEN%'
-                ds0.p_check_type: profiling
-            - dashboard_name: Current completeness issues on columns
-              standard: true
-              url: https://lookerstudio.google.com/embed/reporting/848f6a5a-eaf9-4128-be75-d02be19434e2/page/c5B8C
               width: 1400
               height: 1800
               parameters:
@@ -535,6 +535,14 @@ spec:
         - folder_name: Completeness
           standard: true
           dashboards:
+            - dashboard_name: Current completeness issues on columns
+              standard: true
+              url: https://lookerstudio.google.com/embed/reporting/848f6a5a-eaf9-4128-be75-d02be19434e2/page/c5B8C
+              width: 1400
+              height: 1800
+              parameters:
+                ds0.token: '%DQO_CLOUD_TOKEN%'
+                ds0.p_check_type: monitoring
             - dashboard_name: Columns with null values - counts
               url: https://lookerstudio.google.com/embed/reporting/d7d38ccd-8ec6-468e-a2e3-5a1b027ae7fc/page/c5B8C
               width: 1400
@@ -544,14 +552,6 @@ spec:
                 ds0.p_check_type: monitoring
             - dashboard_name: Columns with null values - percents
               url: https://lookerstudio.google.com/embed/reporting/dd053c15-57dd-4b66-914d-6f8fa83da8a2/page/c5B8C
-              width: 1400
-              height: 1800
-              parameters:
-                ds0.token: '%DQO_CLOUD_TOKEN%'
-                ds0.p_check_type: monitoring
-            - dashboard_name: Current completeness issues on columns
-              standard: true
-              url: https://lookerstudio.google.com/embed/reporting/848f6a5a-eaf9-4128-be75-d02be19434e2/page/c5B8C
               width: 1400
               height: 1800
               parameters:
