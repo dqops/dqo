@@ -156,8 +156,12 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
                     synchronizationMode, checkRunReportingMode, this.defaultTimeZoneProvider.getDefaultTimeZoneId()));
         }
 
+        boolean schedulerWasPreviouslyRunning = this.scheduler != null;
+
         createAndStartScheduler();
-        defineDefaultJobs();
+        if (!schedulerWasPreviouslyRunning) {
+            defineDefaultJobs();
+        }
         this.started = true;
     }
 
@@ -168,8 +172,12 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
         this.dqoJobQueue.start(); // ensure that the job queues are working
         this.parentDqoJobQueue.start();
 
-        assert scheduler == null;
         try {
+            if (this.scheduler != null) {
+                this.scheduler.start();
+                return; // scheduler was started, stopped, and we are now starting it again
+            }
+
             this.scheduler = schedulerFactory.getScheduler();
             this.scheduler.setJobFactory(this.jobFactory);
             if (this.scheduler.getListenerManager().getJobListeners().stream()
@@ -225,6 +233,25 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
             log.error("Failed to define the default jobs because " + ex.getMessage(), ex);
             throw new JobSchedulerException(ex);
         }
+    }
+
+    /**
+     * Stops the job scheduler, but with an option to start it again.
+     */
+    @Override
+    public void stop() {
+        if (!this.started || this.scheduler == null) {
+            return;
+        }
+
+        try {
+            this.scheduler.standby();
+        } catch (SchedulerException ex) {
+            log.error("Failed to pause the scheduler because " + ex.getMessage(), ex);
+            throw new JobSchedulerException(ex);
+        }
+
+        this.started = false;
     }
 
     /**
