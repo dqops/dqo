@@ -35,6 +35,7 @@
 		<java.version>15</java.version>
 		<tablesaw.version>0.43.1</tablesaw.version>
 		<license.licenseName>apache_v2</license.licenseName>
+		<npm.build.script>build</npm.build.script>
 	</properties>
 
 	<licenses>
@@ -1100,7 +1101,7 @@
 								</goals>
 								<phase>compile</phase>
 								<configuration>
-									<arguments>run-script build</arguments>
+									<arguments>run-script ${npm.build.script}</arguments>
 									<environmentVariables>
 										<CI>false</CI> <!-- Allow warning on CI builds, temporary solution until we remove the last few warnings -->
 									</environmentVariables>
@@ -1236,6 +1237,15 @@
 					</plugin>
 				</plugins>
 			</build>
+		</profile>
+		<profile>
+			<id>development-build</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<npm.build.script>build:profile</npm.build.script>
+			</properties>
 		</profile>
 	</profiles>
 </project>

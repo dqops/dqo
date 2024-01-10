@@ -50,8 +50,9 @@
     "tailwindcss": "3.3.3"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "react-scripts start --profile",
     "build": "react-scripts build",
+    "build:profile": "react-scripts build --profile",
     "test": "./node/npx react-scripts test",
     "eject": "./node/npx react-scripts eject",
     "lint": "eslint --ext .tsx,.ts .",
