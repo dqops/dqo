@@ -380,7 +380,7 @@ spec:
       monitoring_checks:
         daily:
           strings:
-            daily_string_value_in_set_percent:
+            daily_text_found_in_set_percent:
               parameters:
                 expected_values:
                   - "US" # (1)!
@@ -601,7 +601,7 @@ spec:
       monitoring_checks:
         daily:
           strings:
-            daily_string_value_in_set_percent:
+            daily_text_found_in_set_percent:
               parameters:
                 expected_values:
                   - "A01" # (5)!
@@ -631,7 +631,7 @@ Setting the data type is not required to run checks, but DQOps may use it as a h
 
 ### **Transforming column values**
 The tables found in the data landing zones are often CSV files with all columns defined as a character data type.
-These columns must be casted to a correct data type before they could be used to perform some kind of data transformations.
+These columns must be cast to a correct data type before they could be used to perform some kind of data transformations.
 
 Let's assume that the monitored table is an external table, backed by the following CSV file.
 
@@ -643,7 +643,7 @@ date,message
 The *date* column contains a text value that is a valid ISO 8601 date.
 We want to replace all usages of the column reference with an SQL expression that will cast the column's value to a DATE.
 
-When the *date* column is casted to a *DATE* type, we can use it as a partitioning column for partitioned checks
+When the *date* column is cast to a *DATE* type, we can use it as a partitioning column for partitioned checks
 or run date specific data quality checks such as 
 the [daily-date-values-in-future-percent](../../checks/column/datetime/date-values-in-future-percent.md#daily-date-values-in-future-percent)
 check that detects if any dates are in the future.
@@ -849,7 +849,7 @@ that are applied on the tables and columns when the tables are imported into DQO
 We are using a table from the freely available Google BigQuery public datasets.
 The table below is *bigquery-public-data.covid19_open_data.covid19_open_data*, but the example shows only one column, the *cumulative_confirmed*.
 This column is numeric, which allowed to activate some numeric anomaly checks, 
-such as the [daily_sum_change](../../checks/column/anomaly/sum-change.md#daily-sum-change)
+such as the [daily_sum_anomaly](../../checks/column/anomaly/sum-anomaly.md#daily-sum-anomaly)
 check that will compare the sum of values per day and raise a warning if the change since yesterday is greater than 10%.
 
 ??? info "Click to see a full *.dqotable.yaml* file with all default data observability checks activated"
@@ -1002,9 +1002,9 @@ The following table shows a list of default data quality checks and describes th
 | Target | Check name                                                                          | Description                                                                                                                                        |
 |--------|-------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
 | table  | [profile row count](../../checks/table/volume/row-count.md)                         | Counts the number of rows in a table. Raises a warning data quality issue when the table is empty.                                                 |
-| table  | [profile expected_column count](../../checks/table/schema/expected-column-count.md) | Retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to an expected number of columns. |
+| table  | [profile expected column count](../../checks/table/schema/expected-column-count.md) | Retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to an expected number of columns. |
 | column | [profile nulls count](../../checks/column/nulls/nulls-count.md)                     | Detects empty values in a column. Raises a warning when any null values were found.                                                                |
-| column | [profile not_nulls count](../../checks/column/nulls/not-nulls-count.md)             | Detects empty columns. Counts the number of not null values and raises a warning if no values are found (min_count is below 1).                    |
+| column | [profile not nulls count](../../checks/column/nulls/not-nulls-count.md)             | Detects empty columns. Counts the number of not null values and raises a warning if no values are found (min_count is below 1).                    |
 | column | [profile nulls percent](../../checks/column/nulls/nulls-percent.md)                 | Measures the percentage of null values in a column. This check is used to profile the data source before a valid threshold is applied in the rule. |
 
 **Daily monitoring checks type**
@@ -1021,12 +1021,12 @@ The following table shows a list of default data quality checks and describes th
 | table  | [daily column types changed](../../checks/table/schema/column-types-changed.md)                              | Detects if the column names or column types have changed since the last time the check was run.                                             |
 | column | [daily nulls count](../../checks/column/nulls/nulls-count.md)                                                | Monitors the table for partially incomplete columns, having any nulls (the max_count of nulls is 0).                                        |
 | column | [daily nulls percent](../../checks/column/nulls/nulls-percent.md)                                            | Ensures that there are no more than a set percentage of null values in the monitored column.                                                |
-| column | [daily not_nulls count](../../checks/column/nulls/not-nulls-count.md)                                        | Detects empty columns. Counts the number of not null values and raises a warning if no values are found (min_count is below 1).             |
+| column | [daily not nulls count](../../checks/column/nulls/not-nulls-count.md)                                        | Detects empty columns. Counts the number of not null values and raises a warning if no values are found (min_count is below 1).             |
 | column | [daily not nulls percent](../../checks/column/nulls/not-nulls-percent.md)                                    | Ensures that there are no more than a set percentage of not null values in the monitored column.                                            |
 | column | [daily nulls percent anomaly](../../checks/column/nulls/nulls-percent-anomaly.md)                            | Ensures that the null percent value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days. |
 | column | [daily nulls percent change 1_day](../../checks/column/nulls/nulls-percent-change-1-day.md)                  | Ensures that the null percent in a monitored column has changed by a fixed rate since the last readout from yesterday.                      |
-| column | [daily_distinct_count_anomaly](../../checks/column/uniqueness/distinct-count-anomaly.md)                     | Detects anomalies in the count of distinct values in the column.                                                                            |    
-| column | [daily detected datatype_in_text changed](../../checks/column/datatype/detected-datatype-in-text-changed.md) | Scans all values in a string column and detects the data type of all values in a column.                                                    |
+| column | [daily distinct count anomaly](../../checks/column/uniqueness/distinct-count-anomaly.md)                     | Detects anomalies in the count of distinct values in the column.                                                                            |    
+| column | [daily detected datatype in text changed](../../checks/column/datatype/detected-datatype-in-text-changed.md) | Scans all values in a string column and detects the data type of all values in a column.                                                    |
 | column | [daily mean anomaly](../../checks/column/anomaly/mean-anomaly.md)                                            | Ensures that the mean value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.         |
 | column | [daily sum anomaly](../../checks/column/anomaly/sum-anomaly.md)                                              | Ensures that the sum in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.                |
 | column | [daily column exists](../../checks/column/schema/column-exists.md)                                           | Reads the metadata of the monitored table and verifies that the column still exists in the data source.                                     |
@@ -1038,10 +1038,10 @@ DQOps uses the imported data type of the column to decide what type of type spec
 
 The following default checks are enabled only on text or numeric columns.
 
-| Numeric columns                                                   | Text columns                                                                                           |
-|-------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|
-| [daily mean anomaly](../../checks/column/anomaly/mean-anomaly.md) | [detected datatype_in_text changed](../../checks/column/datatype/detected-datatype-in-text-changed.md) |
-| [daily sum anomaly](../../checks/column/anomaly/sum-anomaly.md)   |                                                                                                        |
+| Numeric columns                                                   | Text columns                                                                                                 |
+|-------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
+| [daily mean anomaly](../../checks/column/anomaly/mean-anomaly.md) | [daily detected datatype_in_text changed](../../checks/column/datatype/detected-datatype-in-text-changed.md) |
+| [daily sum anomaly](../../checks/column/anomaly/sum-anomaly.md)   |                                                                                                              |
 
 
 ## Next steps

@@ -34,7 +34,7 @@ To navigate to the checks editor:
     The table with data quality checks contains a list of checks divided into different data quality subcategories that you
     can expand and collapse by clicking on an arrow. [Learn more about the different check categories.](../../dqo-concepts/checks/index.md#categories-of-checks)
 
-    The right side of the table allows setting different threshold levels (severity levels). [Learn more about threshold levels ](../../dqo-concepts/checks/index.md#issue-severity-levels)
+    The right side of the table allows setting different threshold levels (severity levels). [Learn more about threshold levels.](../../dqo-concepts/checks/index.md#issue-severity-levels)
 
 ### **Run a check**
 

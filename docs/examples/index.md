@@ -166,7 +166,7 @@ Simply, open the DQOps User Interface Console (http://localhost:8888).
     This tab displays a list of data quality checks in the Check editor. The table with data quality checks contains a list of checks divided into different data quality subcategories that you
     can expand and collapse by clicking on an arrow. [Learn more about the different check subcategories.](../checks/index.md)
 
-    The right side of the table allows setting different threshold levels (severity levels). [Learn more about threshold levels ](../dqo-concepts/checks/index.md#issue-severity-levels)
+    The right side of the table allows setting different threshold levels (severity levels). [Learn more about threshold levels.](../dqo-concepts/checks/index.md#issue-severity-levels)
     
     Learn more about [navigating the check editor](../dqo-concepts/user-interface-overview/user-interface-overview.md#check-editor).
 

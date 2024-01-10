@@ -49,7 +49,7 @@ You can learn more about each default check by clicking on the links below.
 | column | [daily not nulls percent](../../checks/column/nulls/not-nulls-percent.md)                                    | Ensures that there are no more than a set percentage of not null values in the monitored column.                                            |
 | column | [daily detected datatype in text changed](../../checks/column/datatype/detected-datatype-in-text-changed.md) | Scans all values in a string column and detects the data type of all values in a column.                                                    |
 | column | [daily mean anomaly](../../checks/column/anomaly/mean-anomaly.md)                                            | Ensures that the mean value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.         |
-| column | [daily sum change](../../checks/column/anomaly/sum-change.md)                                                | Ensures that the sum in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.                |
+| column | [daily sum anomaly](../../checks/column/anomaly/sum-anomaly.md)                                              | Ensures that the sum in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.                |
 | column | [daily column exists](../../checks/column/schema/column-exists.md)                                           | Reads the metadata of the monitored table and verifies that the column still exists in the data source.                                     |
 | column | [daily column type changed](../../checks/column/schema/column-type-changed.md)                               | Detects if the data type of the column has changed since the last time it was retrieved.                                                    |
 
@@ -149,7 +149,7 @@ spec:
         daily_mean_anomaly:
           warning:
             anomaly_percent: 1.0
-        daily_sum_change:
+        daily_sum_anomaly:
           warning:
             anomaly_percent: 1.0
       schema:

@@ -111,7 +111,7 @@ To execute the check prepared in the example using the [user interface](../../dq
  
     Below you can see the results displayed on the **Highest issue severity per check and day table** dashboard which is located in the
     Highest issue severity per day group of dashboards. This dashboard allows for reviewing and filtering a summary 
-    number of issues that arise from data quality checks per day, grouped by [check category](../../checks/index.md).
+    number of issues that arise from data quality checks per day, grouped by [check category](../../dqo-concepts/checks/index.md#categories-of-checks).
 
     This dashboard helps evaluate the areas with the highest number of data quality issues that should be addressed.
     It also allows to review how the issue severity changed per day of the month.

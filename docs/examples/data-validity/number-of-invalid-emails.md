@@ -13,7 +13,7 @@ The `email` column contains email values. We want to verify that the number of i
 
 **SOLUTION**
 
-We will verify the data using monitoring [string_invalid_email_count](../../checks/column/patterns/invalid-email-format-found.md) column check.
+We will verify the data using monitoring [invalid_email_format_found](../../checks/column/patterns/invalid-email-format-found.md) column check.
 Our goal is to verify if the number of invalid email values in `email` column does not exceed set thresholds.
 
 In this example, we will set three maximum thresholds levels for the check:
