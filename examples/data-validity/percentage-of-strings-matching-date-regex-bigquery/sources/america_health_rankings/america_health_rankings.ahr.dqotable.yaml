@@ -48,8 +48,8 @@ spec:
         nullable: true
       monitoring_checks:
         daily:
-          strings:
-            daily_string_match_date_regex_percent:
+          patterns:
+            daily_text_matching_date_pattern_percent:
               parameters:
                 date_formats: YYYY-MM-DD
               warning:

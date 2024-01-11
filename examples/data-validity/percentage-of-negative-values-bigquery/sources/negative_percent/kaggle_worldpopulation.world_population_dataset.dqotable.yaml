@@ -37,7 +37,7 @@ spec:
       monitoring_checks:
         daily:
           numeric:
-            daily_negative_percent:
+            daily_negative_values_percent:
               warning:
                 max_percent: 45.0
               error:

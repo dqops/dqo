@@ -17,7 +17,7 @@ only contains values that corresponds to the FIPS state codes listed in a separa
 **SOLUTION**
 
 We will check the data of `bigquery-public-data.census_utility.fips_codes_all` using 
-[lookup_key_found_percent](../../checks/column/integrity/lookup-key-found-percent.md) check.
+[foreign_key_match_percent](../../checks/column/integrity/foreign-key-match-percent.md) check.
 Our goal is to verify that the values in `state_fips_code` column in `fips_codes_all` table matches the values in the reference
 `state_fips_code` column in the `fips_codes_states` table. 
 
