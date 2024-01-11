@@ -14,6 +14,8 @@ interface ITrinoConnectionProps {
   trino?: TrinoParametersSpec;
   onChange?: (obj: TrinoParametersSpec) => void;
   sharedCredentials?: SharedCredentialListModel[];
+  nameOfDatabase: string;
+  onNameOfDatabaseChange: (name: string) => void;
 }
 
 const options = [
@@ -30,7 +32,9 @@ const options = [
 const TrinoConnection = ({
   trino,
   onChange,
-  sharedCredentials
+  sharedCredentials,
+  nameOfDatabase,
+  onNameOfDatabaseChange
 }: ITrinoConnectionProps) => {
   const handleChange = (obj: Partial<TrinoParametersSpec>) => {
     if (!onChange) return;
@@ -40,21 +44,17 @@ const TrinoConnection = ({
     });
   };
 
-  console.log(nameOfDatabase)
-  console.log(trino?.trino_engine_type)
-
   return (
     <SectionWrapper title="Trino connection parameters" className="mb-4">
       <Select
         label="Trino engine type"
         options={options}
         className="mb-4"
-        value={
-          trino?.trino_engine_type ||
-          TrinoParametersSpecTrinoEngineTypeEnum.trino
-        }
-        onChange={(value) => handleChange({ trino_engine_type: value })}
-        disabled
+        value={ trino?.trino_engine_type || nameOfDatabase.toLowerCase() as TrinoParametersSpecTrinoEngineTypeEnum }
+        onChange={(value) => { 
+          handleChange({ trino_engine_type: value }),
+          value && onNameOfDatabaseChange(String(value).replace(/\w/, x => x.toUpperCase()))
+        }}
       />
       { trino?.trino_engine_type === TrinoParametersSpecTrinoEngineTypeEnum.trino && 
       <>
@@ -115,11 +115,11 @@ const TrinoConnection = ({
       </>
       }
       <FieldTypeInput
-                data={sharedCredentials}
-                label="Catalog"
-                className="mb-4"
-                value={trino?.catalog}
-                onChange={(value) => handleChange({ catalog: value })}
+          data={sharedCredentials}
+          label="Catalog"
+          className="mb-4"
+          value={trino?.catalog}
+          onChange={(value) => handleChange({ catalog: value })}
       />
       <JdbcPropertiesView
         properties={trino?.properties}

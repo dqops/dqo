@@ -57,7 +57,7 @@ public class AthenaConnectionSpecObjectMother {
                 setCatalog("awsdatacatalog");
                 setAthenaWorkGroup("primary");
                 setAthenaOutputLocation("s3://dqops-athena-test/results/");
-                setProperties(Map.of("CredentialsProvider","DefaultChain"));
+                setProperties(Map.of("CredentialsProvider","DefaultChain"));    // can only by used in the local environment
                 setTrinoEngineType(TrinoEngineType.athena);
             }});
         }};

@@ -52,6 +52,7 @@ const CreateConnection = () => {
           onChange={setDatabase}
           nameOfDatabase={nameofDB.length !== 0 ? nameofDB : ''}
           onBack={() => setStep(0)}
+          onNameOfDatabaseChange={setNameofDB}
         />
       )}
       {step === 2 && (
