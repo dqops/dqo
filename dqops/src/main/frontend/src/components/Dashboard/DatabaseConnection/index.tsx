@@ -202,63 +202,63 @@ const DatabaseConnection = ({
     ),
     [ConnectionModelProviderTypeEnum.postgresql]: (
       <PostgreSQLConnection
-        postgresql={{ ...database.postgresql, port: '5432' }}
+        postgresql={database.postgresql}
         onChange={(postgresql) => onChange({ ...database, postgresql })}
         sharedCredentials={sharedCredentials}
       />
     ),
     [ConnectionModelProviderTypeEnum.redshift]: (
       <RedshiftConnection
-        redshift={{ ...database.redshift, port: '5439' }}
+        redshift={database.redshift}
         onChange={(redshift) => onChange({ ...database, redshift })}
         sharedCredentials={sharedCredentials}
       />
     ),
     [ConnectionModelProviderTypeEnum.sqlserver]: (
       <SqlServerConnection
-        sqlserver={{ ...database.sqlserver, port: '1433' }}
+        sqlserver={database.sqlserver}
         onChange={(sqlserver) => onChange({ ...database, sqlserver })}
         sharedCredentials={sharedCredentials}
       />
     ),
     [ConnectionModelProviderTypeEnum.presto]: (
       <PrestoConnection
-        presto={{ ...database.presto, port: '8080' }}
+        presto={database.presto}
         onChange={(presto) => onChange({ ...database, presto })}
         sharedCredentials={sharedCredentials}
       />
     ),
     [ConnectionModelProviderTypeEnum.trino]: (
       <TrinoConnection
-        trino={{ ...database.trino, port: '8080' }}
+        trino={database.trino}
         onChange={(trino) => onChange({ ...database, trino })}
         sharedCredentials={sharedCredentials}
       />
     ),
     [ConnectionModelProviderTypeEnum.mysql]: (
       <MySQLConnection
-        mysql={{ ...database.mysql, port: '3306' }}
+        mysql={database.mysql}
         onChange={(mysql) => onChange({ ...database, mysql })}
         sharedCredentials={sharedCredentials}
       />
     ),
     [ConnectionModelProviderTypeEnum.oracle]: (
       <OracleConnection
-        oracle={{ ...database.oracle, port: '1521' }}
+        oracle={database.oracle}
         onChange={(oracle) => onChange({ ...database, oracle })}
         sharedCredentials={sharedCredentials}
       />
     ),
     [ConnectionModelProviderTypeEnum.spark]: (
       <SparkConnection
-        spark={{ ...database.spark, port: '10000' }}
+        spark={database.spark}
         onChange={(spark) => onChange({ ...database, spark })}
         sharedCredentials={sharedCredentials}
       />
     ),
     [ConnectionModelProviderTypeEnum.databricks]: (
       <DatabricksConnection
-        databricks={{ ...database.databricks, port: '443' }}
+        databricks={database.databricks}
         onChange={(databricks) => onChange({ ...database, databricks })}
         sharedCredentials={sharedCredentials}
       />
@@ -293,6 +293,7 @@ const DatabaseConnection = ({
         return '';
     }
   }, [database.provider_type]);
+  console.log(database)
 
   return (
     <div>
