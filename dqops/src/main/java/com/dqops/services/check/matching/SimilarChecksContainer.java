@@ -30,16 +30,16 @@ import java.util.*;
  * Object that aggregates models (information) about all similar checks in other categories.
  */
 public class SimilarChecksContainer {
-    private Map<SimilarCheckSensorRuleKey, SimilarChecksGroup> checkGroups = new LinkedHashMap<>();
-    private Map<String, SimilarChecksGroup> similarChecksByCheckName = new HashMap<>();
+    private final Map<SimilarCheckGroupingKey, SimilarChecksGroup> checkGroups = new LinkedHashMap<>();
+    private final Map<String, SimilarChecksGroup> similarChecksByCheckName = new HashMap<>();
 
     /**
-     * Returns a similar check group for a given key (the key contains the sensor name and rule names).
+     * Returns a similar check group for a given key.
      * Creates and returns a new empty group, if the group as not found.
-     * @param groupMatchingKey Group matching key with the sensor name and rule names.
+     * @param groupMatchingKey Group matching key.
      * @return Similar checks group.
      */
-    public SimilarChecksGroup getSimilarCheckGroup(SimilarCheckSensorRuleKey groupMatchingKey) {
+    public SimilarChecksGroup getSimilarCheckGroup(SimilarCheckGroupingKey groupMatchingKey) {
         SimilarChecksGroup similarChecksGroup = this.checkGroups.get(groupMatchingKey);
         if (similarChecksGroup == null) {
             similarChecksGroup = new SimilarChecksGroup(groupMatchingKey);
@@ -59,15 +59,20 @@ public class SimilarChecksContainer {
 
     /**
      * Appends all checks from a category.
+     * @param similarCheckGroupingKeyFactory Similar check grouping key factory to use for grouping key extraction.
      * @param checkContainerModel All UI checks.
      * @param checkTarget Check target (table or column).
      * @param checkType Check type.
      * @param timeScale Check's time scale or null.
      */
-    public void appendAllChecks(CheckContainerModel checkContainerModel, CheckTarget checkTarget, CheckType checkType, CheckTimeScale timeScale) {
+    public void appendAllChecks(SimilarCheckGroupingKeyFactory similarCheckGroupingKeyFactory,
+                                CheckContainerModel checkContainerModel,
+                                CheckTarget checkTarget,
+                                CheckType checkType,
+                                CheckTimeScale timeScale) {
         for (QualityCategoryModel categoryModel : checkContainerModel.getCategories()) {
             for (CheckModel checkModel : categoryModel.getChecks()) {
-                SimilarCheckSensorRuleKey similarCheckMatchKey = checkModel.createSimilarCheckMatchKey();
+                SimilarCheckGroupingKey similarCheckMatchKey = similarCheckGroupingKeyFactory.createSimilarCheckGroupingKey(checkModel);
 
                 SimilarChecksGroup similarCheckGroup = this.getSimilarCheckGroup(similarCheckMatchKey);
                 String categoryName = categoryModel.getCategory();
@@ -95,11 +100,7 @@ public class SimilarChecksContainer {
 
         for (SimilarChecksGroup similarChecksGroup : checkGroups.values()) {
             String category = similarChecksGroup.getFirstCheckCategory();
-            Collection<SimilarChecksGroup> checksInCategory = checksByCategory.get(category);
-            if (checksInCategory == null) {
-                checksInCategory = new ArrayList<>();
-                checksByCategory.put(category, checksInCategory);
-            }
+            Collection<SimilarChecksGroup> checksInCategory = checksByCategory.computeIfAbsent(category, k -> new ArrayList<>());
             checksInCategory.add(similarChecksGroup);
         }
 

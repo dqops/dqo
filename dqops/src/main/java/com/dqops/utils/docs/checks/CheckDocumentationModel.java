@@ -16,6 +16,8 @@
 package com.dqops.utils.docs.checks;
 
 import com.dqops.services.check.mapping.models.CheckModel;
+import com.dqops.utils.docs.rules.RuleDocumentationModel;
+import com.dqops.utils.docs.sensors.SensorDocumentationModel;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -55,6 +57,16 @@ public class CheckDocumentationModel {
      * Check time scale (daily, monthly, or empty).
      */
     private String timeScale;
+
+    /**
+     * Sensor documentation model.
+     */
+    private SensorDocumentationModel sensor;
+
+    /**
+     * Rule documentation model.
+     */
+    private RuleDocumentationModel rule;
 
     /**
      * Check class - "standard" or "advanced".
