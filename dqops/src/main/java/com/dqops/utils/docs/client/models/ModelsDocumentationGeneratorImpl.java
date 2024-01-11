@@ -19,18 +19,21 @@ import com.dqops.utils.docs.HandlebarsDocumentationUtilities;
 import com.dqops.utils.docs.LinkageStore;
 import com.dqops.utils.docs.checks.CheckCategoryDocumentationModel;
 import com.dqops.utils.docs.checks.MainPageCheckDocumentationModel;
+import com.dqops.utils.docs.client.MainPageClientDocumentationModel;
 import com.dqops.utils.docs.client.apimodel.ComponentModel;
 import com.dqops.utils.docs.client.operations.OperationsSuperiorObjectDocumentationModel;
 import com.dqops.utils.docs.files.DocumentationFolder;
 import com.dqops.utils.docs.files.DocumentationMarkdownFile;
 import com.dqops.utils.docs.sensors.MainPageSensorDocumentationModel;
 import com.github.jknack.handlebars.Template;
+import com.google.common.collect.Streams;
 
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Python client documentation generator that generate documentation for models.
@@ -44,7 +47,8 @@ public class ModelsDocumentationGeneratorImpl implements ModelsDocumentationGene
 
     @Override
     public DocumentationFolder renderModelsDocumentation(Path projectRootPath,
-                                                         Collection<ComponentModel> componentModels) {
+                                                         Collection<ComponentModel> componentModels,
+                                                         MainPageClientDocumentationModel mainPageModel) {
         DocumentationFolder modelsFolder = new DocumentationFolder();
         modelsFolder.setFolderName("client/models");
         modelsFolder.setLinkName("Models");
@@ -65,6 +69,12 @@ public class ModelsDocumentationGeneratorImpl implements ModelsDocumentationGene
 
         List<ModelsSuperiorObjectDocumentationModel> modelsSuperiorObjectDocumentationModels =
                 modelsDocumentationModelFactory.createDocumentationForModels(componentModels);
+
+        mainPageModel.setModels(Streams.concat(
+                Stream.of(sharedModelsDocumentationModel),
+                modelsSuperiorObjectDocumentationModels.stream()
+        ).collect(Collectors.toList()));
+
         for (ModelsSuperiorObjectDocumentationModel modelsSuperiorObjectDocumentationModel
                 : modelsSuperiorObjectDocumentationModels) {
             DocumentationMarkdownFile documentationMarkdownFile = modelsFolder.addNestedFile(modelsSuperiorObjectDocumentationModel.getLocationFilePath());

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 DQOps (support@dqops.com)
+ * Copyright © 2023 DQOps (support@dqops.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,16 @@ import lombok.Data;
 
 @Data
 public class OperationUsageExampleDocumentationModel {
+    /**
+     * Name of the example snippet.
+     */
+    private String exampleName;
+
+    /**
+     * Description of the example snippet.
+     */
+    private String exampleDescription;
+
     /**
      * Execution method.
      */

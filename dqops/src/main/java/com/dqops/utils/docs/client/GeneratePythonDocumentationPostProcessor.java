@@ -16,10 +16,13 @@
 package com.dqops.utils.docs.client;
 
 import com.dqops.utils.docs.*;
+import com.dqops.utils.docs.checks.CheckCategoryDocumentationModel;
+import com.dqops.utils.docs.checks.MainPageCheckDocumentationModel;
 import com.dqops.utils.docs.client.apimodel.OpenAPIModel;
 import com.dqops.utils.docs.client.models.ModelsDocumentationGenerator;
 import com.dqops.utils.docs.client.models.ModelsDocumentationGeneratorImpl;
 import com.dqops.utils.docs.client.models.ModelsDocumentationModelFactoryImpl;
+import com.dqops.utils.docs.client.models.ModelsSuperiorObjectDocumentationModel;
 import com.dqops.utils.docs.client.operations.OperationsDocumentationGenerator;
 import com.dqops.utils.docs.client.operations.OperationsDocumentationGeneratorImpl;
 import com.dqops.utils.docs.client.operations.OperationsDocumentationModelFactoryImpl;
@@ -33,6 +36,7 @@ import com.dqops.utils.docs.client.operations.examples.serialization.PythonSeria
 import com.dqops.utils.docs.files.*;
 import com.dqops.utils.docs.generators.ParsedSampleObjectFactoryImpl;
 import com.dqops.utils.reflection.ReflectionServiceImpl;
+import com.github.jknack.handlebars.Template;
 import com.google.common.base.CaseFormat;
 import io.swagger.parser.OpenAPIParser;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -52,6 +56,19 @@ import java.util.stream.Collectors;
  */
 public class GeneratePythonDocumentationPostProcessor {
     public static final Path baseClientDocsPath = Path.of("docs", "client");
+    public static final Comparator<String> cherryPickComparator = (s1, s2) -> {
+        if (s1.equals(s2)) {
+            return 0;
+        }
+        if (s1.equals(ModelsDocumentationModelFactoryImpl.SHARED_MODELS_IDENTIFIER)) {
+            return -1;
+        }
+        if (s2.equals(ModelsDocumentationModelFactoryImpl.SHARED_MODELS_IDENTIFIER)) {
+            return 1;
+        }
+        return 0;
+    };
+
     public static LinkageStore<String> linkageStore;
 
     /**
@@ -84,8 +101,11 @@ public class GeneratePythonDocumentationPostProcessor {
 
             OpenAPIModel openAPIModel = OpenAPIModel.fromOpenAPI(openAPI, targetLinkage, linkageStore, docsModelLinkageService, componentReflectionService);
 
-            generateDocumentationForModels(projectDir, openAPIModel);
-            generateDocumentationForOperations(projectDir, openAPIModel);
+            MainPageClientDocumentationModel mainPageClientDocumentationModel = new MainPageClientDocumentationModel();
+
+            generateDocumentationForModels(projectDir, openAPIModel, mainPageClientDocumentationModel);
+            generateDocumentationForOperations(projectDir, openAPIModel, mainPageClientDocumentationModel);
+            generateMainPageDocumentation(projectDir, mainPageClientDocumentationModel);
 
             Path clientDocPath = projectDir
                     .resolve("..")
@@ -94,18 +114,6 @@ public class GeneratePythonDocumentationPostProcessor {
             DocumentationFolder modifiedClientFolder = DocumentationFolderFactory.loadCurrentFiles(clientDocPath);
             modifiedClientFolder.setLinkName("REST API Python client");
 
-            Comparator<String> cherryPickComparator = (s1, s2) -> {
-                if (s1.equals(s2)) {
-                    return 0;
-                }
-                if (s1.equals(ModelsDocumentationModelFactoryImpl.SHARED_MODELS_IDENTIFIER)) {
-                    return -1;
-                }
-                if (s2.equals(ModelsDocumentationModelFactoryImpl.SHARED_MODELS_IDENTIFIER)) {
-                    return 1;
-                }
-                return 0;
-            };
             modifiedClientFolder.sortByNameRecursive(cherryPickComparator.thenComparing(Comparator.naturalOrder()));
 
             List<String> renderedIndexYaml = modifiedClientFolder.generateMkDocsNavigation(2);
@@ -202,7 +210,8 @@ public class GeneratePythonDocumentationPostProcessor {
     }
 
     protected static void generateDocumentationForModels(Path projectRoot,
-                                                         OpenAPIModel openAPIModel) {
+                                                         OpenAPIModel openAPIModel,
+                                                         MainPageClientDocumentationModel mainPageModel) {
         Path modelsDocPath = projectRoot
                 .resolve("..")
                 .resolve(baseClientDocsPath)
@@ -211,12 +220,14 @@ public class GeneratePythonDocumentationPostProcessor {
         DocumentationFolder currentModelsDocFiles = DocumentationFolderFactory.loadCurrentFiles(modelsDocPath);
         ModelsDocumentationGenerator modelsDocumentationGenerator = new ModelsDocumentationGeneratorImpl(new ModelsDocumentationModelFactoryImpl());
 
-        DocumentationFolder renderedDocumentation = modelsDocumentationGenerator.renderModelsDocumentation(projectRoot, openAPIModel.getModels());
+        DocumentationFolder renderedDocumentation = modelsDocumentationGenerator.renderModelsDocumentation(
+                projectRoot, openAPIModel.getModels(), mainPageModel);
         renderedDocumentation.writeModifiedFiles(currentModelsDocFiles);
     }
 
     protected static void generateDocumentationForOperations(Path projectRoot,
-                                                             OpenAPIModel openAPIModel) {
+                                                             OpenAPIModel openAPIModel,
+                                                             MainPageClientDocumentationModel mainPageModel) {
         Path operationsDocPath = projectRoot
                 .resolve("..")
                 .resolve(baseClientDocsPath)
@@ -235,8 +246,36 @@ public class GeneratePythonDocumentationPostProcessor {
                 new OperationsDocumentationModelFactoryImpl(),
                 usageExampleModelFactory);
 
-        DocumentationFolder renderedDocumentation = operationsDocumentationGenerator.renderOperationsDocumentation(projectRoot, openAPIModel);
+        DocumentationFolder renderedDocumentation = operationsDocumentationGenerator.renderOperationsDocumentation(
+                projectRoot, openAPIModel, mainPageModel);
         renderedDocumentation.writeModifiedFiles(currentOperationsDocFiles);
+    }
+
+    protected static void generateMainPageDocumentation(Path projectRoot,
+                                                        MainPageClientDocumentationModel mainPageModel) {
+        Path clientPath = projectRoot
+                .resolve("..")
+                .resolve(baseClientDocsPath)
+                .toAbsolutePath().normalize();
+        DocumentationFolder currentClientDocFiles = DocumentationFolderFactory.loadCurrentFiles(clientPath);
+
+        mainPageModel.setModels(
+                mainPageModel.getModels().stream()
+                        .sorted(Comparator.comparing(
+                                ModelsSuperiorObjectDocumentationModel::getLocationFilePath,
+                                cherryPickComparator.thenComparing(Comparator.naturalOrder()))
+                        ).collect(Collectors.toList())
+        );
+
+        Template mainPageTemplate = HandlebarsDocumentationUtilities.compileTemplate("client/main_page_documentation");
+
+        DocumentationFolder renderedDocFiles = DocumentationFolderFactory.loadCurrentFiles(clientPath);
+        DocumentationMarkdownFile mainPageDocumentationMarkdownFile = renderedDocFiles.addNestedFile("index" + ".md");
+        mainPageDocumentationMarkdownFile.setRenderContext(mainPageModel);
+
+        String renderedMainPageDocument = HandlebarsDocumentationUtilities.renderTemplate(mainPageTemplate, mainPageModel);
+        mainPageDocumentationMarkdownFile.setFileContent(renderedMainPageDocument);
+        renderedDocFiles.writeModifiedFiles(currentClientDocFiles);
     }
 
     private static OpenAPI getParsedSwaggerFile(Path pathToSwaggerFile) {

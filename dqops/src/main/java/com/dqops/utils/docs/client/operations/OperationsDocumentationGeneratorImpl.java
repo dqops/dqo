@@ -16,6 +16,7 @@
 package com.dqops.utils.docs.client.operations;
 
 import com.dqops.utils.docs.HandlebarsDocumentationUtilities;
+import com.dqops.utils.docs.client.MainPageClientDocumentationModel;
 import com.dqops.utils.docs.client.apimodel.OpenAPIModel;
 import com.dqops.utils.docs.client.operations.examples.OperationExecutionMethod;
 import com.dqops.utils.docs.client.operations.examples.OperationUsageExampleDocumentationModel;
@@ -25,6 +26,7 @@ import com.dqops.utils.docs.files.DocumentationMarkdownFile;
 import com.github.jknack.handlebars.Template;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -49,7 +51,9 @@ public class OperationsDocumentationGeneratorImpl implements OperationsDocumenta
      * @return Folder structure with rendered markdown files.
      */
     @Override
-    public DocumentationFolder renderOperationsDocumentation(Path projectRootPath, OpenAPIModel openAPIModel) {
+    public DocumentationFolder renderOperationsDocumentation(Path projectRootPath,
+                                                             OpenAPIModel openAPIModel,
+                                                             MainPageClientDocumentationModel mainPageModel) {
         DocumentationFolder operationsFolder = new DocumentationFolder();
         operationsFolder.setFolderName("client/operations");
         operationsFolder.setLinkName("Operations");
@@ -72,6 +76,8 @@ public class OperationsDocumentationGeneratorImpl implements OperationsDocumenta
         }
 
         operationsSuperiorObjectDocumentationModels.sort(Comparator.comparing(OperationsSuperiorObjectDocumentationModel::getSuperiorClassSimpleName));
+        mainPageModel.setOperations(operationsSuperiorObjectDocumentationModels);
+        mainPageModel.setSelectedExamples(selectUsageExamplesForClientMainPage(operationsSuperiorObjectDocumentationModels));
 
         MainPageOperationsDocumentationModel mainPageOperationsDocumentationModel = new MainPageOperationsDocumentationModel();
         mainPageOperationsDocumentationModel.setControllerOperations(operationsSuperiorObjectDocumentationModels);
@@ -93,5 +99,11 @@ public class OperationsDocumentationGeneratorImpl implements OperationsDocumenta
             documentationMarkdownFile.setFileContent(renderedDocument);
         }
         return operationsFolder;
+    }
+
+    protected List<OperationUsageExampleDocumentationModel> selectUsageExamplesForClientMainPage(
+            List<OperationsSuperiorObjectDocumentationModel> operationsSuperiorModels) {
+        // TODO: tutaj dalej praca
+        return new ArrayList<>();
     }
 }
