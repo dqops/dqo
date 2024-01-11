@@ -19,7 +19,10 @@ import com.dqops.connectors.ConnectorOperationFailedException;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.jdbc.JdbConnectionPoolCreateException;
 import com.dqops.core.secrets.SecretValueLookupContext;
+import com.dqops.metadata.credentials.SharedCredentialWrapper;
 import com.dqops.metadata.sources.ConnectionSpec;
+import com.dqops.metadata.storage.localfiles.credentials.DefaultCloudCredentialFileContent;
+import com.dqops.metadata.storage.localfiles.credentials.DefaultCloudCredentialFileNames;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.auth.oauth2.UserCredentials;
@@ -33,9 +36,11 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -89,7 +94,17 @@ public class BigQueryConnectionPoolImpl implements BigQueryConnectionPool {
             GoogleCredentials googleCredentials = null;
             switch (bigQueryParametersSpec.getAuthenticationMode()) {
                 case google_application_credentials:
-                    googleCredentials = GoogleCredentials.getApplicationDefault();
+                    SharedCredentialWrapper defaultCredentialsSharedSecret = secretValueLookupContext.getUserHome().getCredentials()
+                            .getByObjectName(DefaultCloudCredentialFileNames.GCP_APPLICATION_DEFAULT_CREDENTIALS_JSON_NAME, true);
+                    if (defaultCredentialsSharedSecret != null && defaultCredentialsSharedSecret.getObject() != null &&
+                            !Objects.equals(defaultCredentialsSharedSecret.getObject().getTextContent(), DefaultCloudCredentialFileContent.GCP_APPLICATION_DEFAULT_CREDENTIALS_JSON_INITIAL_CONTENT)) {
+                        String keyContent = defaultCredentialsSharedSecret.getObject().getTextContent();
+                        try (InputStream keyReaderStream = new ByteArrayInputStream(keyContent.getBytes(StandardCharsets.UTF_8))) {
+                            googleCredentials = GoogleCredentials.fromStream(keyReaderStream);
+                        }
+                    } else {
+                        googleCredentials = GoogleCredentials.getApplicationDefault();
+                    }
                     break;
                 case json_key_content:
                     byte[] keyContentBytes = bigQueryParametersSpec.getJsonKeyContent().getBytes(StandardCharsets.UTF_8);
