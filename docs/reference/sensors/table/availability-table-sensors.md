@@ -1,16 +1,30 @@
+# Data quality availability sensors
+All [data quality sensors](../../../dqo-concepts/sensors/sensors.md) in the **availability** category supported by DQOps are listed below. Those sensors are measured on a table level.
 
-## **table availability**
-**Full sensor name**
-```
-table/availability/table_availability
-```
-**Description**
+---
+
+
+## table availability
 Table availability sensor runs a simple table scan query to detect if the table is queryable. This sensor returns 0.0 when no failure was detected or 1.0 when a failure was detected.
 
+**Sensor summary**
+
+The table availability sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| table | availability | `table/availability/table_availability` | [sensors/table/availability](https://github.com/dqops/dqo/tree/develop/home/sensors/table/availability/) |
 
 
 
-**SQL Template (Jinja2)**
+
+
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
 === "BigQuery"
 
     ```sql+jinja
@@ -197,3 +211,6 @@ Table availability sensor runs a simple table scan query to detect if the table 
     ORDER BY time_period
     ```
 ___
+
+
+

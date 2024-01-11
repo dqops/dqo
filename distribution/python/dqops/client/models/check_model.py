@@ -39,6 +39,9 @@ class CheckModel:
         rule (Union[Unset, RuleThresholdsModel]): Model that returns the form definition and the form data to edit a
             single rule with all three threshold levels (low, medium, high).
         supports_grouping (Union[Unset, bool]): The data quality check supports a custom data grouping configuration.
+        standard (Union[Unset, bool]): This is a standard data quality check that is always shown on the data quality
+            checks editor screen. Non-standard data quality checks (when the value is false) are advanced checks that are
+            shown when the user decides to expand the list of checks.
         data_grouping_override (Union[Unset, DataGroupingConfigurationSpec]):
         schedule_override (Union[Unset, MonitoringScheduleSpec]):
         effective_schedule (Union[Unset, EffectiveScheduleModel]): Model of a configured schedule (enabled on connection
@@ -84,6 +87,7 @@ class CheckModel:
     quality_dimension: Union[Unset, str] = UNSET
     rule: Union[Unset, "RuleThresholdsModel"] = UNSET
     supports_grouping: Union[Unset, bool] = UNSET
+    standard: Union[Unset, bool] = UNSET
     data_grouping_override: Union[Unset, "DataGroupingConfigurationSpec"] = UNSET
     schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
     effective_schedule: Union[Unset, "EffectiveScheduleModel"] = UNSET
@@ -124,6 +128,7 @@ class CheckModel:
             rule = self.rule.to_dict()
 
         supports_grouping = self.supports_grouping
+        standard = self.standard
         data_grouping_override: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.data_grouping_override, Unset):
             data_grouping_override = self.data_grouping_override.to_dict()
@@ -200,6 +205,8 @@ class CheckModel:
             field_dict["rule"] = rule
         if supports_grouping is not UNSET:
             field_dict["supports_grouping"] = supports_grouping
+        if standard is not UNSET:
+            field_dict["standard"] = standard
         if data_grouping_override is not UNSET:
             field_dict["data_grouping_override"] = data_grouping_override
         if schedule_override is not UNSET:
@@ -285,6 +292,8 @@ class CheckModel:
             rule = RuleThresholdsModel.from_dict(_rule)
 
         supports_grouping = d.pop("supports_grouping", UNSET)
+
+        standard = d.pop("standard", UNSET)
 
         _data_grouping_override = d.pop("data_grouping_override", UNSET)
         data_grouping_override: Union[Unset, DataGroupingConfigurationSpec]
@@ -389,6 +398,7 @@ class CheckModel:
             quality_dimension=quality_dimension,
             rule=rule,
             supports_grouping=supports_grouping,
+            standard=standard,
             data_grouping_override=data_grouping_override,
             schedule_override=schedule_override,
             effective_schedule=effective_schedule,

@@ -40,7 +40,7 @@ ___
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[job_id](../Common.md#dqoqueuejobid)|Job id that identifies a job that was started on the DQOps job queue.|[DqoQueueJobId](../Common.md#dqoqueuejobid)|
+|[job_id](./Common.md#dqoqueuejobid)|Job id that identifies a job that was started on the DQOps job queue.|[DqoQueueJobId](./Common.md#dqoqueuejobid)|
 |[result](#collectstatisticsresult)|Optional result object that is returned only when the wait parameter was true and the &quot;collect statistics&quot; job has finished. Contains the summary result of collecting basic statistics, including the number of statistics collectors (queries) that managed to capture metrics about the table(s). |[CollectStatisticsResult](#collectstatisticsresult)|
 |[status](#dqojobstatus)|Job status|[DqoJobStatus](#dqojobstatus)|
 
@@ -106,7 +106,7 @@ Identifies a single partition for hive partitioned tables stored as parquet file
 |data_domain|Data domain name.|string|
 |[table_type](#dqoroot)|Table type.|[DqoRoot](#dqoroot)|
 |connection_name|Connection name.|string|
-|[table_name](../columns.md#physicaltablename)|Table name (schema.table).|[PhysicalTableName](../columns.md#physicaltablename)|
+|[table_name](./columns.md#physicaltablename)|Table name (schema.table).|[PhysicalTableName](./columns.md#physicaltablename)|
 |month|The date of teh first day of the month that identifies a monthly partition.|date|
 
 
@@ -151,9 +151,9 @@ Object returned from the operation that queues a &quot;delete stored data&quot; 
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[job_id](../Common.md#dqoqueuejobid)|Job id that identifies a job that was started on the DQOps job queue.|[DqoQueueJobId](../Common.md#dqoqueuejobid)|
+|[job_id](./Common.md#dqoqueuejobid)|Job id that identifies a job that was started on the DQOps job queue.|[DqoQueueJobId](./Common.md#dqoqueuejobid)|
 |[result](#deletestoreddataresult)|Optional result object that is returned only when the wait parameter was true and the &quot;delete stored data&quot; job has finished. Contains a list of partitions that were deleted or updated.|[DeleteStoredDataResult](#deletestoreddataresult)|
-|[status](#dqojobstatus)|Job status|[DqoJobStatus](#dqojobstatus)|
+|[status](./jobs.md#dqojobstatus)|Job status|[DqoJobStatus](./jobs.md#dqojobstatus)|
 
 
 ___
@@ -193,7 +193,7 @@ Parameter object for starting a file synchronization job. Identifies the folder 
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[folder](#dqoroot)||[DqoRoot](#dqoroot)|
+|[folder](./jobs.md#dqoroot)||[DqoRoot](./jobs.md#dqoroot)|
 |[direction](#filesynchronizationdirection)||[FileSynchronizationDirection](#filesynchronizationdirection)|
 |force_refresh_native_table||boolean|
 
@@ -223,7 +223,7 @@ Simple object for starting multiple folder synchronization jobs with the same co
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[direction](#filesynchronizationdirection)|File synchronization direction, the default is full synchronization (push local changes and pull other changes from DQOps Cloud).|[FileSynchronizationDirection](#filesynchronizationdirection)|
+|[direction](./jobs.md#filesynchronizationdirection)|File synchronization direction, the default is full synchronization (push local changes and pull other changes from DQOps Cloud).|[FileSynchronizationDirection](./jobs.md#filesynchronizationdirection)|
 |force_refresh_native_tables|Force full refresh of native tables in the data quality data warehouse. The default synchronization mode is to refresh only modified data.|boolean|
 |detect_cron_schedules|Scans the yaml files (with the configuration for connections and tables) and detects new cron schedules. Detected cron schedules are registered in the cron (Quartz) job scheduler.|boolean|
 |sources|Synchronize the &quot;sources&quot; folder.|boolean|
@@ -272,7 +272,7 @@ ___
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[highest_severity](../check_results.md#ruleseveritylevel)|The highest check severity for the data quality checks executed in this batch.|[RuleSeverityLevel](../check_results.md#ruleseveritylevel)|
+|[highest_severity](./check_results.md#ruleseveritylevel)|The highest check severity for the data quality checks executed in this batch.|[RuleSeverityLevel](./check_results.md#ruleseveritylevel)|
 |executed_checks|The total count of all executed checks.|integer|
 |valid_results|The total count of all checks that finished successfully (with no data quality issues).|integer|
 |warnings|The total count of all invalid data quality checks that finished raising a warning.|integer|
@@ -292,7 +292,7 @@ ___
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_search_filters](../Common.md#checksearchfilters)|Target data quality checks filter.|[CheckSearchFilters](../Common.md#checksearchfilters)|
+|[check_search_filters](./Common.md#checksearchfilters)|Target data quality checks filter.|[CheckSearchFilters](./Common.md#checksearchfilters)|
 |[time_window_filter](#timewindowfilterparameters)|Optional time window filter, configures the time range that is analyzed or the number of recent days/months to analyze for day or month partitioned data.|[TimeWindowFilterParameters](#timewindowfilterparameters)|
 |dummy_execution|Set the value to true when the data quality checks should be executed in a dummy mode (without running checks on the target systems and storing the results). Only the jinja2 sensors will be rendered.|boolean|
 |[run_checks_result](#runchecksresult)|The result of running the check, updated when the run checks job finishes. Contains the count of executed checks.|[RunChecksResult](#runchecksresult)|
@@ -311,11 +311,11 @@ ___
 |---------------|---------------------------------|-----------|
 |connection|The name of the target connection.|string|
 |max_jobs_per_connection|The maximum number of concurrent &#x27;run checks on table&#x27; jobs that could be run on this connection. Limits the number of concurrent jobs.|integer|
-|[table](../columns.md#physicaltablename)|The full physical name (schema.table) of the target table.|[PhysicalTableName](../columns.md#physicaltablename)|
-|[check_search_filters](../Common.md#checksearchfilters)|Target data quality checks filter.|[CheckSearchFilters](../Common.md#checksearchfilters)|
-|[time_window_filter](#timewindowfilterparameters)|Optional time window filter, configures the time range that is analyzed or the number of recent days/months to analyze for day or month partitioned data.|[TimeWindowFilterParameters](#timewindowfilterparameters)|
+|[table](./columns.md#physicaltablename)|The full physical name (schema.table) of the target table.|[PhysicalTableName](./columns.md#physicaltablename)|
+|[check_search_filters](./Common.md#checksearchfilters)|Target data quality checks filter.|[CheckSearchFilters](./Common.md#checksearchfilters)|
+|[time_window_filter](./jobs.md#timewindowfilterparameters)|Optional time window filter, configures the time range that is analyzed or the number of recent days/months to analyze for day or month partitioned data.|[TimeWindowFilterParameters](./jobs.md#timewindowfilterparameters)|
 |dummy_execution|Set the value to true when the data quality checks should be executed in a dummy mode (without running checks on the target systems and storing the results). Only the jinja2 sensors will be rendered.|boolean|
-|[run_checks_result](#runchecksresult)|The result of running the check, updated when the run checks job finishes. Contains the count of executed checks.|[RunChecksResult](#runchecksresult)|
+|[run_checks_result](./jobs.md#runchecksresult)|The result of running the check, updated when the run checks job finishes. Contains the count of executed checks.|[RunChecksResult](./jobs.md#runchecksresult)|
 
 
 ___
@@ -376,10 +376,10 @@ ___
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[statistics_collector_search_filters](#StatisticsCollectorSearchFilters)|Statistics collectors search filters that identify the type of statistics collector to run.|[StatisticsCollectorSearchFilters](#StatisticsCollectorSearchFilters)|
+|[statistics_collector_search_filters](./jobs.md#StatisticsCollectorSearchFilters)|Statistics collectors search filters that identify the type of statistics collector to run.|[StatisticsCollectorSearchFilters](./jobs.md#StatisticsCollectorSearchFilters)|
 |[data_scope](#statisticsdatascope)|The target scope of collecting statistics. Statistics could be collected on a whole table or for each data grouping separately.|[StatisticsDataScope](#statisticsdatascope)|
 |dummy_sensor_execution|Boolean flag that enables a dummy statistics collection (sensors are executed, but the statistics results are not written to the parquet files).|boolean|
-|[collect_statistics_result](#collectstatisticsresult)|The summary of the statistics collection job after if finished. Returns the number of collectors analyzed, columns analyzed, statistics results captured.|[CollectStatisticsResult](#collectstatisticsresult)|
+|[collect_statistics_result](./jobs.md#collectstatisticsresult)|The summary of the statistics collection job after if finished. Returns the number of collectors analyzed, columns analyzed, statistics results captured.|[CollectStatisticsResult](./jobs.md#collectstatisticsresult)|
 
 
 ___
@@ -395,11 +395,11 @@ ___
 |---------------|---------------------------------|-----------|
 |connection|The name of the target connection.|string|
 |max_jobs_per_connection|The maximum number of concurrent &#x27;run checks on table&#x27; jobs that could be run on this connection. Limits the number of concurrent jobs.|integer|
-|[table](../columns.md#physicaltablename)|The full physical name (schema.table) of the target table.|[PhysicalTableName](../columns.md#physicaltablename)|
-|[statistics_collector_search_filters](#statisticscollectorsearchfilters)|Statistics collectors search filters that identify the type of statistics collector to run.|[StatisticsCollectorSearchFilters](#statisticscollectorsearchfilters)|
-|[data_scope](#statisticsdatascope)|The target scope of collecting statistics. Statistics could be collected on a whole table or for each data grouping separately.|[StatisticsDataScope](#statisticsdatascope)|
+|[table](./columns.md#physicaltablename)|The full physical name (schema.table) of the target table.|[PhysicalTableName](./columns.md#physicaltablename)|
+|[statistics_collector_search_filters](./jobs.md#statisticscollectorsearchfilters)|Statistics collectors search filters that identify the type of statistics collector to run.|[StatisticsCollectorSearchFilters](./jobs.md#statisticscollectorsearchfilters)|
+|[data_scope](./jobs.md#statisticsdatascope)|The target scope of collecting statistics. Statistics could be collected on a whole table or for each data grouping separately.|[StatisticsDataScope](./jobs.md#statisticsdatascope)|
 |dummy_sensor_execution|Boolean flag that enables a dummy statistics collection (sensors are executed, but the statistics results are not written to the parquet files).|boolean|
-|[collect_statistics_result](#collectstatisticsresult)|The summary of the statistics collection job after if finished. Returns the number of collectors analyzed, columns analyzed, statistics results captured.|[CollectStatisticsResult](#collectstatisticsresult)|
+|[collect_statistics_result](./jobs.md#collectstatisticsresult)|The summary of the statistics collection job after if finished. Returns the number of collectors analyzed, columns analyzed, statistics results captured.|[CollectStatisticsResult](./jobs.md#collectstatisticsresult)|
 
 
 ___
@@ -465,15 +465,15 @@ Model object returned to UI that has typed fields for each supported job paramet
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |[synchronize_root_folder_parameters](#synchronizerootfolderdqoqueuejobparameters)||[SynchronizeRootFolderDqoQueueJobParameters](#synchronizerootfolderdqoqueuejobparameters)|
-|[synchronize_multiple_folders_parameters](#SynchronizeMultipleFoldersDqoQueueJobParameters)||[SynchronizeMultipleFoldersDqoQueueJobParameters](#SynchronizeMultipleFoldersDqoQueueJobParameters)|
-|[run_scheduled_checks_parameters](../Common.md#monitoringschedulespec)||[MonitoringScheduleSpec](../Common.md#monitoringschedulespec)|
-|[run_checks_parameters](#RunChecksParameters)||[RunChecksParameters](#RunChecksParameters)|
+|[synchronize_multiple_folders_parameters](./jobs.md#SynchronizeMultipleFoldersDqoQueueJobParameters)||[SynchronizeMultipleFoldersDqoQueueJobParameters](./jobs.md#SynchronizeMultipleFoldersDqoQueueJobParameters)|
+|[run_scheduled_checks_parameters](./Common.md#monitoringschedulespec)||[MonitoringScheduleSpec](./Common.md#monitoringschedulespec)|
+|[run_checks_parameters](./jobs.md#RunChecksParameters)||[RunChecksParameters](./jobs.md#RunChecksParameters)|
 |[run_checks_on_table_parameters](#runchecksontableparameters)||[RunChecksOnTableParameters](#runchecksontableparameters)|
 |[collect_statistics_parameters](#collectstatisticsqueuejobparameters)||[CollectStatisticsQueueJobParameters](#collectstatisticsqueuejobparameters)|
 |[collect_statistics_on_table_parameters](#collectstatisticsontablequeuejobparameters)||[CollectStatisticsOnTableQueueJobParameters](#collectstatisticsontablequeuejobparameters)|
 |[import_schema_parameters](#importschemaqueuejobparameters)||[ImportSchemaQueueJobParameters](#importschemaqueuejobparameters)|
-|[import_table_parameters](#ImportTablesQueueJobParameters)||[ImportTablesQueueJobParameters](#ImportTablesQueueJobParameters)|
-|[delete_stored_data_parameters](#deletestoreddataqueuejobparameters)||[DeleteStoredDataQueueJobParameters](#deletestoreddataqueuejobparameters)|
+|[import_table_parameters](./jobs.md#ImportTablesQueueJobParameters)||[ImportTablesQueueJobParameters](./jobs.md#ImportTablesQueueJobParameters)|
+|[delete_stored_data_parameters](./jobs.md#deletestoreddataqueuejobparameters)||[DeleteStoredDataQueueJobParameters](./jobs.md#deletestoreddataqueuejobparameters)|
 |[repair_stored_data_parameters](#repairstoreddataqueuejobparameters)||[RepairStoredDataQueueJobParameters](#repairstoreddataqueuejobparameters)|
 
 
@@ -488,10 +488,10 @@ Model of a single job that was scheduled or has finished. It is stored in the jo
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[job_id](../Common.md#dqoqueuejobid)||[DqoQueueJobId](../Common.md#dqoqueuejobid)|
+|[job_id](./Common.md#dqoqueuejobid)||[DqoQueueJobId](./Common.md#dqoqueuejobid)|
 |[job_type](#dqojobtype)||[DqoJobType](#dqojobtype)|
 |[parameters](#dqojobentryparametersmodel)||[DqoJobEntryParametersModel](#dqojobentryparametersmodel)|
-|[status](#dqojobstatus)||[DqoJobStatus](#dqojobstatus)|
+|[status](./jobs.md#dqojobstatus)||[DqoJobStatus](./jobs.md#dqojobstatus)|
 |error_message||string|
 
 
@@ -506,10 +506,10 @@ Describes a change to the job status or the job queue (such as a new job was add
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[status](#dqojobstatus)||[DqoJobStatus](#dqojobstatus)|
-|[job_id](../Common.md#dqoqueuejobid)||[DqoQueueJobId](../Common.md#dqoqueuejobid)|
+|[status](./jobs.md#dqojobstatus)||[DqoJobStatus](./jobs.md#dqojobstatus)|
+|[job_id](./Common.md#dqoqueuejobid)||[DqoQueueJobId](./Common.md#dqoqueuejobid)|
 |change_sequence||long|
-|[updated_model](#dqojobhistoryentrymodel)||[DqoJobHistoryEntryModel](#dqojobhistoryentrymodel)|
+|[updated_model](./jobs.md#dqojobhistoryentrymodel)||[DqoJobHistoryEntryModel](./jobs.md#dqojobhistoryentrymodel)|
 
 
 ___
@@ -537,16 +537,16 @@ Model that describes the current synchronization status for each folder.
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |[sources](#foldersynchronizationstatus)|The synchronization status of the &quot;sources&quot; folder.|[FolderSynchronizationStatus](#foldersynchronizationstatus)|
-|[sensors](#foldersynchronizationstatus)|The synchronization status of the &quot;sensors&quot; folder.|[FolderSynchronizationStatus](#foldersynchronizationstatus)|
-|[rules](#foldersynchronizationstatus)|The synchronization status of the &quot;rules&quot; folder.|[FolderSynchronizationStatus](#foldersynchronizationstatus)|
-|[checks](#foldersynchronizationstatus)|The synchronization status of the &quot;checks&quot; folder.|[FolderSynchronizationStatus](#foldersynchronizationstatus)|
-|[settings](#foldersynchronizationstatus)|The synchronization status of the &quot;settings&quot; folder.|[FolderSynchronizationStatus](#foldersynchronizationstatus)|
-|[credentials](#foldersynchronizationstatus)|The synchronization status of the &quot;.credentials&quot; folder.|[FolderSynchronizationStatus](#foldersynchronizationstatus)|
-|[data_sensor_readouts](#foldersynchronizationstatus)|The synchronization status of the &quot;.data/sensor_readouts&quot; folder.|[FolderSynchronizationStatus](#foldersynchronizationstatus)|
-|[data_check_results](#foldersynchronizationstatus)|The synchronization status of the &quot;.data/check_results&quot; folder.|[FolderSynchronizationStatus](#foldersynchronizationstatus)|
-|[data_statistics](#foldersynchronizationstatus)|The synchronization status of the &quot;.data/statistics&quot; folder.|[FolderSynchronizationStatus](#foldersynchronizationstatus)|
-|[data_errors](#foldersynchronizationstatus)|The synchronization status of the &quot;.data/errors&quot; folder.|[FolderSynchronizationStatus](#foldersynchronizationstatus)|
-|[data_incidents](#foldersynchronizationstatus)|The synchronization status of the &quot;.data/incidents&quot; folder.|[FolderSynchronizationStatus](#foldersynchronizationstatus)|
+|[sensors](./jobs.md#foldersynchronizationstatus)|The synchronization status of the &quot;sensors&quot; folder.|[FolderSynchronizationStatus](./jobs.md#foldersynchronizationstatus)|
+|[rules](./jobs.md#foldersynchronizationstatus)|The synchronization status of the &quot;rules&quot; folder.|[FolderSynchronizationStatus](./jobs.md#foldersynchronizationstatus)|
+|[checks](./jobs.md#foldersynchronizationstatus)|The synchronization status of the &quot;checks&quot; folder.|[FolderSynchronizationStatus](./jobs.md#foldersynchronizationstatus)|
+|[settings](./jobs.md#foldersynchronizationstatus)|The synchronization status of the &quot;settings&quot; folder.|[FolderSynchronizationStatus](./jobs.md#foldersynchronizationstatus)|
+|[credentials](./jobs.md#foldersynchronizationstatus)|The synchronization status of the &quot;.credentials&quot; folder.|[FolderSynchronizationStatus](./jobs.md#foldersynchronizationstatus)|
+|[data_sensor_readouts](./jobs.md#foldersynchronizationstatus)|The synchronization status of the &quot;.data/sensor_readouts&quot; folder.|[FolderSynchronizationStatus](./jobs.md#foldersynchronizationstatus)|
+|[data_check_results](./jobs.md#foldersynchronizationstatus)|The synchronization status of the &quot;.data/check_results&quot; folder.|[FolderSynchronizationStatus](./jobs.md#foldersynchronizationstatus)|
+|[data_statistics](./jobs.md#foldersynchronizationstatus)|The synchronization status of the &quot;.data/statistics&quot; folder.|[FolderSynchronizationStatus](./jobs.md#foldersynchronizationstatus)|
+|[data_errors](./jobs.md#foldersynchronizationstatus)|The synchronization status of the &quot;.data/errors&quot; folder.|[FolderSynchronizationStatus](./jobs.md#foldersynchronizationstatus)|
+|[data_incidents](./jobs.md#foldersynchronizationstatus)|The synchronization status of the &quot;.data/incidents&quot; folder.|[FolderSynchronizationStatus](./jobs.md#foldersynchronizationstatus)|
 
 
 ___
@@ -576,8 +576,8 @@ Returns the current snapshot of running jobs.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|jobs||List[[DqoJobHistoryEntryModel](#dqojobhistoryentrymodel)]|
-|[folder_synchronization_status](#cloudsynchronizationfoldersstatusmodel)||[CloudSynchronizationFoldersStatusModel](#cloudsynchronizationfoldersstatusmodel)|
+|jobs||List[[DqoJobHistoryEntryModel](./jobs.md#dqojobhistoryentrymodel)]|
+|[folder_synchronization_status](./jobs.md#cloudsynchronizationfoldersstatusmodel)||[CloudSynchronizationFoldersStatusModel](./jobs.md#cloudsynchronizationfoldersstatusmodel)|
 |last_sequence_number||long|
 
 
@@ -592,7 +592,7 @@ Result object from the {@link ImportTablesQueueJob ImportTablesQueueJob} table i
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|source_table_specs|Table schemas (including column schemas) of imported tables.|List[[TableSpec](../../../reference/yaml/TableYaml.md#tablespec)]|
+|source_table_specs|Table schemas (including column schemas) of imported tables.|List[[TableSpec](../../reference/yaml/TableYaml.md#tablespec)]|
 
 
 ___
@@ -607,9 +607,9 @@ Object returned from the operation that queues a &quot;import tables&quot; job. 
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[job_id](../Common.md#dqoqueuejobid)|Job id that identifies a job that was started on the DQOps job queue.|[DqoQueueJobId](../Common.md#dqoqueuejobid)|
+|[job_id](./Common.md#dqoqueuejobid)|Job id that identifies a job that was started on the DQOps job queue.|[DqoQueueJobId](./Common.md#dqoqueuejobid)|
 |[result](#importtablesresult)|Optional result object that is returned only when the wait parameter was true and the &quot;import tables&quot; job has finished. Contains the summary result of importing tables, including table and column schemas of imported tables. |[ImportTablesResult](#importtablesresult)|
-|[status](#dqojobstatus)|Job status|[DqoJobStatus](#dqojobstatus)|
+|[status](./jobs.md#dqojobstatus)|Job status|[DqoJobStatus](./jobs.md#dqojobstatus)|
 
 
 ___
@@ -623,9 +623,9 @@ ___
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[job_id](../Common.md#dqoqueuejobid)|Job id that identifies a job that was started on the DQOps job queue.|[DqoQueueJobId](../Common.md#dqoqueuejobid)|
-|[result](#runchecksresult)|Optional result object that is returned only when the wait parameter was true and the &quot;run checks&quot; job has finished. Contains the summary result of the data quality checks executed, including the severity of the most severe issue detected. The calling code (the data pipeline) can decide if further processing should be continued.|[RunChecksResult](#runchecksresult)|
-|[status](#dqojobstatus)|Job status|[DqoJobStatus](#dqojobstatus)|
+|[job_id](./Common.md#dqoqueuejobid)|Job id that identifies a job that was started on the DQOps job queue.|[DqoQueueJobId](./Common.md#dqoqueuejobid)|
+|[result](./jobs.md#runchecksresult)|Optional result object that is returned only when the wait parameter was true and the &quot;run checks&quot; job has finished. Contains the summary result of the data quality checks executed, including the severity of the most severe issue detected. The calling code (the data pipeline) can decide if further processing should be continued.|[RunChecksResult](./jobs.md#runchecksresult)|
+|[status](./jobs.md#dqojobstatus)|Job status|[DqoJobStatus](./jobs.md#dqojobstatus)|
 
 
 ___
@@ -640,8 +640,8 @@ Object returned from the operation that queues a &quot;synchronize multiple fold
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[job_id](../Common.md#dqoqueuejobid)|Job id that identifies a job that was started on the DQOps job queue.|[DqoQueueJobId](../Common.md#dqoqueuejobid)|
-|[status](#dqojobstatus)|Job status|[DqoJobStatus](#dqojobstatus)|
+|[job_id](./Common.md#dqoqueuejobid)|Job id that identifies a job that was started on the DQOps job queue.|[DqoQueueJobId](./Common.md#dqoqueuejobid)|
+|[status](./jobs.md#dqojobstatus)|Job status|[DqoJobStatus](./jobs.md#dqojobstatus)|
 
 
 ___

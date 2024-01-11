@@ -10,12 +10,12 @@ To learn more about each check, click on the links below.
 
 **Profiling checks type**
 
-| Target | Check name                                                                          | Description                                                                                                                                        |
-|--------|-------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
-| table  | [profile row count](../../checks/table/volume/row-count.md)                         | Counts the number of rows in a table.                                                                                                              |
-| table  | [profile expected column count](../../checks/table/schema/expected-column-count.md) | Retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to an expected number of columns. |
-| column | [profile nulls count](../../checks/column/nulls/nulls-count.md)                     | Ensures that there are no more than a set number of null values in the monitored column.                                                           |
-| column | [profile nulls percent](../../checks/column/nulls/nulls-percent.md)                 | Ensures that there are no more than a set percentage of null values in the monitored column.                                                       |
+| Target | Check name                                                          | Description                                                                                                                                        |
+|--------|---------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
+| table  | [profile row count](../../checks/table/volume/row-count.md)         | Counts the number of rows in a table.                                                                                                              |
+| table  | [profile column count](../../checks/table/schema/column-count.md)   | Retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to an expected number of columns. |
+| column | [profile nulls count](../../checks/column/nulls/nulls-count.md)     | Ensures that there are no more than a set number of null values in the monitored column.                                                           |
+| column | [profile nulls percent](../../checks/column/nulls/nulls-percent.md) | Ensures that there are no more than a set percentage of null values in the monitored column.                                                       |
 
 **Daily monitoring checks type**
 

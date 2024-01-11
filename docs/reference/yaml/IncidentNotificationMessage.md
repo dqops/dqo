@@ -1,3 +1,6 @@
+# DQOps YAML file definitions
+The definition of YAML files used by DQOps to configure the data sources, monitored tables, and the configuration of activated data quality checks.
+
 
 ## IncidentNotificationMessage
 Notification message payload that is posted (HTTP POST) to a notification endpoint with the details of a new or updated data quality incident.
@@ -10,7 +13,7 @@ Notification message payload that is posted (HTTP POST) to a notification endpoi
 
 
 
-**The structure of this object is described below**
+The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
@@ -40,4 +43,5 @@ Notification message payload that is posted (HTTP POST) to a notification endpoi
 
 
 ___
+
 

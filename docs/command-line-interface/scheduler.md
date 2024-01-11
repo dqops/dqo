@@ -1,29 +1,46 @@
-# scheduler
+# dqo scheduler command
+
+
+Controls the repeating task scheduler by starting, stopping or running a foreground job scheduler.
+
+
 
 ___
-### **dqo scheduler start**
+
+## dqo scheduler start
 
 Starts a background job scheduler
 
+
 **Description**
+
 
 This operation should be called only from the shell mode. When the DQOps is started as &#x27;dqo scheduler start&#x27; from the operating system, it will stop immediately.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] scheduler start [-h] [-fw] [-hl] [-crm=<checkRunMode>] [-of=<outputFormat>]
                  [-sm=<synchronizationMode>]
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> scheduler start [-h] [-fw] [-hl] [-crm=<checkRunMode>] [-of=<outputFormat>]
                  [-sm=<synchronizationMode>]
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
@@ -37,28 +54,42 @@ dqo> scheduler start [-h] [-fw] [-hl] [-crm=<checkRunMode>] [-of=<outputFormat>]
 
 
 
+
+
 ___
-### **dqo scheduler stop**
+
+## dqo scheduler stop
 
 Stops a background job scheduler
 
+
 **Description**
+
 
 This operation should be called only from the shell mode after the scheduler was started.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] scheduler stop [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> scheduler stop [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
@@ -66,6 +97,8 @@ dqo> scheduler stop [-h] [-fw] [-hl] [-of=<outputFormat>]
 |<p id="scheduler stop--headless">`--headless`</p><br/><p id="scheduler stop-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |<p id="scheduler stop-h">`-h`</p><br/><p id="scheduler stop--help">`--help`</p><br/>|Show the help for the command and parameters| ||
 |<p id="scheduler stop-of">`-of`</p><br/><p id="scheduler stop--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+
+
 
 
 

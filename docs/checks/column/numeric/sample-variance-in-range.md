@@ -1,58 +1,64 @@
-**sample variance in range** checks
+# sample variance in range data quality checks
 
-**Description**
 Column level check that ensures the sample variance is in a set range in a monitored column.
 
-___
 
-## **profile sample variance in range**
+___
+The **sample variance in range** data quality check has the following variants for each
+[type of data quality](../../../dqo-concepts/checks/index.md#types-of-checks) checks supported by DQOps.
+
+
+## profile sample variance in range
 
 
 **Check description**
+
 Verifies that the sample variance of all values in a column is not outside the set range.
 
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_sample_variance_in_range|profiling| |Reasonableness|[sample_variance](../../../../reference/sensors/column/numeric-column-sensors.md#sample-variance)|[between_floats](../../../../reference/rules/Comparison.md#between-floats)|
+|profile_sample_variance_in_range|profiling| |Reasonableness|[sample_variance](../../../reference/sensors/column/numeric-column-sensors.md#sample-variance)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
 
-**Activate check (Shell)**
-Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+**Command-line examples**
 
-```
-dqo> check activate -c=connection_name -ch=profile_sample_variance_in_range
-```
+Please expand the section below to see the DQOps command-line examples to run or activate the profile sample variance in range data quality check.
 
-**Run check (Shell)**
-Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+??? example "Managing profile sample variance in range check from DQOps shell"
 
-```
-dqo> check run -ch=profile_sample_variance_in_range
-```
+    === "Activate check"
 
-It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
-```
-dqo> check run -c=connection_name -ch=profile_sample_variance_in_range
-```
+        ```
+        dqo> check activate -c=connection_name -ch=profile_sample_variance_in_range
+        ```
 
-It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+    === "Run check on connection"
 
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_sample_variance_in_range
-```
+        Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
-**Sample configuration (YAML)**
+        ```
+        dqo> check run -c=connection_name -ch=profile_sample_variance_in_range
+        ```
+
+    === "Run check on table"
+
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters
+
+        ```
+        dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_sample_variance_in_range
+        ```
+
+**YAML configuration**
+
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="10-21"
+```yaml hl_lines="7-18"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  incremental_time_window:
-    daily_partitioning_recent_days: 7
-    monthly_partitioning_recent_months: 1
   columns:
     target_column:
       profiling_checks:
@@ -72,333 +78,335 @@ spec:
 
 ```
 
-Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[sample_variance](../../../../reference/sensors/column/numeric-column-sensors.md#sample-variance)
-[sensor](../../../dqo-concepts/sensors/sensors.md).
+??? info "Samples of generated SQL queries for each data source type"
 
-??? example "BigQuery"
+    Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
+    [sample_variance](../../../reference/sensors/column/numeric-column-sensors.md#sample-variance)
+    [sensor](../../../dqo-concepts/sensors/sensors.md).
 
-    === "Sensor template for BigQuery"
+    ??? example "BigQuery"
 
-        ```sql+jinja
-        {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for BigQuery"
+        === "Sensor template for BigQuery"
 
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
-            DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-            TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-        FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "Databricks"
+            ```sql+jinja
+            {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+            SELECT
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for BigQuery"
 
-    === "Sensor template for Databricks"
+            ```sql
+            SELECT
+                VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
+                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+            FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Databricks"
 
-        ```sql+jinja
-        {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Databricks"
+        === "Sensor template for Databricks"
 
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
-            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-            TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
-        FROM `<target_schema>`.`<target_table>` AS analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "MySQL"
+            ```sql+jinja
+            {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+            SELECT
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Databricks"
 
-    === "Sensor template for MySQL"
+            ```sql
+            SELECT
+                VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "MySQL"
 
-        ```sql+jinja
-        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for MySQL"
+        === "Sensor template for MySQL"
 
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
-            DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
-            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
-        FROM `<target_table>` AS analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "Oracle"
+            ```sql+jinja
+            {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            SELECT
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MySQL"
 
-    === "Sensor template for Oracle"
+            ```sql
+            SELECT
+                VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
+                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
+            FROM `<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Oracle"
 
-        ```sql+jinja
-        {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        === "Sensor template for Oracle"
+
+            ```sql+jinja
+            {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+            SELECT
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                    {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Oracle"
+
+            ```sql
+            SELECT
+                VAR_SAMP(analyzed_table."target_column") AS actual_value,
+                time_period,
+                time_period_utc
+            FROM(
+                SELECT
+                    original_table.*,
+                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
+                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "PostgreSQL"
+
+        === "Sensor template for PostgreSQL"
+
+            ```sql+jinja
+            {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+            SELECT
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for PostgreSQL"
+
+            ```sql
+            SELECT
+                VAR_SAMP(analyzed_table."target_column") AS actual_value,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            SELECT
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-        FROM(
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+
+            ```sql
             SELECT
-                original_table.*
-                {{- lib.render_data_grouping_projections('original_table') }}
-                {{- lib.render_time_dimension_projection('original_table') }}
-            FROM {{ lib.render_target_table() }} original_table
-            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-        ) analyzed_table
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Oracle"
+                VAR_SAMP(analyzed_table."target_column") AS actual_value,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Redshift"
 
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table."target_column") AS actual_value,
-            time_period,
-            time_period_utc
-        FROM(
+        === "Sensor template for Redshift"
+
+            ```sql+jinja
+            {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
-                original_table.*,
-            TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
-            CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "<target_schema>"."<target_table>" original_table
-        ) analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "PostgreSQL"
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Redshift"
 
-    === "Sensor template for PostgreSQL"
-
-        ```sql+jinja
-        {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for PostgreSQL"
-
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table."target_column") AS actual_value,
-            DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-            CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "Presto"
-
-    === "Sensor template for Presto"
-
-        ```sql+jinja
-        {% import '/dialects/presto.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-        FROM (
+            ```sql
             SELECT
-                original_table.*
-                {{- lib.render_data_grouping_projections('original_table') }}
-                {{- lib.render_time_dimension_projection('original_table') }}
-            FROM {{ lib.render_target_table() }} original_table
-            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-        ) analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Presto"
+                VAR_SAMP(analyzed_table."target_column") AS actual_value,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Snowflake"
 
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table."target_column") AS actual_value,
-            time_period,
-            time_period_utc
-        FROM (
+        === "Sensor template for Snowflake"
+
+            ```sql+jinja
+            {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
-                original_table.*,
-            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-            CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-            FROM ""."<target_schema>"."<target_table>" original_table
-        ) analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "Redshift"
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Snowflake"
 
-    === "Sensor template for Redshift"
-
-        ```sql+jinja
-        {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Redshift"
-
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table."target_column") AS actual_value,
-            DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-            CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "Snowflake"
-
-    === "Sensor template for Snowflake"
-
-        ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Snowflake"
-
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table."target_column") AS actual_value,
-            DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
-            TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
-        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "Spark"
-
-    === "Sensor template for Spark"
-
-        ```sql+jinja
-        {% import '/dialects/spark.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Spark"
-
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
-            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-            TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
-        FROM `<target_schema>`.`<target_table>` AS analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "SQL Server"
-
-    === "Sensor template for SQL Server"
-
-        ```sql+jinja
-        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-        SELECT
-            VARP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for SQL Server"
-
-        ```sql
-        SELECT
-            VARP(analyzed_table.[target_column]) AS actual_value,
-            DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
-            CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-        ```
-??? example "Trino"
-
-    === "Sensor template for Trino"
-
-        ```sql+jinja
-        {% import '/dialects/trino.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-        FROM (
+            ```sql
             SELECT
-                original_table.*
-                {{- lib.render_data_grouping_projections('original_table') }}
-                {{- lib.render_time_dimension_projection('original_table') }}
-            FROM {{ lib.render_target_table() }} original_table
-            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-        ) analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Trino"
+                VAR_SAMP(analyzed_table."target_column") AS actual_value,
+                DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
+                TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+            FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Spark"
 
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table."target_column") AS actual_value,
-            time_period,
-            time_period_utc
-        FROM (
+        === "Sensor template for Spark"
+
+            ```sql+jinja
+            {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
-                original_table.*,
-            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-            CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-            FROM ""."<target_schema>"."<target_table>" original_table
-        ) analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Spark"
 
+            ```sql
+            SELECT
+                VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "SQL Server"
+
+        === "Sensor template for SQL Server"
+
+            ```sql+jinja
+            {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+            SELECT
+                VARP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for SQL Server"
+
+            ```sql
+            SELECT
+                VARP(analyzed_table.[target_column]) AS actual_value,
+                DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
+                CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+            ```
+    ??? example "Trino"
+
+        === "Sensor template for Trino"
+
+            ```sql+jinja
+            {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+            SELECT
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Trino"
+
+            ```sql
+            SELECT
+                VAR_SAMP(analyzed_table."target_column") AS actual_value,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    
 
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
@@ -407,14 +415,11 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="8-18 33-38"
+    ```yaml hl_lines="5-15 30-35"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
-      incremental_time_window:
-        daily_partitioning_recent_days: 7
-        monthly_partitioning_recent_months: 1
       default_grouping_name: group_by_country_and_state
       groupings:
         group_by_country_and_state:
@@ -449,7 +454,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [sample_variance](../../../../reference/sensors/column/numeric-column-sensors.md#sample-variance)
+    [sample_variance](../../../reference/sensors/column/numeric-column-sensors.md#sample-variance)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -804,54 +809,58 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **daily sample variance in range**
+
+## daily sample variance in range
 
 
 **Check description**
+
 Verifies that the sample variance of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.
 
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_sample_variance_in_range|monitoring|daily|Reasonableness|[sample_variance](../../../../reference/sensors/column/numeric-column-sensors.md#sample-variance)|[between_floats](../../../../reference/rules/Comparison.md#between-floats)|
+|daily_sample_variance_in_range|monitoring|daily|Reasonableness|[sample_variance](../../../reference/sensors/column/numeric-column-sensors.md#sample-variance)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
 
-**Activate check (Shell)**
-Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+**Command-line examples**
 
-```
-dqo> check activate -c=connection_name -ch=daily_sample_variance_in_range
-```
+Please expand the section below to see the DQOps command-line examples to run or activate the daily sample variance in range data quality check.
 
-**Run check (Shell)**
-Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+??? example "Managing daily sample variance in range check from DQOps shell"
 
-```
-dqo> check run -ch=daily_sample_variance_in_range
-```
+    === "Activate check"
 
-It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
-```
-dqo> check run -c=connection_name -ch=daily_sample_variance_in_range
-```
+        ```
+        dqo> check activate -c=connection_name -ch=daily_sample_variance_in_range
+        ```
 
-It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+    === "Run check on connection"
 
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_sample_variance_in_range
-```
+        Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
-**Sample configuration (YAML)**
+        ```
+        dqo> check run -c=connection_name -ch=daily_sample_variance_in_range
+        ```
+
+    === "Run check on table"
+
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters
+
+        ```
+        dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_sample_variance_in_range
+        ```
+
+**YAML configuration**
+
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="10-22"
+```yaml hl_lines="7-19"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  incremental_time_window:
-    daily_partitioning_recent_days: 7
-    monthly_partitioning_recent_months: 1
   columns:
     target_column:
       monitoring_checks:
@@ -872,333 +881,335 @@ spec:
 
 ```
 
-Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[sample_variance](../../../../reference/sensors/column/numeric-column-sensors.md#sample-variance)
-[sensor](../../../dqo-concepts/sensors/sensors.md).
+??? info "Samples of generated SQL queries for each data source type"
 
-??? example "BigQuery"
+    Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
+    [sample_variance](../../../reference/sensors/column/numeric-column-sensors.md#sample-variance)
+    [sensor](../../../dqo-concepts/sensors/sensors.md).
 
-    === "Sensor template for BigQuery"
+    ??? example "BigQuery"
 
-        ```sql+jinja
-        {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for BigQuery"
+        === "Sensor template for BigQuery"
 
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
-            CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-            TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
-        FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "Databricks"
+            ```sql+jinja
+            {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+            SELECT
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for BigQuery"
 
-    === "Sensor template for Databricks"
+            ```sql
+            SELECT
+                VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
+                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
+                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+            FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Databricks"
 
-        ```sql+jinja
-        {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Databricks"
+        === "Sensor template for Databricks"
 
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
-            CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-            TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
-        FROM `<target_schema>`.`<target_table>` AS analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "MySQL"
+            ```sql+jinja
+            {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+            SELECT
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Databricks"
 
-    === "Sensor template for MySQL"
+            ```sql
+            SELECT
+                VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
+                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
+                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "MySQL"
 
-        ```sql+jinja
-        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for MySQL"
+        === "Sensor template for MySQL"
 
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
-            DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
-            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
-        FROM `<target_table>` AS analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "Oracle"
+            ```sql+jinja
+            {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            SELECT
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MySQL"
 
-    === "Sensor template for Oracle"
+            ```sql
+            SELECT
+                VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
+                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+            FROM `<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Oracle"
 
-        ```sql+jinja
-        {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        === "Sensor template for Oracle"
+
+            ```sql+jinja
+            {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+            SELECT
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                    {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Oracle"
+
+            ```sql
+            SELECT
+                VAR_SAMP(analyzed_table."target_column") AS actual_value,
+                time_period,
+                time_period_utc
+            FROM(
+                SELECT
+                    original_table.*,
+                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS time_period,
+                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "PostgreSQL"
+
+        === "Sensor template for PostgreSQL"
+
+            ```sql+jinja
+            {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+            SELECT
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for PostgreSQL"
+
+            ```sql
+            SELECT
+                VAR_SAMP(analyzed_table."target_column") AS actual_value,
+                CAST(LOCALTIMESTAMP AS date) AS time_period,
+                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            SELECT
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-        FROM(
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+
+            ```sql
             SELECT
-                original_table.*
-                {{- lib.render_data_grouping_projections('original_table') }}
-                {{- lib.render_time_dimension_projection('original_table') }}
-            FROM {{ lib.render_target_table() }} original_table
-            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-        ) analyzed_table
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Oracle"
+                VAR_SAMP(analyzed_table."target_column") AS actual_value,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                CAST(CURRENT_TIMESTAMP AS date) AS time_period,
+                CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Redshift"
 
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table."target_column") AS actual_value,
-            time_period,
-            time_period_utc
-        FROM(
+        === "Sensor template for Redshift"
+
+            ```sql+jinja
+            {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
-                original_table.*,
-            TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS time_period,
-            CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "<target_schema>"."<target_table>" original_table
-        ) analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "PostgreSQL"
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Redshift"
 
-    === "Sensor template for PostgreSQL"
-
-        ```sql+jinja
-        {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for PostgreSQL"
-
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table."target_column") AS actual_value,
-            CAST(LOCALTIMESTAMP AS date) AS time_period,
-            CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "Presto"
-
-    === "Sensor template for Presto"
-
-        ```sql+jinja
-        {% import '/dialects/presto.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-        FROM (
+            ```sql
             SELECT
-                original_table.*
-                {{- lib.render_data_grouping_projections('original_table') }}
-                {{- lib.render_time_dimension_projection('original_table') }}
-            FROM {{ lib.render_target_table() }} original_table
-            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-        ) analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Presto"
+                VAR_SAMP(analyzed_table."target_column") AS actual_value,
+                CAST(LOCALTIMESTAMP AS date) AS time_period,
+                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Snowflake"
 
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table."target_column") AS actual_value,
-            time_period,
-            time_period_utc
-        FROM (
+        === "Sensor template for Snowflake"
+
+            ```sql+jinja
+            {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
-                original_table.*,
-            CAST(CURRENT_TIMESTAMP AS date) AS time_period,
-            CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-            FROM ""."<target_schema>"."<target_table>" original_table
-        ) analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "Redshift"
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Snowflake"
 
-    === "Sensor template for Redshift"
-
-        ```sql+jinja
-        {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Redshift"
-
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table."target_column") AS actual_value,
-            CAST(LOCALTIMESTAMP AS date) AS time_period,
-            CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "Snowflake"
-
-    === "Sensor template for Snowflake"
-
-        ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Snowflake"
-
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table."target_column") AS actual_value,
-            CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
-            TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
-        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "Spark"
-
-    === "Sensor template for Spark"
-
-        ```sql+jinja
-        {% import '/dialects/spark.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Spark"
-
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
-            CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-            TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
-        FROM `<target_schema>`.`<target_table>` AS analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "SQL Server"
-
-    === "Sensor template for SQL Server"
-
-        ```sql+jinja
-        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-        SELECT
-            VARP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for SQL Server"
-
-        ```sql
-        SELECT
-            VARP(analyzed_table.[target_column]) AS actual_value,
-            CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
-            CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-        ```
-??? example "Trino"
-
-    === "Sensor template for Trino"
-
-        ```sql+jinja
-        {% import '/dialects/trino.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-        FROM (
+            ```sql
             SELECT
-                original_table.*
-                {{- lib.render_data_grouping_projections('original_table') }}
-                {{- lib.render_time_dimension_projection('original_table') }}
-            FROM {{ lib.render_target_table() }} original_table
-            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-        ) analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Trino"
+                VAR_SAMP(analyzed_table."target_column") AS actual_value,
+                CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
+                TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
+            FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Spark"
 
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table."target_column") AS actual_value,
-            time_period,
-            time_period_utc
-        FROM (
+        === "Sensor template for Spark"
+
+            ```sql+jinja
+            {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
-                original_table.*,
-            CAST(CURRENT_TIMESTAMP AS date) AS time_period,
-            CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-            FROM ""."<target_schema>"."<target_table>" original_table
-        ) analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Spark"
 
+            ```sql
+            SELECT
+                VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
+                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
+                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "SQL Server"
+
+        === "Sensor template for SQL Server"
+
+            ```sql+jinja
+            {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+            SELECT
+                VARP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for SQL Server"
+
+            ```sql
+            SELECT
+                VARP(analyzed_table.[target_column]) AS actual_value,
+                CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
+                CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+            ```
+    ??? example "Trino"
+
+        === "Sensor template for Trino"
+
+            ```sql+jinja
+            {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+            SELECT
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Trino"
+
+            ```sql
+            SELECT
+                VAR_SAMP(analyzed_table."target_column") AS actual_value,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                CAST(CURRENT_TIMESTAMP AS date) AS time_period,
+                CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    
 
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
@@ -1207,14 +1218,11 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="8-18 34-39"
+    ```yaml hl_lines="5-15 31-36"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
-      incremental_time_window:
-        daily_partitioning_recent_days: 7
-        monthly_partitioning_recent_months: 1
       default_grouping_name: group_by_country_and_state
       groupings:
         group_by_country_and_state:
@@ -1250,7 +1258,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [sample_variance](../../../../reference/sensors/column/numeric-column-sensors.md#sample-variance)
+    [sample_variance](../../../reference/sensors/column/numeric-column-sensors.md#sample-variance)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -1605,54 +1613,58 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **monthly sample variance in range**
+
+## monthly sample variance in range
 
 
 **Check description**
-Verifies that the sample variance of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.
+
+Verifies that the sample variance of all values in a column is not outside the set range. Stores the most recent value for each month when the data quality check was evaluated.
 
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_sample_variance_in_range|monitoring|monthly|Reasonableness|[sample_variance](../../../../reference/sensors/column/numeric-column-sensors.md#sample-variance)|[between_floats](../../../../reference/rules/Comparison.md#between-floats)|
+|monthly_sample_variance_in_range|monitoring|monthly|Reasonableness|[sample_variance](../../../reference/sensors/column/numeric-column-sensors.md#sample-variance)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
 
-**Activate check (Shell)**
-Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+**Command-line examples**
 
-```
-dqo> check activate -c=connection_name -ch=monthly_sample_variance_in_range
-```
+Please expand the section below to see the DQOps command-line examples to run or activate the monthly sample variance in range data quality check.
 
-**Run check (Shell)**
-Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+??? example "Managing monthly sample variance in range check from DQOps shell"
 
-```
-dqo> check run -ch=monthly_sample_variance_in_range
-```
+    === "Activate check"
 
-It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
-```
-dqo> check run -c=connection_name -ch=monthly_sample_variance_in_range
-```
+        ```
+        dqo> check activate -c=connection_name -ch=monthly_sample_variance_in_range
+        ```
 
-It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+    === "Run check on connection"
 
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_sample_variance_in_range
-```
+        Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
-**Sample configuration (YAML)**
+        ```
+        dqo> check run -c=connection_name -ch=monthly_sample_variance_in_range
+        ```
+
+    === "Run check on table"
+
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters
+
+        ```
+        dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_sample_variance_in_range
+        ```
+
+**YAML configuration**
+
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="10-22"
+```yaml hl_lines="7-19"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  incremental_time_window:
-    daily_partitioning_recent_days: 7
-    monthly_partitioning_recent_months: 1
   columns:
     target_column:
       monitoring_checks:
@@ -1673,333 +1685,335 @@ spec:
 
 ```
 
-Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[sample_variance](../../../../reference/sensors/column/numeric-column-sensors.md#sample-variance)
-[sensor](../../../dqo-concepts/sensors/sensors.md).
+??? info "Samples of generated SQL queries for each data source type"
 
-??? example "BigQuery"
+    Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
+    [sample_variance](../../../reference/sensors/column/numeric-column-sensors.md#sample-variance)
+    [sensor](../../../dqo-concepts/sensors/sensors.md).
 
-    === "Sensor template for BigQuery"
+    ??? example "BigQuery"
 
-        ```sql+jinja
-        {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for BigQuery"
+        === "Sensor template for BigQuery"
 
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
-            DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-            TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-        FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "Databricks"
+            ```sql+jinja
+            {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+            SELECT
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for BigQuery"
 
-    === "Sensor template for Databricks"
+            ```sql
+            SELECT
+                VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
+                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+            FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Databricks"
 
-        ```sql+jinja
-        {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Databricks"
+        === "Sensor template for Databricks"
 
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
-            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-            TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
-        FROM `<target_schema>`.`<target_table>` AS analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "MySQL"
+            ```sql+jinja
+            {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+            SELECT
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Databricks"
 
-    === "Sensor template for MySQL"
+            ```sql
+            SELECT
+                VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "MySQL"
 
-        ```sql+jinja
-        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for MySQL"
+        === "Sensor template for MySQL"
 
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
-            DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
-            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
-        FROM `<target_table>` AS analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "Oracle"
+            ```sql+jinja
+            {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            SELECT
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MySQL"
 
-    === "Sensor template for Oracle"
+            ```sql
+            SELECT
+                VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
+                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
+            FROM `<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Oracle"
 
-        ```sql+jinja
-        {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        === "Sensor template for Oracle"
+
+            ```sql+jinja
+            {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+            SELECT
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                    {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Oracle"
+
+            ```sql
+            SELECT
+                VAR_SAMP(analyzed_table."target_column") AS actual_value,
+                time_period,
+                time_period_utc
+            FROM(
+                SELECT
+                    original_table.*,
+                TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
+                CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "PostgreSQL"
+
+        === "Sensor template for PostgreSQL"
+
+            ```sql+jinja
+            {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+            SELECT
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for PostgreSQL"
+
+            ```sql
+            SELECT
+                VAR_SAMP(analyzed_table."target_column") AS actual_value,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            SELECT
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-        FROM(
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+
+            ```sql
             SELECT
-                original_table.*
-                {{- lib.render_data_grouping_projections('original_table') }}
-                {{- lib.render_time_dimension_projection('original_table') }}
-            FROM {{ lib.render_target_table() }} original_table
-            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-        ) analyzed_table
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Oracle"
+                VAR_SAMP(analyzed_table."target_column") AS actual_value,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Redshift"
 
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table."target_column") AS actual_value,
-            time_period,
-            time_period_utc
-        FROM(
+        === "Sensor template for Redshift"
+
+            ```sql+jinja
+            {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
-                original_table.*,
-            TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
-            CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "<target_schema>"."<target_table>" original_table
-        ) analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "PostgreSQL"
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Redshift"
 
-    === "Sensor template for PostgreSQL"
-
-        ```sql+jinja
-        {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for PostgreSQL"
-
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table."target_column") AS actual_value,
-            DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-            CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "Presto"
-
-    === "Sensor template for Presto"
-
-        ```sql+jinja
-        {% import '/dialects/presto.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-        FROM (
+            ```sql
             SELECT
-                original_table.*
-                {{- lib.render_data_grouping_projections('original_table') }}
-                {{- lib.render_time_dimension_projection('original_table') }}
-            FROM {{ lib.render_target_table() }} original_table
-            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-        ) analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Presto"
+                VAR_SAMP(analyzed_table."target_column") AS actual_value,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Snowflake"
 
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table."target_column") AS actual_value,
-            time_period,
-            time_period_utc
-        FROM (
+        === "Sensor template for Snowflake"
+
+            ```sql+jinja
+            {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
-                original_table.*,
-            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-            CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-            FROM ""."<target_schema>"."<target_table>" original_table
-        ) analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "Redshift"
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Snowflake"
 
-    === "Sensor template for Redshift"
-
-        ```sql+jinja
-        {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Redshift"
-
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table."target_column") AS actual_value,
-            DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-            CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "Snowflake"
-
-    === "Sensor template for Snowflake"
-
-        ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Snowflake"
-
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table."target_column") AS actual_value,
-            DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
-            TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
-        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "Spark"
-
-    === "Sensor template for Spark"
-
-        ```sql+jinja
-        {% import '/dialects/spark.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Spark"
-
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
-            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
-            TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
-        FROM `<target_schema>`.`<target_table>` AS analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "SQL Server"
-
-    === "Sensor template for SQL Server"
-
-        ```sql+jinja
-        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-        SELECT
-            VARP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for SQL Server"
-
-        ```sql
-        SELECT
-            VARP(analyzed_table.[target_column]) AS actual_value,
-            DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
-            CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-        ```
-??? example "Trino"
-
-    === "Sensor template for Trino"
-
-        ```sql+jinja
-        {% import '/dialects/trino.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-        FROM (
+            ```sql
             SELECT
-                original_table.*
-                {{- lib.render_data_grouping_projections('original_table') }}
-                {{- lib.render_time_dimension_projection('original_table') }}
-            FROM {{ lib.render_target_table() }} original_table
-            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-        ) analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Trino"
+                VAR_SAMP(analyzed_table."target_column") AS actual_value,
+                DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
+                TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+            FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Spark"
 
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table."target_column") AS actual_value,
-            time_period,
-            time_period_utc
-        FROM (
+        === "Sensor template for Spark"
+
+            ```sql+jinja
+            {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
-                original_table.*,
-            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
-            CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-            FROM ""."<target_schema>"."<target_table>" original_table
-        ) analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Spark"
 
+            ```sql
+            SELECT
+                VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "SQL Server"
+
+        === "Sensor template for SQL Server"
+
+            ```sql+jinja
+            {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+            SELECT
+                VARP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for SQL Server"
+
+            ```sql
+            SELECT
+                VARP(analyzed_table.[target_column]) AS actual_value,
+                DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
+                CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+            ```
+    ??? example "Trino"
+
+        === "Sensor template for Trino"
+
+            ```sql+jinja
+            {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+            SELECT
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Trino"
+
+            ```sql
+            SELECT
+                VAR_SAMP(analyzed_table."target_column") AS actual_value,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    
 
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
@@ -2008,14 +2022,11 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="8-18 34-39"
+    ```yaml hl_lines="5-15 31-36"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
-      incremental_time_window:
-        daily_partitioning_recent_days: 7
-        monthly_partitioning_recent_months: 1
       default_grouping_name: group_by_country_and_state
       groupings:
         group_by_country_and_state:
@@ -2051,7 +2062,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [sample_variance](../../../../reference/sensors/column/numeric-column-sensors.md#sample-variance)
+    [sample_variance](../../../reference/sensors/column/numeric-column-sensors.md#sample-variance)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -2406,43 +2417,50 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **daily partition sample variance in range**
+
+## daily partition sample variance in range
 
 
 **Check description**
+
 Verifies that the sample variance of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.
 
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_sample_variance_in_range|partitioned|daily|Reasonableness|[sample_variance](../../../../reference/sensors/column/numeric-column-sensors.md#sample-variance)|[between_floats](../../../../reference/rules/Comparison.md#between-floats)|
+|daily_partition_sample_variance_in_range|partitioned|daily|Reasonableness|[sample_variance](../../../reference/sensors/column/numeric-column-sensors.md#sample-variance)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
 
-**Activate check (Shell)**
-Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+**Command-line examples**
 
-```
-dqo> check activate -c=connection_name -ch=daily_partition_sample_variance_in_range
-```
+Please expand the section below to see the DQOps command-line examples to run or activate the daily partition sample variance in range data quality check.
 
-**Run check (Shell)**
-Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+??? example "Managing daily partition sample variance in range check from DQOps shell"
 
-```
-dqo> check run -ch=daily_partition_sample_variance_in_range
-```
+    === "Activate check"
 
-It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
-```
-dqo> check run -c=connection_name -ch=daily_partition_sample_variance_in_range
-```
+        ```
+        dqo> check activate -c=connection_name -ch=daily_partition_sample_variance_in_range
+        ```
 
-It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+    === "Run check on connection"
 
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_sample_variance_in_range
-```
+        Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
-**Sample configuration (YAML)**
+        ```
+        dqo> check run -c=connection_name -ch=daily_partition_sample_variance_in_range
+        ```
+
+    === "Run check on table"
+
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters
+
+        ```
+        dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_sample_variance_in_range
+        ```
+
+**YAML configuration**
+
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
@@ -2481,337 +2499,339 @@ spec:
 
 ```
 
-Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[sample_variance](../../../../reference/sensors/column/numeric-column-sensors.md#sample-variance)
-[sensor](../../../dqo-concepts/sensors/sensors.md).
+??? info "Samples of generated SQL queries for each data source type"
 
-??? example "BigQuery"
+    Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
+    [sample_variance](../../../reference/sensors/column/numeric-column-sensors.md#sample-variance)
+    [sensor](../../../dqo-concepts/sensors/sensors.md).
 
-    === "Sensor template for BigQuery"
+    ??? example "BigQuery"
 
-        ```sql+jinja
-        {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for BigQuery"
+        === "Sensor template for BigQuery"
 
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
-            CAST(analyzed_table.`date_column` AS DATE) AS time_period,
-            TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
-        FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "Databricks"
+            ```sql+jinja
+            {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+            SELECT
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for BigQuery"
 
-    === "Sensor template for Databricks"
+            ```sql
+            SELECT
+                VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
+                CAST(analyzed_table.`date_column` AS DATE) AS time_period,
+                TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
+            FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Databricks"
 
-        ```sql+jinja
-        {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Databricks"
+        === "Sensor template for Databricks"
 
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
-            CAST(analyzed_table.`date_column` AS DATE) AS time_period,
-            TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
-        FROM `<target_schema>`.`<target_table>` AS analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "MySQL"
+            ```sql+jinja
+            {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+            SELECT
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Databricks"
 
-    === "Sensor template for MySQL"
+            ```sql
+            SELECT
+                VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
+                CAST(analyzed_table.`date_column` AS DATE) AS time_period,
+                TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "MySQL"
 
-        ```sql+jinja
-        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for MySQL"
+        === "Sensor template for MySQL"
 
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
-            DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00') AS time_period,
-            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00'))) AS time_period_utc
-        FROM `<target_table>` AS analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "Oracle"
+            ```sql+jinja
+            {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            SELECT
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MySQL"
 
-    === "Sensor template for Oracle"
+            ```sql
+            SELECT
+                VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
+                DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+            FROM `<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Oracle"
 
-        ```sql+jinja
-        {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        === "Sensor template for Oracle"
+
+            ```sql+jinja
+            {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+            SELECT
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                    {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Oracle"
+
+            ```sql
+            SELECT
+                VAR_SAMP(analyzed_table."target_column") AS actual_value,
+                time_period,
+                time_period_utc
+            FROM(
+                SELECT
+                    original_table.*,
+                TRUNC(CAST(original_table."date_column" AS DATE)) AS time_period,
+                CAST(TRUNC(CAST(original_table."date_column" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "PostgreSQL"
+
+        === "Sensor template for PostgreSQL"
+
+            ```sql+jinja
+            {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+            SELECT
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for PostgreSQL"
+
+            ```sql
+            SELECT
+                VAR_SAMP(analyzed_table."target_column") AS actual_value,
+                CAST(analyzed_table."date_column" AS date) AS time_period,
+                CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            SELECT
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-        FROM(
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+
+            ```sql
             SELECT
-                original_table.*
-                {{- lib.render_data_grouping_projections('original_table') }}
-                {{- lib.render_time_dimension_projection('original_table') }}
-            FROM {{ lib.render_target_table() }} original_table
-            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-        ) analyzed_table
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Oracle"
+                VAR_SAMP(analyzed_table."target_column") AS actual_value,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                CAST(original_table."date_column" AS date) AS time_period,
+                CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Redshift"
 
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table."target_column") AS actual_value,
-            time_period,
-            time_period_utc
-        FROM(
+        === "Sensor template for Redshift"
+
+            ```sql+jinja
+            {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
-                original_table.*,
-            TRUNC(CAST(original_table."date_column" AS DATE)) AS time_period,
-            CAST(TRUNC(CAST(original_table."date_column" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "<target_schema>"."<target_table>" original_table
-        ) analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "PostgreSQL"
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Redshift"
 
-    === "Sensor template for PostgreSQL"
-
-        ```sql+jinja
-        {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for PostgreSQL"
-
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table."target_column") AS actual_value,
-            CAST(analyzed_table."date_column" AS date) AS time_period,
-            CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "Presto"
-
-    === "Sensor template for Presto"
-
-        ```sql+jinja
-        {% import '/dialects/presto.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-        FROM (
+            ```sql
             SELECT
-                original_table.*
-                {{- lib.render_data_grouping_projections('original_table') }}
-                {{- lib.render_time_dimension_projection('original_table') }}
-            FROM {{ lib.render_target_table() }} original_table
-            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-        ) analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Presto"
+                VAR_SAMP(analyzed_table."target_column") AS actual_value,
+                CAST(analyzed_table."date_column" AS date) AS time_period,
+                CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Snowflake"
 
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table."target_column") AS actual_value,
-            time_period,
-            time_period_utc
-        FROM (
+        === "Sensor template for Snowflake"
+
+            ```sql+jinja
+            {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
-                original_table.*,
-            CAST(original_table."date_column" AS date) AS time_period,
-            CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-            FROM ""."<target_schema>"."<target_table>" original_table
-        ) analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "Redshift"
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Snowflake"
 
-    === "Sensor template for Redshift"
+            ```sql
+            SELECT
+                VAR_SAMP(analyzed_table."target_column") AS actual_value,
+                CAST(analyzed_table."date_column" AS date) AS time_period,
+                TO_TIMESTAMP(CAST(analyzed_table."date_column" AS date)) AS time_period_utc
+            FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Spark"
 
-        ```sql+jinja
-        {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Redshift"
+        === "Sensor template for Spark"
 
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table."target_column") AS actual_value,
-            CAST(analyzed_table."date_column" AS date) AS time_period,
-            CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "Snowflake"
+            ```sql+jinja
+            {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+            SELECT
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Spark"
 
-    === "Sensor template for Snowflake"
+            ```sql
+            SELECT
+                VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
+                CAST(analyzed_table.`date_column` AS DATE) AS time_period,
+                TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "SQL Server"
 
-        ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Snowflake"
+        === "Sensor template for SQL Server"
 
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table."target_column") AS actual_value,
-            CAST(analyzed_table."date_column" AS date) AS time_period,
-            TO_TIMESTAMP(CAST(analyzed_table."date_column" AS date)) AS time_period_utc
-        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "Spark"
+            ```sql+jinja
+            {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+            SELECT
+                VARP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for SQL Server"
 
-    === "Sensor template for Spark"
-
-        ```sql+jinja
-        {% import '/dialects/spark.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Spark"
-
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
-            CAST(analyzed_table.`date_column` AS DATE) AS time_period,
-            TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
-        FROM `<target_schema>`.`<target_table>` AS analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "SQL Server"
-
-    === "Sensor template for SQL Server"
-
-        ```sql+jinja
-        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-        SELECT
-            VARP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for SQL Server"
-
-        ```sql
-        SELECT
-            VARP(analyzed_table.[target_column]) AS actual_value,
-            CAST(analyzed_table.[date_column] AS date) AS time_period,
-            CAST((CAST(analyzed_table.[date_column] AS date)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-        GROUP BY CAST(analyzed_table.[date_column] AS date), CAST(analyzed_table.[date_column] AS date)
-        ORDER BY CAST(analyzed_table.[date_column] AS date)
-        
+            ```sql
+            SELECT
+                VARP(analyzed_table.[target_column]) AS actual_value,
+                CAST(analyzed_table.[date_column] AS date) AS time_period,
+                CAST((CAST(analyzed_table.[date_column] AS date)) AS DATETIME) AS time_period_utc
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+            GROUP BY CAST(analyzed_table.[date_column] AS date), CAST(analyzed_table.[date_column] AS date)
+            ORDER BY CAST(analyzed_table.[date_column] AS date)
             
-        ```
-??? example "Trino"
+                
+            ```
+    ??? example "Trino"
 
-    === "Sensor template for Trino"
+        === "Sensor template for Trino"
 
-        ```sql+jinja
-        {% import '/dialects/trino.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-        FROM (
+            ```sql+jinja
+            {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             SELECT
-                original_table.*
-                {{- lib.render_data_grouping_projections('original_table') }}
-                {{- lib.render_time_dimension_projection('original_table') }}
-            FROM {{ lib.render_target_table() }} original_table
-            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-        ) analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Trino"
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Trino"
 
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table."target_column") AS actual_value,
-            time_period,
-            time_period_utc
-        FROM (
+            ```sql
             SELECT
-                original_table.*,
-            CAST(original_table."date_column" AS date) AS time_period,
-            CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-            FROM ""."<target_schema>"."<target_table>" original_table
-        ) analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-
+                VAR_SAMP(analyzed_table."target_column") AS actual_value,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                CAST(original_table."date_column" AS date) AS time_period,
+                CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    
 
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
@@ -2870,7 +2890,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [sample_variance](../../../../reference/sensors/column/numeric-column-sensors.md#sample-variance)
+    [sample_variance](../../../reference/sensors/column/numeric-column-sensors.md#sample-variance)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -3223,43 +3243,50 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **monthly partition sample variance in range**
+
+## monthly partition sample variance in range
 
 
 **Check description**
+
 Verifies that the sample variance of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.
 
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_sample_variance_in_range|partitioned|monthly|Reasonableness|[sample_variance](../../../../reference/sensors/column/numeric-column-sensors.md#sample-variance)|[between_floats](../../../../reference/rules/Comparison.md#between-floats)|
+|monthly_partition_sample_variance_in_range|partitioned|monthly|Reasonableness|[sample_variance](../../../reference/sensors/column/numeric-column-sensors.md#sample-variance)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
 
-**Activate check (Shell)**
-Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+**Command-line examples**
 
-```
-dqo> check activate -c=connection_name -ch=monthly_partition_sample_variance_in_range
-```
+Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition sample variance in range data quality check.
 
-**Run check (Shell)**
-Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+??? example "Managing monthly partition sample variance in range check from DQOps shell"
 
-```
-dqo> check run -ch=monthly_partition_sample_variance_in_range
-```
+    === "Activate check"
 
-It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
-```
-dqo> check run -c=connection_name -ch=monthly_partition_sample_variance_in_range
-```
+        ```
+        dqo> check activate -c=connection_name -ch=monthly_partition_sample_variance_in_range
+        ```
 
-It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+    === "Run check on connection"
 
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_partition_sample_variance_in_range
-```
+        Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
-**Sample configuration (YAML)**
+        ```
+        dqo> check run -c=connection_name -ch=monthly_partition_sample_variance_in_range
+        ```
+
+    === "Run check on table"
+
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters
+
+        ```
+        dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_partition_sample_variance_in_range
+        ```
+
+**YAML configuration**
+
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
@@ -3298,337 +3325,339 @@ spec:
 
 ```
 
-Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[sample_variance](../../../../reference/sensors/column/numeric-column-sensors.md#sample-variance)
-[sensor](../../../dqo-concepts/sensors/sensors.md).
+??? info "Samples of generated SQL queries for each data source type"
 
-??? example "BigQuery"
+    Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
+    [sample_variance](../../../reference/sensors/column/numeric-column-sensors.md#sample-variance)
+    [sensor](../../../dqo-concepts/sensors/sensors.md).
 
-    === "Sensor template for BigQuery"
+    ??? example "BigQuery"
 
-        ```sql+jinja
-        {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for BigQuery"
+        === "Sensor template for BigQuery"
 
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
-            DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH) AS time_period,
-            TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH)) AS time_period_utc
-        FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "Databricks"
+            ```sql+jinja
+            {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+            SELECT
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for BigQuery"
 
-    === "Sensor template for Databricks"
+            ```sql
+            SELECT
+                VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
+                DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH) AS time_period,
+                TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH)) AS time_period_utc
+            FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Databricks"
 
-        ```sql+jinja
-        {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Databricks"
+        === "Sensor template for Databricks"
 
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
-            DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
-            TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
-        FROM `<target_schema>`.`<target_table>` AS analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "MySQL"
+            ```sql+jinja
+            {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+            SELECT
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Databricks"
 
-    === "Sensor template for MySQL"
+            ```sql
+            SELECT
+                VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
+                DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "MySQL"
 
-        ```sql+jinja
-        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for MySQL"
+        === "Sensor template for MySQL"
 
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
-            DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00') AS time_period,
-            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00'))) AS time_period_utc
-        FROM `<target_table>` AS analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "Oracle"
+            ```sql+jinja
+            {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            SELECT
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MySQL"
 
-    === "Sensor template for Oracle"
+            ```sql
+            SELECT
+                VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
+                DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00'))) AS time_period_utc
+            FROM `<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Oracle"
 
-        ```sql+jinja
-        {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        === "Sensor template for Oracle"
+
+            ```sql+jinja
+            {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+            SELECT
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                    {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM(
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Oracle"
+
+            ```sql
+            SELECT
+                VAR_SAMP(analyzed_table."target_column") AS actual_value,
+                time_period,
+                time_period_utc
+            FROM(
+                SELECT
+                    original_table.*,
+                TRUNC(CAST(original_table."date_column" AS DATE), 'MONTH') AS time_period,
+                CAST(TRUNC(CAST(original_table."date_column" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "PostgreSQL"
+
+        === "Sensor template for PostgreSQL"
+
+            ```sql+jinja
+            {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+            SELECT
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for PostgreSQL"
+
+            ```sql
+            SELECT
+                VAR_SAMP(analyzed_table."target_column") AS actual_value,
+                DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            SELECT
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-        FROM(
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+
+            ```sql
             SELECT
-                original_table.*
-                {{- lib.render_data_grouping_projections('original_table') }}
-                {{- lib.render_time_dimension_projection('original_table') }}
-            FROM {{ lib.render_target_table() }} original_table
-            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-        ) analyzed_table
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Oracle"
+                VAR_SAMP(analyzed_table."target_column") AS actual_value,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Redshift"
 
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table."target_column") AS actual_value,
-            time_period,
-            time_period_utc
-        FROM(
+        === "Sensor template for Redshift"
+
+            ```sql+jinja
+            {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
-                original_table.*,
-            TRUNC(CAST(original_table."date_column" AS DATE), 'MONTH') AS time_period,
-            CAST(TRUNC(CAST(original_table."date_column" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "<target_schema>"."<target_table>" original_table
-        ) analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "PostgreSQL"
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Redshift"
 
-    === "Sensor template for PostgreSQL"
-
-        ```sql+jinja
-        {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for PostgreSQL"
-
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table."target_column") AS actual_value,
-            DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
-            CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "Presto"
-
-    === "Sensor template for Presto"
-
-        ```sql+jinja
-        {% import '/dialects/presto.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-        FROM (
+            ```sql
             SELECT
-                original_table.*
-                {{- lib.render_data_grouping_projections('original_table') }}
-                {{- lib.render_time_dimension_projection('original_table') }}
-            FROM {{ lib.render_target_table() }} original_table
-            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-        ) analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Presto"
+                VAR_SAMP(analyzed_table."target_column") AS actual_value,
+                DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Snowflake"
 
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table."target_column") AS actual_value,
-            time_period,
-            time_period_utc
-        FROM (
+        === "Sensor template for Snowflake"
+
+            ```sql+jinja
+            {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
-                original_table.*,
-            DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
-            CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-            FROM ""."<target_schema>"."<target_table>" original_table
-        ) analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "Redshift"
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Snowflake"
 
-    === "Sensor template for Redshift"
+            ```sql
+            SELECT
+                VAR_SAMP(analyzed_table."target_column") AS actual_value,
+                DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+                TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS time_period_utc
+            FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "Spark"
 
-        ```sql+jinja
-        {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Redshift"
+        === "Sensor template for Spark"
 
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table."target_column") AS actual_value,
-            DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
-            CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "Snowflake"
+            ```sql+jinja
+            {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+            SELECT
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Spark"
 
-    === "Sensor template for Snowflake"
+            ```sql
+            SELECT
+                VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
+                DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "SQL Server"
 
-        ```sql+jinja
-        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Snowflake"
+        === "Sensor template for SQL Server"
 
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table."target_column") AS actual_value,
-            DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
-            TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS time_period_utc
-        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "Spark"
+            ```sql+jinja
+            {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+            SELECT
+                VARP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for SQL Server"
 
-    === "Sensor template for Spark"
-
-        ```sql+jinja
-        {% import '/dialects/spark.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Spark"
-
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table.`target_column`) AS actual_value,
-            DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
-            TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
-        FROM `<target_schema>`.`<target_table>` AS analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-??? example "SQL Server"
-
-    === "Sensor template for SQL Server"
-
-        ```sql+jinja
-        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-        SELECT
-            VARP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for SQL Server"
-
-        ```sql
-        SELECT
-            VARP(analyzed_table.[target_column]) AS actual_value,
-            DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1) AS time_period,
-            CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-        GROUP BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[date_column]), 0)
-        ORDER BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)
-        
+            ```sql
+            SELECT
+                VARP(analyzed_table.[target_column]) AS actual_value,
+                DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1) AS time_period,
+                CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)) AS DATETIME) AS time_period_utc
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+            GROUP BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[date_column]), 0)
+            ORDER BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)
             
-        ```
-??? example "Trino"
+                
+            ```
+    ??? example "Trino"
 
-    === "Sensor template for Trino"
+        === "Sensor template for Trino"
 
-        ```sql+jinja
-        {% import '/dialects/trino.sql.jinja2' as lib with context -%}
-        SELECT
-            VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-        FROM (
+            ```sql+jinja
+            {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             SELECT
-                original_table.*
-                {{- lib.render_data_grouping_projections('original_table') }}
-                {{- lib.render_time_dimension_projection('original_table') }}
-            FROM {{ lib.render_target_table() }} original_table
-            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-        ) analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for Trino"
+                VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Trino"
 
-        ```sql
-        SELECT
-            VAR_SAMP(analyzed_table."target_column") AS actual_value,
-            time_period,
-            time_period_utc
-        FROM (
+            ```sql
             SELECT
-                original_table.*,
-            DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
-            CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-            FROM ""."<target_schema>"."<target_table>" original_table
-        ) analyzed_table
-        GROUP BY time_period, time_period_utc
-        ORDER BY time_period, time_period_utc
-        ```
-
+                VAR_SAMP(analyzed_table."target_column") AS actual_value,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    
 
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
@@ -3687,7 +3716,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [sample_variance](../../../../reference/sensors/column/numeric-column-sensors.md#sample-variance)
+    [sample_variance](../../../reference/sensors/column/numeric-column-sensors.md#sample-variance)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -4039,3 +4068,5 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 
 ___
+
+

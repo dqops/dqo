@@ -12,6 +12,9 @@ if TYPE_CHECKING:
     from ..models.table_availability_monthly_monitoring_checks_spec import (
         TableAvailabilityMonthlyMonitoringChecksSpec,
     )
+    from ..models.table_custom_sql_monthly_monitoring_checks_spec import (
+        TableCustomSqlMonthlyMonitoringChecksSpec,
+    )
     from ..models.table_monthly_monitoring_check_categories_spec_comparisons import (
         TableMonthlyMonitoringCheckCategoriesSpecComparisons,
     )
@@ -20,9 +23,6 @@ if TYPE_CHECKING:
     )
     from ..models.table_schema_monthly_monitoring_checks_spec import (
         TableSchemaMonthlyMonitoringChecksSpec,
-    )
-    from ..models.table_sql_monthly_monitoring_checks_spec import (
-        TableSqlMonthlyMonitoringChecksSpec,
     )
     from ..models.table_timeliness_monthly_monitoring_checks_spec import (
         TableTimelinessMonthlyMonitoringChecksSpec,
@@ -44,7 +44,7 @@ class TableMonthlyMonitoringCheckCategoriesSpec:
         volume (Union[Unset, TableVolumeMonthlyMonitoringChecksSpec]):
         timeliness (Union[Unset, TableTimelinessMonthlyMonitoringChecksSpec]):
         accuracy (Union[Unset, TableAccuracyMonthlyMonitoringChecksSpec]):
-        sql (Union[Unset, TableSqlMonthlyMonitoringChecksSpec]):
+        custom_sql (Union[Unset, TableCustomSqlMonthlyMonitoringChecksSpec]):
         availability (Union[Unset, TableAvailabilityMonthlyMonitoringChecksSpec]):
         schema (Union[Unset, TableSchemaMonthlyMonitoringChecksSpec]):
         comparisons (Union[Unset, TableMonthlyMonitoringCheckCategoriesSpecComparisons]): Dictionary of configuration of
@@ -56,7 +56,7 @@ class TableMonthlyMonitoringCheckCategoriesSpec:
     volume: Union[Unset, "TableVolumeMonthlyMonitoringChecksSpec"] = UNSET
     timeliness: Union[Unset, "TableTimelinessMonthlyMonitoringChecksSpec"] = UNSET
     accuracy: Union[Unset, "TableAccuracyMonthlyMonitoringChecksSpec"] = UNSET
-    sql: Union[Unset, "TableSqlMonthlyMonitoringChecksSpec"] = UNSET
+    custom_sql: Union[Unset, "TableCustomSqlMonthlyMonitoringChecksSpec"] = UNSET
     availability: Union[Unset, "TableAvailabilityMonthlyMonitoringChecksSpec"] = UNSET
     schema: Union[Unset, "TableSchemaMonthlyMonitoringChecksSpec"] = UNSET
     comparisons: Union[
@@ -81,9 +81,9 @@ class TableMonthlyMonitoringCheckCategoriesSpec:
         if not isinstance(self.accuracy, Unset):
             accuracy = self.accuracy.to_dict()
 
-        sql: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.sql, Unset):
-            sql = self.sql.to_dict()
+        custom_sql: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_sql, Unset):
+            custom_sql = self.custom_sql.to_dict()
 
         availability: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.availability, Unset):
@@ -108,8 +108,8 @@ class TableMonthlyMonitoringCheckCategoriesSpec:
             field_dict["timeliness"] = timeliness
         if accuracy is not UNSET:
             field_dict["accuracy"] = accuracy
-        if sql is not UNSET:
-            field_dict["sql"] = sql
+        if custom_sql is not UNSET:
+            field_dict["custom_sql"] = custom_sql
         if availability is not UNSET:
             field_dict["availability"] = availability
         if schema is not UNSET:
@@ -127,6 +127,9 @@ class TableMonthlyMonitoringCheckCategoriesSpec:
         from ..models.table_availability_monthly_monitoring_checks_spec import (
             TableAvailabilityMonthlyMonitoringChecksSpec,
         )
+        from ..models.table_custom_sql_monthly_monitoring_checks_spec import (
+            TableCustomSqlMonthlyMonitoringChecksSpec,
+        )
         from ..models.table_monthly_monitoring_check_categories_spec_comparisons import (
             TableMonthlyMonitoringCheckCategoriesSpecComparisons,
         )
@@ -135,9 +138,6 @@ class TableMonthlyMonitoringCheckCategoriesSpec:
         )
         from ..models.table_schema_monthly_monitoring_checks_spec import (
             TableSchemaMonthlyMonitoringChecksSpec,
-        )
-        from ..models.table_sql_monthly_monitoring_checks_spec import (
-            TableSqlMonthlyMonitoringChecksSpec,
         )
         from ..models.table_timeliness_monthly_monitoring_checks_spec import (
             TableTimelinessMonthlyMonitoringChecksSpec,
@@ -177,12 +177,14 @@ class TableMonthlyMonitoringCheckCategoriesSpec:
         else:
             accuracy = TableAccuracyMonthlyMonitoringChecksSpec.from_dict(_accuracy)
 
-        _sql = d.pop("sql", UNSET)
-        sql: Union[Unset, TableSqlMonthlyMonitoringChecksSpec]
-        if isinstance(_sql, Unset):
-            sql = UNSET
+        _custom_sql = d.pop("custom_sql", UNSET)
+        custom_sql: Union[Unset, TableCustomSqlMonthlyMonitoringChecksSpec]
+        if isinstance(_custom_sql, Unset):
+            custom_sql = UNSET
         else:
-            sql = TableSqlMonthlyMonitoringChecksSpec.from_dict(_sql)
+            custom_sql = TableCustomSqlMonthlyMonitoringChecksSpec.from_dict(
+                _custom_sql
+            )
 
         _availability = d.pop("availability", UNSET)
         availability: Union[Unset, TableAvailabilityMonthlyMonitoringChecksSpec]
@@ -216,7 +218,7 @@ class TableMonthlyMonitoringCheckCategoriesSpec:
             volume=volume,
             timeliness=timeliness,
             accuracy=accuracy,
-            sql=sql,
+            custom_sql=custom_sql,
             availability=availability,
             schema=schema,
             comparisons=comparisons,

@@ -7,9 +7,15 @@ from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.comment_spec import CommentSpec
-    from ..models.max_count_rule_0_parameters_spec import MaxCountRule0ParametersSpec
-    from ..models.max_count_rule_10_parameters_spec import MaxCountRule10ParametersSpec
-    from ..models.max_count_rule_15_parameters_spec import MaxCountRule15ParametersSpec
+    from ..models.max_count_rule_0_error_parameters_spec import (
+        MaxCountRule0ErrorParametersSpec,
+    )
+    from ..models.max_count_rule_0_warning_parameters_spec import (
+        MaxCountRule0WarningParametersSpec,
+    )
+    from ..models.max_count_rule_100_parameters_spec import (
+        MaxCountRule100ParametersSpec,
+    )
     from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
     from ..models.table_sql_condition_failed_count_sensor_parameters_spec import (
         TableSqlConditionFailedCountSensorParametersSpec,
@@ -45,9 +51,9 @@ class TableSqlConditionFailedCountCheckSpec:
             quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent
             table.
         parameters (Union[Unset, TableSqlConditionFailedCountSensorParametersSpec]):
-        warning (Union[Unset, MaxCountRule15ParametersSpec]):
-        error (Union[Unset, MaxCountRule10ParametersSpec]):
-        fatal (Union[Unset, MaxCountRule0ParametersSpec]):
+        warning (Union[Unset, MaxCountRule0WarningParametersSpec]):
+        error (Union[Unset, MaxCountRule0ErrorParametersSpec]):
+        fatal (Union[Unset, MaxCountRule100ParametersSpec]):
     """
 
     schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
@@ -59,9 +65,9 @@ class TableSqlConditionFailedCountCheckSpec:
     display_name: Union[Unset, str] = UNSET
     data_grouping: Union[Unset, str] = UNSET
     parameters: Union[Unset, "TableSqlConditionFailedCountSensorParametersSpec"] = UNSET
-    warning: Union[Unset, "MaxCountRule15ParametersSpec"] = UNSET
-    error: Union[Unset, "MaxCountRule10ParametersSpec"] = UNSET
-    fatal: Union[Unset, "MaxCountRule0ParametersSpec"] = UNSET
+    warning: Union[Unset, "MaxCountRule0WarningParametersSpec"] = UNSET
+    error: Union[Unset, "MaxCountRule0ErrorParametersSpec"] = UNSET
+    fatal: Union[Unset, "MaxCountRule100ParametersSpec"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -132,14 +138,14 @@ class TableSqlConditionFailedCountCheckSpec:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.comment_spec import CommentSpec
-        from ..models.max_count_rule_0_parameters_spec import (
-            MaxCountRule0ParametersSpec,
+        from ..models.max_count_rule_0_error_parameters_spec import (
+            MaxCountRule0ErrorParametersSpec,
         )
-        from ..models.max_count_rule_10_parameters_spec import (
-            MaxCountRule10ParametersSpec,
+        from ..models.max_count_rule_0_warning_parameters_spec import (
+            MaxCountRule0WarningParametersSpec,
         )
-        from ..models.max_count_rule_15_parameters_spec import (
-            MaxCountRule15ParametersSpec,
+        from ..models.max_count_rule_100_parameters_spec import (
+            MaxCountRule100ParametersSpec,
         )
         from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
         from ..models.table_sql_condition_failed_count_sensor_parameters_spec import (
@@ -183,25 +189,25 @@ class TableSqlConditionFailedCountCheckSpec:
             )
 
         _warning = d.pop("warning", UNSET)
-        warning: Union[Unset, MaxCountRule15ParametersSpec]
+        warning: Union[Unset, MaxCountRule0WarningParametersSpec]
         if isinstance(_warning, Unset):
             warning = UNSET
         else:
-            warning = MaxCountRule15ParametersSpec.from_dict(_warning)
+            warning = MaxCountRule0WarningParametersSpec.from_dict(_warning)
 
         _error = d.pop("error", UNSET)
-        error: Union[Unset, MaxCountRule10ParametersSpec]
+        error: Union[Unset, MaxCountRule0ErrorParametersSpec]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = MaxCountRule10ParametersSpec.from_dict(_error)
+            error = MaxCountRule0ErrorParametersSpec.from_dict(_error)
 
         _fatal = d.pop("fatal", UNSET)
-        fatal: Union[Unset, MaxCountRule0ParametersSpec]
+        fatal: Union[Unset, MaxCountRule100ParametersSpec]
         if isinstance(_fatal, Unset):
             fatal = UNSET
         else:
-            fatal = MaxCountRule0ParametersSpec.from_dict(_fatal)
+            fatal = MaxCountRule100ParametersSpec.from_dict(_fatal)
 
         table_sql_condition_failed_count_check_spec = cls(
             schedule_override=schedule_override,

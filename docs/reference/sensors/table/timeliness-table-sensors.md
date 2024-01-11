@@ -1,16 +1,30 @@
+# Data quality timeliness sensors
+All [data quality sensors](../../../dqo-concepts/sensors/sensors.md) in the **timeliness** category supported by DQOps are listed below. Those sensors are measured on a table level.
 
-## **data freshness**
-**Full sensor name**
-```
-table/timeliness/data_freshness
-```
-**Description**
+---
+
+
+## data freshness
 Table sensor that runs a query calculating maximum days since the most recent event.
 
+**Sensor summary**
+
+The data freshness sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| table | timeliness | `table/timeliness/data_freshness` | [sensors/table/timeliness](https://github.com/dqops/dqo/tree/develop/home/sensors/table/timeliness/) |
 
 
 
-**SQL Template (Jinja2)**
+
+
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
 === "BigQuery"
 
     ```sql+jinja
@@ -464,18 +478,29 @@ Table sensor that runs a query calculating maximum days since the most recent ev
     ```
 ___
 
-## **data ingestion delay**
-**Full sensor name**
-```
-table/timeliness/data_ingestion_delay
-```
-**Description**
+
+
+## data ingestion delay
 Table sensor that runs a query calculating the time difference in days between the most recent transaction timestamp and the most recent data loading timestamp.
 
+**Sensor summary**
+
+The data ingestion delay sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| table | timeliness | `table/timeliness/data_ingestion_delay` | [sensors/table/timeliness](https://github.com/dqops/dqo/tree/develop/home/sensors/table/timeliness/) |
 
 
 
-**SQL Template (Jinja2)**
+
+
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
 === "BigQuery"
 
     ```sql+jinja
@@ -971,18 +996,29 @@ Table sensor that runs a query calculating the time difference in days between t
     ```
 ___
 
-## **data staleness**
-**Full sensor name**
-```
-table/timeliness/data_staleness
-```
-**Description**
+
+
+## data staleness
 Table sensor that runs a query calculating the time difference in days between the current date and most recent data loading timestamp (staleness).
 
+**Sensor summary**
+
+The data staleness sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| table | timeliness | `table/timeliness/data_staleness` | [sensors/table/timeliness](https://github.com/dqops/dqo/tree/develop/home/sensors/table/timeliness/) |
 
 
 
-**SQL Template (Jinja2)**
+
+
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
 === "BigQuery"
 
     ```sql+jinja
@@ -1437,18 +1473,29 @@ Table sensor that runs a query calculating the time difference in days between t
     ```
 ___
 
-## **partition reload lag**
-**Full sensor name**
-```
-table/timeliness/partition_reload_lag
-```
-**Description**
+
+
+## partition reload lag
 Table sensor that runs a query calculating maximum difference in days between ingestion timestamp and event timestamp rows.
 
+**Sensor summary**
+
+The partition reload lag sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| table | timeliness | `table/timeliness/partition_reload_lag` | [sensors/table/timeliness](https://github.com/dqops/dqo/tree/develop/home/sensors/table/timeliness/) |
 
 
 
-**SQL Template (Jinja2)**
+
+
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
 === "BigQuery"
 
     ```sql+jinja
@@ -1992,3 +2039,6 @@ Table sensor that runs a query calculating maximum difference in days between in
     {{- lib.render_order_by() -}}
     ```
 ___
+
+
+

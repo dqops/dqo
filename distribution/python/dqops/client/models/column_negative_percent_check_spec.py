@@ -10,11 +10,11 @@ if TYPE_CHECKING:
         ColumnNumericNegativePercentSensorParametersSpec,
     )
     from ..models.comment_spec import CommentSpec
-    from ..models.max_percent_rule_0_parameters_spec import (
-        MaxPercentRule0ParametersSpec,
+    from ..models.max_percent_rule_0_error_parameters_spec import (
+        MaxPercentRule0ErrorParametersSpec,
     )
-    from ..models.max_percent_rule_2_parameters_spec import (
-        MaxPercentRule2ParametersSpec,
+    from ..models.max_percent_rule_0_warning_parameters_spec import (
+        MaxPercentRule0WarningParametersSpec,
     )
     from ..models.max_percent_rule_5_parameters_spec import (
         MaxPercentRule5ParametersSpec,
@@ -51,8 +51,8 @@ class ColumnNegativePercentCheckSpec:
             quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent
             table.
         parameters (Union[Unset, ColumnNumericNegativePercentSensorParametersSpec]):
-        warning (Union[Unset, MaxPercentRule0ParametersSpec]):
-        error (Union[Unset, MaxPercentRule2ParametersSpec]):
+        warning (Union[Unset, MaxPercentRule0WarningParametersSpec]):
+        error (Union[Unset, MaxPercentRule0ErrorParametersSpec]):
         fatal (Union[Unset, MaxPercentRule5ParametersSpec]):
     """
 
@@ -65,8 +65,8 @@ class ColumnNegativePercentCheckSpec:
     display_name: Union[Unset, str] = UNSET
     data_grouping: Union[Unset, str] = UNSET
     parameters: Union[Unset, "ColumnNumericNegativePercentSensorParametersSpec"] = UNSET
-    warning: Union[Unset, "MaxPercentRule0ParametersSpec"] = UNSET
-    error: Union[Unset, "MaxPercentRule2ParametersSpec"] = UNSET
+    warning: Union[Unset, "MaxPercentRule0WarningParametersSpec"] = UNSET
+    error: Union[Unset, "MaxPercentRule0ErrorParametersSpec"] = UNSET
     fatal: Union[Unset, "MaxPercentRule5ParametersSpec"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -141,11 +141,11 @@ class ColumnNegativePercentCheckSpec:
             ColumnNumericNegativePercentSensorParametersSpec,
         )
         from ..models.comment_spec import CommentSpec
-        from ..models.max_percent_rule_0_parameters_spec import (
-            MaxPercentRule0ParametersSpec,
+        from ..models.max_percent_rule_0_error_parameters_spec import (
+            MaxPercentRule0ErrorParametersSpec,
         )
-        from ..models.max_percent_rule_2_parameters_spec import (
-            MaxPercentRule2ParametersSpec,
+        from ..models.max_percent_rule_0_warning_parameters_spec import (
+            MaxPercentRule0WarningParametersSpec,
         )
         from ..models.max_percent_rule_5_parameters_spec import (
             MaxPercentRule5ParametersSpec,
@@ -189,18 +189,18 @@ class ColumnNegativePercentCheckSpec:
             )
 
         _warning = d.pop("warning", UNSET)
-        warning: Union[Unset, MaxPercentRule0ParametersSpec]
+        warning: Union[Unset, MaxPercentRule0WarningParametersSpec]
         if isinstance(_warning, Unset):
             warning = UNSET
         else:
-            warning = MaxPercentRule0ParametersSpec.from_dict(_warning)
+            warning = MaxPercentRule0WarningParametersSpec.from_dict(_warning)
 
         _error = d.pop("error", UNSET)
-        error: Union[Unset, MaxPercentRule2ParametersSpec]
+        error: Union[Unset, MaxPercentRule0ErrorParametersSpec]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = MaxPercentRule2ParametersSpec.from_dict(_error)
+            error = MaxPercentRule0ErrorParametersSpec.from_dict(_error)
 
         _fatal = d.pop("fatal", UNSET)
         fatal: Union[Unset, MaxPercentRule5ParametersSpec]

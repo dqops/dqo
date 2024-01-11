@@ -11,13 +11,13 @@ Detailed results for a single sensor. Represent one row in the sensor readouts t
 |id|Sensor readout primary key|string|
 |check_name|Check name|string|
 |check_display_name|Check display name|string|
-|[check_type](../table_comparisons.md#CheckType)|Check type|[CheckType](../table_comparisons.md#CheckType)|
+|[check_type](./table_comparisons.md#CheckType)|Check type|[CheckType](./table_comparisons.md#CheckType)|
 |actual_value|Actual value|double|
 |expected_value|Expected value|double|
 |column_name|Column name|string|
 |data_group|Data group|string|
 |duration_ms|Duration (ms)|integer|
-|[time_gradient](../errors.md#timeperiodgradient)|Time gradient|[TimePeriodGradient](../errors.md#timeperiodgradient)|
+|[time_gradient](./errors.md#timeperiodgradient)|Time gradient|[TimePeriodGradient](./errors.md#timeperiodgradient)|
 |time_period|Time period|datetime|
 |provider|Provider name|string|
 |quality_dimension|Data quality dimension|string|
@@ -37,7 +37,7 @@ Sensor readout detailed results. Returned in the context of a single data group,
 |---------------|---------------------------------|-----------|
 |check_name|Check name|string|
 |check_display_name|Check display name|string|
-|[check_type](../table_comparisons.md#CheckType)|Check type|[CheckType](../table_comparisons.md#CheckType)|
+|[check_type](./table_comparisons.md#CheckType)|Check type|[CheckType](./table_comparisons.md#CheckType)|
 |check_hash|Check hash|long|
 |check_category|Check category name|string|
 |sensor_name|Sensor name|string|

@@ -1,29 +1,46 @@
-# table
+# dqo table command
+
+
+Modify or list tables
+
+
 
 ___
-### **dqo table import**
+
+## dqo table import
 
 Import tables from a specified database
 
+
 **Description**
+
 
 Import the tables from the specified database into the application. It allows the user to import the tables from the database into the application for performing various database operations.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] table import [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
               [-s=<schema>] [-t=<table>]
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> table import [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
               [-s=<schema>] [-t=<table>]
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
@@ -38,28 +55,42 @@ dqo> table import [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
 
 
 
+
+
 ___
-### **dqo table edit**
+
+## dqo table edit
 
 Edit table that matches a given condition
 
+
 **Description**
+
 
 Edit the table or tables that match the filter conditions specified in the options. It allows the user to modify the details of an existing table in the application.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] table edit [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>] [-t=<table>]
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> table edit [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>] [-t=<table>]
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
@@ -73,30 +104,44 @@ dqo> table edit [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>] [-t=<tab
 
 
 
+
+
 ___
-### **dqo table add**
+
+## dqo table add
 
 Add table with specified name
 
+
 **Description**
+
 
 Add a new table with the specified name to the database. It allows the user to create a new table in the application for performing various operations.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] table add [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
            [-t=<fullTableName>]
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> table add [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
            [-t=<fullTableName>]
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
@@ -110,30 +155,44 @@ dqo> table add [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
 
 
 
+
+
 ___
-### **dqo table remove**
+
+## dqo table remove
 
 Remove tables that match a given condition
 
+
 **Description**
+
 
 Remove one or more tables that match a given condition. It allows user to use various filters, such as table names to narrow down the set of tables to remove.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] table remove [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
               [-t=<fullTableName>]
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> table remove [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
               [-t=<fullTableName>]
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
@@ -147,30 +206,44 @@ dqo> table remove [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
 
 
 
+
+
 ___
-### **dqo table update**
+
+## dqo table update
 
 Update tables that match a given condition
 
+
 **Description**
+
 
 Update the structure of one or more tables that match a given condition. It allows user to use various filters, such as table names  to narrow down the set of tables to update.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] table update [-h] [-fw] [-hl] [-c=<connectionName>] [-n=<newTableName>]
               [-of=<outputFormat>] [-t=<fullTableName>]
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> table update [-h] [-fw] [-hl] [-c=<connectionName>] [-n=<newTableName>]
               [-of=<outputFormat>] [-t=<fullTableName>]
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
@@ -185,30 +258,44 @@ dqo> table update [-h] [-fw] [-hl] [-c=<connectionName>] [-n=<newTableName>]
 
 
 
+
+
 ___
-### **dqo table list**
+
+## dqo table list
 
 List tables filtered by the given conditions
 
+
 **Description**
+
 
 List all the tables that match a given condition. It allows the user to use various filters, such as table name or schema names to list filtered tables.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] table list [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
             [-t=<tableName>] [-d=<dimensions>]... [-l=<labels>]...
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> table list [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
             [-t=<tableName>] [-d=<dimensions>]... [-l=<labels>]...
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
@@ -220,6 +307,8 @@ dqo> table list [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
 |<p id="table list-h">`-h`</p><br/><p id="table list--help">`--help`</p><br/>|Show the help for the command and parameters| ||
 |<p id="table list-l">`-l`</p><br/><p id="table list--label">`--label`</p><br/>|Label filter| ||
 |<p id="table list-of">`-of`</p><br/><p id="table list--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+
+
 
 
 

@@ -1,4 +1,5 @@
-# sensor_readouts
+# DQOps sensor_readouts parquet table schema
+The parquet file schema for the sensor_readouts table stored in the *$DQO_USER_HOME/.data/sensor_readouts* folder in DQOps.
 
 ## Table description
 

@@ -1,29 +1,46 @@
-# sensor
+# dqo sensor command
+
+
+Edit sensor template
+
+
 
 ___
-### **dqo sensor edit**
+
+## dqo sensor edit
 
 Edit sensor that matches a given condition
 
+
 **Description**
+
 
 Allows you to modify the properties of a custom sensor that matches certain condition.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] sensor edit [-h] [-fw] [-hl] [-f=<ext>] [-of=<outputFormat>] [-p=<provider>]
              [-s=<name>]
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> sensor edit [-h] [-fw] [-hl] [-f=<ext>] [-of=<outputFormat>] [-p=<provider>]
              [-s=<name>]
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
@@ -34,6 +51,8 @@ dqo> sensor edit [-h] [-fw] [-hl] [-f=<ext>] [-of=<outputFormat>] [-p=<provider>
 |<p id="sensor edit-of">`-of`</p><br/><p id="sensor edit--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 |<p id="sensor edit-p">`-p`</p><br/><p id="sensor edit--provider">`--provider`</p><br/>|Provider type| |bigquery<br/>snowflake<br/>postgresql<br/>redshift<br/>sqlserver<br/>presto<br/>trino<br/>mysql<br/>oracle<br/>spark<br/>databricks<br/>|
 |<p id="sensor edit-s">`-s`</p><br/><p id="sensor edit--sensor">`--sensor`</p><br/>|Sensor name| ||
+
+
 
 
 

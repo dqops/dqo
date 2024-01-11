@@ -1,3 +1,36 @@
+# DQOps YAML file definitions
+The definition of YAML files used by DQOps to configure the data sources, monitored tables, and the configuration of activated data quality checks.
+
+
+## CheckDefinitionYaml
+Custom check specification that describes a pair of a sensor name and rule name.
+
+
+
+
+
+
+
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|api_version||string| | | |
+|kind||enum|default_schedules<br/>settings<br/>default_notifications<br/>rule<br/>sensor<br/>source<br/>check<br/>dashboards<br/>default_checks<br/>table<br/>provider_sensor<br/>file_index<br/>| | |
+|[spec](./CheckDefinitionYaml.md#CheckDefinitionSpec)||[CheckDefinitionSpec](./CheckDefinitionYaml.md#CheckDefinitionSpec)| | | |
+
+
+
+
+
+
+
+
+
+___
+
 
 ## CheckDefinitionSpec
 Custom data quality check specification. Provides the custom check configuration which is a pair of a sensor name and a rule name.
@@ -10,7 +43,7 @@ Custom data quality check specification. Provides the custom check configuration
 
 
 
-**The structure of this object is described below**
+The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
@@ -29,32 +62,4 @@ Custom data quality check specification. Provides the custom check configuration
 
 ___
 
-## CheckDefinitionYaml
-Custom check specification that describes a pair of a sensor name and rule name.
-
-
-
-
-
-
-
-
-
-**The structure of this object is described below**
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|api_version||string| | | |
-|kind||enum|default_schedules<br/>settings<br/>default_notifications<br/>rule<br/>sensor<br/>source<br/>check<br/>dashboards<br/>default_checks<br/>table<br/>provider_sensor<br/>file_index<br/>| | |
-|[spec](#CheckDefinitionSpec)||[CheckDefinitionSpec](#CheckDefinitionSpec)| | | |
-
-
-
-
-
-
-
-
-
-___
 

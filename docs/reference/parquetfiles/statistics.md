@@ -1,4 +1,5 @@
-# statistics
+# DQOps statistics parquet table schema
+The parquet file schema for the statistics table stored in the *$DQO_USER_HOME/.data/statistics* folder in DQOps.
 
 ## Table description
 

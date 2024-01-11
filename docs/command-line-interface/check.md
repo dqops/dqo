@@ -1,16 +1,27 @@
-# check
+# dqo check command
+
+
+Commands related to checks and rules
+
+
 
 ___
-### **dqo check run**
+
+## dqo check run
 
 Run data quality checks that match a given condition
 
+
 **Description**
+
 
 Run data quality checks on your dataset that match a given condition. The command output is a table with the results that provides insight into the data quality.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] check run [-deh] [--daily-partitioning-include-today] [-fw] [-hl]
            [--monthly-partitioning-include-current-month] [-c=<connection>]
@@ -27,7 +38,9 @@ $ dqo [dqo options...] check run [-deh] [--daily-partitioning-include-today] [-f
            [-l=<labels>]... [-tag=<tags>]...
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> check run [-deh] [--daily-partitioning-include-today] [-fw] [-hl]
            [--monthly-partitioning-include-current-month] [-c=<connection>]
@@ -45,7 +58,11 @@ dqo> check run [-deh] [--daily-partitioning-include-today] [-fw] [-hl]
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
@@ -81,15 +98,23 @@ dqo> check run [-deh] [--daily-partitioning-include-today] [-fw] [-hl]
 
 
 
+
+
 ___
-### **dqo check activate**
+
+## dqo check activate
+
 
 **Description**
+
 
 Activates data quality checks matching specified filters
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] check activate [-hno] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
                 [-ch=<check>] [-col=<column>] [-ct=<checkType>]
@@ -99,7 +124,9 @@ $ dqo [dqo options...] check activate [-hno] [-fw] [-hl] [-c=<connection>] [-cat
                 [-W=<String=String>]...
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> check activate [-hno] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
                 [-ch=<check>] [-col=<column>] [-ct=<checkType>]
@@ -110,7 +137,11 @@ dqo> check activate [-hno] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
@@ -137,15 +168,23 @@ dqo> check activate [-hno] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
 
 
 
+
+
 ___
-### **dqo check deactivate**
+
+## dqo check deactivate
+
 
 **Description**
+
 
 Deactivates data quality checks matching specified filters
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] check deactivate [-hn] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
                   [-ch=<check>] [-col=<column>] [-ct=<checkType>]
@@ -153,7 +192,9 @@ $ dqo [dqo options...] check deactivate [-hn] [-fw] [-hl] [-c=<connection>] [-ca
                   [-t=<table>] [-ts=<timeScale>]
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> check deactivate [-hn] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
                   [-ch=<check>] [-col=<column>] [-ct=<checkType>]
@@ -162,7 +203,11 @@ dqo> check deactivate [-hn] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
@@ -180,6 +225,8 @@ dqo> check deactivate [-hn] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
 |<p id="check deactivate-of">`-of`</p><br/><p id="check deactivate--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 |<p id="check deactivate-s">`-s`</p><br/><p id="check deactivate--sensor">`--sensor`</p><br/>|Data quality sensor name (sensor definition or sensor name), supports patterns like &#x27;table/validity/*&#x27;| ||
 |<p id="check deactivate-ts">`-ts`</p><br/><p id="check deactivate--time-scale">`--time-scale`</p><br/>|Time scale for monitoring and partitioned checks (daily, monthly, etc.)| |daily<br/>monthly<br/>|
+
+
 
 
 

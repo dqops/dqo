@@ -10,8 +10,12 @@ if TYPE_CHECKING:
         ColumnNumericInvalidLatitudeCountSensorParametersSpec,
     )
     from ..models.comment_spec import CommentSpec
-    from ..models.max_count_rule_1_parameters_spec import MaxCountRule1ParametersSpec
-    from ..models.max_count_rule_10_parameters_spec import MaxCountRule10ParametersSpec
+    from ..models.max_count_rule_0_error_parameters_spec import (
+        MaxCountRule0ErrorParametersSpec,
+    )
+    from ..models.max_count_rule_0_warning_parameters_spec import (
+        MaxCountRule0WarningParametersSpec,
+    )
     from ..models.max_count_rule_100_parameters_spec import (
         MaxCountRule100ParametersSpec,
     )
@@ -47,8 +51,8 @@ class ColumnInvalidLatitudeCountCheckSpec:
             quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent
             table.
         parameters (Union[Unset, ColumnNumericInvalidLatitudeCountSensorParametersSpec]):
-        warning (Union[Unset, MaxCountRule1ParametersSpec]):
-        error (Union[Unset, MaxCountRule10ParametersSpec]):
+        warning (Union[Unset, MaxCountRule0WarningParametersSpec]):
+        error (Union[Unset, MaxCountRule0ErrorParametersSpec]):
         fatal (Union[Unset, MaxCountRule100ParametersSpec]):
     """
 
@@ -63,8 +67,8 @@ class ColumnInvalidLatitudeCountCheckSpec:
     parameters: Union[
         Unset, "ColumnNumericInvalidLatitudeCountSensorParametersSpec"
     ] = UNSET
-    warning: Union[Unset, "MaxCountRule1ParametersSpec"] = UNSET
-    error: Union[Unset, "MaxCountRule10ParametersSpec"] = UNSET
+    warning: Union[Unset, "MaxCountRule0WarningParametersSpec"] = UNSET
+    error: Union[Unset, "MaxCountRule0ErrorParametersSpec"] = UNSET
     fatal: Union[Unset, "MaxCountRule100ParametersSpec"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -139,11 +143,11 @@ class ColumnInvalidLatitudeCountCheckSpec:
             ColumnNumericInvalidLatitudeCountSensorParametersSpec,
         )
         from ..models.comment_spec import CommentSpec
-        from ..models.max_count_rule_1_parameters_spec import (
-            MaxCountRule1ParametersSpec,
+        from ..models.max_count_rule_0_error_parameters_spec import (
+            MaxCountRule0ErrorParametersSpec,
         )
-        from ..models.max_count_rule_10_parameters_spec import (
-            MaxCountRule10ParametersSpec,
+        from ..models.max_count_rule_0_warning_parameters_spec import (
+            MaxCountRule0WarningParametersSpec,
         )
         from ..models.max_count_rule_100_parameters_spec import (
             MaxCountRule100ParametersSpec,
@@ -189,18 +193,18 @@ class ColumnInvalidLatitudeCountCheckSpec:
             )
 
         _warning = d.pop("warning", UNSET)
-        warning: Union[Unset, MaxCountRule1ParametersSpec]
+        warning: Union[Unset, MaxCountRule0WarningParametersSpec]
         if isinstance(_warning, Unset):
             warning = UNSET
         else:
-            warning = MaxCountRule1ParametersSpec.from_dict(_warning)
+            warning = MaxCountRule0WarningParametersSpec.from_dict(_warning)
 
         _error = d.pop("error", UNSET)
-        error: Union[Unset, MaxCountRule10ParametersSpec]
+        error: Union[Unset, MaxCountRule0ErrorParametersSpec]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = MaxCountRule10ParametersSpec.from_dict(_error)
+            error = MaxCountRule0ErrorParametersSpec.from_dict(_error)
 
         _fatal = d.pop("fatal", UNSET)
         fatal: Union[Unset, MaxCountRule100ParametersSpec]

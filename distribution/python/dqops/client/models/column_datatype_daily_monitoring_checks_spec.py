@@ -12,8 +12,8 @@ if TYPE_CHECKING:
     from ..models.column_datatype_string_datatype_changed_check_spec import (
         ColumnDatatypeStringDatatypeChangedCheckSpec,
     )
-    from ..models.column_datatype_string_datatype_detected_check_spec import (
-        ColumnDatatypeStringDatatypeDetectedCheckSpec,
+    from ..models.column_detected_datatype_in_text_check_spec import (
+        ColumnDetectedDatatypeInTextCheckSpec,
     )
 
 
@@ -27,17 +27,17 @@ class ColumnDatatypeDailyMonitoringChecksSpec:
         custom_checks (Union[Unset, ColumnDatatypeDailyMonitoringChecksSpecCustomChecks]): Dictionary of additional
             custom checks within this category. The keys are check names defined in the definition section. The sensor
             parameters and rules should match the type of the configured sensor and rule for the custom check.
-        daily_string_datatype_detected (Union[Unset, ColumnDatatypeStringDatatypeDetectedCheckSpec]):
-        daily_string_datatype_changed (Union[Unset, ColumnDatatypeStringDatatypeChangedCheckSpec]):
+        daily_detected_datatype_in_text (Union[Unset, ColumnDetectedDatatypeInTextCheckSpec]):
+        daily_detected_datatype_in_text_changed (Union[Unset, ColumnDatatypeStringDatatypeChangedCheckSpec]):
     """
 
     custom_checks: Union[
         Unset, "ColumnDatatypeDailyMonitoringChecksSpecCustomChecks"
     ] = UNSET
-    daily_string_datatype_detected: Union[
-        Unset, "ColumnDatatypeStringDatatypeDetectedCheckSpec"
+    daily_detected_datatype_in_text: Union[
+        Unset, "ColumnDetectedDatatypeInTextCheckSpec"
     ] = UNSET
-    daily_string_datatype_changed: Union[
+    daily_detected_datatype_in_text_changed: Union[
         Unset, "ColumnDatatypeStringDatatypeChangedCheckSpec"
     ] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -47,27 +47,31 @@ class ColumnDatatypeDailyMonitoringChecksSpec:
         if not isinstance(self.custom_checks, Unset):
             custom_checks = self.custom_checks.to_dict()
 
-        daily_string_datatype_detected: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_string_datatype_detected, Unset):
-            daily_string_datatype_detected = (
-                self.daily_string_datatype_detected.to_dict()
+        daily_detected_datatype_in_text: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_detected_datatype_in_text, Unset):
+            daily_detected_datatype_in_text = (
+                self.daily_detected_datatype_in_text.to_dict()
             )
 
-        daily_string_datatype_changed: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_string_datatype_changed, Unset):
-            daily_string_datatype_changed = self.daily_string_datatype_changed.to_dict()
+        daily_detected_datatype_in_text_changed: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_detected_datatype_in_text_changed, Unset):
+            daily_detected_datatype_in_text_changed = (
+                self.daily_detected_datatype_in_text_changed.to_dict()
+            )
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
-        if daily_string_datatype_detected is not UNSET:
+        if daily_detected_datatype_in_text is not UNSET:
             field_dict[
-                "daily_string_datatype_detected"
-            ] = daily_string_datatype_detected
-        if daily_string_datatype_changed is not UNSET:
-            field_dict["daily_string_datatype_changed"] = daily_string_datatype_changed
+                "daily_detected_datatype_in_text"
+            ] = daily_detected_datatype_in_text
+        if daily_detected_datatype_in_text_changed is not UNSET:
+            field_dict[
+                "daily_detected_datatype_in_text_changed"
+            ] = daily_detected_datatype_in_text_changed
 
         return field_dict
 
@@ -79,8 +83,8 @@ class ColumnDatatypeDailyMonitoringChecksSpec:
         from ..models.column_datatype_string_datatype_changed_check_spec import (
             ColumnDatatypeStringDatatypeChangedCheckSpec,
         )
-        from ..models.column_datatype_string_datatype_detected_check_spec import (
-            ColumnDatatypeStringDatatypeDetectedCheckSpec,
+        from ..models.column_detected_datatype_in_text_check_spec import (
+            ColumnDetectedDatatypeInTextCheckSpec,
         )
 
         d = src_dict.copy()
@@ -95,36 +99,40 @@ class ColumnDatatypeDailyMonitoringChecksSpec:
                 )
             )
 
-        _daily_string_datatype_detected = d.pop("daily_string_datatype_detected", UNSET)
-        daily_string_datatype_detected: Union[
-            Unset, ColumnDatatypeStringDatatypeDetectedCheckSpec
+        _daily_detected_datatype_in_text = d.pop(
+            "daily_detected_datatype_in_text", UNSET
+        )
+        daily_detected_datatype_in_text: Union[
+            Unset, ColumnDetectedDatatypeInTextCheckSpec
         ]
-        if isinstance(_daily_string_datatype_detected, Unset):
-            daily_string_datatype_detected = UNSET
+        if isinstance(_daily_detected_datatype_in_text, Unset):
+            daily_detected_datatype_in_text = UNSET
         else:
-            daily_string_datatype_detected = (
-                ColumnDatatypeStringDatatypeDetectedCheckSpec.from_dict(
-                    _daily_string_datatype_detected
+            daily_detected_datatype_in_text = (
+                ColumnDetectedDatatypeInTextCheckSpec.from_dict(
+                    _daily_detected_datatype_in_text
                 )
             )
 
-        _daily_string_datatype_changed = d.pop("daily_string_datatype_changed", UNSET)
-        daily_string_datatype_changed: Union[
+        _daily_detected_datatype_in_text_changed = d.pop(
+            "daily_detected_datatype_in_text_changed", UNSET
+        )
+        daily_detected_datatype_in_text_changed: Union[
             Unset, ColumnDatatypeStringDatatypeChangedCheckSpec
         ]
-        if isinstance(_daily_string_datatype_changed, Unset):
-            daily_string_datatype_changed = UNSET
+        if isinstance(_daily_detected_datatype_in_text_changed, Unset):
+            daily_detected_datatype_in_text_changed = UNSET
         else:
-            daily_string_datatype_changed = (
+            daily_detected_datatype_in_text_changed = (
                 ColumnDatatypeStringDatatypeChangedCheckSpec.from_dict(
-                    _daily_string_datatype_changed
+                    _daily_detected_datatype_in_text_changed
                 )
             )
 
         column_datatype_daily_monitoring_checks_spec = cls(
             custom_checks=custom_checks,
-            daily_string_datatype_detected=daily_string_datatype_detected,
-            daily_string_datatype_changed=daily_string_datatype_changed,
+            daily_detected_datatype_in_text=daily_detected_datatype_in_text,
+            daily_detected_datatype_in_text_changed=daily_detected_datatype_in_text_changed,
         )
 
         column_datatype_daily_monitoring_checks_spec.additional_properties = d

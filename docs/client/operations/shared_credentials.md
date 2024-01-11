@@ -20,7 +20,7 @@ http://localhost:8888/api/credentials
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Shared credential model|[SharedCredentialModel](../../models/shared_credentials.md#sharedcredentialmodel)| |
+|Shared credential model|[SharedCredentialModel](../models/shared_credentials.md#sharedcredentialmodel)| |
 
 
 
@@ -411,7 +411,7 @@ http://localhost:8888/api/credentials
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|shared_credential_list_model||List[[SharedCredentialListModel](../../models/shared_credentials.md#sharedcredentiallistmodel)]|
+|shared_credential_list_model||List[[SharedCredentialListModel](../models/shared_credentials.md#sharedcredentiallistmodel)]|
 
 
 
@@ -545,7 +545,7 @@ http://localhost:8888/api/credentials/{credentialName}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[shared_credential_model](../../models/shared_credentials.md#sharedcredentialmodel)||[SharedCredentialModel](../../models/shared_credentials.md#sharedcredentialmodel)|
+|[shared_credential_model](../models/shared_credentials.md#sharedcredentialmodel)||[SharedCredentialModel](../models/shared_credentials.md#sharedcredentialmodel)|
 
 
 
@@ -696,7 +696,7 @@ http://localhost:8888/api/credential/{credentialName}
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Shared credential model|[SharedCredentialModel](../../models/shared_credentials.md#sharedcredentialmodel)| |
+|Shared credential model|[SharedCredentialModel](../models/shared_credentials.md#sharedcredentialmodel)| |
 
 
 

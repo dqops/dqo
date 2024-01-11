@@ -10,12 +10,8 @@ if TYPE_CHECKING:
         ColumnUniquenessDistinctCountSensorParametersSpec,
     )
     from ..models.comment_spec import CommentSpec
-    from ..models.min_count_rule_0_parameters_spec import MinCountRule0ParametersSpec
-    from ..models.min_count_rule_fatal_parameters_spec import (
-        MinCountRuleFatalParametersSpec,
-    )
-    from ..models.min_count_rule_warning_parameters_spec import (
-        MinCountRuleWarningParametersSpec,
+    from ..models.count_between_rule_parameters_spec import (
+        CountBetweenRuleParametersSpec,
     )
     from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
 
@@ -49,9 +45,9 @@ class ColumnDistinctCountCheckSpec:
             quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent
             table.
         parameters (Union[Unset, ColumnUniquenessDistinctCountSensorParametersSpec]):
-        warning (Union[Unset, MinCountRuleWarningParametersSpec]):
-        error (Union[Unset, MinCountRule0ParametersSpec]):
-        fatal (Union[Unset, MinCountRuleFatalParametersSpec]):
+        warning (Union[Unset, CountBetweenRuleParametersSpec]):
+        error (Union[Unset, CountBetweenRuleParametersSpec]):
+        fatal (Union[Unset, CountBetweenRuleParametersSpec]):
     """
 
     schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
@@ -65,9 +61,9 @@ class ColumnDistinctCountCheckSpec:
     parameters: Union[
         Unset, "ColumnUniquenessDistinctCountSensorParametersSpec"
     ] = UNSET
-    warning: Union[Unset, "MinCountRuleWarningParametersSpec"] = UNSET
-    error: Union[Unset, "MinCountRule0ParametersSpec"] = UNSET
-    fatal: Union[Unset, "MinCountRuleFatalParametersSpec"] = UNSET
+    warning: Union[Unset, "CountBetweenRuleParametersSpec"] = UNSET
+    error: Union[Unset, "CountBetweenRuleParametersSpec"] = UNSET
+    fatal: Union[Unset, "CountBetweenRuleParametersSpec"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -141,14 +137,8 @@ class ColumnDistinctCountCheckSpec:
             ColumnUniquenessDistinctCountSensorParametersSpec,
         )
         from ..models.comment_spec import CommentSpec
-        from ..models.min_count_rule_0_parameters_spec import (
-            MinCountRule0ParametersSpec,
-        )
-        from ..models.min_count_rule_fatal_parameters_spec import (
-            MinCountRuleFatalParametersSpec,
-        )
-        from ..models.min_count_rule_warning_parameters_spec import (
-            MinCountRuleWarningParametersSpec,
+        from ..models.count_between_rule_parameters_spec import (
+            CountBetweenRuleParametersSpec,
         )
         from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
 
@@ -189,25 +179,25 @@ class ColumnDistinctCountCheckSpec:
             )
 
         _warning = d.pop("warning", UNSET)
-        warning: Union[Unset, MinCountRuleWarningParametersSpec]
+        warning: Union[Unset, CountBetweenRuleParametersSpec]
         if isinstance(_warning, Unset):
             warning = UNSET
         else:
-            warning = MinCountRuleWarningParametersSpec.from_dict(_warning)
+            warning = CountBetweenRuleParametersSpec.from_dict(_warning)
 
         _error = d.pop("error", UNSET)
-        error: Union[Unset, MinCountRule0ParametersSpec]
+        error: Union[Unset, CountBetweenRuleParametersSpec]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = MinCountRule0ParametersSpec.from_dict(_error)
+            error = CountBetweenRuleParametersSpec.from_dict(_error)
 
         _fatal = d.pop("fatal", UNSET)
-        fatal: Union[Unset, MinCountRuleFatalParametersSpec]
+        fatal: Union[Unset, CountBetweenRuleParametersSpec]
         if isinstance(_fatal, Unset):
             fatal = UNSET
         else:
-            fatal = MinCountRuleFatalParametersSpec.from_dict(_fatal)
+            fatal = CountBetweenRuleParametersSpec.from_dict(_fatal)
 
         column_distinct_count_check_spec = cls(
             schedule_override=schedule_override,

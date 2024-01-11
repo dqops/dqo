@@ -1,3 +1,6 @@
+# DQOps YAML file definitions
+The definition of YAML files used by DQOps to configure the data sources, monitored tables, and the configuration of activated data quality checks.
+
 
 ## LocalSettingsYaml
 DQOps local settings that are stored in the *$DQO_USER_HOME/.localsettings.dqosettings.yaml* file in the user&#x27;s DQOps home folder.
@@ -12,13 +15,13 @@ DQOps local settings that are stored in the *$DQO_USER_HOME/.localsettings.dqose
 
 
 
-**The structure of this object is described below**
+The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |api_version||string| | | |
 |kind||enum|default_schedules<br/>settings<br/>default_notifications<br/>rule<br/>sensor<br/>source<br/>check<br/>dashboards<br/>default_checks<br/>table<br/>provider_sensor<br/>file_index<br/>| | |
-|[spec](#LocalSettingsSpec)||[LocalSettingsSpec](#LocalSettingsSpec)| | | |
+|[spec](./LocalSettingsYaml.md#LocalSettingsSpec)||[LocalSettingsSpec](./LocalSettingsYaml.md#LocalSettingsSpec)| | | |
 
 
 
@@ -29,6 +32,7 @@ DQOps local settings that are stored in the *$DQO_USER_HOME/.localsettings.dqose
 
 
 ___
+
 
 ## LocalSettingsSpec
 Local settings specification.
@@ -41,7 +45,7 @@ Local settings specification.
 
 
 
-**The structure of this object is described below**
+The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
@@ -60,4 +64,5 @@ Local settings specification.
 
 
 ___
+
 

@@ -10,14 +10,14 @@ if TYPE_CHECKING:
         ColumnNumericNonNegativePercentSensorParametersSpec,
     )
     from ..models.comment_spec import CommentSpec
-    from ..models.max_percent_rule_95_parameters_spec import (
-        MaxPercentRule95ParametersSpec,
+    from ..models.max_percent_rule_0_error_parameters_spec import (
+        MaxPercentRule0ErrorParametersSpec,
     )
-    from ..models.max_percent_rule_99_parameters_spec import (
-        MaxPercentRule99ParametersSpec,
+    from ..models.max_percent_rule_0_warning_parameters_spec import (
+        MaxPercentRule0WarningParametersSpec,
     )
-    from ..models.max_percent_rule_100_parameters_spec import (
-        MaxPercentRule100ParametersSpec,
+    from ..models.max_percent_rule_5_parameters_spec import (
+        MaxPercentRule5ParametersSpec,
     )
     from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
 
@@ -51,9 +51,9 @@ class ColumnNonNegativePercentCheckSpec:
             quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent
             table.
         parameters (Union[Unset, ColumnNumericNonNegativePercentSensorParametersSpec]):
-        warning (Union[Unset, MaxPercentRule100ParametersSpec]):
-        error (Union[Unset, MaxPercentRule99ParametersSpec]):
-        fatal (Union[Unset, MaxPercentRule95ParametersSpec]):
+        warning (Union[Unset, MaxPercentRule0WarningParametersSpec]):
+        error (Union[Unset, MaxPercentRule0ErrorParametersSpec]):
+        fatal (Union[Unset, MaxPercentRule5ParametersSpec]):
     """
 
     schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
@@ -67,9 +67,9 @@ class ColumnNonNegativePercentCheckSpec:
     parameters: Union[
         Unset, "ColumnNumericNonNegativePercentSensorParametersSpec"
     ] = UNSET
-    warning: Union[Unset, "MaxPercentRule100ParametersSpec"] = UNSET
-    error: Union[Unset, "MaxPercentRule99ParametersSpec"] = UNSET
-    fatal: Union[Unset, "MaxPercentRule95ParametersSpec"] = UNSET
+    warning: Union[Unset, "MaxPercentRule0WarningParametersSpec"] = UNSET
+    error: Union[Unset, "MaxPercentRule0ErrorParametersSpec"] = UNSET
+    fatal: Union[Unset, "MaxPercentRule5ParametersSpec"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -143,14 +143,14 @@ class ColumnNonNegativePercentCheckSpec:
             ColumnNumericNonNegativePercentSensorParametersSpec,
         )
         from ..models.comment_spec import CommentSpec
-        from ..models.max_percent_rule_95_parameters_spec import (
-            MaxPercentRule95ParametersSpec,
+        from ..models.max_percent_rule_0_error_parameters_spec import (
+            MaxPercentRule0ErrorParametersSpec,
         )
-        from ..models.max_percent_rule_99_parameters_spec import (
-            MaxPercentRule99ParametersSpec,
+        from ..models.max_percent_rule_0_warning_parameters_spec import (
+            MaxPercentRule0WarningParametersSpec,
         )
-        from ..models.max_percent_rule_100_parameters_spec import (
-            MaxPercentRule100ParametersSpec,
+        from ..models.max_percent_rule_5_parameters_spec import (
+            MaxPercentRule5ParametersSpec,
         )
         from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
 
@@ -191,25 +191,25 @@ class ColumnNonNegativePercentCheckSpec:
             )
 
         _warning = d.pop("warning", UNSET)
-        warning: Union[Unset, MaxPercentRule100ParametersSpec]
+        warning: Union[Unset, MaxPercentRule0WarningParametersSpec]
         if isinstance(_warning, Unset):
             warning = UNSET
         else:
-            warning = MaxPercentRule100ParametersSpec.from_dict(_warning)
+            warning = MaxPercentRule0WarningParametersSpec.from_dict(_warning)
 
         _error = d.pop("error", UNSET)
-        error: Union[Unset, MaxPercentRule99ParametersSpec]
+        error: Union[Unset, MaxPercentRule0ErrorParametersSpec]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = MaxPercentRule99ParametersSpec.from_dict(_error)
+            error = MaxPercentRule0ErrorParametersSpec.from_dict(_error)
 
         _fatal = d.pop("fatal", UNSET)
-        fatal: Union[Unset, MaxPercentRule95ParametersSpec]
+        fatal: Union[Unset, MaxPercentRule5ParametersSpec]
         if isinstance(_fatal, Unset):
             fatal = UNSET
         else:
-            fatal = MaxPercentRule95ParametersSpec.from_dict(_fatal)
+            fatal = MaxPercentRule5ParametersSpec.from_dict(_fatal)
 
         column_non_negative_percent_check_spec = cls(
             schedule_override=schedule_override,

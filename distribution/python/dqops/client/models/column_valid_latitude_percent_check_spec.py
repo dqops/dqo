@@ -13,11 +13,11 @@ if TYPE_CHECKING:
     from ..models.min_percent_rule_95_parameters_spec import (
         MinPercentRule95ParametersSpec,
     )
-    from ..models.min_percent_rule_99_parameters_spec import (
-        MinPercentRule99ParametersSpec,
+    from ..models.min_percent_rule_100_error_parameters_spec import (
+        MinPercentRule100ErrorParametersSpec,
     )
-    from ..models.min_percent_rule_100_parameters_spec import (
-        MinPercentRule100ParametersSpec,
+    from ..models.min_percent_rule_100_warning_parameters_spec import (
+        MinPercentRule100WarningParametersSpec,
     )
     from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
 
@@ -51,8 +51,8 @@ class ColumnValidLatitudePercentCheckSpec:
             quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent
             table.
         parameters (Union[Unset, ColumnNumericValidLatitudePercentSensorParametersSpec]):
-        warning (Union[Unset, MinPercentRule100ParametersSpec]):
-        error (Union[Unset, MinPercentRule99ParametersSpec]):
+        warning (Union[Unset, MinPercentRule100WarningParametersSpec]):
+        error (Union[Unset, MinPercentRule100ErrorParametersSpec]):
         fatal (Union[Unset, MinPercentRule95ParametersSpec]):
     """
 
@@ -67,8 +67,8 @@ class ColumnValidLatitudePercentCheckSpec:
     parameters: Union[
         Unset, "ColumnNumericValidLatitudePercentSensorParametersSpec"
     ] = UNSET
-    warning: Union[Unset, "MinPercentRule100ParametersSpec"] = UNSET
-    error: Union[Unset, "MinPercentRule99ParametersSpec"] = UNSET
+    warning: Union[Unset, "MinPercentRule100WarningParametersSpec"] = UNSET
+    error: Union[Unset, "MinPercentRule100ErrorParametersSpec"] = UNSET
     fatal: Union[Unset, "MinPercentRule95ParametersSpec"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -146,11 +146,11 @@ class ColumnValidLatitudePercentCheckSpec:
         from ..models.min_percent_rule_95_parameters_spec import (
             MinPercentRule95ParametersSpec,
         )
-        from ..models.min_percent_rule_99_parameters_spec import (
-            MinPercentRule99ParametersSpec,
+        from ..models.min_percent_rule_100_error_parameters_spec import (
+            MinPercentRule100ErrorParametersSpec,
         )
-        from ..models.min_percent_rule_100_parameters_spec import (
-            MinPercentRule100ParametersSpec,
+        from ..models.min_percent_rule_100_warning_parameters_spec import (
+            MinPercentRule100WarningParametersSpec,
         )
         from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
 
@@ -193,18 +193,18 @@ class ColumnValidLatitudePercentCheckSpec:
             )
 
         _warning = d.pop("warning", UNSET)
-        warning: Union[Unset, MinPercentRule100ParametersSpec]
+        warning: Union[Unset, MinPercentRule100WarningParametersSpec]
         if isinstance(_warning, Unset):
             warning = UNSET
         else:
-            warning = MinPercentRule100ParametersSpec.from_dict(_warning)
+            warning = MinPercentRule100WarningParametersSpec.from_dict(_warning)
 
         _error = d.pop("error", UNSET)
-        error: Union[Unset, MinPercentRule99ParametersSpec]
+        error: Union[Unset, MinPercentRule100ErrorParametersSpec]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = MinPercentRule99ParametersSpec.from_dict(_error)
+            error = MinPercentRule100ErrorParametersSpec.from_dict(_error)
 
         _fatal = d.pop("fatal", UNSET)
         fatal: Union[Unset, MinPercentRule95ParametersSpec]

@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
+from ..models.trino_engine_type import TrinoEngineType
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -16,46 +17,78 @@ T = TypeVar("T", bound="TrinoParametersSpec")
 class TrinoParametersSpec:
     """
     Attributes:
+        trino_engine_type (Union[Unset, TrinoEngineType]):
         host (Union[Unset, str]): Trino host name. Supports also a ${TRINO_HOST} configuration with a custom environment
             variable.
         port (Union[Unset, str]): Trino port number. The default port is 8080. Supports also a ${TRINO_PORT}
             configuration with a custom environment variable.
-        database (Union[Unset, str]): Trino database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format
-            to use dynamic substitution.
         user (Union[Unset, str]): Trino user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use
             dynamic substitution.
         properties (Union[Unset, TrinoParametersSpecProperties]):
+        athena_region (Union[Unset, str]): The AWS Region where queries will be run. Supports also a ${ATHENA_REGION}
+            configuration with a custom environment variable.
+        catalog (Union[Unset, str]): The catalog that contains the databases and the tables that will be accessed with
+            the driver. Supports also a ${TRINO_CATALOG} configuration with a custom environment variable.
+        athena_work_group (Union[Unset, str]): The workgroup in which queries will run. Supports also a
+            ${ATHENA_WORK_GROUP} configuration with a custom environment variable.
+        athena_output_location (Union[Unset, str]): The location in Amazon S3 where query results will be stored.
+            Supports also a ${ATHENA_OUTPUT_LOCATION} configuration with a custom environment variable.
+        database (Union[Unset, str]):
     """
 
+    trino_engine_type: Union[Unset, TrinoEngineType] = UNSET
     host: Union[Unset, str] = UNSET
     port: Union[Unset, str] = UNSET
-    database: Union[Unset, str] = UNSET
     user: Union[Unset, str] = UNSET
     properties: Union[Unset, "TrinoParametersSpecProperties"] = UNSET
+    athena_region: Union[Unset, str] = UNSET
+    catalog: Union[Unset, str] = UNSET
+    athena_work_group: Union[Unset, str] = UNSET
+    athena_output_location: Union[Unset, str] = UNSET
+    database: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        trino_engine_type: Union[Unset, str] = UNSET
+        if not isinstance(self.trino_engine_type, Unset):
+            trino_engine_type = self.trino_engine_type.value
+
         host = self.host
         port = self.port
-        database = self.database
         user = self.user
         properties: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.properties, Unset):
             properties = self.properties.to_dict()
 
+        athena_region = self.athena_region
+        catalog = self.catalog
+        athena_work_group = self.athena_work_group
+        athena_output_location = self.athena_output_location
+        database = self.database
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if trino_engine_type is not UNSET:
+            field_dict["trino_engine_type"] = trino_engine_type
         if host is not UNSET:
             field_dict["host"] = host
         if port is not UNSET:
             field_dict["port"] = port
-        if database is not UNSET:
-            field_dict["database"] = database
         if user is not UNSET:
             field_dict["user"] = user
         if properties is not UNSET:
             field_dict["properties"] = properties
+        if athena_region is not UNSET:
+            field_dict["athena_region"] = athena_region
+        if catalog is not UNSET:
+            field_dict["catalog"] = catalog
+        if athena_work_group is not UNSET:
+            field_dict["athena_work_group"] = athena_work_group
+        if athena_output_location is not UNSET:
+            field_dict["athena_output_location"] = athena_output_location
+        if database is not UNSET:
+            field_dict["database"] = database
 
         return field_dict
 
@@ -66,11 +99,16 @@ class TrinoParametersSpec:
         )
 
         d = src_dict.copy()
+        _trino_engine_type = d.pop("trino_engine_type", UNSET)
+        trino_engine_type: Union[Unset, TrinoEngineType]
+        if isinstance(_trino_engine_type, Unset):
+            trino_engine_type = UNSET
+        else:
+            trino_engine_type = TrinoEngineType(_trino_engine_type)
+
         host = d.pop("host", UNSET)
 
         port = d.pop("port", UNSET)
-
-        database = d.pop("database", UNSET)
 
         user = d.pop("user", UNSET)
 
@@ -81,12 +119,27 @@ class TrinoParametersSpec:
         else:
             properties = TrinoParametersSpecProperties.from_dict(_properties)
 
+        athena_region = d.pop("athena_region", UNSET)
+
+        catalog = d.pop("catalog", UNSET)
+
+        athena_work_group = d.pop("athena_work_group", UNSET)
+
+        athena_output_location = d.pop("athena_output_location", UNSET)
+
+        database = d.pop("database", UNSET)
+
         trino_parameters_spec = cls(
+            trino_engine_type=trino_engine_type,
             host=host,
             port=port,
-            database=database,
             user=user,
             properties=properties,
+            athena_region=athena_region,
+            catalog=catalog,
+            athena_work_group=athena_work_group,
+            athena_output_location=athena_output_location,
+            database=database,
         )
 
         trino_parameters_spec.additional_properties = d

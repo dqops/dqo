@@ -1,23 +1,36 @@
-# dqo
+# dqo dqo command
+
+
+
+
+
 
 ___
-### **dqo**
+
+## dqo
 
 DQOps command-line entry point script
 
+
 **Description**
+
 
 *dqo* is an executable script installed in the Python scripts local folder when DQOps is installed locally by installing the *dqops* package from PyPi. When the python environment Scripts folder is in the path, running *dqo* from the command line (bash, etc.) will start a DQOps local instance.
 
 
-**Summary (CLI)**
+
+**Command line sample**
+
 ```
 $ dqo [root_level_parameter] [command]
 ```
+
 **Example**
+
 ```
 $ dqo --dqo.cloud.api-key=3242424324242 check run -c=connection_name
 ```
+
 
 **Options**
 
@@ -101,6 +114,8 @@ $ dqo --dqo.cloud.api-key=3242424324242 check run -c=connection_name
 |<p id="--server.port">`--server.port`</p><br/>|Sets the web server port to host the DQOps local web UI.<br/>This parameter could be also configured by setting SERVER_PORT  environment variable.| ||
 |<p id="--silent">`--silent`</p><br/>|Starts DQOps in a silent mode, without showing the banner and any other information.<br/>This parameter could be also configured by setting SILENT  environment variable.| ||
 |<p id="--spring.config.location">`--spring.config.location`</p><br/>|Sets a path to the folder that has the spring configuration files (application.properties or application.yml) or directly to an application.properties or application.yml file. The format of this value is: --spring.config.location&#x3D;file:./foldername/,file:./alternativeapplication.yml<br/>This parameter could be also configured by setting SPRING_CONFIG_LOCATION  environment variable.| ||
+
+
 
 
 
