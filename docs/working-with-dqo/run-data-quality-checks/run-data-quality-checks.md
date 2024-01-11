@@ -15,7 +15,7 @@ For more information about [different categories of checks, see DQOps concepts s
 
 ### **Navigate to the check editor**
 
-To navigate to the checks editor:
+To navigate to the Check editor:
 
 1. Click on the **Profiling**, **Monitoring checks** or **Partition checks** section at the top of the screen.
 

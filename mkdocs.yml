@@ -61,7 +61,7 @@ nav:
           - Number of rows in the table: "examples/data-completeness/number-of-rows-in-the-table.md"
           - Number of null values: "examples/data-completeness/number-of-null-values.md"
       - Data consistency:
-          - Percent of rows with string values in set: "examples/data-consistency/percent-of-text-in-set.md"
+          - Percent of rows with string values in set: "examples/data-consistency/percentage-of-rows-with-a-text-in-set.md"
       - Data uniqueness:
           - Percentage of duplicates: "examples/data-uniqueness/percentage-of-duplicates.md"
       - Data validity:

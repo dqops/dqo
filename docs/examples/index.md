@@ -1,11 +1,10 @@
 # Use cases
-
-We have provided a variety of examples to help you in using DQOps effectively. These examples use openly available 
-datasets from [Google Cloud](https://cloud.google.com/datasets).
+We have provided a variety of examples to help you in using DQOps effectively.
 
 ## List of the use cases
 
 Here is a comprehensive list of examples with links to the relevant documentation section with detailed descriptions.
+These examples use openly available datasets from [Google Cloud](https://cloud.google.com/datasets).
 
 ### **Data accuracy**
 
@@ -23,14 +22,22 @@ Here is a comprehensive list of examples with links to the relevant documentatio
 
 | **Name of the example**                                                           | **Description**                                                                                                                                                                         | **Link to the dataset description**                                          |
 |:----------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------|
-| [Number of rows in the table](./data-completeness/number-of-rows-in-the-table.md) | This example shows how to check that the number of rows in a table does not exceed the minimum accepted count using [row_count](../checks/table/volume/row-count.md) check.             | [Link](https://www.americashealthrankings.org/about/methodology/our-reports) |
 | [Number of null values](./data-completeness/number-of-null-values.md)             | This example shows how to detect that the number of null values in a column does not exceed the maximum accepted count using [nulls_cont](../checks/column/nulls/nulls-count.md) check. | [Link](https://www.americashealthrankings.org/about/methodology/our-reports) |
+| [Number of rows in the table](./data-completeness/number-of-rows-in-the-table.md) | This example shows how to check that the number of rows in a table does not exceed the minimum accepted count using [row_count](../checks/table/volume/row-count.md) check.             | [Link](https://www.americashealthrankings.org/about/methodology/our-reports) |
 
 ### **Data consistency**
 
-| **Name of the example**                                                                                         | **Description**                                                                                                                                                                                                                    | **Link to the dataset description**                                       |
-|:----------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------|
-| [Percent of rows having a string column value in an expected set](./data-consistency/percent-of-text-in-set.md) | This example shows how to verify that the percentage of strings from a set in a column does not fall below a set threshold using [text_found_in_set_percent](../checks/column/accepted_values/text-found-in-set-percent.md) check. | [Link](https://www.kaggle.com/datasets/whenamancodes/student-performance) |
+| **Name of the example**                                                                                                           | **Description**                                                                                                                                                                                                                    | **Link to the dataset description**                                       |
+|:----------------------------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------|
+| [Percentage of rows having a string column value in an expected set](./data-consistency/percentage-of-rows-with-a-text-in-set.md) | This example shows how to verify that the percentage of strings from a set in a column does not fall below a set threshold using [text_found_in_set_percent](../checks/column/accepted_values/text-found-in-set-percent.md) check. | [Link](https://www.kaggle.com/datasets/whenamancodes/student-performance) |
+
+### **Data reasonability**
+
+| **Name of the example**                                                                          | **Description**                                                                                                                                                                                                             | **Link to the dataset description**                                                                              |
+|:-------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------|
+| [Percentage of false values](./data-reasonability/percentage-of-false-values.md)                 | This example shows how to detect that the percentage of false values remains above a set threshold using [bool_false_percent](../checks/column/bool/false-percent.md) check.                                                | [Link](https://console.cloud.google.com/marketplace/product/federal-communications-commission/fcc-political-ads) |
+| [Percentage of values in range](./data-reasonability/percentage-of-integer-values-in-range.md)   | This example shows how to detect that the percentage of values within a set range in a column does not exceed a set threshold using [integer_in_range_percent](../checks/column/numeric/integer-in-range-percent.md) check. | [Link](https://www.americashealthrankings.org/about/methodology/our-reports)                                     |
+| [A string not exceeding a set length](./data-reasonability/string-not-exceeding-a-set-length.md) | This example shows how to check that the length of the string does not exceed the indicated value using [text_max_length](../checks/column/text/text-length-above-max-length-percent.md) check.                             | [Link](https://www.americashealthrankings.org/about/methodology/our-reports)                                     |
 
 ### **Data uniqueness**
 
@@ -42,23 +49,15 @@ Here is a comprehensive list of examples with links to the relevant documentatio
 
 | **Name of the example**                                                                                         | **Description**                                                                                                                                                                                                                                                                                                       | **Link to the dataset description**                                                               |
 |:----------------------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------|
-| [Percentage of rows containing USA zipcodes](./data-validity/percentage-of-values-that-contains-usa-zipcode.md) | This example shows how to detect that the percentage of rows that contains USA zipcode values in a column does not exceed a set threshold using [contains_usa_zipcode_percent](../checks/column/pii/contains-usa-zipcode-percent.md) check.                                                                           | [Link](https://data.austintexas.gov/Utilities-and-City-Services/Austin-311-Public-Data/xwdj-i9he) |
 | [Number of invalid emails](./data-validity/number-of-invalid-emails.md)                                         | This example shows how to detect that the number of invalid emails in a column does not exceed the maximum accepted count using [invalid_email_format_found](../checks/column/patterns/invalid-email-format-found.md) check.                                                                                          | DQOps dataset                                                                                     |
-| [Percentage of valid latitude and longitude](./data-validity/percentage-of-valid-latitude-and-longitude.md)     | This example shows how to detect that the percentage of valid latitude and longitude values remain above a set threshold using [numeric_valid_latitude_percent](../checks/column/numeric/valid-latitude-percent.md) and [numeric_valid_longitude_percent](../checks/column/numeric/valid-longitude-percent.md)checks. | [Link](https://data.austintexas.gov/Utilities-and-City-Services/Austin-311-Public-Data/xwdj-i9he) |
 | [Number of invalid IP4 address](./data-validity/number-of-invalid-IP4-address.md)                               | This example shows how to detect that the number of invalid IP4 address in a column does not exceed a set threshold using [invalid_ip4_address_format_found](../checks/column/patterns/invalid-ip4-address-format-found.md) check.                                                                                    | DQOps dataset                                                                                     |
-| [Percentage of strings matching date regex](./data-validity/percentage-of-strings-matching-date-regex.md)       | This example shows how to detect that the percentage of strings matching the date format regex in a column does not exceed a set threshold using [string_match_date_regex_percent](../checks/column/patterns/text-matching-date-pattern-percent.md) check.                                                            | [Link](https://www.americashealthrankings.org/about/methodology/our-reports)                      |
 | [Percentage of negative values](./data-validity/percentage-of-negative-values.md)                               | This example shows how to detect that the percentage of negative values in a column does not exceed a set threshold using [negative_values_percent](../checks/column/numeric/negative-values-percent.md) check.                                                                                                       | [Link](https://www.worldometers.info/world-population/population-by-country/)                     |
-| [Percentage of valid currency codes](./data-validity/percentage-of-valid-currency-codes.md)                     | This example shows how to detect that the percentage of valid currency codes in a column does not fall below a set threshold using [text_valid_currency_code_percent](../checks/column/text/text-valid-currency-code-percent.md) check.                                                                               | DQOps dataset                                                                                     |
 | [Percentage of rows passing SQL condition](./data-validity/percentage-of-rows-passing-sql-condition.md)         | This example shows how to detect that the percentage of passed sql condition in a column does not fall below a set threshold using [sql_condition_passed_percent](../checks/table/custom_sql/sql-condition-passed-percent-on-table.md)  check.                                                                        | [Link](https://www.americashealthrankings.org/about/methodology/our-reports)                      |
+| [Percentage of strings matching date regex](./data-validity/percentage-of-strings-matching-date-regex.md)       | This example shows how to detect that the percentage of strings matching the date format regex in a column does not exceed a set threshold using [string_match_date_regex_percent](../checks/column/patterns/text-matching-date-pattern-percent.md) check.                                                            | [Link](https://www.americashealthrankings.org/about/methodology/our-reports)                      |
+| [Percentage of valid currency codes](./data-validity/percentage-of-valid-currency-codes.md)                     | This example shows how to detect that the percentage of valid currency codes in a column does not fall below a set threshold using [text_valid_currency_code_percent](../checks/column/text/text-valid-currency-code-percent.md) check.                                                                               | DQOps dataset                                                                                     |
+| [Percentage of valid latitude and longitude](./data-validity/percentage-of-valid-latitude-and-longitude.md)     | This example shows how to detect that the percentage of valid latitude and longitude values remain above a set threshold using [numeric_valid_latitude_percent](../checks/column/numeric/valid-latitude-percent.md) and [numeric_valid_longitude_percent](../checks/column/numeric/valid-longitude-percent.md)checks. | [Link](https://data.austintexas.gov/Utilities-and-City-Services/Austin-311-Public-Data/xwdj-i9he) |
 | [Percentage of valid UUID](./data-validity/percentage-of-valid-uuid.md)                                         | This example shows how to detect that th percentage of valid UUID values in a column does not fall below a set threshold using [valid_uuid_format_percent](../checks/column/patterns/valid-uuid-format-percent.md) check.                                                                                             | DQOps dataset                                                                                     |
-
-### **Data reasonability**
-
-| **Name of the example**                                                                          | **Description**                                                                                                                                                                                                             | **Link to the dataset description**                                                                              |
-|:-------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------|
-| [Percentage of values in range](./data-reasonability/percentage-of-integer-values-in-range.md)   | This example shows how to detect that the percentage of values within a set range in a column does not exceed a set threshold using [integer_in_range_percent](../checks/column/numeric/integer-in-range-percent.md) check. | [Link](https://www.americashealthrankings.org/about/methodology/our-reports)                                     |
-| [A string not exceeding a set length](./data-reasonability/string-not-exceeding-a-set-length.md) | This example shows how to check that the length of the string does not exceed the indicated value using [text_max_length](../checks/column/text/text-length-above-max-length-percent.md) check.                             | [Link](https://www.americashealthrankings.org/about/methodology/our-reports)                                     |
-| [Percentage of false values](./data-reasonability/percentage-of-false-values.md)                 | This example shows how to detect that the percentage of false values remains above a set threshold using [bool_false_percent](../checks/column/bool/false-percent.md) check.                                                | [Link](https://console.cloud.google.com/marketplace/product/federal-communications-commission/fcc-political-ads) |
+| [Percentage of rows containing USA zipcodes](./data-validity/percentage-of-values-that-contains-usa-zipcode.md) | This example shows how to detect that the percentage of rows that contains USA zipcode values in a column does not exceed a set threshold using [contains_usa_zipcode_percent](../checks/column/pii/contains-usa-zipcode-percent.md) check.                                                                           | [Link](https://data.austintexas.gov/Utilities-and-City-Services/Austin-311-Public-Data/xwdj-i9he) |
 
 ### **Schema**
 
@@ -72,7 +71,6 @@ Here is a comprehensive list of examples with links to the relevant documentatio
 |:------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------|
 | [Detect empty tables](./data-quality-monitoring/detect-empty-tables.md)                         | This example shows how to detect empty tables using the default data quality checks. | [Link](https://data.austintexas.gov/Utilities-and-City-Services/Austin-311-Public-Data/xwdj-i9he)   |
 | [Running checks with a scheduler](./data-quality-monitoring/running-checks-with-a-scheduler.md) | This example shows how to set different schedules on multiple checks.                | [Link](https://console.cloud.google.com/marketplace/product/bigquery-public-data/thelook-ecommerce) |
-
 
 
 ## Prerequisite
@@ -89,7 +87,7 @@ After installing Google Cloud CLI, log in to your GCP account, by running:
 gcloud auth application-default login
 ```
 
-## Running the use cases
+## Location of the examples
 
 [Standard DQOps installation](../getting-started/installation/installation.md) comes with a set of examples, which can 
 be found in the `example/` directory. You can view a complete list of the examples with links to detailed explanation by
@@ -101,9 +99,9 @@ configuration, and `*.dqotable.yaml` file, which stores the columns and tables m
 While it is not necessary to manually add the connection in our examples, you can find information on how to do it in the
 [Working with DQOps section](../data-sources/index.md).
 
-## Running the use cases
+## Start DQOps
 
-To run the examples, follow the steps below. 
+To start the DQOps application with the example, follow the steps below. 
 
 1. Go to the directory where you installed DQOps and navigate, for example, to 
     `examples/data-completeness/number-of-rows-in-the-table-bigquery`.  
@@ -144,10 +142,15 @@ To run the examples, follow the steps below.
     During the first registration, a unique identification code (API Key) will be generated and automatically passed to the DQOps application.
     The API Key is now stored in the configuration file.
 
-### **Executing the checks using the user interface**
+## Execute the checks using the user interface
 
 You can execute the checks using the [user interface](../dqo-concepts/user-interface-overview/user-interface-overview.md).
 Simply, open the DQOps User Interface Console (http://localhost:8888).
+
+
+### **Navigate to a list of checks**
+
+To navigate to a list of checks:
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/row-count-navigating-to-the-list-of-checks1.png)
 
@@ -166,47 +169,56 @@ Simply, open the DQOps User Interface Console (http://localhost:8888).
     This tab displays a list of data quality checks in the Check editor. The table with data quality checks contains a list of checks divided into different data quality subcategories that you
     can expand and collapse by clicking on an arrow. [Learn more about the different check subcategories.](../checks/index.md)
 
+    Noticed the checks that have been activated have switched on the toggle button.
+    The icons located before the name of each check allow you to: activate and deactivate it, configure settings, run a check, review results, and get more information about it.
+
     The right side of the table allows setting different threshold levels (severity levels). [Learn more about threshold levels.](../dqo-concepts/checks/index.md#issue-severity-levels)
     
     Learn more about [navigating the check editor](../dqo-concepts/user-interface-overview/user-interface-overview.md#check-editor).
 
 
-4. Run the activated check using the **Run check** button.
+### **Run checks**
 
-    You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
+Run the activated check using the **Run check** button.
 
-    ![Run check](https://dqops.com/docs/images/examples/row-count-run-check1.png)
+![Run check](https://dqops.com/docs/images/examples/row-count-run-check1.png)
 
-    The results of the run check are shown as a color square
+The results of the run check are shown as a color square
 
-    - Green for a valid result
-    - Yellow for a warning
-    - Orange for an error
-    - Red for a fatal error
-    - Black for execution error.
+- Green for a valid result
+- Yellow for a warning
+- Orange for an error
+- Red for a fatal error
+- Black for execution error.
 
-5. Access the detailed results by clicking the **Results** button and review it.
-
-    Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**. 
-    The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
-    The Sensor readouts category displays the values obtained by the sensors from the data source. The Execution errors category displays any error
-    that occurred during the check's execution.
-
-    ![Check details](https://dqops.com/docs/images/examples/row-count-check-details1.png)
-
-6. Review the results
-
-    To see the results which you should expect, refer to the description of each example.
+You can view the details by placing the mouse cursor on the square.
 
 
-7. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
+### **View detailed check results**
 
-    Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
+Access the detailed results by clicking the **Results** button and review it.
 
-8. You can now [review the results on the data quality dashboards](../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md) as described in the Working with DQOps section.
+Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**. 
+The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
+The Sensor readouts category displays the values obtained by the sensors from the data source. The Execution errors category displays any error
+that occurred during the check's execution.
+
+![Check details](https://dqops.com/docs/images/examples/row-count-check-details1.png)
+
+To see the results which you should expect, refer to the description of each example.
 
 
-### **Executing the checks using the DQOps Shell**
+### **Synchronize the results with the cloud account**
+
+Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner
+of the user interface.
+
+Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
+
+You can now [review the results on the data quality dashboards](../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md) as described in the Working with DQOps section.
+
+
+## Execute the checks using the DQOps Shell
 
 You can also execute the checks that were prepared in the example, using the DQOps Shell. 
 
@@ -225,6 +237,5 @@ You can also execute the checks that were prepared in the example, using the DQO
     cloud sync all
     ``` 
 
-3. You can now [review the results on the data quality dashboards](../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md) as described in the Working with DQOps section.
-
-
+3. You can now [review the results on the data quality dashboards](../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
+    as described in the Working with DQOps section.
