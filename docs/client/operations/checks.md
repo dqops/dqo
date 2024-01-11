@@ -27,7 +27,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Check model|[CheckDefinitionModel](../../models/checks.md#checkdefinitionmodel)| |
+|Check model|[CheckDefinitionModel](../models/checks.md#checkdefinitionmodel)| |
 
 
 
@@ -41,7 +41,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"check_name\":\"sample_check\",\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"rule_name\":\"sample_target/sample_category/sample_rule\",\"help_text\":\"Sample help text\",\"custom\":false,\"built_in\":false,\"can_edit\":true}"
+		"{\"check_name\":\"sample_check\",\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"rule_name\":\"sample_target/sample_category/sample_rule\",\"help_text\":\"Sample help text\",\"standard\":false,\"custom\":true,\"built_in\":false,\"can_edit\":true}"
 	
     ```
 
@@ -61,7 +61,8 @@ http://localhost:8888/api/checks/{fullCheckName}
 		sensor_name='sample_target/sample_category/sample_sensor',
 		rule_name='sample_target/sample_category/sample_rule',
 		help_text='Sample help text',
-		custom=False,
+		standard=False,
+		custom=True,
 		built_in=False,
 		can_edit=True
 	)
@@ -90,7 +91,8 @@ http://localhost:8888/api/checks/{fullCheckName}
 		sensor_name='sample_target/sample_category/sample_sensor',
 		rule_name='sample_target/sample_category/sample_rule',
 		help_text='Sample help text',
-		custom=False,
+		standard=False,
+		custom=True,
 		built_in=False,
 		can_edit=True
 	)
@@ -124,7 +126,8 @@ http://localhost:8888/api/checks/{fullCheckName}
 		sensor_name='sample_target/sample_category/sample_sensor',
 		rule_name='sample_target/sample_category/sample_rule',
 		help_text='Sample help text',
-		custom=False,
+		standard=False,
+		custom=True,
 		built_in=False,
 		can_edit=True
 	)
@@ -156,7 +159,8 @@ http://localhost:8888/api/checks/{fullCheckName}
 		sensor_name='sample_target/sample_category/sample_sensor',
 		rule_name='sample_target/sample_category/sample_rule',
 		help_text='Sample help text',
-		custom=False,
+		standard=False,
+		custom=True,
 		built_in=False,
 		can_edit=True
 	)
@@ -310,7 +314,7 @@ http://localhost:8888/api/checks
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_definition_list_model||List[[CheckDefinitionListModel](../../models/checks.md#checkdefinitionlistmodel)]|
+|check_definition_list_model||List[[CheckDefinitionListModel](../models/checks.md#checkdefinitionlistmodel)]|
 
 
 
@@ -453,7 +457,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_definition_model](../../models/checks.md#checkdefinitionmodel)||[CheckDefinitionModel](../../models/checks.md#checkdefinitionmodel)|
+|[check_definition_model](../models/checks.md#checkdefinitionmodel)||[CheckDefinitionModel](../models/checks.md#checkdefinitionmodel)|
 
 
 
@@ -575,7 +579,8 @@ http://localhost:8888/api/checks/{fullCheckName}
 	  "sensor_name" : "sample_target/sample_category/sample_sensor",
 	  "rule_name" : "sample_target/sample_category/sample_rule",
 	  "help_text" : "Sample help text",
-	  "custom" : false,
+	  "standard" : false,
+	  "custom" : true,
 	  "built_in" : false,
 	  "can_edit" : true
 	}
@@ -597,7 +602,7 @@ http://localhost:8888/api/definitions/checks
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_definition_folder_model](../../models/checks.md#checkdefinitionfoldermodel)||[CheckDefinitionFolderModel](../../models/checks.md#checkdefinitionfoldermodel)|
+|[check_definition_folder_model](../models/checks.md#checkdefinitionfoldermodel)||[CheckDefinitionFolderModel](../models/checks.md#checkdefinitionfoldermodel)|
 
 
 
@@ -733,7 +738,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|List of check definitions|[CheckDefinitionModel](../../models/checks.md#checkdefinitionmodel)| |
+|List of check definitions|[CheckDefinitionModel](../models/checks.md#checkdefinitionmodel)| |
 
 
 
@@ -747,7 +752,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"check_name\":\"sample_check\",\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"rule_name\":\"sample_target/sample_category/sample_rule\",\"help_text\":\"Sample help text\",\"custom\":false,\"built_in\":false,\"can_edit\":true}"
+		"{\"check_name\":\"sample_check\",\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"rule_name\":\"sample_target/sample_category/sample_rule\",\"help_text\":\"Sample help text\",\"standard\":false,\"custom\":true,\"built_in\":false,\"can_edit\":true}"
 	
     ```
 
@@ -767,7 +772,8 @@ http://localhost:8888/api/checks/{fullCheckName}
 		sensor_name='sample_target/sample_category/sample_sensor',
 		rule_name='sample_target/sample_category/sample_rule',
 		help_text='Sample help text',
-		custom=False,
+		standard=False,
+		custom=True,
 		built_in=False,
 		can_edit=True
 	)
@@ -796,7 +802,8 @@ http://localhost:8888/api/checks/{fullCheckName}
 		sensor_name='sample_target/sample_category/sample_sensor',
 		rule_name='sample_target/sample_category/sample_rule',
 		help_text='Sample help text',
-		custom=False,
+		standard=False,
+		custom=True,
 		built_in=False,
 		can_edit=True
 	)
@@ -830,7 +837,8 @@ http://localhost:8888/api/checks/{fullCheckName}
 		sensor_name='sample_target/sample_category/sample_sensor',
 		rule_name='sample_target/sample_category/sample_rule',
 		help_text='Sample help text',
-		custom=False,
+		standard=False,
+		custom=True,
 		built_in=False,
 		can_edit=True
 	)
@@ -862,7 +870,8 @@ http://localhost:8888/api/checks/{fullCheckName}
 		sensor_name='sample_target/sample_category/sample_sensor',
 		rule_name='sample_target/sample_category/sample_rule',
 		help_text='Sample help text',
-		custom=False,
+		standard=False,
+		custom=True,
 		built_in=False,
 		can_edit=True
 	)

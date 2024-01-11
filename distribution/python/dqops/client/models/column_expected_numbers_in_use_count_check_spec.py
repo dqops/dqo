@@ -10,11 +10,11 @@ if TYPE_CHECKING:
         ColumnNumericExpectedNumbersInUseCountSensorParametersSpec,
     )
     from ..models.comment_spec import CommentSpec
-    from ..models.max_missing_rule_0_parameters_spec import (
-        MaxMissingRule0ParametersSpec,
+    from ..models.max_missing_rule_0_error_parameters_spec import (
+        MaxMissingRule0ErrorParametersSpec,
     )
-    from ..models.max_missing_rule_1_parameters_spec import (
-        MaxMissingRule1ParametersSpec,
+    from ..models.max_missing_rule_0_warning_parameters_spec import (
+        MaxMissingRule0WarningParametersSpec,
     )
     from ..models.max_missing_rule_2_parameters_spec import (
         MaxMissingRule2ParametersSpec,
@@ -51,8 +51,8 @@ class ColumnExpectedNumbersInUseCountCheckSpec:
             quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent
             table.
         parameters (Union[Unset, ColumnNumericExpectedNumbersInUseCountSensorParametersSpec]):
-        warning (Union[Unset, MaxMissingRule0ParametersSpec]):
-        error (Union[Unset, MaxMissingRule1ParametersSpec]):
+        warning (Union[Unset, MaxMissingRule0WarningParametersSpec]):
+        error (Union[Unset, MaxMissingRule0ErrorParametersSpec]):
         fatal (Union[Unset, MaxMissingRule2ParametersSpec]):
     """
 
@@ -67,8 +67,8 @@ class ColumnExpectedNumbersInUseCountCheckSpec:
     parameters: Union[
         Unset, "ColumnNumericExpectedNumbersInUseCountSensorParametersSpec"
     ] = UNSET
-    warning: Union[Unset, "MaxMissingRule0ParametersSpec"] = UNSET
-    error: Union[Unset, "MaxMissingRule1ParametersSpec"] = UNSET
+    warning: Union[Unset, "MaxMissingRule0WarningParametersSpec"] = UNSET
+    error: Union[Unset, "MaxMissingRule0ErrorParametersSpec"] = UNSET
     fatal: Union[Unset, "MaxMissingRule2ParametersSpec"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -143,11 +143,11 @@ class ColumnExpectedNumbersInUseCountCheckSpec:
             ColumnNumericExpectedNumbersInUseCountSensorParametersSpec,
         )
         from ..models.comment_spec import CommentSpec
-        from ..models.max_missing_rule_0_parameters_spec import (
-            MaxMissingRule0ParametersSpec,
+        from ..models.max_missing_rule_0_error_parameters_spec import (
+            MaxMissingRule0ErrorParametersSpec,
         )
-        from ..models.max_missing_rule_1_parameters_spec import (
-            MaxMissingRule1ParametersSpec,
+        from ..models.max_missing_rule_0_warning_parameters_spec import (
+            MaxMissingRule0WarningParametersSpec,
         )
         from ..models.max_missing_rule_2_parameters_spec import (
             MaxMissingRule2ParametersSpec,
@@ -195,18 +195,18 @@ class ColumnExpectedNumbersInUseCountCheckSpec:
             )
 
         _warning = d.pop("warning", UNSET)
-        warning: Union[Unset, MaxMissingRule0ParametersSpec]
+        warning: Union[Unset, MaxMissingRule0WarningParametersSpec]
         if isinstance(_warning, Unset):
             warning = UNSET
         else:
-            warning = MaxMissingRule0ParametersSpec.from_dict(_warning)
+            warning = MaxMissingRule0WarningParametersSpec.from_dict(_warning)
 
         _error = d.pop("error", UNSET)
-        error: Union[Unset, MaxMissingRule1ParametersSpec]
+        error: Union[Unset, MaxMissingRule0ErrorParametersSpec]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = MaxMissingRule1ParametersSpec.from_dict(_error)
+            error = MaxMissingRule0ErrorParametersSpec.from_dict(_error)
 
         _fatal = d.pop("fatal", UNSET)
         fatal: Union[Unset, MaxMissingRule2ParametersSpec]

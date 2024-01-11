@@ -90,6 +90,7 @@ public class RuleDocumentationModelFactoryImpl implements RuleDocumentationModel
         documentationModel.setRuleExample(loadRuleExample(ruleParts[0], ruleParts[1]));
 
         documentationModel.setDefinition(ruleDefinitionWrapper);
+        documentationModel.setPythonSourceCode(ruleDefinitionWrapper.getRulePythonModuleContent().getTextContent().replace("\n", "\n    "));
 
         List<FieldModel> fieldsForRuleParameters = this.specToModelCheckMappingService.createFieldsForRuleParameters(ruleParametersSpec);
         ParameterDefinitionsListSpec fieldDefinitionsList = new ParameterDefinitionsListSpec();
@@ -111,7 +112,7 @@ public class RuleDocumentationModelFactoryImpl implements RuleDocumentationModel
 
         try {
             List<String> read = Files.readAllLines(path);
-            return String.join("\n", read);
+            return String.join("\n    ", read);
         } catch (IOException e) {
             System.err.println("Cannot load rule example from file: " + path + ", error: " + e.getMessage() + ", " + e);
             return null;

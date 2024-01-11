@@ -16,7 +16,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/Common.md#checkcontainermodel)||[CheckContainerModel](../../models/Common.md#checkcontainermodel)|
+|[check_container_model](../models/Common.md#checkcontainermodel)||[CheckContainerModel](../models/Common.md#checkcontainermodel)|
 
 
 
@@ -164,7 +164,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/Common.md#checkcontainermodel)||[CheckContainerModel](../../models/Common.md#checkcontainermodel)|
+|[check_container_model](../models/Common.md#checkcontainermodel)||[CheckContainerModel](../models/Common.md#checkcontainermodel)|
 
 
 
@@ -312,7 +312,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/Common.md#checkcontainermodel)||[CheckContainerModel](../../models/Common.md#checkcontainermodel)|
+|[check_container_model](../models/Common.md#checkcontainermodel)||[CheckContainerModel](../models/Common.md#checkcontainermodel)|
 
 
 
@@ -460,7 +460,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/Common.md#checkcontainermodel)||[CheckContainerModel](../../models/Common.md#checkcontainermodel)|
+|[check_container_model](../models/Common.md#checkcontainermodel)||[CheckContainerModel](../models/Common.md#checkcontainermodel)|
 
 
 
@@ -608,7 +608,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/Common.md#checkcontainermodel)||[CheckContainerModel](../../models/Common.md#checkcontainermodel)|
+|[check_container_model](../models/Common.md#checkcontainermodel)||[CheckContainerModel](../models/Common.md#checkcontainermodel)|
 
 
 
@@ -756,7 +756,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/Common.md#checkcontainermodel)||[CheckContainerModel](../../models/Common.md#checkcontainermodel)|
+|[check_container_model](../models/Common.md#checkcontainermodel)||[CheckContainerModel](../models/Common.md#checkcontainermodel)|
 
 
 
@@ -904,7 +904,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[monitoring_schedule_spec](../../models/Common.md#monitoringschedulespec)||[MonitoringScheduleSpec](../../models/Common.md#monitoringschedulespec)|
+|[monitoring_schedule_spec](../models/Common.md#monitoringschedulespec)||[MonitoringScheduleSpec](../models/Common.md#monitoringschedulespec)|
 
 
 
@@ -913,7 +913,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|[scheduling_group](../../models/Common.md#checkrunschedulegroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../../models/Common.md#checkrunschedulegroup)|:material-check-bold:|
+|[scheduling_group](../models/Common.md#checkrunschedulegroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../models/Common.md#checkrunschedulegroup)|:material-check-bold:|
 
 
 
@@ -1042,7 +1042,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[incident_webhook_notifications_spec](../../../reference/yaml/ConnectionYaml.md#incidentwebhooknotificationsspec)||[IncidentWebhookNotificationsSpec](../../../reference/yaml/ConnectionYaml.md#incidentwebhooknotificationsspec)|
+|[incident_webhook_notifications_spec](../../reference/yaml/ConnectionYaml.md#incidentwebhooknotificationsspec)||[IncidentWebhookNotificationsSpec](../../reference/yaml/ConnectionYaml.md#incidentwebhooknotificationsspec)|
 
 
 
@@ -1176,7 +1176,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the default configuration of the data observability daily monitoring checks configuration|[CheckContainerModel](../../models/Common.md#checkcontainermodel)| |
+|Model with the changes to be applied to the default configuration of the data observability daily monitoring checks configuration|[CheckContainerModel](../models/Common.md#checkcontainermodel)| |
 
 
 
@@ -1223,6 +1223,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -1275,6 +1276,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -1332,6 +1334,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -1387,6 +1390,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -1435,7 +1439,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the default configuration of the data observability daily monitoring checks configuration|[CheckContainerModel](../../models/Common.md#checkcontainermodel)| |
+|Model with the changes to be applied to the default configuration of the data observability daily monitoring checks configuration|[CheckContainerModel](../models/Common.md#checkcontainermodel)| |
 
 
 
@@ -1482,6 +1486,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -1534,6 +1539,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -1591,6 +1597,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -1646,6 +1653,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -1694,7 +1702,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the default configuration of the data observability monthly monitoring checks configuration|[CheckContainerModel](../../models/Common.md#checkcontainermodel)| |
+|Model with the changes to be applied to the default configuration of the data observability monthly monitoring checks configuration|[CheckContainerModel](../models/Common.md#checkcontainermodel)| |
 
 
 
@@ -1741,6 +1749,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -1793,6 +1802,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -1850,6 +1860,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -1905,6 +1916,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -1953,7 +1965,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the default configuration of the data observability monthly monitoring checks configuration|[CheckContainerModel](../../models/Common.md#checkcontainermodel)| |
+|Model with the changes to be applied to the default configuration of the data observability monthly monitoring checks configuration|[CheckContainerModel](../models/Common.md#checkcontainermodel)| |
 
 
 
@@ -2000,6 +2012,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -2052,6 +2065,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -2109,6 +2123,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -2164,6 +2179,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -2212,7 +2228,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the data quality profiling checks configuration|[CheckContainerModel](../../models/Common.md#checkcontainermodel)| |
+|Model with the changes to be applied to the data quality profiling checks configuration|[CheckContainerModel](../models/Common.md#checkcontainermodel)| |
 
 
 
@@ -2259,6 +2275,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -2311,6 +2328,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -2368,6 +2386,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -2423,6 +2442,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -2471,7 +2491,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the data quality profiling checks configuration|[CheckContainerModel](../../models/Common.md#checkcontainermodel)| |
+|Model with the changes to be applied to the data quality profiling checks configuration|[CheckContainerModel](../models/Common.md#checkcontainermodel)| |
 
 
 
@@ -2518,6 +2538,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -2570,6 +2591,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -2627,6 +2649,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -2682,6 +2705,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -2728,7 +2752,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|[scheduling_group](../../models/Common.md#checkrunschedulegroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../../models/Common.md#checkrunschedulegroup)|:material-check-bold:|
+|[scheduling_group](../models/Common.md#checkrunschedulegroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../models/Common.md#checkrunschedulegroup)|:material-check-bold:|
 
 
 
@@ -2737,7 +2761,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Spec with default schedules changes to be applied to the default configuration.|[MonitoringScheduleSpec](../../models/Common.md#monitoringschedulespec)| |
+|Spec with default schedules changes to be applied to the default configuration.|[MonitoringScheduleSpec](../models/Common.md#monitoringschedulespec)| |
 
 
 
@@ -2888,7 +2912,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Spec with default notification webhooks changes to be applied to the default configuration|[IncidentWebhookNotificationsSpec](../../../reference/yaml/ConnectionYaml.md#incidentwebhooknotificationsspec)| |
+|Spec with default notification webhooks changes to be applied to the default configuration|[IncidentWebhookNotificationsSpec](../../reference/yaml/ConnectionYaml.md#incidentwebhooknotificationsspec)| |
 
 
 

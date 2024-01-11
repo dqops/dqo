@@ -110,6 +110,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         defaultSettings.getColumn().setAnomaly(columnAnomaly);
 
         TableSchemaDailyMonitoringChecksSpec tableSchema = new TableSchemaDailyMonitoringChecksSpec();
+        tableSchema.setDailyColumnCount(new TableSchemaColumnCountCheckSpec());
         tableSchema.setDailyColumnCountChanged(new TableSchemaColumnCountChangedCheckSpec() {{
             setWarning(new ValueChangedRuleParametersSpec());
         }});
@@ -170,7 +171,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         defaultSettings.getTable().setVolume(tableVolume);
 
         TableSchemaProfilingChecksSpec tableSchema = new TableSchemaProfilingChecksSpec();
-        tableSchema.setProfileExpectedColumnCount(new TableSchemaColumnCountCheckSpec());
+        tableSchema.setProfileColumnCount(new TableSchemaColumnCountCheckSpec());
         defaultSettings.getTable().setSchema(tableSchema);
 
         ColumnNullsProfilingChecksSpec columnNulls = new ColumnNullsProfilingChecksSpec();

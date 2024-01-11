@@ -18,6 +18,9 @@ class CheckDefinitionModel:
         rule_name (Union[Unset, str]): Rule name
         help_text (Union[Unset, str]): Help text that is shown in the check editor that describes the purpose and usage
             of the check
+        standard (Union[Unset, bool]): This is a standard data quality check that is always shown on the data quality
+            checks editor screen. Non-standard data quality checks (when the value is false) are advanced checks that are
+            shown when the user decides to expand the list of checks.
         custom (Union[Unset, bool]): This check has is a custom check or was customized by the user.
         built_in (Union[Unset, bool]): This check is provided with DQOps as a built-in check.
         can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can update or delete this object.
@@ -30,6 +33,7 @@ class CheckDefinitionModel:
     sensor_name: Union[Unset, str] = UNSET
     rule_name: Union[Unset, str] = UNSET
     help_text: Union[Unset, str] = UNSET
+    standard: Union[Unset, bool] = UNSET
     custom: Union[Unset, bool] = UNSET
     built_in: Union[Unset, bool] = UNSET
     can_edit: Union[Unset, bool] = UNSET
@@ -41,6 +45,7 @@ class CheckDefinitionModel:
         sensor_name = self.sensor_name
         rule_name = self.rule_name
         help_text = self.help_text
+        standard = self.standard
         custom = self.custom
         built_in = self.built_in
         can_edit = self.can_edit
@@ -57,6 +62,8 @@ class CheckDefinitionModel:
             field_dict["rule_name"] = rule_name
         if help_text is not UNSET:
             field_dict["help_text"] = help_text
+        if standard is not UNSET:
+            field_dict["standard"] = standard
         if custom is not UNSET:
             field_dict["custom"] = custom
         if built_in is not UNSET:
@@ -79,6 +86,8 @@ class CheckDefinitionModel:
 
         help_text = d.pop("help_text", UNSET)
 
+        standard = d.pop("standard", UNSET)
+
         custom = d.pop("custom", UNSET)
 
         built_in = d.pop("built_in", UNSET)
@@ -92,6 +101,7 @@ class CheckDefinitionModel:
             sensor_name=sensor_name,
             rule_name=rule_name,
             help_text=help_text,
+            standard=standard,
             custom=custom,
             built_in=built_in,
             can_edit=can_edit,

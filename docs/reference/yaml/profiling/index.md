@@ -23,11 +23,11 @@
 
 
 
-**The structure of this object is described below**
+The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |---------------|--------------------------|
-||[TableProfilingCheckCategoriesSpec](../table-profiling-checks.md#TableProfilingCheckCategoriesSpec)|
+||[TableProfilingCheckCategoriesSpec](./table-profiling-checks.md#TableProfilingCheckCategoriesSpec)|
 
 
 
@@ -54,11 +54,11 @@ ___
 
 
 
-**The structure of this object is described below**
+The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |---------------|--------------------------|
-||[ColumnProfilingCheckCategoriesSpec](../column-profiling-checks.md#ColumnProfilingCheckCategoriesSpec)|
+||[ColumnProfilingCheckCategoriesSpec](./column-profiling-checks.md#ColumnProfilingCheckCategoriesSpec)|
 
 
 

@@ -4,30 +4,30 @@ DQOps is an DataOps friendly data quality monitoring tool with customizable data
 DQOps comes with more than 140 predefined data quality checks which helps you monitor the quality of your data.
 
 ## DQOps features
-- Intuitive [user interface](../dqo-concepts/user-interface-overview/user-interface-overview.md) that uses tabs
+- Intuitive [user interface](./dqo-concepts/user-interface-overview/user-interface-overview.md) that uses tabs
   to work on multiple tables at the same time
-- [Command-line](../dqo-concepts/command-line-interface/command-line-interface.md) interface
+- [Command-line](./dqo-concepts/command-line-interface/command-line-interface.md) interface
 - Support of a number of different data sources: BigQuery, Snowflake, PostgreSQL, Redshift, SQL Server, MySQL, Spark, Databricks, Oracle and others
 - More than 140 built-in table and column checks with easy customization
-- Table and column-level [data quality checks](../dqo-concepts/checks/index.md) which allows writing your own SQL queries
-- Daily and monthly date [partition testing](../dqo-concepts/checks/partition-checks/partition-checks.md)
-- [Data grouping](../dqo-concepts/data-grouping/data-grouping.md) by up to 9 different columns
-- Built-in [job scheduler](../working-with-dqo/schedules/index.md)
-- Calculation of [data quality KPIs](../dqo-concepts/data-quality-kpis/data-quality-kpis.md)
-- Built-in [data quality dashboards](../dqo-concepts/data-quality-dashboards/data-quality-dashboards.md)
-- [Incremental data quality monitoring](../dqo-concepts/data-quality-kpis/incremental-data-quality-monitoring.md) to detect issues early
-- [Compare tables](../working-with-dqo/table-comparison/table-comparison.md) to the source of truth
-- Cloud hosted [Data Quality Data Warehouse](../dqo-concepts/architecture/dqops-architecture.md#data-quality-data-warehouse)
-- [Incident](../working-with-dqo/incidents-and-notifications/incidents.md) management
-- Sending incident notifications to [webhooks](../integrations/webhooks/index.md) and [Slack](../integrations/slack/configuring-slack-notifications.md)
+- Table and column-level [data quality checks](./dqo-concepts/checks/index.md) which allows writing your own SQL queries
+- Daily and monthly date [partition testing](./dqo-concepts/checks/partition-checks/partition-checks.md)
+- [Data grouping](./dqo-concepts/data-grouping/data-grouping.md) by up to 9 different columns
+- Built-in [job scheduler](./working-with-dqo/schedules/index.md)
+- Calculation of [data quality KPIs](./dqo-concepts/data-quality-kpis/data-quality-kpis.md)
+- Built-in [data quality dashboards](./dqo-concepts/data-quality-dashboards/data-quality-dashboards.md)
+- [Incremental data quality monitoring](./dqo-concepts/data-quality-kpis/incremental-data-quality-monitoring.md) to detect issues early
+- [Compare tables](./working-with-dqo/table-comparison/table-comparison.md) to the source of truth
+- Cloud hosted [Data Quality Data Warehouse](./dqo-concepts/architecture/dqops-architecture.md#data-quality-data-warehouse)
+- [Incident](./working-with-dqo/incidents-and-notifications/incidents.md) management
+- Sending incident notifications to [webhooks](./integrations/webhooks/index.md) and [Slack](./integrations/slack/configuring-slack-notifications.md)
 
 ## Getting started
 
-Try our [tutorial](../getting-started/index.md) to learn how to start monitoring your data with DQOps.
+Try our [tutorial](./getting-started/index.md) to learn how to start monitoring your data with DQOps.
 
 ## Supported data sources
 
-You can use DQOps with the most popular databases. [Learn here how to connect a data source to DQOps](../data-sources/index.md).
+You can use DQOps with the most popular databases. [Learn here how to connect a data source to DQOps](./data-sources/index.md).
 
 ![Google BigQuery](https://dqops.com/docs/images/connections/google-bigquery.png)
 &nbsp; &nbsp; &nbsp; ![Snowflake](https://dqops.com/docs/images/connections/snowflake.png)
@@ -58,5 +58,5 @@ Want to learn more about data quality?
 Check out eBook ["A step-by-step guide to improve data quality"](https://dqops.com/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/)
 created by the DQOps team based on their experience in data cleansing and data quality monitoring.
 
-![A step-by-step guide to improve data quality](../images/dqops-ebook-open-with-process.png "A step-by-step guide to improve data quality"){ loading=lazy }
+![A step-by-step guide to improve data quality](./images/dqops-ebook-open-with-process.png "A step-by-step guide to improve data quality"){ loading=lazy }
 

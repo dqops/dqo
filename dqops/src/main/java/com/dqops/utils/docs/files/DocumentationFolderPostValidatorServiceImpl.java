@@ -33,7 +33,7 @@ public class DocumentationFolderPostValidatorServiceImpl implements Documentatio
     /**
      * Pattern for ensuring a correct links format.
      */
-    private final Pattern correctLinkFormat = Pattern.compile("[\\w\\s]]\\((?!\\))((\\.\\./)*(([a-zA-Z0-9]+[\\-_])*[a-zA-Z0-9]+/)*([a-zA-Z0-9]+[\\-_])*[a-zA-Z0-9]+\\.(md|png))?(#(([a-zA-Z0-9]+[\\-_])*[a-zA-Z0-9]+|--?[\\w.][\\w.\\-]*))?( \".+\")?\\)");
+    private final Pattern correctLinkFormat = Pattern.compile("[\\w\\s]]\\((?!\\))(((\\.\\./)*|\\./)(([a-zA-Z0-9]+[\\-_])*[a-zA-Z0-9]+/)*([a-zA-Z0-9]+[\\-_])*[a-zA-Z0-9]+\\.(md|png))?(#(([a-zA-Z0-9]+[\\-_])*[a-zA-Z0-9]+|--?[\\w.][\\w.\\-]*))?( \".+\")?\\)");
 
     private final Path projectRoot;
 

@@ -43,19 +43,19 @@ We will set six data quality monitoring checks on `bigquery-public-data.thelook_
     - error: 98.0%
     - fatal: 95.0%
 
-5.  [daily_string_value_in_set_percent](../../checks/column/strings/string-value-in-set-percent.md) check on `gender` column with values parameters "F" and "M" and minimum percent thresholds levels
+5.  [daily_text_found_in_set_percent](../../checks/column/accepted_values/text-found-in-set-percent.md) check on `gender` column with values parameters "F" and "M" and minimum percent thresholds levels
     - warning: 99.0%
     - error: 98.0%
     - fatal: 95.0%
 
-6. [daily_values_in_range_numeric_percent](../../checks/column/numeric/values-in-range-numeric-percent.md) check on `age` column with values parameters "min_value=10" and "max_value=80" and minimum percent thresholds levels
+6. [daily_number_in_range_percent](../../checks/column/numeric/number-in-range-percent.md) check on `age` column with values parameters "min_value=10" and "max_value=80" and minimum percent thresholds levels
     - warning: 99.0%
     - error: 98.0%
     - fatal: 95.0%
 
 We will modify the default connection level schedule that apply to all activated checks from 12:00 AM to 8:00 AM. For two 
 checks that require more frequent runs, we will set individual check-level schedules that will override the connection level settings.
-The schedule for the [daily_values_in_range_numeric_percent](../../checks/column/numeric/values-in-range-numeric-percent.md) check will be temporarily disabled.
+The schedule for the [daily_number_in_range_percent](../../checks/column/numeric/number-in-range-percent.md) check will be temporarily disabled.
 
 If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
 You can read more about scheduling [here](../../working-with-dqo/schedules/index.md). 
@@ -108,7 +108,7 @@ To view and modify individual check-level schedules:
 
 3. Select the **Daily checks** tab on the check editor.
 
-    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../../dqo-concepts/user-interface-overview/user-interface-overview.md#check-editor).
+    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../dqo-concepts/user-interface-overview/user-interface-overview.md#check-editor).
 
 4. Find the [daily_table_availability](../../checks/table/availability/table-availability.md) check in the Availability group, and click on the **Settings** icon.
 
@@ -127,14 +127,14 @@ activated on the `id` column for **Run 15 minutes past every hour**.
 
 ### **Disable check-level schedule**
 
-We wanted to disable the scheduling of the [daily_values_in_range_numeric_percent](../../checks/column/numeric/values-in-range-numeric-percent.md)
+We wanted to disable the scheduling of the [daily_number_in_range_percent](../../checks/column/numeric/number-in-range-percent.md)
 check activated on the `age` column.
 
 To disable the check scheduling:
 
 1. Select the `age` column from the tree view
 
-2. Access the settings of the [daily_values_in_range_numeric_percent](../../checks/column/numeric/values-in-range-numeric-percent.md)
+2. Access the settings of the [daily_number_in_range_percent](../../checks/column/numeric/number-in-range-percent.md)
    check and select the **Schedule override** tab.
 
 3. Check the **Disable schedule** checkbutton and click the **Save** button.
@@ -195,7 +195,7 @@ The `id` column also includes an updated schedule on a [daily_distinct_percent](
 
 The remaining monitoring checks will be run every day at 8:00 AM (0 8 * * *) as indicated in the YAML connection configuration mentioned earlier.
 
-The [daily_values_in_range_numeric_percent](../../checks/column/numeric/values-in-range-numeric-percent.md) check activated
+The [daily_number_in_range_percent](../../checks/column/numeric/number-in-range-percent.md) check activated
 on the `age` column will not be run since the "disabled:" parameter has been set to "true" in the "schedule_override" section.
 
 ```yaml hl_lines="10-13 27-30 73-76"
@@ -272,7 +272,7 @@ spec:
       monitoring_checks:
         daily:
           numeric:
-            daily_values_in_range_numeric_percent:
+            daily_number_in_range_percent:
               schedule_override:
                 disabled: true
               parameters:
@@ -290,8 +290,8 @@ spec:
         nullable: true
       monitoring_checks:
         daily:
-          strings:
-            daily_string_value_in_set_percent:
+          accepted_values:
+            daily_text_found_in_set_percent:
               warning:
                 min_percent: 99.0
               error:

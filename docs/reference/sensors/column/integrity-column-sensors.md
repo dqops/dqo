@@ -1,23 +1,37 @@
+# Data quality integrity sensors
+All [data quality sensors](../../../dqo-concepts/sensors/sensors.md) in the **integrity** category supported by DQOps are listed below. Those sensors are measured on a column level.
 
-## **foreign key match percent**
-**Full sensor name**
-```
-column/integrity/foreign_key_match_percent
-```
-**Description**
+---
+
+
+## foreign key match percent
 Column level sensor that calculates the percentage of values that match values in column of another table.
 
-**Parameters**
+**Sensor summary**
+
+The foreign key match percent sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| column | integrity | `column/integrity/foreign_key_match_percent` | [sensors/column/integrity](https://github.com/dqops/dqo/tree/develop/home/sensors/column/integrity/) |
+
+
+**Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|foreign_table|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|string| ||
-|foreign_column|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|string| ||
+|`foreign_table`|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|string| ||
+|`foreign_column`|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|string| ||
 
 
 
 
-**SQL Template (Jinja2)**
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
 === "BigQuery"
 
     ```sql+jinja
@@ -308,7 +322,7 @@ Column level sensor that calculates the percentage of values that match values i
     
     {%- macro render_foreign_table(foreign_table) -%}
     {%- if foreign_table.find(".") < 0 -%}
-       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+       {{ lib.quote_identifier(lib.macro_catalog_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
     {%- else -%}
        {{ foreign_table }}
     {%- endif -%}
@@ -340,25 +354,36 @@ Column level sensor that calculates the percentage of values that match values i
     ```
 ___
 
-## **foreign key not match count**
-**Full sensor name**
-```
-column/integrity/foreign_key_not_match_count
-```
-**Description**
+
+
+## foreign key not match count
 Column level sensor that calculates the count of values that does not match values in column of another table.
 
-**Parameters**
+**Sensor summary**
+
+The foreign key not match count sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| column | integrity | `column/integrity/foreign_key_not_match_count` | [sensors/column/integrity](https://github.com/dqops/dqo/tree/develop/home/sensors/column/integrity/) |
+
+
+**Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|foreign_table|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|string| ||
-|foreign_column|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|string| ||
+|`foreign_table`|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|string| ||
+|`foreign_column`|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|string| ||
 
 
 
 
-**SQL Template (Jinja2)**
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
 === "BigQuery"
 
     ```sql+jinja
@@ -661,7 +686,7 @@ Column level sensor that calculates the count of values that does not match valu
     
     {%- macro render_foreign_table(foreign_table) -%}
     {%- if foreign_table.find(".") < 0 -%}
-       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+       {{ lib.quote_identifier(lib.macro_catalog_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
     {%- else -%}
        {{ foreign_table }}
     {%- endif -%}
@@ -692,3 +717,6 @@ Column level sensor that calculates the count of values that does not match valu
     {{- lib.render_order_by() -}}
     ```
 ___
+
+
+

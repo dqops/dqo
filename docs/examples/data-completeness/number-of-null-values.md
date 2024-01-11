@@ -17,7 +17,7 @@ We want to verify the number of null values on `source ` column.
 **SOLUTION**
 
 We will verify the data of `bigquery-public-data.america_health_rankings.ahr` using monitoring
-[nulls_count](../../../checks/column/nulls/nulls-count.md) column check.
+[nulls_count](../../checks/column/nulls/nulls-count.md) column check.
 Our goal is to verify that the number of null values in the `source ` column does not exceed the set thresholds.
 
 In this example, we will set three maximum number thresholds levels for the check:
@@ -26,7 +26,7 @@ In this example, we will set three maximum number thresholds levels for the chec
 - error: 10
 - fatal: 15
 
-If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
 
 **VALUE**
 
@@ -52,9 +52,9 @@ The `source ` column of interest contains NULL values.
 
 ## Running the checks in the example and evaluating the results using the user interface
 
-A detailed explanation of [how to run the example is described here](../../index.md#running-the-use-cases).
+A detailed explanation of [how to run the example is described here](../index.md#running-the-use-cases).
 
-To execute the check prepared in the example using the [user interface](../../../dqo-concepts/user-interface-overview/user-interface-overview.md):
+To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-null-count-checks2.png)
 
@@ -65,12 +65,12 @@ To execute the check prepared in the example using the [user interface](../../..
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
 
-    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../../data-sources/index.md). 
+    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../data-sources/index.md). 
 
 
 3. Select the **Daily checks** tab.
 
-    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../../../dqo-concepts/user-interface-overview/user-interface-overview.md#check-editor).
+    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../dqo-concepts/user-interface-overview/user-interface-overview.md#check-editor).
 
 
 4. Run the activated check using the **Run check** button.
@@ -99,12 +99,12 @@ To execute the check prepared in the example using the [user interface](../../..
 
     Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
-7. To review the results on the [data quality dashboards](../../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
+7. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
     go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
  
     Below you can see the results displayed on the **Current completeness issues on columns** dashboard located in Data Quality Dimensions/Completeness group.
-    This dashboard displays results from most recently executed null checks on columns ([null_count](../../../checks/column/nulls/nulls-count.md), [null_percent](../../../checks/column/nulls/nulls-percent.md),
-    [not_nulls_count](../../../checks/column/nulls/not-nulls-count.md) and [not_nulls_percent](../../../checks/column/nulls/not-nulls-percent.md)).
+    This dashboard displays results from most recently executed null checks on columns ([null_count](../../checks/column/nulls/nulls-count.md), [null_percent](../../checks/column/nulls/nulls-percent.md),
+    [not_nulls_count](../../checks/column/nulls/not-nulls-count.md) and [not_nulls_percent](../../checks/column/nulls/not-nulls-percent.md)).
 
     This dashboard allows filtering data by:
     
@@ -151,9 +151,9 @@ After importing new tables, DQOps sets the schedule for 12:00 P.M. (noon) every 
 Once a schedule is set up for a particular connection, it will execute all the checks that have been configured across
 all tables associated with that connection. 
 
-You can [read more about scheduling here](../../../working-with-dqo/schedules/index.md).
+You can [read more about scheduling here](../../working-with-dqo/schedules/index.md).
 
-You might also want to check the [Running checks with a scheduler](../../data-quality-monitoring/running-checks-with-a-scheduler.md) example. 
+You might also want to check the [Running checks with a scheduler](../data-quality-monitoring/running-checks-with-a-scheduler.md) example. 
 
 ## YAML configuration file
 
@@ -167,7 +167,7 @@ In this example, we have set three maximum number thresholds levels for the chec
 
 The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_nulls_count` check is configured.
 
-If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
 
 ```yaml hl_lines="20-33"
 apiVersion: dqo/v1
@@ -207,7 +207,7 @@ spec:
 
 ## Running the checks in the example and evaluating the results using DQOps Shell
 
-A detailed explanation of [how to run the example is described here](../../index.md#running-the-use-cases).
+A detailed explanation of [how to run the example is described here](../index.md#running-the-use-cases).
 
 To execute the check prepared in the example, run the following command in DQOps Shell:
 
@@ -260,7 +260,7 @@ threshold level set in the warning (5).
 
 ```
 **************************************************
-Finished executing a sensor for a check nulls_count on the table america_health_rankings.ahr using a sensor definition column/nulls/null_count, sensor result count: 1
+Finished executing a sensor for a check nulls_count on the table america_health_rankings.ahr using a sensor definition column/nulls/nulls_count, sensor result count: 1
 
 Results returned by the sensor:
 +------------+------------------------+------------------------+
@@ -272,14 +272,14 @@ Results returned by the sensor:
 ```
 
 In this example, we have demonstrated how to use DQOps to verify the completeness of data in a column. 
-By using the [nulls_count](../../../checks/column/nulls/nulls-count.md) column check, we can monitor that the number of
+By using the [nulls_count](../../checks/column/nulls/nulls-count.md) column check, we can monitor that the number of
 null values in a column does not exceed the minimum accepted count. If it does, you will get a warning, error or fatal result.
 
 ## Next steps
 
-- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQO as a Docker container](../../../working-with-dqo/installation/run-dqo-as-docker-container.md).
-- For details on the [nulls_cont check used in this example, go to the check details section](../../../checks/column/nulls/nulls-count.md).
-- You might be interested in another completeness check that [evaluates that the number of rows in a table does not exceed the minimum accepted count](../../data-completeness/number-of-rows-in-the-table.md).  
-- Would you like to add your own connection? Here you can find [information about supported databases and how to add new connection](../../../data-sources/index.md).
-- DQOps provide you with summary statistics about your table and column. This information can be valuable in deciding which data quality checks and threshold levels should be set to monitor data quality. For more details about [Basic data statistics, click here](../../../working-with-dqo/basic-data-statistics/basic-data-statistics.md). 
+- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQO as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
+- For details on the [nulls_count check used in this example, go to the check details section](../../checks/column/nulls/nulls-count.md).
+- You might be interested in another completeness check that [evaluates that the number of rows in a table does not exceed the minimum accepted count](../data-completeness/number-of-rows-in-the-table.md).  
+- Would you like to add your own connection? Here you can find [information about supported databases and how to add new connection](../../data-sources/index.md).
+- DQOps provide you with summary statistics about your table and column. This information can be valuable in deciding which data quality checks and threshold levels should be set to monitor data quality. For more details about [Basic data statistics, click here](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md). 
  

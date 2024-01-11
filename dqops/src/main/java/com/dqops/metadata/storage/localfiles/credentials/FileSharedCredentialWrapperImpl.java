@@ -23,6 +23,8 @@ import com.dqops.metadata.basespecs.InstanceStatus;
 import com.dqops.metadata.credentials.SharedCredentialWrapperImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.nio.file.Path;
+
 /**
  * File based shared credential file wrapper. Loads and writes shared credential files in the user's home .credentials/ folder.
  */
@@ -45,7 +47,7 @@ public class FileSharedCredentialWrapperImpl extends SharedCredentialWrapperImpl
      * @return Credentials folder (.credentials).
      */
     @JsonIgnore
-    public FolderTreeNode getRuleFolderNode() {
+    public FolderTreeNode getCredentialsFolderNode() {
         return credentialsFolderNode;
     }
 
@@ -113,5 +115,25 @@ public class FileSharedCredentialWrapperImpl extends SharedCredentialWrapperImpl
         }
 
         super.flush(); // change the statuses
+    }
+
+    /**
+     * Extracts an absolute file path to the credential file. This method returns null if the credentials are not stored on the disk, but using an in-memory user home instance.
+     *
+     * @return Absolut path to the file or null when it is not possible to find the file.
+     */
+    @Override
+    public Path toAbsoluteFilePath() {
+        String fileName = FileNameSanitizer.encodeForFileSystem(this.getObjectName());
+        FileTreeNode childFileByFileName = this.credentialsFolderNode.getChildFileByFileName(fileName);
+        if (childFileByFileName == null) {
+            return null;
+        }
+
+        if (childFileByFileName.isLocalFileSystem()) {
+            return childFileByFileName.getPhysicalAbsolutePath();
+        }
+
+        return null;
     }
 }

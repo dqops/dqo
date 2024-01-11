@@ -1,16 +1,30 @@
+# Data quality range sensors
+All [data quality sensors](../../../dqo-concepts/sensors/sensors.md) in the **range** category supported by DQOps are listed below. Those sensors are measured on a column level.
 
-## **max value**
-**Full sensor name**
-```
-column/range/max_value
-```
-**Description**
+---
+
+
+## max value
 Column level sensor that counts maximum value in a column.
 
+**Sensor summary**
+
+The max value sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| column | range | `column/range/max_value` | [sensors/column/range](https://github.com/dqops/dqo/tree/develop/home/sensors/column/range/) |
 
 
 
-**SQL Template (Jinja2)**
+
+
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
 === "BigQuery"
 
     ```sql+jinja
@@ -176,18 +190,29 @@ Column level sensor that counts maximum value in a column.
     ```
 ___
 
-## **min value**
-**Full sensor name**
-```
-column/range/min_value
-```
-**Description**
+
+
+## min value
 Column level sensor that counts minimum value in a column.
 
+**Sensor summary**
+
+The min value sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| column | range | `column/range/min_value` | [sensors/column/range](https://github.com/dqops/dqo/tree/develop/home/sensors/column/range/) |
 
 
 
-**SQL Template (Jinja2)**
+
+
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
 === "BigQuery"
 
     ```sql+jinja
@@ -352,3 +377,6 @@ Column level sensor that counts minimum value in a column.
     {{- lib.render_order_by() -}}
     ```
 ___
+
+
+

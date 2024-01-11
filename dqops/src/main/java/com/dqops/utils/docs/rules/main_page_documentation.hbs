@@ -1,12 +1,11 @@
-# Rules
-
-**This is a list of the rules in DQOps broken down by category and a brief description of what they do.**
+# Data quality rules supported by DQOps
+The full list of data quality rules supported by DQOps. The source code is found in the *[$DQO_HOME](/docs/dqo-concepts/architecture/dqops-architecture.md#dqops-home)/rules/* folder in the DQOps distribution.
 
 {{#each rules}}
-### **{{category}}**
+## {{category}} rules
 
 | Rule name | Description |
 |-----------|-------------|
-{{#each ruleDocumentationModels}}|[{{ruleName}}](../{{capitalizeFirst category}}.md#{{replace ruleName "_" "-"}})|{{single-line ruleParametersJavaDoc}}|
+{{#each ruleDocumentationModels}}|[{{ruleName}}](./{{capitalizeFirst category}}.md#{{replace ruleName "_" "-"}})|{{single-line ruleParametersJavaDoc}}|
 {{/each}}
 {{/each}}

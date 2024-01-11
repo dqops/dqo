@@ -21,7 +21,7 @@ spec:
       monitoring_checks:
         daily:
           integrity:
-            daily_foreign_key_match_percent:
+            daily_lookup_key_found_percent:
               parameters:
                 foreign_table: fips_codes_states
                 foreign_column: state_fips_code

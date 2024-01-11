@@ -90,12 +90,48 @@ public class CliCommandDocumentationGeneratorImpl implements CliCommandDocumenta
         for (Map.Entry<String, CommandLine> subcommand : firstLevelCommands.entrySet()) {
             CliRootCommandDocumentationModel rootCommandModel = new CliRootCommandDocumentationModel();
             rootCommandModel.setRootCommandName(subcommand.getKey());
+            rootCommandModel.setRootCommandHeader(extractRootCommandHeader(subcommand.getValue()));
+            rootCommandModel.setRootCommandDescription(extractRootCommandDescription(subcommand.getValue()));
             rootCommands.add(rootCommandModel);
 
             collectSubCommands(rootCommandModel, subcommand.getValue());
         }
 
         return rootCommands;
+    }
+
+    /**
+     * Retrieves the header from the root command.
+     * @param commandLine Command line.
+     * @return Command header.
+     */
+    public String extractRootCommandHeader(CommandLine commandLine) {
+        CommandLine.Model.CommandSpec commandSpec = commandLine.getCommandSpec();
+
+        CommandLine.Model.UsageMessageSpec usageMessageSpec = commandSpec.usageMessage();
+        String[] header = usageMessageSpec.header();
+        if (header == null) {
+            return null;
+        }
+
+        return String.join(" ", header);
+    }
+
+    /**
+     * Retrieves the description from the root command.
+     * @param commandLine Command line.
+     * @return Command description.
+     */
+    public String extractRootCommandDescription(CommandLine commandLine) {
+        CommandLine.Model.CommandSpec commandSpec = commandLine.getCommandSpec();
+
+        CommandLine.Model.UsageMessageSpec usageMessageSpec = commandSpec.usageMessage();
+        String[] description = usageMessageSpec.description();
+        if (description == null) {
+            return null;
+        }
+
+        return String.join(" ", description);
     }
 
     /**

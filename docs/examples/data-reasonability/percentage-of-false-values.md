@@ -23,7 +23,7 @@ ready to be transcribed.
 **SOLUTION**
 
 We will verify the data of `bigquery-public-data.fcc_political_ads.content_info` using monitoring 
-[false_percent](../../../checks/column/bool/false-percent.md) column check.
+[false_percent](../../checks/column/bool/false-percent.md) column check.
 Our goal is to verify that the percentage of false boolean values on `invalidOcr` column does not fall below 99%. 
 
 In this example, we will set three minimum percentage thresholds levels for the check:
@@ -32,7 +32,7 @@ In this example, we will set three minimum percentage thresholds levels for the 
 - error: 98.0%
 - fatal: 95.0%
 
-If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
 
 **VALUE**
 
@@ -58,9 +58,9 @@ The `invalidOcr` column of interest contains both TRUE and FALSE values.
 
 ## Running the checks in the example and evaluating the results using the user interface
 
-A detailed explanation of [how to run the example is described here](../../index.md#running-the-use-cases).
+A detailed explanation of [how to run the example is described here](../index.md#running-the-use-cases).
 
-To execute the check prepared in the example using the [user interface](../../../dqo-concepts/user-interface-overview/user-interface-overview.md):
+To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-false-percent-checks1.png)
 
@@ -71,12 +71,12 @@ To execute the check prepared in the example using the [user interface](../../..
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
 
-    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../../data-sources/index.md).
+    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../data-sources/index.md).
 
 
 3. Select the **Daily checks** tab.
 
-    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../../../dqo-concepts/user-interface-overview/user-interface-overview.md#check-editor).
+    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../dqo-concepts/user-interface-overview/user-interface-overview.md#check-editor).
 
 
 4. Run the activated check using the **Run check** button.
@@ -105,7 +105,7 @@ To execute the check prepared in the example using the [user interface](../../..
 
     Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
-7. To review the results on the [data quality dashboards](../../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
+7. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
     go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
 
     Below you can see the results displayed on the **Current column status** dashboard located in the Current status group. 
@@ -157,9 +157,9 @@ After importing new tables, DQOps sets the schedule for 12:00 P.M. (noon) every 
 Once a schedule is set up for a particular connection, it will execute all the checks that have been configured across
 all tables associated with that connection.
 
-You can [read more about scheduling here](../../../working-with-dqo/schedules/index.md).
+You can [read more about scheduling here](../../working-with-dqo/schedules/index.md).
 
-You might also want to check the [Running checks with a scheduler](../../data-quality-monitoring/running-checks-with-a-scheduler.md) example.
+You might also want to check the [Running checks with a scheduler](../data-quality-monitoring/running-checks-with-a-scheduler.md) example.
 
 ## YAML configuration file
 
@@ -173,7 +173,7 @@ In this example, we have set three minimum percentage thresholds levels for the 
 
 The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_false_percent` check is configured.
 
-If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
 
 ```yaml hl_lines="16-29"
 apiVersion: dqo/v1
@@ -209,7 +209,7 @@ spec:
 
 ## Running the checks in the example and evaluating the results using DQOps Shell
 
-A detailed explanation of [how to run the example is described here](../../index.md#running-the-use-cases). 
+A detailed explanation of [how to run the example is described here](../index.md#running-the-use-cases). 
 
 To execute the check prepared in the example, run the following command in DQOps Shell:
 
@@ -278,13 +278,13 @@ Results returned by the sensor:
 ```
 
 In this example, we have demonstrated how to use DQOps to verify the reasonability of data in a column.
-By using the [false_percent](../../../checks/column/bool/false-percent.md) column check, we can monitor that the percentage
+By using the [false_percent](../../checks/column/bool/false-percent.md) column check, we can monitor that the percentage
 of false boolean values does not fall below a set threshold. If it does, you will get a warning, error or fatal result.
 
 ## Next steps
 
-- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../../working-with-dqo/installation/run-dqo-as-docker-container.md).
-- For details on the [profile_false_percent check used in this example, go to the check details section](../../../checks/column/bool/false-percent.md).
-- You might be interested in another reasonability check that [evaluates that percentage of integer values from a range in a column does not exceed the minimum accepted percentage](../../data-reasonability/percentage-of-integer-values-in-range.md).
-- With DQOps, you can easily customize when the checks are run at the level of the entire connection, table, or individual check. [Learn more about how to set schedules here](../../../working-with-dqo/schedules/index.md).
-- DQOps provide you with summary statistics about your table and column. This information can be valuable in deciding which data quality checks and threshold levels should be set to monitor data quality. For more details about [Basic data statistics, click here](../../../working-with-dqo/basic-data-statistics/basic-data-statistics.md).
+- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
+- For details on the [profile_false_percent check used in this example, go to the check details section](../../checks/column/bool/false-percent.md).
+- You might be interested in another reasonability check that [evaluates that percentage of integer values from a range in a column does not exceed the minimum accepted percentage](../data-reasonability/percentage-of-integer-values-in-range.md).
+- With DQOps, you can easily customize when the checks are run at the level of the entire connection, table, or individual check. [Learn more about how to set schedules here](../../working-with-dqo/schedules/index.md).
+- DQOps provide you with summary statistics about your table and column. This information can be valuable in deciding which data quality checks and threshold levels should be set to monitor data quality. For more details about [Basic data statistics, click here](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md).

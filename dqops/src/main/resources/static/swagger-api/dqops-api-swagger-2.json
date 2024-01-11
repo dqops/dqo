@@ -35024,7 +35024,7 @@
             "$ref" : "#/definitions/CustomCheckSpec"
           }
         },
-        "daily_expected_column_count" : {
+        "daily_column_count" : {
           "description" : "Detects if the number of column matches an expected number. Retrieves the metadata of the monitored table, counts the number of columns and compares it to an expected value (an expected number of columns). Stores the most recent column count for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/TableSchemaColumnCountCheckSpec"
         },
@@ -35056,7 +35056,7 @@
             "$ref" : "#/definitions/CustomCheckSpec"
           }
         },
-        "monthly_expected_column_count" : {
+        "monthly_column_count" : {
           "description" : "Detects if the number of column matches an expected number. Retrieves the metadata of the monitored table, counts the number of columns and compares it to an expected value (an expected number of columns). Stores the most recent column count for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/TableSchemaColumnCountCheckSpec"
         },
@@ -35088,7 +35088,7 @@
             "$ref" : "#/definitions/CustomCheckSpec"
           }
         },
-        "profile_expected_column_count" : {
+        "profile_column_count" : {
           "description" : "Detects if the number of column matches an expected number. Retrieves the metadata of the monitored table, counts the number of columns and compares it to an expected value (an expected number of columns).",
           "$ref" : "#/definitions/TableSchemaColumnCountCheckSpec"
         },
@@ -35940,12 +35940,6 @@
         "athena_output_location" : {
           "type" : "string",
           "description" : "The location in Amazon S3 where query results will be stored. Supports also a ${ATHENA_OUTPUT_LOCATION} configuration with a custom environment variable."
-        },
-        "athena_properties" : {
-          "type" : "object",
-          "additionalProperties" : {
-            "type" : "string"
-          }
         },
         "database" : {
           "type" : "string"

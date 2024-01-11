@@ -1,23 +1,37 @@
+# Data quality accuracy sensors
+All [data quality sensors](../../../dqo-concepts/sensors/sensors.md) in the **accuracy** category supported by DQOps are listed below. Those sensors are measured on a column level.
 
-## **total average match percent**
-**Full sensor name**
-```
-column/accuracy/total_average_match_percent
-```
-**Description**
+---
+
+
+## total average match percent
 Column level sensor that calculates the percentage of the difference in average of a column in a table and average of a column of another table.
 
-**Parameters**
+**Sensor summary**
+
+The total average match percent sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| column | accuracy | `column/accuracy/total_average_match_percent` | [sensors/column/accuracy](https://github.com/dqops/dqo/tree/develop/home/sensors/column/accuracy/) |
+
+
+**Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|referenced_table|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|string| ||
-|referenced_column|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|string| ||
+|`referenced_table`|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|string| ||
+|`referenced_column`|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|string| ||
 
 
 
 
-**SQL Template (Jinja2)**
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
 === "BigQuery"
 
     ```sql+jinja
@@ -251,7 +265,7 @@ Column level sensor that calculates the percentage of the difference in average 
     
     {%- macro render_referenced_table(referenced_table) -%}
     {%- if referenced_table.find(".") < 0 -%}
-       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+       {{ lib.quote_identifier(lib.macro_catalog_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
     {%- else -%}
        {{ referenced_table }}
     {%- endif -%}
@@ -268,25 +282,36 @@ Column level sensor that calculates the percentage of the difference in average 
     ```
 ___
 
-## **total max match percent**
-**Full sensor name**
-```
-column/accuracy/total_max_match_percent
-```
-**Description**
+
+
+## total max match percent
 Column level sensor that calculates the percentage of the difference in max of a column in a table and max of a column of another table.
 
-**Parameters**
+**Sensor summary**
+
+The total max match percent sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| column | accuracy | `column/accuracy/total_max_match_percent` | [sensors/column/accuracy](https://github.com/dqops/dqo/tree/develop/home/sensors/column/accuracy/) |
+
+
+**Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|referenced_table|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|string| ||
-|referenced_column|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|string| ||
+|`referenced_table`|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|string| ||
+|`referenced_column`|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|string| ||
 
 
 
 
-**SQL Template (Jinja2)**
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
 === "BigQuery"
 
     ```sql+jinja
@@ -516,7 +541,7 @@ Column level sensor that calculates the percentage of the difference in max of a
     
     {%- macro render_referenced_table(referenced_table) -%}
     {%- if referenced_table.find(".") < 0 -%}
-       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+       {{ lib.quote_identifier(lib.macro_catalog_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
     {%- else -%}
        {{ referenced_table }}
     {%- endif -%}
@@ -533,25 +558,36 @@ Column level sensor that calculates the percentage of the difference in max of a
     ```
 ___
 
-## **total min match percent**
-**Full sensor name**
-```
-column/accuracy/total_min_match_percent
-```
-**Description**
+
+
+## total min match percent
 Column level sensor that calculates the percentage of the difference in min of a column in a table and min of a column of another table.
 
-**Parameters**
+**Sensor summary**
+
+The total min match percent sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| column | accuracy | `column/accuracy/total_min_match_percent` | [sensors/column/accuracy](https://github.com/dqops/dqo/tree/develop/home/sensors/column/accuracy/) |
+
+
+**Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|referenced_table|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|string| ||
-|referenced_column|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|string| ||
+|`referenced_table`|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|string| ||
+|`referenced_column`|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|string| ||
 
 
 
 
-**SQL Template (Jinja2)**
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
 === "BigQuery"
 
     ```sql+jinja
@@ -782,7 +818,7 @@ Column level sensor that calculates the percentage of the difference in min of a
     
     {%- macro render_referenced_table(referenced_table) -%}
     {%- if referenced_table.find(".") < 0 -%}
-       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+       {{ lib.quote_identifier(lib.macro_catalog_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
     {%- else -%}
        {{ referenced_table }}
     {%- endif -%}
@@ -799,25 +835,36 @@ Column level sensor that calculates the percentage of the difference in min of a
     ```
 ___
 
-## **total not null count match percent**
-**Full sensor name**
-```
-column/accuracy/total_not_null_count_match_percent
-```
-**Description**
+
+
+## total not null count match percent
 Column level sensor that calculates the percentage of the difference in row count of a column in a table and row count of a column of another table.
 
-**Parameters**
+**Sensor summary**
+
+The total not null count match percent sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| column | accuracy | `column/accuracy/total_not_null_count_match_percent` | [sensors/column/accuracy](https://github.com/dqops/dqo/tree/develop/home/sensors/column/accuracy/) |
+
+
+**Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|referenced_table|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|string| ||
-|referenced_column|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|string| ||
+|`referenced_table`|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|string| ||
+|`referenced_column`|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|string| ||
 
 
 
 
-**SQL Template (Jinja2)**
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
 === "BigQuery"
 
     ```sql+jinja
@@ -1048,7 +1095,7 @@ Column level sensor that calculates the percentage of the difference in row coun
     
     {%- macro render_referenced_table(referenced_table) -%}
     {%- if referenced_table.find(".") < 0 -%}
-       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+       {{ lib.quote_identifier(lib.macro_catalog_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
     {%- else -%}
        {{ referenced_table }}
     {%- endif -%}
@@ -1065,25 +1112,36 @@ Column level sensor that calculates the percentage of the difference in row coun
     ```
 ___
 
-## **total sum match percent**
-**Full sensor name**
-```
-column/accuracy/total_sum_match_percent
-```
-**Description**
+
+
+## total sum match percent
 Column level sensor that calculates the percentage of the difference in sum of a column in a table and sum of a column of another table.
 
-**Parameters**
+**Sensor summary**
+
+The total sum match percent sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| column | accuracy | `column/accuracy/total_sum_match_percent` | [sensors/column/accuracy](https://github.com/dqops/dqo/tree/develop/home/sensors/column/accuracy/) |
+
+
+**Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|referenced_table|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|string| ||
-|referenced_column|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|string| ||
+|`referenced_table`|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|string| ||
+|`referenced_column`|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|string| ||
 
 
 
 
-**SQL Template (Jinja2)**
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
 === "BigQuery"
 
     ```sql+jinja
@@ -1149,6 +1207,32 @@ Column level sensor that calculates the percentage of the difference in sum of a
         SUM({{ lib.render_target_column('analyzed_table')}}) AS actual_value
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
+    ```
+=== "Oracle"
+
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    
+    SELECT
+        (SELECT
+            SUM(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} referenced_table
+        ) AS expected_value,
+        analyzed_table.actual_value
+    FROM (SELECT
+            SUM({{ lib.render_target_column('original_table')}}) AS actual_value
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause() -}} ) analyzed_table
+    GROUP BY actual_value
     ```
 === "PostgreSQL"
 
@@ -1289,7 +1373,7 @@ Column level sensor that calculates the percentage of the difference in sum of a
     
     {%- macro render_referenced_table(referenced_table) -%}
     {%- if referenced_table.find(".") < 0 -%}
-       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+       {{ lib.quote_identifier(lib.macro_catalog_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
     {%- else -%}
        {{ referenced_table }}
     {%- endif -%}
@@ -1305,3 +1389,6 @@ Column level sensor that calculates the percentage of the difference in sum of a
     {{- lib.render_where_clause() -}}
     ```
 ___
+
+
+

@@ -6,43 +6,13 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.column_anomaly_stationary_distinct_percent_30_days_check_spec import (
-        ColumnAnomalyStationaryDistinctPercent30DaysCheckSpec,
-    )
-    from ..models.column_anomaly_stationary_distinct_percent_check_spec import (
-        ColumnAnomalyStationaryDistinctPercentCheckSpec,
-    )
-    from ..models.column_anomaly_stationary_partition_distinct_count_30_days_check_spec import (
-        ColumnAnomalyStationaryPartitionDistinctCount30DaysCheckSpec,
-    )
-    from ..models.column_anomaly_stationary_partition_distinct_count_check_spec import (
-        ColumnAnomalyStationaryPartitionDistinctCountCheckSpec,
-    )
-    from ..models.column_change_distinct_count_check_spec import (
-        ColumnChangeDistinctCountCheckSpec,
-    )
-    from ..models.column_change_distinct_count_since_7_days_check_spec import (
-        ColumnChangeDistinctCountSince7DaysCheckSpec,
-    )
-    from ..models.column_change_distinct_count_since_30_days_check_spec import (
-        ColumnChangeDistinctCountSince30DaysCheckSpec,
-    )
-    from ..models.column_change_distinct_count_since_yesterday_check_spec import (
-        ColumnChangeDistinctCountSinceYesterdayCheckSpec,
-    )
-    from ..models.column_change_distinct_percent_check_spec import (
-        ColumnChangeDistinctPercentCheckSpec,
-    )
-    from ..models.column_change_distinct_percent_since_7_days_check_spec import (
-        ColumnChangeDistinctPercentSince7DaysCheckSpec,
-    )
-    from ..models.column_change_distinct_percent_since_30_days_check_spec import (
-        ColumnChangeDistinctPercentSince30DaysCheckSpec,
-    )
-    from ..models.column_change_distinct_percent_since_yesterday_check_spec import (
-        ColumnChangeDistinctPercentSinceYesterdayCheckSpec,
+    from ..models.column_distinct_count_change_check_spec import (
+        ColumnDistinctCountChangeCheckSpec,
     )
     from ..models.column_distinct_count_check_spec import ColumnDistinctCountCheckSpec
+    from ..models.column_distinct_percent_change_check_spec import (
+        ColumnDistinctPercentChangeCheckSpec,
+    )
     from ..models.column_distinct_percent_check_spec import (
         ColumnDistinctPercentCheckSpec,
     )
@@ -69,28 +39,8 @@ class ColumnUniquenessMonthlyPartitionedChecksSpec:
         monthly_partition_distinct_percent (Union[Unset, ColumnDistinctPercentCheckSpec]):
         monthly_partition_duplicate_count (Union[Unset, ColumnDuplicateCountCheckSpec]):
         monthly_partition_duplicate_percent (Union[Unset, ColumnDuplicatePercentCheckSpec]):
-        monthly_partition_anomaly_stationary_distinct_count (Union[Unset,
-            ColumnAnomalyStationaryPartitionDistinctCountCheckSpec]):
-        monthly_partition_anomaly_stationary_distinct_percent (Union[Unset,
-            ColumnAnomalyStationaryDistinctPercentCheckSpec]):
-        monthly_partition_change_distinct_count (Union[Unset, ColumnChangeDistinctCountCheckSpec]):
-        monthly_partition_change_distinct_count_since_yesterday (Union[Unset,
-            ColumnChangeDistinctCountSinceYesterdayCheckSpec]):
-        monthly_partition_change_distinct_percent (Union[Unset, ColumnChangeDistinctPercentCheckSpec]):
-        monthly_partition_change_distinct_percent_since_yesterday (Union[Unset,
-            ColumnChangeDistinctPercentSinceYesterdayCheckSpec]):
-        monthly_partition_anomaly_stationary_distinct_count_30_days (Union[Unset,
-            ColumnAnomalyStationaryPartitionDistinctCount30DaysCheckSpec]):
-        monthly_partition_anomaly_stationary_distinct_percent_30_days (Union[Unset,
-            ColumnAnomalyStationaryDistinctPercent30DaysCheckSpec]):
-        monthly_partition_change_distinct_count_since_7_days (Union[Unset,
-            ColumnChangeDistinctCountSince7DaysCheckSpec]):
-        monthly_partition_change_distinct_count_since_30_days (Union[Unset,
-            ColumnChangeDistinctCountSince30DaysCheckSpec]):
-        monthly_partition_change_distinct_percent_since_7_days (Union[Unset,
-            ColumnChangeDistinctPercentSince7DaysCheckSpec]):
-        monthly_partition_change_distinct_percent_since_30_days (Union[Unset,
-            ColumnChangeDistinctPercentSince30DaysCheckSpec]):
+        monthly_partition_distinct_count_change (Union[Unset, ColumnDistinctCountChangeCheckSpec]):
+        monthly_partition_distinct_percent_change (Union[Unset, ColumnDistinctPercentChangeCheckSpec]):
     """
 
     custom_checks: Union[
@@ -108,41 +58,11 @@ class ColumnUniquenessMonthlyPartitionedChecksSpec:
     monthly_partition_duplicate_percent: Union[
         Unset, "ColumnDuplicatePercentCheckSpec"
     ] = UNSET
-    monthly_partition_anomaly_stationary_distinct_count: Union[
-        Unset, "ColumnAnomalyStationaryPartitionDistinctCountCheckSpec"
+    monthly_partition_distinct_count_change: Union[
+        Unset, "ColumnDistinctCountChangeCheckSpec"
     ] = UNSET
-    monthly_partition_anomaly_stationary_distinct_percent: Union[
-        Unset, "ColumnAnomalyStationaryDistinctPercentCheckSpec"
-    ] = UNSET
-    monthly_partition_change_distinct_count: Union[
-        Unset, "ColumnChangeDistinctCountCheckSpec"
-    ] = UNSET
-    monthly_partition_change_distinct_count_since_yesterday: Union[
-        Unset, "ColumnChangeDistinctCountSinceYesterdayCheckSpec"
-    ] = UNSET
-    monthly_partition_change_distinct_percent: Union[
-        Unset, "ColumnChangeDistinctPercentCheckSpec"
-    ] = UNSET
-    monthly_partition_change_distinct_percent_since_yesterday: Union[
-        Unset, "ColumnChangeDistinctPercentSinceYesterdayCheckSpec"
-    ] = UNSET
-    monthly_partition_anomaly_stationary_distinct_count_30_days: Union[
-        Unset, "ColumnAnomalyStationaryPartitionDistinctCount30DaysCheckSpec"
-    ] = UNSET
-    monthly_partition_anomaly_stationary_distinct_percent_30_days: Union[
-        Unset, "ColumnAnomalyStationaryDistinctPercent30DaysCheckSpec"
-    ] = UNSET
-    monthly_partition_change_distinct_count_since_7_days: Union[
-        Unset, "ColumnChangeDistinctCountSince7DaysCheckSpec"
-    ] = UNSET
-    monthly_partition_change_distinct_count_since_30_days: Union[
-        Unset, "ColumnChangeDistinctCountSince30DaysCheckSpec"
-    ] = UNSET
-    monthly_partition_change_distinct_percent_since_7_days: Union[
-        Unset, "ColumnChangeDistinctPercentSince7DaysCheckSpec"
-    ] = UNSET
-    monthly_partition_change_distinct_percent_since_30_days: Union[
-        Unset, "ColumnChangeDistinctPercentSince30DaysCheckSpec"
+    monthly_partition_distinct_percent_change: Union[
+        Unset, "ColumnDistinctPercentChangeCheckSpec"
     ] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -175,116 +95,16 @@ class ColumnUniquenessMonthlyPartitionedChecksSpec:
                 self.monthly_partition_duplicate_percent.to_dict()
             )
 
-        monthly_partition_anomaly_stationary_distinct_count: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
-        if not isinstance(
-            self.monthly_partition_anomaly_stationary_distinct_count, Unset
-        ):
-            monthly_partition_anomaly_stationary_distinct_count = (
-                self.monthly_partition_anomaly_stationary_distinct_count.to_dict()
+        monthly_partition_distinct_count_change: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.monthly_partition_distinct_count_change, Unset):
+            monthly_partition_distinct_count_change = (
+                self.monthly_partition_distinct_count_change.to_dict()
             )
 
-        monthly_partition_anomaly_stationary_distinct_percent: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
-        if not isinstance(
-            self.monthly_partition_anomaly_stationary_distinct_percent, Unset
-        ):
-            monthly_partition_anomaly_stationary_distinct_percent = (
-                self.monthly_partition_anomaly_stationary_distinct_percent.to_dict()
-            )
-
-        monthly_partition_change_distinct_count: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.monthly_partition_change_distinct_count, Unset):
-            monthly_partition_change_distinct_count = (
-                self.monthly_partition_change_distinct_count.to_dict()
-            )
-
-        monthly_partition_change_distinct_count_since_yesterday: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
-        if not isinstance(
-            self.monthly_partition_change_distinct_count_since_yesterday, Unset
-        ):
-            monthly_partition_change_distinct_count_since_yesterday = (
-                self.monthly_partition_change_distinct_count_since_yesterday.to_dict()
-            )
-
-        monthly_partition_change_distinct_percent: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.monthly_partition_change_distinct_percent, Unset):
-            monthly_partition_change_distinct_percent = (
-                self.monthly_partition_change_distinct_percent.to_dict()
-            )
-
-        monthly_partition_change_distinct_percent_since_yesterday: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
-        if not isinstance(
-            self.monthly_partition_change_distinct_percent_since_yesterday, Unset
-        ):
-            monthly_partition_change_distinct_percent_since_yesterday = (
-                self.monthly_partition_change_distinct_percent_since_yesterday.to_dict()
-            )
-
-        monthly_partition_anomaly_stationary_distinct_count_30_days: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
-        if not isinstance(
-            self.monthly_partition_anomaly_stationary_distinct_count_30_days, Unset
-        ):
-            monthly_partition_anomaly_stationary_distinct_count_30_days = (
-                self.monthly_partition_anomaly_stationary_distinct_count_30_days.to_dict()
-            )
-
-        monthly_partition_anomaly_stationary_distinct_percent_30_days: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
-        if not isinstance(
-            self.monthly_partition_anomaly_stationary_distinct_percent_30_days, Unset
-        ):
-            monthly_partition_anomaly_stationary_distinct_percent_30_days = (
-                self.monthly_partition_anomaly_stationary_distinct_percent_30_days.to_dict()
-            )
-
-        monthly_partition_change_distinct_count_since_7_days: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
-        if not isinstance(
-            self.monthly_partition_change_distinct_count_since_7_days, Unset
-        ):
-            monthly_partition_change_distinct_count_since_7_days = (
-                self.monthly_partition_change_distinct_count_since_7_days.to_dict()
-            )
-
-        monthly_partition_change_distinct_count_since_30_days: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
-        if not isinstance(
-            self.monthly_partition_change_distinct_count_since_30_days, Unset
-        ):
-            monthly_partition_change_distinct_count_since_30_days = (
-                self.monthly_partition_change_distinct_count_since_30_days.to_dict()
-            )
-
-        monthly_partition_change_distinct_percent_since_7_days: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
-        if not isinstance(
-            self.monthly_partition_change_distinct_percent_since_7_days, Unset
-        ):
-            monthly_partition_change_distinct_percent_since_7_days = (
-                self.monthly_partition_change_distinct_percent_since_7_days.to_dict()
-            )
-
-        monthly_partition_change_distinct_percent_since_30_days: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
-        if not isinstance(
-            self.monthly_partition_change_distinct_percent_since_30_days, Unset
-        ):
-            monthly_partition_change_distinct_percent_since_30_days = (
-                self.monthly_partition_change_distinct_percent_since_30_days.to_dict()
+        monthly_partition_distinct_percent_change: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.monthly_partition_distinct_percent_change, Unset):
+            monthly_partition_distinct_percent_change = (
+                self.monthly_partition_distinct_percent_change.to_dict()
             )
 
         field_dict: Dict[str, Any] = {}
@@ -308,97 +128,27 @@ class ColumnUniquenessMonthlyPartitionedChecksSpec:
             field_dict[
                 "monthly_partition_duplicate_percent"
             ] = monthly_partition_duplicate_percent
-        if monthly_partition_anomaly_stationary_distinct_count is not UNSET:
+        if monthly_partition_distinct_count_change is not UNSET:
             field_dict[
-                "monthly_partition_anomaly_stationary_distinct_count"
-            ] = monthly_partition_anomaly_stationary_distinct_count
-        if monthly_partition_anomaly_stationary_distinct_percent is not UNSET:
+                "monthly_partition_distinct_count_change"
+            ] = monthly_partition_distinct_count_change
+        if monthly_partition_distinct_percent_change is not UNSET:
             field_dict[
-                "monthly_partition_anomaly_stationary_distinct_percent"
-            ] = monthly_partition_anomaly_stationary_distinct_percent
-        if monthly_partition_change_distinct_count is not UNSET:
-            field_dict[
-                "monthly_partition_change_distinct_count"
-            ] = monthly_partition_change_distinct_count
-        if monthly_partition_change_distinct_count_since_yesterday is not UNSET:
-            field_dict[
-                "monthly_partition_change_distinct_count_since_yesterday"
-            ] = monthly_partition_change_distinct_count_since_yesterday
-        if monthly_partition_change_distinct_percent is not UNSET:
-            field_dict[
-                "monthly_partition_change_distinct_percent"
-            ] = monthly_partition_change_distinct_percent
-        if monthly_partition_change_distinct_percent_since_yesterday is not UNSET:
-            field_dict[
-                "monthly_partition_change_distinct_percent_since_yesterday"
-            ] = monthly_partition_change_distinct_percent_since_yesterday
-        if monthly_partition_anomaly_stationary_distinct_count_30_days is not UNSET:
-            field_dict[
-                "monthly_partition_anomaly_stationary_distinct_count_30_days"
-            ] = monthly_partition_anomaly_stationary_distinct_count_30_days
-        if monthly_partition_anomaly_stationary_distinct_percent_30_days is not UNSET:
-            field_dict[
-                "monthly_partition_anomaly_stationary_distinct_percent_30_days"
-            ] = monthly_partition_anomaly_stationary_distinct_percent_30_days
-        if monthly_partition_change_distinct_count_since_7_days is not UNSET:
-            field_dict[
-                "monthly_partition_change_distinct_count_since_7_days"
-            ] = monthly_partition_change_distinct_count_since_7_days
-        if monthly_partition_change_distinct_count_since_30_days is not UNSET:
-            field_dict[
-                "monthly_partition_change_distinct_count_since_30_days"
-            ] = monthly_partition_change_distinct_count_since_30_days
-        if monthly_partition_change_distinct_percent_since_7_days is not UNSET:
-            field_dict[
-                "monthly_partition_change_distinct_percent_since_7_days"
-            ] = monthly_partition_change_distinct_percent_since_7_days
-        if monthly_partition_change_distinct_percent_since_30_days is not UNSET:
-            field_dict[
-                "monthly_partition_change_distinct_percent_since_30_days"
-            ] = monthly_partition_change_distinct_percent_since_30_days
+                "monthly_partition_distinct_percent_change"
+            ] = monthly_partition_distinct_percent_change
 
         return field_dict
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.column_anomaly_stationary_distinct_percent_30_days_check_spec import (
-            ColumnAnomalyStationaryDistinctPercent30DaysCheckSpec,
-        )
-        from ..models.column_anomaly_stationary_distinct_percent_check_spec import (
-            ColumnAnomalyStationaryDistinctPercentCheckSpec,
-        )
-        from ..models.column_anomaly_stationary_partition_distinct_count_30_days_check_spec import (
-            ColumnAnomalyStationaryPartitionDistinctCount30DaysCheckSpec,
-        )
-        from ..models.column_anomaly_stationary_partition_distinct_count_check_spec import (
-            ColumnAnomalyStationaryPartitionDistinctCountCheckSpec,
-        )
-        from ..models.column_change_distinct_count_check_spec import (
-            ColumnChangeDistinctCountCheckSpec,
-        )
-        from ..models.column_change_distinct_count_since_7_days_check_spec import (
-            ColumnChangeDistinctCountSince7DaysCheckSpec,
-        )
-        from ..models.column_change_distinct_count_since_30_days_check_spec import (
-            ColumnChangeDistinctCountSince30DaysCheckSpec,
-        )
-        from ..models.column_change_distinct_count_since_yesterday_check_spec import (
-            ColumnChangeDistinctCountSinceYesterdayCheckSpec,
-        )
-        from ..models.column_change_distinct_percent_check_spec import (
-            ColumnChangeDistinctPercentCheckSpec,
-        )
-        from ..models.column_change_distinct_percent_since_7_days_check_spec import (
-            ColumnChangeDistinctPercentSince7DaysCheckSpec,
-        )
-        from ..models.column_change_distinct_percent_since_30_days_check_spec import (
-            ColumnChangeDistinctPercentSince30DaysCheckSpec,
-        )
-        from ..models.column_change_distinct_percent_since_yesterday_check_spec import (
-            ColumnChangeDistinctPercentSinceYesterdayCheckSpec,
+        from ..models.column_distinct_count_change_check_spec import (
+            ColumnDistinctCountChangeCheckSpec,
         )
         from ..models.column_distinct_count_check_spec import (
             ColumnDistinctCountCheckSpec,
+        )
+        from ..models.column_distinct_percent_change_check_spec import (
+            ColumnDistinctPercentChangeCheckSpec,
         )
         from ..models.column_distinct_percent_check_spec import (
             ColumnDistinctPercentCheckSpec,
@@ -477,189 +227,33 @@ class ColumnUniquenessMonthlyPartitionedChecksSpec:
                 )
             )
 
-        _monthly_partition_anomaly_stationary_distinct_count = d.pop(
-            "monthly_partition_anomaly_stationary_distinct_count", UNSET
+        _monthly_partition_distinct_count_change = d.pop(
+            "monthly_partition_distinct_count_change", UNSET
         )
-        monthly_partition_anomaly_stationary_distinct_count: Union[
-            Unset, ColumnAnomalyStationaryPartitionDistinctCountCheckSpec
+        monthly_partition_distinct_count_change: Union[
+            Unset, ColumnDistinctCountChangeCheckSpec
         ]
-        if isinstance(_monthly_partition_anomaly_stationary_distinct_count, Unset):
-            monthly_partition_anomaly_stationary_distinct_count = UNSET
+        if isinstance(_monthly_partition_distinct_count_change, Unset):
+            monthly_partition_distinct_count_change = UNSET
         else:
-            monthly_partition_anomaly_stationary_distinct_count = (
-                ColumnAnomalyStationaryPartitionDistinctCountCheckSpec.from_dict(
-                    _monthly_partition_anomaly_stationary_distinct_count
+            monthly_partition_distinct_count_change = (
+                ColumnDistinctCountChangeCheckSpec.from_dict(
+                    _monthly_partition_distinct_count_change
                 )
             )
 
-        _monthly_partition_anomaly_stationary_distinct_percent = d.pop(
-            "monthly_partition_anomaly_stationary_distinct_percent", UNSET
+        _monthly_partition_distinct_percent_change = d.pop(
+            "monthly_partition_distinct_percent_change", UNSET
         )
-        monthly_partition_anomaly_stationary_distinct_percent: Union[
-            Unset, ColumnAnomalyStationaryDistinctPercentCheckSpec
+        monthly_partition_distinct_percent_change: Union[
+            Unset, ColumnDistinctPercentChangeCheckSpec
         ]
-        if isinstance(_monthly_partition_anomaly_stationary_distinct_percent, Unset):
-            monthly_partition_anomaly_stationary_distinct_percent = UNSET
+        if isinstance(_monthly_partition_distinct_percent_change, Unset):
+            monthly_partition_distinct_percent_change = UNSET
         else:
-            monthly_partition_anomaly_stationary_distinct_percent = (
-                ColumnAnomalyStationaryDistinctPercentCheckSpec.from_dict(
-                    _monthly_partition_anomaly_stationary_distinct_percent
-                )
-            )
-
-        _monthly_partition_change_distinct_count = d.pop(
-            "monthly_partition_change_distinct_count", UNSET
-        )
-        monthly_partition_change_distinct_count: Union[
-            Unset, ColumnChangeDistinctCountCheckSpec
-        ]
-        if isinstance(_monthly_partition_change_distinct_count, Unset):
-            monthly_partition_change_distinct_count = UNSET
-        else:
-            monthly_partition_change_distinct_count = (
-                ColumnChangeDistinctCountCheckSpec.from_dict(
-                    _monthly_partition_change_distinct_count
-                )
-            )
-
-        _monthly_partition_change_distinct_count_since_yesterday = d.pop(
-            "monthly_partition_change_distinct_count_since_yesterday", UNSET
-        )
-        monthly_partition_change_distinct_count_since_yesterday: Union[
-            Unset, ColumnChangeDistinctCountSinceYesterdayCheckSpec
-        ]
-        if isinstance(_monthly_partition_change_distinct_count_since_yesterday, Unset):
-            monthly_partition_change_distinct_count_since_yesterday = UNSET
-        else:
-            monthly_partition_change_distinct_count_since_yesterday = (
-                ColumnChangeDistinctCountSinceYesterdayCheckSpec.from_dict(
-                    _monthly_partition_change_distinct_count_since_yesterday
-                )
-            )
-
-        _monthly_partition_change_distinct_percent = d.pop(
-            "monthly_partition_change_distinct_percent", UNSET
-        )
-        monthly_partition_change_distinct_percent: Union[
-            Unset, ColumnChangeDistinctPercentCheckSpec
-        ]
-        if isinstance(_monthly_partition_change_distinct_percent, Unset):
-            monthly_partition_change_distinct_percent = UNSET
-        else:
-            monthly_partition_change_distinct_percent = (
-                ColumnChangeDistinctPercentCheckSpec.from_dict(
-                    _monthly_partition_change_distinct_percent
-                )
-            )
-
-        _monthly_partition_change_distinct_percent_since_yesterday = d.pop(
-            "monthly_partition_change_distinct_percent_since_yesterday", UNSET
-        )
-        monthly_partition_change_distinct_percent_since_yesterday: Union[
-            Unset, ColumnChangeDistinctPercentSinceYesterdayCheckSpec
-        ]
-        if isinstance(
-            _monthly_partition_change_distinct_percent_since_yesterday, Unset
-        ):
-            monthly_partition_change_distinct_percent_since_yesterday = UNSET
-        else:
-            monthly_partition_change_distinct_percent_since_yesterday = (
-                ColumnChangeDistinctPercentSinceYesterdayCheckSpec.from_dict(
-                    _monthly_partition_change_distinct_percent_since_yesterday
-                )
-            )
-
-        _monthly_partition_anomaly_stationary_distinct_count_30_days = d.pop(
-            "monthly_partition_anomaly_stationary_distinct_count_30_days", UNSET
-        )
-        monthly_partition_anomaly_stationary_distinct_count_30_days: Union[
-            Unset, ColumnAnomalyStationaryPartitionDistinctCount30DaysCheckSpec
-        ]
-        if isinstance(
-            _monthly_partition_anomaly_stationary_distinct_count_30_days, Unset
-        ):
-            monthly_partition_anomaly_stationary_distinct_count_30_days = UNSET
-        else:
-            monthly_partition_anomaly_stationary_distinct_count_30_days = (
-                ColumnAnomalyStationaryPartitionDistinctCount30DaysCheckSpec.from_dict(
-                    _monthly_partition_anomaly_stationary_distinct_count_30_days
-                )
-            )
-
-        _monthly_partition_anomaly_stationary_distinct_percent_30_days = d.pop(
-            "monthly_partition_anomaly_stationary_distinct_percent_30_days", UNSET
-        )
-        monthly_partition_anomaly_stationary_distinct_percent_30_days: Union[
-            Unset, ColumnAnomalyStationaryDistinctPercent30DaysCheckSpec
-        ]
-        if isinstance(
-            _monthly_partition_anomaly_stationary_distinct_percent_30_days, Unset
-        ):
-            monthly_partition_anomaly_stationary_distinct_percent_30_days = UNSET
-        else:
-            monthly_partition_anomaly_stationary_distinct_percent_30_days = (
-                ColumnAnomalyStationaryDistinctPercent30DaysCheckSpec.from_dict(
-                    _monthly_partition_anomaly_stationary_distinct_percent_30_days
-                )
-            )
-
-        _monthly_partition_change_distinct_count_since_7_days = d.pop(
-            "monthly_partition_change_distinct_count_since_7_days", UNSET
-        )
-        monthly_partition_change_distinct_count_since_7_days: Union[
-            Unset, ColumnChangeDistinctCountSince7DaysCheckSpec
-        ]
-        if isinstance(_monthly_partition_change_distinct_count_since_7_days, Unset):
-            monthly_partition_change_distinct_count_since_7_days = UNSET
-        else:
-            monthly_partition_change_distinct_count_since_7_days = (
-                ColumnChangeDistinctCountSince7DaysCheckSpec.from_dict(
-                    _monthly_partition_change_distinct_count_since_7_days
-                )
-            )
-
-        _monthly_partition_change_distinct_count_since_30_days = d.pop(
-            "monthly_partition_change_distinct_count_since_30_days", UNSET
-        )
-        monthly_partition_change_distinct_count_since_30_days: Union[
-            Unset, ColumnChangeDistinctCountSince30DaysCheckSpec
-        ]
-        if isinstance(_monthly_partition_change_distinct_count_since_30_days, Unset):
-            monthly_partition_change_distinct_count_since_30_days = UNSET
-        else:
-            monthly_partition_change_distinct_count_since_30_days = (
-                ColumnChangeDistinctCountSince30DaysCheckSpec.from_dict(
-                    _monthly_partition_change_distinct_count_since_30_days
-                )
-            )
-
-        _monthly_partition_change_distinct_percent_since_7_days = d.pop(
-            "monthly_partition_change_distinct_percent_since_7_days", UNSET
-        )
-        monthly_partition_change_distinct_percent_since_7_days: Union[
-            Unset, ColumnChangeDistinctPercentSince7DaysCheckSpec
-        ]
-        if isinstance(_monthly_partition_change_distinct_percent_since_7_days, Unset):
-            monthly_partition_change_distinct_percent_since_7_days = UNSET
-        else:
-            monthly_partition_change_distinct_percent_since_7_days = (
-                ColumnChangeDistinctPercentSince7DaysCheckSpec.from_dict(
-                    _monthly_partition_change_distinct_percent_since_7_days
-                )
-            )
-
-        _monthly_partition_change_distinct_percent_since_30_days = d.pop(
-            "monthly_partition_change_distinct_percent_since_30_days", UNSET
-        )
-        monthly_partition_change_distinct_percent_since_30_days: Union[
-            Unset, ColumnChangeDistinctPercentSince30DaysCheckSpec
-        ]
-        if isinstance(_monthly_partition_change_distinct_percent_since_30_days, Unset):
-            monthly_partition_change_distinct_percent_since_30_days = UNSET
-        else:
-            monthly_partition_change_distinct_percent_since_30_days = (
-                ColumnChangeDistinctPercentSince30DaysCheckSpec.from_dict(
-                    _monthly_partition_change_distinct_percent_since_30_days
+            monthly_partition_distinct_percent_change = (
+                ColumnDistinctPercentChangeCheckSpec.from_dict(
+                    _monthly_partition_distinct_percent_change
                 )
             )
 
@@ -669,18 +263,8 @@ class ColumnUniquenessMonthlyPartitionedChecksSpec:
             monthly_partition_distinct_percent=monthly_partition_distinct_percent,
             monthly_partition_duplicate_count=monthly_partition_duplicate_count,
             monthly_partition_duplicate_percent=monthly_partition_duplicate_percent,
-            monthly_partition_anomaly_stationary_distinct_count=monthly_partition_anomaly_stationary_distinct_count,
-            monthly_partition_anomaly_stationary_distinct_percent=monthly_partition_anomaly_stationary_distinct_percent,
-            monthly_partition_change_distinct_count=monthly_partition_change_distinct_count,
-            monthly_partition_change_distinct_count_since_yesterday=monthly_partition_change_distinct_count_since_yesterday,
-            monthly_partition_change_distinct_percent=monthly_partition_change_distinct_percent,
-            monthly_partition_change_distinct_percent_since_yesterday=monthly_partition_change_distinct_percent_since_yesterday,
-            monthly_partition_anomaly_stationary_distinct_count_30_days=monthly_partition_anomaly_stationary_distinct_count_30_days,
-            monthly_partition_anomaly_stationary_distinct_percent_30_days=monthly_partition_anomaly_stationary_distinct_percent_30_days,
-            monthly_partition_change_distinct_count_since_7_days=monthly_partition_change_distinct_count_since_7_days,
-            monthly_partition_change_distinct_count_since_30_days=monthly_partition_change_distinct_count_since_30_days,
-            monthly_partition_change_distinct_percent_since_7_days=monthly_partition_change_distinct_percent_since_7_days,
-            monthly_partition_change_distinct_percent_since_30_days=monthly_partition_change_distinct_percent_since_30_days,
+            monthly_partition_distinct_count_change=monthly_partition_distinct_count_change,
+            monthly_partition_distinct_percent_change=monthly_partition_distinct_percent_change,
         )
 
         column_uniqueness_monthly_partitioned_checks_spec.additional_properties = d

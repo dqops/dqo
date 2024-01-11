@@ -33,6 +33,7 @@ public class DqoUserConfigurationProperties implements Cloneable {
     private String defaultDataDomain = UserDomainIdentity.DEFAULT_DATA_DOMAIN;
     private boolean hasLocalHome;
     private boolean initializeUserHome;
+    private boolean initializeDefaultCloudCredentials;
     private static DqoUserConfigurationProperties INSTANCE;
 
     /**
@@ -117,6 +118,23 @@ public class DqoUserConfigurationProperties implements Cloneable {
      */
     public void setInitializeUserHome(boolean initializeUserHome) {
         this.initializeUserHome = initializeUserHome;
+    }
+
+    /**
+     * Returns true when also default credential files for GCP, AWS should be generated during the user home initialization.
+     * Instances started in Docker create those files.
+     * @return True when default files should be created.
+     */
+    public boolean isInitializeDefaultCloudCredentials() {
+        return initializeDefaultCloudCredentials;
+    }
+
+    /**
+     * Sets the flag to create default credential files.
+     * @param initializeDefaultCloudCredentials Initialize default credential files.
+     */
+    public void setInitializeDefaultCloudCredentials(boolean initializeDefaultCloudCredentials) {
+        this.initializeDefaultCloudCredentials = initializeDefaultCloudCredentials;
     }
 
     @Override

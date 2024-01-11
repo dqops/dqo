@@ -1,3 +1,6 @@
+# DQOps YAML file definitions
+The definition of YAML files used by DQOps to configure the data sources, monitored tables, and the configuration of activated data quality checks.
+
 
 ## ProviderSensorDefinitionSpec
 Specification (configuration) for a provider specific implementation of a data quality sensor or an SQL template.
@@ -10,7 +13,7 @@ Specification (configuration) for a provider specific implementation of a data q
 
 
 
-**The structure of this object is described below**
+The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
@@ -31,6 +34,7 @@ Specification (configuration) for a provider specific implementation of a data q
 
 ___
 
+
 ## ProviderSensorYaml
 Provider specific data quality sensor definition YAML schema for a data quality sensor configuration specification.
 
@@ -42,13 +46,13 @@ Provider specific data quality sensor definition YAML schema for a data quality 
 
 
 
-**The structure of this object is described below**
+The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |api_version||string| | | |
 |kind||enum|default_schedules<br/>settings<br/>default_notifications<br/>rule<br/>sensor<br/>source<br/>check<br/>dashboards<br/>default_checks<br/>table<br/>provider_sensor<br/>file_index<br/>| | |
-|[spec](#ProviderSensorDefinitionSpec)||[ProviderSensorDefinitionSpec](#ProviderSensorDefinitionSpec)| | | |
+|[spec](./ProviderSensorYaml.md#ProviderSensorDefinitionSpec)||[ProviderSensorDefinitionSpec](./ProviderSensorYaml.md#ProviderSensorDefinitionSpec)| | | |
 
 
 
@@ -59,4 +63,5 @@ Provider specific data quality sensor definition YAML schema for a data quality 
 
 
 ___
+
 

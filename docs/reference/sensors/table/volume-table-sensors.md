@@ -1,16 +1,30 @@
+# Data quality volume sensors
+All [data quality sensors](../../../dqo-concepts/sensors/sensors.md) in the **volume** category supported by DQOps are listed below. Those sensors are measured on a table level.
 
-## **row count**
-**Full sensor name**
-```
-table/volume/row_count
-```
-**Description**
+---
+
+
+## row count
 Table sensor that executes a row count query.
 
+**Sensor summary**
+
+The row count sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| table | volume | `table/volume/row_count` | [sensors/table/volume](https://github.com/dqops/dqo/tree/develop/home/sensors/table/volume/) |
 
 
 
-**SQL Template (Jinja2)**
+
+
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
 === "BigQuery"
 
     ```sql+jinja
@@ -170,3 +184,6 @@ Table sensor that executes a row count query.
     {{- lib.render_order_by() -}}
     ```
 ___
+
+
+

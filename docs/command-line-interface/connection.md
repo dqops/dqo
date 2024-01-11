@@ -1,29 +1,46 @@
-# connection
+# dqo connection command
+
+
+Modify or list connections
+
+
 
 ___
-### **dqo connection list**
+
+## dqo connection list
 
 List connections that match a given condition
 
+
 **Description**
+
 
 Lists all the created connections for the logged-in user that match the conditions specified in the options. It allows the user to filter connections based on various parameters.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] connection list [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
                  [-d=<dimensions>]... [-l=<labels>]...
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> connection list [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
                  [-d=<dimensions>]... [-l=<labels>]...
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
@@ -38,19 +55,30 @@ dqo> connection list [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
 
 
 
+
+
 ___
-### **dqo connection add**
+
+## dqo connection add
 
 Add a connection with specified details
 
+
 **Description**
+
 
 Creates a new connection to the database with the specified details such as connection name, database type, hostname, username, and password. It allows the user to connect to the database from the application to perform various operations on the database.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
+                [--athena-output-location=<athenaOutputLocation>]
+                [--athena-region=<athenaRegion>]
+                [--athena-work-group=<athenaWorkGroup>]
                 [--bigquery-authentication-mode=<authenticationMode>]
                 [--bigquery-billing-project-id=<billingProjectId>]
                 [--bigquery-jobs-create-project=<jobsCreateProject>]
@@ -91,18 +119,24 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
                 [--sqlserver-host=<host>] [--sqlserver-options=<options>]
                 [--sqlserver-password=<password>] [--sqlserver-port=<port>]
                 [--sqlserver-user=<user>] [-t=<providerType>]
-                [--trino-database=<database>] [--trino-host=<host>]
-                [--trino-port=<port>] [--trino-user=<user>]
-                [-A=<String=String>]... [-D=<String=String>]...
-                [-F=<String=String>]... [-K=<String=String>]...
-                [-M=<String=String>]... [-O=<String=String>]...
-                [-P=<String=String>]... [-R=<String=String>]...
-                [-S=<String=String>]... [-T=<String=String>]...
+                [--trino-catalog=<catalog>] [--trino-engine=<trinoEngineType>]
+                [--trino-host=<host>] [--trino-port=<port>]
+                [--trino-user=<user>] [-D=<String=String>]...
+                [-E=<String=String>]... [-F=<String=String>]...
+                [-K=<String=String>]... [-M=<String=String>]...
+                [-O=<String=String>]... [-P=<String=String>]...
+                [-R=<String=String>]... [-S=<String=String>]...
+                [-T=<String=String>]...
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
+                [--athena-output-location=<athenaOutputLocation>]
+                [--athena-region=<athenaRegion>]
+                [--athena-work-group=<athenaWorkGroup>]
                 [--bigquery-authentication-mode=<authenticationMode>]
                 [--bigquery-billing-project-id=<billingProjectId>]
                 [--bigquery-jobs-create-project=<jobsCreateProject>]
@@ -143,20 +177,28 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--sqlserver-host=<host>] [--sqlserver-options=<options>]
                 [--sqlserver-password=<password>] [--sqlserver-port=<port>]
                 [--sqlserver-user=<user>] [-t=<providerType>]
-                [--trino-database=<database>] [--trino-host=<host>]
-                [--trino-port=<port>] [--trino-user=<user>]
-                [-A=<String=String>]... [-D=<String=String>]...
-                [-F=<String=String>]... [-K=<String=String>]...
-                [-M=<String=String>]... [-O=<String=String>]...
-                [-P=<String=String>]... [-R=<String=String>]...
-                [-S=<String=String>]... [-T=<String=String>]...
+                [--trino-catalog=<catalog>] [--trino-engine=<trinoEngineType>]
+                [--trino-host=<host>] [--trino-port=<port>]
+                [--trino-user=<user>] [-D=<String=String>]...
+                [-E=<String=String>]... [-F=<String=String>]...
+                [-K=<String=String>]... [-M=<String=String>]...
+                [-O=<String=String>]... [-P=<String=String>]...
+                [-R=<String=String>]... [-S=<String=String>]...
+                [-T=<String=String>]...
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
+|<p id="connection add--athena-output-location">`--athena-output-location`</p><br/>|The location in Amazon S3 where query results will be stored. Supports also a null configuration with a custom environment variable.| ||
+|<p id="connection add--athena-region">`--athena-region`</p><br/>|The AWS Athena Region where queries will be run. Supports also a null configuration with a custom environment variable.| ||
+|<p id="connection add--athena-work-group">`--athena-work-group`</p><br/>|The Athena WorkGroup in which queries will run. Supports also a null configuration with a custom environment variable.| ||
 |<p id="connection add--bigquery-authentication-mode">`--bigquery-authentication-mode`</p><br/>|Bigquery authentication mode. The default value uses the current GCP application default credentials. The default GCP credentials is the Service Account of a VM in GCP cloud, a GCP JSON key file whose path is in the GOOGLE_APPLICATION_CREDENTIALS environment variable, or it is the default GCP credentials obtained on a user&#x27;s computer by running &#x27;gcloud auth application-default login&#x27; from the command line.| |google_application_credentials<br/>json_key_content<br/>json_key_path<br/>|
 |<p id="connection add--bigquery-billing-project-id">`--bigquery-billing-project-id`</p><br/>|Bigquery billing GCP project id. This is the project used as the default GCP project. The calling user must have a bigquery.jobs.create permission in this project.| ||
 |<p id="connection add--bigquery-jobs-create-project">`--bigquery-jobs-create-project`</p><br/>|Configures the way how to select the project that will be used to start BigQuery jobs and will be used for billing. The user/service identified by the credentials must have bigquery.jobs.create permission in that project.| |create_jobs_in_source_project<br/>create_jobs_in_default_project_from_credentials<br/>create_jobs_in_selected_billing_project_id<br/>|
@@ -228,12 +270,13 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
 |<p id="connection add--sqlserver-password">`--sqlserver-password`</p><br/>|SQL Server database password. The value can be in the null format to use dynamic substitution.| ||
 |<p id="connection add--sqlserver-port">`--sqlserver-port`</p><br/>|SQL Server port number| ||
 |<p id="connection add--sqlserver-user">`--sqlserver-user`</p><br/>|SQL Server user name. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection add--trino-database">`--trino-database`</p><br/>|Trino database name. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection add--trino-host">`--trino-host`</p><br/>|Trino host name| ||
-|<p id="connection add--trino-port">`--trino-port`</p><br/>|Trino port number| ||
+|<p id="connection add--trino-catalog">`--trino-catalog`</p><br/>|The Trino catalog that contains the databases and the tables that will be accessed with the driver. Supports also a null configuration with a custom environment variable.| ||
+|<p id="connection add--trino-engine">`--trino-engine`</p><br/>|Trino engine type.| |trino<br/>athena<br/>|
+|<p id="connection add--trino-host">`--trino-host`</p><br/>|Trino host name.| ||
+|<p id="connection add--trino-port">`--trino-port`</p><br/>|Trino port number.| ||
 |<p id="connection add--trino-user">`--trino-user`</p><br/>|Trino user name. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection add-A">`-A`</p><br/>|Presto additional properties that are added to the JDBC connection string| ||
 |<p id="connection add-D">`-D`</p><br/>|Databricks additional properties that are added to the JDBC connection string| ||
+|<p id="connection add-E">`-E`</p><br/>|Presto additional properties that are added to the JDBC connection string| ||
 |<p id="connection add-F">`-F`</p><br/>|Snowflake additional properties that are added to the JDBC connection string| ||
 |<p id="connection add-K">`-K`</p><br/>|Spark additional properties that are added to the JDBC connection string| ||
 |<p id="connection add-M">`-M`</p><br/>|MySQL additional properties that are added to the JDBC connection string| ||
@@ -246,28 +289,42 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
 
 
 
+
+
 ___
-### **dqo connection remove**
+
+## dqo connection remove
 
 Remove the connection(s) that match a given condition
 
+
 **Description**
+
 
 Removes the connection or connections that match the conditions specified in the options. It allows the user to remove any unwanted connections that are no longer needed.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] connection remove [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> connection remove [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
@@ -280,19 +337,30 @@ dqo> connection remove [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
 
 
 
+
+
 ___
-### **dqo connection update**
+
+## dqo connection update
 
 Update the connection(s) that match a given condition
 
+
 **Description**
+
 
 Update the connection or connections that match the conditions specified in the options with new details. It allows the user to modify existing connections in the application.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
+                   [--athena-output-location=<athenaOutputLocation>]
+                   [--athena-region=<athenaRegion>]
+                   [--athena-work-group=<athenaWorkGroup>]
                    [--bigquery-authentication-mode=<authenticationMode>]
                    [--bigquery-billing-project-id=<billingProjectId>]
                    [--bigquery-jobs-create-project=<jobsCreateProject>]
@@ -334,19 +402,24 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
                    [--sqlserver-database=<database>] [--sqlserver-host=<host>]
                    [--sqlserver-options=<options>]
                    [--sqlserver-password=<password>] [--sqlserver-port=<port>]
-                   [--sqlserver-user=<user>] [--trino-database=<database>]
-                   [--trino-host=<host>] [--trino-port=<port>]
-                   [--trino-user=<user>] [-A=<String=String>]...
-                   [-D=<String=String>]... [-F=<String=String>]...
-                   [-K=<String=String>]... [-M=<String=String>]...
-                   [-O=<String=String>]... [-P=<String=String>]...
-                   [-R=<String=String>]... [-S=<String=String>]...
-                   [-T=<String=String>]...
+                   [--sqlserver-user=<user>] [--trino-catalog=<catalog>]
+                   [--trino-engine=<trinoEngineType>] [--trino-host=<host>]
+                   [--trino-port=<port>] [--trino-user=<user>]
+                   [-D=<String=String>]... [-E=<String=String>]...
+                   [-F=<String=String>]... [-K=<String=String>]...
+                   [-M=<String=String>]... [-O=<String=String>]...
+                   [-P=<String=String>]... [-R=<String=String>]...
+                   [-S=<String=String>]... [-T=<String=String>]...
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
+                   [--athena-output-location=<athenaOutputLocation>]
+                   [--athena-region=<athenaRegion>]
+                   [--athena-work-group=<athenaWorkGroup>]
                    [--bigquery-authentication-mode=<authenticationMode>]
                    [--bigquery-billing-project-id=<billingProjectId>]
                    [--bigquery-jobs-create-project=<jobsCreateProject>]
@@ -388,21 +461,28 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--sqlserver-database=<database>] [--sqlserver-host=<host>]
                    [--sqlserver-options=<options>]
                    [--sqlserver-password=<password>] [--sqlserver-port=<port>]
-                   [--sqlserver-user=<user>] [--trino-database=<database>]
-                   [--trino-host=<host>] [--trino-port=<port>]
-                   [--trino-user=<user>] [-A=<String=String>]...
-                   [-D=<String=String>]... [-F=<String=String>]...
-                   [-K=<String=String>]... [-M=<String=String>]...
-                   [-O=<String=String>]... [-P=<String=String>]...
-                   [-R=<String=String>]... [-S=<String=String>]...
-                   [-T=<String=String>]...
+                   [--sqlserver-user=<user>] [--trino-catalog=<catalog>]
+                   [--trino-engine=<trinoEngineType>] [--trino-host=<host>]
+                   [--trino-port=<port>] [--trino-user=<user>]
+                   [-D=<String=String>]... [-E=<String=String>]...
+                   [-F=<String=String>]... [-K=<String=String>]...
+                   [-M=<String=String>]... [-O=<String=String>]...
+                   [-P=<String=String>]... [-R=<String=String>]...
+                   [-S=<String=String>]... [-T=<String=String>]...
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
+|<p id="connection update--athena-output-location">`--athena-output-location`</p><br/>|The location in Amazon S3 where query results will be stored. Supports also a null configuration with a custom environment variable.| ||
+|<p id="connection update--athena-region">`--athena-region`</p><br/>|The AWS Athena Region where queries will be run. Supports also a null configuration with a custom environment variable.| ||
+|<p id="connection update--athena-work-group">`--athena-work-group`</p><br/>|The Athena WorkGroup in which queries will run. Supports also a null configuration with a custom environment variable.| ||
 |<p id="connection update--bigquery-authentication-mode">`--bigquery-authentication-mode`</p><br/>|Bigquery authentication mode. The default value uses the current GCP application default credentials. The default GCP credentials is the Service Account of a VM in GCP cloud, a GCP JSON key file whose path is in the GOOGLE_APPLICATION_CREDENTIALS environment variable, or it is the default GCP credentials obtained on a user&#x27;s computer by running &#x27;gcloud auth application-default login&#x27; from the command line.| |google_application_credentials<br/>json_key_content<br/>json_key_path<br/>|
 |<p id="connection update--bigquery-billing-project-id">`--bigquery-billing-project-id`</p><br/>|Bigquery billing GCP project id. This is the project used as the default GCP project. The calling user must have a bigquery.jobs.create permission in this project.| ||
 |<p id="connection update--bigquery-jobs-create-project">`--bigquery-jobs-create-project`</p><br/>|Configures the way how to select the project that will be used to start BigQuery jobs and will be used for billing. The user/service identified by the credentials must have bigquery.jobs.create permission in that project.| |create_jobs_in_source_project<br/>create_jobs_in_default_project_from_credentials<br/>create_jobs_in_selected_billing_project_id<br/>|
@@ -473,12 +553,13 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
 |<p id="connection update--sqlserver-password">`--sqlserver-password`</p><br/>|SQL Server database password. The value can be in the null format to use dynamic substitution.| ||
 |<p id="connection update--sqlserver-port">`--sqlserver-port`</p><br/>|SQL Server port number| ||
 |<p id="connection update--sqlserver-user">`--sqlserver-user`</p><br/>|SQL Server user name. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection update--trino-database">`--trino-database`</p><br/>|Trino database name. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection update--trino-host">`--trino-host`</p><br/>|Trino host name| ||
-|<p id="connection update--trino-port">`--trino-port`</p><br/>|Trino port number| ||
+|<p id="connection update--trino-catalog">`--trino-catalog`</p><br/>|The Trino catalog that contains the databases and the tables that will be accessed with the driver. Supports also a null configuration with a custom environment variable.| ||
+|<p id="connection update--trino-engine">`--trino-engine`</p><br/>|Trino engine type.| |trino<br/>athena<br/>|
+|<p id="connection update--trino-host">`--trino-host`</p><br/>|Trino host name.| ||
+|<p id="connection update--trino-port">`--trino-port`</p><br/>|Trino port number.| ||
 |<p id="connection update--trino-user">`--trino-user`</p><br/>|Trino user name. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection update-A">`-A`</p><br/>|Presto additional properties that are added to the JDBC connection string| ||
 |<p id="connection update-D">`-D`</p><br/>|Databricks additional properties that are added to the JDBC connection string| ||
+|<p id="connection update-E">`-E`</p><br/>|Presto additional properties that are added to the JDBC connection string| ||
 |<p id="connection update-F">`-F`</p><br/>|Snowflake additional properties that are added to the JDBC connection string| ||
 |<p id="connection update-K">`-K`</p><br/>|Spark additional properties that are added to the JDBC connection string| ||
 |<p id="connection update-M">`-M`</p><br/>|MySQL additional properties that are added to the JDBC connection string| ||
@@ -491,30 +572,44 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
 
 
 
+
+
 ___
-### **dqo connection schema list**
+
+## dqo connection schema list
 
 List schemas in the specified connection
 
+
 **Description**
+
 
 It allows the user to view the summary of all schemas in a selected connection.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] connection schema list [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
                         [-d=<dimensions>]... [-l=<labels>]...
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> connection schema list [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
                         [-d=<dimensions>]... [-l=<labels>]...
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
@@ -529,24 +624,34 @@ dqo> connection schema list [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
 
 
 
+
+
 ___
-### **dqo connection table list**
+
+## dqo connection table list
 
 List tables for the specified connection and schema name.
 
+
 **Description**
+
 
 List all the tables available in the database for the specified connection and schema. It allows the user to view all the tables in the database.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] connection table list [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
                        [-s=<schema>] [-t=<table>] [-d=<dimensions>]...
                        [-l=<labels>]...
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> connection table list [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
                        [-s=<schema>] [-t=<table>] [-d=<dimensions>]...
@@ -554,7 +659,11 @@ dqo> connection table list [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
@@ -571,30 +680,44 @@ dqo> connection table list [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat
 
 
 
+
+
 ___
-### **dqo connection table show**
+
+## dqo connection table show
 
 Show table for connection
 
+
 **Description**
+
 
 Show the details of the specified table in the database for the specified connection. It allows the user to view the details of a specific table in the database.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] connection table show [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
                        [-t=<table>]
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> connection table show [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
                        [-t=<table>]
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
@@ -608,28 +731,42 @@ dqo> connection table show [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat
 
 
 
+
+
 ___
-### **dqo connection edit**
+
+## dqo connection edit
 
 Edit connection that matches a given condition
 
+
 **Description**
+
 
 Edit the connection or connections that match the filter conditions specified in the options. It allows the user to modify the details of an existing connection in the application.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] connection edit [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> connection edit [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
@@ -638,6 +775,8 @@ dqo> connection edit [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
 |<p id="connection edit--headless">`--headless`</p><br/><p id="connection edit-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |<p id="connection edit-h">`-h`</p><br/><p id="connection edit--help">`--help`</p><br/>|Show the help for the command and parameters| ||
 |<p id="connection edit-of">`-of`</p><br/><p id="connection edit--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+
+
 
 
 

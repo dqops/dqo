@@ -67,7 +67,7 @@ spec:
       monitoring_checks:
         daily:
           numeric:
-            daily_values_in_range_numeric_percent:
+            daily_number_in_range_percent:
               parameters:
                 min_value: 10.0
                 max_value: 80.0
@@ -83,8 +83,8 @@ spec:
         nullable: true
       monitoring_checks:
         daily:
-          strings:
-            daily_string_value_in_set_percent:
+          accepted_values:
+            daily_text_found_in_set_percent:
               warning:
                 min_percent: 99.0
               error:

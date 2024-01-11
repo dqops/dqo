@@ -7,12 +7,12 @@ from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.comment_spec import CommentSpec
-    from ..models.min_count_rule_1_parameters_spec import MinCountRule1ParametersSpec
-    from ..models.min_count_rule_fatal_parameters_spec import (
-        MinCountRuleFatalParametersSpec,
+    from ..models.min_count_rule_0_warning_parameters_spec import (
+        MinCountRule0WarningParametersSpec,
     )
-    from ..models.min_count_rule_warning_parameters_spec import (
-        MinCountRuleWarningParametersSpec,
+    from ..models.min_count_rule_1_parameters_spec import MinCountRule1ParametersSpec
+    from ..models.min_count_rule_100_fatal_parameters_spec import (
+        MinCountRule100FatalParametersSpec,
     )
     from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
     from ..models.table_volume_row_count_sensor_parameters_spec import (
@@ -49,9 +49,9 @@ class TableRowCountCheckSpec:
             quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent
             table.
         parameters (Union[Unset, TableVolumeRowCountSensorParametersSpec]):
-        warning (Union[Unset, MinCountRuleWarningParametersSpec]):
+        warning (Union[Unset, MinCountRule0WarningParametersSpec]):
         error (Union[Unset, MinCountRule1ParametersSpec]):
-        fatal (Union[Unset, MinCountRuleFatalParametersSpec]):
+        fatal (Union[Unset, MinCountRule100FatalParametersSpec]):
     """
 
     schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
@@ -63,9 +63,9 @@ class TableRowCountCheckSpec:
     display_name: Union[Unset, str] = UNSET
     data_grouping: Union[Unset, str] = UNSET
     parameters: Union[Unset, "TableVolumeRowCountSensorParametersSpec"] = UNSET
-    warning: Union[Unset, "MinCountRuleWarningParametersSpec"] = UNSET
+    warning: Union[Unset, "MinCountRule0WarningParametersSpec"] = UNSET
     error: Union[Unset, "MinCountRule1ParametersSpec"] = UNSET
-    fatal: Union[Unset, "MinCountRuleFatalParametersSpec"] = UNSET
+    fatal: Union[Unset, "MinCountRule100FatalParametersSpec"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -136,14 +136,14 @@ class TableRowCountCheckSpec:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.comment_spec import CommentSpec
+        from ..models.min_count_rule_0_warning_parameters_spec import (
+            MinCountRule0WarningParametersSpec,
+        )
         from ..models.min_count_rule_1_parameters_spec import (
             MinCountRule1ParametersSpec,
         )
-        from ..models.min_count_rule_fatal_parameters_spec import (
-            MinCountRuleFatalParametersSpec,
-        )
-        from ..models.min_count_rule_warning_parameters_spec import (
-            MinCountRuleWarningParametersSpec,
+        from ..models.min_count_rule_100_fatal_parameters_spec import (
+            MinCountRule100FatalParametersSpec,
         )
         from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
         from ..models.table_volume_row_count_sensor_parameters_spec import (
@@ -185,11 +185,11 @@ class TableRowCountCheckSpec:
             parameters = TableVolumeRowCountSensorParametersSpec.from_dict(_parameters)
 
         _warning = d.pop("warning", UNSET)
-        warning: Union[Unset, MinCountRuleWarningParametersSpec]
+        warning: Union[Unset, MinCountRule0WarningParametersSpec]
         if isinstance(_warning, Unset):
             warning = UNSET
         else:
-            warning = MinCountRuleWarningParametersSpec.from_dict(_warning)
+            warning = MinCountRule0WarningParametersSpec.from_dict(_warning)
 
         _error = d.pop("error", UNSET)
         error: Union[Unset, MinCountRule1ParametersSpec]
@@ -199,11 +199,11 @@ class TableRowCountCheckSpec:
             error = MinCountRule1ParametersSpec.from_dict(_error)
 
         _fatal = d.pop("fatal", UNSET)
-        fatal: Union[Unset, MinCountRuleFatalParametersSpec]
+        fatal: Union[Unset, MinCountRule100FatalParametersSpec]
         if isinstance(_fatal, Unset):
             fatal = UNSET
         else:
-            fatal = MinCountRuleFatalParametersSpec.from_dict(_fatal)
+            fatal = MinCountRule100FatalParametersSpec.from_dict(_fatal)
 
         table_row_count_check_spec = cls(
             schedule_override=schedule_override,

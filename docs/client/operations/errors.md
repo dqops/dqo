@@ -16,7 +16,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|errors_list_model||List[[ErrorsListModel](../../models/errors.md#errorslistmodel)]|
+|errors_list_model||List[[ErrorsListModel](../models/errors.md#errorslistmodel)]|
 
 
 
@@ -29,7 +29,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
 |column_name|Column name|string|:material-check-bold:|
-|[time_scale](../../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
 |data_group|Data group|string| |
 |month_start|Month start boundary|string| |
 |month_end|Month end boundary|string| |
@@ -185,7 +185,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|errors_list_model||List[[ErrorsListModel](../../models/errors.md#errorslistmodel)]|
+|errors_list_model||List[[ErrorsListModel](../models/errors.md#errorslistmodel)]|
 
 
 
@@ -198,7 +198,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
 |column_name|Column name|string|:material-check-bold:|
-|[time_scale](../../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
 |data_group|Data group|string| |
 |month_start|Month start boundary|string| |
 |month_end|Month end boundary|string| |
@@ -354,7 +354,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|errors_list_model||List[[ErrorsListModel](../../models/errors.md#errorslistmodel)]|
+|errors_list_model||List[[ErrorsListModel](../models/errors.md#errorslistmodel)]|
 
 
 
@@ -518,7 +518,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|errors_list_model||List[[ErrorsListModel](../../models/errors.md#errorslistmodel)]|
+|errors_list_model||List[[ErrorsListModel](../models/errors.md#errorslistmodel)]|
 
 
 
@@ -530,7 +530,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |connection_name|Connection name|string|:material-check-bold:|
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
-|[time_scale](../../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
 |data_group|Data group|string| |
 |month_start|Month start boundary|string| |
 |month_end|Month end boundary|string| |
@@ -682,7 +682,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|errors_list_model||List[[ErrorsListModel](../../models/errors.md#errorslistmodel)]|
+|errors_list_model||List[[ErrorsListModel](../models/errors.md#errorslistmodel)]|
 
 
 
@@ -694,7 +694,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |connection_name|Connection name|string|:material-check-bold:|
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
-|[time_scale](../../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
 |data_group|Data group|string| |
 |month_start|Month start boundary|string| |
 |month_end|Month end boundary|string| |
@@ -846,7 +846,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|errors_list_model||List[[ErrorsListModel](../../models/errors.md#errorslistmodel)]|
+|errors_list_model||List[[ErrorsListModel](../models/errors.md#errorslistmodel)]|
 
 
 

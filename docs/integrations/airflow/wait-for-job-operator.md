@@ -131,8 +131,8 @@ To avoid this issue, make sure that the DAG uses a separate _wait for job_ tasks
 
 ## What's next
 
-- [Check wait for job operator in action](run-checks-use-case.md)
-- [Learn about run checks operator](run-checks-operator.md)
-- [Learn about collect statistics operator](collect-statistics-operator.md)
-- [Learn about table import operator](table-import-operator.md)
-- [Learn about table status operator](table-status-operator.md)
+- [Check wait for job operator in action](./run-checks-use-case.md)
+- [Learn about run checks operator](./run-checks-operator.md)
+- [Learn about collect statistics operator](./collect-statistics-operator.md)
+- [Learn about table import operator](./table-import-operator.md)
+- [Learn about table status operator](./table-status-operator.md)

@@ -1,16 +1,30 @@
+# Data quality bool sensors
+All [data quality sensors](../../../dqo-concepts/sensors/sensors.md) in the **bool** category supported by DQOps are listed below. Those sensors are measured on a column level.
 
-## **false percent**
-**Full sensor name**
-```
-column/bool/false_percent
-```
-**Description**
+---
+
+
+## false percent
 Column level sensor that calculates the percentage of rows with a false value in a column.
 
+**Sensor summary**
+
+The false percent sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| column | bool | `column/bool/false_percent` | [sensors/column/bool](https://github.com/dqops/dqo/tree/develop/home/sensors/column/bool/) |
 
 
 
-**SQL Template (Jinja2)**
+
+
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
 === "BigQuery"
 
     ```sql+jinja
@@ -273,18 +287,29 @@ Column level sensor that calculates the percentage of rows with a false value in
     ```
 ___
 
-## **true percent**
-**Full sensor name**
-```
-column/bool/true_percent
-```
-**Description**
+
+
+## true percent
 Column level sensor that calculates the percentage of rows with a true value in a column.
 
+**Sensor summary**
+
+The true percent sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| column | bool | `column/bool/true_percent` | [sensors/column/bool](https://github.com/dqops/dqo/tree/develop/home/sensors/column/bool/) |
 
 
 
-**SQL Template (Jinja2)**
+
+
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
 === "BigQuery"
 
     ```sql+jinja
@@ -546,3 +571,6 @@ Column level sensor that calculates the percentage of rows with a true value in 
     {{- lib.render_order_by() -}}
     ```
 ___
+
+
+

@@ -1,22 +1,36 @@
+# Data quality datetime sensors
+All [data quality sensors](../../../dqo-concepts/sensors/sensors.md) in the **datetime** category supported by DQOps are listed below. Those sensors are measured on a column level.
 
-## **date match format percent**
-**Full sensor name**
-```
-column/datetime/date_match_format_percent
-```
-**Description**
+---
+
+
+## date match format percent
 Column level sensor that calculates the percentage of values that does fit a given date regex in a column.
 
-**Parameters**
+**Sensor summary**
+
+The date match format percent sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| column | datetime | `column/datetime/date_match_format_percent` | [sensors/column/datetime](https://github.com/dqops/dqo/tree/develop/home/sensors/column/datetime/) |
+
+
+**Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|date_formats|Desired date format. Sensor will try to parse the column records and cast the data using this format.|enum| |YYYY-MM-DD<br/>DD/MM/YYYY<br/>DD.MM.YYYY<br/>DD-MM-YYYY<br/>|
+|`date_formats`|Desired date format. Sensor will try to parse the column records and cast the data using this format.|enum| |YYYY-MM-DD<br/>DD/MM/YYYY<br/>DD.MM.YYYY<br/>DD-MM-YYYY<br/>|
 
 
 
 
-**SQL Template (Jinja2)**
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
 === "BigQuery"
 
     ```sql+jinja
@@ -424,18 +438,29 @@ Column level sensor that calculates the percentage of values that does fit a giv
     ```
 ___
 
-## **date values in future percent**
-**Full sensor name**
-```
-column/datetime/date_values_in_future_percent
-```
-**Description**
+
+
+## date values in future percent
 Column level sensor that calculates the percentage of rows with a date value in the future, compared with the current date.
 
+**Sensor summary**
+
+The date values in future percent sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| column | datetime | `column/datetime/date_values_in_future_percent` | [sensors/column/datetime](https://github.com/dqops/dqo/tree/develop/home/sensors/column/datetime/) |
 
 
 
-**SQL Template (Jinja2)**
+
+
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
 === "BigQuery"
 
     ```sql+jinja
@@ -974,25 +999,36 @@ Column level sensor that calculates the percentage of rows with a date value in 
     ```
 ___
 
-## **value in range date percent**
-**Full sensor name**
-```
-column/datetime/value_in_range_date_percent
-```
-**Description**
+
+
+## value in range date percent
 Column level sensor that calculates the percent of non-negative values in a column.
 
-**Parameters**
+**Sensor summary**
+
+The value in range date percent sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| column | datetime | `column/datetime/value_in_range_date_percent` | [sensors/column/datetime](https://github.com/dqops/dqo/tree/develop/home/sensors/column/datetime/) |
+
+
+**Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|min_value|Lower bound range variable.|date| ||
-|max_value|Upper bound range variable.|date| ||
+|`min_value`|Lower bound range variable.|date| ||
+|`max_value`|Upper bound range variable.|date| ||
 
 
 
 
-**SQL Template (Jinja2)**
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
 === "BigQuery"
 
     ```sql+jinja
@@ -1382,3 +1418,6 @@ Column level sensor that calculates the percent of non-negative values in a colu
     {{- lib.render_order_by() -}}
     ```
 ___
+
+
+
