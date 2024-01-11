@@ -147,8 +147,12 @@ const DatabaseConnection = ({
     setShowError(true);
   };
 
-  const getTitle = (provider?: ConnectionModelProviderTypeEnum) => {
-    switch (provider) {
+  const getTitle = (database?: ConnectionModel): string => {
+    if(nameOfDatabase){
+      return nameOfDatabase + ' Connection Settings';
+    }
+
+    switch (database?.provider_type) {
       case ConnectionModelProviderTypeEnum.bigquery:
         return 'Google BigQuery Connection Settings';
       case ConnectionModelProviderTypeEnum.snowflake:
@@ -175,6 +179,20 @@ const DatabaseConnection = ({
         return 'Database Connection Settings';
     }
   };
+
+  const getIcon = () => {
+    if(nameOfDatabase){
+      return (<SvgIcon
+        name={nameOfDatabase?.toLowerCase().replace(/\s/g, '')}
+        className={clsx(
+          'mb-3 w-20 text-blue-500',
+          nameOfDatabase === 'Spark' && 'w-35',
+          nameOfDatabase === 'Trino' && 'max-w-11',
+        )}
+      />);
+    }
+    return (<img src={dbImage} className="h-16" alt="db logo" />);
+  }
 
   const getSharedCredentials = async () => {
     await SharedCredentailsApi.getAllSharedCredentials().then((res) =>
@@ -233,8 +251,8 @@ const DatabaseConnection = ({
       <TrinoConnection
         trino={{ ...database.trino, 
           port: '8080', 
-          trino_engine_type: nameOfDatabase?.toLowerCase() as TrinoParametersSpecTrinoEngineTypeEnum,
-          catalog: (nameOfDatabase?.toLowerCase() as TrinoParametersSpecTrinoEngineTypeEnum == TrinoParametersSpecTrinoEngineTypeEnum.athena ? 'awsdatacatalog' : ''),
+          trino_engine_type: (database.trino?.trino_engine_type ? database?.trino?.trino_engine_type : nameOfDatabase?.toLowerCase() as TrinoParametersSpecTrinoEngineTypeEnum),
+          catalog: (nameOfDatabase?.toLowerCase() as TrinoParametersSpecTrinoEngineTypeEnum === TrinoParametersSpecTrinoEngineTypeEnum.athena ? 'awsdatacatalog' : ''),
           athena_work_group: 'primary'
         }}
         onChange={(trino) => onChange({ ...database, trino })}

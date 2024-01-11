@@ -40,6 +40,9 @@ const TrinoConnection = ({
     });
   };
 
+  console.log(nameOfDatabase)
+  console.log(trino?.trino_engine_type)
+
   return (
     <SectionWrapper title="Trino connection parameters" className="mb-4">
       <Select
