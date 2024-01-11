@@ -67,7 +67,9 @@ const FieldTypeInput = ({ className, label, value, name, maskingType, onChange, 
   };
 
   useEffect(() => {
-    if (!value) return;
+    if (value === undefined){
+      return; 
+    }
 
     if (value.startsWith('${credential://') && value.endsWith('}')) {
       const credentialName = value.substring('${credential://'.length, value.length - 1);
