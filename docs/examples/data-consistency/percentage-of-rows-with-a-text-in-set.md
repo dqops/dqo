@@ -123,7 +123,7 @@ To execute the check prepared in the example using the [user interface](../../dq
 
     Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
-7. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
+7. To review the results on the [data quality dashboards](../../working-with-dqo/reviewing-results-on-data-quality-dashboards.md)
     go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
 
     Below you can see the results displayed on the **Current data quality checks results** dashboard located in the Check results group. This dashboard

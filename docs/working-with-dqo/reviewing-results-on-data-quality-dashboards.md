@@ -2,11 +2,11 @@
 
 ## Overview
 
-DQOps has multiple built-in data quality dashboards for displaying [data quality KPI](../../dqo-concepts/data-quality-kpis/data-quality-kpis.md).
+DQOps has multiple built-in data quality dashboards for displaying [data quality KPI](../dqo-concepts/data-quality-kpis/data-quality-kpis.md).
 Our dashboards use [Looker Studio](https://lookerstudio.google.com/overview) (formerly Google Data Studio) business
 intelligence environment.
 
-You can [learn more about different types of dashboards](../../dqo-concepts/data-quality-dashboards/data-quality-dashboards.md)
+You can [learn more about different types of dashboards](../dqo-concepts/data-quality-dashboards/data-quality-dashboards.md)
 in the Concept section.
 
 ## Prerequisite
@@ -14,13 +14,13 @@ in the Concept section.
 To be able to display results on data quality dashboards, you need to have a DQOps account and synchronize locally stored results with it.  
 To synchronize the data just click on the **Synchronize** button in the upper right corner of the navigation tab or run `cloud sync all` command in DQOps Shell.
 
-You can read more about `cloud` command in [Command-line specification section](../../command-line-interface/cloud.md).
+You can read more about `cloud` command in [Command-line specification section](../command-line-interface/cloud.md).
 
 ## View results on dashboards
 
 To view dashboards, simply go to the **Data Quality Dashboard** section, and select the dashboard of interest from the tree
 view on the left. There are several groups and subgroups of data quality dashboards dedicated to analyzing results from
-data quality checks. You can [learn more about different types of dashboards](../../dqo-concepts/data-quality-dashboards/data-quality-dashboards.md)
+data quality checks. You can [learn more about different types of dashboards](../dqo-concepts/data-quality-dashboards/data-quality-dashboards.md)
 in the Concept section.
 
 For example, to review the summary KPIs of all executed monitoring checks you can use the **KPIs scorecard - summary** dashboard.
@@ -55,5 +55,5 @@ Other dashboards have buttons to change the view between the current and previou
 
 ## What's next
 
-- [Learn how to run data quality checks](../run-data-quality-checks/run-data-quality-checks.md).
-- [Learn about setting schedules](../schedules/index.md) to easily customize when checks are run.
+- [Learn how to run data quality checks](run-data-quality-checks/run-data-quality-checks.md).
+- [Learn about setting schedules](schedules/index.md) to easily customize when checks are run.

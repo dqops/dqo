@@ -373,5 +373,5 @@ The following data quality KPI formula shows how DQOps can measure timeliness fo
 ## What's next
 - Look at some built-in [data quality KPI dashboards](../data-quality-dashboards/data-quality-dashboards.md#data-quality-kpis) 
 - Read about [build-in data quality dashboards](../data-quality-dashboards/data-quality-dashboards.md)
-- Learn how to [review results of data quality monitoring results on dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
+- Learn how to [review results of data quality monitoring results on dashboards](../../working-with-dqo/reviewing-results-on-data-quality-dashboards.md)
 - Find out how data quality [KPIs are measured incrementally for partitioned data](./incremental-data-quality-monitoring.md)

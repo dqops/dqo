@@ -94,7 +94,7 @@ The following is a fragment of the `bigquery-public-data.america_health_rankings
 6. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
     Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
-7. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
+7. To review the results on the [data quality dashboards](../../working-with-dqo/reviewing-results-on-data-quality-dashboards.md)
     go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
 
 ### **Validation that the table meets the size requirements**
@@ -127,7 +127,7 @@ We aim to verify if the table meets size requirements and is not too small:
 
     Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
-4. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
+4. To review the results on the [data quality dashboards](../../working-with-dqo/reviewing-results-on-data-quality-dashboards.md)
     go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
 
     Below you can see the results displayed on the **Largest tables by number of rows** dashboard located in the Volume group. 

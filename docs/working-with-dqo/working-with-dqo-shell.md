@@ -5,7 +5,7 @@
 DQOps Shell provides command line access to all commands. You can perform almost the same tasks that can be done
 using the user interface. 
 
-For a list and description of all DQOps Shell commands go to [Command-line interface section](../../command-line-interface/index.md)
+For a list and description of all DQOps Shell commands go to [Command-line interface section](../command-line-interface/index.md)
 
 ## Starting shell as a Python package
 If DQOps was installed as a python package in a Python virtual environment (venv) and the virtual environment is active,
@@ -31,7 +31,7 @@ using the `-it` parameter to the `docker run` command as shown below.
 docker run -v .:/dqo/userhome -it -p 8888:8888 dqops/dqo
 ```
 
-The [Run DQOps in Docker](../installation/run-dqo-as-docker-container.md) manual describes other parameters
+The [Run DQOps in Docker](installation/run-dqo-as-docker-container.md) manual describes other parameters
 used in starting DQOps from Docker.
 
 
@@ -92,7 +92,7 @@ To do this, simply enter the command below in your terminal
 
 To terminate dqo running in the background, simply use the Ctrl+C.
 
-For more information on the `run` command, please refer to the [Command-line interface section](../../command-line-interface/run.md).
+For more information on the `run` command, please refer to the [Command-line interface section](../command-line-interface/run.md).
 
 
 ## Using DQOps commands on the command-line interface
