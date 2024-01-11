@@ -1,4 +1,5 @@
 # Integration DQOps with Dbt
+This guide lists the integration options between DQOps and Dbt for running data quality checks along Dbt data transformations.
 
 ## Overview
 

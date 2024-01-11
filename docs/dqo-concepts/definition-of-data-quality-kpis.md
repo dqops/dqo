@@ -1,4 +1,5 @@
 # Data quality KPIs
+Learn how to measure the data quality KPI score with DQOps, what is the formula used to calculate the score, and how to improve data quality following KPIs.
 
 ## Purpose of data quality KPIs
 

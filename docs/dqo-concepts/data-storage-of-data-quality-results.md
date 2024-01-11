@@ -1,4 +1,5 @@
 # Data quality results storage in DQOps
+Read this guide to learn now DQOps stores data quality results locally, to enable even offline work, and monitoring on-premise or sensitive data sources.
 
 ## Data format
 In DQOps, sensor readouts and check results are stored as Apache Parquet files following the Apache

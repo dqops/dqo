@@ -1,4 +1,5 @@
 # Timezone configuration
+This reference page lists all time zones supported by DQOps for configuring an internal CRON scheduler to respect a time zone of choice.
 
 ## Change the time zone settings
 

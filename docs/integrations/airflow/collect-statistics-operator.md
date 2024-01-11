@@ -1,4 +1,5 @@
 # Collect statistics operator
+The documentation and code samples of capturing statistics using DQOps from data sources, and integrating statistics collection directly in Apache Airflow.
 
 ## Overview
 

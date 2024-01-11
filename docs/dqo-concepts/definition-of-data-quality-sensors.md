@@ -1,4 +1,5 @@
-# Sensors
+# Definition of a data quality sensor
+Read this guide to understand how data quality sensors in DQOps capture metrics about monitored data sources for detecting data quality issues with rules.
 
 ## What are sensors in DQOPs?
 

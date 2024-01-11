@@ -1,4 +1,5 @@
 # DQOps run checks example with the Dbt Core 
+This example shows now to integrate dbt core jobs with running data quality checks with DQOps. 
 
 ## Integration example
 

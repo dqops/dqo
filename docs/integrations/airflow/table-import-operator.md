@@ -1,4 +1,5 @@
 # Table import operator
+Read this reference to learn how to use the DQOps Apache Airflow operator for importing metadata of tables to DQOps for further data quality monitoring.
 
 ## Overview
 

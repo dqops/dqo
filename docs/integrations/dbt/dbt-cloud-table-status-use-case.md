@@ -1,4 +1,5 @@
 # DQOps table status example with the DbtCloud
+This guide shows how to detect the data quality status of tables observed by DQOps within DbtCloud jobs, allowing to prevent loading corrupted data.
 
 ## Integration example
 

@@ -1,4 +1,5 @@
 # Download DQOps using PIP
+This guide shows how to quickly download DQOps from PyPi, and start a local development instance to analyze data quality or use the DQOps Client. 
 
 ## Overview
 

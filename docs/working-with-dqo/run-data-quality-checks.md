@@ -1,4 +1,5 @@
 # Run data quality check
+Read this guide to learn now to use the DQOps UI and command line to run data quality checks.
 
 ## Overview
 

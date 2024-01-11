@@ -1,4 +1,5 @@
 # Run DQOps in Docker
+This guide shows how to pull DQOps docker image from Docker Hub, and how to pass the right parameters to the container to start it in a production mode.
 
 ## Overview
 

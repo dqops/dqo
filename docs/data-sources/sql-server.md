@@ -1,4 +1,5 @@
 # SQL Server
+Read this guide to learn how to connect DQOps to Microsoft SQL Server from the UI, command-line, or directly in YAML files. All parameters are documented.
 
 ## Overview
 

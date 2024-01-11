@@ -1,5 +1,7 @@
 # DQOps key concepts overview
+Follow this guide to learn each concept of DQOps Data Quality Operations Center to start measuring data quality for data sources.
 
+## List of DQOps concepts
 These topics introduce the basic concepts of DQOps.
 
  - **[Data quality checks](definition-of-data-quality-checks/index.md)**

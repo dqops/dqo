@@ -1,4 +1,5 @@
 # Running data quality checks
+Read this guide to learn how to run data quality checks in DQOps, and what are the available filtering options to run only the checks that you want.
 
 ## Overview
 

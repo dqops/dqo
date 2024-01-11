@@ -1,4 +1,5 @@
 # Configure Slack notifications
+Read this guide to learn how to integrate DQOps with Slack, sending data quality incident notification when new data quality issues are detected.
 
 ## Overview
 

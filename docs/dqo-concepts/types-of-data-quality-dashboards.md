@@ -1,4 +1,5 @@
 # Data quality dashboards
+Read this guide to learn what kind of data quality dashboards are bundled with DQOps, what is their purpose, and how they allow to find affected tables.
 
 ## Overview
 

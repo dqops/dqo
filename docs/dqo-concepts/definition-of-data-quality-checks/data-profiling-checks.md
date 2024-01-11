@@ -1,4 +1,5 @@
 # Profiling
+Read this guide to understand the purpose of data profiling data quality checks in DQOps, and how they are used to detect the first data quality issues.
 
 ## What are profiling checks?
 

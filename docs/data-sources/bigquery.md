@@ -1,4 +1,5 @@
 # BigQuery
+Read this guide to learn how to connect DQOps to BigQuery from the UI, command-line, or directly in YAML files. All parameters are documented.
 
 ## Overview
 

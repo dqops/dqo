@@ -1,4 +1,5 @@
 # Run checks example
+Read this guide to learn how to run data quality checks in an Apache Airflow DAG using DQOps, and how to stop the pipeline if data quality issues are detected.
 
 ## Overview
 

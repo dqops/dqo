@@ -1,4 +1,5 @@
 # Incremental data quality monitoring
+This guide shows how to detect data quality issues in time-based or partitioned data, monitoring very big or append-only tables, detecting issues ahead of time.
 
 ## Measuring quality of partitioned data
 DQOps was designed from the bottom-up to support analyzing data quality of very big tables, reaching even terabyte and petabyte scale.

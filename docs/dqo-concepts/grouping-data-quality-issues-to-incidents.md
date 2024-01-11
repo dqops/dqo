@@ -1,4 +1,5 @@
 # Data quality incidents
+This guide shows how DQOps correlates similar data quality issues into data quality incidents, and how the incident notification workflow works. 
 
 ## What is a data quality incident?
 

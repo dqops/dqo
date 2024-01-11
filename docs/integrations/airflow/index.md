@@ -1,8 +1,9 @@
 # Airflow integration
+This overview shows the list of Apache Airflow operators provided by DQOps that you can use to monitor data quality directly in the data pipelines. 
 
 ## Overview
 
-DQOps integrates with Apache Airflow. 
+DQOps integrates very easily with Apache Airflow. 
 
 Operators are available for actions such as:
 

@@ -1,4 +1,5 @@
 # Configuring schedule by modifying the YAML file
+Read this guide to learn how to configure schedules for running data quality checks directly in DQOps YAML files.
 
 ## Overview
 

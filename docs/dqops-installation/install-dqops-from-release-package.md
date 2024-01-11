@@ -1,4 +1,5 @@
 # Install DQOps from release package
+This guide shows how to download a DQOps release package that is available as a .zip package on GitHub. You can set up your DQOps installation for your needs.
 
 ## Prerequisites
 

@@ -1,4 +1,5 @@
 # Daily monitoring of data quality 
+Read this guide to understand the daily workflow of using DQOps to review recently detected data quality issues.
 
 ## Overview 
 

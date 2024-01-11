@@ -1,5 +1,7 @@
-# Cron formatting
+# CRON expression format
+This page shows the format of CRON expressions used by DQOps for scheduling data quality checks. DQOps CRON format is compatible with Linux CRON.
 
+## Overview
 A cron expression is a string of fve numbers separated by white space that represents when the job should be executed.
 
 Each value may be any of the allowed values below, along with various combinations of the special characters

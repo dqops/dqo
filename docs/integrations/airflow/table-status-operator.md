@@ -1,4 +1,5 @@
 # Table status operator
+Read this guide to learn how to use the Apache Airflow operator from DQOps to detect the last known data quality status of data sources.
 
 ## Overview
 

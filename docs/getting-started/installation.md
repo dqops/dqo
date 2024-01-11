@@ -1,4 +1,5 @@
 # Installation
+This guide will tell you how to quickly install DQOps from PyPI and create a DQOps Cloud account to enable the data quality dashboards.
 
 ## Overview
 

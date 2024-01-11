@@ -1,4 +1,5 @@
 # Set up data grouping
+Read this guide to learn how to configure data grouping in DQOps for running data quality checks for different data streams.
 
 ## What is data grouping in DQOps?
 

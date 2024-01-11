@@ -1,4 +1,5 @@
 # Basic data statistics
+Read this manual to learn how to collect basic statistics about data sources during the data profiling stage, before activating advanced profiling checks. 
 
 ## Overview
 

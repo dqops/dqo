@@ -1,4 +1,5 @@
 # Editing DQOps YAML files with Visual Studio Code
+Read this article to learn how to edit DQOps data quality definition files (data contracts) directly in VS Code, using code completion and validation.
 
 ## YAML schema overview
 In DQOps, the configuration of [data quality checks](../../dqo-concepts/configuring-data-quality-checks-and-rules.md)

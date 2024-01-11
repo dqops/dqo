@@ -1,4 +1,5 @@
 # Delete data quality results
+Read this guide to learn how to delete a subset of outdated data quality results, especially when tables were decommissioned or checks were run by mistake.
 
 ## Overview
 

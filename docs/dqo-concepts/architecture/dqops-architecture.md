@@ -1,4 +1,5 @@
 # DQOps architecture
+This guide shows the components of a DQOps environment, and what are the possible deployment options for a SaaS hosted, on-premise or a hybrid environment.
 
 ## Overview
 

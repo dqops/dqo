@@ -1,5 +1,5 @@
 # DQOps installation options
-DQOps is an open-source data quality platform that is distributed in multiple formats.
+This guide lists all options of installing DQOps Data Quality Operations Center, using pip, docker, or compiling the code directly.
 
 -  **[Python package](install-dqops-using-pip.md)**
    

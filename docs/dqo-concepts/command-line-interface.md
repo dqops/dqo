@@ -1,4 +1,5 @@
 # Working with Command-Line Interface
+Read this guide to understand the concept of DQOps command line interface.
 
 ## Overview
 

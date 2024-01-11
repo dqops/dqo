@@ -1,4 +1,5 @@
 # Monitoring checks
+This guide shows how the data quality monitoring checks in DQOps are assessing the data quality status of data, applying Data Observability with complex rules.
 
 ## What are monitoring checks?
 

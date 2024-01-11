@@ -1,4 +1,5 @@
 # Data quality dimensions
+This guide shows the types of data quality dimensions that are measured by DQOps Data Quality Operations Center. 
 
 ## What is the data quality dimension?
 

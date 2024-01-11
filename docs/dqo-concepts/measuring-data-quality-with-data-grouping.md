@@ -1,4 +1,5 @@
 # Data grouping
+This guide shows how DQOps uses a *GROUP BY* clause in SQL queries to analyze data quality of data coming from multiple sources, aggregated in one table.
 
 ## How does data grouping work?
 

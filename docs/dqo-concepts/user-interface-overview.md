@@ -1,4 +1,5 @@
 # User interface overview
+This guide introduces the concept of DQOps user interface, how the screen is organized, how to work with multiple tables, and navigate across the platform.
 
 ## Overview
 

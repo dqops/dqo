@@ -1,4 +1,5 @@
 # Working with DQOps Shell
+Read this manual to learn how to use DQOps Shell both from a development instance started as a Python module, or started as a docker container.
 
 ## Overview
 
