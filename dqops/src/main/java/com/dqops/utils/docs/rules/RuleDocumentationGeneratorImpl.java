@@ -51,7 +51,7 @@ public class RuleDocumentationGeneratorImpl implements RuleDocumentationGenerato
     public DocumentationFolder renderRuleDocumentation(Path projectRootPath, LinkageStore<Class<?>> linkageStore, DqoHome dqoHome) {
         DocumentationFolder rulesFolder = new DocumentationFolder();
         rulesFolder.setFolderName("reference/rules");
-        rulesFolder.setLinkName("Rules");
+        rulesFolder.setLinkName("Data quality rules");
         Path rulesPath = Path.of("docs", "reference", "rules");
         rulesFolder.setDirectPath(projectRootPath.resolve("..").resolve(rulesPath).toAbsolutePath().normalize());
 

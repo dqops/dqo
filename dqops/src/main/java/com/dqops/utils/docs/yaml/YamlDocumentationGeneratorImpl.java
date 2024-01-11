@@ -48,7 +48,7 @@ public class YamlDocumentationGeneratorImpl implements YamlDocumentationGenerato
     public DocumentationFolder renderYamlDocumentation(Path projectRootPath, LinkageStore<Class<?>> linkageStore, List<YamlDocumentationSchemaNode> yamlDocumentationSchema) {
         DocumentationFolder yamlFolder = new DocumentationFolder();
         yamlFolder.setFolderName("reference/yaml");
-        yamlFolder.setLinkName("Yaml");
+        yamlFolder.setLinkName("DQOps YAML files schema");
         yamlFolder.setDirectPath(projectRootPath.resolve("../docs/reference/yaml").toAbsolutePath().normalize());
 
         List<YamlSuperiorObjectDocumentationModel> yamlSuperiorObjectDocumentationModels =

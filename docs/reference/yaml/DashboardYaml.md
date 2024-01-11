@@ -2,79 +2,6 @@
 The definition of YAML files used by DQOps to configure the data sources, monitored tables, and the configuration of activated data quality checks.
 
 
-## DashboardsFolderListSpec
-List of dashboard folders.
-
-
-
-
-
-
-
-___
-
-
-## DashboardYaml
-Data quality dashboard definition YAML schema for a data quality dashboards list specification.
-
-
-
-
-
-
-
-
-
-The structure of this object is described below
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|api_version||string| | | |
-|kind||enum|default_schedules<br/>settings<br/>default_notifications<br/>rule<br/>sensor<br/>source<br/>check<br/>dashboards<br/>default_checks<br/>table<br/>provider_sensor<br/>file_index<br/>| | |
-|[spec](./DashboardYaml.md#DashboardsFolderListSpec)||[DashboardsFolderListSpec](./DashboardYaml.md#DashboardsFolderListSpec)| | | |
-
-
-
-
-
-
-
-
-
-___
-
-
-## DashboardsFolderSpec
-Description of a folder with multiple dashboards or other folders.
-
-
-
-
-
-
-
-
-
-The structure of this object is described below
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|folder_name|Folder name|string| | | |
-|standard|Always shows this schema tree node because it contains standard dashboards. Set the value to false to show this folder only when advanced dashboards are enabled.|boolean| | | |
-|[dashboards](./DashboardYaml.md#DashboardListSpec)|List of data quality dashboard at this level.|[DashboardListSpec](./DashboardYaml.md#DashboardListSpec)| | | |
-|[folders](./DashboardYaml.md#DashboardsFolderListSpec)|List of data quality dashboard folders at this level.|[DashboardsFolderListSpec](./DashboardYaml.md#DashboardsFolderListSpec)| | | |
-
-
-
-
-
-
-
-
-
-___
-
-
 ## DashboardSpec
 Description of a single dashboard that is available in the platform.
 
@@ -119,6 +46,79 @@ List of dashboards.
 
 
 
+
+
+
+
+
+
+
+
+
+___
+
+
+## DashboardYaml
+Data quality dashboard definition YAML schema for a data quality dashboards list specification.
+
+
+
+
+
+
+
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|api_version||string| | | |
+|kind||enum|default_schedules<br/>settings<br/>default_notifications<br/>rule<br/>sensor<br/>source<br/>check<br/>dashboards<br/>default_checks<br/>table<br/>provider_sensor<br/>file_index<br/>| | |
+|[spec](./DashboardYaml.md#DashboardsFolderListSpec)||[DashboardsFolderListSpec](./DashboardYaml.md#DashboardsFolderListSpec)| | | |
+
+
+
+
+
+
+
+
+
+___
+
+
+## DashboardsFolderListSpec
+List of dashboard folders.
+
+
+
+
+
+
+
+___
+
+
+## DashboardsFolderSpec
+Description of a folder with multiple dashboards or other folders.
+
+
+
+
+
+
+
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|folder_name|Folder name|string| | | |
+|standard|Always shows this schema tree node because it contains standard dashboards. Set the value to false to show this folder only when advanced dashboards are enabled.|boolean| | | |
+|[dashboards](./DashboardYaml.md#DashboardListSpec)|List of data quality dashboard at this level.|[DashboardListSpec](./DashboardYaml.md#DashboardListSpec)| | | |
+|[folders](./DashboardYaml.md#DashboardsFolderListSpec)|List of data quality dashboard folders at this level.|[DashboardsFolderListSpec](./DashboardYaml.md#DashboardsFolderListSpec)| | | |
 
 
 

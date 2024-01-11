@@ -34,6 +34,20 @@ The structure of this object is described below
 ___
 
 
+## ParameterDefinitionsListSpec
+List of parameter definitions - the parameters for custom sensors or custom rules.
+
+
+
+
+
+
+
+
+
+___
+
+
 ## ParameterDefinitionSpec
 Defines a single field that is a sensor parameter or a rule parameter.
 
@@ -87,20 +101,6 @@ The structure of this object is described below
 |api_version||string| | | |
 |kind||enum|default_schedules<br/>settings<br/>default_notifications<br/>rule<br/>sensor<br/>source<br/>check<br/>dashboards<br/>default_checks<br/>table<br/>provider_sensor<br/>file_index<br/>| | |
 |[spec](./SensorDefinitionYaml.md#SensorDefinitionSpec)||[SensorDefinitionSpec](./SensorDefinitionYaml.md#SensorDefinitionSpec)| | | |
-
-
-
-
-
-
-
-
-
-___
-
-
-## ParameterDefinitionsListSpec
-List of parameter definitions - the parameters for custom sensors or custom rules.
 
 
 

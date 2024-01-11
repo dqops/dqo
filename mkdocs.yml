@@ -406,7 +406,7 @@ nav:
   - Reference:
     - 'reference/index.md'
 ########## INCLUDE SENSOR REFERENCE - DO NOT MODIFY MANUALLY
-    - Sensors:
+    - Data quality sensors:
       - 'reference/sensors/index.md'
       - table:
         - 'reference/sensors/table/index.md'
@@ -437,7 +437,7 @@ nav:
         - uniqueness column sensors: 'reference/sensors/column/uniqueness-column-sensors.md'
 ########## END INCLUDE SENSOR REFERENCE
 ########## INCLUDE RULE REFERENCE - DO NOT MODIFY MANUALLY
-    - Rules:
+    - Data quality rules:
       - 'reference/rules/index.md'
       - Averages: 'reference/rules/Averages.md'
       - Change: 'reference/rules/Change.md'
@@ -446,7 +446,7 @@ nav:
       - Stdev: 'reference/rules/Stdev.md'
 ########## END INCLUDE RULE REFERENCE
 ########## INCLUDE YAML REFERENCE - DO NOT MODIFY MANUALLY
-    - Yaml:
+    - DQOps YAML files schema:
       - profiling:
         - 'reference/yaml/profiling/index.md'
         - table profiling checks: 'reference/yaml/profiling/table-profiling-checks.md'

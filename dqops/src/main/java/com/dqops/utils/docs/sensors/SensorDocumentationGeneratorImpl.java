@@ -55,7 +55,7 @@ public class SensorDocumentationGeneratorImpl implements SensorDocumentationGene
     public DocumentationFolder renderSensorDocumentation(Path projectRootPath, LinkageStore<Class<?>> linkageStore, DqoHome dqoHome) {
         DocumentationFolder sensorsFolder = new DocumentationFolder();
         sensorsFolder.setFolderName("reference/sensors");
-        sensorsFolder.setLinkName("Sensors");
+        sensorsFolder.setLinkName("Data quality sensors");
         Path sensorsPath = Path.of("docs", "reference", "sensors");
         sensorsFolder.setDirectPath(projectRootPath.resolve("..").resolve(sensorsPath).toAbsolutePath().normalize());
 
