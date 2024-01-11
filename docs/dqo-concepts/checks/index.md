@@ -243,7 +243,7 @@ and will replace it with the most recent end-of-day data quality status.
 
 ### **Monthly data quality status snapshots**
 Monthly [monitoring checks](./monitoring-checks/monitoring-checks.md) are measuring the end-of-month data quality status.
-DQOps runs them daily, because the default [CRON schedule](../../working-with-dqo/schedules/index.md) for executing
+DQOps runs them daily, because the default [CRON schedule](../../working-with-dqo/configure-scheduling-of-data-quality-checks/configure-scheduling-of-data-quality-checks) for executing
 monthly data quality monitoring checks is configured to run every day.  
 
 The SQL query generated for a similar, monthly data quality check

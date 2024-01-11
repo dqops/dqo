@@ -58,7 +58,7 @@ checks that require more frequent runs, we will set individual check-level sched
 The schedule for the [daily_number_in_range_percent](../../checks/column/numeric/number-in-range-percent.md) check will be temporarily disabled.
 
 If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
-You can read more about scheduling [here](../../working-with-dqo/schedules/index.md). 
+You can read more about scheduling [here](../../working-with-dqo/configure-scheduling-of-data-quality-checks/configure-scheduling-of-data-quality-checks). 
 
 **VALUE**
 
@@ -158,7 +158,7 @@ The YAML connection configuration file stores data source configurations and all
 In the YAML data source configuration file below, the highlighted sections indicate the area where the cron expression
 for the **Daily monitoring** schedule is set to run every day at 8:00 AM (0 8 * * *).
 
-If you want to learn more about cron formatting, please refer to the [Working with DQOps section](../../working-with-dqo/schedules/cron-formatting.md).
+If you want to learn more about cron formatting, please refer to the [Working with DQOps section](../../working-with-dqo/configure-scheduling-of-data-quality-checks/cron-formatting.md).
 
 ```yaml hl_lines="13-14"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/ConnectionYaml-schema.json
@@ -319,6 +319,6 @@ take place every 10 minutes.
 ## Next step
 - Now that you have set up a schedule and get first results, you can evaluate them on dashboards. 
   You can find instructions on how to do this [here](../../getting-started/review-results-on-dashboards/review-results-on-dashboards.md).
-- With DQOps, you can easily customize when the checks are run at the level of the entire connection, table, or individual check. [Learn more about how to set schedules here](../../working-with-dqo/schedules/index.md). 
+- With DQOps, you can easily customize when the checks are run at the level of the entire connection, table, or individual check. [Learn more about how to set schedules here](../../working-with-dqo/configure-scheduling-of-data-quality-checks/configure-scheduling-of-data-quality-checks). 
 - DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md) and [Slack notifications](../../integrations/slack/configuring-slack-notifications.md).
-- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md) can help you to calculate separate data quality KPI scores for different groups of rows.
+- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md) can help you to calculate separate data quality KPI scores for different groups of rows.

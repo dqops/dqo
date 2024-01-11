@@ -3,7 +3,7 @@
 ## Overview
 
 Table comparison enables you to identify differences between two tables. It is useful when you want to compare datasets
-and validate successful data replication or migration. You can compare tables between any [supported data sources](../../data-sources/index.md).
+and validate successful data replication or migration. You can compare tables between any [supported data sources](../data-sources/index.md).
 
 ## Types of comparison checks 
 
@@ -11,22 +11,22 @@ Using Table comparison you can monitor tables using the following comparison che
 
 **Table-level checks:**
 
-- [row count match](../../checks/table/comparisons/row-count-match.md) compares the row count of the current (parent) table to the row count of the reference table.
-- [column count match](../../checks/table/comparisons/column-count-match.md) compares the column count of the current (parent) table to the column count of the reference table.
+- [row count match](../checks/table/comparisons/row-count-match.md) compares the row count of the current (parent) table to the row count of the reference table.
+- [column count match](../checks/table/comparisons/column-count-match.md) compares the column count of the current (parent) table to the column count of the reference table.
 
 **Column-level checks:**
 
-- [sum match](../../checks/column/comparisons/sum-match.md) compares the sum of the values in the tested column to the sum of values in a reference column from the reference table.
-- [min match](../../checks/column/comparisons/min-match.md) compares the minimum value in the tested column to the minimum value in a reference column from the reference table.
-- [max match](../../checks/column/comparisons/max-match.md) compares the maximum value in the tested column to the maximum value in a reference column from the reference table.
-- [mean match](../../checks/column/comparisons/mean-match.md) compares the mean (average) of the values in the tested column to the mean (average) of values in a reference column from the reference table.
-- [not null count match](../../checks/column/comparisons/not-null-count-match.md) compares the count of not null values in the tested column to the count of not null values in a reference column from the reference table.
-- [null count match](../../checks/column/comparisons/null-count-match.md) compares the count of null values in the tested column to the count of null values in a reference column from the reference table. 
+- [sum match](../checks/column/comparisons/sum-match.md) compares the sum of the values in the tested column to the sum of values in a reference column from the reference table.
+- [min match](../checks/column/comparisons/min-match.md) compares the minimum value in the tested column to the minimum value in a reference column from the reference table.
+- [max match](../checks/column/comparisons/max-match.md) compares the maximum value in the tested column to the maximum value in a reference column from the reference table.
+- [mean match](../checks/column/comparisons/mean-match.md) compares the mean (average) of the values in the tested column to the mean (average) of values in a reference column from the reference table.
+- [not null count match](../checks/column/comparisons/not-null-count-match.md) compares the count of not null values in the tested column to the count of not null values in a reference column from the reference table.
+- [null count match](../checks/column/comparisons/null-count-match.md) compares the count of null values in the tested column to the count of null values in a reference column from the reference table. 
 
 ## Create a new table comparison
 
 Table comparisons can be categorized into three types: profiling, monitoring, and partition. You can read learn more about
-these [types of checks in the DQOps concept section](../../dqo-concepts/checks/index.md).
+these [types of checks in the DQOps concept section](../dqo-concepts/checks/index.md).
 
 To create a new table comparison, follow these steps:
 
@@ -43,7 +43,7 @@ To create a new table comparison, follow these steps:
 4. You can group your data before comparison by using a discriminator column containing data such as location, business units, vendor, etc.
     If you want to use data grouping, select columns on compared (source) and reference tables. DQOps compares up to 1000 distinct data group rows by default.
     You can modify this limit by changing the `--dqo.sensors.limit.sensor-readout-limit` parameter.
-    [Learn more about data groupings](../../dqo-concepts/data-grouping/data-grouping.md).
+    [Learn more about data groupings](../dqo-concepts/data-grouping/data-grouping.md).
    
     ![Optional data grouping on comparison](https://dqops.com/docs/images/working-with-dqo/comparisons/optional-data-grouping-on-comparison.png)
 
@@ -60,12 +60,12 @@ The right part of the comparison screen has a list of comparison checks which yo
 checks you want to run, simply click on the checkboxes.
 
 Once you have activated the checks, you can set the severity level for each one. You can choose from three levels: warning, error, and fatal.
-[Learn more about the severity levels](../../dqo-concepts/checks/index.md#issue-severity-levels).
+[Learn more about the severity levels](../dqo-concepts/checks/index.md#issue-severity-levels).
 
 ![Table comparisons severity levels](https://dqops.com/docs/images/working-with-dqo/comparisons/table-comparisions-severity-levels2.png)
     
 When you create a new table comparison a new category of checks named Comparisons/[name of the comparison] is also 
-created on the [Check editor](../../dqo-concepts/user-interface-overview/user-interface-overview.md#check-editor) with a list of table and column checks.
+created on the [Check editor](../dqo-concepts/user-interface-overview/user-interface-overview.md#check-editor) with a list of table and column checks.
 On the Editor screen you can activate and deactivate comparison checks, set severity levels, run checks and view the results.
 
 ![List of checks](https://dqops.com/docs/images/working-with-dqo/comparisons/comparison-check-editor.png)

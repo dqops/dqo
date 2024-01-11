@@ -107,11 +107,11 @@ There are several tabs to explore in the **Data sources** section that differs d
 The following tabs are shown at the connection level:
 
 - **Connection** - provide details about the connection parameters.
-- **Schedule** - allows setting schedule for running checks. [Learn how to configure schedules](../../working-with-dqo/schedules/index.md).
+- **Schedule** - allows setting schedule for running checks. [Learn how to configure schedules](../../working-with-dqo/configure-scheduling-of-data-quality-checks/configure-scheduling-of-data-quality-checks).
 - **Comments** - allows adding comments to your connection.
 - **Labels** - allows adding labels to your connection.
 - **Schemas** - displays currently imported schemas and allows importing more schemas and tables.
-- **Default grouping template** - allows setting up data grouping globally at the data source level. [Learn how to configure data grouping](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md).
+- **Default grouping template** - allows setting up data grouping globally at the data source level. [Learn how to configure data grouping](../../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md).
 - **Incidents and notifications** - allows configuring incidents and Webhooks for notifications. [Learn more about incidents](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md) that let you keep track of the issues that arise during data quality monitoring. [Learn how to configure notifications](../../integrations/webhooks/index.md) whenever a new incident is created or modified.
 
 ## Explore the table-level tabs in the Data sources section
@@ -119,10 +119,10 @@ The following tabs are shown at the connection level:
 At the table level in the **Data sources** section, there are the following tabs:
 
 - **Table** - provide details about the table and allows you to add filter, priority or stage name (for example, "Ingestion").
-- **Schedule** - allows setting schedule for running checks. [Learn how to configure schedules](../../working-with-dqo/schedules/index.md).
+- **Schedule** - allows setting schedule for running checks. [Learn how to configure schedules](../../working-with-dqo/configure-scheduling-of-data-quality-checks/configure-scheduling-of-data-quality-checks).
 - **Comments** - allows adding comments to your tables.
 - **Labels** - allows adding labels to your tables.
-- **Data groupings** - allows setting up data grouping at the table level. [Learn how to configure data grouping](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md).
+- **Data groupings** - allows setting up data grouping at the table level. [Learn how to configure data grouping](../../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md).
 - **Date and time columns** - allows [configuring event and ingestion timestamp columns for timeliness checks](../../working-with-dqo/run-data-quality-checks.md#configure-event-and-ingestion-timestamp-columns-for-timeliness-checks), as well as [date or datetime column for partition checks](../../working-with-dqo/run-data-quality-checks.md#configure-date-or-datetime-column-for-partition-checks).
 - **Incident configuration** - allows configuring incidents. [Learn more about incidents](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md) that let you keep track of the issues that arise during data quality monitoring.
 

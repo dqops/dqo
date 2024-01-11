@@ -307,7 +307,7 @@ It is also important to mention that the configuration of data grouping on the c
 is only a template of the default grouping configuration that is copied to tables that are imported.
 When a table was already imported into DQOps, changing the configuration on the connection level has no effect.
 
-For more detailed information on setting up a data grouping, go to [Working with DQOps section](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md).
+For more detailed information on setting up a data grouping, go to [Working with DQOps section](../../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md).
 
 
 ## How DQOps stores data grouping results

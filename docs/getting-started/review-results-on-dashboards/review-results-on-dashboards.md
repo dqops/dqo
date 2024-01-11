@@ -70,5 +70,5 @@ You have completed our quick tutorial, and now you know how to add connections, 
   Learn more about [incidents](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md) and 
   [Slack notifications](../../integrations/slack/configuring-slack-notifications.md).
 - The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. 
-  Learn how [data grouping in DQOps](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md)
+  Learn how [data grouping in DQOps](../../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md)
   can help you to calculate separate data quality KPI scores for different groups of rows.

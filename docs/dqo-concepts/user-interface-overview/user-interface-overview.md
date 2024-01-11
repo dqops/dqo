@@ -17,7 +17,7 @@ The navigation bar allows you to select the specific sections that you want to f
 ![Navigation bar sections](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/navigation-bar1.png)
 
 - The **Data Sources** section allows you to [add new connections](../../data-sources/index.md), import schemas and 
-    tables, [set up schedules](../../working-with-dqo/schedules/index.md), add comments and labels, [configure data grouping](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md),
+    tables, [set up schedules](../../working-with-dqo/configure-scheduling-of-data-quality-checks/configure-scheduling-of-data-quality-checks), add comments and labels, [configure data grouping](../../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md),
     [set the date and time columns for partition checks](../../working-with-dqo/run-data-quality-checks.md#configure-date-or-datetime-column-for-partition-checks), 
     and [modify the settings of the incidents and notifications](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md).
 - The **Profiling** section allows you to [collect and review basic data statistics](../../working-with-dqo/collecting-basic-data-statistics.md),
@@ -95,7 +95,7 @@ quality checks that can be customized. The tree view in this section also provid
 
 - **Default checks configuration:** This allows you to configure checks that are automatically activated after importing new tables.
 - **Manage users:** This allows you to add new users and manage their roles.
-- **Default schedules:** This allows you to [configure schedules](../../working-with-dqo/schedules/index.md) that are automatically set after importing new tables.
+- **Default schedules:** This allows you to [configure schedules](../../working-with-dqo/configure-scheduling-of-data-quality-checks/configure-scheduling-of-data-quality-checks) that are automatically set after importing new tables.
 - **Defaults webhooks:** This allows you to [configure webhooks](../../integrations/webhooks/index.md).
 - **Shared credentials:** This allows you to add and manage shared credentials.
 
@@ -217,7 +217,7 @@ Additionally, you can expand each job entry to view sub-jobs and access more det
 
 ### **Enable and disable scheduler**
 
-In the top part of notifications window you can start and stop the scheduler. You can [learn more about scheduling here](../../working-with-dqo/schedules/index.md).
+In the top part of notifications window you can start and stop the scheduler. You can [learn more about scheduling here](../../working-with-dqo/configure-scheduling-of-data-quality-checks/configure-scheduling-of-data-quality-checks).
 
 ![DQOps job scheduler](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/job-scheduler.png)
 
