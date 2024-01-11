@@ -12,11 +12,11 @@ Solution: Set up daily monitoring of data quality checks, set up notifications a
 DQOps comes with a set of default configuration for **profiling** and **daily monitoring** checks that are automatically 
 activated for every newly imported table. 
 
-The [profiling checks](../../dqo-concepts/checks/profiling-checks/profiling-checks.md) capture advanced data quality
+The [profiling checks](../dqo-concepts/checks/profiling-checks/profiling-checks.md) capture advanced data quality
 statistics and store the most current value for each month. Their role is to monitor the overall quality of data,
-without affecting the [data quality KPIs](../../dqo-concepts/data-quality-kpis/data-quality-kpis.md).
+without affecting the [data quality KPIs](../dqo-concepts/data-quality-kpis/data-quality-kpis.md).
 
-The [monitoring checks](../../dqo-concepts/checks/monitoring-checks/monitoring-checks.md) are the primary type of data quality checks
+The [monitoring checks](../dqo-concepts/checks/monitoring-checks/monitoring-checks.md) are the primary type of data quality checks
 used in DQOps for continuous monitoring of the data quality of the data source.
 
 You can learn more about each default check by clicking on the links below.
@@ -25,34 +25,34 @@ You can learn more about each default check by clicking on the links below.
 
 | Target | Check name                                                          | Description                                                                                                                                        |
 |--------|---------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
-| table  | [profile row count](../../checks/table/volume/row-count.md)         | Counts the number of rows in a table.                                                                                                              |
-| table  | [profile column count](../../checks/table/schema/column-count.md)   | Retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to an expected number of columns. |
-| column | [profile nulls count](../../checks/column/nulls/nulls-count.md)     | Ensures that there are no more than a set number of null values in the monitored column.                                                           |
-| column | [profile nulls percent](../../checks/column/nulls/nulls-percent.md) | Ensures that there are no more than a set percentage of null values in the monitored column.                                                       |
+| table  | [profile row count](../checks/table/volume/row-count.md)         | Counts the number of rows in a table.                                                                                                              |
+| table  | [profile column count](../checks/table/schema/column-count.md)   | Retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to an expected number of columns. |
+| column | [profile nulls count](../checks/column/nulls/nulls-count.md)     | Ensures that there are no more than a set number of null values in the monitored column.                                                           |
+| column | [profile nulls percent](../checks/column/nulls/nulls-percent.md) | Ensures that there are no more than a set percentage of null values in the monitored column.                                                       |
 
 **Daily monitoring checks type**
 
 | Target | Check name                                                                                                   | Description                                                                                                                                        |
 |--------|--------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
-| table  | [daily row count](../../checks/table/volume/row-count.md)                                                    | Counts the number of rows in a table.                                                                                                              |
-| table  | [daily row count change](../../checks/table/volume/row-count-change.md)                                      | Ensures that the row count changed by a fixed rate since the last readout.                                                                         |
-| table  | [daily row count anomaly](../../checks/table/volume/row-count-anomaly.md)                                    | Ensures that the row count is within a two-tailed percentile from measurements made during the last 90 days.                                       |
-| table  | [daily column count](../../checks/table/schema/column-count.md)                                              | Retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to an expected number of columns. |
-| table  | [daily table availability](../../checks/table/availability/table-availability.md)                            | Verifies that a table exists, can be accessed, and queried without errors.                                                                         |
-| table  | [daily column count changed](../../checks/table/schema/column-count-changed.md)                              | Detects whether the number of columns in a table has changed since the last time the check (checkpoint) was run.                                   |
-| table  | [daily column list changed](../../checks/table/schema/column-list-changed.md)                                | Detects if the list of columns has changed since the last time the check was run.                                                                  |
-| table  | [daily column list or order changed](../../checks/table/schema/column-list-or-order-changed.md)              | Detects whether the list of columns and the order of columns have changed since the last time the check was run.                                   |
-| table  | [daily column types changed](../../checks/table/schema/column-types-changed.md)                              | Detects if the column names or column types have changed since the last time the check was run.                                                    |
-| column | [daily nulls count](../../checks/column/nulls/nulls-count.md)                                                | Ensures that there are no more than a set number of null values in the monitored column.                                                           |
-| column | [daily nulls percent](../../checks/column/nulls/nulls-percent.md)                                            | Ensures that there are no more than a set percentage of null values in the monitored column.                                                       |
-| column | [daily nulls percent anomaly](../../checks/column/nulls/nulls-percent-anomaly.md)                            | Ensures that the null percent value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.        |
-| column | [daily nulls percent change 1 day](../../checks/column/nulls/nulls-percent-change-1-day.md)                  | Ensures that the null percent in a monitored column has changed by a fixed rate since the last readout from yesterday.                             |
-| column | [daily not nulls percent](../../checks/column/nulls/not-nulls-percent.md)                                    | Ensures that there are no more than a set percentage of not null values in the monitored column.                                                   |
-| column | [daily detected datatype in text changed](../../checks/column/datatype/detected-datatype-in-text-changed.md) | Scans all values in a string column and detects the data type of all values in a column.                                                           |
-| column | [daily mean anomaly](../../checks/column/anomaly/mean-anomaly.md)                                            | Ensures that the mean value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.                |
-| column | [daily sum anomaly](../../checks/column/anomaly/sum-anomaly.md)                                              | Ensures that the sum in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.                       |
-| column | [daily column exists](../../checks/column/schema/column-exists.md)                                           | Reads the metadata of the monitored table and verifies that the column still exists in the data source.                                            |
-| column | [daily column type changed](../../checks/column/schema/column-type-changed.md)                               | Detects if the data type of the column has changed since the last time it was retrieved.                                                           |
+| table  | [daily row count](../checks/table/volume/row-count.md)                                                    | Counts the number of rows in a table.                                                                                                              |
+| table  | [daily row count change](../checks/table/volume/row-count-change.md)                                      | Ensures that the row count changed by a fixed rate since the last readout.                                                                         |
+| table  | [daily row count anomaly](../checks/table/volume/row-count-anomaly.md)                                    | Ensures that the row count is within a two-tailed percentile from measurements made during the last 90 days.                                       |
+| table  | [daily column count](../checks/table/schema/column-count.md)                                              | Retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to an expected number of columns. |
+| table  | [daily table availability](../checks/table/availability/table-availability.md)                            | Verifies that a table exists, can be accessed, and queried without errors.                                                                         |
+| table  | [daily column count changed](../checks/table/schema/column-count-changed.md)                              | Detects whether the number of columns in a table has changed since the last time the check (checkpoint) was run.                                   |
+| table  | [daily column list changed](../checks/table/schema/column-list-changed.md)                                | Detects if the list of columns has changed since the last time the check was run.                                                                  |
+| table  | [daily column list or order changed](../checks/table/schema/column-list-or-order-changed.md)              | Detects whether the list of columns and the order of columns have changed since the last time the check was run.                                   |
+| table  | [daily column types changed](../checks/table/schema/column-types-changed.md)                              | Detects if the column names or column types have changed since the last time the check was run.                                                    |
+| column | [daily nulls count](../checks/column/nulls/nulls-count.md)                                                | Ensures that there are no more than a set number of null values in the monitored column.                                                           |
+| column | [daily nulls percent](../checks/column/nulls/nulls-percent.md)                                            | Ensures that there are no more than a set percentage of null values in the monitored column.                                                       |
+| column | [daily nulls percent anomaly](../checks/column/nulls/nulls-percent-anomaly.md)                            | Ensures that the null percent value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.        |
+| column | [daily nulls percent change 1 day](../checks/column/nulls/nulls-percent-change-1-day.md)                  | Ensures that the null percent in a monitored column has changed by a fixed rate since the last readout from yesterday.                             |
+| column | [daily not nulls percent](../checks/column/nulls/not-nulls-percent.md)                                    | Ensures that there are no more than a set percentage of not null values in the monitored column.                                                   |
+| column | [daily detected datatype in text changed](../checks/column/datatype/detected-datatype-in-text-changed.md) | Scans all values in a string column and detects the data type of all values in a column.                                                           |
+| column | [daily mean anomaly](../checks/column/anomaly/mean-anomaly.md)                                            | Ensures that the mean value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.                |
+| column | [daily sum anomaly](../checks/column/anomaly/sum-anomaly.md)                                              | Ensures that the sum in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.                       |
+| column | [daily column exists](../checks/column/schema/column-exists.md)                                           | Reads the metadata of the monitored table and verifies that the column still exists in the data source.                                            |
+| column | [daily column type changed](../checks/column/schema/column-type-changed.md)                               | Detects if the data type of the column has changed since the last time it was retrieved.                                                           |
 
 You can modify the default list of checks either through the user interface or by modifying the configuration file.
 
@@ -65,7 +65,7 @@ in the tree view on the left.
 ![Navigate to default check configuration](https://dqops.com/docs/images/examples/detect-empty-tables-check-default-check-configuration.png)
 
 The screen on the right will display the current configuration of checks, which can be modified. 
-You can switch between the Table and Column checks using the tabs. For more information check the description of the [check editor screen](../../dqo-concepts/user-interface-overview/user-interface-overview.md#Check-editor).
+You can switch between the Table and Column checks using the tabs. For more information check the description of the [check editor screen](../dqo-concepts/user-interface-overview/user-interface-overview.md#Check-editor).
 
 After making the necessary modifications, click on the **Save** button to save the changes. The new default checks configuration will be 
 set on every newly imported table. 
@@ -77,7 +77,7 @@ The file is located in the `userhome/settings/` folder.
 
 Thanks to the DQOps YAML schema files, configuring data quality checks in Visual Studio Code is very simple. 
 Code completion, syntax validation and help hints are shown by Visual Studio Code and many other editors when editing DQOps YAML files.
-You can read more about [integration of DQOps with Visual Studio Code](../../integrations/visual-studio-code/index.md).
+You can read more about [integration of DQOps with Visual Studio Code](../integrations/visual-studio-code/index.md).
 
 Below is an example of default checks configuration in the `defaultchecks.dqochecks.yaml` file. 
 
@@ -163,7 +163,7 @@ spec:
 ## Import a new table
 
 To import tables, you first need to have added connection. You can check [supported data sources and a guide how to add a new
-connection here](../../data-sources/index.md). 
+connection here](../data-sources/index.md). 
 
 To import source schemas and tables:
 
@@ -216,9 +216,9 @@ tree view on the left, click on the Profiling checks or Daily Checks.
 ![Navigating to the check editor](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/navigate-to-the-check-editor.png)
 
 The table with data quality checks contains a list of checks divided into different data quality subcategories that you
-can expand and collapse by clicking on an arrow. [Learn more about the different check subcategories.](../../dqo-concepts/checks/index.md)
+can expand and collapse by clicking on an arrow. [Learn more about the different check subcategories.](../dqo-concepts/checks/index.md)
 
-The right side of the table allows setting different threshold levels (severity levels). [Learn more about threshold levels ](../../dqo-concepts/checks/index.md#issue-severity-levels)
+The right side of the table allows setting different threshold levels (severity levels). [Learn more about threshold levels ](../dqo-concepts/checks/index.md#issue-severity-levels)
 
 On the left of the name of each check, there are several buttons and icons that allows you to:
 
@@ -274,7 +274,7 @@ We can see that we have one incident with 10 data quality issues. To review more
 
 ![Incidents details](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/incidents-details.png)
 
-Read the full [description of the Incidents section here](../incidents-and-notifications/incidents.md).
+Read the full [description of the Incidents section here](incidents-and-notifications/incidents.md).
 
 
 ## Configure notifications
@@ -293,20 +293,20 @@ To configure Webhooks, follow these steps:
 
 ![Configuring webhooks](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/configuring-webhooks.png)
 
-Follow the link for [more information about Webhooks](../../integrations/webhooks/index.md). 
+Follow the link for [more information about Webhooks](../integrations/webhooks/index.md). 
 
 
 ### **Configure Slack notifications**
 
 DQOps supports integration with Slack Webhooks which are used to set up in-app Slack notifications.
 
-Click the link for more information [how to set up in-app Slack notifications](../../integrations/slack/configuring-slack-notifications.md).
+Click the link for more information [how to set up in-app Slack notifications](../integrations/slack/configuring-slack-notifications.md).
 
 
 ## Review the check results on dashboards
 
 DQOps has multiple built-in data quality dashboards dedicated to analyzing results from
-data quality checks. You can [learn more about different types of dashboards](../../dqo-concepts/data-quality-dashboards/data-quality-dashboards.md)
+data quality checks. You can [learn more about different types of dashboards](../dqo-concepts/data-quality-dashboards/data-quality-dashboards.md)
 in the Concept section.
 
 To be able to display results on data quality dashboards, you need to have a DQOps account and synchronize locally stored results with it.  
@@ -344,12 +344,12 @@ These dashboards allow filtering data by:
 ### **Data quality KPIs**
 
 **Data quality KPIs** dashboards show high-level data quality KPIs, aggregated on a macro scale that can be shared at a
-corporate level. DQOps calculates data quality KPIs as a percentage of passed [data quality checks](../../dqo-concepts/checks/index.md)
+corporate level. DQOps calculates data quality KPIs as a percentage of passed [data quality checks](../dqo-concepts/checks/index.md)
 for each connection, schema, data grouping, etc.
 
 With these dashboards, senior management can review a summary of data quality KPIs or evaluate the KPIs per table, column,
-[data quality dimensions](../../dqo-concepts/data-quality-dimensions/data-quality-dimensions.md),
-[check category](../../dqo-concepts/checks/index.md), [data grouping](../../dqo-concepts/data-grouping/data-grouping.md) and day.
+[data quality dimensions](../dqo-concepts/data-quality-dimensions/data-quality-dimensions.md),
+[check category](../dqo-concepts/checks/index.md), [data grouping](../dqo-concepts/data-grouping/data-grouping.md) and day.
 
 **KPIs per table and day** is a representative of this group. It allows reviewing data quality KPIs per table
 and day of the month.
@@ -399,6 +399,6 @@ This dashboard allows filtering data by:
 
 ## What's next
 
-- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
-- DQOps provide you with summary statistics about your table and column. This information can be valuable in deciding which data quality checks and threshold levels should be set to monitor data quality. For more details about [Basic data statistics, click here](../../working-with-dqo/basic-data-statistics/index.md).
-- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md) can help you to calculate separate data quality KPI scores for different groups of rows.
+- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](installation/run-dqo-as-docker-container.md).
+- DQOps provide you with summary statistics about your table and column. This information can be valuable in deciding which data quality checks and threshold levels should be set to monitor data quality. For more details about [Basic data statistics, click here](collecting-basic-data-statistics.md).
+- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](set-up-data-grouping/set-up-data-grouping.md) can help you to calculate separate data quality KPI scores for different groups of rows.

@@ -281,5 +281,5 @@ null values in a column does not exceed the minimum accepted count. If it does, 
 - For details on the [nulls_count check used in this example, go to the check details section](../../checks/column/nulls/nulls-count.md).
 - You might be interested in another completeness check that [evaluates that the number of rows in a table does not exceed the minimum accepted count](../data-completeness/number-of-rows-in-the-table.md).  
 - Would you like to add your own connection? Here you can find [information about supported databases and how to add new connection](../../data-sources/index.md).
-- DQOps provide you with summary statistics about your table and column. This information can be valuable in deciding which data quality checks and threshold levels should be set to monitor data quality. For more details about [Basic data statistics, click here](../../working-with-dqo/basic-data-statistics/index.md). 
+- DQOps provide you with summary statistics about your table and column. This information can be valuable in deciding which data quality checks and threshold levels should be set to monitor data quality. For more details about [Basic data statistics, click here](../../working-with-dqo/collecting-basic-data-statistics.md). 
  

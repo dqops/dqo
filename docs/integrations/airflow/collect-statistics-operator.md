@@ -4,7 +4,7 @@
 
 The Airflow collect statistics operator **DqopsCollectStatisticsOperator** is used to gather statistics for existing tables in DQOps platform.
 
-You can learn more about [the basic data statistics here](../../working-with-dqo/basic-data-statistics/index.md).
+You can learn more about [the basic data statistics here](../../working-with-dqo/collecting-basic-data-statistics.md).
 
 ## Operator parameters
 

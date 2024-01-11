@@ -20,7 +20,7 @@ The navigation bar allows you to select the specific sections that you want to f
     tables, [set up schedules](../../working-with-dqo/schedules/index.md), add comments and labels, [configure data grouping](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md),
     [set the date and time columns for partition checks](../../working-with-dqo/run-data-quality-checks/run-data-quality-checks.md#configure-date-or-datetime-column-for-partition-checks), 
     and [modify the settings of the incidents and notifications](../../working-with-dqo/incidents-and-notifications/incidents.md).
-- The **Profiling** section allows you to [collect and review basic data statistics](../../working-with-dqo/basic-data-statistics/index.md),
+- The **Profiling** section allows you to [collect and review basic data statistics](../../working-with-dqo/collecting-basic-data-statistics.md),
     as well as [enable and run profiling data quality checks](../../working-with-dqo/run-data-quality-checks/run-data-quality-checks.md)
     that should be used to profile data and run experiments to see which check would be most appropriate for monitoring the quality of data. 
 - The **Monitoring Checks** section allows you to [enable and run daily or monthly monitoring data quality checks](../../working-with-dqo/run-data-quality-checks/run-data-quality-checks.md)

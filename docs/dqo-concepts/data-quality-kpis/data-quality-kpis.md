@@ -150,7 +150,7 @@ DQOps uses numeric priorities (1, 2, 3, ...) configured on the table's metadata 
 
 
 ### **Profile tables**
-Profile the data sources by calculating [basic statistics](../../working-with-dqo/basic-data-statistics/index.md)
+Profile the data sources by calculating [basic statistics](../../working-with-dqo/collecting-basic-data-statistics.md)
 and running [profiling checks](../checks/profiling-checks/profiling-checks.md). Profiling checks in DQOps are designed
 to be run once a month to capture the initial data quality KPI score. During the data profiling stage, you will probably
 activate a lot of ~150+ data quality checks supported by DQOps, just to see if they pass. In our experience, when all profiling checks
