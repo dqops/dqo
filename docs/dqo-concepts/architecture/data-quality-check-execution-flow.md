@@ -3,7 +3,7 @@
 ## Overview
 
 DQOps runs data quality checks in several steps. The first step matches target tables and target
-checks. Table and check targeting is described in the [running checks](../running-checks/running-checks.md) article.
+checks. Table and check targeting is described in the [running checks](../running-data-quality-checks.md) article.
 
 The detailed process of running data quality checks and all DQOps engine internal components involved in the process
 are described below.
@@ -12,7 +12,7 @@ are described below.
 ## Check execution data flow
 When the data quality checks execution is started, for example by running
 the [check run](../../command-line-interface/check.md#dqo-check-run) command line command as shown
-in [running checks](../running-checks/running-checks.md) article, DQOps queues a `run checks` job
+in [running checks](../running-data-quality-checks.md) article, DQOps queues a `run checks` job
 on an internal job queue. 
 
 The `run checks` job is executed as a sequence of steps, involving [sensors](../sensors/sensors.md),

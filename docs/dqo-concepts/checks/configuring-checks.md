@@ -814,7 +814,7 @@ Please download the eBook to learn more about the concept.
 
 ### **Labels**
 Tables and columns can be tagged with labels. The labels are used by DQOps for targeting data quality checks
-when the [checks are run](../running-checks/running-checks.md).
+when the [checks are run](../running-data-quality-checks.md).
 
 Labels are defined in a `labels` section below the `spec` node (for a table-level label)
 or below the column's node for column-level labels. The labels are defined as a list of strings values.

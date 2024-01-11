@@ -144,7 +144,7 @@ To start the DQOps application with the example, follow the steps below.
 
 ## Execute the checks using the user interface
 
-You can execute the checks using the [user interface](../dqo-concepts/user-interface-overview/user-interface-overview.md).
+You can execute the checks using the [user interface](../dqo-concepts/user-interface-overview.md).
 Simply, open the DQOps User Interface Console (http://localhost:8888).
 
 
@@ -174,7 +174,7 @@ To navigate to a list of checks:
 
     The right side of the table allows setting different threshold levels (severity levels). [Learn more about threshold levels.](../dqo-concepts/checks/index.md#issue-severity-levels)
     
-    Learn more about [navigating the check editor](../dqo-concepts/user-interface-overview/user-interface-overview.md#check-editor).
+    Learn more about [navigating the check editor](../dqo-concepts/user-interface-overview.md#check-editor).
 
 
 ### **Run checks**

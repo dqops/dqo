@@ -45,7 +45,7 @@ These topics introduce the basic concepts of DQOps.
     checks for all imported tables. The configuration is stored in YAML files for simplicity of editing in Visual Studio Code.
 
 
- - **[Running data quality checks](./running-checks/running-checks.md)**
+ - **[Running data quality checks](running-data-quality-checks.md)**
 
     Data quality checks configured for each table and column are executed by targeting the data source, table, column,
     check name, check type, check category or even labels assigned to tables or columns. 
@@ -137,13 +137,13 @@ These topics introduce the basic concepts of DQOps.
     different data pipelines, or received from different vendors or departments.
 
 
- - **[User interface overview](./user-interface-overview/user-interface-overview.md)**
+ - **[User interface overview](user-interface-overview.md)**
 
     The user interface in DQOps is using a tabbed application that resembles many popular database management tools.
     Configuring data quality checks on multiple tables at the same time is supported in separate tabs.  
 
 
- - **[Command-line interface](./command-line-interface/command-line-interface.md)**
+ - **[Command-line interface](command-line-interface.md)**
 
     Command-line access to DQOps is supported by a shell interface. The DQOps shell supports command and table name completion.
 
@@ -163,7 +163,7 @@ These topics introduce the basic concepts of DQOps.
     on-premise or in the customer's cloud environment.
 
 
- - **[Check execution flow](./architecture/check-execution-flow.md)**
+ - **[Check execution flow](./architecture/data-quality-check-execution-flow.md)**
 
     Detailed data quality execution flows that show how DQOps executes [data quality sensors](./sensors/sensors.md),
     [data quality rules](./rules/rules.md), [data quality checks](./checks/index.md),

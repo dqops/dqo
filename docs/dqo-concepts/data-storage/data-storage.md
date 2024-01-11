@@ -96,7 +96,7 @@ The schema of the following tables are documented:
 ## How data quality results are stored
 
 ### **Parquet tables**
-When a [data quality check](../checks/index.md) is [run](../running-checks/running-checks.md), DQOps runs the SQL query
+When a [data quality check](../checks/index.md) is [run](../running-data-quality-checks.md), DQOps runs the SQL query
 generated from the [data quality sensor](../sensors/sensors.md) template on the monitored data source.
 The query results (called the **sensor readouts** in DQOps) are stored
 in the [sensor_readouts](../../reference/parquetfiles/sensor_readouts.md) Parquet table.
@@ -330,7 +330,7 @@ The `DQOps Cloud Pairing API Key` is stored in the [`DQOps user home`*/.localset
 The file does not need to be modified manually. DQOps automates the process of issuing and downloading the `DQOps Cloud Pairing API Key`
 in a secure way.
 
-Open the [DQOps Shell](../command-line-interface/command-line-interface.md) and type the command
+Open the [DQOps Shell](../command-line-interface.md) and type the command
 
 &gt; [`cloud login`](../../command-line-interface/cloud.md#dqo-cloud-login)
 

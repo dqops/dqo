@@ -76,7 +76,7 @@ a list of all states and other related regions and with their unique codes (`sta
 
 A detailed explanation of [how to run the example is described here](../index.md#running-the-use-cases).
 
-To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
+To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview.md):
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-foreign-key-match-percent-checks1.png)
 
@@ -94,7 +94,7 @@ To execute the check prepared in the example using the [user interface](../../dq
 
     This tab displays a list of data quality checks in the check editor.
 
-    Learn more about [navigating the check editor](../../dqo-concepts/user-interface-overview/user-interface-overview.md#check-editor).
+    Learn more about [navigating the check editor](../../dqo-concepts/user-interface-overview.md#check-editor).
 
     The daily_lookup_key_found_percent check has additional parameters foreign_table and foreign_column which should be used
     to define the name of the table and column, to be compared to. The name of the table and column should be written as a STRING.

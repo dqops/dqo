@@ -4,9 +4,9 @@ DQOps is an DataOps friendly data quality monitoring tool with customizable data
 DQOps comes with more than 140 predefined data quality checks which helps you monitor the quality of your data.
 
 ## DQOps features
-- Intuitive [user interface](./dqo-concepts/user-interface-overview/user-interface-overview.md) that uses tabs
+- Intuitive [user interface](dqo-concepts/user-interface-overview.md) that uses tabs
   to work on multiple tables at the same time
-- [Command-line](./dqo-concepts/command-line-interface/command-line-interface.md) interface
+- [Command-line](dqo-concepts/command-line-interface.md) interface
 - Support of a number of different data sources: BigQuery, Snowflake, PostgreSQL, Redshift, SQL Server, MySQL, Spark, Databricks, Oracle and others
 - More than 140 built-in table and column checks with easy customization
 - Table and column-level [data quality checks](./dqo-concepts/checks/index.md) which allows writing your own SQL queries

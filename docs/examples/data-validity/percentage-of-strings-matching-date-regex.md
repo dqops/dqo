@@ -55,7 +55,7 @@ The `source_date` column of interest contains non-standard date format.
 
 A detailed explanation of [how to run the example is described here](../index.md#running-the-use-cases).
 
-To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
+To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview.md):
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-string-match-date-regex-percent-checks1.png)
 
@@ -75,7 +75,7 @@ To execute the check prepared in the example using the [user interface](../../dq
     has additional parameter that allows you to select different date format which will be tested. Let's leave the default date format 
     YYYY-MM-DD.
     
-    Learn more about [navigating the check editor](../../dqo-concepts/user-interface-overview/user-interface-overview.md#check-editor).
+    Learn more about [navigating the check editor](../../dqo-concepts/user-interface-overview.md#check-editor).
 
 
 4. Run the activated check using the **Run check** button.

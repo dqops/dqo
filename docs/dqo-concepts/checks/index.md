@@ -373,7 +373,7 @@ Data quality checks that are measuring quality of data stored in columns are lis
 ## What's next
 
 - Learn how to [configure data quality checks](./configuring-checks.md)
-- Learn how to [run data quality checks](../running-checks/running-checks.md)
+- Learn how to [run data quality checks](../running-data-quality-checks.md)
 - [Learn more about profiling checks](./profiling-checks/profiling-checks.md)
 - [Learn more about monitoring checks](./monitoring-checks/monitoring-checks.md)
 - [Learn more about partition checks](./partition-checks/partition-checks.md)

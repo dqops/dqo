@@ -8,7 +8,7 @@ DQOps CLI is an alternative to DQOps user interface.
 ## Command structure
 
 You can use DQOps commands directly in your command-line shell, or in DQOps Shell after you start the application. 
-In your command line use the base call to DQOps program `dqo` with the optional [root_level_parameter](../../command-line-interface/dqo.md),
+In your command line use the base call to DQOps program `dqo` with the optional [root_level_parameter](../command-line-interface/dqo.md),
 command which you would like to use and command options and parameters. 
 
 While in DQOps shell you just need to type the command and options or parameters. An example below show the differences in
@@ -62,5 +62,5 @@ dqo> check run --help
 
 ## List of commands
 
-You can find the complete list of commands and parameters in the [command-line](../../command-line-interface/index.md) interface section.
+You can find the complete list of commands and parameters in the [command-line](../command-line-interface/index.md) interface section.
 

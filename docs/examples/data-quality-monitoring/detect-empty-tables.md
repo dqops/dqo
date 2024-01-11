@@ -81,7 +81,7 @@ For more [general information about checks, see the DQOps concepts](../../dqo-co
 
 A detailed explanation of [how to run the example is described here](../index.md#running-the-use-cases).
 
-To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
+To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview.md):
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/detect-empty-tables-navigating-to-a-list-of-checks.png)
 
@@ -101,7 +101,7 @@ To execute the check prepared in the example using the [user interface](../../dq
     Here you can view the list of all table monitoring checks. Noticed the checks that have been activated upon importing new tables have switched on the toggle button.
     The icons located before the name of each check allow you to: activate and deactivate it, configure settings, run a check, review results, and get more information about it.
 
-    Learn more about [navigating the check editor](../../dqo-concepts/user-interface-overview/user-interface-overview.md#check-editor).
+    Learn more about [navigating the check editor](../../dqo-concepts/user-interface-overview.md#check-editor).
 
 
 4. Run the activated [daily_row_count](../../checks/table/volume/row-count.md) check using the **Run check** button.

@@ -16,19 +16,19 @@ The navigation bar allows you to select the specific sections that you want to f
 
 ![Navigation bar sections](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/navigation-bar1.png)
 
-- The **Data Sources** section allows you to [add new connections](../../data-sources/index.md), import schemas and 
-    tables, [set up schedules](../../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md), add comments and labels, [configure data grouping](../../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md),
-    [set the date and time columns for partition checks](../../working-with-dqo/run-data-quality-checks.md#configure-date-or-datetime-column-for-partition-checks), 
-    and [modify the settings of the incidents and notifications](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md).
-- The **Profiling** section allows you to [collect and review basic data statistics](../../working-with-dqo/collecting-basic-data-statistics.md),
-    as well as [enable and run profiling data quality checks](../../working-with-dqo/run-data-quality-checks.md)
+- The **Data Sources** section allows you to [add new connections](../data-sources/index.md), import schemas and 
+    tables, [set up schedules](../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md), add comments and labels, [configure data grouping](../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md),
+    [set the date and time columns for partition checks](../working-with-dqo/run-data-quality-checks.md#configure-date-or-datetime-column-for-partition-checks), 
+    and [modify the settings of the incidents and notifications](../working-with-dqo/managing-data-quality-incidents-with-dqops.md).
+- The **Profiling** section allows you to [collect and review basic data statistics](../working-with-dqo/collecting-basic-data-statistics.md),
+    as well as [enable and run profiling data quality checks](../working-with-dqo/run-data-quality-checks.md)
     that should be used to profile data and run experiments to see which check would be most appropriate for monitoring the quality of data. 
-- The **Monitoring Checks** section allows you to [enable and run daily or monthly monitoring data quality checks](../../working-with-dqo/run-data-quality-checks.md)
+- The **Monitoring Checks** section allows you to [enable and run daily or monthly monitoring data quality checks](../working-with-dqo/run-data-quality-checks.md)
     that are standard checks that monitor data quality.
-- The **Partition Checks** section allows you to [enable and run daily or monthly partition data quality checks](../../working-with-dqo/run-data-quality-checks.md)
+- The **Partition Checks** section allows you to [enable and run daily or monthly partition data quality checks](../working-with-dqo/run-data-quality-checks.md)
     that measure data quality for each daily or monthly partition by creating a separate data quality score.
-- The **Data Quality Dashboards** section lets you [review the summaries of data quality monitoring](../../getting-started/review-results-on-dashboards.md) on multiple built-in data quality dashboards.
-- The **Incidents** section helps you [review and manage the issues that arise during data quality monitoring](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md).
+- The **Data Quality Dashboards** section lets you [review the summaries of data quality monitoring](../getting-started/review-results-on-dashboards.md) on multiple built-in data quality dashboards.
+- The **Incidents** section helps you [review and manage the issues that arise during data quality monitoring](../working-with-dqo/managing-data-quality-incidents-with-dqops.md).
 - The **Configuration** section lets you customize built-in data quality sensors and rules.  
 
 
@@ -37,7 +37,7 @@ The right side of the navigation bar provides access to the main settings and so
 ![DQOps Navigation bar sections](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/rigth-part-of-the-navigation-bar.png)
 
 - **Help** - Links to the support page, documentation, DQOps account manager and configuration parameters settings set at 
-    the start of DQOps. You can change the configuration settings by [setting command line arguments at the start of the application](../../command-line-interface/dqo.md).
+    the start of DQOps. You can change the configuration settings by [setting command line arguments at the start of the application](../command-line-interface/dqo.md).
 - **Synchronize** - Synchronize locally stored results with your DQOps Cloud account.
 - **[Notifications](#notifications)** - View DQOps notifications and enable/disable the scheduler. The Notifications icon displays **NEW** tag, when there is a new notification.
 - **User account** - Provide information about your account, current limits and access to the DQOps Cloud account. 
@@ -95,8 +95,8 @@ quality checks that can be customized. The tree view in this section also provid
 
 - **Default checks configuration:** This allows you to configure checks that are automatically activated after importing new tables.
 - **Manage users:** This allows you to add new users and manage their roles.
-- **Default schedules:** This allows you to [configure schedules](../../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md) that are automatically set after importing new tables.
-- **Defaults webhooks:** This allows you to [configure webhooks](../../integrations/webhooks/index.md).
+- **Default schedules:** This allows you to [configure schedules](../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md) that are automatically set after importing new tables.
+- **Defaults webhooks:** This allows you to [configure webhooks](../integrations/webhooks/index.md).
 - **Shared credentials:** This allows you to add and manage shared credentials.
 
 ![DQOps tree view - Configuration](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tree-view-configuration.png)
@@ -143,10 +143,10 @@ Under tabs selection, there is information about the set schedule configuration.
 section, there is additional information about the date partitioning column.
 
 The table with data quality checks contains a list of checks divided into different data quality subcategories that you
-can expand and collapse by clicking on an arrow. [Learn more about the different check subcategories](../../checks/index.md).
+can expand and collapse by clicking on an arrow. [Learn more about the different check subcategories](../checks/index.md).
 By clicking on the **Show advanced checks** checkbox you can view all checks available in DQOps. 
 
-The right side of the table allows setting different threshold levels (severity levels). [Learn more about threshold levels ](../checks/index.md#issue-severity-levels)
+The right side of the table allows setting different threshold levels (severity levels). [Learn more about threshold levels ](checks/index.md#issue-severity-levels)
 
 On the left of the name of each check, there are several buttons and icons. And under the name of the check, there is a data quality
 dimension category to which this check was categorized.
@@ -217,7 +217,7 @@ Additionally, you can expand each job entry to view sub-jobs and access more det
 
 ### **Enable and disable scheduler**
 
-In the top part of notifications window you can start and stop the scheduler. You can [learn more about scheduling here](../../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md).
+In the top part of notifications window you can start and stop the scheduler. You can [learn more about scheduling here](../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md).
 
 ![DQOps job scheduler](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/job-scheduler.png)
 
@@ -236,8 +236,8 @@ severity status of the results (green for a valid result, yellow for a warning, 
 
 ## What's next
 
-- Check the detailed process of running data quality checks and all DQOps engine internal components involved in the process in the [Data quality check execution flow](../architecture/check-execution-flow.md) section.
-- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../dqops-installation/install-dqops-using-pip.md) or [run DQOps as a Docker container](../../dqops-installation/run-dqops-as-docker-container.md).
-- DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md) and [Slack notifications](../../integrations/slack/configuring-slack-notifications.md).
+- Check the detailed process of running data quality checks and all DQOps engine internal components involved in the process in the [Data quality check execution flow](architecture/data-quality-check-execution-flow.md) section.
+- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../dqops-installation/install-dqops-using-pip.md) or [run DQOps as a Docker container](../dqops-installation/run-dqops-as-docker-container.md).
+- DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../working-with-dqo/managing-data-quality-incidents-with-dqops.md) and [Slack notifications](../integrations/slack/configuring-slack-notifications.md).
 
 

@@ -85,7 +85,7 @@ To use DQOps you need:
     ![DQOps API Key retrieved](https://dqops.com/docs/images/getting-started/dqops-api-key-retrieved.png)
 
     In case that you cancelled the registration procedure, you can copy the DQOps Cloud Pairing Key and configure your DQOps instance
-    by using the following command from the [DQOps command-line shell](../dqo-concepts/command-line-interface/command-line-interface.md)
+    by using the following command from the [DQOps command-line shell](../dqo-concepts/command-line-interface.md)
 
     ```
     dqo> settings apikey set <your DQOps Cloud Pairing API Key>

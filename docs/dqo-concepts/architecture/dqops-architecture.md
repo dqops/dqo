@@ -178,7 +178,7 @@ Each DQOps instance starts an embedded web server that is hosting the user inter
 The user interface interacts with the DQOps REST API.
 
 ### **Command-line interface**
-When DQOps is started as a Python package in a console window, a [cli mode](../command-line-interface/command-line-interface.md) is activated.
+When DQOps is started as a Python package in a console window, a [cli mode](../command-line-interface.md) is activated.
 The shell mode supports running various operations from the command line, especially importing metadata of data sources
 and running data quality checks. All DQOPs cli commands are documented [here](../../command-line-interface/index.md).
 

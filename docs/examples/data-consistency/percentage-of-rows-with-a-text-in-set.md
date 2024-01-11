@@ -75,7 +75,7 @@ The `Fjob` column of interest contains information about student's father job.
 
 A detailed explanation of [how to run the example is described here](../index.md#running-the-use-cases).
 
-To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
+To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview.md):
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-string-in-set-percent-checks1.png)
 
@@ -91,7 +91,7 @@ To execute the check prepared in the example using the [user interface](../../dq
 
 3. Select the **Daily checks** tab.
 
-    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../dqo-concepts/user-interface-overview/user-interface-overview.md#check-editor).
+    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../dqo-concepts/user-interface-overview.md#check-editor).
 
     The **daily_text_found_in_set_percent** check has an additional parameter to select the **expected_values** that must
     be present in a string column. In our example, these values are `services`, `at_home` and `teacher`.

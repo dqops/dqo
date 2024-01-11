@@ -55,7 +55,7 @@ The `value` column of interest contains values in range between 0 and 100,000.
 
 A detailed explanation of [how to run the example is described here](../index.md#running-the-use-cases).
 
-To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
+To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview.md):
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-values-in-range-numeric-percent-checks1.png)
 
@@ -71,7 +71,7 @@ To execute the check prepared in the example using the [user interface](../../dq
 
 3. Select the **Daily checks** tab.
 
-    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../dqo-concepts/user-interface-overview/user-interface-overview.md#check-editor).
+    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../dqo-concepts/user-interface-overview.md#check-editor).
 
     The **[number_in_range_percent](../../checks/column/numeric/number-in-range-percent.md)** column check
     has an additional parameters to select the **min_values** and **max_values** range.
