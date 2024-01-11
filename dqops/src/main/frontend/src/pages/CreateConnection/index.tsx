@@ -4,7 +4,11 @@ import DatabaseConnection from '../../components/Dashboard/DatabaseConnection';
 import SelectDatabase from '../../components/Dashboard/SelectDatabase';
 import MainLayout from '../../components/MainLayout';
 import ImportSchemas from '../../components/ImportSchemas';
-import { BigQueryParametersSpecJobsCreateProjectEnum, ConnectionModel, ConnectionModelProviderTypeEnum } from '../../api';
+import { 
+  BigQueryParametersSpecJobsCreateProjectEnum, 
+  ConnectionModel, 
+  ConnectionModelProviderTypeEnum,
+  TrinoParametersSpecTrinoEngineTypeEnum } from '../../api';
 import { BigQueryAuthenticationMode } from '../../shared/enums/bigquery.enum';
 
 const CreateConnection = () => {
@@ -16,12 +20,12 @@ const CreateConnection = () => {
     db: ConnectionModelProviderTypeEnum,
     nameOfDatabase?: string
   ) => {
-    addDefaultDatabaseProperties({provider_type: db});
+    addDefaultDatabaseProperties({provider_type: db}, nameOfDatabase || '');
     setNameofDB(nameOfDatabase ? nameOfDatabase : '');
     setStep(1);
   };
 
-  const addDefaultDatabaseProperties = (database: ConnectionModel) => {
+  const addDefaultDatabaseProperties = (database: ConnectionModel, nameOfDatabase: string) => {
     const copiedDatabase = {...database}
 
     switch(database.provider_type) {
@@ -45,6 +49,21 @@ const CreateConnection = () => {
       }
       case ConnectionModelProviderTypeEnum.presto: {
         copiedDatabase.presto =  {port: '8080'};
+        break;
+      }
+      case ConnectionModelProviderTypeEnum.trino: {
+        copiedDatabase.trino = { 
+          port: '8080', 
+          trino_engine_type: (database.trino?.trino_engine_type ? database?.trino?.trino_engine_type : nameOfDatabase?.toLowerCase() as TrinoParametersSpecTrinoEngineTypeEnum),
+          catalog: (
+            (database.trino?.trino_engine_type 
+              ? database.trino?.trino_engine_type 
+              : nameOfDatabase?.toLowerCase() as TrinoParametersSpecTrinoEngineTypeEnum 
+            ) === TrinoParametersSpecTrinoEngineTypeEnum.athena 
+              ? "awsdatacatalog" : ""
+          ),
+          athena_work_group: 'primary'
+        };
         break;
       }
       case ConnectionModelProviderTypeEnum.mysql: {

@@ -251,18 +251,19 @@ const DatabaseConnection = ({
     ),
     [ConnectionModelProviderTypeEnum.trino]: (
       <TrinoConnection
-        trino={{ ...database.trino, 
-          port: '8080', 
-          trino_engine_type: (database.trino?.trino_engine_type ? database?.trino?.trino_engine_type : nameOfDatabase?.toLowerCase() as TrinoParametersSpecTrinoEngineTypeEnum),
-          catalog: (
-            (database.trino?.trino_engine_type 
-              ? database.trino?.trino_engine_type 
-              : nameOfDatabase?.toLowerCase() as TrinoParametersSpecTrinoEngineTypeEnum 
-            ) === TrinoParametersSpecTrinoEngineTypeEnum.athena 
-              ? "awsdatacatalog" : ""
-          ),
-          athena_work_group: 'primary'
-        }}
+        trino={database.trino}
+        // trino={{ ...database.trino, 
+        //   port: '8080', 
+        //   trino_engine_type: (database.trino?.trino_engine_type ? database?.trino?.trino_engine_type : nameOfDatabase?.toLowerCase() as TrinoParametersSpecTrinoEngineTypeEnum),
+        //   catalog: (
+        //     (database.trino?.trino_engine_type 
+        //       ? database.trino?.trino_engine_type 
+        //       : nameOfDatabase?.toLowerCase() as TrinoParametersSpecTrinoEngineTypeEnum 
+        //     ) === TrinoParametersSpecTrinoEngineTypeEnum.athena 
+        //       ? "awsdatacatalog" : ""
+        //   ),
+        //   athena_work_group: 'primary'
+        // }}
         onChange={(trino) => onChange({ ...database, trino })}
         sharedCredentials={sharedCredentials}
         nameOfDatabase={nameOfDatabase ? nameOfDatabase : ''}
