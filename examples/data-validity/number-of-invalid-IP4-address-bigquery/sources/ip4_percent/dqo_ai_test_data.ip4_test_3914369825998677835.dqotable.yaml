@@ -12,8 +12,8 @@ spec:
         nullable: true
       monitoring_checks:
         daily:
-          strings:
-            daily_string_invalid_ip4_address_count:
+          patterns:
+            daily_invalid_ip4_address_format_found:
               warning:
                 max_count: 0
               error:

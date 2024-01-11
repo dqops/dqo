@@ -12,8 +12,8 @@ spec:
         nullable: true
       monitoring_checks:
         daily:
-          strings:
-            daily_string_valid_uuid_percent:
+          patterns:
+            daily_valid_uuid_format_percent:
               warning:
                 min_percent: 99.0
               error:

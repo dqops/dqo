@@ -1,8 +1,8 @@
-# Percent of rows with string values in set
+# Percent of rows with a text in set
 
 ## Overview
 
-Verifies that the percentage of string values from a set in a column does not fall below the minimum accepted percentage.
+Verifies that the percentage of text values from a set in a column does not fall below the minimum accepted percentage.
 
 **PROBLEM**
 
@@ -44,7 +44,7 @@ If you want to learn more about checks and threshold levels, please refer to the
 
 **VALUE**
 
-If the percent of string from a set values fall below 99%, a warning alert will be triggered.
+If the percent of text values from a set fall below 99%, a warning alert will be triggered.
 
 ## Data structure
 
@@ -236,7 +236,7 @@ check run
 ```
 
 Review the results which should be similar to the one below.
-The percent of string values set in the `Fjob` column is below 95% and the check gives a fatal error.
+The percent of text values set in the `Fjob` column is below 95% and the check gives a fatal error.
 
 ```
 Check evaluation summary per table:

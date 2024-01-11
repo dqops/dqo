@@ -20,8 +20,8 @@ spec:
         nullable: true
       monitoring_checks:
         daily:
-          strings:
-            daily_string_max_length:
+          text:
+            daily_text_max_length:
               error:
                 max_value: 30.0
     state_name:

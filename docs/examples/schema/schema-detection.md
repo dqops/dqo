@@ -205,7 +205,7 @@ spec:
   monitoring_checks:
     daily:
       schema:
-        daily_expected_column_count:
+        daily_column_count:
           error:
             expected_value: 5
         daily_column_count_changed:
