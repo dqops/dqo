@@ -530,7 +530,13 @@ theme:
 # Disable search, the index is too big
 plugins:
   - glightbox
-  - meta-descriptions
+  - meta-descriptions:
+      export_csv: false
+      quiet: true
+      enable_checks: true
+      min_length: 50
+      max_length: 160
+      trim: true
 #  - search
 # replace above search with below commented section on update mkdocs-material to 9.4 at least
 #  - group:
