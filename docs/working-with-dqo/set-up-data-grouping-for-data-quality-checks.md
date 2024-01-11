@@ -86,7 +86,7 @@ required extensions.
 
 To set up a default data grouping configuration at the data source level, follow the steps below.
 This default setting is not used on tables on the data source. DQOps uses this configuration only once, when the
-table metadata is imported to [DQOps user home](../dqo-concepts/home-folders/dqops-user-home.md). The connection-level
+table metadata is imported to [DQOps user home](../dqo-concepts/dqops-user-home-folder.md). The connection-level
 data grouping configuration is copied to the *.dqotable.yaml* file.
 
 1. Run the following command in DQOps Shell to edit YAML configuration file and define the default data grouping.

@@ -121,7 +121,7 @@ To start the DQOps application with the example, follow the steps below.
 
 2. Create DQOps `DQOps user home` folder.
 
-    After installation, you will be asked whether to initialize the [DQOps user home folder](../dqo-concepts/home-folders/dqops-user-home.md) in the default location. Type Y to create the folder. . 
+    After installation, you will be asked whether to initialize the [DQOps user home folder](../dqo-concepts/dqops-user-home-folder.md) in the default location. Type Y to create the folder. . 
 
     ![Initializing DQOps user home folder](https://dqops.com/docs/images/getting-started/initializing-user-home-folder2.png)
 
@@ -133,7 +133,7 @@ To start the DQOps application with the example, follow the steps below.
     To use DQOps features, such as storing data quality definitions and results in the cloud or data quality dashboards, you
     must create a DQOps cloud account.
  
-    After creating the [DQOps user home folder](../dqo-concepts/home-folders/dqops-user-home.md), you will be asked whether to log in to the DQOps cloud. 
+    After creating the [DQOps user home folder](../dqo-concepts/dqops-user-home-folder.md), you will be asked whether to log in to the DQOps cloud. 
 
     ![Log in to DQOps Cloud](https://dqops.com/docs/images/getting-started/log-in-to-dqops-cloud3.png)
 

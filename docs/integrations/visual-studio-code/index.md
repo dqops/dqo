@@ -38,7 +38,7 @@ to create a new file, and edit it in Visual Studio Code later.
 
 ## List of schema files
 The urls to all supported schema files are listed below. The file paths are relative to
-the [DQOps user home](../../dqo-concepts/home-folders/dqops-user-home.md) folder.
+the [DQOps user home](../../dqo-concepts/dqops-user-home-folder.md) folder.
 
 | Type                                                                                        | File location                                              | YAML schema url                                                                                                                                                          |
 |---------------------------------------------------------------------------------------------|------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -199,4 +199,4 @@ will underline the invalid node as shown below.
 
 ## What's next
 - Learn how [configure data quality checks](../../dqo-concepts/checks/configuring-checks.md) in DQOps YAML files.
-- Read how the YAML files are organized in the [DQOps user home](../../dqo-concepts/home-folders/dqops-user-home.md) folder.
+- Read how the YAML files are organized in the [DQOps user home](../../dqo-concepts/dqops-user-home-folder.md) folder.

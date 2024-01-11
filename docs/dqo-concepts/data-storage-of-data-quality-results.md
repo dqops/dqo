@@ -6,8 +6,8 @@ Hive compatible folder tree, partitioned by the connection name, table name, and
 For example, check results for February 2023 for a single table would be stored in a file
 `.data/check_results/c=bigquery-public-data/t=america_health_rankings.ahr/m=2023-02-01/rule_results.0.parquet`.
 
-The data files are stored locally in the `.data` subfolder inside the **[DQOps User Home](home-folders/dqops-user-home.md)** folder.
-**[DQOps User Home](home-folders/dqops-user-home.md)** folder is the place on the disk where DQOps
+The data files are stored locally in the `.data` subfolder inside the **[DQOps User Home](dqops-user-home-folder.md)** folder.
+**[DQOps User Home](dqops-user-home-folder.md)** folder is the place on the disk where DQOps
 stores both the configuration files and the data result files.
 
 The `.data` folder is organized as an offline Data Quality Data Lake, storing files in a Hive-compatible partitioning folder structure.
@@ -453,5 +453,5 @@ AWS Athena, and AWS Redshift Spectrum.
 ## What's next
 - Review the [Parquet schema](../reference/parquetfiles/index.md) of all tables stored in the `.data` folder
 - Learn how to [delete selected data quality results](../working-with-dqo/delete-data-quality-results.md)
-- Learn about other folders stored in the **[DQOps user home](home-folders/dqops-user-home.md)** folder
+- Learn about other folders stored in the **[DQOps user home](dqops-user-home-folder.md)** folder
 - Review the architecture of DQOps and [how folders in the `DQOps user home` are handled](architecture/dqops-architecture.md)

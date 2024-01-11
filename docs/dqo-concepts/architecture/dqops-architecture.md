@@ -132,7 +132,7 @@ and the data folders. The detailed description of the folder is [here](../data-s
 DQOps uses the current working folder as the *DQOps user home*, unless a different folder was specified
 by setting the `$DQO_USER_HOME` environment variable or passing a *--dqo.user.home=&lt;alternative_user_home_location&gt;* startup parameter.
 
-The structure of the *DQOps user home* folder is fully described in the [DQOps use home](../home-folders/dqops-user-home.md) article.
+The structure of the *DQOps user home* folder is fully described in the [DQOps use home](../dqops-user-home-folder.md) article.
 
 
 ### **Git repository**

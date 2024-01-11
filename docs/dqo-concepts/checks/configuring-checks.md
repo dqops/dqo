@@ -4,9 +4,9 @@
 
 Data quality checks are configured on monitored tables and columns in
 [&lt;schema_name&gt;.&lt;table_name&gt;.dqotable.yaml](../../reference/yaml/TableYaml.md) YAML files.
-These files are placed in the *[$DQO_USER_HOME/sources/&lt;connection_name&gt;/](../home-folders/dqops-user-home.md#monitored-tables)* folders
+These files are placed in the *[$DQO_USER_HOME/sources/&lt;connection_name&gt;/](../dqops-user-home-folder.md#monitored-tables)* folders
 in the `DQOps user home`.
-The role and layout of the `DQOps user home` folder is described on the [DQOps user home](../home-folders/dqops-user-home.md) page.
+The role and layout of the `DQOps user home` folder is described on the [DQOps user home](../dqops-user-home-folder.md) page.
 
 
 ## DQOps table YAML file
@@ -843,7 +843,7 @@ spec:
 
 
 ## Default data quality checks
-DQOps maintains a configuration of the [default data quality checks](../home-folders/dqops-user-home.md#shared-settings)
+DQOps maintains a configuration of the [default data quality checks](../dqops-user-home-folder.md#shared-settings)
 that are applied on the tables and columns when the tables are imported into DQOps.
 
 We are using a table from the freely available Google BigQuery public datasets.
@@ -987,7 +987,7 @@ check that will compare the sum of values per day and raise a warning if the cha
 ### **List of default observability checks**
 The default observability checks are configured in the
 *[$DQO_USER_HOME/settings/defaultchecks.dqochecks.yaml](../../reference/yaml/DefaultObservabilityChecksYaml.md)* file
-in the [DQOps user home](../home-folders/dqops-user-home.md).
+in the [DQOps user home](../dqops-user-home-folder.md).
 
 The easiest way to change the default configuration is by using the *Default checks* editor in the *Configuration* section
 of the DQOps user interface.

@@ -35,7 +35,7 @@ To use DQOps you need:
 
 1. Create an empty folder that will be used to store the configuration. 
    This folder is called the `DQOps user home` and is documented in the
-   [DQOps user home concept](../dqo-concepts/home-folders/dqops-user-home.md) guide.
+   [DQOps user home concept](../dqo-concepts/dqops-user-home-folder.md) guide.
    DQOps will store the configuration of data sources, configured data quality checks and the data quality check
    results in this folder.
 

@@ -102,7 +102,7 @@ Confirm connection changes by clicking **Apply** on a pop-up window that will ap
 After confirmation, a screen will open where you can see the data model and parameters in the dashboard. 
 The dashboard can use the [check_results](../../reference/parquetfiles/check_results.md) table as a source.
 Alternative, the [sensor_results](../../reference/parquetfiles/sensor_readouts.md) and other parquet tables
-replicated from the *[DQOps user home](../../dqo-concepts/home-folders/dqops-user-home.md)/.data* folder
+replicated from the *[DQOps user home](../../dqo-concepts/dqops-user-home-folder.md)/.data* folder
 to the DQOps Cloud Data Lake are available for querying.
 
 The list of columns in these tables is described in 
@@ -159,13 +159,13 @@ You will need this embeddable url in the next step to add the dashboard to the d
 
 Finally, to make the dashboard visible, you need to add it to the dashboard list YAML configuration file in DQOps. 
 The dashboard list is located in the *settings/dashboardslist.dqodashboards.yaml* file in
-the [DQOps user home](../../dqo-concepts/home-folders/dqops-user-home.md) folder.
+the [DQOps user home](../../dqo-concepts/dqops-user-home-folder.md) folder.
 
 The file format of the dashboard list specification file is defined in the [dashboards YAML reference](../../reference/yaml/DashboardYaml.md) documentation.
 When the dashboard's url is added to the dashboard list file, it will become visible in the user interface.
 
 Open the *settings/dashboardslist.dqodashboards.yaml* file in the Visual Studio Code. An empty file should be present
-in the *[DQOps user home](../../dqo-concepts/home-folders/dqops-user-home.md)/settings* folder
+in the *[DQOps user home](../../dqo-concepts/dqops-user-home-folder.md)/settings* folder
 that is initialized when DQOps is started for the first time.
 
 The example below shows the default configuration of all DQOps built-in dashboards.
@@ -248,7 +248,7 @@ A folder node has three types of child elements:
 
 When editing the dashboard list YAML file, please be very careful about maintaining correct indentations in the file.
 If the file is corrupted, the *Dashboards* screen will be empty in the DQOps user interface. Any errors will be reported
-to the local *[DQOps user home](../../dqo-concepts/home-folders/dqops-user-home.md)/.logs* logging folder.
+to the local *[DQOps user home](../../dqo-concepts/dqops-user-home-folder.md)/.logs* logging folder.
 DQOps will report the exact file location (line and column) where the issue was found while reading the dashboard list file.
 
 A single dashboard has the following structure:

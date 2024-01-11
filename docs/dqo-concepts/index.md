@@ -36,7 +36,7 @@ These topics introduce the basic concepts of DQOps.
     are shown by Visual Studio Code and many other editors when editing DQOps YAML files.
     
 
- - **[DQOps user home](./home-folders/dqops-user-home.md)**
+ - **[DQOps user home](dqops-user-home-folder.md)**
 
     `DQOps user home` is the most important folder, it is the place where DQOps stores all configuration and data quality results.
     When DQOps is started by running `python -m dqops`, the current working folder is used as the default `DQOps user home`.
