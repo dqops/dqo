@@ -1,5 +1,5 @@
 # DQOps REST API schemas operations
-Schema management
+Operations for listing imported schemas from monitored data sources. Also provides operations for activating and deactivating multiple checks at once.
 
 
 ___

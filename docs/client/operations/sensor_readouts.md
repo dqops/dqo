@@ -1,5 +1,5 @@
 # DQOps REST API sensor_readouts operations
-Returns the complete sensor readouts of executed checks on tables and columns.
+Operations that are retrieving the data quality sensor readouts of executed checks on tables and columns.
 
 
 ___

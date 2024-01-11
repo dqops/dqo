@@ -1,5 +1,5 @@
 # DQOps REST API table_comparisons operations
-Manages the configuration of table comparisons between tables on the same or different data sources
+Operations for managing the configurations of table comparisons between tables on the same or different data sources
 
 
 ___

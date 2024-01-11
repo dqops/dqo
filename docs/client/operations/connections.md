@@ -1,5 +1,5 @@
 # DQOps REST API connections operations
-Manages connections to monitored data sources
+Operations for adding/updating/deleting the configuration of data sources managed by DQOps.
 
 
 ___

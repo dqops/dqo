@@ -1,5 +1,5 @@
 # DQOps REST API checks operations
-Data quality check definition management
+Data quality check definition management operations for adding/removing/changing custom data quality checks.
 
 
 ___

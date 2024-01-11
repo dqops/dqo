@@ -1,5 +1,5 @@
 # DQOps REST API data_grouping_configurations operations
-Manages data grouping configurations on a table
+Operations for managing the configuration of data groupings on a table level in DQOps.
 
 
 ___

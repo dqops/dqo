@@ -1,5 +1,5 @@
 # DQOps REST API shared_credentials operations
-Shared credentials management for managing credentials that are stored in the shared .credentials folder in the DQOps user&#x27;s home folder.
+Operations for managing shared credentials in DQOps. Credentials that are stored in the shared .credentials folder in the DQOps user&#x27;s home folder.
 
 
 ___

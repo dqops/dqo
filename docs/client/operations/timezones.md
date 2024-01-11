@@ -1,5 +1,5 @@
 # DQOps REST API timezones operations
-Timezone management
+Operations for returning time zone names and codes supported by DQOps.
 
 
 ___

@@ -1,5 +1,5 @@
 # DQOps REST API check_results operations
-Returns the complete results of executed checks on tables and columns.
+Returns all the data quality check results of executed checks on tables and columns.
 
 
 ___

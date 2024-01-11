@@ -1,5 +1,5 @@
 # DQOps REST API jobs operations
-Jobs management controller that supports starting new jobs, such as running selected data quality checks
+Jobs management controller that supports starting new jobs, such as running selected data quality checks. Provides access to the job queue for incremental monitoring.
 
 
 ___

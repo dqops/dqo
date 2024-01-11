@@ -22,31 +22,31 @@
   } ],
   "tags" : [ {
     "name" : "CheckResults",
-    "description" : "Returns the complete results of executed checks on tables and columns.",
+    "description" : "Returns all the data quality check results of executed checks on tables and columns.",
     "extensions" : { }
   }, {
     "name" : "CheckResultsOverview",
-    "description" : "Returns the overview of the recently executed checks on tables and columns.",
+    "description" : "Returns the overview of the recently executed checks on tables and columns, returning a summary of the last 5 runs.",
     "extensions" : { }
   }, {
     "name" : "Checks",
-    "description" : "Data quality check definition management",
+    "description" : "Data quality check definition management operations for adding/removing/changing custom data quality checks.",
     "extensions" : { }
   }, {
     "name" : "Columns",
-    "description" : "Manages columns inside a table",
+    "description" : "Operations related to manage the metadata of columns, and managing the configuration of column-level data quality checks.",
     "extensions" : { }
   }, {
     "name" : "Connections",
-    "description" : "Manages connections to monitored data sources",
+    "description" : "Operations for adding/updating/deleting the configuration of data sources managed by DQOps.",
     "extensions" : { }
   }, {
     "name" : "Dashboards",
-    "description" : "Provides access to data quality dashboards",
+    "description" : "Operations for retrieving the list of data quality dashboards supported by DQOps and issuing short-term access keys to open a dashboard.",
     "extensions" : { }
   }, {
     "name" : "DataGroupingConfigurations",
-    "description" : "Manages data grouping configurations on a table",
+    "description" : "Operations for managing the configuration of data groupings on a table level in DQOps.",
     "extensions" : { }
   }, {
     "name" : "DataSources",
@@ -62,19 +62,19 @@
     "extensions" : { }
   }, {
     "name" : "Errors",
-    "description" : "Returns the errors related to check executions on tables and columns.",
+    "description" : "Operations that return the execution errors captured when data quality checks were executed on data sources, and sensors or rules failed with an error.",
     "extensions" : { }
   }, {
     "name" : "Healthcheck",
-    "description" : "Health check service for checking if the DQOps service is up and operational.",
+    "description" : "Health check operations for checking if the DQOps service is up and operational. Used for monitoring by load balancers.",
     "extensions" : { }
   }, {
     "name" : "Incidents",
-    "description" : "Data quality incidents controller that supports loading incidents and changing the status of an incident.",
+    "description" : "Data quality incidents controller that supports reading and updating data quality incidents, such as changing the incident status or assigning an external ticket number.",
     "extensions" : { }
   }, {
     "name" : "Jobs",
-    "description" : "Jobs management controller that supports starting new jobs, such as running selected data quality checks",
+    "description" : "Jobs management controller that supports starting new jobs, such as running selected data quality checks. Provides access to the job queue for incremental monitoring.",
     "extensions" : { }
   }, {
     "name" : "LogShipping",
@@ -82,43 +82,43 @@
     "extensions" : { }
   }, {
     "name" : "Rules",
-    "description" : "Rule management",
+    "description" : "Operations for managing custom data quality rule definitions in DQOps. The custom rules are stored in the DQOps user home folder.",
     "extensions" : { }
   }, {
     "name" : "Schemas",
-    "description" : "Schema management",
+    "description" : "Operations for listing imported schemas from monitored data sources. Also provides operations for activating and deactivating multiple checks at once.",
     "extensions" : { }
   }, {
     "name" : "SensorReadouts",
-    "description" : "Returns the complete sensor readouts of executed checks on tables and columns.",
+    "description" : "Operations that are retrieving the data quality sensor readouts of executed checks on tables and columns.",
     "extensions" : { }
   }, {
     "name" : "Sensors",
-    "description" : "Sensors definition management",
+    "description" : "Operations for managing custom data quality sensor definitions in DQOps. The custom sensors are stored in the DQOps user home folder.",
     "extensions" : { }
   }, {
     "name" : "SharedCredentials",
-    "description" : "Shared credentials management for managing credentials that are stored in the shared .credentials folder in the DQOps user's home folder.",
+    "description" : "Operations for managing shared credentials in DQOps. Credentials that are stored in the shared .credentials folder in the DQOps user's home folder.",
     "extensions" : { }
   }, {
     "name" : "TableComparisonResults",
-    "description" : "Controller that returns the results of the most recent table comparison that was performed between the compared table and the reference table (the source of truth).",
+    "description" : "Operations that returns the results of the most recent table comparison that was performed between the compared table and the reference table (the source of truth).",
     "extensions" : { }
   }, {
     "name" : "TableComparisons",
-    "description" : "Manages the configuration of table comparisons between tables on the same or different data sources",
+    "description" : "Operations for managing the configurations of table comparisons between tables on the same or different data sources",
     "extensions" : { }
   }, {
     "name" : "Tables",
-    "description" : "Manages tables inside a connection/schema",
+    "description" : "Operations related to manage the metadata of imported tables, and managing the configuration of table-level data quality checks.",
     "extensions" : { }
   }, {
     "name" : "Timezones",
-    "description" : "Timezone management",
+    "description" : "Operations for returning time zone names and codes supported by DQOps.",
     "extensions" : { }
   }, {
     "name" : "Users",
-    "description" : "User management service",
+    "description" : "Operations for managing access for DQOps users in a multi-user installations. User management is supported in the TEAM and ENTERPRISE licences.",
     "extensions" : { }
   } ],
   "paths" : {

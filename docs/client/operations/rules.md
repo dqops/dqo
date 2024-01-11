@@ -1,5 +1,5 @@
 # DQOps REST API rules operations
-Rule management
+Operations for managing custom data quality rule definitions in DQOps. The custom rules are stored in the DQOps user home folder.
 
 
 ___

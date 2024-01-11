@@ -1,5 +1,5 @@
 # DQOps REST API columns operations
-Manages columns inside a table
+Operations related to manage the metadata of columns, and managing the configuration of column-level data quality checks.
 
 
 ___

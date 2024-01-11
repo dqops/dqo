@@ -1,5 +1,5 @@
 # DQOps REST API sensors operations
-Sensors definition management
+Operations for managing custom data quality sensor definitions in DQOps. The custom sensors are stored in the DQOps user home folder.
 
 
 ___

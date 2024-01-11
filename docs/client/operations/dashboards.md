@@ -1,5 +1,5 @@
 # DQOps REST API dashboards operations
-Provides access to data quality dashboards
+Operations for retrieving the list of data quality dashboards supported by DQOps and issuing short-term access keys to open a dashboard.
 
 
 ___

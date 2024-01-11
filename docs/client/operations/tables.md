@@ -1,5 +1,5 @@
 # DQOps REST API tables operations
-Manages tables inside a connection/schema
+Operations related to manage the metadata of imported tables, and managing the configuration of table-level data quality checks.
 
 
 ___

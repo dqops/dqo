@@ -1,5 +1,5 @@
 # DQOps REST API errors operations
-Returns the errors related to check executions on tables and columns.
+Operations that return the execution errors captured when data quality checks were executed on data sources, and sensors or rules failed with an error.
 
 
 ___

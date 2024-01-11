@@ -1,5 +1,5 @@
 # DQOps REST API incidents operations
-Data quality incidents controller that supports loading incidents and changing the status of an incident.
+Data quality incidents controller that supports reading and updating data quality incidents, such as changing the incident status or assigning an external ticket number.
 
 
 ___
