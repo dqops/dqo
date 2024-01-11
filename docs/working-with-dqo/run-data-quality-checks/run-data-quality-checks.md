@@ -7,9 +7,9 @@ In DQOps there are two ways to activate and run data quality checks:
 - using the user interface 
 - using DQOps Shell
 
-To activate checks, you need to add a connection. You can learn [how to add connection here](../../../data-sources/index.md).
+To activate checks, you need to add a connection. You can learn [how to add connection here](../../data-sources/index.md).
 
-For more information about [different categories of checks, see DQOps concepts section](../../../dqo-concepts/checks/index.md).
+For more information about [different categories of checks, see DQOps concepts section](../../dqo-concepts/checks/index.md).
 
 ## Run data quality checks using the user interface
 
@@ -22,7 +22,8 @@ To navigate to the checks editor:
     ![Navigate to check section](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/navigate-to-the-check-section2.png)
    
 2. On the tree view on the left, select a table or column of interest by expanding the connection.
-    This will open a [**Check editor**](../../../dqo-concepts/user-interface-overview/user-interface-overview.md#check-editor) screen when you can work with checks. 
+
+    This will open a [**Check editor**](../../dqo-concepts/user-interface-overview/user-interface-overview.md#check-editor) screen when you can work with checks.
 
     ![Select a table or column of interest](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/select-a-table-or-colum-of-interest2.png)
    
@@ -31,9 +32,9 @@ To navigate to the checks editor:
     (only in Profiling section), or preview tables (only in Profiling section).
 
     The table with data quality checks contains a list of checks divided into different data quality subcategories that you
-    can expand and collapse by clicking on an arrow. [Learn more about the different check categories.](../../../dqo-concepts/checks/index.md#categories-of-checks)
+    can expand and collapse by clicking on an arrow. [Learn more about the different check categories.](../../dqo-concepts/checks/index.md#categories-of-checks)
 
-    The right side of the table allows setting different threshold levels (severity levels). [Learn more about threshold levels ](../../../dqo-concepts/checks/index.md#issue-severity-levels)
+    The right side of the table allows setting different threshold levels (severity levels). [Learn more about threshold levels.](../../dqo-concepts/checks/index.md#issue-severity-levels)
 
 ### **Run a check**
 
@@ -45,7 +46,7 @@ To run a check:
 
 2. Set the threshold levels or leave default values. Set parameters if the check has any. Click the **Save** button in the upper right corner.
     
-    You can read more about [threshold severity levels in DQOps concepts section](../../../dqo-concepts/checks/index.md#issue-severity-levels).
+    You can read more about [threshold severity levels in DQOps concepts section](../../dqo-concepts/checks/index.md#issue-severity-levels).
 
     ![Set threshold levels](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/set-threshold-levels2.png)
 
@@ -78,20 +79,20 @@ using the dropdowns. Additionally, you can switch between the table and chart vi
 right of the month filter dropdown. To close the detailed results view, click on the **Results** icon again or use 
 the X button on the right.
 
-[Learn here how to delete data quality results](../../delete-data-quality-results/delete-data-quality-results.md).
+[Learn here how to delete data quality results](../delete-data-quality-results/delete-data-quality-results.md).
 
 Synchronize locally stored results with your DQOps Cloud account to be able to view the results on the dashboards.
 
 To synchronize all the data click on the **Synchronize** button in the upper right corner of the navigation menu.
 
-You can learn here how to [Review the results of data quality monitoring on dashboards.](../../data-quality-dashboards/data-quality-dashboards.md)
+You can learn here how to [Review the results of data quality monitoring on dashboards.](../data-quality-dashboards/data-quality-dashboards.md)
 
 
 ## Configure date or datetime column for partition checks
 
 Partition checks measure data quality for each daily or monthly partition by creating a separate data quality score.
 
-To learn more about partition checks, go to [DQOps concepts section](../../../dqo-concepts/checks/partition-checks/partition-checks.md)
+To learn more about partition checks, go to [DQOps concepts section](../../dqo-concepts/checks/partition-checks/partition-checks.md)
 
 To run partition checks you need to configure a date or datetime columns which will be used as the time partitioning key for the table.
 
@@ -192,7 +193,7 @@ To add and run data quality checks using the DQOps Shell, follow the steps below
     ```
    
     You can execute the check run for the whole connection, table or specific check type using additional parameters. 
-    For more details check the [CLI section](../../../command-line-interface/check.md#dqo-check-run)
+    For more details check the [CLI section](../../command-line-interface/check.md#dqo-check-run)
 
     You should see the table with the results similar to the one below.
  
@@ -280,5 +281,5 @@ spec:
 
 ## What's next
 
-- [Learn about setting schedules](../../schedules/index.md) to easily customize when checks are run.
-- [Learn how to delete data quality results](../../delete-data-quality-results/delete-data-quality-results.md).
+- [Learn about setting schedules](../schedules/index.md) to easily customize when checks are run.
+- [Learn how to delete data quality results](../delete-data-quality-results/delete-data-quality-results.md).

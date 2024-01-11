@@ -40,7 +40,7 @@ import java.util.Objects;
 public class TableSchemaDailyMonitoringChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableSchemaDailyMonitoringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_expected_column_count", o -> o.dailyExpectedColumnCount);
+            put("daily_column_count", o -> o.dailyColumnCount);
             put("daily_column_count_changed", o -> o.dailyColumnCountChanged);
             put("daily_column_list_changed", o -> o.dailyColumnListChanged);
             put("daily_column_list_or_order_changed", o -> o.dailyColumnListOrOrderChanged);
@@ -49,7 +49,7 @@ public class TableSchemaDailyMonitoringChecksSpec extends AbstractCheckCategoryS
     };
 
     @JsonPropertyDescription("Detects if the number of column matches an expected number. Retrieves the metadata of the monitored table, counts the number of columns and compares it to an expected value (an expected number of columns). Stores the most recent column count for each day when the data quality check was evaluated.")
-    private TableSchemaColumnCountCheckSpec dailyExpectedColumnCount;
+    private TableSchemaColumnCountCheckSpec dailyColumnCount;
 
     @JsonPropertyDescription("Detects if the count of columns has changed since the most recent day. Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time. Stores the most recent column count for each day when the data quality check was evaluated.")
     private TableSchemaColumnCountChangedCheckSpec dailyColumnCountChanged;
@@ -67,18 +67,18 @@ public class TableSchemaDailyMonitoringChecksSpec extends AbstractCheckCategoryS
      * Returns a column count check.
      * @return Column count check.
      */
-    public TableSchemaColumnCountCheckSpec getDailyExpectedColumnCount() {
-        return dailyExpectedColumnCount;
+    public TableSchemaColumnCountCheckSpec getDailyColumnCount() {
+        return dailyColumnCount;
     }
 
     /**
      * Sets a new definition of a column count check.
-     * @param dailyExpectedColumnCount Column count check.
+     * @param dailyColumnCount Column count check.
      */
-    public void setDailyExpectedColumnCount(TableSchemaColumnCountCheckSpec dailyExpectedColumnCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyExpectedColumnCount, dailyExpectedColumnCount));
-        this.dailyExpectedColumnCount = dailyExpectedColumnCount;
-        propagateHierarchyIdToField(dailyExpectedColumnCount, "daily_expected_column_count");
+    public void setDailyColumnCount(TableSchemaColumnCountCheckSpec dailyColumnCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyColumnCount, dailyColumnCount));
+        this.dailyColumnCount = dailyColumnCount;
+        propagateHierarchyIdToField(dailyColumnCount, "daily_column_count");
     }
 
     /**

@@ -13,7 +13,7 @@ Detailed results for a single check. Represent one row in the check results tabl
 |check_category|Check category name|string|
 |check_name|Check name|string|
 |check_display_name|Check display name|string|
-|[check_type](../table_comparisons.md#CheckType)|Check type|[CheckType](../table_comparisons.md#CheckType)|
+|[check_type](./table_comparisons.md#CheckType)|Check type|[CheckType](./table_comparisons.md#CheckType)|
 |actual_value|Actual value|double|
 |expected_value|Expected value|double|
 |warning_lower_bound|Warning lower bound|double|
@@ -26,7 +26,7 @@ Detailed results for a single check. Represent one row in the check results tabl
 |column_name|Column name|string|
 |data_group|Data group name|string|
 |duration_ms|Duration (ms)|integer|
-|[time_gradient](../errors.md#timeperiodgradient)|Time gradient|[TimePeriodGradient](../errors.md#timeperiodgradient)|
+|[time_gradient](./errors.md#timeperiodgradient)|Time gradient|[TimePeriodGradient](./errors.md#timeperiodgradient)|
 |time_period|Time period|datetime|
 |include_in_kpi|Include in KPI|boolean|
 |include_in_sla|Include in SLA|boolean|
@@ -127,7 +127,7 @@ Data quality incident model shown on an incident details screen.
 |minimum_severity|The minimum severity of the data quality incident, copied from the incident configuration at a connection or table at the time when the incident was first seen. Possible values are: 1 - warning, 2 - error, 3 - fatal.|integer|
 |failed_checks_count|The total number of failed data quality checks that were seen when the incident was raised for the first time.|integer|
 |issue_url|The link (url) to a ticket in an external system that is tracking this incident.|string|
-|[status](#IncidentStatus)|Incident status.|[IncidentStatus](#IncidentStatus)|
+|[status](./incidents.md#IncidentStatus)|Incident status.|[IncidentStatus](./incidents.md#IncidentStatus)|
 
 
 ___

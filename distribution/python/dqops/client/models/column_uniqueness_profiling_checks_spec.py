@@ -6,43 +6,37 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.column_anomaly_differencing_distinct_count_30_days_check_spec import (
-        ColumnAnomalyDifferencingDistinctCount30DaysCheckSpec,
+    from ..models.column_distinct_count_anomaly_differencing_check_spec import (
+        ColumnDistinctCountAnomalyDifferencingCheckSpec,
     )
-    from ..models.column_anomaly_differencing_distinct_count_check_spec import (
-        ColumnAnomalyDifferencingDistinctCountCheckSpec,
+    from ..models.column_distinct_count_change_1_day_check_spec import (
+        ColumnDistinctCountChange1DayCheckSpec,
     )
-    from ..models.column_anomaly_stationary_distinct_percent_30_days_check_spec import (
-        ColumnAnomalyStationaryDistinctPercent30DaysCheckSpec,
+    from ..models.column_distinct_count_change_7_days_check_spec import (
+        ColumnDistinctCountChange7DaysCheckSpec,
     )
-    from ..models.column_anomaly_stationary_distinct_percent_check_spec import (
-        ColumnAnomalyStationaryDistinctPercentCheckSpec,
+    from ..models.column_distinct_count_change_30_days_check_spec import (
+        ColumnDistinctCountChange30DaysCheckSpec,
     )
-    from ..models.column_change_distinct_count_check_spec import (
-        ColumnChangeDistinctCountCheckSpec,
-    )
-    from ..models.column_change_distinct_count_since_7_days_check_spec import (
-        ColumnChangeDistinctCountSince7DaysCheckSpec,
-    )
-    from ..models.column_change_distinct_count_since_30_days_check_spec import (
-        ColumnChangeDistinctCountSince30DaysCheckSpec,
-    )
-    from ..models.column_change_distinct_count_since_yesterday_check_spec import (
-        ColumnChangeDistinctCountSinceYesterdayCheckSpec,
-    )
-    from ..models.column_change_distinct_percent_check_spec import (
-        ColumnChangeDistinctPercentCheckSpec,
-    )
-    from ..models.column_change_distinct_percent_since_7_days_check_spec import (
-        ColumnChangeDistinctPercentSince7DaysCheckSpec,
-    )
-    from ..models.column_change_distinct_percent_since_30_days_check_spec import (
-        ColumnChangeDistinctPercentSince30DaysCheckSpec,
-    )
-    from ..models.column_change_distinct_percent_since_yesterday_check_spec import (
-        ColumnChangeDistinctPercentSinceYesterdayCheckSpec,
+    from ..models.column_distinct_count_change_check_spec import (
+        ColumnDistinctCountChangeCheckSpec,
     )
     from ..models.column_distinct_count_check_spec import ColumnDistinctCountCheckSpec
+    from ..models.column_distinct_percent_anomaly_stationary_check_spec import (
+        ColumnDistinctPercentAnomalyStationaryCheckSpec,
+    )
+    from ..models.column_distinct_percent_change_1_day_check_spec import (
+        ColumnDistinctPercentChange1DayCheckSpec,
+    )
+    from ..models.column_distinct_percent_change_7_days_check_spec import (
+        ColumnDistinctPercentChange7DaysCheckSpec,
+    )
+    from ..models.column_distinct_percent_change_30_days_check_spec import (
+        ColumnDistinctPercentChange30DaysCheckSpec,
+    )
+    from ..models.column_distinct_percent_change_check_spec import (
+        ColumnDistinctPercentChangeCheckSpec,
+    )
     from ..models.column_distinct_percent_check_spec import (
         ColumnDistinctPercentCheckSpec,
     )
@@ -69,21 +63,16 @@ class ColumnUniquenessProfilingChecksSpec:
         profile_distinct_percent (Union[Unset, ColumnDistinctPercentCheckSpec]):
         profile_duplicate_count (Union[Unset, ColumnDuplicateCountCheckSpec]):
         profile_duplicate_percent (Union[Unset, ColumnDuplicatePercentCheckSpec]):
-        profile_anomaly_differencing_distinct_count (Union[Unset, ColumnAnomalyDifferencingDistinctCountCheckSpec]):
-        profile_anomaly_stationary_distinct_percent (Union[Unset, ColumnAnomalyStationaryDistinctPercentCheckSpec]):
-        profile_change_distinct_count (Union[Unset, ColumnChangeDistinctCountCheckSpec]):
-        profile_change_distinct_count_since_yesterday (Union[Unset, ColumnChangeDistinctCountSinceYesterdayCheckSpec]):
-        profile_change_distinct_percent (Union[Unset, ColumnChangeDistinctPercentCheckSpec]):
-        profile_change_distinct_percent_since_yesterday (Union[Unset,
-            ColumnChangeDistinctPercentSinceYesterdayCheckSpec]):
-        profile_anomaly_differencing_distinct_count_30_days (Union[Unset,
-            ColumnAnomalyDifferencingDistinctCount30DaysCheckSpec]):
-        profile_anomaly_stationary_distinct_percent_30_days (Union[Unset,
-            ColumnAnomalyStationaryDistinctPercent30DaysCheckSpec]):
-        profile_change_distinct_count_since_7_days (Union[Unset, ColumnChangeDistinctCountSince7DaysCheckSpec]):
-        profile_change_distinct_count_since_30_days (Union[Unset, ColumnChangeDistinctCountSince30DaysCheckSpec]):
-        profile_change_distinct_percent_since_7_days (Union[Unset, ColumnChangeDistinctPercentSince7DaysCheckSpec]):
-        profile_change_distinct_percent_since_30_days (Union[Unset, ColumnChangeDistinctPercentSince30DaysCheckSpec]):
+        profile_distinct_count_anomaly (Union[Unset, ColumnDistinctCountAnomalyDifferencingCheckSpec]):
+        profile_distinct_percent_anomaly (Union[Unset, ColumnDistinctPercentAnomalyStationaryCheckSpec]):
+        profile_distinct_count_change (Union[Unset, ColumnDistinctCountChangeCheckSpec]):
+        profile_distinct_percent_change (Union[Unset, ColumnDistinctPercentChangeCheckSpec]):
+        profile_distinct_count_change_1_day (Union[Unset, ColumnDistinctCountChange1DayCheckSpec]):
+        profile_distinct_count_change_7_days (Union[Unset, ColumnDistinctCountChange7DaysCheckSpec]):
+        profile_distinct_count_change_30_days (Union[Unset, ColumnDistinctCountChange30DaysCheckSpec]):
+        profile_distinct_percent_change_1_day (Union[Unset, ColumnDistinctPercentChange1DayCheckSpec]):
+        profile_distinct_percent_change_7_days (Union[Unset, ColumnDistinctPercentChange7DaysCheckSpec]):
+        profile_distinct_percent_change_30_days (Union[Unset, ColumnDistinctPercentChange30DaysCheckSpec]):
     """
 
     custom_checks: Union[
@@ -93,41 +82,35 @@ class ColumnUniquenessProfilingChecksSpec:
     profile_distinct_percent: Union[Unset, "ColumnDistinctPercentCheckSpec"] = UNSET
     profile_duplicate_count: Union[Unset, "ColumnDuplicateCountCheckSpec"] = UNSET
     profile_duplicate_percent: Union[Unset, "ColumnDuplicatePercentCheckSpec"] = UNSET
-    profile_anomaly_differencing_distinct_count: Union[
-        Unset, "ColumnAnomalyDifferencingDistinctCountCheckSpec"
+    profile_distinct_count_anomaly: Union[
+        Unset, "ColumnDistinctCountAnomalyDifferencingCheckSpec"
     ] = UNSET
-    profile_anomaly_stationary_distinct_percent: Union[
-        Unset, "ColumnAnomalyStationaryDistinctPercentCheckSpec"
+    profile_distinct_percent_anomaly: Union[
+        Unset, "ColumnDistinctPercentAnomalyStationaryCheckSpec"
     ] = UNSET
-    profile_change_distinct_count: Union[
-        Unset, "ColumnChangeDistinctCountCheckSpec"
+    profile_distinct_count_change: Union[
+        Unset, "ColumnDistinctCountChangeCheckSpec"
     ] = UNSET
-    profile_change_distinct_count_since_yesterday: Union[
-        Unset, "ColumnChangeDistinctCountSinceYesterdayCheckSpec"
+    profile_distinct_percent_change: Union[
+        Unset, "ColumnDistinctPercentChangeCheckSpec"
     ] = UNSET
-    profile_change_distinct_percent: Union[
-        Unset, "ColumnChangeDistinctPercentCheckSpec"
+    profile_distinct_count_change_1_day: Union[
+        Unset, "ColumnDistinctCountChange1DayCheckSpec"
     ] = UNSET
-    profile_change_distinct_percent_since_yesterday: Union[
-        Unset, "ColumnChangeDistinctPercentSinceYesterdayCheckSpec"
+    profile_distinct_count_change_7_days: Union[
+        Unset, "ColumnDistinctCountChange7DaysCheckSpec"
     ] = UNSET
-    profile_anomaly_differencing_distinct_count_30_days: Union[
-        Unset, "ColumnAnomalyDifferencingDistinctCount30DaysCheckSpec"
+    profile_distinct_count_change_30_days: Union[
+        Unset, "ColumnDistinctCountChange30DaysCheckSpec"
     ] = UNSET
-    profile_anomaly_stationary_distinct_percent_30_days: Union[
-        Unset, "ColumnAnomalyStationaryDistinctPercent30DaysCheckSpec"
+    profile_distinct_percent_change_1_day: Union[
+        Unset, "ColumnDistinctPercentChange1DayCheckSpec"
     ] = UNSET
-    profile_change_distinct_count_since_7_days: Union[
-        Unset, "ColumnChangeDistinctCountSince7DaysCheckSpec"
+    profile_distinct_percent_change_7_days: Union[
+        Unset, "ColumnDistinctPercentChange7DaysCheckSpec"
     ] = UNSET
-    profile_change_distinct_count_since_30_days: Union[
-        Unset, "ColumnChangeDistinctCountSince30DaysCheckSpec"
-    ] = UNSET
-    profile_change_distinct_percent_since_7_days: Union[
-        Unset, "ColumnChangeDistinctPercentSince7DaysCheckSpec"
-    ] = UNSET
-    profile_change_distinct_percent_since_30_days: Union[
-        Unset, "ColumnChangeDistinctPercentSince30DaysCheckSpec"
+    profile_distinct_percent_change_30_days: Union[
+        Unset, "ColumnDistinctPercentChange30DaysCheckSpec"
     ] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -152,96 +135,62 @@ class ColumnUniquenessProfilingChecksSpec:
         if not isinstance(self.profile_duplicate_percent, Unset):
             profile_duplicate_percent = self.profile_duplicate_percent.to_dict()
 
-        profile_anomaly_differencing_distinct_count: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
-        if not isinstance(self.profile_anomaly_differencing_distinct_count, Unset):
-            profile_anomaly_differencing_distinct_count = (
-                self.profile_anomaly_differencing_distinct_count.to_dict()
+        profile_distinct_count_anomaly: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_distinct_count_anomaly, Unset):
+            profile_distinct_count_anomaly = (
+                self.profile_distinct_count_anomaly.to_dict()
             )
 
-        profile_anomaly_stationary_distinct_percent: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
-        if not isinstance(self.profile_anomaly_stationary_distinct_percent, Unset):
-            profile_anomaly_stationary_distinct_percent = (
-                self.profile_anomaly_stationary_distinct_percent.to_dict()
+        profile_distinct_percent_anomaly: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_distinct_percent_anomaly, Unset):
+            profile_distinct_percent_anomaly = (
+                self.profile_distinct_percent_anomaly.to_dict()
             )
 
-        profile_change_distinct_count: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.profile_change_distinct_count, Unset):
-            profile_change_distinct_count = self.profile_change_distinct_count.to_dict()
+        profile_distinct_count_change: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_distinct_count_change, Unset):
+            profile_distinct_count_change = self.profile_distinct_count_change.to_dict()
 
-        profile_change_distinct_count_since_yesterday: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
-        if not isinstance(self.profile_change_distinct_count_since_yesterday, Unset):
-            profile_change_distinct_count_since_yesterday = (
-                self.profile_change_distinct_count_since_yesterday.to_dict()
+        profile_distinct_percent_change: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_distinct_percent_change, Unset):
+            profile_distinct_percent_change = (
+                self.profile_distinct_percent_change.to_dict()
             )
 
-        profile_change_distinct_percent: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.profile_change_distinct_percent, Unset):
-            profile_change_distinct_percent = (
-                self.profile_change_distinct_percent.to_dict()
+        profile_distinct_count_change_1_day: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_distinct_count_change_1_day, Unset):
+            profile_distinct_count_change_1_day = (
+                self.profile_distinct_count_change_1_day.to_dict()
             )
 
-        profile_change_distinct_percent_since_yesterday: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
-        if not isinstance(self.profile_change_distinct_percent_since_yesterday, Unset):
-            profile_change_distinct_percent_since_yesterday = (
-                self.profile_change_distinct_percent_since_yesterday.to_dict()
+        profile_distinct_count_change_7_days: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_distinct_count_change_7_days, Unset):
+            profile_distinct_count_change_7_days = (
+                self.profile_distinct_count_change_7_days.to_dict()
             )
 
-        profile_anomaly_differencing_distinct_count_30_days: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
-        if not isinstance(
-            self.profile_anomaly_differencing_distinct_count_30_days, Unset
-        ):
-            profile_anomaly_differencing_distinct_count_30_days = (
-                self.profile_anomaly_differencing_distinct_count_30_days.to_dict()
+        profile_distinct_count_change_30_days: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_distinct_count_change_30_days, Unset):
+            profile_distinct_count_change_30_days = (
+                self.profile_distinct_count_change_30_days.to_dict()
             )
 
-        profile_anomaly_stationary_distinct_percent_30_days: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
-        if not isinstance(
-            self.profile_anomaly_stationary_distinct_percent_30_days, Unset
-        ):
-            profile_anomaly_stationary_distinct_percent_30_days = (
-                self.profile_anomaly_stationary_distinct_percent_30_days.to_dict()
+        profile_distinct_percent_change_1_day: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_distinct_percent_change_1_day, Unset):
+            profile_distinct_percent_change_1_day = (
+                self.profile_distinct_percent_change_1_day.to_dict()
             )
 
-        profile_change_distinct_count_since_7_days: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.profile_change_distinct_count_since_7_days, Unset):
-            profile_change_distinct_count_since_7_days = (
-                self.profile_change_distinct_count_since_7_days.to_dict()
+        profile_distinct_percent_change_7_days: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_distinct_percent_change_7_days, Unset):
+            profile_distinct_percent_change_7_days = (
+                self.profile_distinct_percent_change_7_days.to_dict()
             )
 
-        profile_change_distinct_count_since_30_days: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
-        if not isinstance(self.profile_change_distinct_count_since_30_days, Unset):
-            profile_change_distinct_count_since_30_days = (
-                self.profile_change_distinct_count_since_30_days.to_dict()
-            )
-
-        profile_change_distinct_percent_since_7_days: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
-        if not isinstance(self.profile_change_distinct_percent_since_7_days, Unset):
-            profile_change_distinct_percent_since_7_days = (
-                self.profile_change_distinct_percent_since_7_days.to_dict()
-            )
-
-        profile_change_distinct_percent_since_30_days: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
-        if not isinstance(self.profile_change_distinct_percent_since_30_days, Unset):
-            profile_change_distinct_percent_since_30_days = (
-                self.profile_change_distinct_percent_since_30_days.to_dict()
+        profile_distinct_percent_change_30_days: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_distinct_percent_change_30_days, Unset):
+            profile_distinct_percent_change_30_days = (
+                self.profile_distinct_percent_change_30_days.to_dict()
             )
 
         field_dict: Dict[str, Any] = {}
@@ -257,95 +206,81 @@ class ColumnUniquenessProfilingChecksSpec:
             field_dict["profile_duplicate_count"] = profile_duplicate_count
         if profile_duplicate_percent is not UNSET:
             field_dict["profile_duplicate_percent"] = profile_duplicate_percent
-        if profile_anomaly_differencing_distinct_count is not UNSET:
+        if profile_distinct_count_anomaly is not UNSET:
             field_dict[
-                "profile_anomaly_differencing_distinct_count"
-            ] = profile_anomaly_differencing_distinct_count
-        if profile_anomaly_stationary_distinct_percent is not UNSET:
+                "profile_distinct_count_anomaly"
+            ] = profile_distinct_count_anomaly
+        if profile_distinct_percent_anomaly is not UNSET:
             field_dict[
-                "profile_anomaly_stationary_distinct_percent"
-            ] = profile_anomaly_stationary_distinct_percent
-        if profile_change_distinct_count is not UNSET:
-            field_dict["profile_change_distinct_count"] = profile_change_distinct_count
-        if profile_change_distinct_count_since_yesterday is not UNSET:
+                "profile_distinct_percent_anomaly"
+            ] = profile_distinct_percent_anomaly
+        if profile_distinct_count_change is not UNSET:
+            field_dict["profile_distinct_count_change"] = profile_distinct_count_change
+        if profile_distinct_percent_change is not UNSET:
             field_dict[
-                "profile_change_distinct_count_since_yesterday"
-            ] = profile_change_distinct_count_since_yesterday
-        if profile_change_distinct_percent is not UNSET:
+                "profile_distinct_percent_change"
+            ] = profile_distinct_percent_change
+        if profile_distinct_count_change_1_day is not UNSET:
             field_dict[
-                "profile_change_distinct_percent"
-            ] = profile_change_distinct_percent
-        if profile_change_distinct_percent_since_yesterday is not UNSET:
+                "profile_distinct_count_change_1_day"
+            ] = profile_distinct_count_change_1_day
+        if profile_distinct_count_change_7_days is not UNSET:
             field_dict[
-                "profile_change_distinct_percent_since_yesterday"
-            ] = profile_change_distinct_percent_since_yesterday
-        if profile_anomaly_differencing_distinct_count_30_days is not UNSET:
+                "profile_distinct_count_change_7_days"
+            ] = profile_distinct_count_change_7_days
+        if profile_distinct_count_change_30_days is not UNSET:
             field_dict[
-                "profile_anomaly_differencing_distinct_count_30_days"
-            ] = profile_anomaly_differencing_distinct_count_30_days
-        if profile_anomaly_stationary_distinct_percent_30_days is not UNSET:
+                "profile_distinct_count_change_30_days"
+            ] = profile_distinct_count_change_30_days
+        if profile_distinct_percent_change_1_day is not UNSET:
             field_dict[
-                "profile_anomaly_stationary_distinct_percent_30_days"
-            ] = profile_anomaly_stationary_distinct_percent_30_days
-        if profile_change_distinct_count_since_7_days is not UNSET:
+                "profile_distinct_percent_change_1_day"
+            ] = profile_distinct_percent_change_1_day
+        if profile_distinct_percent_change_7_days is not UNSET:
             field_dict[
-                "profile_change_distinct_count_since_7_days"
-            ] = profile_change_distinct_count_since_7_days
-        if profile_change_distinct_count_since_30_days is not UNSET:
+                "profile_distinct_percent_change_7_days"
+            ] = profile_distinct_percent_change_7_days
+        if profile_distinct_percent_change_30_days is not UNSET:
             field_dict[
-                "profile_change_distinct_count_since_30_days"
-            ] = profile_change_distinct_count_since_30_days
-        if profile_change_distinct_percent_since_7_days is not UNSET:
-            field_dict[
-                "profile_change_distinct_percent_since_7_days"
-            ] = profile_change_distinct_percent_since_7_days
-        if profile_change_distinct_percent_since_30_days is not UNSET:
-            field_dict[
-                "profile_change_distinct_percent_since_30_days"
-            ] = profile_change_distinct_percent_since_30_days
+                "profile_distinct_percent_change_30_days"
+            ] = profile_distinct_percent_change_30_days
 
         return field_dict
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.column_anomaly_differencing_distinct_count_30_days_check_spec import (
-            ColumnAnomalyDifferencingDistinctCount30DaysCheckSpec,
+        from ..models.column_distinct_count_anomaly_differencing_check_spec import (
+            ColumnDistinctCountAnomalyDifferencingCheckSpec,
         )
-        from ..models.column_anomaly_differencing_distinct_count_check_spec import (
-            ColumnAnomalyDifferencingDistinctCountCheckSpec,
+        from ..models.column_distinct_count_change_1_day_check_spec import (
+            ColumnDistinctCountChange1DayCheckSpec,
         )
-        from ..models.column_anomaly_stationary_distinct_percent_30_days_check_spec import (
-            ColumnAnomalyStationaryDistinctPercent30DaysCheckSpec,
+        from ..models.column_distinct_count_change_7_days_check_spec import (
+            ColumnDistinctCountChange7DaysCheckSpec,
         )
-        from ..models.column_anomaly_stationary_distinct_percent_check_spec import (
-            ColumnAnomalyStationaryDistinctPercentCheckSpec,
+        from ..models.column_distinct_count_change_30_days_check_spec import (
+            ColumnDistinctCountChange30DaysCheckSpec,
         )
-        from ..models.column_change_distinct_count_check_spec import (
-            ColumnChangeDistinctCountCheckSpec,
-        )
-        from ..models.column_change_distinct_count_since_7_days_check_spec import (
-            ColumnChangeDistinctCountSince7DaysCheckSpec,
-        )
-        from ..models.column_change_distinct_count_since_30_days_check_spec import (
-            ColumnChangeDistinctCountSince30DaysCheckSpec,
-        )
-        from ..models.column_change_distinct_count_since_yesterday_check_spec import (
-            ColumnChangeDistinctCountSinceYesterdayCheckSpec,
-        )
-        from ..models.column_change_distinct_percent_check_spec import (
-            ColumnChangeDistinctPercentCheckSpec,
-        )
-        from ..models.column_change_distinct_percent_since_7_days_check_spec import (
-            ColumnChangeDistinctPercentSince7DaysCheckSpec,
-        )
-        from ..models.column_change_distinct_percent_since_30_days_check_spec import (
-            ColumnChangeDistinctPercentSince30DaysCheckSpec,
-        )
-        from ..models.column_change_distinct_percent_since_yesterday_check_spec import (
-            ColumnChangeDistinctPercentSinceYesterdayCheckSpec,
+        from ..models.column_distinct_count_change_check_spec import (
+            ColumnDistinctCountChangeCheckSpec,
         )
         from ..models.column_distinct_count_check_spec import (
             ColumnDistinctCountCheckSpec,
+        )
+        from ..models.column_distinct_percent_anomaly_stationary_check_spec import (
+            ColumnDistinctPercentAnomalyStationaryCheckSpec,
+        )
+        from ..models.column_distinct_percent_change_1_day_check_spec import (
+            ColumnDistinctPercentChange1DayCheckSpec,
+        )
+        from ..models.column_distinct_percent_change_7_days_check_spec import (
+            ColumnDistinctPercentChange7DaysCheckSpec,
+        )
+        from ..models.column_distinct_percent_change_30_days_check_spec import (
+            ColumnDistinctPercentChange30DaysCheckSpec,
+        )
+        from ..models.column_distinct_percent_change_check_spec import (
+            ColumnDistinctPercentChangeCheckSpec,
         )
         from ..models.column_distinct_percent_check_spec import (
             ColumnDistinctPercentCheckSpec,
@@ -406,179 +341,147 @@ class ColumnUniquenessProfilingChecksSpec:
                 _profile_duplicate_percent
             )
 
-        _profile_anomaly_differencing_distinct_count = d.pop(
-            "profile_anomaly_differencing_distinct_count", UNSET
-        )
-        profile_anomaly_differencing_distinct_count: Union[
-            Unset, ColumnAnomalyDifferencingDistinctCountCheckSpec
+        _profile_distinct_count_anomaly = d.pop("profile_distinct_count_anomaly", UNSET)
+        profile_distinct_count_anomaly: Union[
+            Unset, ColumnDistinctCountAnomalyDifferencingCheckSpec
         ]
-        if isinstance(_profile_anomaly_differencing_distinct_count, Unset):
-            profile_anomaly_differencing_distinct_count = UNSET
+        if isinstance(_profile_distinct_count_anomaly, Unset):
+            profile_distinct_count_anomaly = UNSET
         else:
-            profile_anomaly_differencing_distinct_count = (
-                ColumnAnomalyDifferencingDistinctCountCheckSpec.from_dict(
-                    _profile_anomaly_differencing_distinct_count
+            profile_distinct_count_anomaly = (
+                ColumnDistinctCountAnomalyDifferencingCheckSpec.from_dict(
+                    _profile_distinct_count_anomaly
                 )
             )
 
-        _profile_anomaly_stationary_distinct_percent = d.pop(
-            "profile_anomaly_stationary_distinct_percent", UNSET
+        _profile_distinct_percent_anomaly = d.pop(
+            "profile_distinct_percent_anomaly", UNSET
         )
-        profile_anomaly_stationary_distinct_percent: Union[
-            Unset, ColumnAnomalyStationaryDistinctPercentCheckSpec
+        profile_distinct_percent_anomaly: Union[
+            Unset, ColumnDistinctPercentAnomalyStationaryCheckSpec
         ]
-        if isinstance(_profile_anomaly_stationary_distinct_percent, Unset):
-            profile_anomaly_stationary_distinct_percent = UNSET
+        if isinstance(_profile_distinct_percent_anomaly, Unset):
+            profile_distinct_percent_anomaly = UNSET
         else:
-            profile_anomaly_stationary_distinct_percent = (
-                ColumnAnomalyStationaryDistinctPercentCheckSpec.from_dict(
-                    _profile_anomaly_stationary_distinct_percent
+            profile_distinct_percent_anomaly = (
+                ColumnDistinctPercentAnomalyStationaryCheckSpec.from_dict(
+                    _profile_distinct_percent_anomaly
                 )
             )
 
-        _profile_change_distinct_count = d.pop("profile_change_distinct_count", UNSET)
-        profile_change_distinct_count: Union[Unset, ColumnChangeDistinctCountCheckSpec]
-        if isinstance(_profile_change_distinct_count, Unset):
-            profile_change_distinct_count = UNSET
+        _profile_distinct_count_change = d.pop("profile_distinct_count_change", UNSET)
+        profile_distinct_count_change: Union[Unset, ColumnDistinctCountChangeCheckSpec]
+        if isinstance(_profile_distinct_count_change, Unset):
+            profile_distinct_count_change = UNSET
         else:
-            profile_change_distinct_count = (
-                ColumnChangeDistinctCountCheckSpec.from_dict(
-                    _profile_change_distinct_count
+            profile_distinct_count_change = (
+                ColumnDistinctCountChangeCheckSpec.from_dict(
+                    _profile_distinct_count_change
                 )
             )
 
-        _profile_change_distinct_count_since_yesterday = d.pop(
-            "profile_change_distinct_count_since_yesterday", UNSET
+        _profile_distinct_percent_change = d.pop(
+            "profile_distinct_percent_change", UNSET
         )
-        profile_change_distinct_count_since_yesterday: Union[
-            Unset, ColumnChangeDistinctCountSinceYesterdayCheckSpec
+        profile_distinct_percent_change: Union[
+            Unset, ColumnDistinctPercentChangeCheckSpec
         ]
-        if isinstance(_profile_change_distinct_count_since_yesterday, Unset):
-            profile_change_distinct_count_since_yesterday = UNSET
+        if isinstance(_profile_distinct_percent_change, Unset):
+            profile_distinct_percent_change = UNSET
         else:
-            profile_change_distinct_count_since_yesterday = (
-                ColumnChangeDistinctCountSinceYesterdayCheckSpec.from_dict(
-                    _profile_change_distinct_count_since_yesterday
+            profile_distinct_percent_change = (
+                ColumnDistinctPercentChangeCheckSpec.from_dict(
+                    _profile_distinct_percent_change
                 )
             )
 
-        _profile_change_distinct_percent = d.pop(
-            "profile_change_distinct_percent", UNSET
+        _profile_distinct_count_change_1_day = d.pop(
+            "profile_distinct_count_change_1_day", UNSET
         )
-        profile_change_distinct_percent: Union[
-            Unset, ColumnChangeDistinctPercentCheckSpec
+        profile_distinct_count_change_1_day: Union[
+            Unset, ColumnDistinctCountChange1DayCheckSpec
         ]
-        if isinstance(_profile_change_distinct_percent, Unset):
-            profile_change_distinct_percent = UNSET
+        if isinstance(_profile_distinct_count_change_1_day, Unset):
+            profile_distinct_count_change_1_day = UNSET
         else:
-            profile_change_distinct_percent = (
-                ColumnChangeDistinctPercentCheckSpec.from_dict(
-                    _profile_change_distinct_percent
+            profile_distinct_count_change_1_day = (
+                ColumnDistinctCountChange1DayCheckSpec.from_dict(
+                    _profile_distinct_count_change_1_day
                 )
             )
 
-        _profile_change_distinct_percent_since_yesterday = d.pop(
-            "profile_change_distinct_percent_since_yesterday", UNSET
+        _profile_distinct_count_change_7_days = d.pop(
+            "profile_distinct_count_change_7_days", UNSET
         )
-        profile_change_distinct_percent_since_yesterday: Union[
-            Unset, ColumnChangeDistinctPercentSinceYesterdayCheckSpec
+        profile_distinct_count_change_7_days: Union[
+            Unset, ColumnDistinctCountChange7DaysCheckSpec
         ]
-        if isinstance(_profile_change_distinct_percent_since_yesterday, Unset):
-            profile_change_distinct_percent_since_yesterday = UNSET
+        if isinstance(_profile_distinct_count_change_7_days, Unset):
+            profile_distinct_count_change_7_days = UNSET
         else:
-            profile_change_distinct_percent_since_yesterday = (
-                ColumnChangeDistinctPercentSinceYesterdayCheckSpec.from_dict(
-                    _profile_change_distinct_percent_since_yesterday
+            profile_distinct_count_change_7_days = (
+                ColumnDistinctCountChange7DaysCheckSpec.from_dict(
+                    _profile_distinct_count_change_7_days
                 )
             )
 
-        _profile_anomaly_differencing_distinct_count_30_days = d.pop(
-            "profile_anomaly_differencing_distinct_count_30_days", UNSET
+        _profile_distinct_count_change_30_days = d.pop(
+            "profile_distinct_count_change_30_days", UNSET
         )
-        profile_anomaly_differencing_distinct_count_30_days: Union[
-            Unset, ColumnAnomalyDifferencingDistinctCount30DaysCheckSpec
+        profile_distinct_count_change_30_days: Union[
+            Unset, ColumnDistinctCountChange30DaysCheckSpec
         ]
-        if isinstance(_profile_anomaly_differencing_distinct_count_30_days, Unset):
-            profile_anomaly_differencing_distinct_count_30_days = UNSET
+        if isinstance(_profile_distinct_count_change_30_days, Unset):
+            profile_distinct_count_change_30_days = UNSET
         else:
-            profile_anomaly_differencing_distinct_count_30_days = (
-                ColumnAnomalyDifferencingDistinctCount30DaysCheckSpec.from_dict(
-                    _profile_anomaly_differencing_distinct_count_30_days
+            profile_distinct_count_change_30_days = (
+                ColumnDistinctCountChange30DaysCheckSpec.from_dict(
+                    _profile_distinct_count_change_30_days
                 )
             )
 
-        _profile_anomaly_stationary_distinct_percent_30_days = d.pop(
-            "profile_anomaly_stationary_distinct_percent_30_days", UNSET
+        _profile_distinct_percent_change_1_day = d.pop(
+            "profile_distinct_percent_change_1_day", UNSET
         )
-        profile_anomaly_stationary_distinct_percent_30_days: Union[
-            Unset, ColumnAnomalyStationaryDistinctPercent30DaysCheckSpec
+        profile_distinct_percent_change_1_day: Union[
+            Unset, ColumnDistinctPercentChange1DayCheckSpec
         ]
-        if isinstance(_profile_anomaly_stationary_distinct_percent_30_days, Unset):
-            profile_anomaly_stationary_distinct_percent_30_days = UNSET
+        if isinstance(_profile_distinct_percent_change_1_day, Unset):
+            profile_distinct_percent_change_1_day = UNSET
         else:
-            profile_anomaly_stationary_distinct_percent_30_days = (
-                ColumnAnomalyStationaryDistinctPercent30DaysCheckSpec.from_dict(
-                    _profile_anomaly_stationary_distinct_percent_30_days
+            profile_distinct_percent_change_1_day = (
+                ColumnDistinctPercentChange1DayCheckSpec.from_dict(
+                    _profile_distinct_percent_change_1_day
                 )
             )
 
-        _profile_change_distinct_count_since_7_days = d.pop(
-            "profile_change_distinct_count_since_7_days", UNSET
+        _profile_distinct_percent_change_7_days = d.pop(
+            "profile_distinct_percent_change_7_days", UNSET
         )
-        profile_change_distinct_count_since_7_days: Union[
-            Unset, ColumnChangeDistinctCountSince7DaysCheckSpec
+        profile_distinct_percent_change_7_days: Union[
+            Unset, ColumnDistinctPercentChange7DaysCheckSpec
         ]
-        if isinstance(_profile_change_distinct_count_since_7_days, Unset):
-            profile_change_distinct_count_since_7_days = UNSET
+        if isinstance(_profile_distinct_percent_change_7_days, Unset):
+            profile_distinct_percent_change_7_days = UNSET
         else:
-            profile_change_distinct_count_since_7_days = (
-                ColumnChangeDistinctCountSince7DaysCheckSpec.from_dict(
-                    _profile_change_distinct_count_since_7_days
+            profile_distinct_percent_change_7_days = (
+                ColumnDistinctPercentChange7DaysCheckSpec.from_dict(
+                    _profile_distinct_percent_change_7_days
                 )
             )
 
-        _profile_change_distinct_count_since_30_days = d.pop(
-            "profile_change_distinct_count_since_30_days", UNSET
+        _profile_distinct_percent_change_30_days = d.pop(
+            "profile_distinct_percent_change_30_days", UNSET
         )
-        profile_change_distinct_count_since_30_days: Union[
-            Unset, ColumnChangeDistinctCountSince30DaysCheckSpec
+        profile_distinct_percent_change_30_days: Union[
+            Unset, ColumnDistinctPercentChange30DaysCheckSpec
         ]
-        if isinstance(_profile_change_distinct_count_since_30_days, Unset):
-            profile_change_distinct_count_since_30_days = UNSET
+        if isinstance(_profile_distinct_percent_change_30_days, Unset):
+            profile_distinct_percent_change_30_days = UNSET
         else:
-            profile_change_distinct_count_since_30_days = (
-                ColumnChangeDistinctCountSince30DaysCheckSpec.from_dict(
-                    _profile_change_distinct_count_since_30_days
-                )
-            )
-
-        _profile_change_distinct_percent_since_7_days = d.pop(
-            "profile_change_distinct_percent_since_7_days", UNSET
-        )
-        profile_change_distinct_percent_since_7_days: Union[
-            Unset, ColumnChangeDistinctPercentSince7DaysCheckSpec
-        ]
-        if isinstance(_profile_change_distinct_percent_since_7_days, Unset):
-            profile_change_distinct_percent_since_7_days = UNSET
-        else:
-            profile_change_distinct_percent_since_7_days = (
-                ColumnChangeDistinctPercentSince7DaysCheckSpec.from_dict(
-                    _profile_change_distinct_percent_since_7_days
-                )
-            )
-
-        _profile_change_distinct_percent_since_30_days = d.pop(
-            "profile_change_distinct_percent_since_30_days", UNSET
-        )
-        profile_change_distinct_percent_since_30_days: Union[
-            Unset, ColumnChangeDistinctPercentSince30DaysCheckSpec
-        ]
-        if isinstance(_profile_change_distinct_percent_since_30_days, Unset):
-            profile_change_distinct_percent_since_30_days = UNSET
-        else:
-            profile_change_distinct_percent_since_30_days = (
-                ColumnChangeDistinctPercentSince30DaysCheckSpec.from_dict(
-                    _profile_change_distinct_percent_since_30_days
+            profile_distinct_percent_change_30_days = (
+                ColumnDistinctPercentChange30DaysCheckSpec.from_dict(
+                    _profile_distinct_percent_change_30_days
                 )
             )
 
@@ -588,18 +491,16 @@ class ColumnUniquenessProfilingChecksSpec:
             profile_distinct_percent=profile_distinct_percent,
             profile_duplicate_count=profile_duplicate_count,
             profile_duplicate_percent=profile_duplicate_percent,
-            profile_anomaly_differencing_distinct_count=profile_anomaly_differencing_distinct_count,
-            profile_anomaly_stationary_distinct_percent=profile_anomaly_stationary_distinct_percent,
-            profile_change_distinct_count=profile_change_distinct_count,
-            profile_change_distinct_count_since_yesterday=profile_change_distinct_count_since_yesterday,
-            profile_change_distinct_percent=profile_change_distinct_percent,
-            profile_change_distinct_percent_since_yesterday=profile_change_distinct_percent_since_yesterday,
-            profile_anomaly_differencing_distinct_count_30_days=profile_anomaly_differencing_distinct_count_30_days,
-            profile_anomaly_stationary_distinct_percent_30_days=profile_anomaly_stationary_distinct_percent_30_days,
-            profile_change_distinct_count_since_7_days=profile_change_distinct_count_since_7_days,
-            profile_change_distinct_count_since_30_days=profile_change_distinct_count_since_30_days,
-            profile_change_distinct_percent_since_7_days=profile_change_distinct_percent_since_7_days,
-            profile_change_distinct_percent_since_30_days=profile_change_distinct_percent_since_30_days,
+            profile_distinct_count_anomaly=profile_distinct_count_anomaly,
+            profile_distinct_percent_anomaly=profile_distinct_percent_anomaly,
+            profile_distinct_count_change=profile_distinct_count_change,
+            profile_distinct_percent_change=profile_distinct_percent_change,
+            profile_distinct_count_change_1_day=profile_distinct_count_change_1_day,
+            profile_distinct_count_change_7_days=profile_distinct_count_change_7_days,
+            profile_distinct_count_change_30_days=profile_distinct_count_change_30_days,
+            profile_distinct_percent_change_1_day=profile_distinct_percent_change_1_day,
+            profile_distinct_percent_change_7_days=profile_distinct_percent_change_7_days,
+            profile_distinct_percent_change_30_days=profile_distinct_percent_change_30_days,
         )
 
         column_uniqueness_profiling_checks_spec.additional_properties = d

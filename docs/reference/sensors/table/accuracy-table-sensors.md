@@ -1,22 +1,36 @@
+# Data quality accuracy sensors
+All [data quality sensors](../../../dqo-concepts/sensors/sensors.md) in the **accuracy** category supported by DQOps are listed below. Those sensors are measured on a table level.
 
-## **total row count match percent**
-**Full sensor name**
-```
-table/accuracy/total_row_count_match_percent
-```
-**Description**
+---
+
+
+## total row count match percent
 Table level sensor that calculates the percentage of the difference of the total row count of all rows in the tested table and the total row count of the other (reference) table.
 
-**Parameters**
+**Sensor summary**
+
+The total row count match percent sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| table | accuracy | `table/accuracy/total_row_count_match_percent` | [sensors/table/accuracy](https://github.com/dqops/dqo/tree/develop/home/sensors/table/accuracy/) |
+
+
+**Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|referenced_table|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|string| ||
+|`referenced_table`|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|string| ||
 
 
 
 
-**SQL Template (Jinja2)**
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
 === "BigQuery"
 
     ```sql+jinja
@@ -238,3 +252,6 @@ Table level sensor that calculates the percentage of the difference of the total
     {{- lib.render_where_clause() -}}
     ```
 ___
+
+
+

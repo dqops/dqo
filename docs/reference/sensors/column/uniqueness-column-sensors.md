@@ -1,16 +1,30 @@
+# Data quality uniqueness sensors
+All [data quality sensors](../../../dqo-concepts/sensors/sensors.md) in the **uniqueness** category supported by DQOps are listed below. Those sensors are measured on a column level.
 
-## **distinct count**
-**Full sensor name**
-```
-column/uniqueness/distinct_count
-```
-**Description**
+---
+
+
+## distinct count
 Column level sensor that calculates the number of unique non-null values.
 
+**Sensor summary**
+
+The distinct count sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| column | uniqueness | `column/uniqueness/distinct_count` | [sensors/column/uniqueness](https://github.com/dqops/dqo/tree/develop/home/sensors/column/uniqueness/) |
 
 
 
-**SQL Template (Jinja2)**
+
+
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
 === "BigQuery"
 
     ```sql+jinja
@@ -198,18 +212,29 @@ Column level sensor that calculates the number of unique non-null values.
     ```
 ___
 
-## **distinct percent**
-**Full sensor name**
-```
-column/uniqueness/distinct_percent
-```
-**Description**
+
+
+## distinct percent
 Column level sensor that calculates the percentage of unique values in a column.
 
+**Sensor summary**
+
+The distinct percent sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| column | uniqueness | `column/uniqueness/distinct_percent` | [sensors/column/uniqueness](https://github.com/dqops/dqo/tree/develop/home/sensors/column/uniqueness/) |
 
 
 
-**SQL Template (Jinja2)**
+
+
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
 === "BigQuery"
 
     ```sql+jinja
@@ -419,18 +444,29 @@ Column level sensor that calculates the percentage of unique values in a column.
     ```
 ___
 
-## **duplicate count**
-**Full sensor name**
-```
-column/uniqueness/duplicate_count
-```
-**Description**
+
+
+## duplicate count
 Column level sensor that calculates the number of duplicate values in a given column.
 
+**Sensor summary**
+
+The duplicate count sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| column | uniqueness | `column/uniqueness/duplicate_count` | [sensors/column/uniqueness](https://github.com/dqops/dqo/tree/develop/home/sensors/column/uniqueness/) |
 
 
 
-**SQL Template (Jinja2)**
+
+
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
 === "BigQuery"
 
     ```sql+jinja
@@ -607,18 +643,29 @@ Column level sensor that calculates the number of duplicate values in a given co
     ```
 ___
 
-## **duplicate percent**
-**Full sensor name**
-```
-column/uniqueness/duplicate_percent
-```
-**Description**
+
+
+## duplicate percent
 Column level sensor that calculates the percentage of rows that are duplicates.
 
+**Sensor summary**
+
+The duplicate percent sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| column | uniqueness | `column/uniqueness/duplicate_percent` | [sensors/column/uniqueness](https://github.com/dqops/dqo/tree/develop/home/sensors/column/uniqueness/) |
 
 
 
-**SQL Template (Jinja2)**
+
+
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
 === "BigQuery"
 
     ```sql+jinja
@@ -838,3 +885,6 @@ Column level sensor that calculates the percentage of rows that are duplicates.
     {{- lib.render_order_by() -}}
     ```
 ___
+
+
+

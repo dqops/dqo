@@ -16,7 +16,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|schema_remote_model||List[[SchemaRemoteModel](../../models/data_sources.md#schemaremotemodel)]|
+|schema_remote_model||List[[SchemaRemoteModel](../models/data_sources.md#schemaremotemodel)]|
 
 
 
@@ -158,7 +158,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|remote_table_list_model||List[[RemoteTableListModel](../../models/data_sources.md#remotetablelistmodel)]|
+|remote_table_list_model||List[[RemoteTableListModel](../models/data_sources.md#remotetablelistmodel)]|
 
 
 
@@ -305,7 +305,7 @@ http://localhost:8888/api/datasource/testconnection
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[connection_test_model](../../models/data_sources.md#connectiontestmodel)||[ConnectionTestModel](../../models/data_sources.md#connectiontestmodel)|
+|[connection_test_model](../models/data_sources.md#connectiontestmodel)||[ConnectionTestModel](../models/data_sources.md#connectiontestmodel)|
 
 
 
@@ -323,7 +323,7 @@ http://localhost:8888/api/datasource/testconnection
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Basic connection model|[ConnectionModel](../../models/Common.md#connectionmodel)| |
+|Basic connection model|[ConnectionModel](../models/Common.md#connectionmodel)| |
 
 
 

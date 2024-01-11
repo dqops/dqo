@@ -64,10 +64,7 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
         label="Authentication mode to the Google Cloud"
         options={options}
         className="mb-4"
-        value={
-          bigquery?.authentication_mode ||
-          BigQueryAuthenticationMode.google_application_credentials
-        }
+        value={bigquery?.authentication_mode}
         onChange={(value) => handleChange({ authentication_mode: value })}
         disabled={userProfile.can_manage_data_sources !== true}
       />
@@ -82,10 +79,7 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
           })
         )}
         className="mb-4"
-        value={
-          bigquery?.jobs_create_project ||
-          BigQueryParametersSpecJobsCreateProjectEnum.create_jobs_in_source_project
-        }
+        value={bigquery?.jobs_create_project}
         onChange={(value) => handleChange({ jobs_create_project: value })}
         disabled={userProfile.can_manage_data_sources !== true}
       />

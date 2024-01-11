@@ -1,27 +1,44 @@
-# cloud
+# dqo cloud command
+
+
+Manage the DQOps Cloud account. This group of commands supports connecting this DQOps instance to a DQOps Cloud account, changing the password and synchronizing local data with the Data Quality Data Warehouse hosted by DQOps Cloud
+
+
 
 ___
-### **dqo cloud login**
+
+## dqo cloud login
 
 Log in or register an account at the DQOps Cloud
 
+
 **Description**
+
 
 Allow user to provide login credentials if the user already has an account.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] cloud login [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> cloud login [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
@@ -33,28 +50,42 @@ dqo> cloud login [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 
 
+
+
 ___
-### **dqo cloud password**
+
+## dqo cloud password
 
 Changes the user&#x27;s password in DQOps Cloud
 
+
 **Description**
+
 
 Allows the user to change the password that is used to log in to DQOps Cloud account using the email and password.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] cloud password [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> cloud password [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
@@ -66,30 +97,44 @@ dqo> cloud password [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 
 
+
+
 ___
-### **dqo cloud sync data**
+
+## dqo cloud sync data
 
 Synchronize local &quot;data&quot; folder with sensor readouts and rule results with DQOps Cloud
 
+
 **Description**
+
 
 Uploads any local changes to the cloud and downloads any changes made to the cloud version of the &quot;data&quot; folder.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] cloud sync data [-hr] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
                  [-of=<outputFormat>]
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> cloud sync data [-hr] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
                  [-of=<outputFormat>]
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
@@ -104,30 +149,44 @@ dqo> cloud sync data [-hr] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
 
 
 
+
+
 ___
-### **dqo cloud sync sources**
+
+## dqo cloud sync sources
 
 Synchronize local &quot;sources&quot; connection and table level quality definitions with DQOps Cloud
 
+
 **Description**
+
 
 Uploads any local changes to the cloud and downloads any changes made to the cloud version of the &quot;sources&quot; folder.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] cloud sync sources [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
                     [-of=<outputFormat>]
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> cloud sync sources [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
                     [-of=<outputFormat>]
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
@@ -141,30 +200,44 @@ dqo> cloud sync sources [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
 
 
 
+
+
 ___
-### **dqo cloud sync sensors**
+
+## dqo cloud sync sensors
 
 Synchronize local &quot;sensors&quot; folder with custom sensor definitions with DQOps Cloud
 
+
 **Description**
+
 
 Uploads any local changes to the cloud and downloads any changes made to the cloud version of the &quot;sensors&quot; folder.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] cloud sync sensors [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
                     [-of=<outputFormat>]
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> cloud sync sensors [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
                     [-of=<outputFormat>]
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
@@ -178,30 +251,44 @@ dqo> cloud sync sensors [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
 
 
 
+
+
 ___
-### **dqo cloud sync rules**
+
+## dqo cloud sync rules
 
 Synchronize local &quot;rules&quot; folder with custom rule definitions with DQOps Cloud
 
+
 **Description**
+
 
 Uploads any local changes to the cloud and downloads any changes made to the cloud version of the &quot;rules&quot; folder.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] cloud sync rules [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
                   [-of=<outputFormat>]
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> cloud sync rules [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
                   [-of=<outputFormat>]
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
@@ -215,30 +302,44 @@ dqo> cloud sync rules [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
 
 
 
+
+
 ___
-### **dqo cloud sync checks**
+
+## dqo cloud sync checks
 
 Synchronize local &quot;checks&quot; folder with custom check definitions with DQOps Cloud
 
+
 **Description**
+
 
 Uploads any local changes to the cloud and downloads any changes made to the cloud version of the &quot;checks&quot; folder.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] cloud sync checks [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
                    [-of=<outputFormat>]
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> cloud sync checks [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
                    [-of=<outputFormat>]
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
@@ -252,30 +353,44 @@ dqo> cloud sync checks [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
 
 
 
+
+
 ___
-### **dqo cloud sync settings**
+
+## dqo cloud sync settings
 
 Synchronize local &quot;settings&quot; folder with DQOps Cloud
 
+
 **Description**
+
 
 Uploads any local changes to the cloud and downloads any changes made to the cloud version of the &quot;settings&quot; folder.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] cloud sync settings [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
                      [-of=<outputFormat>]
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> cloud sync settings [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
                      [-of=<outputFormat>]
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
@@ -289,30 +404,44 @@ dqo> cloud sync settings [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
 
 
 
+
+
 ___
-### **dqo cloud sync credentials**
+
+## dqo cloud sync credentials
 
 Synchronize local &quot;.credentials&quot; folder that stores shared credentials with DQOps Cloud
 
+
 **Description**
+
 
 Uploads any local changes to the cloud and downloads any changes made to the cloud version of the &quot;.credentials&quot; folder.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] cloud sync credentials [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
                         [-of=<outputFormat>]
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> cloud sync credentials [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
                         [-of=<outputFormat>]
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
@@ -326,30 +455,44 @@ dqo> cloud sync credentials [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
 
 
 
+
+
 ___
-### **dqo cloud sync all**
+
+## dqo cloud sync all
 
 Synchronize local files with DQOps Cloud (sources, table rules, custom rules, custom sensors and data - sensor readouts and rule results)
 
+
 **Description**
+
 
 Uploads any local changes to the cloud and downloads any changes made to the cloud versions of the folders.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] cloud sync all [-hr] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
                 [-of=<outputFormat>]
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> cloud sync all [-hr] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
                 [-of=<outputFormat>]
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
@@ -360,6 +503,8 @@ dqo> cloud sync all [-hr] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
 |<p id="cloud sync all-m">`-m`</p><br/><p id="cloud sync all--mode">`--mode`</p><br/>|Reporting mode (silent, summary, debug)| |silent<br/>summary<br/>debug<br/>|
 |<p id="cloud sync all-of">`-of`</p><br/><p id="cloud sync all--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 |<p id="cloud sync all-r">`-r`</p><br/><p id="cloud sync all--refresh-data-warehouse">`--refresh-data-warehouse`</p><br/>|Force refresh a whole table in the data quality data warehouse| ||
+
+
 
 
 

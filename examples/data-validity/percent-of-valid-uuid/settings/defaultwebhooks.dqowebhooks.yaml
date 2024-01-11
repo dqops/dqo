@@ -1,4 +1,0 @@
-# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/DefaultIncidentWebhookNotificationsYaml-schema.json
-apiVersion: dqo/v1
-kind: notification_webhooks
-spec: {}

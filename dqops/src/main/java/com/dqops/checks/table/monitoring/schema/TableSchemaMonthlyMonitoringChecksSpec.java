@@ -40,7 +40,7 @@ import java.util.Objects;
 public class TableSchemaMonthlyMonitoringChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableSchemaMonthlyMonitoringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("monthly_expected_column_count", o -> o.monthlyExpectedColumnCount);
+            put("monthly_column_count", o -> o.monthlyColumnCount);
             put("monthly_column_count_changed", o -> o.monthlyColumnCountChanged);
             put("monthly_column_list_changed", o -> o.monthlyColumnListChanged);
             put("monthly_column_list_or_order_changed", o -> o.monthlyColumnListOrOrderChanged);
@@ -49,7 +49,7 @@ public class TableSchemaMonthlyMonitoringChecksSpec extends AbstractCheckCategor
     };
 
     @JsonPropertyDescription("Detects if the number of column matches an expected number. Retrieves the metadata of the monitored table, counts the number of columns and compares it to an expected value (an expected number of columns). Stores the most recent column count for each month when the data quality check was evaluated.")
-    private TableSchemaColumnCountCheckSpec monthlyExpectedColumnCount;
+    private TableSchemaColumnCountCheckSpec monthlyColumnCount;
 
     @JsonPropertyDescription("Detects if the count of columns has changed since the last month. Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time. Stores the most recent column count for each month when the data quality check was evaluated.")
     private TableSchemaColumnCountChangedCheckSpec monthlyColumnCountChanged;
@@ -67,18 +67,18 @@ public class TableSchemaMonthlyMonitoringChecksSpec extends AbstractCheckCategor
      * Returns a column count check.
      * @return Column count check.
      */
-    public TableSchemaColumnCountCheckSpec getMonthlyExpectedColumnCount() {
-        return monthlyExpectedColumnCount;
+    public TableSchemaColumnCountCheckSpec getMonthlyColumnCount() {
+        return monthlyColumnCount;
     }
 
     /**
      * Sets a new definition of a column count check.
-     * @param monthlyExpectedColumnCount Column count check.
+     * @param monthlyColumnCount Column count check.
      */
-    public void setMonthlyExpectedColumnCount(TableSchemaColumnCountCheckSpec monthlyExpectedColumnCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyExpectedColumnCount, monthlyExpectedColumnCount));
-        this.monthlyExpectedColumnCount = monthlyExpectedColumnCount;
-        propagateHierarchyIdToField(monthlyExpectedColumnCount, "monthly_expected_column_count");
+    public void setMonthlyColumnCount(TableSchemaColumnCountCheckSpec monthlyColumnCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyColumnCount, monthlyColumnCount));
+        this.monthlyColumnCount = monthlyColumnCount;
+        propagateHierarchyIdToField(monthlyColumnCount, "monthly_column_count");
     }
 
     /**

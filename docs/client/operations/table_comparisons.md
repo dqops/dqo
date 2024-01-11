@@ -29,7 +29,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Table comparison configuration model|[TableComparisonConfigurationModel](../../models/table_comparisons.md#tablecomparisonconfigurationmodel)| |
+|Table comparison configuration model|[TableComparisonConfigurationModel](../models/table_comparisons.md#tablecomparisonconfigurationmodel)| |
 
 
 
@@ -249,7 +249,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Table comparison configuration model with the selected checks to use for comparison|[TableComparisonModel](../../models/table_comparisons.md#tablecomparisonmodel)| |
+|Table comparison configuration model with the selected checks to use for comparison|[TableComparisonModel](../models/table_comparisons.md#tablecomparisonmodel)| |
 
 
 
@@ -613,7 +613,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Table comparison configuration model with the selected checks to use for comparison|[TableComparisonModel](../../models/table_comparisons.md#tablecomparisonmodel)| |
+|Table comparison configuration model with the selected checks to use for comparison|[TableComparisonModel](../models/table_comparisons.md#tablecomparisonmodel)| |
 
 
 
@@ -977,7 +977,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Table comparison configuration model with the selected checks to use for comparison|[TableComparisonModel](../../models/table_comparisons.md#tablecomparisonmodel)| |
+|Table comparison configuration model with the selected checks to use for comparison|[TableComparisonModel](../models/table_comparisons.md#tablecomparisonmodel)| |
 
 
 
@@ -1341,7 +1341,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Table comparison configuration model with the selected checks to use for comparison|[TableComparisonModel](../../models/table_comparisons.md#tablecomparisonmodel)| |
+|Table comparison configuration model with the selected checks to use for comparison|[TableComparisonModel](../models/table_comparisons.md#tablecomparisonmodel)| |
 
 
 
@@ -1705,7 +1705,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Table comparison configuration model with the selected checks to use for comparison|[TableComparisonModel](../../models/table_comparisons.md#tablecomparisonmodel)| |
+|Table comparison configuration model with the selected checks to use for comparison|[TableComparisonModel](../models/table_comparisons.md#tablecomparisonmodel)| |
 
 
 
@@ -2191,7 +2191,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_comparison_configuration_model](../../models/table_comparisons.md#tablecomparisonconfigurationmodel)||[TableComparisonConfigurationModel](../../models/table_comparisons.md#tablecomparisonconfigurationmodel)|
+|[table_comparison_configuration_model](../models/table_comparisons.md#tablecomparisonconfigurationmodel)||[TableComparisonConfigurationModel](../models/table_comparisons.md#tablecomparisonconfigurationmodel)|
 
 
 
@@ -2354,7 +2354,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|table_comparison_configuration_model||List[[TableComparisonConfigurationModel](../../models/table_comparisons.md#tablecomparisonconfigurationmodel)]|
+|table_comparison_configuration_model||List[[TableComparisonConfigurationModel](../models/table_comparisons.md#tablecomparisonconfigurationmodel)]|
 
 
 
@@ -2366,8 +2366,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |connection_name|Connection name|string|:material-check-bold:|
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
-|[check_type](../../models/table_comparisons.md#checktype)|Optional check type filter (profiling, monitoring, partitioned).|[CheckType](../../models/table_comparisons.md#checktype)| |
-|[check_time_scale](../../models/Common.md#checktimescale)|Optional time scale filter for table comparisons specific to the monitoring and partitioned checks (values: daily or monthly).|[CheckTimeScale](../../models/Common.md#checktimescale)| |
+|[check_type](../models/table_comparisons.md#checktype)|Optional check type filter (profiling, monitoring, partitioned).|[CheckType](../models/table_comparisons.md#checktype)| |
+|[check_time_scale](../models/Common.md#checktimescale)|Optional time scale filter for table comparisons specific to the monitoring and partitioned checks (values: daily or monthly).|[CheckTimeScale](../models/Common.md#checktimescale)| |
 
 
 
@@ -2542,7 +2542,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_comparison_model](../../models/table_comparisons.md#tablecomparisonmodel)||[TableComparisonModel](../../models/table_comparisons.md#tablecomparisonmodel)|
+|[table_comparison_model](../models/table_comparisons.md#tablecomparisonmodel)||[TableComparisonModel](../models/table_comparisons.md#tablecomparisonmodel)|
 
 
 
@@ -2736,7 +2736,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_comparison_model](../../models/table_comparisons.md#tablecomparisonmodel)||[TableComparisonModel](../../models/table_comparisons.md#tablecomparisonmodel)|
+|[table_comparison_model](../models/table_comparisons.md#tablecomparisonmodel)||[TableComparisonModel](../models/table_comparisons.md#tablecomparisonmodel)|
 
 
 
@@ -2930,7 +2930,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_comparison_model](../../models/table_comparisons.md#tablecomparisonmodel)||[TableComparisonModel](../../models/table_comparisons.md#tablecomparisonmodel)|
+|[table_comparison_model](../models/table_comparisons.md#tablecomparisonmodel)||[TableComparisonModel](../models/table_comparisons.md#tablecomparisonmodel)|
 
 
 
@@ -3124,7 +3124,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_comparison_model](../../models/table_comparisons.md#tablecomparisonmodel)||[TableComparisonModel](../../models/table_comparisons.md#tablecomparisonmodel)|
+|[table_comparison_model](../models/table_comparisons.md#tablecomparisonmodel)||[TableComparisonModel](../models/table_comparisons.md#tablecomparisonmodel)|
 
 
 
@@ -3318,7 +3318,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_comparison_model](../../models/table_comparisons.md#tablecomparisonmodel)||[TableComparisonModel](../../models/table_comparisons.md#tablecomparisonmodel)|
+|[table_comparison_model](../models/table_comparisons.md#tablecomparisonmodel)||[TableComparisonModel](../models/table_comparisons.md#tablecomparisonmodel)|
 
 
 
@@ -3526,7 +3526,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Table comparison model with the configuration of the tables to compare|[TableComparisonConfigurationModel](../../models/table_comparisons.md#tablecomparisonconfigurationmodel)| |
+|Table comparison model with the configuration of the tables to compare|[TableComparisonConfigurationModel](../models/table_comparisons.md#tablecomparisonconfigurationmodel)| |
 
 
 
@@ -3751,7 +3751,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Table comparison configuration model with the selected checks to use for comparison|[TableComparisonModel](../../models/table_comparisons.md#tablecomparisonmodel)| |
+|Table comparison configuration model with the selected checks to use for comparison|[TableComparisonModel](../models/table_comparisons.md#tablecomparisonmodel)| |
 
 
 
@@ -4120,7 +4120,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Table comparison configuration model with the selected checks to use for comparison|[TableComparisonModel](../../models/table_comparisons.md#tablecomparisonmodel)| |
+|Table comparison configuration model with the selected checks to use for comparison|[TableComparisonModel](../models/table_comparisons.md#tablecomparisonmodel)| |
 
 
 
@@ -4489,7 +4489,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Table comparison configuration model with the selected checks to use for comparison|[TableComparisonModel](../../models/table_comparisons.md#tablecomparisonmodel)| |
+|Table comparison configuration model with the selected checks to use for comparison|[TableComparisonModel](../models/table_comparisons.md#tablecomparisonmodel)| |
 
 
 
@@ -4858,7 +4858,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Table comparison configuration model with the selected checks to use for comparison|[TableComparisonModel](../../models/table_comparisons.md#tablecomparisonmodel)| |
+|Table comparison configuration model with the selected checks to use for comparison|[TableComparisonModel](../models/table_comparisons.md#tablecomparisonmodel)| |
 
 
 
@@ -5227,7 +5227,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Table comparison configuration model with the selected checks to use for comparison|[TableComparisonModel](../../models/table_comparisons.md#tablecomparisonmodel)| |
+|Table comparison configuration model with the selected checks to use for comparison|[TableComparisonModel](../models/table_comparisons.md#tablecomparisonmodel)| |
 
 
 

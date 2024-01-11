@@ -6,7 +6,7 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.table_change_row_count_check_spec import TableChangeRowCountCheckSpec
+    from ..models.table_row_count_change_check_spec import TableRowCountChangeCheckSpec
     from ..models.table_row_count_check_spec import TableRowCountCheckSpec
     from ..models.table_volume_monthly_partitioned_checks_spec_custom_checks import (
         TableVolumeMonthlyPartitionedChecksSpecCustomChecks,
@@ -24,7 +24,7 @@ class TableVolumeMonthlyPartitionedChecksSpec:
             custom checks within this category. The keys are check names defined in the definition section. The sensor
             parameters and rules should match the type of the configured sensor and rule for the custom check.
         monthly_partition_row_count (Union[Unset, TableRowCountCheckSpec]):
-        monthly_partition_row_count_change (Union[Unset, TableChangeRowCountCheckSpec]):
+        monthly_partition_row_count_change (Union[Unset, TableRowCountChangeCheckSpec]):
     """
 
     custom_checks: Union[
@@ -32,7 +32,7 @@ class TableVolumeMonthlyPartitionedChecksSpec:
     ] = UNSET
     monthly_partition_row_count: Union[Unset, "TableRowCountCheckSpec"] = UNSET
     monthly_partition_row_count_change: Union[
-        Unset, "TableChangeRowCountCheckSpec"
+        Unset, "TableRowCountChangeCheckSpec"
     ] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -67,8 +67,8 @@ class TableVolumeMonthlyPartitionedChecksSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.table_change_row_count_check_spec import (
-            TableChangeRowCountCheckSpec,
+        from ..models.table_row_count_change_check_spec import (
+            TableRowCountChangeCheckSpec,
         )
         from ..models.table_row_count_check_spec import TableRowCountCheckSpec
         from ..models.table_volume_monthly_partitioned_checks_spec_custom_checks import (
@@ -99,11 +99,11 @@ class TableVolumeMonthlyPartitionedChecksSpec:
         _monthly_partition_row_count_change = d.pop(
             "monthly_partition_row_count_change", UNSET
         )
-        monthly_partition_row_count_change: Union[Unset, TableChangeRowCountCheckSpec]
+        monthly_partition_row_count_change: Union[Unset, TableRowCountChangeCheckSpec]
         if isinstance(_monthly_partition_row_count_change, Unset):
             monthly_partition_row_count_change = UNSET
         else:
-            monthly_partition_row_count_change = TableChangeRowCountCheckSpec.from_dict(
+            monthly_partition_row_count_change = TableRowCountChangeCheckSpec.from_dict(
                 _monthly_partition_row_count_change
             )
 

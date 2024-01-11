@@ -30,7 +30,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Column specification|[ColumnSpec](../../../reference/yaml/TableYaml.md#columnspec)| |
+|Column specification|[ColumnSpec](../../reference/yaml/TableYaml.md#columnspec)| |
 
 
 
@@ -44,7 +44,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"type_snapshot\":{\"column_type\":\"string\",\"nullable\":false,\"length\":256},\"profiling_checks\":{\"nulls\":{\"profile_nulls_count\":{\"error\":{\"max_count\":10}}}}}"
+		"{\"type_snapshot\":{\"column_type\":\"string\",\"nullable\":false,\"length\":256},\"profiling_checks\":{\"nulls\":{\"profile_nulls_count\":{\"error\":{\"max_count\":0}}}}}"
 	
     ```
 
@@ -60,7 +60,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                ColumnProfilingCheckCategoriesSpec, \
 	                                ColumnSpec, \
 	                                ColumnTypeSnapshotSpec, \
-	                                MaxCountRule10ParametersSpec
+	                                MaxCountRule0ErrorParametersSpec
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -77,7 +77,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			nulls=ColumnNullsProfilingChecksSpec(
 				profile_nulls_count=ColumnNullsCountCheckSpec(
 					parameters=ColumnNullsNullsCountSensorParametersSpec(),
-					error=MaxCountRule10ParametersSpec(max_count=10),
+					error=MaxCountRule0ErrorParametersSpec(max_count=0),
 					disabled=False,
 					exclude_from_kpi=False,
 					include_in_sla=False
@@ -110,7 +110,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                ColumnProfilingCheckCategoriesSpec, \
 	                                ColumnSpec, \
 	                                ColumnTypeSnapshotSpec, \
-	                                MaxCountRule10ParametersSpec
+	                                MaxCountRule0ErrorParametersSpec
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -127,7 +127,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			nulls=ColumnNullsProfilingChecksSpec(
 				profile_nulls_count=ColumnNullsCountCheckSpec(
 					parameters=ColumnNullsNullsCountSensorParametersSpec(),
-					error=MaxCountRule10ParametersSpec(max_count=10),
+					error=MaxCountRule0ErrorParametersSpec(max_count=0),
 					disabled=False,
 					exclude_from_kpi=False,
 					include_in_sla=False
@@ -162,7 +162,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                ColumnProfilingCheckCategoriesSpec, \
 	                                ColumnSpec, \
 	                                ColumnTypeSnapshotSpec, \
-	                                MaxCountRule10ParametersSpec
+	                                MaxCountRule0ErrorParametersSpec
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -182,7 +182,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			nulls=ColumnNullsProfilingChecksSpec(
 				profile_nulls_count=ColumnNullsCountCheckSpec(
 					parameters=ColumnNullsNullsCountSensorParametersSpec(),
-					error=MaxCountRule10ParametersSpec(max_count=10),
+					error=MaxCountRule0ErrorParametersSpec(max_count=0),
 					disabled=False,
 					exclude_from_kpi=False,
 					include_in_sla=False
@@ -215,7 +215,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                ColumnProfilingCheckCategoriesSpec, \
 	                                ColumnSpec, \
 	                                ColumnTypeSnapshotSpec, \
-	                                MaxCountRule10ParametersSpec
+	                                MaxCountRule0ErrorParametersSpec
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -235,7 +235,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			nulls=ColumnNullsProfilingChecksSpec(
 				profile_nulls_count=ColumnNullsCountCheckSpec(
 					parameters=ColumnNullsNullsCountSensorParametersSpec(),
-					error=MaxCountRule10ParametersSpec(max_count=10),
+					error=MaxCountRule0ErrorParametersSpec(max_count=0),
 					disabled=False,
 					exclude_from_kpi=False,
 					include_in_sla=False
@@ -277,7 +277,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[dqo_queue_job_id](../../models/Common.md#dqoqueuejobid)||[DqoQueueJobId](../../models/Common.md#dqoqueuejobid)|
+|[dqo_queue_job_id](../models/Common.md#dqoqueuejobid)||[DqoQueueJobId](../models/Common.md#dqoqueuejobid)|
 
 
 
@@ -427,7 +427,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[column_model](../../models/columns.md#columnmodel)||[ColumnModel](../../models/columns.md#columnmodel)|
+|[column_model](../models/columns.md#columnmodel)||[ColumnModel](../models/columns.md#columnmodel)|
 
 
 
@@ -576,7 +576,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	      "nulls" : {
 	        "profile_nulls_count" : {
 	          "error" : {
-	            "max_count" : 10
+	            "max_count" : 0
 	          }
 	        }
 	      }
@@ -602,7 +602,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[column_list_model](../../models/columns.md#columnlistmodel)||[ColumnListModel](../../models/columns.md#columnlistmodel)|
+|[column_list_model](../models/columns.md#columnlistmodel)||[ColumnListModel](../models/columns.md#columnlistmodel)|
 
 
 
@@ -771,7 +771,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|comment_spec||List[[CommentSpec](../../models/Common.md#commentspec)]|
+|comment_spec||List[[CommentSpec](../models/Common.md#commentspec)]|
 
 
 
@@ -1085,7 +1085,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_list_model](../../models/Common.md#checkcontainerlistmodel)||[CheckContainerListModel](../../models/Common.md#checkcontainerlistmodel)|
+|[check_container_list_model](../models/Common.md#checkcontainerlistmodel)||[CheckContainerListModel](../models/Common.md#checkcontainerlistmodel)|
 
 
 
@@ -1098,7 +1098,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
 |column_name|Column name|string|:material-check-bold:|
-|[time_scale](../../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
 
 
 
@@ -1276,7 +1276,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[column_daily_monitoring_check_categories_spec](../../models/columns.md#columndailymonitoringcheckcategoriesspec)||[ColumnDailyMonitoringCheckCategoriesSpec](../../models/columns.md#columndailymonitoringcheckcategoriesspec)|
+|[column_daily_monitoring_check_categories_spec](../models/columns.md#columndailymonitoringcheckcategoriesspec)||[ColumnDailyMonitoringCheckCategoriesSpec](../models/columns.md#columndailymonitoringcheckcategoriesspec)|
 
 
 
@@ -1412,7 +1412,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  "nulls" : {
 	    "daily_nulls_count" : {
 	      "error" : {
-	        "max_count" : 10
+	        "max_count" : 0
 	      }
 	    }
 	  }
@@ -1435,7 +1435,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/Common.md#checkcontainermodel)||[CheckContainerModel](../../models/Common.md#checkcontainermodel)|
+|[check_container_model](../models/Common.md#checkcontainermodel)||[CheckContainerModel](../models/Common.md#checkcontainermodel)|
 
 
 
@@ -1448,7 +1448,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
 |column_name|Column name|string|:material-check-bold:|
-|[time_scale](../../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
 
 
 
@@ -1614,7 +1614,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/Common.md#checkcontainermodel)||[CheckContainerModel](../../models/Common.md#checkcontainermodel)|
+|[check_container_model](../models/Common.md#checkcontainermodel)||[CheckContainerModel](../models/Common.md#checkcontainermodel)|
 
 
 
@@ -1627,7 +1627,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
 |column_name|Column name|string|:material-check-bold:|
-|[time_scale](../../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
 |check_category|Check category|string|:material-check-bold:|
 |check_name|Check name|string|:material-check-bold:|
 
@@ -1803,7 +1803,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[column_monthly_monitoring_check_categories_spec](../../models/columns.md#columnmonthlymonitoringcheckcategoriesspec)||[ColumnMonthlyMonitoringCheckCategoriesSpec](../../models/columns.md#columnmonthlymonitoringcheckcategoriesspec)|
+|[column_monthly_monitoring_check_categories_spec](../models/columns.md#columnmonthlymonitoringcheckcategoriesspec)||[ColumnMonthlyMonitoringCheckCategoriesSpec](../models/columns.md#columnmonthlymonitoringcheckcategoriesspec)|
 
 
 
@@ -1939,7 +1939,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  "nulls" : {
 	    "monthly_nulls_count" : {
 	      "error" : {
-	        "max_count" : 10
+	        "max_count" : 0
 	      }
 	    }
 	  }
@@ -1962,7 +1962,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_list_model](../../models/Common.md#checkcontainerlistmodel)||[CheckContainerListModel](../../models/Common.md#checkcontainerlistmodel)|
+|[check_container_list_model](../models/Common.md#checkcontainerlistmodel)||[CheckContainerListModel](../models/Common.md#checkcontainerlistmodel)|
 
 
 
@@ -1975,7 +1975,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
 |column_name|Column name|string|:material-check-bold:|
-|[time_scale](../../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
 
 
 
@@ -2153,7 +2153,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[column_daily_partitioned_check_categories_spec](../../models/columns.md#columndailypartitionedcheckcategoriesspec)||[ColumnDailyPartitionedCheckCategoriesSpec](../../models/columns.md#columndailypartitionedcheckcategoriesspec)|
+|[column_daily_partitioned_check_categories_spec](../models/columns.md#columndailypartitionedcheckcategoriesspec)||[ColumnDailyPartitionedCheckCategoriesSpec](../models/columns.md#columndailypartitionedcheckcategoriesspec)|
 
 
 
@@ -2289,7 +2289,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  "nulls" : {
 	    "daily_partition_nulls_count" : {
 	      "error" : {
-	        "max_count" : 10
+	        "max_count" : 0
 	      }
 	    }
 	  }
@@ -2312,7 +2312,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/Common.md#checkcontainermodel)||[CheckContainerModel](../../models/Common.md#checkcontainermodel)|
+|[check_container_model](../models/Common.md#checkcontainermodel)||[CheckContainerModel](../models/Common.md#checkcontainermodel)|
 
 
 
@@ -2325,7 +2325,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
 |column_name|Column name|string|:material-check-bold:|
-|[time_scale](../../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
 
 
 
@@ -2491,7 +2491,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/Common.md#checkcontainermodel)||[CheckContainerModel](../../models/Common.md#checkcontainermodel)|
+|[check_container_model](../models/Common.md#checkcontainermodel)||[CheckContainerModel](../models/Common.md#checkcontainermodel)|
 
 
 
@@ -2504,7 +2504,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
 |column_name|Column name|string|:material-check-bold:|
-|[time_scale](../../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
 |check_category|Check category|string|:material-check-bold:|
 |check_name|Check name|string|:material-check-bold:|
 
@@ -2680,7 +2680,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[column_monthly_partitioned_check_categories_spec](../../models/columns.md#columnmonthlypartitionedcheckcategoriesspec)||[ColumnMonthlyPartitionedCheckCategoriesSpec](../../models/columns.md#columnmonthlypartitionedcheckcategoriesspec)|
+|[column_monthly_partitioned_check_categories_spec](../models/columns.md#columnmonthlypartitionedcheckcategoriesspec)||[ColumnMonthlyPartitionedCheckCategoriesSpec](../models/columns.md#columnmonthlypartitionedcheckcategoriesspec)|
 
 
 
@@ -2816,7 +2816,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  "nulls" : {
 	    "monthly_partition_nulls_count" : {
 	      "error" : {
-	        "max_count" : 10
+	        "max_count" : 0
 	      }
 	    }
 	  }
@@ -2839,7 +2839,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[column_profiling_check_categories_spec](../../models/columns.md#columnprofilingcheckcategoriesspec)||[ColumnProfilingCheckCategoriesSpec](../../models/columns.md#columnprofilingcheckcategoriesspec)|
+|[column_profiling_check_categories_spec](../models/columns.md#columnprofilingcheckcategoriesspec)||[ColumnProfilingCheckCategoriesSpec](../models/columns.md#columnprofilingcheckcategoriesspec)|
 
 
 
@@ -2975,7 +2975,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  "nulls" : {
 	    "profile_nulls_count" : {
 	      "error" : {
-	        "max_count" : 10
+	        "max_count" : 0
 	      }
 	    }
 	  }
@@ -2998,7 +2998,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_list_model](../../models/Common.md#checkcontainerlistmodel)||[CheckContainerListModel](../../models/Common.md#checkcontainerlistmodel)|
+|[check_container_list_model](../models/Common.md#checkcontainerlistmodel)||[CheckContainerListModel](../models/Common.md#checkcontainerlistmodel)|
 
 
 
@@ -3184,7 +3184,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/Common.md#checkcontainermodel)||[CheckContainerModel](../../models/Common.md#checkcontainermodel)|
+|[check_container_model](../models/Common.md#checkcontainermodel)||[CheckContainerModel](../models/Common.md#checkcontainermodel)|
 
 
 
@@ -3358,7 +3358,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/Common.md#checkcontainermodel)||[CheckContainerModel](../../models/Common.md#checkcontainermodel)|
+|[check_container_model](../models/Common.md#checkcontainermodel)||[CheckContainerModel](../models/Common.md#checkcontainermodel)|
 
 
 
@@ -3542,7 +3542,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[column_statistics_model](../../models/columns.md#columnstatisticsmodel)||[ColumnStatisticsModel](../../models/columns.md#columnstatisticsmodel)|
+|[column_statistics_model](../models/columns.md#columnstatisticsmodel)||[ColumnStatisticsModel](../models/columns.md#columnstatisticsmodel)|
 
 
 
@@ -3744,7 +3744,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|column_list_model||List[[ColumnListModel](../../models/columns.md#columnlistmodel)]|
+|column_list_model||List[[ColumnListModel](../models/columns.md#columnlistmodel)]|
 
 
 
@@ -3944,7 +3944,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_columns_statistics_model](../../models/columns.md#tablecolumnsstatisticsmodel)||[TableColumnsStatisticsModel](../../models/columns.md#tablecolumnsstatisticsmodel)|
+|[table_columns_statistics_model](../models/columns.md#tablecolumnsstatisticsmodel)||[TableColumnsStatisticsModel](../models/columns.md#tablecolumnsstatisticsmodel)|
 
 
 
@@ -4221,7 +4221,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Column specification|[ColumnSpec](../../../reference/yaml/TableYaml.md#columnspec)| |
+|Column specification|[ColumnSpec](../../reference/yaml/TableYaml.md#columnspec)| |
 
 
 
@@ -4235,7 +4235,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"type_snapshot\":{\"column_type\":\"string\",\"nullable\":false,\"length\":256},\"profiling_checks\":{\"nulls\":{\"profile_nulls_count\":{\"error\":{\"max_count\":10}}}}}"
+		"{\"type_snapshot\":{\"column_type\":\"string\",\"nullable\":false,\"length\":256},\"profiling_checks\":{\"nulls\":{\"profile_nulls_count\":{\"error\":{\"max_count\":0}}}}}"
 	
     ```
 
@@ -4251,7 +4251,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                ColumnProfilingCheckCategoriesSpec, \
 	                                ColumnSpec, \
 	                                ColumnTypeSnapshotSpec, \
-	                                MaxCountRule10ParametersSpec
+	                                MaxCountRule0ErrorParametersSpec
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -4268,7 +4268,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			nulls=ColumnNullsProfilingChecksSpec(
 				profile_nulls_count=ColumnNullsCountCheckSpec(
 					parameters=ColumnNullsNullsCountSensorParametersSpec(),
-					error=MaxCountRule10ParametersSpec(max_count=10),
+					error=MaxCountRule0ErrorParametersSpec(max_count=0),
 					disabled=False,
 					exclude_from_kpi=False,
 					include_in_sla=False
@@ -4301,7 +4301,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                ColumnProfilingCheckCategoriesSpec, \
 	                                ColumnSpec, \
 	                                ColumnTypeSnapshotSpec, \
-	                                MaxCountRule10ParametersSpec
+	                                MaxCountRule0ErrorParametersSpec
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -4318,7 +4318,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			nulls=ColumnNullsProfilingChecksSpec(
 				profile_nulls_count=ColumnNullsCountCheckSpec(
 					parameters=ColumnNullsNullsCountSensorParametersSpec(),
-					error=MaxCountRule10ParametersSpec(max_count=10),
+					error=MaxCountRule0ErrorParametersSpec(max_count=0),
 					disabled=False,
 					exclude_from_kpi=False,
 					include_in_sla=False
@@ -4353,7 +4353,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                ColumnProfilingCheckCategoriesSpec, \
 	                                ColumnSpec, \
 	                                ColumnTypeSnapshotSpec, \
-	                                MaxCountRule10ParametersSpec
+	                                MaxCountRule0ErrorParametersSpec
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -4373,7 +4373,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			nulls=ColumnNullsProfilingChecksSpec(
 				profile_nulls_count=ColumnNullsCountCheckSpec(
 					parameters=ColumnNullsNullsCountSensorParametersSpec(),
-					error=MaxCountRule10ParametersSpec(max_count=10),
+					error=MaxCountRule0ErrorParametersSpec(max_count=0),
 					disabled=False,
 					exclude_from_kpi=False,
 					include_in_sla=False
@@ -4406,7 +4406,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                ColumnProfilingCheckCategoriesSpec, \
 	                                ColumnSpec, \
 	                                ColumnTypeSnapshotSpec, \
-	                                MaxCountRule10ParametersSpec
+	                                MaxCountRule0ErrorParametersSpec
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -4426,7 +4426,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			nulls=ColumnNullsProfilingChecksSpec(
 				profile_nulls_count=ColumnNullsCountCheckSpec(
 					parameters=ColumnNullsNullsCountSensorParametersSpec(),
-					error=MaxCountRule10ParametersSpec(max_count=10),
+					error=MaxCountRule0ErrorParametersSpec(max_count=0),
 					disabled=False,
 					exclude_from_kpi=False,
 					include_in_sla=False
@@ -4482,7 +4482,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Basic column information to store|[ColumnListModel](../../models/columns.md#columnlistmodel)| |
+|Basic column information to store|[ColumnListModel](../models/columns.md#columnlistmodel)| |
 
 
 
@@ -4731,7 +4731,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|List of comments to stored (replaced) on the column or an empty object to clear the list of assigned comments on the column|List[[CommentSpec](../../models/Common.md#commentspec)]| |
+|List of comments to stored (replaced) on the column or an empty object to clear the list of assigned comments on the column|List[[CommentSpec](../models/Common.md#commentspec)]| |
 
 
 
@@ -5125,7 +5125,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Configuration of daily column level data quality monitoring to configure on a column or an empty object to clear the list of assigned daily data quality monitoring on the column|[ColumnDailyMonitoringCheckCategoriesSpec](../../models/columns.md#columndailymonitoringcheckcategoriesspec)| |
+|Configuration of daily column level data quality monitoring to configure on a column or an empty object to clear the list of assigned daily data quality monitoring on the column|[ColumnDailyMonitoringCheckCategoriesSpec](../models/columns.md#columndailymonitoringcheckcategoriesspec)| |
 
 
 
@@ -5139,7 +5139,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"nulls\":{\"daily_nulls_count\":{\"error\":{\"max_count\":10}}}}"
+		"{\"nulls\":{\"daily_nulls_count\":{\"error\":{\"max_count\":0}}}}"
 	
     ```
 
@@ -5153,7 +5153,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                ColumnNullsCountCheckSpec, \
 	                                ColumnNullsDailyMonitoringChecksSpec, \
 	                                ColumnNullsNullsCountSensorParametersSpec, \
-	                                MaxCountRule10ParametersSpec
+	                                MaxCountRule0ErrorParametersSpec
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -5163,7 +5163,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		nulls=ColumnNullsDailyMonitoringChecksSpec(
 			daily_nulls_count=ColumnNullsCountCheckSpec(
 				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule10ParametersSpec(max_count=10),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False
@@ -5193,7 +5193,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                ColumnNullsCountCheckSpec, \
 	                                ColumnNullsDailyMonitoringChecksSpec, \
 	                                ColumnNullsNullsCountSensorParametersSpec, \
-	                                MaxCountRule10ParametersSpec
+	                                MaxCountRule0ErrorParametersSpec
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -5203,7 +5203,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		nulls=ColumnNullsDailyMonitoringChecksSpec(
 			daily_nulls_count=ColumnNullsCountCheckSpec(
 				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule10ParametersSpec(max_count=10),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False
@@ -5235,7 +5235,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                ColumnNullsCountCheckSpec, \
 	                                ColumnNullsDailyMonitoringChecksSpec, \
 	                                ColumnNullsNullsCountSensorParametersSpec, \
-	                                MaxCountRule10ParametersSpec
+	                                MaxCountRule0ErrorParametersSpec
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -5248,7 +5248,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		nulls=ColumnNullsDailyMonitoringChecksSpec(
 			daily_nulls_count=ColumnNullsCountCheckSpec(
 				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule10ParametersSpec(max_count=10),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False
@@ -5278,7 +5278,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                ColumnNullsCountCheckSpec, \
 	                                ColumnNullsDailyMonitoringChecksSpec, \
 	                                ColumnNullsNullsCountSensorParametersSpec, \
-	                                MaxCountRule10ParametersSpec
+	                                MaxCountRule0ErrorParametersSpec
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -5291,7 +5291,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		nulls=ColumnNullsDailyMonitoringChecksSpec(
 			daily_nulls_count=ColumnNullsCountCheckSpec(
 				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule10ParametersSpec(max_count=10),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False
@@ -5338,7 +5338,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
 |column_name|Column name|string|:material-check-bold:|
-|[time_scale](../../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
 
 
 
@@ -5347,7 +5347,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the data quality monitoring configuration|[CheckContainerModel](../../models/Common.md#checkcontainermodel)| |
+|Model with the changes to be applied to the data quality monitoring configuration|[CheckContainerModel](../models/Common.md#checkcontainermodel)| |
 
 
 
@@ -5395,6 +5395,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -5453,6 +5454,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -5516,6 +5518,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -5577,6 +5580,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -5640,7 +5644,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Configuration of monthly column level data quality monitoring to configure on a column or an empty object to clear the list of assigned monthly data quality monitoring on the column|[ColumnMonthlyMonitoringCheckCategoriesSpec](../../models/columns.md#columnmonthlymonitoringcheckcategoriesspec)| |
+|Configuration of monthly column level data quality monitoring to configure on a column or an empty object to clear the list of assigned monthly data quality monitoring on the column|[ColumnMonthlyMonitoringCheckCategoriesSpec](../models/columns.md#columnmonthlymonitoringcheckcategoriesspec)| |
 
 
 
@@ -5654,7 +5658,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"nulls\":{\"monthly_nulls_count\":{\"error\":{\"max_count\":10}}}}"
+		"{\"nulls\":{\"monthly_nulls_count\":{\"error\":{\"max_count\":0}}}}"
 	
     ```
 
@@ -5668,7 +5672,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                ColumnNullsCountCheckSpec, \
 	                                ColumnNullsMonthlyMonitoringChecksSpec, \
 	                                ColumnNullsNullsCountSensorParametersSpec, \
-	                                MaxCountRule10ParametersSpec
+	                                MaxCountRule0ErrorParametersSpec
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -5678,7 +5682,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		nulls=ColumnNullsMonthlyMonitoringChecksSpec(
 			monthly_nulls_count=ColumnNullsCountCheckSpec(
 				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule10ParametersSpec(max_count=10),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False
@@ -5708,7 +5712,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                ColumnNullsCountCheckSpec, \
 	                                ColumnNullsMonthlyMonitoringChecksSpec, \
 	                                ColumnNullsNullsCountSensorParametersSpec, \
-	                                MaxCountRule10ParametersSpec
+	                                MaxCountRule0ErrorParametersSpec
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -5718,7 +5722,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		nulls=ColumnNullsMonthlyMonitoringChecksSpec(
 			monthly_nulls_count=ColumnNullsCountCheckSpec(
 				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule10ParametersSpec(max_count=10),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False
@@ -5750,7 +5754,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                ColumnNullsCountCheckSpec, \
 	                                ColumnNullsMonthlyMonitoringChecksSpec, \
 	                                ColumnNullsNullsCountSensorParametersSpec, \
-	                                MaxCountRule10ParametersSpec
+	                                MaxCountRule0ErrorParametersSpec
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -5763,7 +5767,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		nulls=ColumnNullsMonthlyMonitoringChecksSpec(
 			monthly_nulls_count=ColumnNullsCountCheckSpec(
 				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule10ParametersSpec(max_count=10),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False
@@ -5793,7 +5797,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                ColumnNullsCountCheckSpec, \
 	                                ColumnNullsMonthlyMonitoringChecksSpec, \
 	                                ColumnNullsNullsCountSensorParametersSpec, \
-	                                MaxCountRule10ParametersSpec
+	                                MaxCountRule0ErrorParametersSpec
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -5806,7 +5810,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		nulls=ColumnNullsMonthlyMonitoringChecksSpec(
 			monthly_nulls_count=ColumnNullsCountCheckSpec(
 				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule10ParametersSpec(max_count=10),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False
@@ -5861,7 +5865,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Configuration of daily column level data quality partitioned checks to configure on a column or an empty object to clear the list of assigned data quality partitioned checks on the column|[ColumnDailyPartitionedCheckCategoriesSpec](../../models/columns.md#columndailypartitionedcheckcategoriesspec)| |
+|Configuration of daily column level data quality partitioned checks to configure on a column or an empty object to clear the list of assigned data quality partitioned checks on the column|[ColumnDailyPartitionedCheckCategoriesSpec](../models/columns.md#columndailypartitionedcheckcategoriesspec)| |
 
 
 
@@ -5875,7 +5879,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"nulls\":{\"daily_partition_nulls_count\":{\"error\":{\"max_count\":10}}}}"
+		"{\"nulls\":{\"daily_partition_nulls_count\":{\"error\":{\"max_count\":0}}}}"
 	
     ```
 
@@ -5889,7 +5893,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                ColumnNullsCountCheckSpec, \
 	                                ColumnNullsDailyPartitionedChecksSpec, \
 	                                ColumnNullsNullsCountSensorParametersSpec, \
-	                                MaxCountRule10ParametersSpec
+	                                MaxCountRule0ErrorParametersSpec
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -5899,7 +5903,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		nulls=ColumnNullsDailyPartitionedChecksSpec(
 			daily_partition_nulls_count=ColumnNullsCountCheckSpec(
 				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule10ParametersSpec(max_count=10),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False
@@ -5929,7 +5933,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                ColumnNullsCountCheckSpec, \
 	                                ColumnNullsDailyPartitionedChecksSpec, \
 	                                ColumnNullsNullsCountSensorParametersSpec, \
-	                                MaxCountRule10ParametersSpec
+	                                MaxCountRule0ErrorParametersSpec
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -5939,7 +5943,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		nulls=ColumnNullsDailyPartitionedChecksSpec(
 			daily_partition_nulls_count=ColumnNullsCountCheckSpec(
 				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule10ParametersSpec(max_count=10),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False
@@ -5971,7 +5975,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                ColumnNullsCountCheckSpec, \
 	                                ColumnNullsDailyPartitionedChecksSpec, \
 	                                ColumnNullsNullsCountSensorParametersSpec, \
-	                                MaxCountRule10ParametersSpec
+	                                MaxCountRule0ErrorParametersSpec
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -5984,7 +5988,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		nulls=ColumnNullsDailyPartitionedChecksSpec(
 			daily_partition_nulls_count=ColumnNullsCountCheckSpec(
 				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule10ParametersSpec(max_count=10),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False
@@ -6014,7 +6018,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                ColumnNullsCountCheckSpec, \
 	                                ColumnNullsDailyPartitionedChecksSpec, \
 	                                ColumnNullsNullsCountSensorParametersSpec, \
-	                                MaxCountRule10ParametersSpec
+	                                MaxCountRule0ErrorParametersSpec
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -6027,7 +6031,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		nulls=ColumnNullsDailyPartitionedChecksSpec(
 			daily_partition_nulls_count=ColumnNullsCountCheckSpec(
 				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule10ParametersSpec(max_count=10),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False
@@ -6074,7 +6078,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
 |column_name|Column name|string|:material-check-bold:|
-|[time_scale](../../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
 
 
 
@@ -6083,7 +6087,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the data quality partitioned checks configuration|[CheckContainerModel](../../models/Common.md#checkcontainermodel)| |
+|Model with the changes to be applied to the data quality partitioned checks configuration|[CheckContainerModel](../models/Common.md#checkcontainermodel)| |
 
 
 
@@ -6131,6 +6135,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -6189,6 +6194,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -6252,6 +6258,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -6313,6 +6320,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -6376,7 +6384,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Configuration of monthly column level data quality partitioned checks to configure on a column or an empty object to clear the list of assigned data quality partitioned checks on the column|[ColumnMonthlyPartitionedCheckCategoriesSpec](../../models/columns.md#columnmonthlypartitionedcheckcategoriesspec)| |
+|Configuration of monthly column level data quality partitioned checks to configure on a column or an empty object to clear the list of assigned data quality partitioned checks on the column|[ColumnMonthlyPartitionedCheckCategoriesSpec](../models/columns.md#columnmonthlypartitionedcheckcategoriesspec)| |
 
 
 
@@ -6390,7 +6398,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"nulls\":{\"monthly_partition_nulls_count\":{\"error\":{\"max_count\":10}}}}"
+		"{\"nulls\":{\"monthly_partition_nulls_count\":{\"error\":{\"max_count\":0}}}}"
 	
     ```
 
@@ -6404,7 +6412,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                ColumnNullsCountCheckSpec, \
 	                                ColumnNullsMonthlyPartitionedChecksSpec, \
 	                                ColumnNullsNullsCountSensorParametersSpec, \
-	                                MaxCountRule10ParametersSpec
+	                                MaxCountRule0ErrorParametersSpec
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -6414,7 +6422,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		nulls=ColumnNullsMonthlyPartitionedChecksSpec(
 			monthly_partition_nulls_count=ColumnNullsCountCheckSpec(
 				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule10ParametersSpec(max_count=10),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False
@@ -6444,7 +6452,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                ColumnNullsCountCheckSpec, \
 	                                ColumnNullsMonthlyPartitionedChecksSpec, \
 	                                ColumnNullsNullsCountSensorParametersSpec, \
-	                                MaxCountRule10ParametersSpec
+	                                MaxCountRule0ErrorParametersSpec
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -6454,7 +6462,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		nulls=ColumnNullsMonthlyPartitionedChecksSpec(
 			monthly_partition_nulls_count=ColumnNullsCountCheckSpec(
 				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule10ParametersSpec(max_count=10),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False
@@ -6486,7 +6494,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                ColumnNullsCountCheckSpec, \
 	                                ColumnNullsMonthlyPartitionedChecksSpec, \
 	                                ColumnNullsNullsCountSensorParametersSpec, \
-	                                MaxCountRule10ParametersSpec
+	                                MaxCountRule0ErrorParametersSpec
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -6499,7 +6507,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		nulls=ColumnNullsMonthlyPartitionedChecksSpec(
 			monthly_partition_nulls_count=ColumnNullsCountCheckSpec(
 				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule10ParametersSpec(max_count=10),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False
@@ -6529,7 +6537,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                ColumnNullsCountCheckSpec, \
 	                                ColumnNullsMonthlyPartitionedChecksSpec, \
 	                                ColumnNullsNullsCountSensorParametersSpec, \
-	                                MaxCountRule10ParametersSpec
+	                                MaxCountRule0ErrorParametersSpec
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -6542,7 +6550,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		nulls=ColumnNullsMonthlyPartitionedChecksSpec(
 			monthly_partition_nulls_count=ColumnNullsCountCheckSpec(
 				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule10ParametersSpec(max_count=10),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False
@@ -6597,7 +6605,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Configuration of column level data quality profiling checks to configure on a column or an empty object to clear the list of assigned data quality profiling checks on the column|[ColumnProfilingCheckCategoriesSpec](../../models/columns.md#columnprofilingcheckcategoriesspec)| |
+|Configuration of column level data quality profiling checks to configure on a column or an empty object to clear the list of assigned data quality profiling checks on the column|[ColumnProfilingCheckCategoriesSpec](../models/columns.md#columnprofilingcheckcategoriesspec)| |
 
 
 
@@ -6611,7 +6619,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"nulls\":{\"profile_nulls_count\":{\"error\":{\"max_count\":10}}}}"
+		"{\"nulls\":{\"profile_nulls_count\":{\"error\":{\"max_count\":0}}}}"
 	
     ```
 
@@ -6625,7 +6633,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                ColumnNullsNullsCountSensorParametersSpec, \
 	                                ColumnNullsProfilingChecksSpec, \
 	                                ColumnProfilingCheckCategoriesSpec, \
-	                                MaxCountRule10ParametersSpec
+	                                MaxCountRule0ErrorParametersSpec
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -6635,7 +6643,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		nulls=ColumnNullsProfilingChecksSpec(
 			profile_nulls_count=ColumnNullsCountCheckSpec(
 				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule10ParametersSpec(max_count=10),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False
@@ -6665,7 +6673,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                ColumnNullsNullsCountSensorParametersSpec, \
 	                                ColumnNullsProfilingChecksSpec, \
 	                                ColumnProfilingCheckCategoriesSpec, \
-	                                MaxCountRule10ParametersSpec
+	                                MaxCountRule0ErrorParametersSpec
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -6675,7 +6683,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		nulls=ColumnNullsProfilingChecksSpec(
 			profile_nulls_count=ColumnNullsCountCheckSpec(
 				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule10ParametersSpec(max_count=10),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False
@@ -6707,7 +6715,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                ColumnNullsNullsCountSensorParametersSpec, \
 	                                ColumnNullsProfilingChecksSpec, \
 	                                ColumnProfilingCheckCategoriesSpec, \
-	                                MaxCountRule10ParametersSpec
+	                                MaxCountRule0ErrorParametersSpec
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -6720,7 +6728,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		nulls=ColumnNullsProfilingChecksSpec(
 			profile_nulls_count=ColumnNullsCountCheckSpec(
 				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule10ParametersSpec(max_count=10),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False
@@ -6750,7 +6758,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	                                ColumnNullsNullsCountSensorParametersSpec, \
 	                                ColumnNullsProfilingChecksSpec, \
 	                                ColumnProfilingCheckCategoriesSpec, \
-	                                MaxCountRule10ParametersSpec
+	                                MaxCountRule0ErrorParametersSpec
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -6763,7 +6771,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		nulls=ColumnNullsProfilingChecksSpec(
 			profile_nulls_count=ColumnNullsCountCheckSpec(
 				parameters=ColumnNullsNullsCountSensorParametersSpec(),
-				error=MaxCountRule10ParametersSpec(max_count=10),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
 				disabled=False,
 				exclude_from_kpi=False,
 				include_in_sla=False
@@ -6818,7 +6826,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the data quality profiling checks configuration|[CheckContainerModel](../../models/Common.md#checkcontainermodel)| |
+|Model with the changes to be applied to the data quality profiling checks configuration|[CheckContainerModel](../models/Common.md#checkcontainermodel)| |
 
 
 
@@ -6865,6 +6873,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -6921,6 +6930,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -6982,6 +6992,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -7041,6 +7052,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,

@@ -16,8 +16,8 @@ spec:
         nullable: true
       monitoring_checks:
         daily:
-          strings:
-            daily_string_invalid_email_count:
+          patterns:
+            daily_invalid_email_format_found:
               warning:
                 max_count: 0
               error:

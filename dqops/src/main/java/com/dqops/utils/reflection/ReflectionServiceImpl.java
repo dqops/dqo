@@ -83,8 +83,10 @@ public class ReflectionServiceImpl implements ReflectionService {
         Optional<Constructor<?>> parameterlessConstructor = Arrays.stream(constructors)
                 .filter(c -> c.getParameterCount() == 0)
                 .findFirst();
+        String metaDescription = targetClass.isAnnotationPresent(MetaDescription.class) ?
+                targetClass.getAnnotation(MetaDescription.class).values() : null;
 
-        ClassInfo classInfo = new ClassInfo(targetClass, parameterlessConstructor.orElse(null));
+        ClassInfo classInfo = new ClassInfo(targetClass, parameterlessConstructor.orElse(null), metaDescription);
 
         Class<?> reflectedClass = targetClass;
         while (reflectedClass != Object.class) {

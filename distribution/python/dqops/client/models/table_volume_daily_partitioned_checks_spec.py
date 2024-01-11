@@ -6,22 +6,19 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.table_anomaly_stationary_partition_row_count_30_days_check_spec import (
-        TableAnomalyStationaryPartitionRowCount30DaysCheckSpec,
+    from ..models.table_row_count_anomaly_stationary_partition_check_spec import (
+        TableRowCountAnomalyStationaryPartitionCheckSpec,
     )
-    from ..models.table_anomaly_stationary_partition_row_count_check_spec import (
-        TableAnomalyStationaryPartitionRowCountCheckSpec,
+    from ..models.table_row_count_change_1_day_check_spec import (
+        TableRowCountChange1DayCheckSpec,
     )
-    from ..models.table_change_row_count_check_spec import TableChangeRowCountCheckSpec
-    from ..models.table_change_row_count_since_7_days_check_spec import (
-        TableChangeRowCountSince7DaysCheckSpec,
+    from ..models.table_row_count_change_7_days_check_spec import (
+        TableRowCountChange7DaysCheckSpec,
     )
-    from ..models.table_change_row_count_since_30_days_check_spec import (
-        TableChangeRowCountSince30DaysCheckSpec,
+    from ..models.table_row_count_change_30_days_check_spec import (
+        TableRowCountChange30DaysCheckSpec,
     )
-    from ..models.table_change_row_count_since_yesterday_check_spec import (
-        TableChangeRowCountSinceYesterdayCheckSpec,
-    )
+    from ..models.table_row_count_change_check_spec import TableRowCountChangeCheckSpec
     from ..models.table_row_count_check_spec import TableRowCountCheckSpec
     from ..models.table_volume_daily_partitioned_checks_spec_custom_checks import (
         TableVolumeDailyPartitionedChecksSpecCustomChecks,
@@ -39,36 +36,31 @@ class TableVolumeDailyPartitionedChecksSpec:
             checks within this category. The keys are check names defined in the definition section. The sensor parameters
             and rules should match the type of the configured sensor and rule for the custom check.
         daily_partition_row_count (Union[Unset, TableRowCountCheckSpec]):
-        daily_partition_row_count_change (Union[Unset, TableChangeRowCountCheckSpec]):
-        daily_partition_row_count_change_yesterday (Union[Unset, TableChangeRowCountSinceYesterdayCheckSpec]):
-        daily_partition_row_count_anomaly_stationary_30_days (Union[Unset,
-            TableAnomalyStationaryPartitionRowCount30DaysCheckSpec]):
-        daily_partition_row_count_anomaly_stationary (Union[Unset, TableAnomalyStationaryPartitionRowCountCheckSpec]):
-        daily_partition_row_count_change_7_days (Union[Unset, TableChangeRowCountSince7DaysCheckSpec]):
-        daily_partition_row_count_change_30_days (Union[Unset, TableChangeRowCountSince30DaysCheckSpec]):
+        daily_partition_row_count_anomaly (Union[Unset, TableRowCountAnomalyStationaryPartitionCheckSpec]):
+        daily_partition_row_count_change (Union[Unset, TableRowCountChangeCheckSpec]):
+        daily_partition_row_count_change_1_day (Union[Unset, TableRowCountChange1DayCheckSpec]):
+        daily_partition_row_count_change_7_days (Union[Unset, TableRowCountChange7DaysCheckSpec]):
+        daily_partition_row_count_change_30_days (Union[Unset, TableRowCountChange30DaysCheckSpec]):
     """
 
     custom_checks: Union[
         Unset, "TableVolumeDailyPartitionedChecksSpecCustomChecks"
     ] = UNSET
     daily_partition_row_count: Union[Unset, "TableRowCountCheckSpec"] = UNSET
+    daily_partition_row_count_anomaly: Union[
+        Unset, "TableRowCountAnomalyStationaryPartitionCheckSpec"
+    ] = UNSET
     daily_partition_row_count_change: Union[
-        Unset, "TableChangeRowCountCheckSpec"
+        Unset, "TableRowCountChangeCheckSpec"
     ] = UNSET
-    daily_partition_row_count_change_yesterday: Union[
-        Unset, "TableChangeRowCountSinceYesterdayCheckSpec"
-    ] = UNSET
-    daily_partition_row_count_anomaly_stationary_30_days: Union[
-        Unset, "TableAnomalyStationaryPartitionRowCount30DaysCheckSpec"
-    ] = UNSET
-    daily_partition_row_count_anomaly_stationary: Union[
-        Unset, "TableAnomalyStationaryPartitionRowCountCheckSpec"
+    daily_partition_row_count_change_1_day: Union[
+        Unset, "TableRowCountChange1DayCheckSpec"
     ] = UNSET
     daily_partition_row_count_change_7_days: Union[
-        Unset, "TableChangeRowCountSince7DaysCheckSpec"
+        Unset, "TableRowCountChange7DaysCheckSpec"
     ] = UNSET
     daily_partition_row_count_change_30_days: Union[
-        Unset, "TableChangeRowCountSince30DaysCheckSpec"
+        Unset, "TableRowCountChange30DaysCheckSpec"
     ] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -81,34 +73,22 @@ class TableVolumeDailyPartitionedChecksSpec:
         if not isinstance(self.daily_partition_row_count, Unset):
             daily_partition_row_count = self.daily_partition_row_count.to_dict()
 
+        daily_partition_row_count_anomaly: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_partition_row_count_anomaly, Unset):
+            daily_partition_row_count_anomaly = (
+                self.daily_partition_row_count_anomaly.to_dict()
+            )
+
         daily_partition_row_count_change: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_partition_row_count_change, Unset):
             daily_partition_row_count_change = (
                 self.daily_partition_row_count_change.to_dict()
             )
 
-        daily_partition_row_count_change_yesterday: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_partition_row_count_change_yesterday, Unset):
-            daily_partition_row_count_change_yesterday = (
-                self.daily_partition_row_count_change_yesterday.to_dict()
-            )
-
-        daily_partition_row_count_anomaly_stationary_30_days: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
-        if not isinstance(
-            self.daily_partition_row_count_anomaly_stationary_30_days, Unset
-        ):
-            daily_partition_row_count_anomaly_stationary_30_days = (
-                self.daily_partition_row_count_anomaly_stationary_30_days.to_dict()
-            )
-
-        daily_partition_row_count_anomaly_stationary: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
-        if not isinstance(self.daily_partition_row_count_anomaly_stationary, Unset):
-            daily_partition_row_count_anomaly_stationary = (
-                self.daily_partition_row_count_anomaly_stationary.to_dict()
+        daily_partition_row_count_change_1_day: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_partition_row_count_change_1_day, Unset):
+            daily_partition_row_count_change_1_day = (
+                self.daily_partition_row_count_change_1_day.to_dict()
             )
 
         daily_partition_row_count_change_7_days: Union[Unset, Dict[str, Any]] = UNSET
@@ -130,22 +110,18 @@ class TableVolumeDailyPartitionedChecksSpec:
             field_dict["custom_checks"] = custom_checks
         if daily_partition_row_count is not UNSET:
             field_dict["daily_partition_row_count"] = daily_partition_row_count
+        if daily_partition_row_count_anomaly is not UNSET:
+            field_dict[
+                "daily_partition_row_count_anomaly"
+            ] = daily_partition_row_count_anomaly
         if daily_partition_row_count_change is not UNSET:
             field_dict[
                 "daily_partition_row_count_change"
             ] = daily_partition_row_count_change
-        if daily_partition_row_count_change_yesterday is not UNSET:
+        if daily_partition_row_count_change_1_day is not UNSET:
             field_dict[
-                "daily_partition_row_count_change_yesterday"
-            ] = daily_partition_row_count_change_yesterday
-        if daily_partition_row_count_anomaly_stationary_30_days is not UNSET:
-            field_dict[
-                "daily_partition_row_count_anomaly_stationary_30_days"
-            ] = daily_partition_row_count_anomaly_stationary_30_days
-        if daily_partition_row_count_anomaly_stationary is not UNSET:
-            field_dict[
-                "daily_partition_row_count_anomaly_stationary"
-            ] = daily_partition_row_count_anomaly_stationary
+                "daily_partition_row_count_change_1_day"
+            ] = daily_partition_row_count_change_1_day
         if daily_partition_row_count_change_7_days is not UNSET:
             field_dict[
                 "daily_partition_row_count_change_7_days"
@@ -159,23 +135,20 @@ class TableVolumeDailyPartitionedChecksSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.table_anomaly_stationary_partition_row_count_30_days_check_spec import (
-            TableAnomalyStationaryPartitionRowCount30DaysCheckSpec,
+        from ..models.table_row_count_anomaly_stationary_partition_check_spec import (
+            TableRowCountAnomalyStationaryPartitionCheckSpec,
         )
-        from ..models.table_anomaly_stationary_partition_row_count_check_spec import (
-            TableAnomalyStationaryPartitionRowCountCheckSpec,
+        from ..models.table_row_count_change_1_day_check_spec import (
+            TableRowCountChange1DayCheckSpec,
         )
-        from ..models.table_change_row_count_check_spec import (
-            TableChangeRowCountCheckSpec,
+        from ..models.table_row_count_change_7_days_check_spec import (
+            TableRowCountChange7DaysCheckSpec,
         )
-        from ..models.table_change_row_count_since_7_days_check_spec import (
-            TableChangeRowCountSince7DaysCheckSpec,
+        from ..models.table_row_count_change_30_days_check_spec import (
+            TableRowCountChange30DaysCheckSpec,
         )
-        from ..models.table_change_row_count_since_30_days_check_spec import (
-            TableChangeRowCountSince30DaysCheckSpec,
-        )
-        from ..models.table_change_row_count_since_yesterday_check_spec import (
-            TableChangeRowCountSinceYesterdayCheckSpec,
+        from ..models.table_row_count_change_check_spec import (
+            TableRowCountChangeCheckSpec,
         )
         from ..models.table_row_count_check_spec import TableRowCountCheckSpec
         from ..models.table_volume_daily_partitioned_checks_spec_custom_checks import (
@@ -201,59 +174,44 @@ class TableVolumeDailyPartitionedChecksSpec:
                 _daily_partition_row_count
             )
 
+        _daily_partition_row_count_anomaly = d.pop(
+            "daily_partition_row_count_anomaly", UNSET
+        )
+        daily_partition_row_count_anomaly: Union[
+            Unset, TableRowCountAnomalyStationaryPartitionCheckSpec
+        ]
+        if isinstance(_daily_partition_row_count_anomaly, Unset):
+            daily_partition_row_count_anomaly = UNSET
+        else:
+            daily_partition_row_count_anomaly = (
+                TableRowCountAnomalyStationaryPartitionCheckSpec.from_dict(
+                    _daily_partition_row_count_anomaly
+                )
+            )
+
         _daily_partition_row_count_change = d.pop(
             "daily_partition_row_count_change", UNSET
         )
-        daily_partition_row_count_change: Union[Unset, TableChangeRowCountCheckSpec]
+        daily_partition_row_count_change: Union[Unset, TableRowCountChangeCheckSpec]
         if isinstance(_daily_partition_row_count_change, Unset):
             daily_partition_row_count_change = UNSET
         else:
-            daily_partition_row_count_change = TableChangeRowCountCheckSpec.from_dict(
+            daily_partition_row_count_change = TableRowCountChangeCheckSpec.from_dict(
                 _daily_partition_row_count_change
             )
 
-        _daily_partition_row_count_change_yesterday = d.pop(
-            "daily_partition_row_count_change_yesterday", UNSET
+        _daily_partition_row_count_change_1_day = d.pop(
+            "daily_partition_row_count_change_1_day", UNSET
         )
-        daily_partition_row_count_change_yesterday: Union[
-            Unset, TableChangeRowCountSinceYesterdayCheckSpec
+        daily_partition_row_count_change_1_day: Union[
+            Unset, TableRowCountChange1DayCheckSpec
         ]
-        if isinstance(_daily_partition_row_count_change_yesterday, Unset):
-            daily_partition_row_count_change_yesterday = UNSET
+        if isinstance(_daily_partition_row_count_change_1_day, Unset):
+            daily_partition_row_count_change_1_day = UNSET
         else:
-            daily_partition_row_count_change_yesterday = (
-                TableChangeRowCountSinceYesterdayCheckSpec.from_dict(
-                    _daily_partition_row_count_change_yesterday
-                )
-            )
-
-        _daily_partition_row_count_anomaly_stationary_30_days = d.pop(
-            "daily_partition_row_count_anomaly_stationary_30_days", UNSET
-        )
-        daily_partition_row_count_anomaly_stationary_30_days: Union[
-            Unset, TableAnomalyStationaryPartitionRowCount30DaysCheckSpec
-        ]
-        if isinstance(_daily_partition_row_count_anomaly_stationary_30_days, Unset):
-            daily_partition_row_count_anomaly_stationary_30_days = UNSET
-        else:
-            daily_partition_row_count_anomaly_stationary_30_days = (
-                TableAnomalyStationaryPartitionRowCount30DaysCheckSpec.from_dict(
-                    _daily_partition_row_count_anomaly_stationary_30_days
-                )
-            )
-
-        _daily_partition_row_count_anomaly_stationary = d.pop(
-            "daily_partition_row_count_anomaly_stationary", UNSET
-        )
-        daily_partition_row_count_anomaly_stationary: Union[
-            Unset, TableAnomalyStationaryPartitionRowCountCheckSpec
-        ]
-        if isinstance(_daily_partition_row_count_anomaly_stationary, Unset):
-            daily_partition_row_count_anomaly_stationary = UNSET
-        else:
-            daily_partition_row_count_anomaly_stationary = (
-                TableAnomalyStationaryPartitionRowCountCheckSpec.from_dict(
-                    _daily_partition_row_count_anomaly_stationary
+            daily_partition_row_count_change_1_day = (
+                TableRowCountChange1DayCheckSpec.from_dict(
+                    _daily_partition_row_count_change_1_day
                 )
             )
 
@@ -261,13 +219,13 @@ class TableVolumeDailyPartitionedChecksSpec:
             "daily_partition_row_count_change_7_days", UNSET
         )
         daily_partition_row_count_change_7_days: Union[
-            Unset, TableChangeRowCountSince7DaysCheckSpec
+            Unset, TableRowCountChange7DaysCheckSpec
         ]
         if isinstance(_daily_partition_row_count_change_7_days, Unset):
             daily_partition_row_count_change_7_days = UNSET
         else:
             daily_partition_row_count_change_7_days = (
-                TableChangeRowCountSince7DaysCheckSpec.from_dict(
+                TableRowCountChange7DaysCheckSpec.from_dict(
                     _daily_partition_row_count_change_7_days
                 )
             )
@@ -276,13 +234,13 @@ class TableVolumeDailyPartitionedChecksSpec:
             "daily_partition_row_count_change_30_days", UNSET
         )
         daily_partition_row_count_change_30_days: Union[
-            Unset, TableChangeRowCountSince30DaysCheckSpec
+            Unset, TableRowCountChange30DaysCheckSpec
         ]
         if isinstance(_daily_partition_row_count_change_30_days, Unset):
             daily_partition_row_count_change_30_days = UNSET
         else:
             daily_partition_row_count_change_30_days = (
-                TableChangeRowCountSince30DaysCheckSpec.from_dict(
+                TableRowCountChange30DaysCheckSpec.from_dict(
                     _daily_partition_row_count_change_30_days
                 )
             )
@@ -290,10 +248,9 @@ class TableVolumeDailyPartitionedChecksSpec:
         table_volume_daily_partitioned_checks_spec = cls(
             custom_checks=custom_checks,
             daily_partition_row_count=daily_partition_row_count,
+            daily_partition_row_count_anomaly=daily_partition_row_count_anomaly,
             daily_partition_row_count_change=daily_partition_row_count_change,
-            daily_partition_row_count_change_yesterday=daily_partition_row_count_change_yesterday,
-            daily_partition_row_count_anomaly_stationary_30_days=daily_partition_row_count_anomaly_stationary_30_days,
-            daily_partition_row_count_anomaly_stationary=daily_partition_row_count_anomaly_stationary,
+            daily_partition_row_count_change_1_day=daily_partition_row_count_change_1_day,
             daily_partition_row_count_change_7_days=daily_partition_row_count_change_7_days,
             daily_partition_row_count_change_30_days=daily_partition_row_count_change_30_days,
         )

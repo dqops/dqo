@@ -1,27 +1,44 @@
-# rule
+# dqo rule command
+
+
+Edit sensor template
+
+
 
 ___
-### **dqo rule edit**
+
+## dqo rule edit
 
 Edit rule that matches a given condition
 
+
 **Description**
+
 
 This command can be used to update the rule. It is important to use caution when using this command, as it can impact the execution of data quality checks.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] rule edit [-h] [-fw] [-hl] [-f=<ext>] [-of=<outputFormat>] [-r=<name>]
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> rule edit [-h] [-fw] [-hl] [-f=<ext>] [-of=<outputFormat>] [-r=<name>]
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
@@ -31,6 +48,8 @@ dqo> rule edit [-h] [-fw] [-hl] [-f=<ext>] [-of=<outputFormat>] [-r=<name>]
 |<p id="rule edit-h">`-h`</p><br/><p id="rule edit--help">`--help`</p><br/>|Show the help for the command and parameters| ||
 |<p id="rule edit-of">`-of`</p><br/><p id="rule edit--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 |<p id="rule edit-r">`-r`</p><br/><p id="rule edit--rule">`--rule`</p><br/>|Rule name| ||
+
+
 
 
 

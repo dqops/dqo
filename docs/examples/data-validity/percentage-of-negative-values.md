@@ -19,7 +19,7 @@ We want to verify the percentage of negative values on `Migrants__net_` column.
 
 **SOLUTION**
 
-We will verify the data using monitoring [negative_percent](../../../checks/column/numeric/negative-percent.md) column check.
+We will verify the data using monitoring [negative_values_percent](../../checks/column/numeric/negative-values-percent.md) column check.
 Our goal is to verify that the percent of negative values in the `Migrants__net_` column does not exceed the set thresholds.
 
 In this example, we will set three maximum percentage thresholds levels for the check:
@@ -28,7 +28,7 @@ In this example, we will set three maximum percentage thresholds levels for the 
 - error: 55.0
 - fatal: 60.0
 
-If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
 
 **VALUE**
 
@@ -54,9 +54,9 @@ The `Migrants__net` column of interest contains negative values.
 
 ## Running the checks in the example and evaluating the results using the user interface
 
-A detailed explanation of [how to run the example is described here](../../index.md#running-the-use-cases).
+A detailed explanation of [how to run the example is described here](../index.md#running-the-use-cases).
 
-To execute the check prepared in the example using the [user interface](../../../dqo-concepts/user-interface-overview/user-interface-overview.md):
+To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-negative-percent-checks1.png)
 
@@ -67,12 +67,12 @@ To execute the check prepared in the example using the [user interface](../../..
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
 
-    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../../data-sources/index.md).
+    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../data-sources/index.md).
 
 
 3. Select the **Daily checks** tab.
 
-    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../../dqo-concepts/user-interface-overview/user-interface-overview.md#check-editor).
+    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../dqo-concepts/user-interface-overview/user-interface-overview.md#check-editor).
 
 
 4. Run the activated check using the **Run check** button.
@@ -101,7 +101,7 @@ To execute the check prepared in the example using the [user interface](../../..
 
     Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
-7. To review the results on the [data quality dashboards](../../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
+7. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
     go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
 
     Below you can see the results displayed on the **Current validity issues on columns** dashboard located in Data Quality Dimension/Validity group.
@@ -151,9 +151,9 @@ After importing new tables, DQOps sets the schedule for 12:00 P.M. (noon) every 
 Once a schedule is set up for a particular connection, it will execute all the checks that have been configured across
 all tables associated with that connection.
 
-You can [read more about scheduling here](../../../working-with-dqo/schedules/index.md).
+You can [read more about scheduling here](../../working-with-dqo/schedules/index.md).
 
-You might also want to check the [Running checks with a scheduler](../../data-quality-monitoring/running-checks-with-a-scheduler.md) example.
+You might also want to check the [Running checks with a scheduler](../data-quality-monitoring/running-checks-with-a-scheduler.md) example.
 
 ## YAML configuration file
 
@@ -165,9 +165,9 @@ In this example, we have set three maximum percentage thresholds levels for the 
 - error: 55.0
 - fatal: 60.0
 
-The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_negative_percent` check is configured.
+The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_negative_values_percent` check is configured.
 
-If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
 
 ```yaml hl_lines="16-29"
 apiVersion: dqo/v1
@@ -192,7 +192,7 @@ spec:
       monitoring_checks:
         daily:
           numeric:
-            daily_negative_percent:
+            daily_negative_values_percent:
               warning:
                 max_percent: 45.0
               error:
@@ -203,7 +203,7 @@ spec:
 
 ## Running the checks in the example and evaluating the results using DQOps Shell
 
-A detailed explanation of [how to run the example is described here](../../index.md#running-the-use-cases).
+A detailed explanation of [how to run the example is described here](../index.md#running-the-use-cases).
 
 To execute the check prepared in the example, run the following command in DQOps Shell:
 
@@ -219,7 +219,7 @@ Check evaluation summary per table:
 +----------------+-----------------------------------------------+------+--------------+-------------+--------+------+------------+----------------+
 |Connection      |Table                                          |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
 +----------------+-----------------------------------------------+------+--------------+-------------+--------+------+------------+----------------+
-|negative_percent|kaggle_worldpopulation.world_population_dataset|1     |1             |1            |1       |0     |0           |0               |
+|negative_values_percent|kaggle_worldpopulation.world_population_dataset|1     |1             |1            |1       |0     |0           |0               |
 +----------------+-----------------------------------------------+------+--------------+-------------+--------+------+------------+----------------+
 ```
 
@@ -234,7 +234,7 @@ In the debug mode you can view the SQL query (sensor) executed in the check.
 
 ```
 **************************************************
-Executing SQL on connection negative_percent (bigquery)
+Executing SQL on connection negative_values_percent (bigquery)
 SQL to be executed on the connection:
 SELECT
     CASE
@@ -259,7 +259,7 @@ threshold level set in the warning (45.0).
 
 ```
 **************************************************
-Finished executing a sensor for a check negative_percent on the table kaggle_worldpopulation.world_population_dataset using a sensor definition column/numeric/negative_percent, sensor result count: 1
+Finished executing a sensor for a check negative_values_percent on the table kaggle_worldpopulation.world_population_dataset using a sensor definition column/numeric/negative_values_percent, sensor result count: 1
 
 Results returned by the sensor:
 +-----------------+------------------------+------------------------+
@@ -271,13 +271,13 @@ Results returned by the sensor:
 ```
 
 In this example, we have demonstrated how to use DQOps to verify the validity of data in a column.
-By using the [negative_percent](../../../checks/column/numeric/negative-percent.md) column check, we can monitor that
+By using the [negative_values_percent](../../checks/column/numeric/negative-values-percent.md) column check, we can monitor that
 the percentage of negative values in a column does not exceed the maximum accepted percentage. If it does, you will get a warning, error or fatal result.
 
 ## Next steps
 
-- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../../working-with-dqo/installation/run-dqo-as-docker-container.md).
-- For details on the [negative_percent check used in this example, go to the check details section](../../../checks/column/numeric/negative-percent.md).
-- You might be interested in another validity check that [evaluates that a minimum percentage of rows passed a custom SQL condition (expression)](../percentage-of-rows-passing-sql-condition.md).
-- With DQOps, you can easily customize when the checks are run at the level of the entire connection, table, or individual check. [Learn more about how to set schedules here](../../../working-with-dqo/schedules/index.md).
-- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md) can help you to calculate separate data quality KPI scores for different groups of rows.
+- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
+- For details on the [negative_values_percent check used in this example, go to the check details section](../../checks/column/numeric/negative-values-percent.md).
+- You might be interested in another validity check that [evaluates that a minimum percentage of rows passed a custom SQL condition (expression)](./percentage-of-rows-passing-sql-condition.md).
+- With DQOps, you can easily customize when the checks are run at the level of the entire connection, table, or individual check. [Learn more about how to set schedules here](../../working-with-dqo/schedules/index.md).
+- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md) can help you to calculate separate data quality KPI scores for different groups of rows.

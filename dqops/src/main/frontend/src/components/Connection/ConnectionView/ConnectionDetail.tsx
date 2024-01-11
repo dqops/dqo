@@ -21,7 +21,7 @@ import { useParams } from "react-router-dom";
 import ErrorModal from "../../Dashboard/DatabaseConnection/ErrorModal";
 import Loader from "../../Loader";
 import Button from "../../Button";
-import { DataSourcesApi, SharedCredentailsApi } from "../../../services/apiClient";
+import { DataSourcesApi, SharedCredentialsApi } from "../../../services/apiClient";
 import ConfirmErrorModal from "../../Dashboard/DatabaseConnection/ConfirmErrorModal";
 import PostgreSQLConnection from "../../Dashboard/DatabaseConnection/PostgreSQLConnection";
 import RedshiftConnection from "../../Dashboard/DatabaseConnection/RedshiftConnection";
@@ -122,7 +122,7 @@ const ConnectionDetail = () => {
   };
 
   const getSharedCredentials = async () => {
-    await SharedCredentailsApi.getAllSharedCredentials()
+    await SharedCredentialsApi.getAllSharedCredentials()
       .then((res) => setSharedCredentials(res.data))
   }
 

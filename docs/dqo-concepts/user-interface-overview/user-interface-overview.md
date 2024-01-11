@@ -126,7 +126,7 @@ If the tab's content no longer exists, a pop-up notification will appear and the
 
 Below we explain the main elements of the workspace in the **Profiling**, **Monitoring Checks** and **Partition Checks** sections.
 
-![Check editor ](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/main-workspace-check-editor.png)
+![Check editor](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/main-workspace-check-editor.png)
 
 
 The top section of this workspace contains quick links that allow you to switch between different sections 

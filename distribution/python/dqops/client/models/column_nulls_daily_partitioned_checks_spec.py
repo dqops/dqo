@@ -6,27 +6,24 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.column_anomaly_stationary_null_percent_30_days_check_spec import (
-        ColumnAnomalyStationaryNullPercent30DaysCheckSpec,
-    )
-    from ..models.column_anomaly_stationary_null_percent_check_spec import (
-        ColumnAnomalyStationaryNullPercentCheckSpec,
-    )
-    from ..models.column_change_null_percent_check_spec import (
-        ColumnChangeNullPercentCheckSpec,
-    )
-    from ..models.column_change_null_percent_since_7_days_check_spec import (
-        ColumnChangeNullPercentSince7DaysCheckSpec,
-    )
-    from ..models.column_change_null_percent_since_30_days_check_spec import (
-        ColumnChangeNullPercentSince30DaysCheckSpec,
-    )
-    from ..models.column_change_null_percent_since_yesterday_check_spec import (
-        ColumnChangeNullPercentSinceYesterdayCheckSpec,
-    )
     from ..models.column_not_nulls_count_check_spec import ColumnNotNullsCountCheckSpec
     from ..models.column_not_nulls_percent_check_spec import (
         ColumnNotNullsPercentCheckSpec,
+    )
+    from ..models.column_null_percent_anomaly_stationary_check_spec import (
+        ColumnNullPercentAnomalyStationaryCheckSpec,
+    )
+    from ..models.column_null_percent_change_1_day_check_spec import (
+        ColumnNullPercentChange1DayCheckSpec,
+    )
+    from ..models.column_null_percent_change_7_days_check_spec import (
+        ColumnNullPercentChange7DaysCheckSpec,
+    )
+    from ..models.column_null_percent_change_30_days_check_spec import (
+        ColumnNullPercentChange30DaysCheckSpec,
+    )
+    from ..models.column_null_percent_change_check_spec import (
+        ColumnNullPercentChangeCheckSpec,
     )
     from ..models.column_nulls_count_check_spec import ColumnNullsCountCheckSpec
     from ..models.column_nulls_daily_partitioned_checks_spec_custom_checks import (
@@ -47,15 +44,13 @@ class ColumnNullsDailyPartitionedChecksSpec:
             and rules should match the type of the configured sensor and rule for the custom check.
         daily_partition_nulls_count (Union[Unset, ColumnNullsCountCheckSpec]):
         daily_partition_nulls_percent (Union[Unset, ColumnNullsPercentCheckSpec]):
-        daily_partition_nulls_percent_anomaly_stationary (Union[Unset, ColumnAnomalyStationaryNullPercentCheckSpec]):
-        daily_partition_nulls_percent_change (Union[Unset, ColumnChangeNullPercentCheckSpec]):
-        daily_partition_nulls_percent_change_yesterday (Union[Unset, ColumnChangeNullPercentSinceYesterdayCheckSpec]):
         daily_partition_not_nulls_count (Union[Unset, ColumnNotNullsCountCheckSpec]):
         daily_partition_not_nulls_percent (Union[Unset, ColumnNotNullsPercentCheckSpec]):
-        daily_partition_nulls_percent_anomaly_stationary_30_days (Union[Unset,
-            ColumnAnomalyStationaryNullPercent30DaysCheckSpec]):
-        daily_partition_nulls_percent_change_7_days (Union[Unset, ColumnChangeNullPercentSince7DaysCheckSpec]):
-        daily_partition_nulls_percent_change_30_days (Union[Unset, ColumnChangeNullPercentSince30DaysCheckSpec]):
+        daily_partition_nulls_percent_anomaly (Union[Unset, ColumnNullPercentAnomalyStationaryCheckSpec]):
+        daily_partition_nulls_percent_change (Union[Unset, ColumnNullPercentChangeCheckSpec]):
+        daily_partition_nulls_percent_change_1_day (Union[Unset, ColumnNullPercentChange1DayCheckSpec]):
+        daily_partition_nulls_percent_change_7_days (Union[Unset, ColumnNullPercentChange7DaysCheckSpec]):
+        daily_partition_nulls_percent_change_30_days (Union[Unset, ColumnNullPercentChange30DaysCheckSpec]):
     """
 
     custom_checks: Union[
@@ -63,29 +58,26 @@ class ColumnNullsDailyPartitionedChecksSpec:
     ] = UNSET
     daily_partition_nulls_count: Union[Unset, "ColumnNullsCountCheckSpec"] = UNSET
     daily_partition_nulls_percent: Union[Unset, "ColumnNullsPercentCheckSpec"] = UNSET
-    daily_partition_nulls_percent_anomaly_stationary: Union[
-        Unset, "ColumnAnomalyStationaryNullPercentCheckSpec"
-    ] = UNSET
-    daily_partition_nulls_percent_change: Union[
-        Unset, "ColumnChangeNullPercentCheckSpec"
-    ] = UNSET
-    daily_partition_nulls_percent_change_yesterday: Union[
-        Unset, "ColumnChangeNullPercentSinceYesterdayCheckSpec"
-    ] = UNSET
     daily_partition_not_nulls_count: Union[
         Unset, "ColumnNotNullsCountCheckSpec"
     ] = UNSET
     daily_partition_not_nulls_percent: Union[
         Unset, "ColumnNotNullsPercentCheckSpec"
     ] = UNSET
-    daily_partition_nulls_percent_anomaly_stationary_30_days: Union[
-        Unset, "ColumnAnomalyStationaryNullPercent30DaysCheckSpec"
+    daily_partition_nulls_percent_anomaly: Union[
+        Unset, "ColumnNullPercentAnomalyStationaryCheckSpec"
+    ] = UNSET
+    daily_partition_nulls_percent_change: Union[
+        Unset, "ColumnNullPercentChangeCheckSpec"
+    ] = UNSET
+    daily_partition_nulls_percent_change_1_day: Union[
+        Unset, "ColumnNullPercentChange1DayCheckSpec"
     ] = UNSET
     daily_partition_nulls_percent_change_7_days: Union[
-        Unset, "ColumnChangeNullPercentSince7DaysCheckSpec"
+        Unset, "ColumnNullPercentChange7DaysCheckSpec"
     ] = UNSET
     daily_partition_nulls_percent_change_30_days: Union[
-        Unset, "ColumnChangeNullPercentSince30DaysCheckSpec"
+        Unset, "ColumnNullPercentChange30DaysCheckSpec"
     ] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -102,28 +94,6 @@ class ColumnNullsDailyPartitionedChecksSpec:
         if not isinstance(self.daily_partition_nulls_percent, Unset):
             daily_partition_nulls_percent = self.daily_partition_nulls_percent.to_dict()
 
-        daily_partition_nulls_percent_anomaly_stationary: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
-        if not isinstance(self.daily_partition_nulls_percent_anomaly_stationary, Unset):
-            daily_partition_nulls_percent_anomaly_stationary = (
-                self.daily_partition_nulls_percent_anomaly_stationary.to_dict()
-            )
-
-        daily_partition_nulls_percent_change: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_partition_nulls_percent_change, Unset):
-            daily_partition_nulls_percent_change = (
-                self.daily_partition_nulls_percent_change.to_dict()
-            )
-
-        daily_partition_nulls_percent_change_yesterday: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
-        if not isinstance(self.daily_partition_nulls_percent_change_yesterday, Unset):
-            daily_partition_nulls_percent_change_yesterday = (
-                self.daily_partition_nulls_percent_change_yesterday.to_dict()
-            )
-
         daily_partition_not_nulls_count: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_partition_not_nulls_count, Unset):
             daily_partition_not_nulls_count = (
@@ -136,14 +106,22 @@ class ColumnNullsDailyPartitionedChecksSpec:
                 self.daily_partition_not_nulls_percent.to_dict()
             )
 
-        daily_partition_nulls_percent_anomaly_stationary_30_days: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
-        if not isinstance(
-            self.daily_partition_nulls_percent_anomaly_stationary_30_days, Unset
-        ):
-            daily_partition_nulls_percent_anomaly_stationary_30_days = (
-                self.daily_partition_nulls_percent_anomaly_stationary_30_days.to_dict()
+        daily_partition_nulls_percent_anomaly: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_partition_nulls_percent_anomaly, Unset):
+            daily_partition_nulls_percent_anomaly = (
+                self.daily_partition_nulls_percent_anomaly.to_dict()
+            )
+
+        daily_partition_nulls_percent_change: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_partition_nulls_percent_change, Unset):
+            daily_partition_nulls_percent_change = (
+                self.daily_partition_nulls_percent_change.to_dict()
+            )
+
+        daily_partition_nulls_percent_change_1_day: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_partition_nulls_percent_change_1_day, Unset):
+            daily_partition_nulls_percent_change_1_day = (
+                self.daily_partition_nulls_percent_change_1_day.to_dict()
             )
 
         daily_partition_nulls_percent_change_7_days: Union[
@@ -171,18 +149,6 @@ class ColumnNullsDailyPartitionedChecksSpec:
             field_dict["daily_partition_nulls_count"] = daily_partition_nulls_count
         if daily_partition_nulls_percent is not UNSET:
             field_dict["daily_partition_nulls_percent"] = daily_partition_nulls_percent
-        if daily_partition_nulls_percent_anomaly_stationary is not UNSET:
-            field_dict[
-                "daily_partition_nulls_percent_anomaly_stationary"
-            ] = daily_partition_nulls_percent_anomaly_stationary
-        if daily_partition_nulls_percent_change is not UNSET:
-            field_dict[
-                "daily_partition_nulls_percent_change"
-            ] = daily_partition_nulls_percent_change
-        if daily_partition_nulls_percent_change_yesterday is not UNSET:
-            field_dict[
-                "daily_partition_nulls_percent_change_yesterday"
-            ] = daily_partition_nulls_percent_change_yesterday
         if daily_partition_not_nulls_count is not UNSET:
             field_dict[
                 "daily_partition_not_nulls_count"
@@ -191,10 +157,18 @@ class ColumnNullsDailyPartitionedChecksSpec:
             field_dict[
                 "daily_partition_not_nulls_percent"
             ] = daily_partition_not_nulls_percent
-        if daily_partition_nulls_percent_anomaly_stationary_30_days is not UNSET:
+        if daily_partition_nulls_percent_anomaly is not UNSET:
             field_dict[
-                "daily_partition_nulls_percent_anomaly_stationary_30_days"
-            ] = daily_partition_nulls_percent_anomaly_stationary_30_days
+                "daily_partition_nulls_percent_anomaly"
+            ] = daily_partition_nulls_percent_anomaly
+        if daily_partition_nulls_percent_change is not UNSET:
+            field_dict[
+                "daily_partition_nulls_percent_change"
+            ] = daily_partition_nulls_percent_change
+        if daily_partition_nulls_percent_change_1_day is not UNSET:
+            field_dict[
+                "daily_partition_nulls_percent_change_1_day"
+            ] = daily_partition_nulls_percent_change_1_day
         if daily_partition_nulls_percent_change_7_days is not UNSET:
             field_dict[
                 "daily_partition_nulls_percent_change_7_days"
@@ -208,29 +182,26 @@ class ColumnNullsDailyPartitionedChecksSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.column_anomaly_stationary_null_percent_30_days_check_spec import (
-            ColumnAnomalyStationaryNullPercent30DaysCheckSpec,
-        )
-        from ..models.column_anomaly_stationary_null_percent_check_spec import (
-            ColumnAnomalyStationaryNullPercentCheckSpec,
-        )
-        from ..models.column_change_null_percent_check_spec import (
-            ColumnChangeNullPercentCheckSpec,
-        )
-        from ..models.column_change_null_percent_since_7_days_check_spec import (
-            ColumnChangeNullPercentSince7DaysCheckSpec,
-        )
-        from ..models.column_change_null_percent_since_30_days_check_spec import (
-            ColumnChangeNullPercentSince30DaysCheckSpec,
-        )
-        from ..models.column_change_null_percent_since_yesterday_check_spec import (
-            ColumnChangeNullPercentSinceYesterdayCheckSpec,
-        )
         from ..models.column_not_nulls_count_check_spec import (
             ColumnNotNullsCountCheckSpec,
         )
         from ..models.column_not_nulls_percent_check_spec import (
             ColumnNotNullsPercentCheckSpec,
+        )
+        from ..models.column_null_percent_anomaly_stationary_check_spec import (
+            ColumnNullPercentAnomalyStationaryCheckSpec,
+        )
+        from ..models.column_null_percent_change_1_day_check_spec import (
+            ColumnNullPercentChange1DayCheckSpec,
+        )
+        from ..models.column_null_percent_change_7_days_check_spec import (
+            ColumnNullPercentChange7DaysCheckSpec,
+        )
+        from ..models.column_null_percent_change_30_days_check_spec import (
+            ColumnNullPercentChange30DaysCheckSpec,
+        )
+        from ..models.column_null_percent_change_check_spec import (
+            ColumnNullPercentChangeCheckSpec,
         )
         from ..models.column_nulls_count_check_spec import ColumnNullsCountCheckSpec
         from ..models.column_nulls_daily_partitioned_checks_spec_custom_checks import (
@@ -266,51 +237,6 @@ class ColumnNullsDailyPartitionedChecksSpec:
                 _daily_partition_nulls_percent
             )
 
-        _daily_partition_nulls_percent_anomaly_stationary = d.pop(
-            "daily_partition_nulls_percent_anomaly_stationary", UNSET
-        )
-        daily_partition_nulls_percent_anomaly_stationary: Union[
-            Unset, ColumnAnomalyStationaryNullPercentCheckSpec
-        ]
-        if isinstance(_daily_partition_nulls_percent_anomaly_stationary, Unset):
-            daily_partition_nulls_percent_anomaly_stationary = UNSET
-        else:
-            daily_partition_nulls_percent_anomaly_stationary = (
-                ColumnAnomalyStationaryNullPercentCheckSpec.from_dict(
-                    _daily_partition_nulls_percent_anomaly_stationary
-                )
-            )
-
-        _daily_partition_nulls_percent_change = d.pop(
-            "daily_partition_nulls_percent_change", UNSET
-        )
-        daily_partition_nulls_percent_change: Union[
-            Unset, ColumnChangeNullPercentCheckSpec
-        ]
-        if isinstance(_daily_partition_nulls_percent_change, Unset):
-            daily_partition_nulls_percent_change = UNSET
-        else:
-            daily_partition_nulls_percent_change = (
-                ColumnChangeNullPercentCheckSpec.from_dict(
-                    _daily_partition_nulls_percent_change
-                )
-            )
-
-        _daily_partition_nulls_percent_change_yesterday = d.pop(
-            "daily_partition_nulls_percent_change_yesterday", UNSET
-        )
-        daily_partition_nulls_percent_change_yesterday: Union[
-            Unset, ColumnChangeNullPercentSinceYesterdayCheckSpec
-        ]
-        if isinstance(_daily_partition_nulls_percent_change_yesterday, Unset):
-            daily_partition_nulls_percent_change_yesterday = UNSET
-        else:
-            daily_partition_nulls_percent_change_yesterday = (
-                ColumnChangeNullPercentSinceYesterdayCheckSpec.from_dict(
-                    _daily_partition_nulls_percent_change_yesterday
-                )
-            )
-
         _daily_partition_not_nulls_count = d.pop(
             "daily_partition_not_nulls_count", UNSET
         )
@@ -335,18 +261,48 @@ class ColumnNullsDailyPartitionedChecksSpec:
                 )
             )
 
-        _daily_partition_nulls_percent_anomaly_stationary_30_days = d.pop(
-            "daily_partition_nulls_percent_anomaly_stationary_30_days", UNSET
+        _daily_partition_nulls_percent_anomaly = d.pop(
+            "daily_partition_nulls_percent_anomaly", UNSET
         )
-        daily_partition_nulls_percent_anomaly_stationary_30_days: Union[
-            Unset, ColumnAnomalyStationaryNullPercent30DaysCheckSpec
+        daily_partition_nulls_percent_anomaly: Union[
+            Unset, ColumnNullPercentAnomalyStationaryCheckSpec
         ]
-        if isinstance(_daily_partition_nulls_percent_anomaly_stationary_30_days, Unset):
-            daily_partition_nulls_percent_anomaly_stationary_30_days = UNSET
+        if isinstance(_daily_partition_nulls_percent_anomaly, Unset):
+            daily_partition_nulls_percent_anomaly = UNSET
         else:
-            daily_partition_nulls_percent_anomaly_stationary_30_days = (
-                ColumnAnomalyStationaryNullPercent30DaysCheckSpec.from_dict(
-                    _daily_partition_nulls_percent_anomaly_stationary_30_days
+            daily_partition_nulls_percent_anomaly = (
+                ColumnNullPercentAnomalyStationaryCheckSpec.from_dict(
+                    _daily_partition_nulls_percent_anomaly
+                )
+            )
+
+        _daily_partition_nulls_percent_change = d.pop(
+            "daily_partition_nulls_percent_change", UNSET
+        )
+        daily_partition_nulls_percent_change: Union[
+            Unset, ColumnNullPercentChangeCheckSpec
+        ]
+        if isinstance(_daily_partition_nulls_percent_change, Unset):
+            daily_partition_nulls_percent_change = UNSET
+        else:
+            daily_partition_nulls_percent_change = (
+                ColumnNullPercentChangeCheckSpec.from_dict(
+                    _daily_partition_nulls_percent_change
+                )
+            )
+
+        _daily_partition_nulls_percent_change_1_day = d.pop(
+            "daily_partition_nulls_percent_change_1_day", UNSET
+        )
+        daily_partition_nulls_percent_change_1_day: Union[
+            Unset, ColumnNullPercentChange1DayCheckSpec
+        ]
+        if isinstance(_daily_partition_nulls_percent_change_1_day, Unset):
+            daily_partition_nulls_percent_change_1_day = UNSET
+        else:
+            daily_partition_nulls_percent_change_1_day = (
+                ColumnNullPercentChange1DayCheckSpec.from_dict(
+                    _daily_partition_nulls_percent_change_1_day
                 )
             )
 
@@ -354,13 +310,13 @@ class ColumnNullsDailyPartitionedChecksSpec:
             "daily_partition_nulls_percent_change_7_days", UNSET
         )
         daily_partition_nulls_percent_change_7_days: Union[
-            Unset, ColumnChangeNullPercentSince7DaysCheckSpec
+            Unset, ColumnNullPercentChange7DaysCheckSpec
         ]
         if isinstance(_daily_partition_nulls_percent_change_7_days, Unset):
             daily_partition_nulls_percent_change_7_days = UNSET
         else:
             daily_partition_nulls_percent_change_7_days = (
-                ColumnChangeNullPercentSince7DaysCheckSpec.from_dict(
+                ColumnNullPercentChange7DaysCheckSpec.from_dict(
                     _daily_partition_nulls_percent_change_7_days
                 )
             )
@@ -369,13 +325,13 @@ class ColumnNullsDailyPartitionedChecksSpec:
             "daily_partition_nulls_percent_change_30_days", UNSET
         )
         daily_partition_nulls_percent_change_30_days: Union[
-            Unset, ColumnChangeNullPercentSince30DaysCheckSpec
+            Unset, ColumnNullPercentChange30DaysCheckSpec
         ]
         if isinstance(_daily_partition_nulls_percent_change_30_days, Unset):
             daily_partition_nulls_percent_change_30_days = UNSET
         else:
             daily_partition_nulls_percent_change_30_days = (
-                ColumnChangeNullPercentSince30DaysCheckSpec.from_dict(
+                ColumnNullPercentChange30DaysCheckSpec.from_dict(
                     _daily_partition_nulls_percent_change_30_days
                 )
             )
@@ -384,12 +340,11 @@ class ColumnNullsDailyPartitionedChecksSpec:
             custom_checks=custom_checks,
             daily_partition_nulls_count=daily_partition_nulls_count,
             daily_partition_nulls_percent=daily_partition_nulls_percent,
-            daily_partition_nulls_percent_anomaly_stationary=daily_partition_nulls_percent_anomaly_stationary,
-            daily_partition_nulls_percent_change=daily_partition_nulls_percent_change,
-            daily_partition_nulls_percent_change_yesterday=daily_partition_nulls_percent_change_yesterday,
             daily_partition_not_nulls_count=daily_partition_not_nulls_count,
             daily_partition_not_nulls_percent=daily_partition_not_nulls_percent,
-            daily_partition_nulls_percent_anomaly_stationary_30_days=daily_partition_nulls_percent_anomaly_stationary_30_days,
+            daily_partition_nulls_percent_anomaly=daily_partition_nulls_percent_anomaly,
+            daily_partition_nulls_percent_change=daily_partition_nulls_percent_change,
+            daily_partition_nulls_percent_change_1_day=daily_partition_nulls_percent_change_1_day,
             daily_partition_nulls_percent_change_7_days=daily_partition_nulls_percent_change_7_days,
             daily_partition_nulls_percent_change_30_days=daily_partition_nulls_percent_change_30_days,
         )

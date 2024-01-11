@@ -1,16 +1,27 @@
-# data
+# dqo data command
+
+
+Commands related to the data
+
+
 
 ___
-### **dqo data delete**
+
+## dqo data delete
 
 Deletes stored data that matches the specified conditions
 
+
 **Description**
+
 
 Deletes stored data that matches specified conditions. Be careful when using this command, as it permanently deletes the selected data and cannot be undone.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] data delete [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] [-b=<begin>]
              [-c=<connection>] [-cat=<checkCategory>] [-ch=<check>]
@@ -21,7 +32,9 @@ $ dqo [dqo options...] data delete [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] [-b=
              [-tg=<timeGradient>]
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> data delete [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] [-b=<begin>]
              [-c=<connection>] [-cat=<checkCategory>] [-ch=<check>]
@@ -33,7 +46,11 @@ dqo> data delete [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] [-b=<begin>]
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
@@ -65,30 +82,44 @@ dqo> data delete [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] [-b=<begin>]
 
 
 
+
+
 ___
-### **dqo data repair**
+
+## dqo data repair
 
 Verify integrity of parquet files used to store data and removes corrupted files
 
+
 **Description**
+
 
 Verify integrity of parquet files used to store data and removes corrupted files. Be careful when using this command, as it permanently deletes the selected data and cannot be undone.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] data repair [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] -c=<connection>
              [-of=<outputFormat>] [-t=<table>]
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> data repair [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] -c=<connection>
              [-of=<outputFormat>] [-t=<table>]
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
@@ -102,6 +133,8 @@ dqo> data repair [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] -c=<connection>
 |<p id="data repair-of">`-of`</p><br/><p id="data repair--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 |<p id="data repair-sr">`-sr`</p><br/><p id="data repair--sensor-readouts">`--sensor-readouts`</p><br/>|Repair the sensor readouts| ||
 |<p id="data repair-st">`-st`</p><br/><p id="data repair--statistics">`--statistics`</p><br/>|Repair the statistics| ||
+
+
 
 
 

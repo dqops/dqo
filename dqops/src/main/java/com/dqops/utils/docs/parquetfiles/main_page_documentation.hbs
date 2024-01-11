@@ -1,8 +1,10 @@
-# Parquet files
+# Parquet files supported by DQOps
+The list of parquet tables used by DQOps to store data quality results in the *[$DQO_USER_HOME](/docs/dqo-concepts/home-folders/dqops-user-home.md)/.data* folder is listed below.
 
-**This is a list of parquet file types in DQOps.**
+
+## List of supported parquet tables
 
 | Parquet file table | Description |
 |--------------------|-------------|
-{{#each parquetFiles}}|[{{parquetFileFullName}}](../{{parquetFileFullName}}.md)|{{parquetFileShortDescription}}|
+{{#each parquetFiles}}|[{{parquetFileFullName}}](./{{parquetFileFullName}}.md)|{{parquetFileShortDescription}}|
 {{/each}}

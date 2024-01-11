@@ -41,6 +41,8 @@ import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.core.rolling.RollingFileAppender;
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
 import ch.qos.logback.core.util.FileSize;
+import com.dqops.metadata.storage.localfiles.credentials.DefaultCloudCredentialFileContent;
+import com.dqops.metadata.storage.localfiles.credentials.DefaultCloudCredentialFileNames;
 import com.dqops.metadata.storage.localfiles.dashboards.DashboardYaml;
 import com.dqops.metadata.storage.localfiles.defaultschedules.DefaultSchedulesYaml;
 import com.dqops.metadata.storage.localfiles.defaultobservabilitychecks.DefaultObservabilityChecksYaml;
@@ -275,9 +277,29 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
                 Files.writeString(defaultNotificaitonWebhooksPath, defaultWebhooks);
             }
 
-            Path rulesRequirementTxtPath = userHomePath.resolve("rules/requirements.txt");
+            Path rulesRequirementTxtPath = userHomePath.resolve(BuiltInFolderNames.RULES).resolve("requirements.txt");
             if (!Files.exists(rulesRequirementTxtPath)) {
                 Files.writeString(rulesRequirementTxtPath, "# packages in this file are installed when DQOps starts\n");
+            }
+
+            if (this.userConfigurationProperties.isInitializeDefaultCloudCredentials()) {
+                Path defaultGcpCredentialsPath = userHomeMarkerPath.resolve(BuiltInFolderNames.CREDENTIALS)
+                        .resolve(DefaultCloudCredentialFileNames.GCP_APPLICATION_DEFAULT_CREDENTIALS_JSON_NAME);
+                if (!Files.exists(defaultGcpCredentialsPath)) {
+                    Files.writeString(defaultGcpCredentialsPath, DefaultCloudCredentialFileContent.GCP_APPLICATION_DEFAULT_CREDENTIALS_JSON_INITIAL_CONTENT);
+                }
+
+                Path defaultAwsCredentialsPath = userHomeMarkerPath.resolve(BuiltInFolderNames.CREDENTIALS)
+                        .resolve(DefaultCloudCredentialFileNames.AWS_DEFAULT_CREDENTIALS_NAME);
+                if (!Files.exists(defaultAwsCredentialsPath)) {
+                    Files.writeString(defaultAwsCredentialsPath, DefaultCloudCredentialFileContent.AWS_DEFAULT_CREDENTIALS_INITIAL_CONTENT);
+                }
+
+                Path defaultAwsConfigPath = userHomeMarkerPath.resolve(BuiltInFolderNames.CREDENTIALS)
+                        .resolve(DefaultCloudCredentialFileNames.AWS_DEFAULT_CONFIG_NAME);
+                if (!Files.exists(defaultAwsConfigPath)) {
+                    Files.writeString(defaultAwsConfigPath, DefaultCloudCredentialFileContent.AWS_DEFAULT_CONFIG_INITIAL_CONTENT);
+                }
             }
         }
         catch (Exception ex) {

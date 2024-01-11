@@ -8,7 +8,7 @@ Provider sensor list model that is returned by the REST API.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[provider_type](../Common.md#providertype)|Provider type.|[ProviderType](../Common.md#providertype)|
+|[provider_type](./Common.md#providertype)|Provider type.|[ProviderType](./Common.md#providertype)|
 |custom|This connection specific template is a custom sensor template or was customized by the user.|boolean|
 |built_in|This connection specific template is provided with DQOps as a built-in sensor.|boolean|
 |can_edit|Boolean flag that decides if the current user can update or delete this object.|boolean|
@@ -45,8 +45,8 @@ Sensor folder model that is returned by the REST API.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|folders|A dictionary of nested folders with sensors, the keys are the folder names.|Dict[string, [SensorFolderModel](#SensorFolderModel)]|
-|sensors|List of sensors defined in this folder.|List[[SensorListModel](#SensorListModel)]|
+|folders|A dictionary of nested folders with sensors, the keys are the folder names.|Dict[string, [SensorFolderModel](./sensors.md#SensorFolderModel)]|
+|sensors|List of sensors defined in this folder.|List[[SensorListModel](./sensors.md#SensorListModel)]|
 
 
 ___
@@ -60,8 +60,8 @@ Provider sensor model returned from REST API.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[provider_type](../Common.md#providertype)|Provider type.|[ProviderType](../Common.md#providertype)|
-|[provider_sensor_definition_spec](../../../reference/yaml/ProviderSensorYaml.md#providersensordefinitionspec)|Provider specific sensor definition specification|[ProviderSensorDefinitionSpec](../../../reference/yaml/ProviderSensorYaml.md#providersensordefinitionspec)|
+|[provider_type](./Common.md#providertype)|Provider type.|[ProviderType](./Common.md#providertype)|
+|[provider_sensor_definition_spec](../../reference/yaml/ProviderSensorYaml.md#providersensordefinitionspec)|Provider specific sensor definition specification|[ProviderSensorDefinitionSpec](../../reference/yaml/ProviderSensorYaml.md#providersensordefinitionspec)|
 |sql_template|Provider specific Jinja2 SQL template|string|
 |custom|Whether the provider sensor is a User Home provider sensor|boolean|
 |built_in|This is a DQOps built-in provider sensor, whose parameters cannot be changed.|boolean|
@@ -81,7 +81,7 @@ Sensor model returned from REST API.
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |full_sensor_name|Full sensor name.|string|
-|[sensor_definition_spec](../../../reference/yaml/SensorDefinitionYaml.md#sensordefinitionspec)|Sensor definition specification.|[SensorDefinitionSpec](../../../reference/yaml/SensorDefinitionYaml.md#sensordefinitionspec)|
+|[sensor_definition_spec](../../reference/yaml/SensorDefinitionYaml.md#sensordefinitionspec)|Sensor definition specification.|[SensorDefinitionSpec](../../reference/yaml/SensorDefinitionYaml.md#sensordefinitionspec)|
 |provider_sensor_list|Provider sensors list with provider specific sensor definitions.|List[[ProviderSensorModel](#providersensormodel)]|
 |custom|Whether the sensor is a User Home sensor|boolean|
 |built_in|This is a DQOps built-in sensor, whose parameters cannot be changed.|boolean|

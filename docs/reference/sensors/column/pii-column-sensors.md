@@ -1,16 +1,30 @@
+# Data quality pii sensors
+All [data quality sensors](../../../dqo-concepts/sensors/sensors.md) in the **pii** category supported by DQOps are listed below. Those sensors are measured on a column level.
 
-## **contains email percent**
-**Full sensor name**
-```
-column/pii/contains_email_percent
-```
-**Description**
+---
+
+
+## contains email percent
 Column level sensor that calculates the percentage of rows with a valid email value in a column.
 
+**Sensor summary**
+
+The contains email percent sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| column | pii | `column/pii/contains_email_percent` | [sensors/column/pii](https://github.com/dqops/dqo/tree/develop/home/sensors/column/pii/) |
 
 
 
-**SQL Template (Jinja2)**
+
+
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
 === "BigQuery"
 
     ```sql+jinja
@@ -277,18 +291,29 @@ Column level sensor that calculates the percentage of rows with a valid email va
     ```
 ___
 
-## **contains ip4 percent**
-**Full sensor name**
-```
-column/pii/contains_ip4_percent
-```
-**Description**
+
+
+## contains ip4 percent
 Column level sensor that calculates the percentage of rows with a valid IP4 value in a column.
 
+**Sensor summary**
+
+The contains ip4 percent sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| column | pii | `column/pii/contains_ip4_percent` | [sensors/column/pii](https://github.com/dqops/dqo/tree/develop/home/sensors/column/pii/) |
 
 
 
-**SQL Template (Jinja2)**
+
+
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
 === "BigQuery"
 
     ```sql+jinja
@@ -557,18 +582,29 @@ Column level sensor that calculates the percentage of rows with a valid IP4 valu
     ```
 ___
 
-## **contains ip6 percent**
-**Full sensor name**
-```
-column/pii/contains_ip6_percent
-```
-**Description**
+
+
+## contains ip6 percent
 Column level sensor that calculates the percentage of rows with a valid IP6 value in a column.
 
+**Sensor summary**
+
+The contains ip6 percent sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| column | pii | `column/pii/contains_ip6_percent` | [sensors/column/pii](https://github.com/dqops/dqo/tree/develop/home/sensors/column/pii/) |
 
 
 
-**SQL Template (Jinja2)**
+
+
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
 === "BigQuery"
 
     ```sql+jinja
@@ -902,18 +938,29 @@ Column level sensor that calculates the percentage of rows with a valid IP6 valu
     ```
 ___
 
-## **contains usa phone percent**
-**Full sensor name**
-```
-column/pii/contains_usa_phone_percent
-```
-**Description**
+
+
+## contains usa phone percent
 Column level sensor that calculates the percent of values that contains a USA phone number in a column.
 
+**Sensor summary**
+
+The contains usa phone percent sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| column | pii | `column/pii/contains_usa_phone_percent` | [sensors/column/pii](https://github.com/dqops/dqo/tree/develop/home/sensors/column/pii/) |
 
 
 
-**SQL Template (Jinja2)**
+
+
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
 === "BigQuery"
 
     ```sql+jinja
@@ -1207,18 +1254,29 @@ Column level sensor that calculates the percent of values that contains a USA ph
     ```
 ___
 
-## **contains usa zipcode percent**
-**Full sensor name**
-```
-column/pii/contains_usa_zipcode_percent
-```
-**Description**
+
+
+## contains usa zipcode percent
 Column level sensor that calculates the percent of values that contain a USA ZIP code number in a column.
 
+**Sensor summary**
+
+The contains usa zipcode percent sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| column | pii | `column/pii/contains_usa_zipcode_percent` | [sensors/column/pii](https://github.com/dqops/dqo/tree/develop/home/sensors/column/pii/) |
 
 
 
-**SQL Template (Jinja2)**
+
+
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
 === "BigQuery"
 
     ```sql+jinja
@@ -1494,3 +1552,6 @@ Column level sensor that calculates the percent of values that contain a USA ZIP
     {{- lib.render_order_by() -}}
     ```
 ___
+
+
+

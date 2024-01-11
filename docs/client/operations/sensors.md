@@ -27,7 +27,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Dictionary of sensor definitions|[SensorModel](../../models/sensors.md#sensormodel)| |
+|Dictionary of sensor definitions|[SensorModel](../models/sensors.md#sensormodel)| |
 
 
 
@@ -346,7 +346,7 @@ http://localhost:8888/api/sensors
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|sensor_list_model||List[[SensorListModel](../../models/sensors.md#sensorlistmodel)]|
+|sensor_list_model||List[[SensorListModel](../models/sensors.md#sensorlistmodel)]|
 
 
 
@@ -483,7 +483,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[sensor_model](../../models/sensors.md#sensormodel)||[SensorModel](../../models/sensors.md#sensormodel)|
+|[sensor_model](../models/sensors.md#sensormodel)||[SensorModel](../models/sensors.md#sensormodel)|
 
 
 
@@ -635,7 +635,7 @@ http://localhost:8888/api/definitions/sensors
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[sensor_folder_model](../../models/sensors.md#sensorfoldermodel)||[SensorFolderModel](../../models/sensors.md#sensorfoldermodel)|
+|[sensor_folder_model](../models/sensors.md#sensorfoldermodel)||[SensorFolderModel](../models/sensors.md#sensorfoldermodel)|
 
 
 
@@ -774,7 +774,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Dictionary of sensor definitions|[SensorModel](../../models/sensors.md#sensormodel)| |
+|Dictionary of sensor definitions|[SensorModel](../models/sensors.md#sensormodel)| |
 
 
 

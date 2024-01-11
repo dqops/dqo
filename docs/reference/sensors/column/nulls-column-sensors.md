@@ -1,16 +1,30 @@
+# Data quality nulls sensors
+All [data quality sensors](../../../dqo-concepts/sensors/sensors.md) in the **nulls** category supported by DQOps are listed below. Those sensors are measured on a column level.
 
-## **not null count**
-**Full sensor name**
-```
-column/nulls/not_null_count
-```
-**Description**
+---
+
+
+## not null count
 Column-level sensor that calculates the number of rows with not null values.
 
+**Sensor summary**
+
+The not null count sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| column | nulls | `column/nulls/not_null_count` | [sensors/column/nulls](https://github.com/dqops/dqo/tree/develop/home/sensors/column/nulls/) |
 
 
 
-**SQL Template (Jinja2)**
+
+
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
 === "BigQuery"
 
     ```sql+jinja
@@ -183,18 +197,29 @@ Column-level sensor that calculates the number of rows with not null values.
     ```
 ___
 
-## **not null percent**
-**Full sensor name**
-```
-column/nulls/not_null_percent
-```
-**Description**
+
+
+## not null percent
 Column level sensor that calculates the percentage of not null values in a column.
 
+**Sensor summary**
+
+The not null percent sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| column | nulls | `column/nulls/not_null_percent` | [sensors/column/nulls](https://github.com/dqops/dqo/tree/develop/home/sensors/column/nulls/) |
 
 
 
-**SQL Template (Jinja2)**
+
+
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
 === "BigQuery"
 
     ```sql+jinja
@@ -393,18 +418,29 @@ Column level sensor that calculates the percentage of not null values in a colum
     ```
 ___
 
-## **null count**
-**Full sensor name**
-```
-column/nulls/null_count
-```
-**Description**
+
+
+## null count
 Column-level sensor that calculates the number of rows with null values.
 
+**Sensor summary**
+
+The null count sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| column | nulls | `column/nulls/null_count` | [sensors/column/nulls](https://github.com/dqops/dqo/tree/develop/home/sensors/column/nulls/) |
 
 
 
-**SQL Template (Jinja2)**
+
+
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
 === "BigQuery"
 
     ```sql+jinja
@@ -625,18 +661,29 @@ Column-level sensor that calculates the number of rows with null values.
     ```
 ___
 
-## **null percent**
-**Full sensor name**
-```
-column/nulls/null_percent
-```
-**Description**
+
+
+## null percent
 Column-level sensor that calculates the percentage of rows with null values.
 
+**Sensor summary**
+
+The null percent sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| column | nulls | `column/nulls/null_percent` | [sensors/column/nulls](https://github.com/dqops/dqo/tree/develop/home/sensors/column/nulls/) |
 
 
 
-**SQL Template (Jinja2)**
+
+
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
 === "BigQuery"
 
     ```sql+jinja
@@ -889,3 +936,6 @@ Column-level sensor that calculates the percentage of rows with null values.
     {{- lib.render_order_by() -}}
     ```
 ___
+
+
+

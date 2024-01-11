@@ -29,7 +29,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Table specification|[TableSpec](../../../reference/yaml/TableYaml.md#tablespec)| |
+|Table specification|[TableSpec](../../reference/yaml/TableYaml.md#tablespec)| |
 
 
 
@@ -332,7 +332,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[dqo_queue_job_id](../../models/Common.md#dqoqueuejobid)||[DqoQueueJobId](../../models/Common.md#dqoqueuejobid)|
+|[dqo_queue_job_id](../models/Common.md#dqoqueuejobid)||[DqoQueueJobId](../models/Common.md#dqoqueuejobid)|
 
 
 
@@ -477,7 +477,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_model](../../models/tables.md#tablemodel)||[TableModel](../../models/tables.md#tablemodel)|
+|[table_model](../models/tables.md#tablemodel)||[TableModel](../models/tables.md#tablemodel)|
 
 
 
@@ -625,7 +625,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_list_model](../../models/tables.md#tablelistmodel)||[TableListModel](../../models/tables.md#tablelistmodel)|
+|[table_list_model](../models/tables.md#tablelistmodel)||[TableListModel](../models/tables.md#tablelistmodel)|
 
 
 
@@ -815,7 +815,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_configuration_model||List[[CheckConfigurationModel](../../models/Common.md#checkconfigurationmodel)]|
+|check_configuration_model||List[[CheckConfigurationModel](../models/Common.md#checkconfigurationmodel)]|
 
 
 
@@ -827,7 +827,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |connection_name|Connection name|string|:material-check-bold:|
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
-|[time_scale](../../models/Common.md#checktimescale)|Check time-scale|[CheckTimeScale](../../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/Common.md#checktimescale)|Check time-scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
 |column_name_pattern|Column name pattern|string| |
 |column_data_type|Column data-type|string| |
 |check_category|Check category|string| |
@@ -985,7 +985,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_configuration_model||List[[CheckConfigurationModel](../../models/Common.md#checkconfigurationmodel)]|
+|check_configuration_model||List[[CheckConfigurationModel](../models/Common.md#checkconfigurationmodel)]|
 
 
 
@@ -997,7 +997,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |connection_name|Connection name|string|:material-check-bold:|
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
-|[time_scale](../../models/Common.md#checktimescale)|Check time-scale|[CheckTimeScale](../../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/Common.md#checktimescale)|Check time-scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
 |column_name_pattern|Column name pattern|string| |
 |column_data_type|Column data-type|string| |
 |check_category|Check category|string| |
@@ -1155,7 +1155,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_configuration_model||List[[CheckConfigurationModel](../../models/Common.md#checkconfigurationmodel)]|
+|check_configuration_model||List[[CheckConfigurationModel](../models/Common.md#checkconfigurationmodel)]|
 
 
 
@@ -1320,7 +1320,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|comment_spec||List[[CommentSpec](../../models/Common.md#commentspec)]|
+|comment_spec||List[[CommentSpec](../models/Common.md#commentspec)]|
 
 
 
@@ -1478,7 +1478,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_daily_monitoring_check_categories_spec](../../models/tables.md#tabledailymonitoringcheckcategoriesspec)||[TableDailyMonitoringCheckCategoriesSpec](../../models/tables.md#tabledailymonitoringcheckcategoriesspec)|
+|[table_daily_monitoring_check_categories_spec](../models/tables.md#tabledailymonitoringcheckcategoriesspec)||[TableDailyMonitoringCheckCategoriesSpec](../models/tables.md#tabledailymonitoringcheckcategoriesspec)|
 
 
 
@@ -1632,7 +1632,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_daily_partitioned_check_categories_spec](../../models/tables.md#tabledailypartitionedcheckcategoriesspec)||[TableDailyPartitionedCheckCategoriesSpec](../../models/tables.md#tabledailypartitionedcheckcategoriesspec)|
+|[table_daily_partitioned_check_categories_spec](../models/tables.md#tabledailypartitionedcheckcategoriesspec)||[TableDailyPartitionedCheckCategoriesSpec](../models/tables.md#tabledailypartitionedcheckcategoriesspec)|
 
 
 
@@ -1786,7 +1786,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[data_grouping_configuration_spec](../../../reference/yaml/ConnectionYaml.md#datagroupingconfigurationspec)||[DataGroupingConfigurationSpec](../../../reference/yaml/ConnectionYaml.md#datagroupingconfigurationspec)|
+|[data_grouping_configuration_spec](../../reference/yaml/ConnectionYaml.md#datagroupingconfigurationspec)||[DataGroupingConfigurationSpec](../../reference/yaml/ConnectionYaml.md#datagroupingconfigurationspec)|
 
 
 
@@ -1937,7 +1937,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_incident_grouping_spec](../../../reference/yaml/TableYaml.md#tableincidentgroupingspec)||[TableIncidentGroupingSpec](../../../reference/yaml/TableYaml.md#tableincidentgroupingspec)|
+|[table_incident_grouping_spec](../../reference/yaml/TableYaml.md#tableincidentgroupingspec)||[TableIncidentGroupingSpec](../../reference/yaml/TableYaml.md#tableincidentgroupingspec)|
 
 
 
@@ -2234,7 +2234,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_list_model](../../models/Common.md#checkcontainerlistmodel)||[CheckContainerListModel](../../models/Common.md#checkcontainerlistmodel)|
+|[check_container_list_model](../models/Common.md#checkcontainerlistmodel)||[CheckContainerListModel](../models/Common.md#checkcontainerlistmodel)|
 
 
 
@@ -2246,7 +2246,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |connection_name|Connection name|string|:material-check-bold:|
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
-|[time_scale](../../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
 
 
 
@@ -2420,7 +2420,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/Common.md#checkcontainermodel)||[CheckContainerModel](../../models/Common.md#checkcontainermodel)|
+|[check_container_model](../models/Common.md#checkcontainermodel)||[CheckContainerModel](../models/Common.md#checkcontainermodel)|
 
 
 
@@ -2432,7 +2432,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |connection_name|Connection name|string|:material-check-bold:|
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
-|[time_scale](../../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
 
 
 
@@ -2594,7 +2594,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/Common.md#checkcontainermodel)||[CheckContainerModel](../../models/Common.md#checkcontainermodel)|
+|[check_container_model](../models/Common.md#checkcontainermodel)||[CheckContainerModel](../models/Common.md#checkcontainermodel)|
 
 
 
@@ -2606,7 +2606,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |connection_name|Connection name|string|:material-check-bold:|
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
-|[time_scale](../../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
 |check_category|Check category|string|:material-check-bold:|
 |check_name|Check name|string|:material-check-bold:|
 
@@ -2778,7 +2778,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_monthly_monitoring_check_categories_spec](../../models/tables.md#tablemonthlymonitoringcheckcategoriesspec)||[TableMonthlyMonitoringCheckCategoriesSpec](../../models/tables.md#tablemonthlymonitoringcheckcategoriesspec)|
+|[table_monthly_monitoring_check_categories_spec](../models/tables.md#tablemonthlymonitoringcheckcategoriesspec)||[TableMonthlyMonitoringCheckCategoriesSpec](../models/tables.md#tablemonthlymonitoringcheckcategoriesspec)|
 
 
 
@@ -2932,7 +2932,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_template||List[[CheckTemplate](../../models/Common.md#checktemplate)]|
+|check_template||List[[CheckTemplate](../models/Common.md#checktemplate)]|
 
 
 
@@ -2944,7 +2944,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |connection_name|Connection name|string|:material-check-bold:|
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
-|[time_scale](../../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
 |check_category|Check category|string| |
 |check_name|Check name|string| |
 
@@ -3091,7 +3091,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_list_model](../../models/Common.md#checkcontainerlistmodel)||[CheckContainerListModel](../../models/Common.md#checkcontainerlistmodel)|
+|[check_container_list_model](../models/Common.md#checkcontainerlistmodel)||[CheckContainerListModel](../models/Common.md#checkcontainerlistmodel)|
 
 
 
@@ -3103,7 +3103,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |connection_name|Connection name|string|:material-check-bold:|
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
-|[time_scale](../../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
 
 
 
@@ -3277,7 +3277,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/Common.md#checkcontainermodel)||[CheckContainerModel](../../models/Common.md#checkcontainermodel)|
+|[check_container_model](../models/Common.md#checkcontainermodel)||[CheckContainerModel](../models/Common.md#checkcontainermodel)|
 
 
 
@@ -3289,7 +3289,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |connection_name|Connection name|string|:material-check-bold:|
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
-|[time_scale](../../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
 
 
 
@@ -3451,7 +3451,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/Common.md#checkcontainermodel)||[CheckContainerModel](../../models/Common.md#checkcontainermodel)|
+|[check_container_model](../models/Common.md#checkcontainermodel)||[CheckContainerModel](../models/Common.md#checkcontainermodel)|
 
 
 
@@ -3463,7 +3463,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |connection_name|Connection name|string|:material-check-bold:|
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
-|[time_scale](../../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
 |check_category|Check category|string|:material-check-bold:|
 |check_name|Check name|string|:material-check-bold:|
 
@@ -3635,7 +3635,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_monthly_partitioned_check_categories_spec](../../models/tables.md#tablemonthlypartitionedcheckcategoriesspec)||[TableMonthlyPartitionedCheckCategoriesSpec](../../models/tables.md#tablemonthlypartitionedcheckcategoriesspec)|
+|[table_monthly_partitioned_check_categories_spec](../models/tables.md#tablemonthlypartitionedcheckcategoriesspec)||[TableMonthlyPartitionedCheckCategoriesSpec](../models/tables.md#tablemonthlypartitionedcheckcategoriesspec)|
 
 
 
@@ -3789,7 +3789,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_template||List[[CheckTemplate](../../models/Common.md#checktemplate)]|
+|check_template||List[[CheckTemplate](../models/Common.md#checktemplate)]|
 
 
 
@@ -3801,7 +3801,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |connection_name|Connection name|string|:material-check-bold:|
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
-|[time_scale](../../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
 |check_category|Check category|string| |
 |check_name|Check name|string| |
 
@@ -3948,7 +3948,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_partitioning_model](../../models/tables.md#tablepartitioningmodel)||[TablePartitioningModel](../../models/tables.md#tablepartitioningmodel)|
+|[table_partitioning_model](../models/tables.md#tablepartitioningmodel)||[TablePartitioningModel](../models/tables.md#tablepartitioningmodel)|
 
 
 
@@ -4110,7 +4110,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_profiling_check_categories_spec](../../models/tables.md#tableprofilingcheckcategoriesspec)||[TableProfilingCheckCategoriesSpec](../../models/tables.md#tableprofilingcheckcategoriesspec)|
+|[table_profiling_check_categories_spec](../models/tables.md#tableprofilingcheckcategoriesspec)||[TableProfilingCheckCategoriesSpec](../models/tables.md#tableprofilingcheckcategoriesspec)|
 
 
 
@@ -4264,7 +4264,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_list_model](../../models/Common.md#checkcontainerlistmodel)||[CheckContainerListModel](../../models/Common.md#checkcontainerlistmodel)|
+|[check_container_list_model](../models/Common.md#checkcontainerlistmodel)||[CheckContainerListModel](../models/Common.md#checkcontainerlistmodel)|
 
 
 
@@ -4445,7 +4445,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/Common.md#checkcontainermodel)||[CheckContainerModel](../../models/Common.md#checkcontainermodel)|
+|[check_container_model](../models/Common.md#checkcontainermodel)||[CheckContainerModel](../models/Common.md#checkcontainermodel)|
 
 
 
@@ -4614,7 +4614,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/Common.md#checkcontainermodel)||[CheckContainerModel](../../models/Common.md#checkcontainermodel)|
+|[check_container_model](../models/Common.md#checkcontainermodel)||[CheckContainerModel](../models/Common.md#checkcontainermodel)|
 
 
 
@@ -4793,7 +4793,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_template||List[[CheckTemplate](../../models/Common.md#checktemplate)]|
+|check_template||List[[CheckTemplate](../models/Common.md#checktemplate)]|
 
 
 
@@ -4947,7 +4947,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[monitoring_schedule_spec](../../models/Common.md#monitoringschedulespec)||[MonitoringScheduleSpec](../../models/Common.md#monitoringschedulespec)|
+|[monitoring_schedule_spec](../models/Common.md#monitoringschedulespec)||[MonitoringScheduleSpec](../models/Common.md#monitoringschedulespec)|
 
 
 
@@ -4959,7 +4959,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |connection_name|Connection name|string|:material-check-bold:|
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
-|[scheduling_group](../../models/Common.md#checkrunschedulegroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../../models/Common.md#checkrunschedulegroup)|:material-check-bold:|
+|[scheduling_group](../models/Common.md#checkrunschedulegroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../models/Common.md#checkrunschedulegroup)|:material-check-bold:|
 
 
 
@@ -5100,7 +5100,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_statistics_model](../../models/tables.md#tablestatisticsmodel)||[TableStatisticsModel](../../models/tables.md#tablestatisticsmodel)|
+|[table_statistics_model](../models/tables.md#tablestatisticsmodel)||[TableStatisticsModel](../models/tables.md#tablestatisticsmodel)|
 
 
 
@@ -5248,7 +5248,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|table_list_model||List[[TableListModel](../../models/tables.md#tablelistmodel)]|
+|table_list_model||List[[TableListModel](../models/tables.md#tablelistmodel)]|
 
 
 
@@ -5534,7 +5534,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Full table specification|[TableSpec](../../../reference/yaml/TableYaml.md#tablespec)| |
+|Full table specification|[TableSpec](../../reference/yaml/TableYaml.md#tablespec)| |
 
 
 
@@ -5850,7 +5850,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Table basic model with the updated settings|[TableListModel](../../models/tables.md#tablelistmodel)| |
+|Table basic model with the updated settings|[TableListModel](../models/tables.md#tablelistmodel)| |
 
 
 
@@ -6206,7 +6206,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|List of comments to attach (replace) on a table or an empty object to clear the list of comments on a table|List[[CommentSpec](../../models/Common.md#commentspec)]| |
+|List of comments to attach (replace) on a table or an empty object to clear the list of comments on a table|List[[CommentSpec](../models/Common.md#commentspec)]| |
 
 
 
@@ -6422,7 +6422,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Configuration of daily table level data quality monitoring to store or an empty object to remove all data quality monitoring on the table level (column level monitoring are preserved).|[TableDailyMonitoringCheckCategoriesSpec](../../models/tables.md#tabledailymonitoringcheckcategoriesspec)| |
+|Configuration of daily table level data quality monitoring to store or an empty object to remove all data quality monitoring on the table level (column level monitoring are preserved).|[TableDailyMonitoringCheckCategoriesSpec](../models/tables.md#tabledailymonitoringcheckcategoriesspec)| |
 
 
 
@@ -6638,7 +6638,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Default data grouping configuration to store or an empty object to clear the data grouping configuration on a table level|[DataGroupingConfigurationSpec](../../../reference/yaml/ConnectionYaml.md#datagroupingconfigurationspec)| |
+|Default data grouping configuration to store or an empty object to clear the data grouping configuration on a table level|[DataGroupingConfigurationSpec](../../reference/yaml/ConnectionYaml.md#datagroupingconfigurationspec)| |
 
 
 
@@ -6818,7 +6818,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|New configuration of the table&#x27;s incident grouping|[TableIncidentGroupingSpec](../../../reference/yaml/TableYaml.md#tableincidentgroupingspec)| |
+|New configuration of the table&#x27;s incident grouping|[TableIncidentGroupingSpec](../../reference/yaml/TableYaml.md#tableincidentgroupingspec)| |
 
 
 
@@ -7158,7 +7158,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |connection_name|Connection name|string|:material-check-bold:|
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
-|[time_scale](../../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
 
 
 
@@ -7167,7 +7167,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the data quality monitoring configuration.|[CheckContainerModel](../../models/Common.md#checkcontainermodel)| |
+|Model with the changes to be applied to the data quality monitoring configuration.|[CheckContainerModel](../models/Common.md#checkcontainermodel)| |
 
 
 
@@ -7215,6 +7215,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -7272,6 +7273,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -7334,6 +7336,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -7394,6 +7397,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -7455,7 +7459,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Configuration of monthly table level data quality monitoring to store or an empty object to remove all data quality monitoring on the table level (column level monitoring are preserved).|[TableMonthlyMonitoringCheckCategoriesSpec](../../models/tables.md#tablemonthlymonitoringcheckcategoriesspec)| |
+|Configuration of monthly table level data quality monitoring to store or an empty object to remove all data quality monitoring on the table level (column level monitoring are preserved).|[TableMonthlyMonitoringCheckCategoriesSpec](../models/tables.md#tablemonthlymonitoringcheckcategoriesspec)| |
 
 
 
@@ -7671,7 +7675,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Configuration of daily table level data quality partitioned checks to store or an empty object to remove all data quality partitioned checks on the table level (column level partitioned checks are preserved).|[TableDailyPartitionedCheckCategoriesSpec](../../models/tables.md#tabledailypartitionedcheckcategoriesspec)| |
+|Configuration of daily table level data quality partitioned checks to store or an empty object to remove all data quality partitioned checks on the table level (column level partitioned checks are preserved).|[TableDailyPartitionedCheckCategoriesSpec](../models/tables.md#tabledailypartitionedcheckcategoriesspec)| |
 
 
 
@@ -7879,7 +7883,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |connection_name|Connection name|string|:material-check-bold:|
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
-|[time_scale](../../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
 
 
 
@@ -7888,7 +7892,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the data quality partitioned checks configuration.|[CheckContainerModel](../../models/Common.md#checkcontainermodel)| |
+|Model with the changes to be applied to the data quality partitioned checks configuration.|[CheckContainerModel](../models/Common.md#checkcontainermodel)| |
 
 
 
@@ -7936,6 +7940,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -7993,6 +7998,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -8055,6 +8061,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -8115,6 +8122,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -8176,7 +8184,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Configuration of monthly table level data quality partitioned checks to store or an empty object to remove all data quality partitioned checks on the table level (column level partitioned checks are preserved).|[TableMonthlyPartitionedCheckCategoriesSpec](../../models/tables.md#tablemonthlypartitionedcheckcategoriesspec)| |
+|Configuration of monthly table level data quality partitioned checks to store or an empty object to remove all data quality partitioned checks on the table level (column level partitioned checks are preserved).|[TableMonthlyPartitionedCheckCategoriesSpec](../models/tables.md#tablemonthlypartitionedcheckcategoriesspec)| |
 
 
 
@@ -8392,7 +8400,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Table partitioning model with the updated settings|[TablePartitioningModel](../../models/tables.md#tablepartitioningmodel)| |
+|Table partitioning model with the updated settings|[TablePartitioningModel](../models/tables.md#tablepartitioningmodel)| |
 
 
 
@@ -8628,7 +8636,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Configuration of table level data quality profiling checks to store or an empty object to remove all data quality profiling checks on the table level (column level profiling checks are preserved).|[TableProfilingCheckCategoriesSpec](../../models/tables.md#tableprofilingcheckcategoriesspec)| |
+|Configuration of table level data quality profiling checks to store or an empty object to remove all data quality profiling checks on the table level (column level profiling checks are preserved).|[TableProfilingCheckCategoriesSpec](../models/tables.md#tableprofilingcheckcategoriesspec)| |
 
 
 
@@ -8836,7 +8844,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the data quality profiling checks configuration.|[CheckContainerModel](../../models/Common.md#checkcontainermodel)| |
+|Model with the changes to be applied to the data quality profiling checks configuration.|[CheckContainerModel](../models/Common.md#checkcontainermodel)| |
 
 
 
@@ -8883,6 +8891,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -8938,6 +8947,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -8998,6 +9008,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -9056,6 +9067,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 						sensor_name='sample_target/sample_category/sample_sensor',
 						quality_dimension='sample_quality_dimension',
 						supports_grouping=False,
+						standard=False,
 						disabled=False,
 						exclude_from_kpi=False,
 						include_in_sla=False,
@@ -9108,7 +9120,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |connection_name|Connection name|string|:material-check-bold:|
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
-|[scheduling_group](../../models/Common.md#checkrunschedulegroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../../models/Common.md#checkrunschedulegroup)|:material-check-bold:|
+|[scheduling_group](../models/Common.md#checkrunschedulegroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../models/Common.md#checkrunschedulegroup)|:material-check-bold:|
 
 
 
@@ -9117,7 +9129,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Table&#x27;s overridden schedule configuration to store or an empty object to clear the schedule configuration on a table|[MonitoringScheduleSpec](../../models/Common.md#monitoringschedulespec)| |
+|Table&#x27;s overridden schedule configuration to store or an empty object to clear the schedule configuration on a table|[MonitoringScheduleSpec](../models/Common.md#monitoringschedulespec)| |
 
 
 

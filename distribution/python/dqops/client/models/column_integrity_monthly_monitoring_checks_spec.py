@@ -9,8 +9,8 @@ if TYPE_CHECKING:
     from ..models.column_integrity_foreign_key_match_percent_check_spec import (
         ColumnIntegrityForeignKeyMatchPercentCheckSpec,
     )
-    from ..models.column_integrity_foreign_key_not_match_count_check_spec import (
-        ColumnIntegrityForeignKeyNotMatchCountCheckSpec,
+    from ..models.column_integrity_lookup_key_not_found_count_check_spec import (
+        ColumnIntegrityLookupKeyNotFoundCountCheckSpec,
     )
     from ..models.column_integrity_monthly_monitoring_checks_spec_custom_checks import (
         ColumnIntegrityMonthlyMonitoringChecksSpecCustomChecks,
@@ -27,17 +27,17 @@ class ColumnIntegrityMonthlyMonitoringChecksSpec:
         custom_checks (Union[Unset, ColumnIntegrityMonthlyMonitoringChecksSpecCustomChecks]): Dictionary of additional
             custom checks within this category. The keys are check names defined in the definition section. The sensor
             parameters and rules should match the type of the configured sensor and rule for the custom check.
-        monthly_foreign_key_not_match_count (Union[Unset, ColumnIntegrityForeignKeyNotMatchCountCheckSpec]):
-        monthly_foreign_key_match_percent (Union[Unset, ColumnIntegrityForeignKeyMatchPercentCheckSpec]):
+        monthly_lookup_key_not_found (Union[Unset, ColumnIntegrityLookupKeyNotFoundCountCheckSpec]):
+        monthly_lookup_key_found_percent (Union[Unset, ColumnIntegrityForeignKeyMatchPercentCheckSpec]):
     """
 
     custom_checks: Union[
         Unset, "ColumnIntegrityMonthlyMonitoringChecksSpecCustomChecks"
     ] = UNSET
-    monthly_foreign_key_not_match_count: Union[
-        Unset, "ColumnIntegrityForeignKeyNotMatchCountCheckSpec"
+    monthly_lookup_key_not_found: Union[
+        Unset, "ColumnIntegrityLookupKeyNotFoundCountCheckSpec"
     ] = UNSET
-    monthly_foreign_key_match_percent: Union[
+    monthly_lookup_key_found_percent: Union[
         Unset, "ColumnIntegrityForeignKeyMatchPercentCheckSpec"
     ] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -47,16 +47,14 @@ class ColumnIntegrityMonthlyMonitoringChecksSpec:
         if not isinstance(self.custom_checks, Unset):
             custom_checks = self.custom_checks.to_dict()
 
-        monthly_foreign_key_not_match_count: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.monthly_foreign_key_not_match_count, Unset):
-            monthly_foreign_key_not_match_count = (
-                self.monthly_foreign_key_not_match_count.to_dict()
-            )
+        monthly_lookup_key_not_found: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.monthly_lookup_key_not_found, Unset):
+            monthly_lookup_key_not_found = self.monthly_lookup_key_not_found.to_dict()
 
-        monthly_foreign_key_match_percent: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.monthly_foreign_key_match_percent, Unset):
-            monthly_foreign_key_match_percent = (
-                self.monthly_foreign_key_match_percent.to_dict()
+        monthly_lookup_key_found_percent: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.monthly_lookup_key_found_percent, Unset):
+            monthly_lookup_key_found_percent = (
+                self.monthly_lookup_key_found_percent.to_dict()
             )
 
         field_dict: Dict[str, Any] = {}
@@ -64,14 +62,12 @@ class ColumnIntegrityMonthlyMonitoringChecksSpec:
         field_dict.update({})
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
-        if monthly_foreign_key_not_match_count is not UNSET:
+        if monthly_lookup_key_not_found is not UNSET:
+            field_dict["monthly_lookup_key_not_found"] = monthly_lookup_key_not_found
+        if monthly_lookup_key_found_percent is not UNSET:
             field_dict[
-                "monthly_foreign_key_not_match_count"
-            ] = monthly_foreign_key_not_match_count
-        if monthly_foreign_key_match_percent is not UNSET:
-            field_dict[
-                "monthly_foreign_key_match_percent"
-            ] = monthly_foreign_key_match_percent
+                "monthly_lookup_key_found_percent"
+            ] = monthly_lookup_key_found_percent
 
         return field_dict
 
@@ -80,8 +76,8 @@ class ColumnIntegrityMonthlyMonitoringChecksSpec:
         from ..models.column_integrity_foreign_key_match_percent_check_spec import (
             ColumnIntegrityForeignKeyMatchPercentCheckSpec,
         )
-        from ..models.column_integrity_foreign_key_not_match_count_check_spec import (
-            ColumnIntegrityForeignKeyNotMatchCountCheckSpec,
+        from ..models.column_integrity_lookup_key_not_found_count_check_spec import (
+            ColumnIntegrityLookupKeyNotFoundCountCheckSpec,
         )
         from ..models.column_integrity_monthly_monitoring_checks_spec_custom_checks import (
             ColumnIntegrityMonthlyMonitoringChecksSpecCustomChecks,
@@ -101,40 +97,38 @@ class ColumnIntegrityMonthlyMonitoringChecksSpec:
                 )
             )
 
-        _monthly_foreign_key_not_match_count = d.pop(
-            "monthly_foreign_key_not_match_count", UNSET
-        )
-        monthly_foreign_key_not_match_count: Union[
-            Unset, ColumnIntegrityForeignKeyNotMatchCountCheckSpec
+        _monthly_lookup_key_not_found = d.pop("monthly_lookup_key_not_found", UNSET)
+        monthly_lookup_key_not_found: Union[
+            Unset, ColumnIntegrityLookupKeyNotFoundCountCheckSpec
         ]
-        if isinstance(_monthly_foreign_key_not_match_count, Unset):
-            monthly_foreign_key_not_match_count = UNSET
+        if isinstance(_monthly_lookup_key_not_found, Unset):
+            monthly_lookup_key_not_found = UNSET
         else:
-            monthly_foreign_key_not_match_count = (
-                ColumnIntegrityForeignKeyNotMatchCountCheckSpec.from_dict(
-                    _monthly_foreign_key_not_match_count
+            monthly_lookup_key_not_found = (
+                ColumnIntegrityLookupKeyNotFoundCountCheckSpec.from_dict(
+                    _monthly_lookup_key_not_found
                 )
             )
 
-        _monthly_foreign_key_match_percent = d.pop(
-            "monthly_foreign_key_match_percent", UNSET
+        _monthly_lookup_key_found_percent = d.pop(
+            "monthly_lookup_key_found_percent", UNSET
         )
-        monthly_foreign_key_match_percent: Union[
+        monthly_lookup_key_found_percent: Union[
             Unset, ColumnIntegrityForeignKeyMatchPercentCheckSpec
         ]
-        if isinstance(_monthly_foreign_key_match_percent, Unset):
-            monthly_foreign_key_match_percent = UNSET
+        if isinstance(_monthly_lookup_key_found_percent, Unset):
+            monthly_lookup_key_found_percent = UNSET
         else:
-            monthly_foreign_key_match_percent = (
+            monthly_lookup_key_found_percent = (
                 ColumnIntegrityForeignKeyMatchPercentCheckSpec.from_dict(
-                    _monthly_foreign_key_match_percent
+                    _monthly_lookup_key_found_percent
                 )
             )
 
         column_integrity_monthly_monitoring_checks_spec = cls(
             custom_checks=custom_checks,
-            monthly_foreign_key_not_match_count=monthly_foreign_key_not_match_count,
-            monthly_foreign_key_match_percent=monthly_foreign_key_match_percent,
+            monthly_lookup_key_not_found=monthly_lookup_key_not_found,
+            monthly_lookup_key_found_percent=monthly_lookup_key_found_percent,
         )
 
         column_integrity_monthly_monitoring_checks_spec.additional_properties = d

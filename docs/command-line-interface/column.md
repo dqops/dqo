@@ -1,23 +1,36 @@
-# column
+# dqo column command
+
+
+Modify and list columns
+
+
 
 ___
-### **dqo column add**
+
+## dqo column add
 
 Add a column with specified details
 
+
 **Description**
+
 
 Add a new column to a table with specific details. The new column is added to the YAML configuration file.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] column add [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
             [-d=<dataType>] [-e=<sqlExpression>] [-of=<outputFormat>]
             [-t=<fullTableName>]
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> column add [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
             [-d=<dataType>] [-e=<sqlExpression>] [-of=<outputFormat>]
@@ -25,7 +38,11 @@ dqo> column add [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
@@ -42,30 +59,44 @@ dqo> column add [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 
 
 
+
+
 ___
-### **dqo column remove**
+
+## dqo column remove
 
 Remove the column(s) that match a given condition
 
+
 **Description**
+
 
 Remove one or more columns from a table that match a specified condition. Users can filter the column.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] column remove [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
                [-of=<outputFormat>] [-t=<fullTableName>]
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> column remove [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
                [-of=<outputFormat>] [-t=<fullTableName>]
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
@@ -80,24 +111,34 @@ dqo> column remove [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 
 
 
+
+
 ___
-### **dqo column update**
+
+## dqo column update
 
 Update the column(s) that match a given condition
 
+
 **Description**
+
 
 Update one or more columns in a table that match a specified condition.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] column update [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
                [-d=<dataType>] [-e=<sqlExpression>] [-of=<outputFormat>]
                [-t=<fullTableName>]
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> column update [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
                [-d=<dataType>] [-e=<sqlExpression>] [-of=<outputFormat>]
@@ -105,7 +146,11 @@ dqo> column update [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
@@ -122,24 +167,34 @@ dqo> column update [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 
 
 
+
+
 ___
-### **dqo column list**
+
+## dqo column list
 
 List the columns that match a given condition
 
+
 **Description**
+
 
 List all the columns in a table or filter them based on a specified condition.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] column list [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
              [-of=<outputFormat>] [-t=<fullTableName>] [-l=<labels>]...
              [-tg=<tags>]...
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> column list [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
              [-of=<outputFormat>] [-t=<fullTableName>] [-l=<labels>]...
@@ -147,7 +202,11 @@ dqo> column list [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
@@ -164,30 +223,44 @@ dqo> column list [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 
 
 
+
+
 ___
-### **dqo column enable**
+
+## dqo column enable
 
 Enable the column(s) filtered by the given conditions
 
+
 **Description**
+
 
 Enable one or more columns in a table based on a specified condition. This command will restore the data in the previously disabled columns.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] column enable [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
                [-of=<outputFormat>] [-t=<fullTableName>]
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> column enable [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
                [-of=<outputFormat>] [-t=<fullTableName>]
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
@@ -202,30 +275,44 @@ dqo> column enable [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 
 
 
+
+
 ___
-### **dqo column disable**
+
+## dqo column disable
 
 Disable the column(s)filtered by the given conditions
 
+
 **Description**
+
 
 Disable one or more columns in a table based on a specified condition. Disabling a column will prevent it from being queried or updated until it is enabled again.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] column disable [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
                 [-of=<outputFormat>] [-t=<fullTableName>]
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> column disable [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
                 [-of=<outputFormat>] [-t=<fullTableName>]
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
@@ -240,30 +327,44 @@ dqo> column disable [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 
 
 
+
+
 ___
-### **dqo column rename**
+
+## dqo column rename
 
 Rename the column filtered by the given conditions
 
+
 **Description**
+
 
 Rename one or more columns in a table based on a specified condition.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] column rename [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
                [-n=<newColumnName>] [-of=<outputFormat>] [-t=<fullTableName>]
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> column rename [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
                [-n=<newColumnName>] [-of=<outputFormat>] [-t=<fullTableName>]
 
 ```
 
-**Options**
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
@@ -275,6 +376,8 @@ dqo> column rename [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 |<p id="column rename-h">`-h`</p><br/><p id="column rename--help">`--help`</p><br/>|Show the help for the command and parameters| ||
 |<p id="column rename-n">`-n`</p><br/><p id="column rename--newColumn">`--newColumn`</p><br/>|New column name| ||
 |<p id="column rename-of">`-of`</p><br/><p id="column rename--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+
+
 
 
 
