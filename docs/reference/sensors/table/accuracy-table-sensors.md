@@ -1,5 +1,5 @@
 # Data quality accuracy sensors
-All [data quality sensors](../../../dqo-concepts/sensors/sensors.md) in the **accuracy** category supported by DQOps are listed below. Those sensors are measured on a table level.
+All [data quality sensors](../../../dqo-concepts/definition-of-data-quality-sensors.md) in the **accuracy** category supported by DQOps are listed below. Those sensors are measured on a table level.
 
 ---
 

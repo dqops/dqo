@@ -2,6 +2,28 @@
 The definition of YAML files used by DQOps to configure the data sources, monitored tables, and the configuration of activated data quality checks.
 
 
+## DashboardListSpec
+List of dashboards.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+___
+
+
 ## DashboardSpec
 Description of a single dashboard that is available in the platform.
 
@@ -36,18 +58,8 @@ The structure of this object is described below
 ___
 
 
-## DashboardListSpec
-List of dashboards.
-
-
-
-
-
-
-
-
-
-
+## DashboardsFolderListSpec
+List of dashboard folders.
 
 
 
@@ -78,18 +90,6 @@ The structure of this object is described below
 |[spec](./DashboardYaml.md#DashboardsFolderListSpec)||[DashboardsFolderListSpec](./DashboardYaml.md#DashboardsFolderListSpec)| | | |
 
 
-
-
-
-
-
-
-
-___
-
-
-## DashboardsFolderListSpec
-List of dashboard folders.
 
 
 

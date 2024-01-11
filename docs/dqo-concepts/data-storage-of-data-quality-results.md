@@ -97,7 +97,7 @@ The schema of the following tables are documented:
 
 ### **Parquet tables**
 When a [data quality check](definition-of-data-quality-checks/index.md) is [run](running-data-quality-checks.md), DQOps runs the SQL query
-generated from the [data quality sensor](sensors/sensors.md) template on the monitored data source.
+generated from the [data quality sensor](definition-of-data-quality-sensors.md) template on the monitored data source.
 The query results (called the **sensor readouts** in DQOps) are stored
 in the [sensor_readouts](../reference/parquetfiles/sensor_readouts.md) Parquet table.
 

@@ -64,7 +64,7 @@ by Red Hat as shown on the following example.
 
 ![YAML extension](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/yaml-extension.png)
 
-If you intend to create custom [data quality sensors](../../dqo-concepts/sensors/sensors.md),
+If you intend to create custom [data quality sensors](../../dqo-concepts/definition-of-data-quality-sensors.md),
 please also install the [Better Jinja](https://marketplace.visualstudio.com/items?itemName=samuelcolvin.jinjahtml)
 extension by Samuel Colvin.
 
@@ -153,7 +153,7 @@ The following elements are supported, not including the data quality issue thres
   stored in the [check_results](../../reference/parquetfiles/check_results.md) parquet table. Data quality SLAs
   can be used to group data quality checks that must pass to meet a Data Contract.
 - **`parameters`** is an important node that contains 
-  the [data quality sensor](../../dqo-concepts/sensors/sensors.md)'s parameters. Not all sensors used by data quality
+  the [data quality sensor](../../dqo-concepts/definition-of-data-quality-sensors.md)'s parameters. Not all sensors used by data quality
   checks have parameters and the node does not need to be configured.
 - `quality_dimension` is a text field used to override the default value of the [data quality dimension](../../dqo-concepts/data-quality-dimensions.md)
   stored in the parquet tables. Changing the default data quality dimension name allows to report some issues under a different dimension.

@@ -3,7 +3,7 @@ Data quality checks are responsible for detecting data quality issues, and asser
 
 ## Data quality check definition
 In DQOps, a check is a data quality test that can be run on both table or column levels. The data quality check consists of a 
-[data quality sensor](../sensors/sensors.md) and a [data quality rule](../definition-of-data-quality-rules.md).
+[data quality sensor](../definition-of-data-quality-sensors.md) and a [data quality rule](../definition-of-data-quality-rules.md).
 
 The data quality sensor reads the value from the data source at a given point in time. The data quality rule includes 
 a set of conditions (thresholds) that the sensor readout must meet. When the conditions are not met, the check detects 
@@ -17,7 +17,7 @@ data quality check that verifies if the number of rows in the monitored table is
 
 The data quality check is evaluated on a monitored table (or column) in three phases.
 
-- The placeholders for the table name (and column name) **[sensor](../sensors/sensors.md) template** are
+- The placeholders for the table name (and column name) **[sensor](../definition-of-data-quality-sensors.md) template** are
   filled in a templated SQL query (called a data quality sensor) 
 
 
@@ -89,7 +89,7 @@ The structure of the table configuration file is described in the [configuring c
 
 ## Issue severity levels
 Each data quality check supports configuring the alerting thresholds at three levels: *warning*, *error* and *fatal*.
-DQOps will pass the [sensor](../sensors/sensors.md) (the captured data quality metric, such as a percentage of null values)
+DQOps will pass the [sensor](../definition-of-data-quality-sensors.md) (the captured data quality metric, such as a percentage of null values)
 to all three [data quality rules](../definition-of-data-quality-rules.md), using different thresholds.
 If rules at multiple severity levels identify a data quality issue (the rule fails), DQOps picks the severity level
 of the most severe rule that failed in the order: *fatal*, *error*, *warning*.
@@ -201,7 +201,7 @@ GROUP BY time_period, time_period_utc
 ORDER BY time_period, time_period_utc
 ```
 
-1.  Actual value returned by the [data quality sensor](../sensors/sensors.md), called the **sensor readout**.
+1.  Actual value returned by the [data quality sensor](../definition-of-data-quality-sensors.md), called the **sensor readout**.
     It is the measure captured by the data quality sensor. It will be verified by the [data quality rule](../definition-of-data-quality-rules.md).
 
 2.  The time period for which the **sensor readout** is valid, using a local time zone of the monitored database.
@@ -210,7 +210,7 @@ ORDER BY time_period, time_period_utc
 3.  The time period (day) for which the **sensor readout** is valid, but converted to timestamp with the database server's time zone.
 
 
-DQOps captures the data quality measure, called the **sensor readout**. The data quality [sensor templates](../sensors/sensors.md)
+DQOps captures the data quality measure, called the **sensor readout**. The data quality [sensor templates](../definition-of-data-quality-sensors.md)
 require that the result is returned as an `actual_value` result column.
 
 The remaining two columns that are returned by the query are:

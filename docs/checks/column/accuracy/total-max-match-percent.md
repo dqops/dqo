@@ -82,7 +82,7 @@ spec:
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
     [total_max_match_percent](../../../reference/sensors/column/accuracy-column-sensors.md#total-max-match-percent)
-    [sensor](../../../dqo-concepts/sensors/sensors.md).
+    [data quality sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     ??? example "BigQuery"
 
@@ -558,7 +558,7 @@ spec:
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
     [total_max_match_percent](../../../reference/sensors/column/accuracy-column-sensors.md#total-max-match-percent)
-    [sensor](../../../dqo-concepts/sensors/sensors.md).
+    [data quality sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     ??? example "BigQuery"
 
@@ -1034,7 +1034,7 @@ spec:
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
     [total_max_match_percent](../../../reference/sensors/column/accuracy-column-sensors.md#total-max-match-percent)
-    [sensor](../../../dqo-concepts/sensors/sensors.md).
+    [data quality sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     ??? example "BigQuery"
 

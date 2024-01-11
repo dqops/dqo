@@ -2,7 +2,7 @@
 
 ## What are monitoring checks?
 
-In DQOps, the check is a data quality test, which consists of a [data quality sensor](../sensors/sensors.md) and a
+In DQOps, the check is a data quality test, which consists of a [data quality sensor](../definition-of-data-quality-sensors.md) and a
 [data quality rule](../definition-of-data-quality-rules.md).
 
 Monitoring checks are standard checks that monitor the data quality of a table or column. There are two categories of 

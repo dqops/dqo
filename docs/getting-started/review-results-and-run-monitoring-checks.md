@@ -106,7 +106,7 @@ Just select the column of interest form the tree view on the left.
 On the list of checks you can activate other checks, change their thresholds and run them.
 
 Note that some activated checks, for example column-level profile_nulls_count and profile_null_percent, do not have thresholds levels set.
-For those check a [sensor](../dqo-concepts/sensors/sensors.md) will be executed, and you can view its result on Results details, **Sensor readouts** tab.
+For those check a [sensor](../dqo-concepts/definition-of-data-quality-sensors.md) will be executed, and you can view its result on Results details, **Sensor readouts** tab.
 Based on the results, you can set the threshold for these checks.
     
 

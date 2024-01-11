@@ -5,7 +5,7 @@ These topics introduce the basic concepts of DQOps.
  - **[Data quality checks](definition-of-data-quality-checks/index.md)**
 
     A data quality check detects data quality issues. The check in DQOps is defined as a pair
-    of a [sensor](./sensors/sensors.md) that captures metrics from the data source and a [rule](definition-of-data-quality-rules.md) that verifies the sensor's readout.
+    of a [sensor](definition-of-data-quality-sensors.md) that captures metrics from the data source and a [rule](definition-of-data-quality-rules.md) that verifies the sensor's readout.
     For example, the [nulls_percent](../checks/column/nulls/nulls-percent.md) check uses both the [null_percent](../reference/sensors/column/nulls-column-sensors.md#null-percent) sensor
     and the [max_percent](../reference/rules/Comparison.md#max-percent) rule to detect if the maximum percent
     of null values in a tested column is satisfied.
@@ -51,7 +51,7 @@ These topics introduce the basic concepts of DQOps.
     check name, check type, check category or even labels assigned to tables or columns. 
 
 
- - **[Data quality sensors](./sensors/sensors.md)**
+ - **[Data quality sensors](definition-of-data-quality-sensors.md)**
 
     The data quality `sensors` are SQL queries defined as Jinja2 templates. A sensor is called by a data quality check
     to capture a data quality measure such as the row count from the monitored source. The sensor's measure is called
@@ -67,7 +67,7 @@ These topics introduce the basic concepts of DQOps.
     of the [null_percent](../reference/sensors/column/nulls-column-sensors.md#null-percent) sensor is valid.
 
 
- - **[Data quality KPIs](definition-of-data-quality-kpis)**
+ - **[Data quality KPIs](definition-of-data-quality-kpis.md)**
 
     The data quality is measured by data quality KPIs (Key Performance Indicators).
     The definition of a data quality KPI in DQOps is a percentage of passed data quality checks out of all executed data quality checks.
@@ -165,7 +165,7 @@ These topics introduce the basic concepts of DQOps.
 
  - **[Check execution flow](architecture/data-quality-check-execution-flow.md)**
 
-    Detailed data quality execution flows that show how DQOps executes [data quality sensors](./sensors/sensors.md),
+    Detailed data quality execution flows that show how DQOps executes [data quality sensors](definition-of-data-quality-sensors.md),
     [data quality rules](definition-of-data-quality-rules.md), [data quality checks](definition-of-data-quality-checks/index.md),
     and how the data is [stored](data-storage-of-data-quality-results.md). Learn how execution errors are stored.
  

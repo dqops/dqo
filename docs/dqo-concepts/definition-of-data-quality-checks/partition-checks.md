@@ -2,7 +2,7 @@
 
 ## What are partition checks?
 
-In DQOps, the check is a data quality test, which consists of a [data quality sensor](../sensors/sensors.md) and a
+In DQOps, the check is a data quality test, which consists of a [data quality sensor](../definition-of-data-quality-sensors.md) and a
 [data quality rule](../definition-of-data-quality-rules.md).
 
 Partition checks are designed to measure the data quality in partitioned data. In contrast to [monitoring checks](data-observability-monitoring-checks.md),

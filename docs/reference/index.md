@@ -1,5 +1,5 @@
 # DQOps reference
-The reference of DQOps file formats, [data quality sensors](../dqo-concepts/sensors/sensors.md) and
+The reference of DQOps file formats, [data quality sensors](../dqo-concepts/definition-of-data-quality-sensors.md) and
 [data quality rules](../dqo-concepts/definition-of-data-quality-rules.md) is provided below.
 
 
@@ -8,7 +8,7 @@ The following reference documentation shows the definition of data quality senso
 
  - **[Data quality sensors reference](./sensors/index.md)**
 
-    The reference of [data quality sensors](../dqo-concepts/sensors/sensors.md) shows the Jinja2 SQL templates
+    The reference of [data quality sensors](../dqo-concepts/definition-of-data-quality-sensors.md) shows the Jinja2 SQL templates
     used by data quality sensors for each [data source](../data-sources/index.md).
 
 

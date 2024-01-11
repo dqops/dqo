@@ -89,7 +89,7 @@ spec:
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
     [text_found_in_set_percent](../../../reference/sensors/column/accepted_values-column-sensors.md#text-found-in-set-percent)
-    [sensor](../../../dqo-concepts/sensors/sensors.md).
+    [data quality sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     ??? example "BigQuery"
 
@@ -867,7 +867,7 @@ Expand the *Configure with data grouping* section to see additional examples for
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
     [text_found_in_set_percent](../../../reference/sensors/column/accepted_values-column-sensors.md#text-found-in-set-percent)
-    [sensor](../../../dqo-concepts/sensors/sensors.md).
+    [sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     ??? example "BigQuery"
 
@@ -1702,7 +1702,7 @@ spec:
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
     [text_found_in_set_percent](../../../reference/sensors/column/accepted_values-column-sensors.md#text-found-in-set-percent)
-    [sensor](../../../dqo-concepts/sensors/sensors.md).
+    [data quality sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     ??? example "BigQuery"
 
@@ -2481,7 +2481,7 @@ Expand the *Configure with data grouping* section to see additional examples for
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
     [text_found_in_set_percent](../../../reference/sensors/column/accepted_values-column-sensors.md#text-found-in-set-percent)
-    [sensor](../../../dqo-concepts/sensors/sensors.md).
+    [sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     ??? example "BigQuery"
 
@@ -3316,7 +3316,7 @@ spec:
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
     [text_found_in_set_percent](../../../reference/sensors/column/accepted_values-column-sensors.md#text-found-in-set-percent)
-    [sensor](../../../dqo-concepts/sensors/sensors.md).
+    [data quality sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     ??? example "BigQuery"
 
@@ -4095,7 +4095,7 @@ Expand the *Configure with data grouping* section to see additional examples for
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
     [text_found_in_set_percent](../../../reference/sensors/column/accepted_values-column-sensors.md#text-found-in-set-percent)
-    [sensor](../../../dqo-concepts/sensors/sensors.md).
+    [sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     ??? example "BigQuery"
 
@@ -4940,7 +4940,7 @@ spec:
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
     [text_found_in_set_percent](../../../reference/sensors/column/accepted_values-column-sensors.md#text-found-in-set-percent)
-    [sensor](../../../dqo-concepts/sensors/sensors.md).
+    [data quality sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     ??? example "BigQuery"
 
@@ -5733,7 +5733,7 @@ Expand the *Configure with data grouping* section to see additional examples for
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
     [text_found_in_set_percent](../../../reference/sensors/column/accepted_values-column-sensors.md#text-found-in-set-percent)
-    [sensor](../../../dqo-concepts/sensors/sensors.md).
+    [sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     ??? example "BigQuery"
 
@@ -6576,7 +6576,7 @@ spec:
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
     [text_found_in_set_percent](../../../reference/sensors/column/accepted_values-column-sensors.md#text-found-in-set-percent)
-    [sensor](../../../dqo-concepts/sensors/sensors.md).
+    [data quality sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     ??? example "BigQuery"
 
@@ -7369,7 +7369,7 @@ Expand the *Configure with data grouping* section to see additional examples for
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
     [text_found_in_set_percent](../../../reference/sensors/column/accepted_values-column-sensors.md#text-found-in-set-percent)
-    [sensor](../../../dqo-concepts/sensors/sensors.md).
+    [sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     ??? example "BigQuery"
 

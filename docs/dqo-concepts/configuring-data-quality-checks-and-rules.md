@@ -309,7 +309,7 @@ will make the **warning** rule ineffective, raising only **error** severity issu
 
 ## Checks without rules
 Data quality checks without any rules are a special case in DQOps.
-These checks will only capture the *sensor result* from the [sensor](sensors/sensors.md) and store
+These checks will only capture the *sensor result* from the [sensor](definition-of-data-quality-sensors.md) and store
 it in both the [sensor_readouts](../reference/parquetfiles/sensor_readouts.md), and the
 check results [check_results](../reference/parquetfiles/check_results.md) parquet tables.
 
@@ -359,7 +359,7 @@ spec:
 ```
 
 ## Checks with sensor's parameters
-Some data quality [sensors](sensors/sensors.md) are parametrized. The parameters are used
+Some data quality [sensors](definition-of-data-quality-sensors.md) are parametrized. The parameters are used
 in the SQL template and will be rendered in the SQL query that is generated from the sensor.
 
 The following example shows how to use the
@@ -433,7 +433,7 @@ that is used by DQOps in the following cases:
 - The default [data quality checks](#default-data-quality-checks) are activated depending on the column's data type.
   Numeric anomaly checks are activated only on numeric columns such as the *cumulative_confirmed* column in the example above.
 
-- The data quality [sensors](sensors/sensors.md) may use the column's data type to decide if an additional type casting
+- The data quality [sensors](definition-of-data-quality-sensors.md) may use the column's data type to decide if an additional type casting
   must be generated in the SQL query that will capture the metrics for the data quality check.
 
 DQOps does not require that each column has the `type_snapshot` node defined. All the data quality checks will work

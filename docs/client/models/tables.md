@@ -13,7 +13,7 @@ Container of comparison checks for each defined data comparison. The name of the
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|self||Dict[string, [TableComparisonDailyMonitoringChecksSpec](../../reference/yaml/monitoring/table-daily-monitoring-checks.md#tablecomparisondailymonitoringchecksspec)]|
+|self|:mm|Dict[string, [TableComparisonDailyMonitoringChecksSpec](../../reference/yaml/monitoring/table-daily-monitoring-checks.md#tablecomparisondailymonitoringchecksspec)]|
 
 
 ___
@@ -27,8 +27,8 @@ Dictionary of custom checks indexed by a check name.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|self||Dict[string, [CustomCheckSpec](../../reference/yaml/profiling/table-profiling-checks.md#customcheckspec)]|
-|self||Dict[string, [CustomCheckSpec](../../reference/yaml/profiling/table-profiling-checks.md#customcheckspec)]|
+|self|:mm|Dict[string, [CustomCheckSpec](../../reference/yaml/profiling/table-profiling-checks.md#customcheckspec)]|
+|self|:mm|Dict[string, [CustomCheckSpec](../../reference/yaml/profiling/table-profiling-checks.md#customcheckspec)]|
 
 
 ___
@@ -65,7 +65,7 @@ Container of comparison checks for each defined data comparison. The name of the
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|self||Dict[string, [TableComparisonDailyPartitionedChecksSpec](../../reference/yaml/partitioned/table-daily-partitioned-checks.md#tablecomparisondailypartitionedchecksspec)]|
+|self|:mm|Dict[string, [TableComparisonDailyPartitionedChecksSpec](../../reference/yaml/partitioned/table-daily-partitioned-checks.md#tablecomparisondailypartitionedchecksspec)]|
 
 
 ___
@@ -170,7 +170,7 @@ Container of comparison checks for each defined data comparison. The name of the
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|self||Dict[string, [TableComparisonMonthlyMonitoringChecksSpec](../../reference/yaml/monitoring/table-monthly-monitoring-checks.md#tablecomparisonmonthlymonitoringchecksspec)]|
+|self|:mm|Dict[string, [TableComparisonMonthlyMonitoringChecksSpec](../../reference/yaml/monitoring/table-monthly-monitoring-checks.md#tablecomparisonmonthlymonitoringchecksspec)]|
 
 
 ___
@@ -207,7 +207,7 @@ Container of comparison checks for each defined data comparison. The name of the
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|self||Dict[string, [TableComparisonMonthlyPartitionedChecksSpec](../../reference/yaml/partitioned/table-monthly-partitioned-checks.md#tablecomparisonmonthlypartitionedchecksspec)]|
+|self|:mm|Dict[string, [TableComparisonMonthlyPartitionedChecksSpec](../../reference/yaml/partitioned/table-monthly-partitioned-checks.md#tablecomparisonmonthlypartitionedchecksspec)]|
 
 
 ___
@@ -258,7 +258,7 @@ Container of comparison checks for each defined data comparison. The name of the
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|self||Dict[string, [TableComparisonProfilingChecksSpec](../../reference/yaml/profiling/table-profiling-checks.md#tablecomparisonprofilingchecksspec)]|
+|self|:mm|Dict[string, [TableComparisonProfilingChecksSpec](../../reference/yaml/profiling/table-profiling-checks.md#tablecomparisonprofilingchecksspec)]|
 
 
 ___

@@ -79,7 +79,7 @@ spec:
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
     [integer_in_range_percent](../../../reference/sensors/column/numeric-column-sensors.md#integer-in-range-percent)
-    [sensor](../../../dqo-concepts/sensors/sensors.md).
+    [data quality sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     ??? example "BigQuery"
 
@@ -568,7 +568,7 @@ Expand the *Configure with data grouping* section to see additional examples for
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
     [integer_in_range_percent](../../../reference/sensors/column/numeric-column-sensors.md#integer-in-range-percent)
-    [sensor](../../../dqo-concepts/sensors/sensors.md).
+    [sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     ??? example "BigQuery"
 
@@ -1114,7 +1114,7 @@ spec:
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
     [integer_in_range_percent](../../../reference/sensors/column/numeric-column-sensors.md#integer-in-range-percent)
-    [sensor](../../../dqo-concepts/sensors/sensors.md).
+    [data quality sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     ??? example "BigQuery"
 
@@ -1604,7 +1604,7 @@ Expand the *Configure with data grouping* section to see additional examples for
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
     [integer_in_range_percent](../../../reference/sensors/column/numeric-column-sensors.md#integer-in-range-percent)
-    [sensor](../../../dqo-concepts/sensors/sensors.md).
+    [sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     ??? example "BigQuery"
 
@@ -2150,7 +2150,7 @@ spec:
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
     [integer_in_range_percent](../../../reference/sensors/column/numeric-column-sensors.md#integer-in-range-percent)
-    [sensor](../../../dqo-concepts/sensors/sensors.md).
+    [data quality sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     ??? example "BigQuery"
 
@@ -2640,7 +2640,7 @@ Expand the *Configure with data grouping* section to see additional examples for
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
     [integer_in_range_percent](../../../reference/sensors/column/numeric-column-sensors.md#integer-in-range-percent)
-    [sensor](../../../dqo-concepts/sensors/sensors.md).
+    [sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     ??? example "BigQuery"
 
@@ -3196,7 +3196,7 @@ spec:
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
     [integer_in_range_percent](../../../reference/sensors/column/numeric-column-sensors.md#integer-in-range-percent)
-    [sensor](../../../dqo-concepts/sensors/sensors.md).
+    [data quality sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     ??? example "BigQuery"
 
@@ -3700,7 +3700,7 @@ Expand the *Configure with data grouping* section to see additional examples for
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
     [integer_in_range_percent](../../../reference/sensors/column/numeric-column-sensors.md#integer-in-range-percent)
-    [sensor](../../../dqo-concepts/sensors/sensors.md).
+    [sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     ??? example "BigQuery"
 
@@ -4254,7 +4254,7 @@ spec:
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
     [integer_in_range_percent](../../../reference/sensors/column/numeric-column-sensors.md#integer-in-range-percent)
-    [sensor](../../../dqo-concepts/sensors/sensors.md).
+    [data quality sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     ??? example "BigQuery"
 
@@ -4758,7 +4758,7 @@ Expand the *Configure with data grouping* section to see additional examples for
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
     [integer_in_range_percent](../../../reference/sensors/column/numeric-column-sensors.md#integer-in-range-percent)
-    [sensor](../../../dqo-concepts/sensors/sensors.md).
+    [sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     ??? example "BigQuery"
 

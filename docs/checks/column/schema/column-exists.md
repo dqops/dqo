@@ -77,7 +77,7 @@ spec:
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
     [column_exists](../../../reference/sensors/column/schema-column-sensors.md#column-exists)
-    [sensor](../../../dqo-concepts/sensors/sensors.md).
+    [data quality sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     
 
@@ -158,7 +158,7 @@ spec:
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
     [column_exists](../../../reference/sensors/column/schema-column-sensors.md#column-exists)
-    [sensor](../../../dqo-concepts/sensors/sensors.md).
+    [data quality sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     
 
@@ -239,7 +239,7 @@ spec:
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
     [column_exists](../../../reference/sensors/column/schema-column-sensors.md#column-exists)
-    [sensor](../../../dqo-concepts/sensors/sensors.md).
+    [data quality sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     
 

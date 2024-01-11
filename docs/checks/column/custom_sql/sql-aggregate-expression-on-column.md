@@ -84,7 +84,7 @@ spec:
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
     [sql_aggregated_expression](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-aggregated-expression)
-    [sensor](../../../dqo-concepts/sensors/sensors.md).
+    [data quality sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     ??? example "BigQuery"
 
@@ -431,7 +431,7 @@ Expand the *Configure with data grouping* section to see additional examples for
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
     [sql_aggregated_expression](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-aggregated-expression)
-    [sensor](../../../dqo-concepts/sensors/sensors.md).
+    [sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     ??? example "BigQuery"
 
@@ -830,7 +830,7 @@ spec:
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
     [sql_aggregated_expression](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-aggregated-expression)
-    [sensor](../../../dqo-concepts/sensors/sensors.md).
+    [data quality sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     ??? example "BigQuery"
 
@@ -1178,7 +1178,7 @@ Expand the *Configure with data grouping* section to see additional examples for
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
     [sql_aggregated_expression](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-aggregated-expression)
-    [sensor](../../../dqo-concepts/sensors/sensors.md).
+    [sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     ??? example "BigQuery"
 
@@ -1577,7 +1577,7 @@ spec:
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
     [sql_aggregated_expression](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-aggregated-expression)
-    [sensor](../../../dqo-concepts/sensors/sensors.md).
+    [data quality sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     ??? example "BigQuery"
 
@@ -1925,7 +1925,7 @@ Expand the *Configure with data grouping* section to see additional examples for
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
     [sql_aggregated_expression](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-aggregated-expression)
-    [sensor](../../../dqo-concepts/sensors/sensors.md).
+    [sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     ??? example "BigQuery"
 
@@ -2334,7 +2334,7 @@ spec:
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
     [sql_aggregated_expression](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-aggregated-expression)
-    [sensor](../../../dqo-concepts/sensors/sensors.md).
+    [data quality sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     ??? example "BigQuery"
 
@@ -2696,7 +2696,7 @@ Expand the *Configure with data grouping* section to see additional examples for
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
     [sql_aggregated_expression](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-aggregated-expression)
-    [sensor](../../../dqo-concepts/sensors/sensors.md).
+    [sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     ??? example "BigQuery"
 
@@ -3103,7 +3103,7 @@ spec:
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
     [sql_aggregated_expression](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-aggregated-expression)
-    [sensor](../../../dqo-concepts/sensors/sensors.md).
+    [data quality sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     ??? example "BigQuery"
 
@@ -3465,7 +3465,7 @@ Expand the *Configure with data grouping* section to see additional examples for
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
     [sql_aggregated_expression](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-aggregated-expression)
-    [sensor](../../../dqo-concepts/sensors/sensors.md).
+    [sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     ??? example "BigQuery"
 

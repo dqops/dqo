@@ -13,7 +13,7 @@ Container of comparison checks for each defined data comparison. The name of the
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|self||Dict[string, [ColumnComparisonDailyMonitoringChecksSpec](../../reference/yaml/monitoring/column-daily-monitoring-checks.md#columncomparisondailymonitoringchecksspec)]|
+|self|:mm|Dict[string, [ColumnComparisonDailyMonitoringChecksSpec](../../reference/yaml/monitoring/column-daily-monitoring-checks.md#columncomparisondailymonitoringchecksspec)]|
 
 
 ___
@@ -27,7 +27,7 @@ Dictionary of custom checks indexed by a check name.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|self||Dict[string, [CustomCheckSpec](../../reference/yaml/profiling/table-profiling-checks.md#customcheckspec)]|
+|self|:mm|Dict[string, [CustomCheckSpec](../../reference/yaml/profiling/table-profiling-checks.md#customcheckspec)]|
 
 
 ___
@@ -74,7 +74,7 @@ Container of comparison checks for each defined data comparison. The name of the
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|self||Dict[string, [ColumnComparisonDailyPartitionedChecksSpec](../../reference/yaml/partitioned/column-daily-partitioned-checks.md#columncomparisondailypartitionedchecksspec)]|
+|self|:mm|Dict[string, [ColumnComparisonDailyPartitionedChecksSpec](../../reference/yaml/partitioned/column-daily-partitioned-checks.md#columncomparisondailypartitionedchecksspec)]|
 
 
 ___
@@ -188,7 +188,7 @@ Container of comparison checks for each defined data comparison. The name of the
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|self||Dict[string, [ColumnComparisonMonthlyMonitoringChecksSpec](../../reference/yaml/monitoring/column-monthly-monitoring-checks.md#columncomparisonmonthlymonitoringchecksspec)]|
+|self|:mm|Dict[string, [ColumnComparisonMonthlyMonitoringChecksSpec](../../reference/yaml/monitoring/column-monthly-monitoring-checks.md#columncomparisonmonthlymonitoringchecksspec)]|
 
 
 ___
@@ -235,7 +235,7 @@ Container of comparison checks for each defined data comparison. The name of the
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|self||Dict[string, [ColumnComparisonMonthlyPartitionedChecksSpec](../../reference/yaml/partitioned/column-monthly-partitioned-checks.md#columncomparisonmonthlypartitionedchecksspec)]|
+|self|:mm|Dict[string, [ColumnComparisonMonthlyPartitionedChecksSpec](../../reference/yaml/partitioned/column-monthly-partitioned-checks.md#columncomparisonmonthlypartitionedchecksspec)]|
 
 
 ___
@@ -280,7 +280,7 @@ Container of comparison checks for each defined data comparison. The name of the
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|self||Dict[string, [ColumnComparisonProfilingChecksSpec](../../reference/yaml/profiling/column-profiling-checks.md#columncomparisonprofilingchecksspec)]|
+|self|:mm|Dict[string, [ColumnComparisonProfilingChecksSpec](../../reference/yaml/profiling/column-profiling-checks.md#columncomparisonprofilingchecksspec)]|
 
 
 ___

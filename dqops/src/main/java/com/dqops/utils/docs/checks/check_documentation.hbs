@@ -6,7 +6,7 @@
 
 ___
 The **{{replace primaryCheckName "_" " "}}** data quality check has the following variants for each
-[type of data quality](/docs/dqo-concepts/checks/index.md#types-of-checks) checks supported by DQOps.
+[type of data quality](/docs/dqo-concepts/definition-of-data-quality-checks/index.md#types-of-checks) checks supported by DQOps.
 
 {{#each allChecks}}
 ## {{replace checkName  "_" " "}}
@@ -63,7 +63,7 @@ The sample *schema_name.table_name.dqotable.yaml* file with the check configured
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
     [{{sensor.sensorName}}](../../../reference/sensors/{{target}}/{{sensor.category}}-{{target}}-sensors.md#{{replace sensor.sensorName "_" "-"}})
-    [sensor](../../../dqo-concepts/sensors/sensors.md).
+    [data quality sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     {{#each providerTemplates~}}
 
@@ -102,7 +102,7 @@ Expand the *Configure with data grouping* section to see additional examples for
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
     [{{sensor.sensorName}}](../../../reference/sensors/{{target}}/{{sensor.category}}-{{target}}-sensors.md#{{replace sensor.sensorName "_" "-"}})
-    [sensor](../../../dqo-concepts/sensors/sensors.md).
+    [sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     {{#each providerTemplatesDataStreams~}}
 

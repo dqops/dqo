@@ -11,8 +11,8 @@ The references of all objects used by [check_results_overview](../operations/che
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|seconds||long|
-|nanos||integer|
+|seconds|:mm|long|
+|nanos|:mm|integer|
 
 
 ___
