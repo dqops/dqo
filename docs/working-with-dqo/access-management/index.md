@@ -1,4 +1,5 @@
 # Access management
+DQOps supports managing access to users, to enable splitting the roles between data quality editors, operation teams, and data stakeholders.
 
 ## Overview
 

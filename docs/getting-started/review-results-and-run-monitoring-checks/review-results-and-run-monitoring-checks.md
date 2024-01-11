@@ -59,7 +59,7 @@ To review the results:
 
     You can filter the columns by simply clicking on the sorting icon next to any column header.
 
-    For detailed description of each column go to the [Basics statistics section](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md). 
+    For detailed description of each column go to the [Basics statistics section](../../working-with-dqo/basic-data-statistics/index.md). 
 
     ![Basic statistics results for austin crimes](https://dqops.com/docs/images/getting-started/austin-crimes-statistics.png)
 
@@ -71,7 +71,7 @@ To review the results:
 ## Review profiling checks results
 
 [**Profiling checks**](../../dqo-concepts/checks/profiling-checks/profiling-checks.md) enable you to run more advanced data analyses than
-[**Basic data statistics**](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md). Profiling checks are also useful for
+[**Basic data statistics**](../../working-with-dqo/basic-data-statistics/index.md). Profiling checks are also useful for
 exploring and experimenting with various types of checks and determining the most suitable ones for regular data quality monitoring.
 
 In the previous step we have run profiling checks for imported tables and column using the Advisor. Now, let's review the results.

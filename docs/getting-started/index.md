@@ -2,7 +2,7 @@
 This guide contains a quick tutorial on how to get started with DQOps using the web interface. 
 
 In the example, we add connection to the [BigQuery public dataset Austin Crime Data](https://console.cloud.google.com/marketplace/details/city-of-austin/austin-crime). 
-Next, we will run and review [Basic statistics](../working-with-dqo/basic-data-statistics/basic-data-statistics.md) and automatically added profiling and monitoring [data quality checks](../dqo-concepts/checks/index.md). 
+Next, we will run and review [Basic statistics](../working-with-dqo/basic-data-statistics/index.md) and automatically added profiling and monitoring [data quality checks](../dqo-concepts/checks/index.md). 
 Finally, we will review the results on the [data quality dashboards](../dqo-concepts/data-quality-dashboards/data-quality-dashboards.md). 
 
 ## Overview
