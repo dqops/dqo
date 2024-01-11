@@ -11,7 +11,7 @@ import {
 import {
   ConnectionApiClient,
   DataSourcesApi,
-  SharedCredentailsApi
+  SharedCredentialsApi
 } from '../../../services/apiClient';
 import { useTree } from '../../../contexts/treeContext';
 import Loader from '../../Loader';
@@ -176,7 +176,7 @@ const DatabaseConnection = ({
   };
 
   const getSharedCredentials = async () => {
-    await SharedCredentailsApi.getAllSharedCredentials().then((res) =>
+    await SharedCredentialsApi.getAllSharedCredentials().then((res) =>
       setSharedCredentials(res.data)
     );
   };

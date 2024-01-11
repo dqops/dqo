@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { getFirstLevelSensorState } from '../../redux/selectors';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { closeFirstLevelTab } from '../../redux/actions/definition.actions';
-import { SharedCredentailsApi } from '../../services/apiClient';
+import { SharedCredentialsApi } from '../../services/apiClient';
 import RadioButton from '../../components/RadioButton';
 import Button from '../../components/Button';
 import { SharedCredentialModel, SharedCredentialModelTypeEnum } from '../../api';
@@ -25,34 +25,34 @@ export default function SingleSharedCredential() {
 
     const addSharedCredential = async () => {
         if (type ==="text"){
-            await SharedCredentailsApi.createSharedCredential({credential_name: credentialName, type, text_value: textAreaValue})
+            await SharedCredentialsApi.createSharedCredential({credential_name: credentialName, type, text_value: textAreaValue})
             .catch((err) => console.error(err))
         } else {
-            await SharedCredentailsApi.createSharedCredential({credential_name: credentialName, type, binary_value: textAreaValue})
+            await SharedCredentialsApi.createSharedCredential({credential_name: credentialName, type, binary_value: textAreaValue})
             .catch((err) => console.error(err))
 
         }
-        dispatch(closeFirstLevelTab('/definitions/shared-credentail/new'))
+        dispatch(closeFirstLevelTab('/definitions/shared-credential/new'))
     }
   
     const editSharedCredential = async () => {
         if (type ==="text"){
-            await SharedCredentailsApi.updateSharedCredential(credential_name, {credential_name: credential_name, type: type, text_value: textAreaValue})
+            await SharedCredentialsApi.updateSharedCredential(credential_name, {credential_name: credential_name, type: type, text_value: textAreaValue})
             .catch((err) => console.error(err))
 
         } else {
-                await SharedCredentailsApi.updateSharedCredential(credential_name, {credential_name, type, binary_value: textAreaValue})
+                await SharedCredentialsApi.updateSharedCredential(credential_name, {credential_name, type, binary_value: textAreaValue})
                 .catch((err) => console.error(err)) 
            
         }
       
       dispatch(
-        closeFirstLevelTab('/definitions/shared-credentail/' + credential_name)
+        closeFirstLevelTab('/definitions/shared-credential/' + credential_name)
       )
     }
 
     const getSharedCredential = async () => {
-       await SharedCredentailsApi.getSharedCredential(credential_name)
+       await SharedCredentialsApi.getSharedCredential(credential_name)
             .then((res) => setEditingCredential(res.data))
             .catch((err) => console.error(err))
     }
