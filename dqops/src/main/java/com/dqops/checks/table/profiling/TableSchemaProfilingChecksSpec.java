@@ -40,7 +40,7 @@ import java.util.Objects;
 public class TableSchemaProfilingChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableSchemaProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("profile_expected_column_count", o -> o.profileExpectedColumnCount);
+            put("profile_column_count", o -> o.profileColumnCount);
             put("profile_column_count_changed", o -> o.profileColumnCountChanged);
             put("profile_column_list_changed", o -> o.profileColumnListChanged);
             put("profile_column_list_or_order_changed", o -> o.profileColumnListOrOrderChanged);
@@ -49,7 +49,7 @@ public class TableSchemaProfilingChecksSpec extends AbstractCheckCategorySpec {
     };
 
     @JsonPropertyDescription("Detects if the number of column matches an expected number. Retrieves the metadata of the monitored table, counts the number of columns and compares it to an expected value (an expected number of columns).")
-    private TableSchemaColumnCountCheckSpec profileExpectedColumnCount;
+    private TableSchemaColumnCountCheckSpec profileColumnCount;
 
     @JsonPropertyDescription("Detects if the count of columns has changed. Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time.")
     private TableSchemaColumnCountChangedCheckSpec profileColumnCountChanged;
@@ -67,18 +67,18 @@ public class TableSchemaProfilingChecksSpec extends AbstractCheckCategorySpec {
      * Returns a column count check.
      * @return Column count check.
      */
-    public TableSchemaColumnCountCheckSpec getProfileExpectedColumnCount() {
-        return profileExpectedColumnCount;
+    public TableSchemaColumnCountCheckSpec getProfileColumnCount() {
+        return profileColumnCount;
     }
 
     /**
      * Sets a new definition of a column count check.
-     * @param profileExpectedColumnCount Column count check.
+     * @param profileColumnCount Column count check.
      */
-    public void setProfileExpectedColumnCount(TableSchemaColumnCountCheckSpec profileExpectedColumnCount) {
-        this.setDirtyIf(!Objects.equals(this.profileExpectedColumnCount, profileExpectedColumnCount));
-        this.profileExpectedColumnCount = profileExpectedColumnCount;
-        propagateHierarchyIdToField(profileExpectedColumnCount, "profile_expected_column_count");
+    public void setProfileColumnCount(TableSchemaColumnCountCheckSpec profileColumnCount) {
+        this.setDirtyIf(!Objects.equals(this.profileColumnCount, profileColumnCount));
+        this.profileColumnCount = profileColumnCount;
+        propagateHierarchyIdToField(profileColumnCount, "profile_column_count");
     }
 
     /**

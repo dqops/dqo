@@ -8,4 +8,3 @@ spec:
     \ the metadata of the monitored table, counts the number of columns and compares\
     \ it to an expected value (an expected number of columns). Stores the most recent\
     \ column count for each month when the data quality check was evaluated."
-  standard: true
