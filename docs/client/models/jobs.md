@@ -196,9 +196,9 @@ Parameter object for starting a file synchronization job. Identifies the folder 
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[folder](./jobs.md#dqoroot)||[DqoRoot](./jobs.md#dqoroot)|
-|[direction](#filesynchronizationdirection)||[FileSynchronizationDirection](#filesynchronizationdirection)|
-|force_refresh_native_table||boolean|
+|[folder](./jobs.md#dqoroot)|:mm|[DqoRoot](./jobs.md#dqoroot)|
+|[direction](#filesynchronizationdirection)|:mm|[FileSynchronizationDirection](#filesynchronizationdirection)|
+|force_refresh_native_table|:mm|boolean|
 
 
 ___
@@ -212,7 +212,7 @@ Parameters object for a job that synchronizes one folder with DQOps Cloud.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[synchronization_parameter](#synchronizerootfolderparameters)||[SynchronizeRootFolderParameters](#synchronizerootfolderparameters)|
+|[synchronization_parameter](#synchronizerootfolderparameters)|:mm|[SynchronizeRootFolderParameters](#synchronizerootfolderparameters)|
 
 
 ___
@@ -259,7 +259,7 @@ ___
 |monthly_partitioning_recent_months|The number of recent months to analyze incrementally by monthly partitioned data quality checks.|integer|
 |monthly_partitioning_include_current_month|Analyze also the current month and later months when running monthly partitioned checks. By default, monthly partitioned checks will not analyze the current month and future months. Setting true will disable filtering the end dates.|boolean|
 |from_date|Analyze the data since the given date (inclusive). The date should be an ISO 8601 date (yyyy-MM-dd). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the beginning date overrides recent days and recent months.|date|
-|from_date_time|Analyze the data since the given date and time (inclusive). The date and time should be an ISO 8601 local date and time without the time zone (yyyy-MM-dd HH:mm:ss). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the beginning date and time overrides recent days and recent months.|datetime|
+|from_date_time|Analyze the data since the given date and time (inclusive). The date and time should be an ISO 8601 local date and time without the time zone (yyyy-MM-dd HH\:mm:ss). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the beginning date and time overrides recent days and recent months.|datetime|
 |to_date|Analyze the data until the given date (exclusive, the given date and the following dates are not analyzed). The date should be an ISO 8601 date (YYYY-MM-DD). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the end date overrides the parameters to disable analyzing today or the current month.|date|
 |to_date_time|Analyze the data until the given date and time (exclusive). The date should be an ISO 8601 date (yyyy-MM-dd). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the end date and time overrides the parameters to disable analyzing today or the current month.|datetime|
 
@@ -416,9 +416,9 @@ Parameters for the {@link ImportSchemaQueueJob ImportSchemaQueueJob} job that im
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|connection_name||string|
-|schema_name||string|
-|table_name_pattern||string|
+|connection_name|:mm|string|
+|schema_name|:mm|string|
+|table_name_pattern|:mm|string|
 
 
 ___
@@ -448,12 +448,12 @@ Parameters for the {@link RepairStoredDataQueueJob RepairStoredDataQueueJob} job
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|connection_name||string|
-|schema_table_name||string|
-|repair_errors||boolean|
-|repair_statistics||boolean|
-|repair_check_results||boolean|
-|repair_sensor_readouts||boolean|
+|connection_name|:mm|string|
+|schema_table_name|:mm|string|
+|repair_errors|:mm|boolean|
+|repair_statistics|:mm|boolean|
+|repair_check_results|:mm|boolean|
+|repair_sensor_readouts|:mm|boolean|
 
 
 ___
@@ -467,17 +467,17 @@ Model object returned to UI that has typed fields for each supported job paramet
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[synchronize_root_folder_parameters](#synchronizerootfolderdqoqueuejobparameters)||[SynchronizeRootFolderDqoQueueJobParameters](#synchronizerootfolderdqoqueuejobparameters)|
-|[synchronize_multiple_folders_parameters](./jobs.md#SynchronizeMultipleFoldersDqoQueueJobParameters)||[SynchronizeMultipleFoldersDqoQueueJobParameters](./jobs.md#SynchronizeMultipleFoldersDqoQueueJobParameters)|
-|[run_scheduled_checks_parameters](./common.md#monitoringschedulespec)||[MonitoringScheduleSpec](./common.md#monitoringschedulespec)|
-|[run_checks_parameters](./jobs.md#RunChecksParameters)||[RunChecksParameters](./jobs.md#RunChecksParameters)|
-|[run_checks_on_table_parameters](#runchecksontableparameters)||[RunChecksOnTableParameters](#runchecksontableparameters)|
-|[collect_statistics_parameters](#collectstatisticsqueuejobparameters)||[CollectStatisticsQueueJobParameters](#collectstatisticsqueuejobparameters)|
-|[collect_statistics_on_table_parameters](#collectstatisticsontablequeuejobparameters)||[CollectStatisticsOnTableQueueJobParameters](#collectstatisticsontablequeuejobparameters)|
-|[import_schema_parameters](#importschemaqueuejobparameters)||[ImportSchemaQueueJobParameters](#importschemaqueuejobparameters)|
-|[import_table_parameters](./jobs.md#ImportTablesQueueJobParameters)||[ImportTablesQueueJobParameters](./jobs.md#ImportTablesQueueJobParameters)|
-|[delete_stored_data_parameters](./jobs.md#deletestoreddataqueuejobparameters)||[DeleteStoredDataQueueJobParameters](./jobs.md#deletestoreddataqueuejobparameters)|
-|[repair_stored_data_parameters](#repairstoreddataqueuejobparameters)||[RepairStoredDataQueueJobParameters](#repairstoreddataqueuejobparameters)|
+|[synchronize_root_folder_parameters](#synchronizerootfolderdqoqueuejobparameters)|:mm|[SynchronizeRootFolderDqoQueueJobParameters](#synchronizerootfolderdqoqueuejobparameters)|
+|[synchronize_multiple_folders_parameters](./jobs.md#SynchronizeMultipleFoldersDqoQueueJobParameters)|:mm|[SynchronizeMultipleFoldersDqoQueueJobParameters](./jobs.md#SynchronizeMultipleFoldersDqoQueueJobParameters)|
+|[run_scheduled_checks_parameters](./common.md#monitoringschedulespec)|:mm|[MonitoringScheduleSpec](./common.md#monitoringschedulespec)|
+|[run_checks_parameters](./jobs.md#RunChecksParameters)|:mm|[RunChecksParameters](./jobs.md#RunChecksParameters)|
+|[run_checks_on_table_parameters](#runchecksontableparameters)|:mm|[RunChecksOnTableParameters](#runchecksontableparameters)|
+|[collect_statistics_parameters](#collectstatisticsqueuejobparameters)|:mm|[CollectStatisticsQueueJobParameters](#collectstatisticsqueuejobparameters)|
+|[collect_statistics_on_table_parameters](#collectstatisticsontablequeuejobparameters)|:mm|[CollectStatisticsOnTableQueueJobParameters](#collectstatisticsontablequeuejobparameters)|
+|[import_schema_parameters](#importschemaqueuejobparameters)|:mm|[ImportSchemaQueueJobParameters](#importschemaqueuejobparameters)|
+|[import_table_parameters](./jobs.md#ImportTablesQueueJobParameters)|:mm|[ImportTablesQueueJobParameters](./jobs.md#ImportTablesQueueJobParameters)|
+|[delete_stored_data_parameters](./jobs.md#deletestoreddataqueuejobparameters)|:mm|[DeleteStoredDataQueueJobParameters](./jobs.md#deletestoreddataqueuejobparameters)|
+|[repair_stored_data_parameters](#repairstoreddataqueuejobparameters)|:mm|[RepairStoredDataQueueJobParameters](#repairstoreddataqueuejobparameters)|
 
 
 ___
@@ -491,11 +491,11 @@ Model of a single job that was scheduled or has finished. It is stored in the jo
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[job_id](./common.md#dqoqueuejobid)||[DqoQueueJobId](./common.md#dqoqueuejobid)|
-|[job_type](#dqojobtype)||[DqoJobType](#dqojobtype)|
-|[parameters](#dqojobentryparametersmodel)||[DqoJobEntryParametersModel](#dqojobentryparametersmodel)|
-|[status](./jobs.md#dqojobstatus)||[DqoJobStatus](./jobs.md#dqojobstatus)|
-|error_message||string|
+|[job_id](./common.md#dqoqueuejobid)|:mm|[DqoQueueJobId](./common.md#dqoqueuejobid)|
+|[job_type](#dqojobtype)|:mm|[DqoJobType](#dqojobtype)|
+|[parameters](#dqojobentryparametersmodel)|:mm|[DqoJobEntryParametersModel](#dqojobentryparametersmodel)|
+|[status](./jobs.md#dqojobstatus)|:mm|[DqoJobStatus](./jobs.md#dqojobstatus)|
+|error_message|:mm|string|
 
 
 ___
@@ -509,10 +509,10 @@ Describes a change to the job status or the job queue (such as a new job was add
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[status](./jobs.md#dqojobstatus)||[DqoJobStatus](./jobs.md#dqojobstatus)|
-|[job_id](./common.md#dqoqueuejobid)||[DqoQueueJobId](./common.md#dqoqueuejobid)|
-|change_sequence||long|
-|[updated_model](./jobs.md#dqojobhistoryentrymodel)||[DqoJobHistoryEntryModel](./jobs.md#dqojobhistoryentrymodel)|
+|[status](./jobs.md#dqojobstatus)|:mm|[DqoJobStatus](./jobs.md#dqojobstatus)|
+|[job_id](./common.md#dqoqueuejobid)|:mm|[DqoQueueJobId](./common.md#dqoqueuejobid)|
+|change_sequence|:mm|long|
+|[updated_model](./jobs.md#dqojobhistoryentrymodel)|:mm|[DqoJobHistoryEntryModel](./jobs.md#dqojobhistoryentrymodel)|
 
 
 ___
@@ -563,9 +563,9 @@ Job history snapshot model that returns only changes after a given change sequen
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|job_changes||List[[DqoJobChangeModel](#dqojobchangemodel)]|
-|[folder_synchronization_status](#cloudsynchronizationfoldersstatusmodel)||[CloudSynchronizationFoldersStatusModel](#cloudsynchronizationfoldersstatusmodel)|
-|last_sequence_number||long|
+|job_changes|:mm|List[[DqoJobChangeModel](#dqojobchangemodel)]|
+|[folder_synchronization_status](#cloudsynchronizationfoldersstatusmodel)|:mm|[CloudSynchronizationFoldersStatusModel](#cloudsynchronizationfoldersstatusmodel)|
+|last_sequence_number|:mm|long|
 
 
 ___
@@ -579,9 +579,9 @@ Returns the current snapshot of running jobs.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|jobs||List[[DqoJobHistoryEntryModel](./jobs.md#dqojobhistoryentrymodel)]|
-|[folder_synchronization_status](./jobs.md#cloudsynchronizationfoldersstatusmodel)||[CloudSynchronizationFoldersStatusModel](./jobs.md#cloudsynchronizationfoldersstatusmodel)|
-|last_sequence_number||long|
+|jobs|:mm|List[[DqoJobHistoryEntryModel](./jobs.md#dqojobhistoryentrymodel)]|
+|[folder_synchronization_status](./jobs.md#cloudsynchronizationfoldersstatusmodel)|:mm|[CloudSynchronizationFoldersStatusModel](./jobs.md#cloudsynchronizationfoldersstatusmodel)|
+|last_sequence_number|:mm|long|
 
 
 ___
