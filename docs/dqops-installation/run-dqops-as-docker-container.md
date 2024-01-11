@@ -18,7 +18,7 @@ To run DQOps as a Docker container you need
     definitions and results in the cloud or data quality dashboards. [Create a new DQOps Cloud account here](https://cloud.dqops.com/registration).
 - A `DQOps User Home` folder is created locally which will be mounted to your container. Volumes are the preferred mechanism for persisting data generated
     by and used by Docker containers. The `DQOps User Home` folder will locally store data such as sensor readouts, checkout results, and data source configurations.
-    [You can learn more about data storage here](../../dqo-concepts/data-storage/data-storage.md).
+    [You can learn more about data storage here](../dqo-concepts/data-storage/data-storage.md).
 
 
 ## Start DQOps in Shell mode
@@ -89,7 +89,7 @@ To start DQOps in a server mode follow the steps below.
      YAML and parquet files in memory. The memory size could be changed by passing the `DQO_JAVA_OPTS`
      environment variable to the container using the following docker run parameter: `-e DQO_JAVA_OPTS=-XX:MaxRAMPercentage=60.0`
    - The `--dqo.cloud.api-key` argument specifies the API Key of your [DQOps Cloud account](https://cloud.dqops.com/registration).
-   - The `run` command at the end will run the [run CLI command](../../command-line-interface/run.md) command and activate a server mode
+   - The `run` command at the end will run the [run CLI command](../command-line-interface/run.md) command and activate a server mode
      without the DQOps Shell.
 
 3. After a few seconds open your web browser to **http://localhost:8888/**. You should see the DQOps user interface.

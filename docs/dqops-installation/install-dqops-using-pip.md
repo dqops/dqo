@@ -9,7 +9,7 @@ specific to the current platform. DQOps runs on Windows, Linux and MacOS. Both x
 !!! note "Running DQOps as a server"
 
     DQOps python package is a quick option to run a local, non-production instance.
-    Please choose a [Docker distribution](./run-dqo-as-docker-container.md) to run DQOps as a long-running production instance
+    Please choose a [Docker distribution](./run-dqops-as-docker-container.md) to run DQOps as a long-running production instance
     that can monitor the data quality at all times.
 
 
@@ -64,7 +64,7 @@ DQOps is available on [PyPi repository](https://pypi.org/project/dqops/).
     After installation, you will be asked whether to initialize the DQOps `DQOps User Home` folder in the default location.
     Type Y to initialize the folder content.  
     The `DQOps User Home` folder locally stores data such as sensor readouts and checkout results, as well as data source configurations.
-    [You can learn more about data storage here](../../dqo-concepts/data-storage/data-storage.md). 
+    [You can learn more about data storage here](../dqo-concepts/data-storage/data-storage.md). 
 
     ![Initializing DQOps user home folder](https://dqops.com/docs/images/getting-started/initializing-user-home-folder2.png)
 

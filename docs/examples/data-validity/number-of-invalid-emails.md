@@ -270,7 +270,7 @@ the number of invalid emails in a monitored column does not exceed the maximum a
 
 ## Next steps
 
-- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
+- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../dqops-installation/install-dqops-using-pip.md) or [run DQOps as a Docker container](../../dqops-installation/run-dqops-as-docker-container.md).
 - For details on the [invalid_email_format_found check used in this example, go to the check details section](../../checks/column/patterns/invalid-email-format-found.md).
 - You might be interested in another validity check that [evaluates that the number of invalid IP4 address in a column does not exceed the maximum accepted count](../data-validity/number-of-invalid-IP4-address.md).
 - With DQOps, you can easily customize when the checks are run at the level of the entire connection, table, or individual check. [Learn more about how to set schedules here](../../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md). 

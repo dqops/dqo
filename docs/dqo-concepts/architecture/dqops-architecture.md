@@ -55,7 +55,7 @@ The simplest way to start using DQOps as a local, standalone data quality tool i
 Despite that DQOps is mostly developed as a Java application based on Spring Boot, it is available also as a 
 [dqops](https://pypi.org/project/dqops/) PyPi package.
 
-Once DQOps is [installed from PyPI](../../working-with-dqo/installation/install-dqo-using-pip.md), it should be started by
+Once DQOps is [installed from PyPI](../../dqops-installation/install-dqops-using-pip.md), it should be started by
 
   ```
   python -m dqops
@@ -243,7 +243,7 @@ The only important differences are:
   The DQOps Cloud Pairing API Key is found on the [https://cloud.dqops.com/account](https://cloud.dqops.com/account) page.
 
 For detailed steps required to start DQOps as a docker container, please read the 
-[run dqo as docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md) manual. 
+[run dqo as docker container](../../dqops-installation/run-dqops-as-docker-container.md) manual. 
 
 
 ## Local and hybrid deployment components

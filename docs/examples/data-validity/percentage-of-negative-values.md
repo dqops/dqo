@@ -276,7 +276,7 @@ the percentage of negative values in a column does not exceed the maximum accept
 
 ## Next steps
 
-- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
+- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../dqops-installation/install-dqops-using-pip.md) or [run DQOps as a Docker container](../../dqops-installation/run-dqops-as-docker-container.md).
 - For details on the [negative_values_percent check used in this example, go to the check details section](../../checks/column/numeric/negative-values-percent.md).
 - You might be interested in another validity check that [evaluates that a minimum percentage of rows passed a custom SQL condition (expression)](./percentage-of-rows-passing-sql-condition.md).
 - With DQOps, you can easily customize when the checks are run at the level of the entire connection, table, or individual check. [Learn more about how to set schedules here](../../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md).

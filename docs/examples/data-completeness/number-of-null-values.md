@@ -277,7 +277,7 @@ null values in a column does not exceed the minimum accepted count. If it does, 
 
 ## Next steps
 
-- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQO as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
+- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../dqops-installation/install-dqops-using-pip.md) or [run DQO as a Docker container](../../dqops-installation/run-dqops-as-docker-container.md).
 - For details on the [nulls_count check used in this example, go to the check details section](../../checks/column/nulls/nulls-count.md).
 - You might be interested in another completeness check that [evaluates that the number of rows in a table does not exceed the minimum accepted count](../data-completeness/number-of-rows-in-the-table.md).  
 - Would you like to add your own connection? Here you can find [information about supported databases and how to add new connection](../../data-sources/index.md).

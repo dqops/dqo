@@ -245,7 +245,7 @@ the percentage of rows containing valid USA zipcodes does not exceed set thresho
 
 ## Next steps
 
-- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
+- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../dqops-installation/install-dqops-using-pip.md) or [run DQOps as a Docker container](../../dqops-installation/run-dqops-as-docker-container.md).
 - For details on the [contains_usa_zipcode_percent check used in this example, go to the check details section](../../checks/column/pii/contains-usa-zipcode-percent.md).
 - You might be interested in another validity check that [evaluates that the number of invalid emails in a monitored column does not exceed the maximum accepted count](./number-of-invalid-emails.md).
 - The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md) can help you to calculate separate data quality KPI scores for different groups of rows.

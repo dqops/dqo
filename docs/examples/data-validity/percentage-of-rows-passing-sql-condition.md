@@ -366,7 +366,7 @@ the percentage of rows passed a custom SQL condition does not fall below the set
 
 ## Next steps
 
-- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
+- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../dqops-installation/install-dqops-using-pip.md) or [run DQOps as a Docker container](../../dqops-installation/run-dqops-as-docker-container.md).
 - For details on the [sql_condition_passed_percent check used in this example, go to the check details section](../../checks/table/custom_sql/sql-condition-passed-percent-on-table.md).
 - You might be interested in another validity check that [evaluates that the percentage of strings matching the date format regex in a column does not exceed the maximum accepted percentage](./percentage-of-strings-matching-date-regex.md).
 - Would you like to add your own connection? Here you can find [information about supported databases and how to add new connection](../../data-sources/index.md).

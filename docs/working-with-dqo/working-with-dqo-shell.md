@@ -31,7 +31,7 @@ using the `-it` parameter to the `docker run` command as shown below.
 docker run -v .:/dqo/userhome -it -p 8888:8888 dqops/dqo
 ```
 
-The [Run DQOps in Docker](installation/run-dqo-as-docker-container.md) manual describes other parameters
+The [Run DQOps in Docker](../dqops-installation/run-dqops-as-docker-container.md) manual describes other parameters
 used in starting DQOps from Docker.
 
 

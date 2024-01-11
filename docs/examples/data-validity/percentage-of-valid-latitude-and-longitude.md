@@ -326,7 +326,7 @@ the percentage of valid latitude and longitude values does not fall below a set 
 
 ## Next steps
 
-- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
+- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../dqops-installation/install-dqops-using-pip.md) or [run DQOps as a Docker container](../../dqops-installation/run-dqops-as-docker-container.md).
 - For details on the [valid_latitude_percent check used in this example, go to the check details section](../../checks/column/numeric/valid-latitude-percent.md).
 - For details on the [valid_longitude_percent check used in this example, go to the check details section](../../checks/column/numeric/valid-longitude-percent.md).
 - You might be interested in another validity check that [evaluates that the percentage of valid UUID values in a column does not fall below the minimum accepted percentage](./percentage-of-valid-uuid.md).

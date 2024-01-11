@@ -275,7 +275,7 @@ the number of invalid IP4 address in a column does not exceed the maximum accept
 
 ## Next steps
 
-- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
+- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../dqops-installation/install-dqops-using-pip.md) or [run DQOps as a Docker container](../../dqops-installation/run-dqops-as-docker-container.md).
 - For details on the [invalid_ip4_address_format_found check used in this example, go to the check details section](../../checks/column/patterns/invalid-ip4-address-format-found.md).
 - You might be interested in another validity check that [evaluates that the percentage of negative values in a column does not exceed the maximum accepted percentage](../data-validity/percentage-of-negative-values.md).
 - DQOps provide you with summary statistics about your table and column. This information can be valuable in deciding which data quality checks and threshold levels should be set to monitor data quality. For more details about [Basic data statistics, click here](../../working-with-dqo/collecting-basic-data-statistics.md). 

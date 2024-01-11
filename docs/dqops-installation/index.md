@@ -1,7 +1,7 @@
 # DQOps installation options
 DQOps is an open-source data quality platform that is distributed in multiple formats.
 
--  **[Python package](./install-dqo-using-pip.md)**
+-  **[Python package](install-dqops-using-pip)**
    
     If you have Python >=3.8 installed, installing the `dqops` pip package is the easiest way to start.
     Running DQOps as a pip package is meant for the non-production usage.
@@ -10,10 +10,10 @@ DQOps is an open-source data quality platform that is distributed in multiple fo
     python -m pip install --user dqops
     ```
 
-    Before running this command, please read the rest of the [installing from pip](./install-dqo-using-pip.md) manual.
+    Before running this command, please read the rest of the [installing from pip](install-dqops-using-pip) manual.
 
 
--  **[Docker container](./run-dqo-as-docker-container.md)**
+-  **[Docker container](run-dqops-as-docker-container)**
 
     You can also start DQOps as a Docker container that is published on Docker Hub.
 
@@ -22,19 +22,19 @@ DQOps is an open-source data quality platform that is distributed in multiple fo
     docker run -v [enter the path to your local DQOps user home folder]:/dqo/userhome -it -p 8888:8888 dqops/dqo [--dqo.cloud.api-key=here-our-DQOps-Cloud-API-key]
     ```
 
-    All required parameters for starting DQOps in Docker are described in the [running DQOps in Docker](./run-dqo-as-docker-container.md) manual.
+    All required parameters for starting DQOps in Docker are described in the [running DQOps in Docker](run-dqops-as-docker-container) manual.
 
 
--  **[Use release package](./install-dqo-from-release-package.md)**
+-  **[Use release package](./install-dqops-from-release-package.md)**
 
     DQOps releases are published in the *dqops\dqo* [https://github.com/dqops/dqo/releases](https://github.com/dqops/dqo/releases) releases archive on GitHub.
     If you need to configure DQOps instance for your needs, running DQOps even on bare metal, follow the
-    [installing DQOps from release package](./install-dqo-from-release-package.md) manual.
+    [installing DQOps from release package](install-dqops-from-release-package) manual.
 
     You will need Python >=3.8 and Java >= 17 installed to start DQOps.
 
 
--  **[Compile DQOps from GitHub](./install-dqo-from-git.md)**
+-  **[Compile DQOps from GitHub](./install-dqops-from-git.md)**
 
     If you wish to contribute to DQOps, check out the GitHub repository and compile the code.
 
@@ -42,6 +42,6 @@ DQOps is an open-source data quality platform that is distributed in multiple fo
     git clone https://github.com/dqops/dqo.git
     ```
    
-    Follow the [install from Git](./install-dqo-from-git.md) manual to compile and start DQOps. If you have Java JDK 17
+    Follow the [install from Git](install-dqops-from-git) manual to compile and start DQOps. If you have Java JDK 17
     or newer on the PATH, you can just start the `dqo.cmd` or `./dqo` script after check out. DQOps will compile itself
     before the first start.

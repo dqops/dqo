@@ -40,7 +40,7 @@ It is advised to create a new, empty folder that will serve as the `DQOps user h
 
 If DQOps is started as a docker image for production use, the `DQOps user home` folder should be
 mounted to the */dqo/userhome* folder inside a DQOps docker image as described in
-the [DQOps docker installation manual](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
+the [DQOps docker installation manual](../../dqops-installation/run-dqops-as-docker-container.md).
 
 
 ## DQOps user home structure
@@ -320,7 +320,7 @@ DQOps instance that is started for development as a Python module by running `py
 *rules/requirements.txt* file at all. Instead, DQOps will require that all necessary packages were already installed
 in the Python's system or virtual environment that is used to start the `python -m dqops` command.
 
-A production DQOps instance that was started from [docker](../../working-with-dqo/installation/run-dqo-as-docker-container.md),
+A production DQOps instance that was started from [docker](../../dqops-installation/run-dqops-as-docker-container.md),
 DQOps will detect changes to the *rules/requirements.txt* file on startup and will reinstall required packages.
 
 

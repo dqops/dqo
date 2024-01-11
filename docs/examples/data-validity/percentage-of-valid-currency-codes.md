@@ -285,7 +285,7 @@ the percentage of valid currency code strings in the monitored column does not f
 
 ## Next steps
 
-- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
+- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../dqops-installation/install-dqops-using-pip.md) or [run DQOps as a Docker container](../../dqops-installation/run-dqops-as-docker-container.md).
 - For details on the [text_valid_currency_code_percent check used in this example, go to the check details section](../../checks/column/text/text-valid-currency-code-percent.md).
 - You might be interested in another validity check that [evaluates that the percentage of valid latitude and longitude values are above the set threshold](./percentage-of-valid-latitude-and-longitude.md).
 - Would you like to add your own connection? Here you can find [information about supported databases and how to add new connection](../../data-sources/index.md).

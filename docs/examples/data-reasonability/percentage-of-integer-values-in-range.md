@@ -276,7 +276,7 @@ of integer values from a range in a column does not exceed the minimum accepted 
 
 ## Next steps
 
-- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
+- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../dqops-installation/install-dqops-using-pip.md) or [run DQOps as a Docker container](../../dqops-installation/run-dqops-as-docker-container.md).
 - For details on the [profile_number_in_range_percent check used in this example, go to the check details section](../../checks/column/numeric/number-in-range-percent.md).
 - You might be interested in another reasonability check that [evaluates that the length of the string does not exceed the indicated value](../data-reasonability/string-not-exceeding-a-set-length.md).
 - Would you like to add your own connection? Here you can find [information about supported databases and how to add new connection](../../data-sources/index.md).

@@ -55,9 +55,11 @@ The use of table status operator prevents from running the load task on the tabl
 The table status operation reads results from all checks that are set on the table and its columns.
 Then it looks for any data quality issue.
 
-!!! info "Schedules in DQOps"
+!!! info "Scheduling data quality checks in DQOps"
 
-    DQOps has a built-in [scheduling component](../../working-with-dqo/schedules/index.md). It allows you to run checks automatically on a different time of day.
+    DQOps has a built-in [scheduling component](../../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md).
+    It allows you to run checks automatically on a different time of day.
+
 
 The issue found by the table status is equal to finding at least one failed check on the tested table. 
 The example do not use any of optional parameters of the DqopsAssertTableStatusOperator, 
