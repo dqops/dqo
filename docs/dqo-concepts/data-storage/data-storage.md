@@ -452,6 +452,6 @@ AWS Athena, and AWS Redshift Spectrum.
 
 ## What's next
 - Review the [Parquet schema](../../reference/parquetfiles/index.md) of all tables stored in the `.data` folder
-- Learn how to [delete selected data quality results](../../working-with-dqo/delete-data-quality-results/delete-data-quality-results.md)
+- Learn how to [delete selected data quality results](../../working-with-dqo/delete-data-quality-results.md)
 - Learn about other folders stored in the **[DQOps user home](../home-folders/dqops-user-home.md)** folder
 - Review the architecture of DQOps and [how folders in the `DQOps user home` are handled](../architecture/dqops-architecture.md)

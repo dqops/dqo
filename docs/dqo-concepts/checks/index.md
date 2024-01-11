@@ -7,7 +7,7 @@ In DQOps, a check is a data quality test that can be run on both table or column
 
 The data quality sensor reads the value from the data source at a given point in time. The data quality rule includes 
 a set of conditions (thresholds) that the sensor readout must meet. When the conditions are not met, the check detects 
-an issue with your data, and it creates an [incident that can be viewed, filtered, and managed](../../working-with-dqo/incidents-and-notifications/incidents.md).
+an issue with your data, and it creates an [incident that can be viewed, filtered, and managed](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md).
 
 The components involved in running a data quality check are shown below.
 The example below shows how DQOps performs the [daily_row_count](../../checks/table/volume/row-count.md#daily-row-count)

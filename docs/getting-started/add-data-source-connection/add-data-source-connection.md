@@ -112,7 +112,7 @@ The following tabs are shown at the connection level:
 - **Labels** - allows adding labels to your connection.
 - **Schemas** - displays currently imported schemas and allows importing more schemas and tables.
 - **Default grouping template** - allows setting up data grouping globally at the data source level. [Learn how to configure data grouping](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md).
-- **Incidents and notifications** - allows configuring incidents and Webhooks for notifications. [Learn more about incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) that let you keep track of the issues that arise during data quality monitoring. [Learn how to configure notifications](../../integrations/webhooks/index.md) whenever a new incident is created or modified.
+- **Incidents and notifications** - allows configuring incidents and Webhooks for notifications. [Learn more about incidents](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md) that let you keep track of the issues that arise during data quality monitoring. [Learn how to configure notifications](../../integrations/webhooks/index.md) whenever a new incident is created or modified.
 
 ## Explore the table-level tabs in the Data sources section
 
@@ -124,7 +124,7 @@ At the table level in the **Data sources** section, there are the following tabs
 - **Labels** - allows adding labels to your tables.
 - **Data groupings** - allows setting up data grouping at the table level. [Learn how to configure data grouping](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md).
 - **Date and time columns** - allows [configuring event and ingestion timestamp columns for timeliness checks](../../working-with-dqo/run-data-quality-checks/run-data-quality-checks.md#configure-event-and-ingestion-timestamp-columns-for-timeliness-checks), as well as [date or datetime column for partition checks](../../working-with-dqo/run-data-quality-checks/run-data-quality-checks.md#configure-date-or-datetime-column-for-partition-checks).
-- **Incident configuration** - allows configuring incidents. [Learn more about incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) that let you keep track of the issues that arise during data quality monitoring.
+- **Incident configuration** - allows configuring incidents. [Learn more about incidents](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md) that let you keep track of the issues that arise during data quality monitoring.
 
 You can check the details of the imported table by expanding the tree view on the left and selecting the "crime" table.
 

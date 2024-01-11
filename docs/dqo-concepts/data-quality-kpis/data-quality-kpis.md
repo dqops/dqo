@@ -160,7 +160,7 @@ of the data source is incomplete, or simply wrong parameters were passed
 to data quality rules, expecting to have <20% of null values in a column, while the column is sparse and mostly empty.
     
 In order to exclude the results of the invalid profiling checks from the initial data quality KPI score,
-you can open the  [delete data quality results](../../working-with-dqo/delete-data-quality-results/delete-data-quality-results.md) popup and delete any combination of data quality results.
+you can open the  [delete data quality results](../../working-with-dqo/delete-data-quality-results.md) popup and delete any combination of data quality results.
 If the orphaned results of failed data quality checks are not removed, they will decrease the data quality profiling KPIs.
 
 The profiling KPI scorecard dashboard is shown below. The dashboard can be found in the Data Quality Dashboards -> Profiling -> Profiling data quality KPIs section.

@@ -6,7 +6,7 @@ DQOps can send alert notifications whenever a new incident is created or modifie
 
 An incident aggregates data quality issues based on different categories such as a table, data quality, dimension, check category,
 or check type. Thanks to the issue grouping the number of notifications is reduced. 
-You can read [more about incidents and their configuration here](../../working-with-dqo/incidents-and-notifications/incidents.md).
+You can read [more about incidents and their configuration here](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md).
 
 Notifications allow you to monitor data in real-time and receive alerts when active data quality checks exceed alerting thresholds.
 

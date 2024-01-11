@@ -19,7 +19,7 @@ The navigation bar allows you to select the specific sections that you want to f
 - The **Data Sources** section allows you to [add new connections](../../data-sources/index.md), import schemas and 
     tables, [set up schedules](../../working-with-dqo/schedules/index.md), add comments and labels, [configure data grouping](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md),
     [set the date and time columns for partition checks](../../working-with-dqo/run-data-quality-checks/run-data-quality-checks.md#configure-date-or-datetime-column-for-partition-checks), 
-    and [modify the settings of the incidents and notifications](../../working-with-dqo/incidents-and-notifications/incidents.md).
+    and [modify the settings of the incidents and notifications](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md).
 - The **Profiling** section allows you to [collect and review basic data statistics](../../working-with-dqo/collecting-basic-data-statistics.md),
     as well as [enable and run profiling data quality checks](../../working-with-dqo/run-data-quality-checks/run-data-quality-checks.md)
     that should be used to profile data and run experiments to see which check would be most appropriate for monitoring the quality of data. 
@@ -28,7 +28,7 @@ The navigation bar allows you to select the specific sections that you want to f
 - The **Partition Checks** section allows you to [enable and run daily or monthly partition data quality checks](../../working-with-dqo/run-data-quality-checks/run-data-quality-checks.md)
     that measure data quality for each daily or monthly partition by creating a separate data quality score.
 - The **Data Quality Dashboards** section lets you [review the summaries of data quality monitoring](../../getting-started/review-results-on-dashboards/review-results-on-dashboards.md) on multiple built-in data quality dashboards.
-- The **Incidents** section helps you [review and manage the issues that arise during data quality monitoring](../../working-with-dqo/incidents-and-notifications/incidents.md).
+- The **Incidents** section helps you [review and manage the issues that arise during data quality monitoring](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md).
 - The **Configuration** section lets you customize built-in data quality sensors and rules.  
 
 
@@ -238,6 +238,6 @@ severity status of the results (green for a valid result, yellow for a warning, 
 
 - Check the detailed process of running data quality checks and all DQOps engine internal components involved in the process in the [Data quality check execution flow](../architecture/check-execution-flow.md) section.
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
-- DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) and [Slack notifications](../../integrations/slack/configuring-slack-notifications.md).
+- DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md) and [Slack notifications](../../integrations/slack/configuring-slack-notifications.md).
 
 

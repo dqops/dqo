@@ -67,7 +67,7 @@ You have completed our quick tutorial, and now you know how to add connections, 
   to help you in using DQOps effectively. You can find the [full list of use cases here](../../examples/index.md). 
 - DQOps allows you to keep track of the issues that arise during data quality monitoring and 
   send alert notifications directly to Slack. 
-  Learn more about [incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) and 
+  Learn more about [incidents](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md) and 
   [Slack notifications](../../integrations/slack/configuring-slack-notifications.md).
 - The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. 
   Learn how [data grouping in DQOps](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md)

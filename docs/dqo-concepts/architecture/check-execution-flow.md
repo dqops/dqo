@@ -100,9 +100,9 @@ The following steps are performed by the DQOps engine to run a data quality chec
 
 7.   Detect new incidents or update active incidents.
 
-     DQOps groups similar data quality `issues` as a single data quality [incident](../../working-with-dqo/incidents-and-notifications/incidents.md)
+     DQOps groups similar data quality `issues` as a single data quality [incident](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md)
      that can be assigned for resolution. Data quality issue grouping is configured for each data source
-     on the [Incidents and Notifications](../../working-with-dqo/incidents-and-notifications/incidents.md) tab. 
+     on the [Incidents and Notifications](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md) tab. 
      Grouping data quality issues into incidents avoids raising the same data quality issue on multiple days until the issue is resolved.
 
      The incidents are saved to the [incidents](../../reference/parquetfiles/incidents.md) local parquet table
@@ -212,7 +212,7 @@ The steps are described below.
      DQOps finds a matching active data quality [incidents](../../reference/parquetfiles/incidents.md)
      by calculating an incident hash code and searching for an incident that has the same hash code.
      The incident hash code is calculated from the values of the *check result* columns selected on the
-     [Incidents and Notifications](../../working-with-dqo/incidents-and-notifications/incidents.md) screen.
+     [Incidents and Notifications](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md) screen.
 
      The widest supported issue grouping level is by a table, combining all data quality issues identified
      on a table into a single data quality incident. The default incident's issue grouping level is by the tested table,

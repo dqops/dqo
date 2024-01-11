@@ -79,7 +79,7 @@ using the dropdowns. Additionally, you can switch between the table and chart vi
 right of the month filter dropdown. To close the detailed results view, click on the **Results** icon again or use 
 the X button on the right.
 
-[Learn here how to delete data quality results](../delete-data-quality-results/delete-data-quality-results.md).
+[Learn here how to delete data quality results](../delete-data-quality-results.md).
 
 Synchronize locally stored results with your DQOps Cloud account to be able to view the results on the dashboards.
 
@@ -282,4 +282,4 @@ spec:
 ## What's next
 
 - [Learn about setting schedules](../schedules/index.md) to easily customize when checks are run.
-- [Learn how to delete data quality results](../delete-data-quality-results/delete-data-quality-results.md).
+- [Learn how to delete data quality results](../delete-data-quality-results.md).

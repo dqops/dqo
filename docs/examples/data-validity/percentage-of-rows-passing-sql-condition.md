@@ -195,7 +195,7 @@ On the left side of this screen, there is a list displaying the connections and 
 occurred for each one. On the right panel, you can view incidents for the connections you have selected, and you can change the status of the incident, 
 as well as filter, sort, and view detailed information about the incidents.
 
-To learn more about incidents go to the [Incidents overview section](../../working-with-dqo/incidents-and-notifications/incidents.md).
+To learn more about incidents go to the [Incidents overview section](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md).
 
 ## Notifications
 

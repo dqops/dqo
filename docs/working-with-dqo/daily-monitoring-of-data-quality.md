@@ -274,7 +274,7 @@ We can see that we have one incident with 10 data quality issues. To review more
 
 ![Incidents details](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/incidents-details.png)
 
-Read the full [description of the Incidents section here](incidents-and-notifications/incidents.md).
+Read the full [description of the Incidents section here](managing-data-quality-incidents-with-dqops.md).
 
 
 ## Configure notifications

@@ -33,7 +33,7 @@ DQOps integrates with multiple tools, using both the REST API interface and by u
 
 - **[Slack](./slack/configuring-slack-notifications.md)**
 
-    Notifications of new or updated [data quality incidents](../working-with-dqo/incidents-and-notifications/incidents.md)
+    Notifications of new or updated [data quality incidents](../working-with-dqo/managing-data-quality-incidents-with-dqops.md)
     can be published to a Slack channel.
     DQOps also supports incident workflows, sending different messages to different channels.
     The notifications of new incidents can be sent to a data quality team, the data quality team evaluates the incidents
@@ -52,7 +52,7 @@ DQOps integrates with multiple tools, using both the REST API interface and by u
   
 - **[Webhooks](./webhooks/index.md)**
 
-    Any changes to the [data quality incidents](../working-with-dqo/incidents-and-notifications/incidents.md)
+    Any changes to the [data quality incidents](../working-with-dqo/managing-data-quality-incidents-with-dqops.md)
     can be also published by posting the [IncidentNotificationMessage](../reference/yaml/IncidentNotificationMessage.md)
     message to a third-party listener.
 

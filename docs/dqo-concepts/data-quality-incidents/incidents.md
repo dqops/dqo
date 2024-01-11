@@ -133,7 +133,7 @@ in the [Slack incident notifications](../../integrations/slack/configuring-slack
 ![Incident details screen](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/incident-details-screen.png)
 
 The incident management screens are described on the 
-[working with incidents and notifications](../../working-with-dqo/incidents-and-notifications/incidents.md) page.
+[working with incidents and notifications](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md) page.
 
 
 ## Incident notifications
@@ -148,7 +148,7 @@ use formatted messages that are shown on the Slack channels as shown below.
 
 ## What's next
 
-- Learn how to use the [incident management screens](../../working-with-dqo/incidents-and-notifications/incidents.md)
+- Learn how to use the [incident management screens](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md)
   in the *Working with DQOps* section.
 - Learn how to configure [data quality incident notifications with Slack](../../integrations/slack/configuring-slack-notifications.md)
 - Learn how a generic integration using [webhooks](../../integrations/webhooks/index.md) is used for incident notifications.

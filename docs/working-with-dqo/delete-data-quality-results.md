@@ -10,9 +10,9 @@ In DQOps, there are two ways to delete stored data quality results:
 In DQOps, sensor readouts and check results are stored as Apache Parquet files following the Apache
 Hive compatible folder tree, partitioned by connection name, table name, and month.
 
-For more information where and how the sensor readouts and check results are stored, see [DQOps concepts section](../../dqo-concepts/data-storage/data-storage.md).
+For more information where and how the sensor readouts and check results are stored, see [DQOps concepts section](../dqo-concepts/data-storage/data-storage.md).
 
-You can learn [how to run data quality checks here](../run-data-quality-checks/run-data-quality-checks.md).
+You can learn [how to run data quality checks here](run-data-quality-checks/run-data-quality-checks.md).
 
 
 ## Delete data quality results using the user interface
@@ -39,7 +39,7 @@ To delete the data quality results at the connection, schema, table or column le
 
 ##  Delete data quality results using the DQOps Shell
 
-To delete data quality results using the DQOps Shell, use the [data delete command](../../command-line-interface/data.md). 
+To delete data quality results using the DQOps Shell, use the [data delete command](../command-line-interface/data.md). 
 
 To delete all the data for a connection run the following command
 
@@ -69,4 +69,4 @@ A summary of deleted data similar to the following table will be displayed.
 ```
 
 Using various parameters, you can limit the data that will be deleted to a specific table, column, time period, data type,
-check name, check category type, and more. For a full description of the `data delete` command and its parameters, see the [Command-line interface section](../../command-line-interface/data.md).
+check name, check category type, and more. For a full description of the `data delete` command and its parameters, see the [Command-line interface section](../command-line-interface/data.md).

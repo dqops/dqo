@@ -118,7 +118,7 @@ A new incident preview in Slack is shown below.
 ![slack-message-open](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configuring-slack-notifications/slack-message-open.png)
 
 ### **Acknowledged incident message example**
-After the support team reviews a new data quality [incident](../../working-with-dqo/incidents-and-notifications/incidents.md) in DQOps,
+After the support team reviews a new data quality [incident](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md) in DQOps,
 the support user will change the status of a valid incident to **Acknowledged**.
 Changing the incident status to **Acknowledged** is the next status in the incident management workflow, which means
 that the incident was acknowledged (confirmed), and is assigned to the engineering team (the 3rd level support) to be fixed. 

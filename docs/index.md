@@ -18,7 +18,7 @@ DQOps comes with more than 140 predefined data quality checks which helps you mo
 - [Incremental data quality monitoring](./dqo-concepts/data-quality-kpis/incremental-data-quality-monitoring.md) to detect issues early
 - [Compare tables](./working-with-dqo/table-comparison/table-comparison.md) to the source of truth
 - Cloud hosted [Data Quality Data Warehouse](./dqo-concepts/architecture/dqops-architecture.md#data-quality-data-warehouse)
-- [Incident](./working-with-dqo/incidents-and-notifications/incidents.md) management
+- [Incident](working-with-dqo/managing-data-quality-incidents-with-dqops.md) management
 - Sending incident notifications to [webhooks](./integrations/webhooks/index.md) and [Slack](./integrations/slack/configuring-slack-notifications.md)
 
 ## Getting started
