@@ -16,7 +16,7 @@ and data quality incident is described below.
  -  A **data quality issue** is a single data quality [check](../checks/index.md) result that was not accepted by 
     a data quality [rule](../rules/rules.md), and was assigned a severity rule, which is one of *warning*, *error* or *fatal*.
     Data quality issues are stored in the [check_results](../../reference/parquetfiles/check_results.md) parquet table.
-    The data quality issues can be counted on the data quality dashboards for [counting issues](../data-quality-dashboards/data-quality-dashboards.md#data-quality-issues-count).
+    The data quality issues can be counted on the data quality dashboards for [counting issues](../types-of-data-quality-dashboards.md#data-quality-issues-count).
     The percentage of data quality issues within the total number of data quality checks performed is also
     used to measure the overall quality of data by calculating the [data quality KPIs](../definition-of-data-quality-kpis.md).
  
@@ -68,7 +68,7 @@ The following grouping levels are supported:
 - Table, data quality dimension, check category and check type
 - Table, data quality dimension, check category and check name
 
-By default, DQOps groups issues by the table where the issue was identified, the [data quality dimension](../data-quality-dimensions/data-quality-dimensions.md),
+By default, DQOps groups issues by the table where the issue was identified, the [data quality dimension](../data-quality-dimensions.md),
 and a data quality check category that mostly groups the check by the type of column or a way how the check is implemented.
 
 It is also possible to raise data quality incidents only for **error** and **fatal** or only **fatal** severity issues.
@@ -76,7 +76,7 @@ The default configuration assigned to each data source will create a data qualit
 including **warning** severity issues. The warning severity issues include also many anomaly detection checks that are
 sensitive and may raise unexpected issues that will engage the support team. An alternative method of managing **warning** severity
 issues is to increase the *minimum severity level* for raising incidents to **error**, and use the
-[current table status](../data-quality-dashboards/data-quality-dashboards.md#current-table-status) dashboards to review warnings.
+[current table status](../types-of-data-quality-dashboards.md#current-table-status) dashboards to review warnings.
 
 DQOps performs mapping of groups of data quality issues to an incident by calculating a hash code of all the selected
 issue grouping components. The incident hash code is stored in the `incident_hash` column

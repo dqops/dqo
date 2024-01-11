@@ -154,7 +154,7 @@ The result of the query is stored in the [sensor_readouts](../reference/parquetf
 ### **Additional sensor readout columns**
 The generated SQL query can also include the data grouping columns,
 such as `grouping_level_1`. Sample SQL queries generated with data grouping by column clauses are
-shown in the [data grouping concept](data-grouping/data-grouping.md) guide.
+shown in the [data grouping concept](measuring-data-quality-with-data-grouping.md) guide.
 
 DQOps will also store information about the monitored data source, table, column, data quality check name, type, category and dimension.
 
@@ -167,7 +167,7 @@ share common identity columns that identify each data quality result, and each t
 |:------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------|
 | `time_period`     | The time period, for which the **sensor readout** is valid. The value may be truncated for some types of data quality checks.                                                                                                                      | 2023-04-01T00:00:00                  |
 | `check_hash`      | Hash code calculated from the data source (connection) name, schema name, table name, column name (optional) and the check name.                                                                                                                   | 4907661392389800303                  |
-| `data_group_hash` | Hash code calculated from the [data grouping](data-grouping/data-grouping.md) level columns.                                                                                                                                                    | 3432492748264648423                  |
+| `data_group_hash` | Hash code calculated from the [data grouping](measuring-data-quality-with-data-grouping.md) level columns.                                                                                                                                                    | 3432492748264648423                  |
 | `time_series_id`  | Unique identifier of each time series, a time series is a collection of data quality results captured by the same data quality check (identified by the `check_hash`), for the same data group that is identified by the `data_group_hash` column. | 441b8408-d34b-016f-19d0-ca77a4156fba |
 | **`id`**          | Primary key of the row. Calculated as as hash value of the `time_series_id`, `check_hash`, and the `time_period` columns, that identify each data quality result within a time series by the time period.                                          | ef606aaf-dec8-5207-4d54-db2f5669c32d |
 

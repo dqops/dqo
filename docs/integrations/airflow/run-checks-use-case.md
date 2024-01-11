@@ -122,7 +122,7 @@ For more details which will help to solve the issue use the Incidents in the DQO
 
 To reach more information about the issue click the link on the **Data quality issue grouping** in the top menu.
 
-The issue in the example points to the [Completeness dimension](../../dqo-concepts/data-quality-dimensions/data-quality-dimensions.md).
+The issue in the example points to the [Completeness dimension](../../dqo-concepts/data-quality-dimensions.md).
 The check that controls the expected number of rows failed.
 This means the data are incomplete and the issue has to be investigated and resolved.
 

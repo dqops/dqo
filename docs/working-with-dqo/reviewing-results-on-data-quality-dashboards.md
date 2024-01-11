@@ -6,7 +6,7 @@ DQOps has multiple built-in data quality dashboards for displaying [data quality
 Our dashboards use [Looker Studio](https://lookerstudio.google.com/overview) (formerly Google Data Studio) business
 intelligence environment.
 
-You can [learn more about different types of dashboards](../dqo-concepts/data-quality-dashboards/data-quality-dashboards.md)
+You can [learn more about different types of dashboards](../dqo-concepts/types-of-data-quality-dashboards.md)
 in the Concept section.
 
 ## Prerequisite
@@ -20,7 +20,7 @@ You can read more about `cloud` command in [Command-line specification section](
 
 To view dashboards, simply go to the **Data Quality Dashboard** section, and select the dashboard of interest from the tree
 view on the left. There are several groups and subgroups of data quality dashboards dedicated to analyzing results from
-data quality checks. You can [learn more about different types of dashboards](../dqo-concepts/data-quality-dashboards/data-quality-dashboards.md)
+data quality checks. You can [learn more about different types of dashboards](../dqo-concepts/types-of-data-quality-dashboards.md)
 in the Concept section.
 
 For example, to review the summary KPIs of all executed monitoring checks you can use the **KPIs scorecard - summary** dashboard.

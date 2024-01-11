@@ -79,7 +79,7 @@ To use DQOps you need:
     You can also log in to your existing DQOps Cloud account.
 
     During the first registration, DQOps Cloud will generate your DQOps Cloud Pairing Key that is used to connect your local
-    DQOps instance to the [data quality dashboards](../dqo-concepts/data-quality-dashboards/data-quality-dashboards.md).
+    DQOps instance to the [data quality dashboards](../dqo-concepts/types-of-data-quality-dashboards.md).
     You don't need to copy the DQOps Cloud Pairing Key. DQOps is smart enough to pick the DQOps Cloud API Key for you.
 
     ![DQOps API Key retrieved](https://dqops.com/docs/images/getting-started/dqops-api-key-retrieved.png)

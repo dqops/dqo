@@ -43,7 +43,7 @@ To create a new table comparison, follow these steps:
 4. You can group your data before comparison by using a discriminator column containing data such as location, business units, vendor, etc.
     If you want to use data grouping, select columns on compared (source) and reference tables. DQOps compares up to 1000 distinct data group rows by default.
     You can modify this limit by changing the `--dqo.sensors.limit.sensor-readout-limit` parameter.
-    [Learn more about data groupings](../dqo-concepts/data-grouping/data-grouping.md).
+    [Learn more about data groupings](../dqo-concepts/measuring-data-quality-with-data-grouping.md).
    
     ![Optional data grouping on comparison](https://dqops.com/docs/images/working-with-dqo/comparisons/optional-data-grouping-on-comparison.png)
 

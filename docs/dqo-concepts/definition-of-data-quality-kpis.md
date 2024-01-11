@@ -32,7 +32,7 @@ all stakeholders, including the data teams, data stewards, data owners, data pro
 
 Beside calculating the data quality KPI for each physical and logical groups of data, the KPI must also support identifying the type
 of data quality issue. For that purpose, all data quality check results are attributed with the name
-of a [data quality dimension](data-quality-dimensions/data-quality-dimensions.md), allowing to identify the type of problem.
+of a [data quality dimension](data-quality-dimensions.md), allowing to identify the type of problem.
 
 
 ## Data quality score formula
@@ -320,14 +320,14 @@ as shown in the following table.
 
 
 ### **By groups of rows**
-Additionally, data quality KPIs can be calculated for each [data group](data-grouping/data-grouping.md). 
+Additionally, data quality KPIs can be calculated for each [data group](measuring-data-quality-with-data-grouping.md). 
 
 Tracking data quality for groups of rows identified by a discriminator column enables to identify data received from different
 data sources, but finally aggregated into a single table. The discriminator column could be a country name, state name, vendor name,
 or a supplier name.
 
 DQOps supports running data quality checks as SQL queries with a **GROUP BY** clause. Please read about data segmentation
-in [the concept of data grouping](data-grouping/data-grouping.md) article.
+in [the concept of data grouping](measuring-data-quality-with-data-grouping.md) article.
 
 The following data quality KPI formula shows how DQOps measures the score for each group of rows, when the data is grouped by a *state* column
 that contains US state names.
@@ -363,7 +363,7 @@ DQOps supports also calculating data quality KPIs for groups of tables. This typ
 - tables are grouped by geography (country, state, etc.)
 - business owner
 
-Please read the concept of [data grouping by tags](data-grouping/data-grouping.md#grouping-similar-tables) article to see how to assign tags to tables.
+Please read the concept of [data grouping by tags](measuring-data-quality-with-data-grouping.md#grouping-similar-tables) article to see how to assign tags to tables.
 
 The following data quality KPI formula shows how DQOps can measure timeliness for tables tagged by a state name.
 
@@ -371,7 +371,7 @@ The following data quality KPI formula shows how DQOps can measure timeliness fo
 
 
 ## What's next
-- Look at some built-in [data quality KPI dashboards](data-quality-dashboards/data-quality-dashboards.md#data-quality-kpis) 
-- Read about [build-in data quality dashboards](data-quality-dashboards/data-quality-dashboards.md)
+- Look at some built-in [data quality KPI dashboards](types-of-data-quality-dashboards.md#data-quality-kpis) 
+- Read about [build-in data quality dashboards](types-of-data-quality-dashboards.md)
 - Learn how to [review results of data quality monitoring results on dashboards](../working-with-dqo/reviewing-results-on-data-quality-dashboards.md)
 - Find out how data quality [KPIs are measured incrementally for partitioned data](incremental-data-quality-monitoring.md)

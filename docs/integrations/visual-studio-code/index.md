@@ -142,7 +142,7 @@ Each data quality check has several parameters, allowing to customize the check 
 The following elements are supported, not including the data quality issue thresholds presented before.
 
 - `comments` supports managing a list of comments that are usable to track changes within the file and in the DQOps UI
-- `data_grouping` supports configuring a custom [data grouping](../../dqo-concepts/data-grouping/data-grouping.md)
+- `data_grouping` supports configuring a custom [data grouping](../../dqo-concepts/measuring-data-quality-with-data-grouping.md)
   for that check. Data grouping adds a **GROUP BY** clause to the SQL queries, capturing multiple check results,
   separately for each group of rows.
 - `disabled` enables disabling a configured check temporarily from running, but preserving the configuration in the YAML file
@@ -155,7 +155,7 @@ The following elements are supported, not including the data quality issue thres
 - **`parameters`** is an important node that contains 
   the [data quality sensor](../../dqo-concepts/sensors/sensors.md)'s parameters. Not all sensors used by data quality
   checks have parameters and the node does not need to be configured.
-- `quality_dimension` is a text field used to override the default value of the [data quality dimension](../../dqo-concepts/data-quality-dimensions/data-quality-dimensions.md)
+- `quality_dimension` is a text field used to override the default value of the [data quality dimension](../../dqo-concepts/data-quality-dimensions.md)
   stored in the parquet tables. Changing the default data quality dimension name allows to report some issues under a different dimension.
 - `schedule_override` is a configuration of the CRON schedule for a single data quality check. The check could be configured
   to run using its own schedule, more or less frequently than the default scheduling configuration at the table or connection levels. 

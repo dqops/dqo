@@ -11,7 +11,7 @@ of the data source.
 Data groups are used to calculate separate [data quality KPI](../dqo-concepts/definition-of-data-quality-kpis.md) scores for
 different groups of rows. 
 
-For more information about data grouping, see [data grouping in the DQOps concepts section](../dqo-concepts/data-grouping/data-grouping.md).
+For more information about data grouping, see [data grouping in the DQOps concepts section](../dqo-concepts/measuring-data-quality-with-data-grouping.md).
 
 In DQOps, you can set up data grouping globally at the data source level, in which case the configuration will be copied to the data grouping
 configuration of the tables that will be imported. Note that this configuration does not affect tables that have already been imported.
@@ -66,7 +66,7 @@ To set up data grouping configuration at the **table level**:
     quality results. The number of rows returned by a GROUP BY clause in SQL will increase the number of data quality 
     check results tracked by DQOps and will impact data quality KPIs.
 
-    For more information about data grouping, see [data grouping in the DQOps concepts section](../dqo-concepts/data-grouping/data-grouping.md).
+    For more information about data grouping, see [data grouping in the DQOps concepts section](../dqo-concepts/measuring-data-quality-with-data-grouping.md).
 
     ![Select default data grouping configuration](https://dqops.com/docs/images/working-with-dqo/set-up-data-grouping/select-default-data-grouping-configuration.png)
     

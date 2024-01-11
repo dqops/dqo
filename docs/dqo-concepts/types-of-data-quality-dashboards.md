@@ -2,7 +2,7 @@
 
 ## Overview
 
-DQOps has multiple built-in data quality dashboards for displaying [data quality KPI](../definition-of-data-quality-kpis.md).
+DQOps has multiple built-in data quality dashboards for displaying [data quality KPI](definition-of-data-quality-kpis.md).
 Our dashboards use [Looker Studio](https://lookerstudio.google.com/overview) (formerly Google Data Studio) business 
 intelligence environment. We chose Looker Studio because there is no per-user license fee, which allows granting access
 to all parties that might be involved in the issue resolution process.
@@ -53,17 +53,17 @@ Other dashboards have buttons to change the view between the current and previou
 Profiling, Monitoring, and Partitions groups each contain subgroups for analyzing results from profiling, monitoring, 
 and partition check types, respectively.
 
-[**Profiling checks**](../checks/profiling-checks/profiling-checks.md) are useful for exploring and experimenting with 
+[**Profiling checks**](checks/profiling-checks/profiling-checks.md) are useful for exploring and experimenting with 
 various types of checks and determining the most suitable ones for regular data quality monitoring. When the profiling 
 data quality check is run, only one sensor readout is saved per month. That is why profiling group does not have 
 dashboards displaying data per day of the month or histograms.
 
-[**Monitoring checks**](../checks/monitoring-checks/monitoring-checks.md) are standard checks that monitor the data quality of
+[**Monitoring checks**](checks/monitoring-checks/monitoring-checks.md) are standard checks that monitor the data quality of
 a table or column. There are two categories of monitoring checks: daily checks and monthly checks. The daily monitoring 
 checks store the most recent sensor readouts for each day when the data quality check was run. This means that if you run
 a check several times a day only the most recent readout is stored. The previous readouts for that day will be overwritten.
 
-[**Partition checks**](../checks/partition-checks/partition-checks.md) are designed to measure the data quality in partitioned
+[**Partition checks**](checks/partition-checks/partition-checks.md) are designed to measure the data quality in partitioned
 data. In contrast to monitoring checks, partition checks produce separate monitoring results for each partition. 
 There are two categories of partition checks: daily checks and monthly checks. The daily partition checks store the most
 recent sensor readouts for each partition and each day when the data quality check was run. This means that if you run 
@@ -100,7 +100,7 @@ These dashboards allow filtering data by:
 
 **Highest issue severity per day** dashboards allow for reviewing and filtering a summary number of issues that arise 
 from data quality checks per day. Depending on the dashboard, the summary is grouped by table, column, 
-[data grouping](../data-grouping/data-grouping.md), or [check category](../../checks/index.md).
+[data grouping](measuring-data-quality-with-data-grouping.md), or [check category](../checks/index.md).
 These dashboards help evaluate the areas with the highest number of data quality issues that should be addressed. 
 It also allows to review how the issue severity changed per day of the month.
 
@@ -150,12 +150,12 @@ This dashboard allows filtering data by:
 ### **Data quality KPIs**
 
 **Data quality KPIs** dashboards show high-level data quality KPIs, aggregated on a macro scale that can be shared at a 
-corporate level. DQOps calculates data quality KPIs as a percentage of passed [data quality checks](../checks/index.md) 
+corporate level. DQOps calculates data quality KPIs as a percentage of passed [data quality checks](checks/index.md) 
 for each connection, schema, data grouping, etc.
 
 With these dashboards, senior management can review a summary of data quality KPIs or evaluate the KPIs per table, column, 
-[data quality dimensions](../data-quality-dimensions/data-quality-dimensions.md), 
-[check category](../../checks/index.md), [data grouping](../data-grouping/data-grouping.md) and day.
+[data quality dimensions](data-quality-dimensions.md), 
+[check category](../checks/index.md), [data grouping](measuring-data-quality-with-data-grouping.md) and day.
 
 **KPIs per table and day** is a representative of this group. It allows reviewing data quality KPIs per table
 and day of the month. 
@@ -225,8 +225,8 @@ other to history of issues.
 
 
 **Current completeness issues on columns** is a representative of **Completeness** subgroup. This dashboard summarizes
-results from most recently executed null checks on columns ([null_count](../../checks/column/nulls/nulls-count.md), [null_percent](../../checks/column/nulls/nulls-percent.md),
-[not_nulls_count](../../checks/column/nulls/not-nulls-count.md) and [not_nulls_percent](../../checks/column/nulls/not-nulls-percent.md)).
+results from most recently executed null checks on columns ([null_count](../checks/column/nulls/nulls-count.md), [null_percent](../checks/column/nulls/nulls-percent.md),
+[not_nulls_count](../checks/column/nulls/not-nulls-count.md) and [not_nulls_percent](../checks/column/nulls/not-nulls-percent.md)).
 
 This dashboard allows filtering data by:
 
@@ -253,7 +253,7 @@ or too small tables. While dashboards in the **Partitions** group (**Partition v
 partitions row count and too small partitions.
 
 **Largest tables by number of rows** is a representative of **Volume** subgroup. This dashboard displays tables monitored
-with [row_count](../../checks/table/volume/row-count.md) check and allows review the number of rows in these tables. 
+with [row_count](../checks/table/volume/row-count.md) check and allows review the number of rows in these tables. 
 
 This dashboard allows filtering data by:
 
@@ -271,11 +271,11 @@ This dashboard allows filtering data by:
 ### **PII**
 
 **PII** dashboards display results from column checks detecting the percentage of Personal Identifiable Information in data. 
-PII includes phone numbers ([contains_usa_phone_percent](../../checks/column/pii/contains-usa-phone-percent.md)), 
-emails ([contains_email_percent](../../checks/column/pii/contains-email-percent.md)), 
-zipcodes ([contains_usa_zipcode_percent](../../checks/column/pii/contains-usa-zipcode-percent.md)), or 
-IP addresses ([contains_ip4_percent](../../checks/column/pii/contains-ip4-percent.md), 
-[contains_ip6_percent](../../checks/column/pii/contains-ip6-percent.md)).
+PII includes phone numbers ([contains_usa_phone_percent](../checks/column/pii/contains-usa-phone-percent.md)), 
+emails ([contains_email_percent](../checks/column/pii/contains-email-percent.md)), 
+zipcodes ([contains_usa_zipcode_percent](../checks/column/pii/contains-usa-zipcode-percent.md)), or 
+IP addresses ([contains_ip4_percent](../checks/column/pii/contains-ip4-percent.md), 
+[contains_ip6_percent](../checks/column/pii/contains-ip6-percent.md)).
 
 
 ### **Schema changes**
@@ -294,10 +294,10 @@ schema change:
     - Column type changed
 
 **Summary of changes in columns** is a representative of Schema changes group. This dashboard summarizes issues obtained
-from all table-level schema change checks ([column count](../../checks/table/schema/column-count.md),
-[column count changed](../../checks/table/schema/column-count-changed.md), [column list changed](../../checks/table/schema/column-list-changed.md),
-[column list or order changed,](../../checks/table/schema/column-list-or-order-changed.md),
-[column types changed](../../checks/table/schema/column-types-changed.md)). 
+from all table-level schema change checks ([column count](../checks/table/schema/column-count.md),
+[column count changed](../checks/table/schema/column-count-changed.md), [column list changed](../checks/table/schema/column-list-changed.md),
+[column list or order changed,](../checks/table/schema/column-list-or-order-changed.md),
+[column types changed](../checks/table/schema/column-types-changed.md)). 
 
 This dashboard allows filtering data by:
 
@@ -320,7 +320,7 @@ This dashboard allows filtering data by:
 ### **Statistics of executed checks** 
 
 **Statistics of executed checks** subgroup of dashboards contains summaries of executed checks per table, column, 
-[data grouping](../data-grouping/data-grouping.md), and [check category](../../checks/index.md).
+[data grouping](measuring-data-quality-with-data-grouping.md), and [check category](../checks/index.md).
 
 ### **Execution errors**
 

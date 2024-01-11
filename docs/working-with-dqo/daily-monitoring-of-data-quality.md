@@ -306,7 +306,7 @@ Click the link for more information [how to set up in-app Slack notifications](.
 ## Review the check results on dashboards
 
 DQOps has multiple built-in data quality dashboards dedicated to analyzing results from
-data quality checks. You can [learn more about different types of dashboards](../dqo-concepts/data-quality-dashboards/data-quality-dashboards.md)
+data quality checks. You can [learn more about different types of dashboards](../dqo-concepts/types-of-data-quality-dashboards.md)
 in the Concept section.
 
 To be able to display results on data quality dashboards, you need to have a DQOps account and synchronize locally stored results with it.  
@@ -348,8 +348,8 @@ corporate level. DQOps calculates data quality KPIs as a percentage of passed [d
 for each connection, schema, data grouping, etc.
 
 With these dashboards, senior management can review a summary of data quality KPIs or evaluate the KPIs per table, column,
-[data quality dimensions](../dqo-concepts/data-quality-dimensions/data-quality-dimensions.md),
-[check category](../dqo-concepts/checks/index.md), [data grouping](../dqo-concepts/data-grouping/data-grouping.md) and day.
+[data quality dimensions](../dqo-concepts/data-quality-dimensions.md),
+[check category](../dqo-concepts/checks/index.md), [data grouping](../dqo-concepts/measuring-data-quality-with-data-grouping.md) and day.
 
 **KPIs per table and day** is a representative of this group. It allows reviewing data quality KPIs per table
 and day of the month.

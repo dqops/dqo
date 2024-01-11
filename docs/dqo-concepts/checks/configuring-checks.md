@@ -747,7 +747,7 @@ a table in the *.dqotable.yaml* file.
 The value of the `stage` field that was configured on the table at the time of running the check is saved in the
 [sensor_readouts](../../reference/parquetfiles/sensor_readouts.md) and the
 [check_results](../../reference/parquetfiles/check_results.md) parquet tables. 
-The [data quality dashboards](../data-quality-dashboards/data-quality-dashboards.md) in DQOps are designed
+The [data quality dashboards](../types-of-data-quality-dashboards.md) in DQOps are designed
 to allow filtering by the stage, using the `stage` value from the tables mentioned above.
 
 The following example shows how the `stage` field is configured.
@@ -783,7 +783,7 @@ level are assigned to be improved in the next iteration.
 The value of the `priority` field that was configured on the table at the time of running the check is saved in the
 [sensor_readouts](../../reference/parquetfiles/sensor_readouts.md) and the
 [check_results](../../reference/parquetfiles/check_results.md) parquet tables.
-The [data quality dashboards](../data-quality-dashboards/data-quality-dashboards.md) in DQOps use a filter for the table priorities,
+The [data quality dashboards](../types-of-data-quality-dashboards.md) in DQOps use a filter for the table priorities,
 allowing to separate data quality issues between high priority tables that should be already cleansed and lower priority tables
 that are still in the data cleansing process.
 
@@ -1049,6 +1049,6 @@ The following default checks are enabled only on text or numeric columns.
 ## Next steps
 
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../dqops-installation/install-dqops-using-pip.md) or [run DQOps as a Docker container](../../dqops-installation/run-dqops-as-docker-container.md).
-- DQOps has multiple built-in data quality dashboards for displaying data quality KPI. [Learn more about different types of dashboards](../data-quality-dashboards/data-quality-dashboards.md).
+- DQOps has multiple built-in data quality dashboards for displaying data quality KPI. [Learn more about different types of dashboards](../types-of-data-quality-dashboards.md).
 - DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md) and [notifications](../../integrations/webhooks/index.md).
 - DQOps provide you with summary statistics about your table and column. This information can be valuable in deciding which data quality checks and threshold levels should be set to monitor data quality. For more details about [Basic data statistics, click here](../../working-with-dqo/collecting-basic-data-statistics.md).

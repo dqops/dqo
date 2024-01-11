@@ -92,7 +92,7 @@ These topics introduce the basic concepts of DQOps.
     in the most recent batch.
 
 
- - **[Data quality dashboards](./data-quality-dashboards/data-quality-dashboards.md)**
+ - **[Data quality dashboards](types-of-data-quality-dashboards.md)**
 
     DQOps stores the data quality check results locally, but also the data is synchronized to a `Data Quality Data Warehouse`
     hosted in the cloud by DQOps for each user.
@@ -102,7 +102,7 @@ These topics introduce the basic concepts of DQOps.
     the user's `Data Quality Data Warehouse`.
 
 
- - **[Data quality dimensions](./data-quality-dimensions/data-quality-dimensions.md)**
+ - **[Data quality dimensions](data-quality-dimensions.md)**
 
     The data quality dimensions are the fundamental way to group data quality checks into groups of checks that detect similar issue.
     The most important data quality dimensions supported by DQOps are:
@@ -125,7 +125,7 @@ These topics introduce the basic concepts of DQOps.
     - `Validity` detects common field format issues, such as an *email* field does not meet the email format
 
 
- - **[Data grouping](./data-grouping/data-grouping.md)**
+ - **[Data grouping](measuring-data-quality-with-data-grouping.md)**
 
     DQOps unique feature is the ability to use a **GROUP BY** clause in the data quality sensors, allowing to run data quality checks
     for multiple ranges of rows in the same table.

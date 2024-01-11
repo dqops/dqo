@@ -47,7 +47,7 @@ The result set returned by the SQL query above is shown below.
 | 55.1%        | DE               |
 | 56.7%        | IT               |
 
-DQOps will store all results in the [sensor_readout](../../reference/parquetfiles/sensor_readouts.md) parquet table.
+DQOps will store all results in the [sensor_readout](../reference/parquetfiles/sensor_readouts.md) parquet table.
 Each sensor readout will be verified by a data quality rule, generating a data quality check result
 for each data group returned by the query.
 
@@ -98,7 +98,7 @@ DQOps supports setting of up to 9 different data grouping dimensions (levels).
 
 ## Configuring data grouping
 
-Data grouping is configured for each table in the [.dqotable.yaml](../../reference/yaml/TableYaml.md) files
+Data grouping is configured for each table in the [.dqotable.yaml](../reference/yaml/TableYaml.md) files
 as shown in the example below.
 
 
@@ -165,12 +165,12 @@ The supported values for the **source** field are:
 
 - **tag** - the data grouping level is static, assigning the same hardcoded data grouping value to all data quality results
   (sensor readouts, data quality check results). Tagging is used for grouping the results of similar tables, especially
-  for calculating [data quality KPIs](../definition-of-data-quality-kpis.md) for different data areas, data pipelines,
+  for calculating [data quality KPIs](definition-of-data-quality-kpis.md) for different data areas, data pipelines,
   or data sources.
 
 
 ### **Grouping by calculated columns**
-Virtual columns that are defined as SQL expressions ([calculated columns](../checks/configuring-checks.md#calculated-columns))
+Virtual columns that are defined as SQL expressions ([calculated columns](checks/configuring-checks.md#calculated-columns))
 can be also used for dynamic grouping. This complex scenario could be used to run data quality checks on unstructured data
 in the landing zone of the data warehouse.
 
@@ -215,10 +215,10 @@ data from different data sources.
 The data quality results captured from those tables could be tagged by the name of the data source, external vendor, or department.
 
 When the results are tagged, the values are stored in the sensor readout and rule result tables, keeping the data group names.
-The [data quality dashboards](../data-quality-dashboards/data-quality-dashboards.md) in DQOps always have a filter
+The [data quality dashboards](types-of-data-quality-dashboards.md) in DQOps always have a filter
 for **data group**, allowing to deep-dive into data quality issues related to that source, or the data suppliers.
 
-Tagging data quality results becomes even more important when combined with [data quality KPIs](../definition-of-data-quality-kpis.md),
+Tagging data quality results becomes even more important when combined with [data quality KPIs](definition-of-data-quality-kpis.md),
 because a separate data quality KPI score can be calculated for each data supplier, vendor, department, or any other data area.
 
 The tags are defined under the *level_1*, ..., *level_9* nodes as show below. 
@@ -293,7 +293,7 @@ group of data (the country in this example) as a separate data quality incident.
 
 The data quality dashboards in DQOps have a configuration parameter to select the data grouping for which we want to
 find the most recent data quality issues or calculate the data quality KPI.
-The [data quality KPI](../definition-of-data-quality-kpis.md) scores that is calculated for each data source (data grouping)
+The [data quality KPI](definition-of-data-quality-kpis.md) scores that is calculated for each data source (data grouping)
 simplify the root cause analysis by linking the data quality issue to a data source, a data group,
 an external data supplier, a data provider, or simply a separate data pipeline that has loaded invalid data.
 
@@ -307,12 +307,12 @@ It is also important to mention that the configuration of data grouping on the c
 is only a template of the default grouping configuration that is copied to tables that are imported.
 When a table was already imported into DQOps, changing the configuration on the connection level has no effect.
 
-For more detailed information on setting up a data grouping, go to [Working with DQOps section](../../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md).
+For more detailed information on setting up a data grouping, go to [Working with DQOps section](../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md).
 
 
 ## How DQOps stores data grouping results
-DQOps stores the data in Parquet files. The format of parquet files for the sensor readout ([.data/sensor_readouts/](../../reference/parquetfiles/sensor_readouts.md))
-and the check results ([.data/check_results/](../../reference/parquetfiles/check_results.md)) are documented in the reference section.
+DQOps stores the data in Parquet files. The format of parquet files for the sensor readout ([.data/sensor_readouts/](../reference/parquetfiles/sensor_readouts.md))
+and the check results ([.data/check_results/](../reference/parquetfiles/check_results.md)) are documented in the reference section.
 
 The columns that identify the data groups are:
 
@@ -346,7 +346,7 @@ The columns that identify the data groups are:
 
 
 ## Integration of partitioned checks with data grouping
-[Partition checks](../checks/partition-checks/partition-checks.md) can also analyze partitions with grouping rows
+[Partition checks](checks/partition-checks/partition-checks.md) can also analyze partitions with grouping rows
 by additional dimensions within each date partition.
 Because both partition checks and data grouping by columns depends on adding all columns to the **GROUP BY** clause,
 DQOps groups rows both by the date partitioning column and the columns used for data grouping.
@@ -387,6 +387,6 @@ identification of the source of the data quality issue.
 
 
 ## What's next
-- Learn how DQOps calculated [data quality KPIs](../definition-of-data-quality-kpis.md)
-- Read how the data quality results are [stored as a Hive-compliant local data warehouse](../data-storage-of-data-quality-results.md)
-- Check how the **data groups** are aggregated on the [data quality dashboards](../data-quality-dashboards/data-quality-dashboards.md) 
+- Learn how DQOps calculated [data quality KPIs](definition-of-data-quality-kpis.md)
+- Read how the data quality results are [stored as a Hive-compliant local data warehouse](data-storage-of-data-quality-results.md)
+- Check how the **data groups** are aggregated on the [data quality dashboards](types-of-data-quality-dashboards.md) 

@@ -365,7 +365,7 @@ $DQO_USER_HOME
 
 The custom checks are defined in [**&lt;check_name&gt;**.dqocheck.yaml](../../reference/yaml/CheckDefinitionYaml.md) files.
 The check names must be unique even between categories. Otherwise, the results shown on the
-[data quality dashboards](../data-quality-dashboards/data-quality-dashboards.md) will not identify the correct check name.
+[data quality dashboards](../types-of-data-quality-dashboards.md) will not identify the correct check name.
 The **check_name** used in the *.dqocheck.yaml* is the name of the check that is used to run it.
 
 Differently from the customization of sensors and rules, it is not possible to overwrite a built-in check by creating

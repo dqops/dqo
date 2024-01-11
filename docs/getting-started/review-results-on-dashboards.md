@@ -7,7 +7,7 @@ the initial results from the basic statistics and profiling checks, as well as r
 the results on the data quality dashboards. 
 
 In DQOps, you can choose from a variety of built-in dashboard groups.
-You can read more about the [data quality dashboards](../dqo-concepts/data-quality-dashboards/data-quality-dashboards.md)
+You can read more about the [data quality dashboards](../dqo-concepts/types-of-data-quality-dashboards.md)
 in the DQOps concepts section.
 
 ## Prerequisite
@@ -45,9 +45,9 @@ Data quality KPIs dashboards show high-level data quality KPIs, aggregated on a 
 To read more about [data quality KPIs, check DQO concept section](../dqo-concepts/definition-of-data-quality-kpis.md).
 
 Data quality KPIs dashboards review key data metrics per connection,
-[data quality dimensions](../dqo-concepts/data-quality-dimensions/data-quality-dimensions.md),
+[data quality dimensions](../dqo-concepts/data-quality-dimensions.md),
 [check category](../dqo-concepts/checks/index.md#categories-of-checks) and
-[data grouping](../dqo-concepts/data-grouping/data-grouping.md).
+[data grouping](../dqo-concepts/measuring-data-quality-with-data-grouping.md).
 
 To review the summary KPIs of all run checks use the **KPIs scorecard - summary** dashboards.
 
