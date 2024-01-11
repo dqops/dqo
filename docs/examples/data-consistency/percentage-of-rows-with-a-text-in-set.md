@@ -40,7 +40,7 @@ In this example, we will set three minimum percent thresholds levels for the che
 - error: 98
 - fatal: 95
 
-If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
 **VALUE**
 
@@ -190,7 +190,7 @@ In this example, we have set three minimum percent thresholds levels for the che
 
 The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_text_found_in_set_percent` check is configured.
 
-If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
 ```yaml hl_lines="12-30"
 apiVersion: dqo/v1

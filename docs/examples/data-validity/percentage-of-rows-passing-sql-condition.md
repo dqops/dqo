@@ -47,7 +47,7 @@ In this example, we will set three minimum percentage thresholds levels for the 
 - error: 99.0%
 - fatal: 95.0%
 
-If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
 **VALUE**
 
@@ -220,7 +220,7 @@ In this example, we have set three minimum percentage thresholds levels for the 
 
 The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_sql_condition_passed_percent` check is configured.
 
-If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
 ```yaml hl_lines="7-28"
 apiVersion: dqo/v1

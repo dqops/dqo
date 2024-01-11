@@ -53,17 +53,17 @@ Other dashboards have buttons to change the view between the current and previou
 Profiling, Monitoring, and Partitions groups each contain subgroups for analyzing results from profiling, monitoring, 
 and partition check types, respectively.
 
-[**Profiling checks**](checks/profiling-checks/profiling-checks.md) are useful for exploring and experimenting with 
+[**Profiling checks**](definition-of-data-quality-checks/data-profiling-checks.md) are useful for exploring and experimenting with 
 various types of checks and determining the most suitable ones for regular data quality monitoring. When the profiling 
 data quality check is run, only one sensor readout is saved per month. That is why profiling group does not have 
 dashboards displaying data per day of the month or histograms.
 
-[**Monitoring checks**](checks/monitoring-checks/monitoring-checks.md) are standard checks that monitor the data quality of
+[**Monitoring checks**](definition-of-data-quality-checks/data-observability-monitoring-checks.md) are standard checks that monitor the data quality of
 a table or column. There are two categories of monitoring checks: daily checks and monthly checks. The daily monitoring 
 checks store the most recent sensor readouts for each day when the data quality check was run. This means that if you run
 a check several times a day only the most recent readout is stored. The previous readouts for that day will be overwritten.
 
-[**Partition checks**](checks/partition-checks/partition-checks.md) are designed to measure the data quality in partitioned
+[**Partition checks**](definition-of-data-quality-checks/partition-checks.md) are designed to measure the data quality in partitioned
 data. In contrast to monitoring checks, partition checks produce separate monitoring results for each partition. 
 There are two categories of partition checks: daily checks and monthly checks. The daily partition checks store the most
 recent sensor readouts for each partition and each day when the data quality check was run. This means that if you run 
@@ -150,7 +150,7 @@ This dashboard allows filtering data by:
 ### **Data quality KPIs**
 
 **Data quality KPIs** dashboards show high-level data quality KPIs, aggregated on a macro scale that can be shared at a 
-corporate level. DQOps calculates data quality KPIs as a percentage of passed [data quality checks](checks/index.md) 
+corporate level. DQOps calculates data quality KPIs as a percentage of passed [data quality checks](definition-of-data-quality-checks/index.md) 
 for each connection, schema, data grouping, etc.
 
 With these dashboards, senior management can review a summary of data quality KPIs or evaluate the KPIs per table, column, 

@@ -29,7 +29,7 @@ In this example, we will set three minimum percentage thresholds levels for the 
 - error: 98.0%
 - fatal: 95.0%
 
-If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
 **VALUE**
 
@@ -111,7 +111,7 @@ To execute the check prepared in the example using the [user interface](../../dq
  
     Below you can see the results displayed on the **Highest issue severity per check and day table** dashboard which is located in the
     Highest issue severity per day group of dashboards. This dashboard allows for reviewing and filtering a summary 
-    number of issues that arise from data quality checks per day, grouped by [check category](../../dqo-concepts/checks/index.md#categories-of-checks).
+    number of issues that arise from data quality checks per day, grouped by [check category](../../dqo-concepts/definition-of-data-quality-checks/index.md#categories-of-checks).
 
     This dashboard helps evaluate the areas with the highest number of data quality issues that should be addressed.
     It also allows to review how the issue severity changed per day of the month.
@@ -175,7 +175,7 @@ In this example, we have set three maximum percentage thresholds levels for the 
 The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_valid_latitude_percent` and
 `daily_valid_longitude_percent`checks are configured.
 
-If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
 ```yaml hl_lines="12-39"
 apiVersion: dqo/v1

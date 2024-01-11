@@ -7,7 +7,7 @@ Column-level check that counts unique values in a numeric column and counts how 
 
 ___
 The **expected numbers in use count** data quality check has the following variants for each
-[type of data quality](../../../dqo-concepts/checks/index.md#types-of-checks) checks supported by DQOps.
+[type of data quality](../../../dqo-concepts/definition-of-data-quality-checks/index.md#types-of-checks) checks supported by DQOps.
 
 
 ## profile expected numbers in use count

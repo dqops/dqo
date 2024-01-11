@@ -5,7 +5,7 @@ Column level check that ensures the sample variance is in a set range in a monit
 
 ___
 The **sample variance in range** data quality check has the following variants for each
-[type of data quality](../../../dqo-concepts/checks/index.md#types-of-checks) checks supported by DQOps.
+[type of data quality](../../../dqo-concepts/definition-of-data-quality-checks/index.md#types-of-checks) checks supported by DQOps.
 
 
 ## profile sample variance in range

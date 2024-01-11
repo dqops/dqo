@@ -44,7 +44,7 @@ To learn more about each check, click on the links below.
 
 All checks are scheduled to run daily at 12:00 a.m.
 
-For more [general information about checks, see the DQOps concepts](../dqo-concepts/checks/index.md) section. 
+For more [general information about checks, see the DQOps concepts](../dqo-concepts/definition-of-data-quality-checks/index.md) section. 
 
 ## Review basic statistics results
 
@@ -70,7 +70,7 @@ To review the results:
 
 ## Review profiling checks results
 
-[**Profiling checks**](../dqo-concepts/checks/profiling-checks/profiling-checks.md) enable you to run more advanced data analyses than
+[**Profiling checks**](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md) enable you to run more advanced data analyses than
 [**Basic data statistics**](../working-with-dqo/collecting-basic-data-statistics.md). Profiling checks are also useful for
 exploring and experimenting with various types of checks and determining the most suitable ones for regular data quality monitoring.
 
@@ -112,7 +112,7 @@ Based on the results, you can set the threshold for these checks.
 
 ## Run monitoring checks
 
-[**Monitoring checks**](../dqo-concepts/checks/monitoring-checks/monitoring-checks.md) are standard checks that monitor the data quality of a
+[**Monitoring checks**](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md) are standard checks that monitor the data quality of a
 table or column. These checks create a single data quality result for the entire table or column. There are two categories
 of monitoring checks: daily checks and monthly checks. When run multiple times per day, the **daily checks** store only
 the most recent result for each day. **Monthly checks** store the most recent results for each month the data quality
@@ -129,7 +129,7 @@ Now let's run monitoring checks.
 2. Click the **Run check** icon next to daily_row_count check. This check verifies that the number of rows in the table
     does not exceed the minimum accepted count set as the threshold level which is 1 in this case.
    
-    You can read more about [issue severity levels in DQOps concepts section](../dqo-concepts/checks/index.md#issue-severity-levels).
+    You can read more about [issue severity levels in DQOps concepts section](../dqo-concepts/definition-of-data-quality-checks/index.md#issue-severity-levels).
 
     ![Running check](https://dqops.com/docs/images/getting-started/run-daily-row-count-check.png)
     

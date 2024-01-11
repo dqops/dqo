@@ -146,7 +146,7 @@ The table with data quality checks contains a list of checks divided into differ
 can expand and collapse by clicking on an arrow. [Learn more about the different check subcategories](../checks/index.md).
 By clicking on the **Show advanced checks** checkbox you can view all checks available in DQOps. 
 
-The right side of the table allows setting different threshold levels (severity levels). [Learn more about threshold levels ](checks/index.md#issue-severity-levels)
+The right side of the table allows setting different threshold levels (severity levels). [Learn more about threshold levels ](definition-of-data-quality-checks/index.md#issue-severity-levels)
 
 On the left of the name of each check, there are several buttons and icons. And under the name of the check, there is a data quality
 dimension category to which this check was categorized.

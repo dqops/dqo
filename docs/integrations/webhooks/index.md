@@ -106,7 +106,7 @@ Payload's text field is built with the use of the following data:
 - **Status**: One of four resolution statuses (open, acknowledged, resolved and muted).
 - **Datetimes of the incident**: UTC date times with offset specific to local user setup. Values of JSON fields firstSeen and lastSeen.
 - **Data quality dimension**: Name of the dimension. [Read more](../../dqo-concepts/data-quality-dimensions.md)
-- **Highest severity level**: A severity level from the data quality rule. [Read more](../../dqo-concepts/checks/index.md)
+- **Highest severity level**: A severity level from the data quality rule. [Read more](../../dqo-concepts/definition-of-data-quality-checks/index.md)
 - **Total data quality issues**: A value from failedChecksCount JSON field.
 - **Links**: Quick access links.
  

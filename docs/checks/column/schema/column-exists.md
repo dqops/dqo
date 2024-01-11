@@ -6,7 +6,7 @@ Column level check that reads the metadata of the monitored table and verifies t
 
 ___
 The **column exists** data quality check has the following variants for each
-[type of data quality](../../../dqo-concepts/checks/index.md#types-of-checks) checks supported by DQOps.
+[type of data quality](../../../dqo-concepts/definition-of-data-quality-checks/index.md#types-of-checks) checks supported by DQOps.
 
 
 ## profile column exists

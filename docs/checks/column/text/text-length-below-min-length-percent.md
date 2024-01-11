@@ -5,7 +5,7 @@ Column-level check that ensures that the percentage of texts in the monitored co
 
 ___
 The **text length below min length percent** data quality check has the following variants for each
-[type of data quality](../../../dqo-concepts/checks/index.md#types-of-checks) checks supported by DQOps.
+[type of data quality](../../../dqo-concepts/definition-of-data-quality-checks/index.md#types-of-checks) checks supported by DQOps.
 
 
 ## profile text length below min length percent

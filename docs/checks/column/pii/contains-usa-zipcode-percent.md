@@ -5,7 +5,7 @@ Column check that calculates the percentage of rows that contains USA zip code v
 
 ___
 The **contains usa zipcode percent** data quality check has the following variants for each
-[type of data quality](../../../dqo-concepts/checks/index.md#types-of-checks) checks supported by DQOps.
+[type of data quality](../../../dqo-concepts/definition-of-data-quality-checks/index.md#types-of-checks) checks supported by DQOps.
 
 
 ## profile contains usa zipcode percent

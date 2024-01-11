@@ -22,7 +22,7 @@ In this example, we will set three maximum thresholds levels for the check:
 - error: 10
 - fatal: 15
 
-If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
 **VALUE**
 
@@ -160,7 +160,7 @@ In this example, we have set three maximum thresholds levels for the check:
 
 The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_invalid_email_format_found` check is configured.
 
-If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
 ```yaml hl_lines="12-25"
 apiVersion: dqo/v1

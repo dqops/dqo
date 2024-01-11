@@ -16,7 +16,7 @@ in [running checks](../running-data-quality-checks.md) article, DQOps queues a `
 on an internal job queue. 
 
 The `run checks` job is executed as a sequence of steps, involving [sensors](../sensors/sensors.md),
-[rules](../rules/rules.md), [checks](../checks/index.md), running SQL queries on the data sources using JDBC drivers
+[rules](../rules/rules.md), [checks](../definition-of-data-quality-checks/index.md), running SQL queries on the data sources using JDBC drivers
 and finally storing the results in the local data lake in the *$DQO_USER_HOME/.data* folder.
 
 The sequence of steps for running data quality checks is shown on the diagram below.
@@ -62,7 +62,7 @@ The following steps are performed by the DQOps engine to run a data quality chec
      The *sensor readouts* are saved to the [sensor_readouts](../../reference/parquetfiles/sensor_readouts.md) local parquet table
      in the *$DQO_USER_HOME/.data/sensor_readouts* folder. DQOps stores only one result for each time series 
      (each data quality check on one data group) for each time period. The time period depends on the type of the data quality check.
-     [Profiling](../checks/profiling-checks/profiling-checks.md) are capturing one *sensor readout* per month, which means that
+     [Profiling](../definition-of-data-quality-checks/data-profiling-checks.md) are capturing one *sensor readout* per month, which means that
      when a profiling check is executed again during the same month, the previous *sensor readout* is replaced in the parquet table. 
 
 5.   Anomaly detection and change detection data quality checks require historical values of *sensor readouts*.
@@ -95,7 +95,7 @@ The following steps are performed by the DQOps engine to run a data quality chec
 
      The check results after validation by the data quality rules are saved to the [check_results](../../reference/parquetfiles/check_results.md)
      local parquet table in the *$DQO_USER_HOME/.data/check_results* folder. DQOps will append new daily results for
-     [daily monitoring](../checks/monitoring-checks/monitoring-checks.md) checks or replace the current result for the current month
+     [daily monitoring](../definition-of-data-quality-checks/data-observability-monitoring-checks.md) checks or replace the current result for the current month
      for profiling or monthly monitoring checks. Also, the results for partitioned checks are replaced for each time period (the partition day or month).
 
 7.   Detect new incidents or update active incidents.
@@ -126,7 +126,7 @@ The following steps are performed by the DQOps engine to run a data quality chec
 
 ## Custom checks and errors flow
 DQOps supports both defining custom data quality checks and customizing the definition of built-in checks.
-The data quality [checks](../checks/index.md) are defined as a pair of a [sensor](../sensors/sensors.md) that will capture
+The data quality [checks](../definition-of-data-quality-checks/index.md) are defined as a pair of a [sensor](../sensors/sensors.md) that will capture
 a metric and a [rule](../rules/rules.md) that verifies the metric, raising a data quality issue if the rule fails.
 
 The definitions of custom checks, sensors and rules are stored in the *DQOps user home* folder. The check execution engine

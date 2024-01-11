@@ -9,7 +9,7 @@ In DQOps there are two ways to activate and run data quality checks:
 
 To activate checks, you need to add a connection. You can learn [how to add connection here](../data-sources/index.md).
 
-For more information about [different categories of checks, see DQOps concepts section](../dqo-concepts/checks/index.md).
+For more information about [different categories of checks, see DQOps concepts section](../dqo-concepts/definition-of-data-quality-checks/index.md).
 
 ## Run data quality checks using the user interface
 
@@ -32,9 +32,9 @@ To navigate to the Check editor:
     (only in Profiling section), or preview tables (only in Profiling section).
 
     The table with data quality checks contains a list of checks divided into different data quality subcategories that you
-    can expand and collapse by clicking on an arrow. [Learn more about the different check categories.](../dqo-concepts/checks/index.md#categories-of-checks)
+    can expand and collapse by clicking on an arrow. [Learn more about the different check categories.](../dqo-concepts/definition-of-data-quality-checks/index.md#categories-of-checks)
 
-    The right side of the table allows setting different threshold levels (severity levels). [Learn more about threshold levels.](../dqo-concepts/checks/index.md#issue-severity-levels)
+    The right side of the table allows setting different threshold levels (severity levels). [Learn more about threshold levels.](../dqo-concepts/definition-of-data-quality-checks/index.md#issue-severity-levels)
 
 ### **Run a check**
 
@@ -46,7 +46,7 @@ To run a check:
 
 2. Set the threshold levels or leave default values. Set parameters if the check has any. Click the **Save** button in the upper right corner.
     
-    You can read more about [threshold severity levels in DQOps concepts section](../dqo-concepts/checks/index.md#issue-severity-levels).
+    You can read more about [threshold severity levels in DQOps concepts section](../dqo-concepts/definition-of-data-quality-checks/index.md#issue-severity-levels).
 
     ![Set threshold levels](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/set-threshold-levels2.png)
 
@@ -92,7 +92,7 @@ You can learn here how to [Review the results of data quality monitoring on dash
 
 Partition checks measure data quality for each daily or monthly partition by creating a separate data quality score.
 
-To learn more about partition checks, go to [DQOps concepts section](../dqo-concepts/checks/partition-checks/partition-checks.md)
+To learn more about partition checks, go to [DQOps concepts section](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)
 
 To run partition checks you need to configure a date or datetime columns which will be used as the time partitioning key for the table.
 

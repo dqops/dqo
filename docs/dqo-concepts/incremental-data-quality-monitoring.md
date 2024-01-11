@@ -24,7 +24,7 @@ calculated monthly, will be decreased by a drop of data quality in recently load
 ## _Monitoring_ vs _partitioned_ checks
 DQOps takes a different approach for calculating data quality KPIs by *monitoring* and *partitioned* data quality checks.
 
- -  [**Monitoring** checks](checks/monitoring-checks/monitoring-checks.md) analyze the whole table
+ -  [**Monitoring** checks](definition-of-data-quality-checks/data-observability-monitoring-checks.md) analyze the whole table
 
      -  *Daily monitoring checks* are executed daily, capturing the data quality check result for each day. The data quality KPI for daily monitoring
         checks counts the number of days in the month when the data quality check passed, as shown in the data quality formulas above.
@@ -34,13 +34,13 @@ DQOps takes a different approach for calculating data quality KPIs by *monitorin
         *Monthly monitoring checks* are used, when the data quality KPI should measure the **end-of-month data quality status**, instead
         of measuring the number of days when the data quality rules were satisfied.
 
- -  [**Partitioned** checks](checks/partition-checks/partition-checks.md) analyze data by grouping by a date column
+ -  [**Partitioned** checks](definition-of-data-quality-checks/partition-checks.md) analyze data by grouping by a date column
     for incremental data quality analysis
 
-     -  *Daily partitioned checks* group rows by configuring the [partition_by_column](checks/configuring-checks.md#table-level-partitioned-checks) column.
+     -  *Daily partitioned checks* group rows by configuring the [partition_by_column](configuring-data-quality-checks-and-rules.md#table-level-partitioned-checks) column.
         Data quality KPIs calculated monthly are evaluated for each daily partition.
 
-     -  *Monthly monitoring checks* group rows also by the [partition_by_column](checks/configuring-checks.md#table-level-partitioned-checks) column,
+     -  *Monthly monitoring checks* group rows also by the [partition_by_column](configuring-data-quality-checks-and-rules.md#table-level-partitioned-checks) column,
         but an additional truncation of the date is applied. The date column is truncated to the beginning of the month. Data quality SQL queries
         executed by DQOps measure the quality of the whole month of data.
 
@@ -129,5 +129,5 @@ The *partition_by_column* should be the name of the **date dimension** column.
 
 ## What's next
 - Learn how data quality KPIs [data quality KPIs](definition-of-data-quality-kpis) are measured
-- Find out more about [partitioned checks](checks/partition-checks/partition-checks.md)
+- Find out more about [partitioned checks](definition-of-data-quality-checks/partition-checks.md)
 - Learn how DQOps [stores the results of partitioned checks](data-storage-of-data-quality-results.md#partition-checks)

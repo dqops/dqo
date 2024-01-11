@@ -5,7 +5,7 @@ Column-level check that ensures that the number of duplicate values in a column 
 
 ___
 The **duplicate count** data quality check has the following variants for each
-[type of data quality](../../../dqo-concepts/checks/index.md#types-of-checks) checks supported by DQOps.
+[type of data quality](../../../dqo-concepts/definition-of-data-quality-checks/index.md#types-of-checks) checks supported by DQOps.
 
 
 ## profile duplicate count

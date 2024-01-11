@@ -27,7 +27,7 @@ In this example, we will set three minimum percentage thresholds levels for the 
 - error: 98.0%
 - fatal: 95.0%
 
-If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
 **VALUE**
 
@@ -132,7 +132,7 @@ To execute the check prepared in the example using the [user interface](../../dq
     
     Below you can see the results displayed on the **KPIs per table - summary** dashboard located in the Data quality KPIs group.
     This dashboard shows high-level data quality KPIs, aggregated on a macro scale that can be shared at a
-    corporate level. DQOps calculates data quality KPIs as a percentage of passed [data quality checks](../../dqo-concepts/checks/index.md)
+    corporate level. DQOps calculates data quality KPIs as a percentage of passed [data quality checks](../../dqo-concepts/definition-of-data-quality-checks/index.md)
     for each connection, schema, data grouping, etc. With this dashboard, senior management can review a summary of 
     KPIs per table
 
@@ -165,7 +165,7 @@ And the following parameters:
 The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_lookup_key_found_percent`
 check is configured.
 
-If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
 ```yaml hl_lines="16-32"
 apiVersion: dqo/v1

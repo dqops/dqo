@@ -20,7 +20,7 @@ We want to detect if the newly imported table contains rows.
 Using default monitoring [daily_row_count](../../checks/table/volume/row-count.md) table check, we will
 verify if the table `311_servie_request` is not empty. The default threshold of [daily_row_count](../../checks/table/volume/row-count.md) is set as warning 1. 
 
-If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
 **VALUE**
 
@@ -74,7 +74,7 @@ You can then modify the **Profiling checks**, **Monitoring daily**, and **Monito
 
 ![Check default check configuration](https://dqops.com/docs/images/examples/detect-empty-tables-check-default-check-configuration.png)
 
-For more [general information about checks, see the DQOps concepts](../../dqo-concepts/checks/index.md) section.
+For more [general information about checks, see the DQOps concepts](../../dqo-concepts/definition-of-data-quality-checks/index.md) section.
 
 
 ## Running the checks in the example and evaluating the results using the user interface
@@ -163,7 +163,7 @@ However, the rest of the columns' configurations can also be found in the YAML f
 The highlighted sections in the YAML file below show where the [daily_row_count](../../checks/table/volume/row-count.md)
 monitoring check is configured.
 
-If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
 ```yaml hl_lines="17-20"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json

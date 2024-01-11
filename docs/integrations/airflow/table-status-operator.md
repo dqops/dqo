@@ -10,9 +10,9 @@ These operators can be used to collect information about the data quality before
 There are four operators available to check the status of the table.
 
 - **DqopsAssertTableStatusOperator**: A generic Airflow assert table status operator that is used to receive the overall status of a table in DQOps.
-- **DqopsAssertProfilingTableStatusOperator**: Verifies the status of [profiling checks](../../dqo-concepts/checks/profiling-checks/profiling-checks.md).
-- **DqopsAssertMonitoringTableStatusOperator**: Verifies the status of [monitoring checks](../../dqo-concepts/checks/monitoring-checks/monitoring-checks.md).
-- **DqopsAssertPartitionedTableStatusOperator**: Verifies the status of [partition checks](../../dqo-concepts/checks/partition-checks/partition-checks.md).
+- **DqopsAssertProfilingTableStatusOperator**: Verifies the status of [profiling checks](../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md).
+- **DqopsAssertMonitoringTableStatusOperator**: Verifies the status of [monitoring checks](../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md).
+- **DqopsAssertPartitionedTableStatusOperator**: Verifies the status of [partition checks](../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md).
 
 
 ## Operator parameters

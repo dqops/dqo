@@ -8,7 +8,7 @@ table, or individual check. When you import a new table, DQOPs automatically set
 To modify the schedule you can use the user interface as described below or [manually modify the YAML configuration file as described here.](./configuring-schedules-by-modifying-yaml-file.md)
 
 Different types of checks, such as Profiling, Monitoring, and Partition, have their own schedules. For more information
-on these [different check types, please refer to the DQOps Concepts section](../../dqo-concepts/checks/index.md).
+on these [different check types, please refer to the DQOps Concepts section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
 ## Configure a schedule at connection and table level
 

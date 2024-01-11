@@ -96,7 +96,7 @@ The schema of the following tables are documented:
 ## How data quality results are stored
 
 ### **Parquet tables**
-When a [data quality check](checks/index.md) is [run](running-data-quality-checks.md), DQOps runs the SQL query
+When a [data quality check](definition-of-data-quality-checks/index.md) is [run](running-data-quality-checks.md), DQOps runs the SQL query
 generated from the [data quality sensor](sensors/sensors.md) template on the monitored data source.
 The query results (called the **sensor readouts** in DQOps) are stored
 in the [sensor_readouts](../reference/parquetfiles/sensor_readouts.md) Parquet table.
@@ -174,7 +174,7 @@ share common identity columns that identify each data quality result, and each t
 
 DQOps de-duplicates results stored in the data quality data warehouse by overwriting previous results identified by
 the same **`id`** column value. This means that the result of executing the same data quality check again will overwrite the previous result.
-The behavior is further described for each [type of data quality checks](checks/index.md#types-of-checks).
+The behavior is further described for each [type of data quality checks](definition-of-data-quality-checks/index.md#types-of-checks).
 
 
 ## Storage of check results
@@ -182,7 +182,7 @@ The way check results data are stored varies depending on the type of check used
 
 ### **Profiling checks**
 
-When the [profiling data quality check](checks/profiling-checks/profiling-checks.md) is run, 
+When the [profiling data quality check](definition-of-data-quality-checks/data-profiling-checks.md) is run, 
 all sensor readouts are saved. As an illustration, if the check
 is run three times, the table with the results could look like this:
 

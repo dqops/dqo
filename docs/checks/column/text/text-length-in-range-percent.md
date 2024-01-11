@@ -5,7 +5,7 @@ Column check that calculates the percentage of texts with a length below the ind
 
 ___
 The **text length in range percent** data quality check has the following variants for each
-[type of data quality](../../../dqo-concepts/checks/index.md#types-of-checks) checks supported by DQOps.
+[type of data quality](../../../dqo-concepts/definition-of-data-quality-checks/index.md#types-of-checks) checks supported by DQOps.
 
 
 ## profile text length in range percent

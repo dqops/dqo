@@ -5,7 +5,7 @@ Column level check that ensures that the percentile 75 of values in a monitored 
 
 ___
 The **percentile 75 in range** data quality check has the following variants for each
-[type of data quality](../../../dqo-concepts/checks/index.md#types-of-checks) checks supported by DQOps.
+[type of data quality](../../../dqo-concepts/definition-of-data-quality-checks/index.md#types-of-checks) checks supported by DQOps.
 
 
 ## profile percentile 75 in range

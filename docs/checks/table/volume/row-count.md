@@ -6,7 +6,7 @@ Row count (select count(*) from ...) test that runs a row_count check, obtains a
 
 ___
 The **row count** data quality check has the following variants for each
-[type of data quality](../../../dqo-concepts/checks/index.md#types-of-checks) checks supported by DQOps.
+[type of data quality](../../../dqo-concepts/definition-of-data-quality-checks/index.md#types-of-checks) checks supported by DQOps.
 
 
 ## profile row count

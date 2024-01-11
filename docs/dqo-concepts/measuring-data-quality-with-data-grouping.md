@@ -170,7 +170,7 @@ The supported values for the **source** field are:
 
 
 ### **Grouping by calculated columns**
-Virtual columns that are defined as SQL expressions ([calculated columns](checks/configuring-checks.md#calculated-columns))
+Virtual columns that are defined as SQL expressions ([calculated columns](configuring-data-quality-checks-and-rules.md#calculated-columns))
 can be also used for dynamic grouping. This complex scenario could be used to run data quality checks on unstructured data
 in the landing zone of the data warehouse.
 
@@ -346,7 +346,7 @@ The columns that identify the data groups are:
 
 
 ## Integration of partitioned checks with data grouping
-[Partition checks](checks/partition-checks/partition-checks.md) can also analyze partitions with grouping rows
+[Partition checks](definition-of-data-quality-checks/partition-checks.md) can also analyze partitions with grouping rows
 by additional dimensions within each date partition.
 Because both partition checks and data grouping by columns depends on adding all columns to the **GROUP BY** clause,
 DQOps groups rows both by the date partitioning column and the columns used for data grouping.

@@ -5,7 +5,7 @@ Column level check that ensures that there are no more than a set percentage of 
 
 ___
 The **number in range percent** data quality check has the following variants for each
-[type of data quality](../../../dqo-concepts/checks/index.md#types-of-checks) checks supported by DQOps.
+[type of data quality](../../../dqo-concepts/definition-of-data-quality-checks/index.md#types-of-checks) checks supported by DQOps.
 
 
 ## profile number in range percent

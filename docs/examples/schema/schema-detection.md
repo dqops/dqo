@@ -30,7 +30,7 @@ We will verify the data using the following monitoring checks design for detecti
 | [daily_column_list_or_order_changed](../../checks/table/schema/column-list-or-order-changed.md) | Detects if new columns were added, existing columns were removed or the columns were reordered. Retrieves the metadata of the monitored table and calculates an ordered hash of the column names. Compares the current hash to the previously known hash to detect any changes to the list of columns or their order.                                                         |
 | [daily_column_types_changed](../../checks/table/schema/column-types-changed.md)                 | Detects if new columns were added, removed or their data types have changed. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names and the data types (including the length, scale, precision, nullability). Compares the current hash to the previously known hash to detect any changes to the list of columns or their types. |
 
-If you want to learn more about checks, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
+If you want to learn more about checks, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
 **VALUE**
 
@@ -193,7 +193,7 @@ The YAML configuration file stores both the table details and checks configurati
 
 The highlighted fragments in the YAML file below represent the segment where the schema change check are configured.
 
-If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
 ```yaml hl_lines="7-20"
 apiVersion: dqo/v1

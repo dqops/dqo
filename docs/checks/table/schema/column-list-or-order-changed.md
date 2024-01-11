@@ -7,7 +7,7 @@ Table-level check that detects if the list of columns and the order of columns h
 
 ___
 The **column list or order changed** data quality check has the following variants for each
-[type of data quality](../../../dqo-concepts/checks/index.md#types-of-checks) checks supported by DQOps.
+[type of data quality](../../../dqo-concepts/definition-of-data-quality-checks/index.md#types-of-checks) checks supported by DQOps.
 
 
 ## profile column list or order changed

@@ -57,7 +57,7 @@ We will modify the default connection level schedule that apply to all activated
 checks that require more frequent runs, we will set individual check-level schedules that will override the connection level settings.
 The schedule for the [daily_number_in_range_percent](../../checks/column/numeric/number-in-range-percent.md) check will be temporarily disabled.
 
-If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 You can read more about scheduling [here](../../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md). 
 
 **VALUE**

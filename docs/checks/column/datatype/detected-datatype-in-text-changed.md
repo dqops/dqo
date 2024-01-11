@@ -7,7 +7,7 @@ Table-level check that scans all values in a string column and detects the data 
 
 ___
 The **detected datatype in text changed** data quality check has the following variants for each
-[type of data quality](../../../dqo-concepts/checks/index.md#types-of-checks) checks supported by DQOps.
+[type of data quality](../../../dqo-concepts/definition-of-data-quality-checks/index.md#types-of-checks) checks supported by DQOps.
 
 
 ## profile detected datatype in text changed

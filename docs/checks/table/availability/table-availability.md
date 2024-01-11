@@ -7,7 +7,7 @@ Table-level check that verifies that a query can be executed on a table and that
 
 ___
 The **table availability** data quality check has the following variants for each
-[type of data quality](../../../dqo-concepts/checks/index.md#types-of-checks) checks supported by DQOps.
+[type of data quality](../../../dqo-concepts/definition-of-data-quality-checks/index.md#types-of-checks) checks supported by DQOps.
 
 
 ## profile table availability

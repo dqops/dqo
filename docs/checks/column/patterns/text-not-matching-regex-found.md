@@ -5,7 +5,7 @@ Column check that calculates quantity of values that does not match the custom r
 
 ___
 The **text not matching regex found** data quality check has the following variants for each
-[type of data quality](../../../dqo-concepts/checks/index.md#types-of-checks) checks supported by DQOps.
+[type of data quality](../../../dqo-concepts/definition-of-data-quality-checks/index.md#types-of-checks) checks supported by DQOps.
 
 
 ## profile text not matching regex found

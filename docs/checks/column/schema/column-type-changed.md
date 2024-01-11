@@ -7,7 +7,7 @@ Column level check that detects if the data type of the column has changed since
 
 ___
 The **column type changed** data quality check has the following variants for each
-[type of data quality](../../../dqo-concepts/checks/index.md#types-of-checks) checks supported by DQOps.
+[type of data quality](../../../dqo-concepts/definition-of-data-quality-checks/index.md#types-of-checks) checks supported by DQOps.
 
 
 ## profile column type changed

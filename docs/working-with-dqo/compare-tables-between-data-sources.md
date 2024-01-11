@@ -26,7 +26,7 @@ Using Table comparison you can monitor tables using the following comparison che
 ## Create a new table comparison
 
 Table comparisons can be categorized into three types: profiling, monitoring, and partition. You can read learn more about
-these [types of checks in the DQOps concept section](../dqo-concepts/checks/index.md).
+these [types of checks in the DQOps concept section](../dqo-concepts/definition-of-data-quality-checks/index.md).
 
 To create a new table comparison, follow these steps:
 
@@ -60,7 +60,7 @@ The right part of the comparison screen has a list of comparison checks which yo
 checks you want to run, simply click on the checkboxes.
 
 Once you have activated the checks, you can set the severity level for each one. You can choose from three levels: warning, error, and fatal.
-[Learn more about the severity levels](../dqo-concepts/checks/index.md#issue-severity-levels).
+[Learn more about the severity levels](../dqo-concepts/definition-of-data-quality-checks/index.md#issue-severity-levels).
 
 ![Table comparisons severity levels](https://dqops.com/docs/images/working-with-dqo/comparisons/table-comparisions-severity-levels2.png)
     

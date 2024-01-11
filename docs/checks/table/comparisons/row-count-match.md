@@ -5,7 +5,7 @@ Table level comparison check compares the row count of the current (parent) tabl
 
 ___
 The **row count match** data quality check has the following variants for each
-[type of data quality](../../../dqo-concepts/checks/index.md#types-of-checks) checks supported by DQOps.
+[type of data quality](../../../dqo-concepts/definition-of-data-quality-checks/index.md#types-of-checks) checks supported by DQOps.
 
 
 ## profile row count match

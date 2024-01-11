@@ -14,11 +14,11 @@ nav:
   - DQOps concepts:
       - "dqo-concepts/index.md"
       - Data quality checks:
-          - "dqo-concepts/checks/index.md"
-          - Profiling checks: "dqo-concepts/checks/profiling-checks/profiling-checks.md"
-          - Monitoring checks: "dqo-concepts/checks/monitoring-checks/monitoring-checks.md"
-          - Partition checks: "dqo-concepts/checks/partition-checks/partition-checks.md"
-      - Configuring checks: "dqo-concepts/checks/configuring-checks.md"
+          - "dqo-concepts/definition-of-data-quality-checks/index.md"
+          - Data profiling checks: "dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md"
+          - Data observability monitoring checks: "dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md"
+          - Partition checks: "dqo-concepts/definition-of-data-quality-checks/partition-checks.md"
+      - Configuring checks: "dqo-concepts/configuring-data-quality-checks-and-rules.md"
       - DQOps user home: "dqo-concepts/dqops-user-home-folder.md"
       - Running checks: "dqo-concepts/running-data-quality-checks.md"
       - Data quality sensors: "dqo-concepts/sensors/sensors.md"

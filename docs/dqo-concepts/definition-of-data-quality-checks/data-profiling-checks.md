@@ -2,8 +2,8 @@
 
 ## What are profiling checks?
 
-In DQOps, the check is a data quality test, which consists of a [data quality sensor](../../sensors/sensors.md) and a
-[data quality rule](../../rules/rules.md).
+In DQOps, the check is a data quality test, which consists of a [data quality sensor](../sensors/sensors.md) and a
+[data quality rule](../rules/rules.md).
 
 Profiling checks are useful for exploring and experimenting with various types of checks and determining the most suitable
 ones for regular data quality monitoring.
@@ -63,5 +63,5 @@ be raised.
 
 ## What's next
 
-- [Learn more about monitoring checks](../monitoring-checks/monitoring-checks.md)
-- [Learn more about partition checks](../partition-checks/partition-checks.md)
+- [Learn more about monitoring checks](data-observability-monitoring-checks.md)
+- [Learn more about partition checks](partition-checks.md)

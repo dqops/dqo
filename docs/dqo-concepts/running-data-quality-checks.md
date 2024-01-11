@@ -233,7 +233,7 @@ spec:
 ```
 
 The type of checks is filtered using the `--check-type=` parameter. In order to run only
-[profiling checks](checks/profiling-checks/profiling-checks.md), we will use the following command.
+[profiling checks](definition-of-data-quality-checks/data-profiling-checks.md), we will use the following command.
 
 ``` { .asc .annotate }
 dqo> check run --connection=sales-dwh --full-table-name=public.fact_sales --check-type=profiling(1)
@@ -318,7 +318,7 @@ dqo> check run --connection=sales-dwh --full-table-name=public.fact_sales --chec
 1.  Selects the *daily* checks. Another supported value is the *monthly* checks.
 
 ### **Running partitioned checks**
-Running [partitioned checks](checks/partition-checks/partition-checks.md) to analyze partitions is similar
+Running [partitioned checks](definition-of-data-quality-checks/partition-checks.md) to analyze partitions is similar
 to running *monitoring* checks. We can also select the time scale.
 
 The following example highlights the *partitioned* checks that will be run.

@@ -24,7 +24,7 @@ In this example, we will set one maximum thresholds level for the check:
 
 - error: 30.0
 
-If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
 **VALUE**
 
@@ -160,7 +160,7 @@ In this example, we have set three maximum number thresholds levels for the chec
 
 The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_text_max_length` check is configured.
 
-If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
 ```yaml hl_lines="16-25"
 apiVersion: dqo/v1

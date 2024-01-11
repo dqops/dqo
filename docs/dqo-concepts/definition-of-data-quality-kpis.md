@@ -36,7 +36,7 @@ of a [data quality dimension](data-quality-dimensions.md), allowing to identify 
 
 
 ## Data quality score formula
-DQOps calculates data quality KPIs as a percentage of passed [data quality checks](checks/index.md) out of all executed checks.
+DQOps calculates data quality KPIs as a percentage of passed [data quality checks](definition-of-data-quality-checks/index.md) out of all executed checks.
 The result of measuring the data quality KPI for two data quality checks, [daily_nulls_percent](../checks/column/nulls/nulls-percent.md#daily-nulls-percent)
 and [daily_duplicate_percent](../checks/column/uniqueness/duplicate-percent.md#daily-duplicate-percent) on
 5 columns over the period of 10 days is shown below.
@@ -151,7 +151,7 @@ DQOps uses numeric priorities (1, 2, 3, ...) configured on the table's metadata 
 
 ### **Profile tables**
 Profile the data sources by calculating [basic statistics](../working-with-dqo/collecting-basic-data-statistics.md)
-and running [profiling checks](checks/profiling-checks/profiling-checks.md). Profiling checks in DQOps are designed
+and running [profiling checks](definition-of-data-quality-checks/data-profiling-checks.md). Profiling checks in DQOps are designed
 to be run once a month to capture the initial data quality KPI score. During the data profiling stage, you will probably
 activate a lot of ~150+ data quality checks supported by DQOps, just to see if they pass. In our experience, when all profiling checks
 that are reasonable are activated, only 40% of checks pass (the data quality KPI is only 40%). The remaining 60% of failed
@@ -169,7 +169,7 @@ The profiling KPI scorecard dashboard is shown below. The dashboard can be found
 
 Once you finish the data profiling, you will know which data quality issues are real issues, and which failed profiling checks
 should not be measured because some columns could be incomplete. The selected list of profiling checks should be activated
-as [monitoring](checks/monitoring-checks/monitoring-checks.md) and [partitioned](checks/partition-checks/partition-checks.md) checks.
+as [monitoring](definition-of-data-quality-checks/data-observability-monitoring-checks.md) and [partitioned](definition-of-data-quality-checks/partition-checks.md) checks.
 
 ### **Activate monitoring checks**
 Choose which profiling checks should be used for monitoring and measuring the data quality KPI. Activate those checks

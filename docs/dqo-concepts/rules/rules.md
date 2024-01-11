@@ -2,7 +2,7 @@
 
 ## What are rules in DQOps?
 
-In DQOps, the data quality rule and the [data quality sensor](../sensors/sensors.md) form the [data quality check](../checks/index.md).
+In DQOps, the data quality rule and the [data quality sensor](../sensors/sensors.md) form the [data quality check](../definition-of-data-quality-checks/index.md).
 
 Rule is a set of conditions against which sensor readouts are verified, described by a list of thresholds.
 A basic rule can simply score the most recent data quality result if the value is above or below particular value or

@@ -172,7 +172,7 @@ To navigate to a list of checks:
     Noticed the checks that have been activated have switched on the toggle button.
     The icons located before the name of each check allow you to: activate and deactivate it, configure settings, run a check, review results, and get more information about it.
 
-    The right side of the table allows setting different threshold levels (severity levels). [Learn more about threshold levels.](../dqo-concepts/checks/index.md#issue-severity-levels)
+    The right side of the table allows setting different threshold levels (severity levels). [Learn more about threshold levels.](../dqo-concepts/definition-of-data-quality-checks/index.md#issue-severity-levels)
     
     Learn more about [navigating the check editor](../dqo-concepts/user-interface-overview.md#check-editor).
 

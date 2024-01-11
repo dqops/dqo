@@ -46,7 +46,7 @@ To read more about [data quality KPIs, check DQO concept section](../dqo-concept
 
 Data quality KPIs dashboards review key data metrics per connection,
 [data quality dimensions](../dqo-concepts/data-quality-dimensions.md),
-[check category](../dqo-concepts/checks/index.md#categories-of-checks) and
+[check category](../dqo-concepts/definition-of-data-quality-checks/index.md#categories-of-checks) and
 [data grouping](../dqo-concepts/measuring-data-quality-with-data-grouping.md).
 
 To review the summary KPIs of all run checks use the **KPIs scorecard - summary** dashboards.

@@ -1,7 +1,7 @@
 # Editing DQOps YAML files with Visual Studio Code
 
 ## YAML schema overview
-In DQOps, the configuration of [data quality checks](../../dqo-concepts/checks/configuring-checks.md)
+In DQOps, the configuration of [data quality checks](../../dqo-concepts/configuring-data-quality-checks-and-rules.md)
 is defined in the YAML files.
 YAML is a human-readable data serialization language that is often used for writing configuration files. 
 
@@ -93,7 +93,7 @@ the YAML file and are presented in the DQOps user interface.
 
 
 ### **Add a check category**
-Data quality checks are grouped in categories as described in the [configuring checks](../../dqo-concepts/checks/configuring-checks.md)
+Data quality checks are grouped in categories as described in the [configuring checks](../../dqo-concepts/configuring-data-quality-checks-and-rules.md)
 article.
 
 The list of check type nodes where categories are listed below. Those nodes are available both at a table root level
@@ -198,5 +198,5 @@ will underline the invalid node as shown below.
 
 
 ## What's next
-- Learn how [configure data quality checks](../../dqo-concepts/checks/configuring-checks.md) in DQOps YAML files.
+- Learn how [configure data quality checks](../../dqo-concepts/configuring-data-quality-checks-and-rules.md) in DQOps YAML files.
 - Read how the YAML files are organized in the [DQOps user home](../../dqo-concepts/dqops-user-home-folder.md) folder.

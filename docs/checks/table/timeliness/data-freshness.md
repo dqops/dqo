@@ -7,7 +7,7 @@ Table-level check that calculates the time difference between the most recent ro
 
 ___
 The **data freshness** data quality check has the following variants for each
-[type of data quality](../../../dqo-concepts/checks/index.md#types-of-checks) checks supported by DQOps.
+[type of data quality](../../../dqo-concepts/definition-of-data-quality-checks/index.md#types-of-checks) checks supported by DQOps.
 
 
 ## profile data freshness

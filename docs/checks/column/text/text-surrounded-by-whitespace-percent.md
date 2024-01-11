@@ -5,7 +5,7 @@ Column-level check that ensures that there are no more than a maximum percent of
 
 ___
 The **text surrounded by whitespace percent** data quality check has the following variants for each
-[type of data quality](../../../dqo-concepts/checks/index.md#types-of-checks) checks supported by DQOps.
+[type of data quality](../../../dqo-concepts/definition-of-data-quality-checks/index.md#types-of-checks) checks supported by DQOps.
 
 
 ## profile text surrounded by whitespace percent

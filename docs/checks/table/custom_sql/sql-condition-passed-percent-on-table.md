@@ -5,7 +5,7 @@ Table-level check that ensures that a minimum percentage of rows passed a custom
 
 ___
 The **sql condition passed percent on table** data quality check has the following variants for each
-[type of data quality](../../../dqo-concepts/checks/index.md#types-of-checks) checks supported by DQOps.
+[type of data quality](../../../dqo-concepts/definition-of-data-quality-checks/index.md#types-of-checks) checks supported by DQOps.
 
 
 ## profile sql condition passed percent on table

@@ -2,8 +2,8 @@
 
 ## What are monitoring checks?
 
-In DQOps, the check is a data quality test, which consists of a [data quality sensor](../../sensors/sensors.md) and a
-[data quality rule](../../rules/rules.md).
+In DQOps, the check is a data quality test, which consists of a [data quality sensor](../sensors/sensors.md) and a
+[data quality rule](../rules/rules.md).
 
 Monitoring checks are standard checks that monitor the data quality of a table or column. There are two categories of 
 monitoring checks: daily checks and monthly checks.
@@ -115,5 +115,5 @@ is stored.
 
 ## What's next 
 
-- [Learn more about profiling checks](../profiling-checks/profiling-checks.md)
-- [Learn more about partition checks](../partition-checks/partition-checks.md)
+- [Learn more about profiling checks](data-profiling-checks.md)
+- [Learn more about partition checks](partition-checks.md)

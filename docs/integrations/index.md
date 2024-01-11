@@ -43,7 +43,7 @@ DQOps integrates with multiple tools, using both the REST API interface and by u
 
 - **[Visual Studio Code](./visual-studio-code/index.md)**
   
-    [YAML files](../dqo-concepts/checks/configuring-checks.md) used by DQOps to store the configuration of
+    [YAML files](../dqo-concepts/configuring-data-quality-checks-and-rules.md) used by DQOps to store the configuration of
     data sources and data quality checks are fully documented using a published YAML/JSON schema.
 
     By installing a Visual Studio Code extension for editing YAML files, code completion, inline help about

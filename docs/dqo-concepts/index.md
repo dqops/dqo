@@ -2,7 +2,7 @@
 
 These topics introduce the basic concepts of DQOps.
 
- - **[Data quality checks](./checks/index.md)**
+ - **[Data quality checks](definition-of-data-quality-checks/index.md)**
 
     A data quality check detects data quality issues. The check in DQOps is defined as a pair
     of a [sensor](./sensors/sensors.md) that captures metrics from the data source and a [rule](./rules/rules.md) that verifies the sensor's readout.
@@ -15,15 +15,15 @@ These topics introduce the basic concepts of DQOps.
 
     DQOps has three types of data quality checks:
    
-     - [Profiling checks](./checks/profiling-checks/profiling-checks.md) for measuring the initial data quality score during the profiling stage
+     - [Profiling checks](definition-of-data-quality-checks/data-profiling-checks.md) for measuring the initial data quality score during the profiling stage
 
-     - [Monitoring checks](./checks/monitoring-checks/monitoring-checks.md) for observing and measuring the data quality daily or monthly
+     - [Monitoring checks](definition-of-data-quality-checks/data-observability-monitoring-checks.md) for observing and measuring the data quality daily or monthly
 
-     - [Partition checks](./checks/partition-checks/partition-checks.md) for analyzing partitioned data incrementally, or analyzing
+     - [Partition checks](definition-of-data-quality-checks/partition-checks.md) for analyzing partitioned data incrementally, or analyzing
        incrementally any table that has a date column.
 
 
- - **[Configuring data quality checks](./checks/configuring-checks.md)**
+ - **[Configuring data quality checks](configuring-data-quality-checks-and-rules.md)**
 
     Data quality checks are configured by setting the incident alerting thresholds
     by setting the [data quality rule](./rules/rules.md) parameters.
@@ -85,7 +85,7 @@ These topics introduce the basic concepts of DQOps.
 
  - **[Incremental data quality monitoring](incremental-data-quality-monitoring.md)**
 
-    Learn how [partition checks](./checks/partition-checks/partition-checks.md) are used to analyze data quality incrementally,
+    Learn how [partition checks](definition-of-data-quality-checks/partition-checks.md) are used to analyze data quality incrementally,
     even for very big tables, reaching terabyte or petabyte scale.
 
     Partitioned checks introduced by DQOps allow to detect data quality issues very early, as soon as invalid data was loaded
@@ -166,6 +166,6 @@ These topics introduce the basic concepts of DQOps.
  - **[Check execution flow](./architecture/data-quality-check-execution-flow.md)**
 
     Detailed data quality execution flows that show how DQOps executes [data quality sensors](./sensors/sensors.md),
-    [data quality rules](./rules/rules.md), [data quality checks](./checks/index.md),
+    [data quality rules](./rules/rules.md), [data quality checks](definition-of-data-quality-checks/index.md),
     and how the data is [stored](data-storage-of-data-quality-results.md). Learn how execution errors are stored.
  

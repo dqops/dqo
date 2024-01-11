@@ -5,7 +5,7 @@ Table-level check that calculates a given SQL aggregate expression and compares 
 
 ___
 The **sql aggregate expression on table** data quality check has the following variants for each
-[type of data quality](../../../dqo-concepts/checks/index.md#types-of-checks) checks supported by DQOps.
+[type of data quality](../../../dqo-concepts/definition-of-data-quality-checks/index.md#types-of-checks) checks supported by DQOps.
 
 
 ## profile sql aggregate expression on table

@@ -2,10 +2,10 @@
 
 ## What are partition checks?
 
-In DQOps, the check is a data quality test, which consists of a [data quality sensor](../../sensors/sensors.md) and a
-[data quality rule](../../rules/rules.md).
+In DQOps, the check is a data quality test, which consists of a [data quality sensor](../sensors/sensors.md) and a
+[data quality rule](../rules/rules.md).
 
-Partition checks are designed to measure the data quality in partitioned data. In contrast to [monitoring checks](../monitoring-checks/monitoring-checks.md),
+Partition checks are designed to measure the data quality in partitioned data. In contrast to [monitoring checks](data-observability-monitoring-checks.md),
 partition checks produce separate monitoring results for each partition. There are two categories of partition checks: daily checks and monthly checks.
 
 The daily partition checks store the most recent sensor readouts for each partition and each day when the data quality
@@ -147,9 +147,9 @@ nulls_percent.
 
 
 ## What's next
-- Learn how partition checks are used for [incremental data quality monitoring](../../incremental-data-quality-monitoring.md)
-- [Learn more about profiling checks](../profiling-checks/profiling-checks.md)
-- [Learn more about monitoring checks](../monitoring-checks/monitoring-checks.md)
+- Learn how partition checks are used for [incremental data quality monitoring](../incremental-data-quality-monitoring.md)
+- [Learn more about profiling checks](data-profiling-checks.md)
+- [Learn more about monitoring checks](data-observability-monitoring-checks.md)
 
 
 

@@ -12,11 +12,11 @@ Solution: Set up daily monitoring of data quality checks, set up notifications a
 DQOps comes with a set of default configuration for **profiling** and **daily monitoring** checks that are automatically 
 activated for every newly imported table. 
 
-The [profiling checks](../dqo-concepts/checks/profiling-checks/profiling-checks.md) capture advanced data quality
+The [profiling checks](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md) capture advanced data quality
 statistics and store the most current value for each month. Their role is to monitor the overall quality of data,
 without affecting the [data quality KPIs](../dqo-concepts/definition-of-data-quality-kpis.md).
 
-The [monitoring checks](../dqo-concepts/checks/monitoring-checks/monitoring-checks.md) are the primary type of data quality checks
+The [monitoring checks](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md) are the primary type of data quality checks
 used in DQOps for continuous monitoring of the data quality of the data source.
 
 You can learn more about each default check by clicking on the links below.
@@ -216,9 +216,9 @@ tree view on the left, click on the Profiling checks or Daily Checks.
 ![Navigating to the check editor](https://dqops.com/docs/images/working-with-dqo/daily-monitoring-of-data-quality/navigate-to-the-check-editor.png)
 
 The table with data quality checks contains a list of checks divided into different data quality subcategories that you
-can expand and collapse by clicking on an arrow. [Learn more about the different check subcategories.](../dqo-concepts/checks/index.md)
+can expand and collapse by clicking on an arrow. [Learn more about the different check subcategories.](../dqo-concepts/definition-of-data-quality-checks/index.md)
 
-The right side of the table allows setting different threshold levels (severity levels). [Learn more about threshold levels ](../dqo-concepts/checks/index.md#issue-severity-levels)
+The right side of the table allows setting different threshold levels (severity levels). [Learn more about threshold levels ](../dqo-concepts/definition-of-data-quality-checks/index.md#issue-severity-levels)
 
 On the left of the name of each check, there are several buttons and icons that allows you to:
 
@@ -344,12 +344,12 @@ These dashboards allow filtering data by:
 ### **Data quality KPIs**
 
 **Data quality KPIs** dashboards show high-level data quality KPIs, aggregated on a macro scale that can be shared at a
-corporate level. DQOps calculates data quality KPIs as a percentage of passed [data quality checks](../dqo-concepts/checks/index.md)
+corporate level. DQOps calculates data quality KPIs as a percentage of passed [data quality checks](../dqo-concepts/definition-of-data-quality-checks/index.md)
 for each connection, schema, data grouping, etc.
 
 With these dashboards, senior management can review a summary of data quality KPIs or evaluate the KPIs per table, column,
 [data quality dimensions](../dqo-concepts/data-quality-dimensions.md),
-[check category](../dqo-concepts/checks/index.md), [data grouping](../dqo-concepts/measuring-data-quality-with-data-grouping.md) and day.
+[check category](../dqo-concepts/definition-of-data-quality-checks/index.md), [data grouping](../dqo-concepts/measuring-data-quality-with-data-grouping.md) and day.
 
 **KPIs per table and day** is a representative of this group. It allows reviewing data quality KPIs per table
 and day of the month.

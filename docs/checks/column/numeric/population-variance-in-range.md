@@ -5,7 +5,7 @@ Column-level check that ensures that the population variance is in a set range i
 
 ___
 The **population variance in range** data quality check has the following variants for each
-[type of data quality](../../../dqo-concepts/checks/index.md#types-of-checks) checks supported by DQOps.
+[type of data quality](../../../dqo-concepts/definition-of-data-quality-checks/index.md#types-of-checks) checks supported by DQOps.
 
 
 ## profile population variance in range
