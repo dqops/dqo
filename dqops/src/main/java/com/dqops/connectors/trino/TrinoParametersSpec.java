@@ -62,13 +62,17 @@ public class TrinoParametersSpec extends BaseProviderParametersSpec
     private String user;
 
     // TODO: Handling authentication methods to different Trino instances: https://trino.io/docs/current/security/authentication-types.html
-//    @CommandLine.Option(names = {"--trino-password"}, description = "Trino database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-//    @JsonPropertyDescription("Trino database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-//    private String password;
+    @CommandLine.Option(names = {"--trino-password"}, description = "Trino database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("Trino database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    private String password;
 
     @CommandLine.Option(names = {"-T"}, description = "Trino additional properties that are added to the JDBC connection string")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, String> properties;
+
+    @CommandLine.Option(names = {"--athena-authentication-mode"}, description = "The authentication mode for AWS Athena. Supports also a ${ATHENA_AUTHENTICATION_MODE} configuration with a custom environment variable.")
+    @JsonPropertyDescription("The authentication mode for AWS Athena. Supports also a ${ATHENA_AUTHENTICATION_MODE} configuration with a custom environment variable.")
+    private AthenaAuthenticationMode athenaAuthenticationMode;
 
     @CommandLine.Option(names = {"--athena-region"}, description = "The AWS Athena Region where queries will be run. Supports also a ${ATHENA_REGION} configuration with a custom environment variable.")
     @JsonPropertyDescription("The AWS Region where queries will be run. Supports also a ${ATHENA_REGION} configuration with a custom environment variable.")
@@ -154,22 +158,22 @@ public class TrinoParametersSpec extends BaseProviderParametersSpec
         this.user = user;
     }
 
-//    /**
-//     * Returns a password used to authenticate to the server.
-//     * @return Password.
-//     */
-//    public String getPassword() {
-//        return password;
-//    }
-//
-//    /**
-//     * Sets a password that is used to connect to the database.
-//     * @param password Password.
-//     */
-//    public void setPassword(String password) {
-//        setDirtyIf(!Objects.equals(this.password, password));
-//        this.password = password;
-//    }
+    /**
+     * Returns a password used to authenticate to the server.
+     * @return Password.
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * Sets a password that is used to connect to the database.
+     * @param password Password.
+     */
+    public void setPassword(String password) {
+        setDirtyIf(!Objects.equals(this.password, password));
+        this.password = password;
+    }
 
     /**
      * Returns a key/value map of additional properties that are included in the JDBC connection string.
@@ -186,6 +190,23 @@ public class TrinoParametersSpec extends BaseProviderParametersSpec
     public void setProperties(Map<String, String> properties) {
         setDirtyIf(!Objects.equals(this.properties, properties));
         this.properties = properties != null ? Collections.unmodifiableMap(properties) : null;
+    }
+
+    /**
+     * Returns the Athena's authentication mode.
+     * @return Athena's authentication mode.
+     */
+    public AthenaAuthenticationMode getAthenaAuthenticationMode() {
+        return athenaAuthenticationMode;
+    }
+
+    /**
+     * Sets Athena's authentication mode.
+     * @param athenaAuthenticationMode Athena's authentication mode.
+     */
+    public void setAthenaAuthenticationMode(AthenaAuthenticationMode athenaAuthenticationMode) {
+        setDirtyIf(!Objects.equals(this.athenaAuthenticationMode, athenaAuthenticationMode));
+        this.athenaAuthenticationMode = athenaAuthenticationMode;
     }
 
 
@@ -299,9 +320,10 @@ public class TrinoParametersSpec extends BaseProviderParametersSpec
         cloned.host = secretValueProvider.expandValue(cloned.host, lookupContext);
         cloned.port = secretValueProvider.expandValue(cloned.port, lookupContext);
         cloned.user = secretValueProvider.expandValue(cloned.user, lookupContext);
-        // cloned.password = secretValueProvider.expandValue(cloned.password, lookupContext);
+        cloned.password = secretValueProvider.expandValue(cloned.password, lookupContext);
         cloned.properties = secretValueProvider.expandProperties(cloned.properties, lookupContext);
 
+        cloned.athenaAuthenticationMode = AthenaAuthenticationMode.valueOf(secretValueProvider.expandValue(cloned.athenaAuthenticationMode.toString(), lookupContext));
         cloned.athenaRegion = secretValueProvider.expandValue(cloned.athenaRegion, lookupContext);
         cloned.catalog = secretValueProvider.expandValue(cloned.catalog, lookupContext);
         cloned.athenaWorkGroup = secretValueProvider.expandValue(cloned.athenaWorkGroup, lookupContext);

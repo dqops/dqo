@@ -130,6 +130,20 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
             dataSourceProperties.putAll(trinoSpec.getProperties());
         }
 
+        if(trinoSpec.getAthenaAuthenticationMode().equals(AthenaAuthenticationMode.iam)){ // todo: switch
+            String user = this.getSecretValueProvider().expandValue(trinoSpec.getUser(), secretValueLookupContext);
+            if (!Strings.isNullOrEmpty(user)){
+                dataSourceProperties.put("AccessKeyId", user);  // AccessKeyId alias for User
+            }
+
+            String password = this.getSecretValueProvider().expandValue(trinoSpec.getPassword(), secretValueLookupContext);
+            if (!Strings.isNullOrEmpty(password)){
+                dataSourceProperties.put("SecretAccessKey", password);  // SecretAccessKey alias for Password
+            }
+        } else {
+            // todo
+        }
+
         String region = this.getSecretValueProvider().expandValue(trinoSpec.getAthenaRegion(), secretValueLookupContext);
         if (!Strings.isNullOrEmpty(region)){
             dataSourceProperties.put("Region", region);

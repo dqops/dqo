@@ -4,7 +4,8 @@ import SectionWrapper from '../../SectionWrapper';
 import {
   TrinoParametersSpec,
   SharedCredentialListModel,
-  TrinoParametersSpecTrinoEngineTypeEnum
+  TrinoParametersSpecTrinoEngineTypeEnum,
+  TrinoParametersSpecAthenaAuthenticationModeEnum
 } from '../../../../api';
 import JdbcPropertiesView from '../JdbcProperties';
 import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
@@ -26,6 +27,17 @@ const options = [
   {
     label: 'AWS Athena',
     value: TrinoParametersSpecTrinoEngineTypeEnum.athena
+  }
+];
+
+const athenaAuthenticaionOptions = [
+  {
+    label: 'IAM',
+    value: TrinoParametersSpecAthenaAuthenticationModeEnum.iam
+  },
+  {
+    label: 'Default Credentials',
+    value: TrinoParametersSpecAthenaAuthenticationModeEnum.default_credentials
   }
 ];
 
@@ -65,7 +77,6 @@ const TrinoConnection = ({
           value={trino?.host}
           onChange={(value) => handleChange({ host: value })}
         />  
-
         <FieldTypeInput
           data={sharedCredentials}
           label="Port"
@@ -91,6 +102,30 @@ const TrinoConnection = ({
       }
       { trino?.trino_engine_type === TrinoParametersSpecTrinoEngineTypeEnum.athena && 
       <>
+        <Select
+          label="Athena authentication option"
+          options={athenaAuthenticaionOptions}
+          className="mb-4"
+          value={ trino?.athena_authentication_mode }
+          onChange={(value) => { handleChange({ athena_authentication_mode: value })}}
+        />
+        { trino?.athena_authentication_mode === TrinoParametersSpecAthenaAuthenticationModeEnum.iam && 
+          <>
+            <FieldTypeInput
+              data={sharedCredentials}
+              label="Athena AccessKeyId"
+              className="mb-4"
+              value={trino?.user}
+              onChange={(value) => handleChange({ user: value })}
+            />
+            <FieldTypeInput
+              data={sharedCredentials}
+              label="Athena SecretAccessKey"
+              value={trino?.password}
+              onChange={(value) => handleChange({ password: value })}
+            />
+          </>
+        }
         <FieldTypeInput
         data={sharedCredentials}
         label="Athena Region"

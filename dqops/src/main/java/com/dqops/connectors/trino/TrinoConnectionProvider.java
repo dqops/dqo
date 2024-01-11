@@ -149,6 +149,24 @@ public class TrinoConnectionProvider extends AbstractSqlConnectionProvider {
     }
 
     private void promptForAthenaConnectionParameters(TrinoParametersSpec trinoSpec, boolean isHeadless, TerminalReader terminalReader) {
+
+        if(trinoSpec.getAthenaAuthenticationMode().equals(AthenaAuthenticationMode.iam)){ // todo: switch
+            if (Strings.isNullOrEmpty(trinoSpec.getUser())) {
+                if (isHeadless) {
+                    throw new CliRequiredParameterMissingException("--trino-user");
+                }
+                trinoSpec.setUser(terminalReader.prompt(" (--trino-region)", "${TRINO_USER}", false));
+            }
+            if (Strings.isNullOrEmpty(trinoSpec.getPassword())) {
+                if (isHeadless) {
+                    throw new CliRequiredParameterMissingException("--trino-password");
+                }
+                trinoSpec.setPassword(terminalReader.prompt(" (--trino-password)", "${TRINO_PASSWORD}", false));
+            }
+        } else {
+            // todo
+        }
+
         if (Strings.isNullOrEmpty(trinoSpec.getAthenaRegion())) {
             if (isHeadless) {
                 throw new CliRequiredParameterMissingException("--athena-region");
