@@ -41,7 +41,7 @@ DQOps is available on [PyPi repository](https://pypi.org/project/dqops/).
     python -m dqops
     ```
 
-3. Create DQOps userhome folder.
+3. Create DQOps user home folder.
 
    After installation, you will be asked whether to initialize the DQO user's home folder in the default location. Type Y to create the folder.  
    The user's home folder locally stores data such as sensor readouts and the data quality check results, as well as data source configurations. [You can learn more about data storage here](https://dqops.com/docs/dqo-concepts/data-storage/data-storage/).
@@ -73,77 +73,54 @@ and how to configure data quality checks.
 The package contains also a remote DQO client that can connect to a DQOps instance and perform all operations supported by the user interface.
 The DQOps client could be used inside data pipelines or data preparation code to verify the quality of tables.
 
-Usage of the DQOps client.
+If you want to connect to a local DQOps instance from your data pipeline code, you can use
+the unauthenticated client. First, create the client object.
 
 ```python
-from dqops.client import Client
+from dqops import client
 
-client = Client(base_url="http://localhost:8888")
+dqops_client = client.Client(base_url="http://localhost:8888")
 ```
 
-If the endpoints you're going to hit require authentication, use `AuthenticatedClient` instead:
+Alternatively, if you are connecting to production instance of DQOps that has authentication
+enabled, you have to open the user's profile screen in DQOps and generate your DQOps API Key.
+Then take the key and use it as the token, when creating an `AuthenticatedClient` instead.
 
 ```python
-from dqops.client import AuthenticatedClient
+from dqops import client
 
-client = AuthenticatedClient(base_url="http://localhost:8888", token="Your DQO API Key")
+dqops_client = client.AuthenticatedClient(base_url="http://localhost:8888", token="Your DQO API Key")
 ```
 
-Now call your endpoint and use your models:
+Now you can call operations on DQOps. The following code shows how to execute data quality checks
+on data sources that are already registered in DQOps.
 
 ```python
-from dqops.client.models import MyDataModel
-from dqops.client.api.my_tag import get_my_data_model
-from dqops.client.types import Response
+from dqops.client.api.jobs import run_checks
+from dqops.client.models import CheckSearchFilters, \
+                              RunChecksParameters
 
-my_data: MyDataModel = get_my_data_model.sync(client=client)
-# or if you need more info (e.g. status_code)
-response: Response[MyDataModel] = get_my_data_model.sync_detailed(client=client)
-```
 
-Or do the same thing with an async version:
-
-```python
-from dq_ops_client.models import MyDataModel
-from dq_ops_client.api.my_tag import get_my_data_model
-from dq_ops_client.types import Response
-
-my_data: MyDataModel = await get_my_data_model.asyncio(client=client)
-response: Response[MyDataModel] = await get_my_data_model.asyncio_detailed(client=client)
-```
-
-By default, when you're calling an HTTPS API it will attempt to verify that SSL is working correctly. Using certificate verification is highly recommended most of the time, but sometimes you may need to authenticate to a server (especially an internal server) using a custom certificate bundle.
-
-```python
-client = AuthenticatedClient(
-    base_url="https://tenantinstance.us.dqops.com/", 
-    token="SuperSecretToken",
-    verify_ssl="/path/to/certificate_bundle.pem",
+request_body = RunChecksParameters(
+  check_search_filters=CheckSearchFilters(
+      column='sample_column',
+      column_data_type='string',
+      connection='sample_connection',
+      full_table_name='sample_schema.sample_table',
+      enabled=True
+  ),
+  dummy_execution=False
 )
-```
 
-You can also disable certificate validation altogether, but beware that **this is a security risk**.
-
-```python
-client = AuthenticatedClient(
-    base_url="https://tenantinstance.us.dqops.com/", 
-    token="SuperSecretToken", 
-    verify_ssl=False
+check_results = run_checks.sync(
+  client=dqops_client,
+  json_body=request_body
 )
+
 ```
 
-There are more settings on the generated `Client` class which let you control more runtime behavior, check out the docstring on that class for more info.
-
-Things to know:
-1. Every path/method combo becomes a Python module with four functions:
-   1. `sync`: Blocking request that returns parsed data (if successful) or `None`
-   1. `sync_detailed`: Blocking request that always returns a `Request`, optionally with `parsed` set if the request was successful.
-   1. `asyncio`: Like `sync` but async instead of blocking
-   1. `asyncio_detailed`: Like `sync_detailed` but async instead of blocking
-
-1. All path/query params, and bodies become method arguments.
-1. If your endpoint had any tags on it, the first tag will be used as a module name for the function (my_tag above)
-1. Any endpoint which did not have a tag will be in `dqops.client.api.default`
+Learn more about the DQOps Python client in the [DQOps REST API client](https://dqops.com/docs/client/) reference
+documentation that shows Python code examples for every operation supported by the client.
 
 
 ## Contact and issues
