@@ -61,7 +61,7 @@ import java.util.stream.Stream;
 @RestController
 @RequestMapping("/api/connections")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "Connections", description = "Manages connections to monitored data sources")
+@Api(value = "Connections", description = "Operations for adding/updating/deleting the configuration of data sources managed by DQOps.")
 public class ConnectionsController {
     private final ConnectionService connectionService;
     private final UserHomeContextFactory userHomeContextFactory;

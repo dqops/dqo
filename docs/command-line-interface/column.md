@@ -1,7 +1,5 @@
 # dqo column command
-
-
-Modify and list columns
+The reference of the **column** command in DQOps. Modify and list columns
 
 
 

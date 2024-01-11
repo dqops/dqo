@@ -186,10 +186,10 @@ and running data quality checks. All DQOPs cli commands are documented [here](..
 The web server that is embedded in DQOps exposes REST API endpoints for all operations.
 The REST API can be used from external clients to run data quality checks.
 Additionally, when complex automation of all data quality activities is required, DQOps REST API can be used directly.
-A full description of all REST API operations is included in the [DQOps Python Client](../../client/operations/index.md) documentation.
+A full description of all REST API operations is included in the [DQOps Python Client](../../client/index.md) documentation.
 
 ### **Python client**
-The *dqops* Python module contains a typed Python [client](../../client/operations/index.md) that is a wrapper over the DQOps REST API.
+The *dqops* Python module contains a typed Python [client](../../client/index.md) that is a wrapper over the DQOps REST API.
 The source code of the module is available on [GitHub](https://github.com/dqops/dqo/tree/develop/distribution/python/dqops/client) for reference.
 The Python client can be integrated with additional tools, called from data pipelines or imported directly into a Notebook, to execute
 data quality checks directly using the [run_checks](../../client/operations/jobs.md#run_checks) function.

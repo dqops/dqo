@@ -38,7 +38,7 @@ What's more, you can integrate the DQOps REST API into Python code using `dqops`
 ??? Models
     | Model group |
     |-------------|
-    |[Common](models/Common.md)|
+    |[common](models/common.md)|
     |[check_results](models/check_results.md)|
     |[check_results_overview](models/check_results_overview.md)|
     |[checks](models/checks.md)|

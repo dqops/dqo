@@ -1,7 +1,5 @@
 # dqo run command
-Starts DQOps in a server mode, continuously running a job scheduler that runs the data quality checks
-
-This command is useful when you want to continuously monitor the quality of your data in real-time. The job scheduler runs in the background, allowing you to perform other tasks while the DQOps is running.
+The reference of the **run** command in DQOps. This command is useful when you want to continuously monitor the quality of your data in real-time. The job scheduler runs in the background, allowing you to perform other tasks while the DQOps is running.
 
 
 

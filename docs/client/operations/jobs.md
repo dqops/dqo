@@ -1,10 +1,11 @@
+# DQOps REST API jobs operations
 Jobs management controller that supports starting new jobs, such as running selected data quality checks
 
 
 ___
 ## cancel_job
 Cancels a running job
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/cancel_job.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/cancel_job.py) to see the source code on GitHub.
 
 
 **DELETE**
@@ -124,7 +125,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}
 ___
 ## collect_statistics_on_data_groups
 Starts a new background job that will run selected data statistics collectors on tables, calculating separate metric for each data grouping
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/collect_statistics_on_data_groups.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/collect_statistics_on_data_groups.py) to see the source code on GitHub.
 
 
 **POST**
@@ -310,7 +311,7 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
 ___
 ## collect_statistics_on_table
 Starts a new background job that will run selected data statistics collectors on a whole table
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/collect_statistics_on_table.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/collect_statistics_on_table.py) to see the source code on GitHub.
 
 
 **POST**
@@ -496,7 +497,7 @@ http://localhost:8888/api/jobs/collectstatistics/table
 ___
 ## delete_stored_data
 Starts a new background job that will delete stored data about check results, sensor readouts etc.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/delete_stored_data.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/delete_stored_data.py) to see the source code on GitHub.
 
 
 **POST**
@@ -694,7 +695,7 @@ http://localhost:8888/api/jobs/deletestoreddata
 ___
 ## get_all_jobs
 Retrieves a list of all queued and recently finished jobs.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/get_all_jobs.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/get_all_jobs.py) to see the source code on GitHub.
 
 
 **GET**
@@ -835,7 +836,7 @@ http://localhost:8888/api/jobs/jobs
 ___
 ## get_job
 Retrieves the current status of a single job, identified by a job id.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/get_job.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/get_job.py) to see the source code on GitHub.
 
 
 **GET**
@@ -971,7 +972,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}
 ___
 ## get_job_changes_since
 Retrieves an incremental list of job changes (new jobs or job status changes)
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/get_job_changes_since.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/get_job_changes_since.py) to see the source code on GitHub.
 
 
 **GET**
@@ -1123,7 +1124,7 @@ http://localhost:8888/api/jobs/jobchangessince/{sequenceNumber}
 ___
 ## import_tables
 Starts a new background job that will import selected tables.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/import_tables.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/import_tables.py) to see the source code on GitHub.
 
 
 **POST**
@@ -1301,7 +1302,7 @@ http://localhost:8888/api/jobs/importtables
 ___
 ## is_cron_scheduler_running
 Checks if the DQOps internal CRON scheduler is running and processing jobs scheduled using cron expressions.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/is_cron_scheduler_running.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/is_cron_scheduler_running.py) to see the source code on GitHub.
 
 
 **GET**
@@ -1414,7 +1415,7 @@ http://localhost:8888/api/jobs/scheduler/isrunning
 ___
 ## run_checks
 Starts a new background job that will run selected data quality checks
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/run_checks.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/run_checks.py) to see the source code on GitHub.
 
 
 **POST**
@@ -1608,7 +1609,7 @@ http://localhost:8888/api/jobs/runchecks
 ___
 ## start_cron_scheduler
 Starts the job scheduler that runs monitoring jobs that are scheduled by assigning cron expressions.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/start_cron_scheduler.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/start_cron_scheduler.py) to see the source code on GitHub.
 
 
 **POST**
@@ -1717,7 +1718,7 @@ http://localhost:8888/api/jobs/scheduler/status/start
 ___
 ## stop_cron_scheduler
 Stops the job scheduler that runs monitoring jobs that are scheduled by assigning cron expressions.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/stop_cron_scheduler.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/stop_cron_scheduler.py) to see the source code on GitHub.
 
 
 **POST**
@@ -1826,7 +1827,7 @@ http://localhost:8888/api/jobs/scheduler/status/stop
 ___
 ## synchronize_folders
 Starts multiple file synchronization jobs that will synchronize files from selected DQOps User home folders to the DQOps Cloud. The default synchronization mode is a full synchronization (upload local files, download new files from the cloud).
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/synchronize_folders.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/synchronize_folders.py) to see the source code on GitHub.
 
 
 **POST**
@@ -2048,7 +2049,7 @@ http://localhost:8888/api/jobs/synchronize
 ___
 ## wait_for_job
 Waits for a job to finish. Returns the status of a finished job or a current state of a job that is still running, but the wait timeout elapsed.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/wait_for_job.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/wait_for_job.py) to see the source code on GitHub.
 
 
 **GET**
@@ -2185,7 +2186,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}/wait
 ___
 ## wait_for_run_checks_job
 Waits for a job to finish. Returns the status of a finished job or a current state of a job that is still running, but the wait timeout elapsed.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/wait_for_run_checks_job.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/wait_for_run_checks_job.py) to see the source code on GitHub.
 
 
 **GET**

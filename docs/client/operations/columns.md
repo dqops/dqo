@@ -1,10 +1,11 @@
+# DQOps REST API columns operations
 Manages columns inside a table
 
 
 ___
 ## create_column
 Creates a new column (adds a column metadata to the table)
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/create_column.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/create_column.py) to see the source code on GitHub.
 
 
 **POST**
@@ -265,7 +266,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## delete_column
 Deletes a column from the table
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/delete_column.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/delete_column.py) to see the source code on GitHub.
 
 
 **DELETE**
@@ -277,7 +278,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[dqo_queue_job_id](../models/Common.md#dqoqueuejobid)||[DqoQueueJobId](../models/Common.md#dqoqueuejobid)|
+|[dqo_queue_job_id](../models/common.md#dqoqueuejobid)||[DqoQueueJobId](../models/common.md#dqoqueuejobid)|
 
 
 
@@ -415,7 +416,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## get_column
 Returns the full column specification
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column.py) to see the source code on GitHub.
 
 
 **GET**
@@ -590,7 +591,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## get_column_basic
 Returns the column specification
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_basic.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_basic.py) to see the source code on GitHub.
 
 
 **GET**
@@ -759,7 +760,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## get_column_comments
 Return the list of comments assigned to a column
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_comments.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_comments.py) to see the source code on GitHub.
 
 
 **GET**
@@ -771,7 +772,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|comment_spec||List[[CommentSpec](../models/Common.md#commentspec)]|
+|comment_spec||List[[CommentSpec](../models/common.md#commentspec)]|
 
 
 
@@ -922,7 +923,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## get_column_labels
 Return the list of labels assigned to a column
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_labels.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_labels.py) to see the source code on GitHub.
 
 
 **GET**
@@ -1073,7 +1074,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## get_column_monitoring_checks_basic_model
 Return a simplistic UI friendly model of column level data quality monitoring on a column
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_monitoring_checks_basic_model.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_monitoring_checks_basic_model.py) to see the source code on GitHub.
 
 
 **GET**
@@ -1085,7 +1086,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_list_model](../models/Common.md#checkcontainerlistmodel)||[CheckContainerListModel](../models/Common.md#checkcontainerlistmodel)|
+|[check_container_list_model](../models/common.md#checkcontainerlistmodel)||[CheckContainerListModel](../models/common.md#checkcontainerlistmodel)|
 
 
 
@@ -1098,7 +1099,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
 |column_name|Column name|string|:material-check-bold:|
-|[time_scale](../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/common.md#checktimescale)|Time scale|[CheckTimeScale](../models/common.md#checktimescale)|:material-check-bold:|
 
 
 
@@ -1264,7 +1265,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## get_column_monitoring_checks_daily
 Return the configuration of daily column level data quality monitoring on a column
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_monitoring_checks_daily.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_monitoring_checks_daily.py) to see the source code on GitHub.
 
 
 **GET**
@@ -1423,7 +1424,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## get_column_monitoring_checks_model
 Return a UI friendly model of column level data quality monitoring on a column
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_monitoring_checks_model.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_monitoring_checks_model.py) to see the source code on GitHub.
 
 
 **GET**
@@ -1435,7 +1436,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../models/Common.md#checkcontainermodel)||[CheckContainerModel](../models/Common.md#checkcontainermodel)|
+|[check_container_model](../models/common.md#checkcontainermodel)||[CheckContainerModel](../models/common.md#checkcontainermodel)|
 
 
 
@@ -1448,7 +1449,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
 |column_name|Column name|string|:material-check-bold:|
-|[time_scale](../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/common.md#checktimescale)|Time scale|[CheckTimeScale](../models/common.md#checktimescale)|:material-check-bold:|
 
 
 
@@ -1602,7 +1603,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## get_column_monitoring_checks_model_filter
 Return a UI friendly model of column level data quality monitoring on a column filtered by category and check name
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_monitoring_checks_model_filter.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_monitoring_checks_model_filter.py) to see the source code on GitHub.
 
 
 **GET**
@@ -1614,7 +1615,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../models/Common.md#checkcontainermodel)||[CheckContainerModel](../models/Common.md#checkcontainermodel)|
+|[check_container_model](../models/common.md#checkcontainermodel)||[CheckContainerModel](../models/common.md#checkcontainermodel)|
 
 
 
@@ -1627,7 +1628,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
 |column_name|Column name|string|:material-check-bold:|
-|[time_scale](../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/common.md#checktimescale)|Time scale|[CheckTimeScale](../models/common.md#checktimescale)|:material-check-bold:|
 |check_category|Check category|string|:material-check-bold:|
 |check_name|Check name|string|:material-check-bold:|
 
@@ -1791,7 +1792,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## get_column_monitoring_checks_monthly
 Return the configuration of monthly column level data quality monitoring on a column
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_monitoring_checks_monthly.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_monitoring_checks_monthly.py) to see the source code on GitHub.
 
 
 **GET**
@@ -1950,7 +1951,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## get_column_partitioned_checks_basic_model
 Return a simplistic UI friendly model of column level data quality partitioned checks on a column
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_partitioned_checks_basic_model.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_partitioned_checks_basic_model.py) to see the source code on GitHub.
 
 
 **GET**
@@ -1962,7 +1963,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_list_model](../models/Common.md#checkcontainerlistmodel)||[CheckContainerListModel](../models/Common.md#checkcontainerlistmodel)|
+|[check_container_list_model](../models/common.md#checkcontainerlistmodel)||[CheckContainerListModel](../models/common.md#checkcontainerlistmodel)|
 
 
 
@@ -1975,7 +1976,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
 |column_name|Column name|string|:material-check-bold:|
-|[time_scale](../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/common.md#checktimescale)|Time scale|[CheckTimeScale](../models/common.md#checktimescale)|:material-check-bold:|
 
 
 
@@ -2141,7 +2142,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## get_column_partitioned_checks_daily
 Return the configuration of daily column level data quality partitioned checks on a column
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_partitioned_checks_daily.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_partitioned_checks_daily.py) to see the source code on GitHub.
 
 
 **GET**
@@ -2300,7 +2301,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## get_column_partitioned_checks_model
 Return a UI friendly model of column level data quality partitioned checks on a column
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_partitioned_checks_model.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_partitioned_checks_model.py) to see the source code on GitHub.
 
 
 **GET**
@@ -2312,7 +2313,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../models/Common.md#checkcontainermodel)||[CheckContainerModel](../models/Common.md#checkcontainermodel)|
+|[check_container_model](../models/common.md#checkcontainermodel)||[CheckContainerModel](../models/common.md#checkcontainermodel)|
 
 
 
@@ -2325,7 +2326,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
 |column_name|Column name|string|:material-check-bold:|
-|[time_scale](../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/common.md#checktimescale)|Time scale|[CheckTimeScale](../models/common.md#checktimescale)|:material-check-bold:|
 
 
 
@@ -2479,7 +2480,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## get_column_partitioned_checks_model_filter
 Return a UI friendly model of column level data quality partitioned checks on a column, filtered by category and check name
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_partitioned_checks_model_filter.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_partitioned_checks_model_filter.py) to see the source code on GitHub.
 
 
 **GET**
@@ -2491,7 +2492,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../models/Common.md#checkcontainermodel)||[CheckContainerModel](../models/Common.md#checkcontainermodel)|
+|[check_container_model](../models/common.md#checkcontainermodel)||[CheckContainerModel](../models/common.md#checkcontainermodel)|
 
 
 
@@ -2504,7 +2505,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
 |column_name|Column name|string|:material-check-bold:|
-|[time_scale](../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/common.md#checktimescale)|Time scale|[CheckTimeScale](../models/common.md#checktimescale)|:material-check-bold:|
 |check_category|Check category|string|:material-check-bold:|
 |check_name|Check name|string|:material-check-bold:|
 
@@ -2668,7 +2669,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## get_column_partitioned_checks_monthly
 Return the configuration of monthly column level data quality partitioned checks on a column
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_partitioned_checks_monthly.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_partitioned_checks_monthly.py) to see the source code on GitHub.
 
 
 **GET**
@@ -2827,7 +2828,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## get_column_profiling_checks
 Return the configuration of column level data quality profiling checks on a column
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_profiling_checks.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_profiling_checks.py) to see the source code on GitHub.
 
 
 **GET**
@@ -2986,7 +2987,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## get_column_profiling_checks_basic_model
 Return a simplistic UI friendly model of column level data quality profiling checks on a column
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_profiling_checks_basic_model.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_profiling_checks_basic_model.py) to see the source code on GitHub.
 
 
 **GET**
@@ -2998,7 +2999,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_list_model](../models/Common.md#checkcontainerlistmodel)||[CheckContainerListModel](../models/Common.md#checkcontainerlistmodel)|
+|[check_container_list_model](../models/common.md#checkcontainerlistmodel)||[CheckContainerListModel](../models/common.md#checkcontainerlistmodel)|
 
 
 
@@ -3172,7 +3173,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## get_column_profiling_checks_model
 Return a UI friendly model of data quality profiling checks on a column
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_profiling_checks_model.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_profiling_checks_model.py) to see the source code on GitHub.
 
 
 **GET**
@@ -3184,7 +3185,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../models/Common.md#checkcontainermodel)||[CheckContainerModel](../models/Common.md#checkcontainermodel)|
+|[check_container_model](../models/common.md#checkcontainermodel)||[CheckContainerModel](../models/common.md#checkcontainermodel)|
 
 
 
@@ -3346,7 +3347,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## get_column_profiling_checks_model_filter
 Return a UI friendly model of data quality profiling checks on a column filtered by category and check name
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_profiling_checks_model_filter.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_profiling_checks_model_filter.py) to see the source code on GitHub.
 
 
 **GET**
@@ -3358,7 +3359,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../models/Common.md#checkcontainermodel)||[CheckContainerModel](../models/Common.md#checkcontainermodel)|
+|[check_container_model](../models/common.md#checkcontainermodel)||[CheckContainerModel](../models/common.md#checkcontainermodel)|
 
 
 
@@ -3530,7 +3531,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## get_column_statistics
 Returns the column specification with the metrics captured by the most recent statistics collection.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_statistics.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_statistics.py) to see the source code on GitHub.
 
 
 **GET**
@@ -3732,7 +3733,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## get_columns
 Returns a list of columns inside a table
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_columns.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_columns.py) to see the source code on GitHub.
 
 
 **GET**
@@ -3932,7 +3933,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## get_columns_statistics
 Returns a list of columns inside a table with the metrics captured by the most recent statistics collection.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_columns_statistics.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_columns_statistics.py) to see the source code on GitHub.
 
 
 **GET**
@@ -4195,7 +4196,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_column
 Updates an existing column specification, changing all the fields (even the column level data quality checks).
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column.py) to see the source code on GitHub.
 
 
 **PUT**
@@ -4456,7 +4457,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_column_basic
 Updates an existing column, changing only the basic information like the expected data type (the data type snapshot).
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_basic.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_basic.py) to see the source code on GitHub.
 
 
 **PUT**
@@ -4705,7 +4706,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_column_comments
 Updates the list of comments assigned to a column.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_comments.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_comments.py) to see the source code on GitHub.
 
 
 **PUT**
@@ -4731,7 +4732,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|List of comments to stored (replaced) on the column or an empty object to clear the list of assigned comments on the column|List[[CommentSpec](../models/Common.md#commentspec)]| |
+|List of comments to stored (replaced) on the column or an empty object to clear the list of assigned comments on the column|List[[CommentSpec](../models/common.md#commentspec)]| |
 
 
 
@@ -4926,7 +4927,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_column_labels
 Updates the list of labels assigned to a column.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_labels.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_labels.py) to see the source code on GitHub.
 
 
 **PUT**
@@ -5099,7 +5100,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_column_monitoring_checks_daily
 Updates configuration of daily column level data quality monitoring on a column.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_monitoring_checks_daily.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_monitoring_checks_daily.py) to see the source code on GitHub.
 
 
 **PUT**
@@ -5320,7 +5321,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_column_monitoring_checks_model
 Updates configuration of column level data quality monitoring on a column, for a given time scale, from a UI friendly model.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_monitoring_checks_model.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_monitoring_checks_model.py) to see the source code on GitHub.
 
 
 **PUT**
@@ -5338,7 +5339,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
 |column_name|Column name|string|:material-check-bold:|
-|[time_scale](../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/common.md#checktimescale)|Time scale|[CheckTimeScale](../models/common.md#checktimescale)|:material-check-bold:|
 
 
 
@@ -5347,7 +5348,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the data quality monitoring configuration|[CheckContainerModel](../models/Common.md#checkcontainermodel)| |
+|Model with the changes to be applied to the data quality monitoring configuration|[CheckContainerModel](../models/common.md#checkcontainermodel)| |
 
 
 
@@ -5618,7 +5619,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_column_monitoring_checks_monthly
 Updates configuration of monthly column level data quality monitoring checks on a column.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_monitoring_checks_monthly.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_monitoring_checks_monthly.py) to see the source code on GitHub.
 
 
 **PUT**
@@ -5839,7 +5840,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_column_partitioned_checks_daily
 Updates configuration of daily column level data quality partitioned checks on a column.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_partitioned_checks_daily.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_partitioned_checks_daily.py) to see the source code on GitHub.
 
 
 **PUT**
@@ -6060,7 +6061,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_column_partitioned_checks_model
 Updates configuration of column level data quality partitioned checks on a column, for a given time scale, from a UI friendly model.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_partitioned_checks_model.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_partitioned_checks_model.py) to see the source code on GitHub.
 
 
 **PUT**
@@ -6078,7 +6079,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
 |column_name|Column name|string|:material-check-bold:|
-|[time_scale](../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/common.md#checktimescale)|Time scale|[CheckTimeScale](../models/common.md#checktimescale)|:material-check-bold:|
 
 
 
@@ -6087,7 +6088,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the data quality partitioned checks configuration|[CheckContainerModel](../models/Common.md#checkcontainermodel)| |
+|Model with the changes to be applied to the data quality partitioned checks configuration|[CheckContainerModel](../models/common.md#checkcontainermodel)| |
 
 
 
@@ -6358,7 +6359,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_column_partitioned_checks_monthly
 Updates configuration of monthly column level data quality partitioned checks on a column.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_partitioned_checks_monthly.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_partitioned_checks_monthly.py) to see the source code on GitHub.
 
 
 **PUT**
@@ -6579,7 +6580,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_column_profiling_checks
 Updates configuration of column level data quality profiling checks on a column.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_profiling_checks.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_profiling_checks.py) to see the source code on GitHub.
 
 
 **PUT**
@@ -6800,7 +6801,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_column_profiling_checks_model
 Updates configuration of column level data quality profiling checks on a column from a UI friendly model.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_profiling_checks_model.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_profiling_checks_model.py) to see the source code on GitHub.
 
 
 **PUT**
@@ -6826,7 +6827,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the data quality profiling checks configuration|[CheckContainerModel](../models/Common.md#checkcontainermodel)| |
+|Model with the changes to be applied to the data quality profiling checks configuration|[CheckContainerModel](../models/common.md#checkcontainermodel)| |
 
 
 

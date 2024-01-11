@@ -1,3 +1,6 @@
+# DQOps REST API sensor_readouts models reference
+The references of all objects used by [sensor_readouts](../operations/sensor_readouts.md) REST API operations are listed below.
+
 
 ## SensorReadoutEntryModel
 Detailed results for a single sensor. Represent one row in the sensor readouts table.

@@ -1,10 +1,11 @@
+# DQOps REST API schemas operations
 Schema management
 
 
 ___
 ## get_schema_monitoring_checks_model
 Return a UI friendly model of configurations for data quality monitoring checks on a schema
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/schemas/get_schema_monitoring_checks_model.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/schemas/get_schema_monitoring_checks_model.py) to see the source code on GitHub.
 
 
 **GET**
@@ -16,7 +17,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_configuration_model||List[[CheckConfigurationModel](../models/Common.md#checkconfigurationmodel)]|
+|check_configuration_model||List[[CheckConfigurationModel](../models/common.md#checkconfigurationmodel)]|
 
 
 
@@ -27,7 +28,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
 |schema_name|Schema name|string|:material-check-bold:|
-|[time_scale](../models/Common.md#checktimescale)|Check time-scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/common.md#checktimescale)|Check time-scale|[CheckTimeScale](../models/common.md#checktimescale)|:material-check-bold:|
 |table_name_pattern|Table name pattern|string| |
 |column_name_pattern|Column name pattern|string| |
 |column_data_type|Column data-type|string| |
@@ -175,7 +176,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
 ___
 ## get_schema_monitoring_checks_templates
 Return available data quality checks on a requested schema.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/schemas/get_schema_monitoring_checks_templates.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/schemas/get_schema_monitoring_checks_templates.py) to see the source code on GitHub.
 
 
 **GET**
@@ -187,7 +188,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_template||List[[CheckTemplate](../models/Common.md#checktemplate)]|
+|check_template||List[[CheckTemplate](../models/common.md#checktemplate)]|
 
 
 
@@ -198,7 +199,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
 |schema_name|Schema name|string|:material-check-bold:|
-|[time_scale](../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/common.md#checktimescale)|Time scale|[CheckTimeScale](../models/common.md#checktimescale)|:material-check-bold:|
 |[check_target](../models/schemas.md#checktarget)|Check target|[CheckTarget](../models/schemas.md#checktarget)| |
 |check_category|Check category|string| |
 |check_name|Check name|string| |
@@ -334,7 +335,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 ___
 ## get_schema_partitioned_checks_model
 Return a UI friendly model of configurations for data quality partitioned checks on a schema
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/schemas/get_schema_partitioned_checks_model.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/schemas/get_schema_partitioned_checks_model.py) to see the source code on GitHub.
 
 
 **GET**
@@ -346,7 +347,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_configuration_model||List[[CheckConfigurationModel](../models/Common.md#checkconfigurationmodel)]|
+|check_configuration_model||List[[CheckConfigurationModel](../models/common.md#checkconfigurationmodel)]|
 
 
 
@@ -357,7 +358,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
 |schema_name|Schema name|string|:material-check-bold:|
-|[time_scale](../models/Common.md#checktimescale)|Check time-scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/common.md#checktimescale)|Check time-scale|[CheckTimeScale](../models/common.md#checktimescale)|:material-check-bold:|
 |table_name_pattern|Table name pattern|string| |
 |column_name_pattern|Column name pattern|string| |
 |column_data_type|Column data-type|string| |
@@ -505,7 +506,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
 ___
 ## get_schema_partitioned_checks_templates
 Return available data quality checks on a requested schema.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/schemas/get_schema_partitioned_checks_templates.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/schemas/get_schema_partitioned_checks_templates.py) to see the source code on GitHub.
 
 
 **GET**
@@ -517,7 +518,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_template||List[[CheckTemplate](../models/Common.md#checktemplate)]|
+|check_template||List[[CheckTemplate](../models/common.md#checktemplate)]|
 
 
 
@@ -528,7 +529,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
 |schema_name|Schema name|string|:material-check-bold:|
-|[time_scale](../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/common.md#checktimescale)|Time scale|[CheckTimeScale](../models/common.md#checktimescale)|:material-check-bold:|
 |[check_target](../models/schemas.md#checktarget)|Check target|[CheckTarget](../models/schemas.md#checktarget)| |
 |check_category|Check category|string| |
 |check_name|Check name|string| |
@@ -664,7 +665,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 ___
 ## get_schema_profiling_checks_model
 Return a flat list of configurations for profiling checks on a schema
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/schemas/get_schema_profiling_checks_model.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/schemas/get_schema_profiling_checks_model.py) to see the source code on GitHub.
 
 
 **GET**
@@ -676,7 +677,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_configuration_model||List[[CheckConfigurationModel](../models/Common.md#checkconfigurationmodel)]|
+|check_configuration_model||List[[CheckConfigurationModel](../models/common.md#checkconfigurationmodel)]|
 
 
 
@@ -826,7 +827,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
 ___
 ## get_schema_profiling_checks_templates
 Return available data quality checks on a requested schema.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/schemas/get_schema_profiling_checks_templates.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/schemas/get_schema_profiling_checks_templates.py) to see the source code on GitHub.
 
 
 **GET**
@@ -838,7 +839,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_template||List[[CheckTemplate](../models/Common.md#checktemplate)]|
+|check_template||List[[CheckTemplate](../models/common.md#checktemplate)]|
 
 
 
@@ -976,7 +977,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 ___
 ## get_schemas
 Returns a list of schemas inside a connection
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/schemas/get_schemas.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/schemas/get_schemas.py) to see the source code on GitHub.
 
 
 **GET**

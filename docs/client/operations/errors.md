@@ -1,10 +1,11 @@
+# DQOps REST API errors operations
 Returns the errors related to check executions on tables and columns.
 
 
 ___
 ## get_column_monitoring_errors
 Returns errors related to the recent column level monitoring executions for the monitoring at a requested time scale
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/errors/get_column_monitoring_errors.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/errors/get_column_monitoring_errors.py) to see the source code on GitHub.
 
 
 **GET**
@@ -29,7 +30,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
 |column_name|Column name|string|:material-check-bold:|
-|[time_scale](../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/common.md#checktimescale)|Time scale|[CheckTimeScale](../models/common.md#checktimescale)|:material-check-bold:|
 |data_group|Data group|string| |
 |month_start|Month start boundary|string| |
 |month_end|Month end boundary|string| |
@@ -173,7 +174,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## get_column_partitioned_errors
 Returns the errors related to the recent column level partitioned checks executions for a requested time scale
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/errors/get_column_partitioned_errors.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/errors/get_column_partitioned_errors.py) to see the source code on GitHub.
 
 
 **GET**
@@ -198,7 +199,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
 |column_name|Column name|string|:material-check-bold:|
-|[time_scale](../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/common.md#checktimescale)|Time scale|[CheckTimeScale](../models/common.md#checktimescale)|:material-check-bold:|
 |data_group|Data group|string| |
 |month_start|Month start boundary|string| |
 |month_end|Month end boundary|string| |
@@ -342,7 +343,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## get_column_profiling_errors
 Returns the errors related to the recent check executions for all column level data quality profiling checks on a column
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/errors/get_column_profiling_errors.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/errors/get_column_profiling_errors.py) to see the source code on GitHub.
 
 
 **GET**
@@ -506,7 +507,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## get_table_monitoring_errors
 Returns the errors related to the most recent table level monitoring executions for the monitoring at a requested time scale
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/errors/get_table_monitoring_errors.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/errors/get_table_monitoring_errors.py) to see the source code on GitHub.
 
 
 **GET**
@@ -530,7 +531,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |connection_name|Connection name|string|:material-check-bold:|
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
-|[time_scale](../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/common.md#checktimescale)|Time scale|[CheckTimeScale](../models/common.md#checktimescale)|:material-check-bold:|
 |data_group|Data group|string| |
 |month_start|Month start boundary|string| |
 |month_end|Month end boundary|string| |
@@ -670,7 +671,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## get_table_partitioned_errors
 Returns errors related to the recent table level partitioned checks executions for a requested time scale
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/errors/get_table_partitioned_errors.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/errors/get_table_partitioned_errors.py) to see the source code on GitHub.
 
 
 **GET**
@@ -694,7 +695,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |connection_name|Connection name|string|:material-check-bold:|
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
-|[time_scale](../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../models/Common.md#checktimescale)|:material-check-bold:|
+|[time_scale](../models/common.md#checktimescale)|Time scale|[CheckTimeScale](../models/common.md#checktimescale)|:material-check-bold:|
 |data_group|Data group|string| |
 |month_start|Month start boundary|string| |
 |month_end|Month end boundary|string| |
@@ -834,7 +835,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## get_table_profiling_errors
 Returns the errors related to the most recent check executions for all table level data quality profiling checks on a table
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/errors/get_table_profiling_errors.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/errors/get_table_profiling_errors.py) to see the source code on GitHub.
 
 
 **GET**

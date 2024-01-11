@@ -1,3 +1,6 @@
+# DQOps REST API shared_credentials models reference
+The references of all objects used by [shared_credentials](../operations/shared_credentials.md) REST API operations are listed below.
+
 
 ## CredentialType
 Credential type - a text credential or a binary credential that must be updated as a base64 value.

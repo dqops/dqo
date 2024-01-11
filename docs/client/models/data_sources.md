@@ -1,3 +1,6 @@
+# DQOps REST API data_sources models reference
+The references of all objects used by [data_sources](../operations/data_sources.md) REST API operations are listed below.
+
 
 ## ConnectionTestStatus
 Tabular output format for printing the tabular results.

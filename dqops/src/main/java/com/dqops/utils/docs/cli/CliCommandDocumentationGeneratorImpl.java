@@ -141,6 +141,8 @@ public class CliCommandDocumentationGeneratorImpl implements CliCommandDocumenta
     private CliRootCommandDocumentationModel createRootDqoCommandModel(CommandLine commandLine) {
         CliRootCommandDocumentationModel rootDqoCommandModel = new CliRootCommandDocumentationModel();
         rootDqoCommandModel.setRootCommandName("dqo");
+        rootDqoCommandModel.setRootCommandHeader(extractRootCommandHeader(commandLine));
+        rootDqoCommandModel.setRootCommandDescription(extractRootCommandDescription(commandLine));
         CliCommandDocumentationModel myCommandModel = this.commandDocumentationModelFactory.makeDocumentationForCommand(commandLine);
         myCommandModel.setHeader(new String[]{"DQOps command-line entry point script"});
         myCommandModel.setDescription(new String[]{"*dqo* is an executable script installed in the Python scripts local folder when DQOps is installed locally by installing the *dqops* package from PyPi. " +

@@ -90,7 +90,7 @@ import java.util.stream.Stream;
 @RestController
 @RequestMapping("/api/connections")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "Tables", description = "Manages tables inside a connection/schema")
+@Api(value = "Tables", description = "Operations related to manage the metadata of imported tables, and managing the configuration of table-level data quality checks.")
 public class TablesController {
     private static final Logger LOG = LoggerFactory.getLogger(TablesController.class);
     private final TableService tableService;

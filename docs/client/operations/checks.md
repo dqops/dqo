@@ -1,10 +1,11 @@
+# DQOps REST API checks operations
 Data quality check definition management
 
 
 ___
 ## create_check
 Creates (adds) a new custom check that is a pair of a sensor name and a rule name.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/checks/create_check.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/checks/create_check.py) to see the source code on GitHub.
 
 
 **POST**
@@ -182,7 +183,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 ___
 ## delete_check
 Deletes a custom check definition
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/checks/delete_check.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/checks/delete_check.py) to see the source code on GitHub.
 
 
 **DELETE**
@@ -302,7 +303,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 ___
 ## get_all_checks
 Returns a flat list of all checks available in DQOps, both built-in checks and user defined or customized checks.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/checks/get_all_checks.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/checks/get_all_checks.py) to see the source code on GitHub.
 
 
 **GET**
@@ -445,7 +446,7 @@ http://localhost:8888/api/checks
 ___
 ## get_check
 Returns a check definition
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/checks/get_check.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/checks/get_check.py) to see the source code on GitHub.
 
 
 **GET**
@@ -590,7 +591,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 ___
 ## get_check_folder_tree
 Returns a tree of all checks available in DQOps, both built-in checks and user defined or customized checks.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/checks/get_check_folder_tree.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/checks/get_check_folder_tree.py) to see the source code on GitHub.
 
 
 **GET**
@@ -715,7 +716,7 @@ http://localhost:8888/api/definitions/checks
 ___
 ## update_check
 Updates an existing check, making a custom check definition if it is not present
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/checks/update_check.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/checks/update_check.py) to see the source code on GitHub.
 
 
 **PUT**

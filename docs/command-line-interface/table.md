@@ -1,7 +1,5 @@
 # dqo table command
-
-
-Modify or list tables
+The reference of the **table** command in DQOps. Modify or list tables
 
 
 

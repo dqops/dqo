@@ -53,7 +53,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/dashboards")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "Dashboards", description = "Provides access to data quality dashboards")
+@Api(value = "Dashboards", description = "Operations for retrieving the list of data quality dashboards supported by DQOps and issuing short-term access keys to open a dashboard.")
 @Slf4j
 public class DashboardsController {
     private final LookerStudioUrlService lookerStudioUrlService;

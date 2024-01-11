@@ -52,7 +52,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "Incidents", description = "Data quality incidents controller that supports loading incidents and changing the status of an incident.")
+@Api(value = "Incidents", description = "Data quality incidents controller that supports reading and updating data quality incidents, such as changing the incident status or assigning an external ticket number.")
 public class IncidentsController {
     private IncidentsDataService incidentsDataService;
     private IncidentImportQueueService incidentImportQueueService;

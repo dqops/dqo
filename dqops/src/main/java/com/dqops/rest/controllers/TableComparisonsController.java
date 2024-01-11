@@ -51,7 +51,7 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/connections")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "TableComparisons", description = "Manages the configuration of table comparisons between tables on the same or different data sources")
+@Api(value = "TableComparisons", description = "Operations for managing the configurations of table comparisons between tables on the same or different data sources")
 public class TableComparisonsController {
     private final UserHomeContextFactory userHomeContextFactory;
     private final HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher;

@@ -52,7 +52,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "Checks", description = "Data quality check definition management")
+@Api(value = "Checks", description = "Data quality check definition management operations for adding/removing/changing custom data quality checks.")
 public class ChecksController {
     private DqoHomeContextFactory dqoHomeContextFactory;
     private UserHomeContextFactory userHomeContextFactory;

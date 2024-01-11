@@ -1,10 +1,11 @@
+# DQOps REST API data_grouping_configurations operations
 Manages data grouping configurations on a table
 
 
 ___
 ## create_table_grouping_configuration
 Creates a new data grouping configuration on a table level
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/data_grouping_configurations/create_table_grouping_configuration.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/data_grouping_configurations/create_table_grouping_configuration.py) to see the source code on GitHub.
 
 
 **POST**
@@ -204,7 +205,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## delete_table_grouping_configuration
 Deletes a data grouping configuration from a table
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/data_grouping_configurations/delete_table_grouping_configuration.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/data_grouping_configurations/delete_table_grouping_configuration.py) to see the source code on GitHub.
 
 
 **DELETE**
@@ -339,7 +340,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## get_table_grouping_configuration
 Returns a model of the data grouping configuration
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/data_grouping_configurations/get_table_grouping_configuration.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/data_grouping_configurations/get_table_grouping_configuration.py) to see the source code on GitHub.
 
 
 **GET**
@@ -492,7 +493,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## get_table_grouping_configurations
 Returns the list of data grouping configurations on a table
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/data_grouping_configurations/get_table_grouping_configurations.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/data_grouping_configurations/get_table_grouping_configurations.py) to see the source code on GitHub.
 
 
 **GET**
@@ -647,7 +648,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## set_table_default_grouping_configuration
 Sets a table&#x27;s grouping configuration as the default or disables data grouping
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/data_grouping_configurations/set_table_default_grouping_configuration.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/data_grouping_configurations/set_table_default_grouping_configuration.py) to see the source code on GitHub.
 
 
 **PATCH**
@@ -778,7 +779,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_table_grouping_configuration
 Updates a data grouping configuration according to the provided model
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/data_grouping_configurations/update_table_grouping_configuration.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/data_grouping_configurations/update_table_grouping_configuration.py) to see the source code on GitHub.
 
 
 **PUT**

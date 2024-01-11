@@ -1,10 +1,11 @@
+# DQOps REST API log_shipping operations
 Log shipping controller that accepts logs sent from a web application or external tools and aggregates them in the local DQOps instance logs.
 
 
 ___
 ## log_debug
 Logs an information message in the server&#x27;s logs as a debug severity log entry.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/log_shipping/log_debug.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/log_shipping/log_debug.py) to see the source code on GitHub.
 
 
 **POST**
@@ -147,7 +148,7 @@ http://localhost:8888/api/logs/debug
 ___
 ## log_error
 Logs an information message in the server&#x27;s logs as an error severity log entry.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/log_shipping/log_error.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/log_shipping/log_error.py) to see the source code on GitHub.
 
 
 **POST**
@@ -290,7 +291,7 @@ http://localhost:8888/api/logs/error
 ___
 ## log_info
 Logs an information message in the server&#x27;s logs as an info severity log entry.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/log_shipping/log_info.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/log_shipping/log_info.py) to see the source code on GitHub.
 
 
 **POST**
@@ -433,7 +434,7 @@ http://localhost:8888/api/logs/info
 ___
 ## log_warn
 Logs an information message in the server&#x27;s logs as a warn severity log entry.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/log_shipping/log_warn.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/log_shipping/log_warn.py) to see the source code on GitHub.
 
 
 **POST**

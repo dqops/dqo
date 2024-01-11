@@ -1,7 +1,5 @@
 # dqo rule command
-
-
-Edit sensor template
+The reference of the **rule** command in DQOps. Edit sensor template
 
 
 

@@ -1,10 +1,11 @@
+# DQOps REST API sensors operations
 Sensors definition management
 
 
 ___
 ## create_sensor
 Creates (adds) a new sensor given sensor information.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensors/create_sensor.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensors/create_sensor.py) to see the source code on GitHub.
 
 
 **POST**
@@ -214,7 +215,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 ___
 ## delete_sensor
 Deletes a custom sensor definition
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensors/delete_sensor.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensors/delete_sensor.py) to see the source code on GitHub.
 
 
 **DELETE**
@@ -334,7 +335,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 ___
 ## get_all_sensors
 Returns a flat list of all sensors available in DQOps, both built-in sensors and user defined or customized sensors.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensors/get_all_sensors.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensors/get_all_sensors.py) to see the source code on GitHub.
 
 
 **GET**
@@ -471,7 +472,7 @@ http://localhost:8888/api/sensors
 ___
 ## get_sensor
 Returns a sensor model
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensors/get_sensor.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensors/get_sensor.py) to see the source code on GitHub.
 
 
 **GET**
@@ -623,7 +624,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 ___
 ## get_sensor_folder_tree
 Returns a tree of all sensors available in DQOps, both built-in sensors and user defined or customized sensors.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensors/get_sensor_folder_tree.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensors/get_sensor_folder_tree.py) to see the source code on GitHub.
 
 
 **GET**
@@ -751,7 +752,7 @@ ___
 ## update_sensor
 Updates an existing sensor, making a custom sensor definition if it is not present. 
 Removes sensor if custom definition is same as Dqo Home sensor
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensors/update_sensor.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensors/update_sensor.py) to see the source code on GitHub.
 
 
 **PUT**

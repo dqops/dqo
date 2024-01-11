@@ -47,7 +47,7 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/connections")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "DataGroupingConfigurations", description = "Manages data grouping configurations on a table")
+@Api(value = "DataGroupingConfigurations", description = "Operations for managing the configuration of data groupings on a table level in DQOps.")
 public class DataGroupingConfigurationsController {
     private UserHomeContextFactory userHomeContextFactory;
 

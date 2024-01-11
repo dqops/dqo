@@ -1,3 +1,6 @@
+# DQOps REST API data_grouping_configurations models reference
+The references of all objects used by [data_grouping_configurations](../operations/data_grouping_configurations.md) REST API operations are listed below.
+
 
 ## DataGroupingConfigurationListModel
 Basic model for data grouping configuration on a table, returned by the rest api.

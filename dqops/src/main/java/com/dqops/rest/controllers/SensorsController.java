@@ -53,7 +53,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "Sensors", description = "Sensors definition management")
+@Api(value = "Sensors", description = "Operations for managing custom data quality sensor definitions in DQOps. The custom sensors are stored in the DQOps user home folder.")
 public class SensorsController {
     private DqoHomeContextFactory dqoHomeContextFactory;
     private UserHomeContextFactory userHomeContextFactory;

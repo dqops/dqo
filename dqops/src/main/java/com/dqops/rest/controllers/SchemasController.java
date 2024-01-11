@@ -55,7 +55,7 @@ import java.util.stream.Stream;
 @RestController
 @RequestMapping("/api/connections")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "Schemas", description = "Schema management")
+@Api(value = "Schemas", description = "Operations for listing imported schemas from monitored data sources. Also provides operations for activating and deactivating multiple checks at once.")
 public class SchemasController {
     private static final Logger LOG = LoggerFactory.getLogger(SchemasController.class);
     private final SchemaService schemaService;

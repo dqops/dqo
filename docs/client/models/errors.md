@@ -1,3 +1,6 @@
+# DQOps REST API errors models reference
+The references of all objects used by [errors](../operations/errors.md) REST API operations are listed below.
+
 
 ## TimePeriodGradient
 Time series gradient type (daily, monthly, quarterly, monthly, weekly, hourly).

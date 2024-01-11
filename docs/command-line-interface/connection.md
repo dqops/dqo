@@ -1,7 +1,5 @@
 # dqo connection command
-
-
-Modify or list connections
+The reference of the **connection** command in DQOps. Modify or list connections
 
 
 

@@ -52,7 +52,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "Rules", description = "Rule management")
+@Api(value = "Rules", description = "Operations for managing custom data quality rule definitions in DQOps. The custom rules are stored in the DQOps user home folder.")
 public class RulesController {
     private DqoHomeContextFactory dqoHomeContextFactory;
     private UserHomeContextFactory userHomeContextFactory;

@@ -1,7 +1,5 @@
 # dqo data command
-
-
-Commands related to the data
+The reference of the **data** command in DQOps. Commands related to the data
 
 
 

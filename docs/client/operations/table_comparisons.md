@@ -1,10 +1,11 @@
+# DQOps REST API table_comparisons operations
 Manages the configuration of table comparisons between tables on the same or different data sources
 
 
 ___
 ## create_table_comparison_configuration
 Creates a new table comparison configuration added to the compared table
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/create_table_comparison_configuration.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/create_table_comparison_configuration.py) to see the source code on GitHub.
 
 
 **POST**
@@ -224,7 +225,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## create_table_comparison_monitoring_daily
 Creates a table comparison configuration using daily monitoring checks
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/create_table_comparison_monitoring_daily.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/create_table_comparison_monitoring_daily.py) to see the source code on GitHub.
 
 
 **POST**
@@ -588,7 +589,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## create_table_comparison_monitoring_monthly
 Creates a table comparison configuration using monthly monitoring checks
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/create_table_comparison_monitoring_monthly.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/create_table_comparison_monitoring_monthly.py) to see the source code on GitHub.
 
 
 **POST**
@@ -952,7 +953,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## create_table_comparison_partitioned_daily
 Creates a table comparison configuration using daily partitioned checks
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/create_table_comparison_partitioned_daily.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/create_table_comparison_partitioned_daily.py) to see the source code on GitHub.
 
 
 **POST**
@@ -1316,7 +1317,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## create_table_comparison_partitioned_monthly
 Creates a table comparison configuration using monthly partitioned checks
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/create_table_comparison_partitioned_monthly.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/create_table_comparison_partitioned_monthly.py) to see the source code on GitHub.
 
 
 **POST**
@@ -1680,7 +1681,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## create_table_comparison_profiling
 Creates a table comparison configuration using profiling checks
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/create_table_comparison_profiling.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/create_table_comparison_profiling.py) to see the source code on GitHub.
 
 
 **POST**
@@ -2044,7 +2045,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## delete_table_comparison_configuration
 Deletes a table comparison configuration from a compared table
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/delete_table_comparison_configuration.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/delete_table_comparison_configuration.py) to see the source code on GitHub.
 
 
 **DELETE**
@@ -2179,7 +2180,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## get_table_comparison_configuration
 Returns a model of the table comparison configuration
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/get_table_comparison_configuration.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/get_table_comparison_configuration.py) to see the source code on GitHub.
 
 
 **GET**
@@ -2342,7 +2343,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## get_table_comparison_configurations
 Returns the list of table comparison configurations on a compared table
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/get_table_comparison_configurations.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/get_table_comparison_configurations.py) to see the source code on GitHub.
 
 
 **GET**
@@ -2367,7 +2368,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
 |[check_type](../models/table_comparisons.md#checktype)|Optional check type filter (profiling, monitoring, partitioned).|[CheckType](../models/table_comparisons.md#checktype)| |
-|[check_time_scale](../models/Common.md#checktimescale)|Optional time scale filter for table comparisons specific to the monitoring and partitioned checks (values: daily or monthly).|[CheckTimeScale](../models/Common.md#checktimescale)| |
+|[check_time_scale](../models/common.md#checktimescale)|Optional time scale filter for table comparisons specific to the monitoring and partitioned checks (values: daily or monthly).|[CheckTimeScale](../models/common.md#checktimescale)| |
 
 
 
@@ -2530,7 +2531,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## get_table_comparison_monitoring_daily
 Returns a model of the table comparison using daily monitoring checks (comparison once a day)
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/get_table_comparison_monitoring_daily.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/get_table_comparison_monitoring_daily.py) to see the source code on GitHub.
 
 
 **GET**
@@ -2724,7 +2725,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## get_table_comparison_monitoring_monthly
 Returns a model of the table comparison using monthly monitoring checks (comparison once a month)
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/get_table_comparison_monitoring_monthly.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/get_table_comparison_monitoring_monthly.py) to see the source code on GitHub.
 
 
 **GET**
@@ -2918,7 +2919,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## get_table_comparison_partitioned_daily
 Returns a model of the table comparison using daily partition checks (comparing day to day)
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/get_table_comparison_partitioned_daily.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/get_table_comparison_partitioned_daily.py) to see the source code on GitHub.
 
 
 **GET**
@@ -3112,7 +3113,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## get_table_comparison_partitioned_monthly
 Returns a model of the table comparison using monthly partition checks (comparing month to month)
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/get_table_comparison_partitioned_monthly.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/get_table_comparison_partitioned_monthly.py) to see the source code on GitHub.
 
 
 **GET**
@@ -3306,7 +3307,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## get_table_comparison_profiling
 Returns a model of the table comparison using profiling checks (comparison at any time)
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/get_table_comparison_profiling.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/get_table_comparison_profiling.py) to see the source code on GitHub.
 
 
 **GET**
@@ -3500,7 +3501,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_table_comparison_configuration
 Updates a table configuration configuration
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/update_table_comparison_configuration.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/update_table_comparison_configuration.py) to see the source code on GitHub.
 
 
 **PUT**
@@ -3725,7 +3726,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_table_comparison_monitoring_daily
 Updates a table comparison checks monitoring daily
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/update_table_comparison_monitoring_daily.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/update_table_comparison_monitoring_daily.py) to see the source code on GitHub.
 
 
 **PUT**
@@ -4094,7 +4095,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_table_comparison_monitoring_monthly
 Updates a table comparison checks monitoring monthly
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/update_table_comparison_monitoring_monthly.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/update_table_comparison_monitoring_monthly.py) to see the source code on GitHub.
 
 
 **PUT**
@@ -4463,7 +4464,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_table_comparison_partitioned_daily
 Updates a table comparison checks partitioned daily (comparing day to day)
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/update_table_comparison_partitioned_daily.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/update_table_comparison_partitioned_daily.py) to see the source code on GitHub.
 
 
 **PUT**
@@ -4832,7 +4833,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_table_comparison_partitioned_monthly
 Updates a table comparison checks partitioned monthly (comparing month to month)
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/update_table_comparison_partitioned_monthly.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/update_table_comparison_partitioned_monthly.py) to see the source code on GitHub.
 
 
 **PUT**
@@ -5201,7 +5202,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_table_comparison_profiling
 Updates a table comparison profiling checks
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/update_table_comparison_profiling.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparisons/update_table_comparison_profiling.py) to see the source code on GitHub.
 
 
 **PUT**

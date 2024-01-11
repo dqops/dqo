@@ -1,37 +1,37 @@
-# models
+# Reference of all models used by DQOps REST API
 
-**This is a list of the models in DQOps REST API Python client broken down by individual controllers.**
+This is a list of the models in DQOps REST API Python client broken down by individual controllers.
 
 
-## Common
+## common
 
 |&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |------------|---------------------------------|
-|[CheckTimeScale](./Common.md#checktimescale)|Enumeration of time scale of monitoring and partitioned data quality checks (daily, monthly, etc.)|
-|[FieldModel](./Common.md#fieldmodel)|Model of a single field that is used to edit a parameter value for a sensor or a rule. Describes the type of the field and the current value.|
-|[RuleParametersModel](./Common.md#ruleparametersmodel)|Model that returns the form definition and the form data to edit parameters (thresholds) for a rule at a single severity level (low, medium, high).|
-|[CheckConfigurationModel](./Common.md#checkconfigurationmodel)|Model containing fundamental configuration of a single data quality check.|
-|[CheckListModel](./Common.md#checklistmodel)|Simplistic model that returns a single data quality check, its name and &quot;configured&quot; flag.|
-|[CheckContainerListModel](./Common.md#checkcontainerlistmodel)|Simplistic model that returns the list of data quality checks, their names, categories and &quot;configured&quot; flag.|
-|[RuleThresholdsModel](./Common.md#rulethresholdsmodel)|Model that returns the form definition and the form data to edit a single rule with all three threshold levels (low, medium, high).|
-|[MonitoringScheduleSpec](./Common.md#monitoringschedulespec)|Monitoring job schedule specification.|
-|[CheckRunScheduleGroup](./Common.md#checkrunschedulegroup)|The run check scheduling group (profiling, daily checks, monthly checks, etc), which identifies the configuration of a schedule (cron expression) used schedule these checks on the job scheduler.|
-|[EffectiveScheduleLevelModel](./Common.md#effectiveschedulelevelmodel)|Enumeration of possible levels at which a schedule could be configured.|
-|[EffectiveScheduleModel](./Common.md#effectiveschedulemodel)|Model of a configured schedule (on connection or table) or schedule override (on check). Describes the CRON expression and the time of the upcoming execution, as well as the duration until this time.|
-|[ScheduleEnabledStatusModel](./Common.md#scheduleenabledstatusmodel)|Enumeration of possible ways a schedule can be configured.|
-|[CommentSpec](./Common.md#commentspec)|Comment entry. Comments are added when a change was made and the change should be recorded in a persisted format.|
-|[CommentsListSpec](./Common.md#commentslistspec)|List of comments.|
-|[CheckSearchFilters](./Common.md#checksearchfilters)|Target data quality checks filter, identifies which checks on which tables and columns should be executed.|
-|[CheckTargetModel](./Common.md#checktargetmodel)|Enumeration of possible targets for check model request result.|
-|[SimilarCheckModel](./Common.md#similarcheckmodel)|Describes a single check that is similar to other checks in other check types.|
-|[CheckModel](./Common.md#checkmodel)|Model that returns the form definition and the form data to edit a single data quality check.|
-|[QualityCategoryModel](./Common.md#qualitycategorymodel)|Model that returns the form definition and the form data to edit all checks within a single category.|
-|[CheckContainerModel](./Common.md#checkcontainermodel)|Model that returns the form definition and the form data to edit all data quality checks divided by categories.|
-|[CheckContainerTypeModel](./Common.md#checkcontainertypemodel)|Model identifying the check type and timescale of checks belonging to a container.|
-|[CheckTemplate](./Common.md#checktemplate)|Model depicting a named data quality check that can potentially be enabled, regardless to its position in hierarchy tree.|
-|[ProviderType](./Common.md#providertype)|Data source provider type (dialect type). We will use lower case names to avoid issues with parsing, even if the enum names are not named following the Java naming convention.|
-|[ConnectionModel](./Common.md#connectionmodel)|Connection model returned by the rest api that is limited only to the basic fields, excluding nested nodes.|
-|[DqoQueueJobId](./Common.md#dqoqueuejobid)|Identifies a single job.|
+|[CheckTimeScale](./common.md#checktimescale)|Enumeration of time scale of monitoring and partitioned data quality checks (daily, monthly, etc.)|
+|[FieldModel](./common.md#fieldmodel)|Model of a single field that is used to edit a parameter value for a sensor or a rule. Describes the type of the field and the current value.|
+|[RuleParametersModel](./common.md#ruleparametersmodel)|Model that returns the form definition and the form data to edit parameters (thresholds) for a rule at a single severity level (low, medium, high).|
+|[CheckConfigurationModel](./common.md#checkconfigurationmodel)|Model containing fundamental configuration of a single data quality check.|
+|[CheckListModel](./common.md#checklistmodel)|Simplistic model that returns a single data quality check, its name and &quot;configured&quot; flag.|
+|[CheckContainerListModel](./common.md#checkcontainerlistmodel)|Simplistic model that returns the list of data quality checks, their names, categories and &quot;configured&quot; flag.|
+|[RuleThresholdsModel](./common.md#rulethresholdsmodel)|Model that returns the form definition and the form data to edit a single rule with all three threshold levels (low, medium, high).|
+|[MonitoringScheduleSpec](./common.md#monitoringschedulespec)|Monitoring job schedule specification.|
+|[CheckRunScheduleGroup](./common.md#checkrunschedulegroup)|The run check scheduling group (profiling, daily checks, monthly checks, etc), which identifies the configuration of a schedule (cron expression) used schedule these checks on the job scheduler.|
+|[EffectiveScheduleLevelModel](./common.md#effectiveschedulelevelmodel)|Enumeration of possible levels at which a schedule could be configured.|
+|[EffectiveScheduleModel](./common.md#effectiveschedulemodel)|Model of a configured schedule (on connection or table) or schedule override (on check). Describes the CRON expression and the time of the upcoming execution, as well as the duration until this time.|
+|[ScheduleEnabledStatusModel](./common.md#scheduleenabledstatusmodel)|Enumeration of possible ways a schedule can be configured.|
+|[CommentSpec](./common.md#commentspec)|Comment entry. Comments are added when a change was made and the change should be recorded in a persisted format.|
+|[CommentsListSpec](./common.md#commentslistspec)|List of comments.|
+|[CheckSearchFilters](./common.md#checksearchfilters)|Target data quality checks filter, identifies which checks on which tables and columns should be executed.|
+|[CheckTargetModel](./common.md#checktargetmodel)|Enumeration of possible targets for check model request result.|
+|[SimilarCheckModel](./common.md#similarcheckmodel)|Describes a single check that is similar to other checks in other check types.|
+|[CheckModel](./common.md#checkmodel)|Model that returns the form definition and the form data to edit a single data quality check.|
+|[QualityCategoryModel](./common.md#qualitycategorymodel)|Model that returns the form definition and the form data to edit all checks within a single category.|
+|[CheckContainerModel](./common.md#checkcontainermodel)|Model that returns the form definition and the form data to edit all data quality checks divided by categories.|
+|[CheckContainerTypeModel](./common.md#checkcontainertypemodel)|Model identifying the check type and timescale of checks belonging to a container.|
+|[CheckTemplate](./common.md#checktemplate)|Model depicting a named data quality check that can potentially be enabled, regardless to its position in hierarchy tree.|
+|[ProviderType](./common.md#providertype)|Data source provider type (dialect type). We will use lower case names to avoid issues with parsing, even if the enum names are not named following the Java naming convention.|
+|[ConnectionModel](./common.md#connectionmodel)|Connection model returned by the rest api that is limited only to the basic fields, excluding nested nodes.|
+|[DqoQueueJobId](./common.md#dqoqueuejobid)|Identifies a single job.|
 
 
 ## check_results
@@ -91,6 +91,7 @@
 |------------|---------------------------------|
 |[AllChecksPatchParameters](./connections.md#allcheckspatchparameters)||
 |[BulkCheckDeactivateParameters](./connections.md#bulkcheckdeactivateparameters)||
+|[CommonColumnModel](./connections.md#commoncolumnmodel)|Dictionary model used for combo boxes to select a column. Returns a column name that exists in any table within a connection (source) and a count of the column occurrence. It is used to find the most common columns.|
 |[ConnectionSpecificationModel](./connections.md#connectionspecificationmodel)|Connection model returned by the rest api.|
 
 

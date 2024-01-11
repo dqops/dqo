@@ -1,10 +1,11 @@
+# DQOps REST API rules operations
 Rule management
 
 
 ___
 ## create_rule
 Creates (adds) a new custom rule given the rule definition.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/rules/create_rule.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/rules/create_rule.py) to see the source code on GitHub.
 
 
 **POST**
@@ -186,7 +187,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 ___
 ## delete_rule
 Deletes a custom rule definition
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/rules/delete_rule.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/rules/delete_rule.py) to see the source code on GitHub.
 
 
 **DELETE**
@@ -306,7 +307,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 ___
 ## get_all_rules
 Returns a flat list of all rules available in DQOps, both built-in rules and user defined or customized rules.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/rules/get_all_rules.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/rules/get_all_rules.py) to see the source code on GitHub.
 
 
 **GET**
@@ -449,7 +450,7 @@ http://localhost:8888/api/rules
 ___
 ## get_rule
 Returns a rule definition
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/rules/get_rule.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/rules/get_rule.py) to see the source code on GitHub.
 
 
 **GET**
@@ -593,7 +594,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 ___
 ## get_rule_folder_tree
 Returns a tree of all rules available in DQOps, both built-in rules and user defined or customized rules.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/rules/get_rule_folder_tree.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/rules/get_rule_folder_tree.py) to see the source code on GitHub.
 
 
 **GET**
@@ -769,7 +770,7 @@ http://localhost:8888/api/definitions/rules
 ___
 ## update_rule
 Updates an existing rule, making a custom rule definition if it is not present
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/rules/update_rule.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/rules/update_rule.py) to see the source code on GitHub.
 
 
 **PUT**

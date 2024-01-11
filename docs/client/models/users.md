@@ -1,3 +1,6 @@
+# DQOps REST API users models reference
+The references of all objects used by [users](../operations/users.md) REST API operations are listed below.
+
 
 ## DqoCloudUserModel
 DQOps Cloud user model - identifies a user in a multi-user DQOps deployment.

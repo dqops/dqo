@@ -1,3 +1,6 @@
+# DQOps REST API sensors models reference
+The references of all objects used by [sensors](../operations/sensors.md) REST API operations are listed below.
+
 
 ## ProviderSensorListModel
 Provider sensor list model that is returned by the REST API.
@@ -8,7 +11,7 @@ Provider sensor list model that is returned by the REST API.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[provider_type](./Common.md#providertype)|Provider type.|[ProviderType](./Common.md#providertype)|
+|[provider_type](./common.md#providertype)|Provider type.|[ProviderType](./common.md#providertype)|
 |custom|This connection specific template is a custom sensor template or was customized by the user.|boolean|
 |built_in|This connection specific template is provided with DQOps as a built-in sensor.|boolean|
 |can_edit|Boolean flag that decides if the current user can update or delete this object.|boolean|
@@ -60,7 +63,7 @@ Provider sensor model returned from REST API.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[provider_type](./Common.md#providertype)|Provider type.|[ProviderType](./Common.md#providertype)|
+|[provider_type](./common.md#providertype)|Provider type.|[ProviderType](./common.md#providertype)|
 |[provider_sensor_definition_spec](../../reference/yaml/ProviderSensorYaml.md#providersensordefinitionspec)|Provider specific sensor definition specification|[ProviderSensorDefinitionSpec](../../reference/yaml/ProviderSensorYaml.md#providersensordefinitionspec)|
 |sql_template|Provider specific Jinja2 SQL template|string|
 |custom|Whether the provider sensor is a User Home provider sensor|boolean|

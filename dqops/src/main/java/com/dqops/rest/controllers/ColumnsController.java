@@ -77,7 +77,7 @@ import java.util.stream.Stream;
 @RestController
 @RequestMapping("/api/connections")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "Columns", description = "Manages columns inside a table")
+@Api(value = "Columns", description = "Operations related to manage the metadata of columns, and managing the configuration of column-level data quality checks.")
 public class ColumnsController {
     private final ColumnService columnService;
     private UserHomeContextFactory userHomeContextFactory;

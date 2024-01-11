@@ -1,10 +1,11 @@
+# DQOps REST API shared_credentials operations
 Shared credentials management for managing credentials that are stored in the shared .credentials folder in the DQOps user&#x27;s home folder.
 
 
 ___
 ## create_shared_credential
 Creates (adds) a new shared credential, which creates a file in the DQOps user&#x27;s home .credentials/ folder named as the credential and with the content that is provided in this call.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/shared_credentials/create_shared_credential.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/shared_credentials/create_shared_credential.py) to see the source code on GitHub.
 
 
 **POST**
@@ -155,7 +156,7 @@ http://localhost:8888/api/credentials
 ___
 ## delete_shared_credential
 Deletes a shared credential file from the DQOps user&#x27;s home .credentials/ folder.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/shared_credentials/delete_shared_credential.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/shared_credentials/delete_shared_credential.py) to see the source code on GitHub.
 
 
 **DELETE**
@@ -275,7 +276,7 @@ http://localhost:8888/api/credentials/{credentialName}
 ___
 ## download_shared_credential
 Downloads a shared credential&#x27;s file
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/shared_credentials/download_shared_credential.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/shared_credentials/download_shared_credential.py) to see the source code on GitHub.
 
 
 **GET**
@@ -399,7 +400,7 @@ http://localhost:8888/api/credentials/{credentialName}/download
 ___
 ## get_all_shared_credentials
 Returns a list of all shared credentials that are present in the DQOps user&#x27;s home .credentials/ folder..
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/shared_credentials/get_all_shared_credentials.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/shared_credentials/get_all_shared_credentials.py) to see the source code on GitHub.
 
 
 **GET**
@@ -533,7 +534,7 @@ http://localhost:8888/api/credentials
 ___
 ## get_shared_credential
 Returns a shared credential content
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/shared_credentials/get_shared_credential.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/shared_credentials/get_shared_credential.py) to see the source code on GitHub.
 
 
 **GET**
@@ -673,7 +674,7 @@ http://localhost:8888/api/credentials/{credentialName}
 ___
 ## update_shared_credential
 Updates an existing shared credential, replacing the credential&#x27;s file content.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/shared_credentials/update_shared_credential.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/shared_credentials/update_shared_credential.py) to see the source code on GitHub.
 
 
 **PUT**

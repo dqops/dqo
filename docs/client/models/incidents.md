@@ -1,3 +1,6 @@
+# DQOps REST API incidents models reference
+The references of all objects used by [incidents](../operations/incidents.md) REST API operations are listed below.
+
 
 ## CheckResultEntryModel
 Detailed results for a single check. Represent one row in the check results table.

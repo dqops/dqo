@@ -1,10 +1,11 @@
+# DQOps REST API connections operations
 Manages connections to monitored data sources
 
 
 ___
 ## bulk_activate_connection_checks
 Activates all named check on this connection in the locations specified by filter
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/bulk_activate_connection_checks.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/bulk_activate_connection_checks.py) to see the source code on GitHub.
 
 
 **PUT**
@@ -271,7 +272,7 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkac
 ___
 ## bulk_deactivate_connection_checks
 Deactivates (deletes) all named check on this connection in the locations specified by filter
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/bulk_deactivate_connection_checks.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/bulk_deactivate_connection_checks.py) to see the source code on GitHub.
 
 
 **PUT**
@@ -454,7 +455,7 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkde
 ___
 ## create_connection
 Creates a new connection
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/create_connection.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/create_connection.py) to see the source code on GitHub.
 
 
 **POST**
@@ -696,7 +697,7 @@ http://localhost:8888/api/connections/{connectionName}
 ___
 ## create_connection_basic
 Creates a new connection given the basic information.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/create_connection_basic.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/create_connection_basic.py) to see the source code on GitHub.
 
 
 **POST**
@@ -719,7 +720,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Basic connection model|[ConnectionModel](../models/Common.md#connectionmodel)| |
+|Basic connection model|[ConnectionModel](../models/common.md#connectionmodel)| |
 
 
 
@@ -1054,7 +1055,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
 ___
 ## delete_connection
 Deletes a connection
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/delete_connection.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/delete_connection.py) to see the source code on GitHub.
 
 
 **DELETE**
@@ -1066,7 +1067,7 @@ http://localhost:8888/api/connections/{connectionName}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[dqo_queue_job_id](../models/Common.md#dqoqueuejobid)||[DqoQueueJobId](../models/Common.md#dqoqueuejobid)|
+|[dqo_queue_job_id](../models/common.md#dqoqueuejobid)||[DqoQueueJobId](../models/common.md#dqoqueuejobid)|
 
 
 
@@ -1189,7 +1190,7 @@ http://localhost:8888/api/connections/{connectionName}
 ___
 ## get_all_connections
 Returns a list of connections (data sources)
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_all_connections.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_all_connections.py) to see the source code on GitHub.
 
 
 **GET**
@@ -1201,7 +1202,7 @@ http://localhost:8888/api/connections
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|connection_model||List[[ConnectionModel](../models/Common.md#connectionmodel)]|
+|connection_model||List[[ConnectionModel](../models/common.md#connectionmodel)]|
 
 
 
@@ -1452,7 +1453,7 @@ http://localhost:8888/api/connections
 ___
 ## get_connection
 Return the full details of a connection given the connection name
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection.py) to see the source code on GitHub.
 
 
 **GET**
@@ -1590,7 +1591,7 @@ http://localhost:8888/api/connections/{connectionName}
 ___
 ## get_connection_basic
 Return the basic details of a connection given the connection name
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection_basic.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection_basic.py) to see the source code on GitHub.
 
 
 **GET**
@@ -1602,7 +1603,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[connection_model](../models/Common.md#connectionmodel)||[ConnectionModel](../models/Common.md#connectionmodel)|
+|[connection_model](../models/common.md#connectionmodel)||[ConnectionModel](../models/common.md#connectionmodel)|
 
 
 
@@ -1772,7 +1773,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
 ___
 ## get_connection_comments
 Return the comments for a connection
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection_comments.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection_comments.py) to see the source code on GitHub.
 
 
 **GET**
@@ -1784,7 +1785,7 @@ http://localhost:8888/api/connections/{connectionName}/comments
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|comment_spec||List[[CommentSpec](../models/Common.md#commentspec)]|
+|comment_spec||List[[CommentSpec](../models/common.md#commentspec)]|
 
 
 
@@ -1920,7 +1921,7 @@ http://localhost:8888/api/connections/{connectionName}/comments
 ___
 ## get_connection_common_columns
 Finds common column names that are used on one or more tables. The list of columns is sorted in descending order by column name.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection_common_columns.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection_common_columns.py) to see the source code on GitHub.
 
 
 **GET**
@@ -1932,7 +1933,7 @@ http://localhost:8888/api/connections/{connectionName}/commoncolumns
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|common_column_model||List[[CommonColumnModel](../models/connections.md#CommonColumnModel)]|
+|common_column_model||List[[CommonColumnModel](../models/connections.md#commoncolumnmodel)]|
 
 
 
@@ -2062,7 +2063,7 @@ http://localhost:8888/api/connections/{connectionName}/commoncolumns
 ___
 ## get_connection_default_grouping_configuration
 Return the default data grouping configuration for a connection
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection_default_grouping_configuration.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection_default_grouping_configuration.py) to see the source code on GitHub.
 
 
 **GET**
@@ -2203,7 +2204,7 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
 ___
 ## get_connection_incident_grouping
 Retrieves the configuration of data quality incident grouping and incident notifications
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection_incident_grouping.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection_incident_grouping.py) to see the source code on GitHub.
 
 
 **GET**
@@ -2351,7 +2352,7 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 ___
 ## get_connection_labels
 Return the labels for a connection
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection_labels.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection_labels.py) to see the source code on GitHub.
 
 
 **GET**
@@ -2487,7 +2488,7 @@ http://localhost:8888/api/connections/{connectionName}/labels
 ___
 ## get_connection_scheduling_group
 Return the schedule for a connection for a scheduling group
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection_scheduling_group.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection_scheduling_group.py) to see the source code on GitHub.
 
 
 **GET**
@@ -2499,7 +2500,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[monitoring_schedule_spec](../models/Common.md#monitoringschedulespec)||[MonitoringScheduleSpec](../models/Common.md#monitoringschedulespec)|
+|[monitoring_schedule_spec](../models/common.md#monitoringschedulespec)||[MonitoringScheduleSpec](../models/common.md#monitoringschedulespec)|
 
 
 
@@ -2509,7 +2510,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
-|[scheduling_group](../models/Common.md#checkrunschedulegroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../models/Common.md#checkrunschedulegroup)|:material-check-bold:|
+|[scheduling_group](../models/common.md#checkrunschedulegroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../models/common.md#checkrunschedulegroup)|:material-check-bold:|
 
 
 
@@ -2630,7 +2631,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 ___
 ## update_connection
 Updates an existing connection
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/update_connection.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/update_connection.py) to see the source code on GitHub.
 
 
 **PUT**
@@ -2872,7 +2873,7 @@ http://localhost:8888/api/connections/{connectionName}
 ___
 ## update_connection_basic
 Updates the basic information of a connection
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/update_connection_basic.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/update_connection_basic.py) to see the source code on GitHub.
 
 
 **PUT**
@@ -2895,7 +2896,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Connection basic details|[ConnectionModel](../models/Common.md#connectionmodel)| |
+|Connection basic details|[ConnectionModel](../models/common.md#connectionmodel)| |
 
 
 
@@ -3230,7 +3231,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
 ___
 ## update_connection_comments
 Updates (replaces) the list of comments of a connection
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/update_connection_comments.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/update_connection_comments.py) to see the source code on GitHub.
 
 
 **PUT**
@@ -3253,7 +3254,7 @@ http://localhost:8888/api/connections/{connectionName}/comments
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|List of comments|List[[CommentSpec](../models/Common.md#commentspec)]| |
+|List of comments|List[[CommentSpec](../models/common.md#commentspec)]| |
 
 
 
@@ -3436,7 +3437,7 @@ http://localhost:8888/api/connections/{connectionName}/comments
 ___
 ## update_connection_default_grouping_configuration
 Updates the default data grouping connection of a connection
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/update_connection_default_grouping_configuration.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/update_connection_default_grouping_configuration.py) to see the source code on GitHub.
 
 
 **PUT**
@@ -3606,7 +3607,7 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
 ___
 ## update_connection_incident_grouping
 Updates (replaces) configuration of incident grouping and notifications on a connection (data source) level.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/update_connection_incident_grouping.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/update_connection_incident_grouping.py) to see the source code on GitHub.
 
 
 **PUT**
@@ -3812,7 +3813,7 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 ___
 ## update_connection_labels
 Updates the list of labels of a connection
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/update_connection_labels.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/update_connection_labels.py) to see the source code on GitHub.
 
 
 **PUT**
@@ -3970,7 +3971,7 @@ http://localhost:8888/api/connections/{connectionName}/labels
 ___
 ## update_connection_scheduling_group
 Updates the schedule of a connection for a scheduling group (named schedule for checks with a similar time series configuration)
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/update_connection_scheduling_group.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/update_connection_scheduling_group.py) to see the source code on GitHub.
 
 
 **PUT**
@@ -3985,7 +3986,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
-|[scheduling_group](../models/Common.md#checkrunschedulegroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../models/Common.md#checkrunschedulegroup)|:material-check-bold:|
+|[scheduling_group](../models/common.md#checkrunschedulegroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../models/common.md#checkrunschedulegroup)|:material-check-bold:|
 
 
 
@@ -3994,7 +3995,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Monitoring schedule definition to store|[MonitoringScheduleSpec](../models/Common.md#monitoringschedulespec)| |
+|Monitoring schedule definition to store|[MonitoringScheduleSpec](../models/common.md#monitoringschedulespec)| |
 
 
 

@@ -1,3 +1,6 @@
+# DQOps REST API tables models reference
+The references of all objects used by [tables](../operations/tables.md) REST API operations are listed below.
+
 
 ## TableComparisonDailyMonitoringChecksSpecMap
 Container of comparison checks for each defined data comparison. The name of the key in this dictionary
@@ -123,10 +126,10 @@ Table list model returned by the rest api that is limited only to the basic fiel
 |has_any_configured_monitoring_checks|True when the table has any monitoring checks configured.|boolean|
 |has_any_configured_partition_checks|True when the table has any partition checks configured.|boolean|
 |partitioning_configuration_missing|True when the table has missing configuration of the &quot;partition_by_column&quot; column, making any partition checks fail when executed.|boolean|
-|[run_checks_job_template](./Common.md#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run all checks within this table.|[CheckSearchFilters](./Common.md#checksearchfilters)|
-|[run_profiling_checks_job_template](./Common.md#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run profiling checks within this table.|[CheckSearchFilters](./Common.md#checksearchfilters)|
-|[run_monitoring_checks_job_template](./Common.md#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run monitoring checks within this table.|[CheckSearchFilters](./Common.md#checksearchfilters)|
-|[run_partition_checks_job_template](./Common.md#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run partition partitioned checks within this table.|[CheckSearchFilters](./Common.md#checksearchfilters)|
+|[run_checks_job_template](./common.md#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run all checks within this table.|[CheckSearchFilters](./common.md#checksearchfilters)|
+|[run_profiling_checks_job_template](./common.md#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run profiling checks within this table.|[CheckSearchFilters](./common.md#checksearchfilters)|
+|[run_monitoring_checks_job_template](./common.md#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run monitoring checks within this table.|[CheckSearchFilters](./common.md#checksearchfilters)|
+|[run_partition_checks_job_template](./common.md#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run partition partitioned checks within this table.|[CheckSearchFilters](./common.md#checksearchfilters)|
 |[collect_statistics_job_template](./jobs.md#statisticscollectorsearchfilters)|Configured parameters for the &quot;collect statistics&quot; job that should be pushed to the job queue in order to run all statistics collectors within this table.|[StatisticsCollectorSearchFilters](./jobs.md#statisticscollectorsearchfilters)|
 |[data_clean_job_template](./jobs.md#deletestoreddataqueuejobparameters)|Configured parameters for the &quot;data clean&quot; job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this table.|[DeleteStoredDataQueueJobParameters](./jobs.md#deletestoreddataqueuejobparameters)|
 |can_edit|Boolean flag that decides if the current user can update or delete this object.|boolean|

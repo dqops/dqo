@@ -75,7 +75,7 @@ import java.util.concurrent.TimeUnit;
 @RestController
 @RequestMapping("/api/jobs")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "Jobs", description = "Jobs management controller that supports starting new jobs, such as running selected data quality checks")
+@Api(value = "Jobs", description = "Jobs management controller that supports starting new jobs, such as running selected data quality checks. Provides access to the job queue for incremental monitoring.")
 @Slf4j
 public class JobsController {
     private DqoQueueJobFactory dqoQueueJobFactory;

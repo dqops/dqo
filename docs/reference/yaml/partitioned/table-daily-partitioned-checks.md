@@ -2,36 +2,6 @@
 The definition of YAML files used by DQOps to configure the data sources, monitored tables, and the configuration of activated data quality checks.
 
 
-## TableComparisonDailyPartitionedChecksSpecMap
-Container of comparison checks for each defined data comparison. The name of the key in this dictionary
- must match a name of a table comparison that is defined on the parent table.
- Contains the daily partitioned comparison checks for each configured reference table.
-
-
-
-
-
-
-
-
-
-The structure of this object is described below
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|self||Dict[string, [TableComparisonDailyPartitionedChecksSpec](./table-daily-partitioned-checks.md#TableComparisonDailyPartitionedChecksSpec)]| | | |
-
-
-
-
-
-
-
-
-
-___
-
-
 ## TableComparisonDailyPartitionedChecksSpec
 Container of built-in comparison (accuracy) checks on a table level that are using a defined comparison to identify the reference table and the data grouping configuration.
  Contains the daily partitioned comparison checks.
@@ -50,6 +20,38 @@ The structure of this object is described below
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[daily_partition_row_count_match](../../../checks/table/comparisons/row-count-match.md)|Verifies that the row count of the tested (parent) table matches the row count of the reference table. Compares each group of data with a GROUP BY clause on the time period (the daily partition) and all other data grouping columns. Stores the most recent captured value for each daily partition that was analyzed.|[TableComparisonRowCountMatchCheckSpec](../../../checks/table/comparisons/row-count-match.md)| | | |
 |[custom_checks](../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)| | | |
+
+
+
+
+
+
+
+
+
+___
+
+
+## TableDailyPartitionedCheckCategoriesSpec
+Container of table level daily partitioned checks. Contains categories of daily partitioned checks.
+
+
+
+
+
+
+
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[volume](./table-daily-partitioned-checks.md#TableVolumeDailyPartitionedChecksSpec)|Volume daily partitioned data quality checks that verify the quality of every day of data separately|[TableVolumeDailyPartitionedChecksSpec](./table-daily-partitioned-checks.md#TableVolumeDailyPartitionedChecksSpec)| | | |
+|[timeliness](./table-daily-partitioned-checks.md#TableTimelinessDailyPartitionedChecksSpec)|Daily partitioned timeliness checks|[TableTimelinessDailyPartitionedChecksSpec](./table-daily-partitioned-checks.md#TableTimelinessDailyPartitionedChecksSpec)| | | |
+|[custom_sql](./table-daily-partitioned-checks.md#TableCustomSqlDailyPartitionedChecksSpec)|Custom SQL daily partitioned data quality checks that verify the quality of every day of data separately|[TableCustomSqlDailyPartitionedChecksSpec](./table-daily-partitioned-checks.md#TableCustomSqlDailyPartitionedChecksSpec)| | | |
+|[comparisons](./table-daily-partitioned-checks.md#TableComparisonDailyPartitionedChecksSpecMap)|Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[TableComparisonDailyPartitionedChecksSpecMap](./table-daily-partitioned-checks.md#TableComparisonDailyPartitionedChecksSpecMap)| | | |
+|[custom](../profiling/table-profiling-checks.md#CustomCheckSpecMap)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](../profiling/table-profiling-checks.md#CustomCheckSpecMap)| | | |
 
 
 
@@ -93,8 +95,10 @@ The structure of this object is described below
 ___
 
 
-## TableVolumeDailyPartitionedChecksSpec
-Container of table level date partitioned volume data quality checks.
+## TableComparisonDailyPartitionedChecksSpecMap
+Container of comparison checks for each defined data comparison. The name of the key in this dictionary
+ must match a name of a table comparison that is defined on the parent table.
+ Contains the daily partitioned comparison checks for each configured reference table.
 
 
 
@@ -108,13 +112,7 @@ The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[daily_partition_row_count](../../../checks/table/volume/row-count.md)|Verifies that each daily partition in the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the partition is not empty. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.|[TableRowCountCheckSpec](../../../checks/table/volume/row-count.md)| | | |
-|[daily_partition_row_count_anomaly](../../../checks/table/volume/row-count-anomaly.md)|Verifies that the total row count of the tested table is within a percentile from measurements made during the last 90 days.|[TableRowCountAnomalyStationaryPartitionCheckSpec](../../../checks/table/volume/row-count-anomaly.md)| | | |
-|[daily_partition_row_count_change](../../../checks/table/volume/row-count-change.md)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.|[TableRowCountChangeCheckSpec](../../../checks/table/volume/row-count-change.md)| | | |
-|[daily_partition_row_count_change_1_day](../../../checks/table/volume/row-count-change-1-day.md)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from yesterday. Allows for exact match to readouts from yesterday or past readouts lookup.|[TableRowCountChange1DayCheckSpec](../../../checks/table/volume/row-count-change-1-day.md)| | | |
-|[daily_partition_row_count_change_7_days](../../../checks/table/volume/row-count-change-7-days.md)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last week. Allows for exact match to readouts from 7 days ago or past readouts lookup.|[TableRowCountChange7DaysCheckSpec](../../../checks/table/volume/row-count-change-7-days.md)| | | |
-|[daily_partition_row_count_change_30_days](../../../checks/table/volume/row-count-change-30-days.md)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last month. Allows for exact match to readouts from 30 days ago or past readouts lookup.|[TableRowCountChange30DaysCheckSpec](../../../checks/table/volume/row-count-change-30-days.md)| | | |
-|[custom_checks](../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)| | | |
+|self||Dict[string, [TableComparisonDailyPartitionedChecksSpec](./table-daily-partitioned-checks.md#TableComparisonDailyPartitionedChecksSpec)]| | | |
 
 
 
@@ -159,8 +157,8 @@ The structure of this object is described below
 ___
 
 
-## TableDailyPartitionedCheckCategoriesSpec
-Container of table level daily partitioned checks. Contains categories of daily partitioned checks.
+## TableVolumeDailyPartitionedChecksSpec
+Container of table level date partitioned volume data quality checks.
 
 
 
@@ -174,11 +172,13 @@ The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[volume](./table-daily-partitioned-checks.md#TableVolumeDailyPartitionedChecksSpec)|Volume daily partitioned data quality checks that verify the quality of every day of data separately|[TableVolumeDailyPartitionedChecksSpec](./table-daily-partitioned-checks.md#TableVolumeDailyPartitionedChecksSpec)| | | |
-|[timeliness](./table-daily-partitioned-checks.md#TableTimelinessDailyPartitionedChecksSpec)|Daily partitioned timeliness checks|[TableTimelinessDailyPartitionedChecksSpec](./table-daily-partitioned-checks.md#TableTimelinessDailyPartitionedChecksSpec)| | | |
-|[custom_sql](./table-daily-partitioned-checks.md#TableCustomSqlDailyPartitionedChecksSpec)|Custom SQL daily partitioned data quality checks that verify the quality of every day of data separately|[TableCustomSqlDailyPartitionedChecksSpec](./table-daily-partitioned-checks.md#TableCustomSqlDailyPartitionedChecksSpec)| | | |
-|[comparisons](./table-daily-partitioned-checks.md#TableComparisonDailyPartitionedChecksSpecMap)|Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[TableComparisonDailyPartitionedChecksSpecMap](./table-daily-partitioned-checks.md#TableComparisonDailyPartitionedChecksSpecMap)| | | |
-|[custom](../profiling/table-profiling-checks.md#CustomCheckSpecMap)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](../profiling/table-profiling-checks.md#CustomCheckSpecMap)| | | |
+|[daily_partition_row_count](../../../checks/table/volume/row-count.md)|Verifies that each daily partition in the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the partition is not empty. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.|[TableRowCountCheckSpec](../../../checks/table/volume/row-count.md)| | | |
+|[daily_partition_row_count_anomaly](../../../checks/table/volume/row-count-anomaly.md)|Verifies that the total row count of the tested table is within a percentile from measurements made during the last 90 days.|[TableRowCountAnomalyStationaryPartitionCheckSpec](../../../checks/table/volume/row-count-anomaly.md)| | | |
+|[daily_partition_row_count_change](../../../checks/table/volume/row-count-change.md)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.|[TableRowCountChangeCheckSpec](../../../checks/table/volume/row-count-change.md)| | | |
+|[daily_partition_row_count_change_1_day](../../../checks/table/volume/row-count-change-1-day.md)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from yesterday. Allows for exact match to readouts from yesterday or past readouts lookup.|[TableRowCountChange1DayCheckSpec](../../../checks/table/volume/row-count-change-1-day.md)| | | |
+|[daily_partition_row_count_change_7_days](../../../checks/table/volume/row-count-change-7-days.md)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last week. Allows for exact match to readouts from 7 days ago or past readouts lookup.|[TableRowCountChange7DaysCheckSpec](../../../checks/table/volume/row-count-change-7-days.md)| | | |
+|[daily_partition_row_count_change_30_days](../../../checks/table/volume/row-count-change-30-days.md)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last month. Allows for exact match to readouts from 30 days ago or past readouts lookup.|[TableRowCountChange30DaysCheckSpec](../../../checks/table/volume/row-count-change-30-days.md)| | | |
+|[custom_checks](../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)| | | |
 
 
 

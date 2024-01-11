@@ -1,6 +1,5 @@
-# operations
-
-**This is a list of the operations in DQOps REST API Python client broken down by individual controllers.**
+# Reference of all operations used by DQOps REST API
+This is a list of the operations in DQOps REST API Python client broken down by individual groups of operations.
 
 
 ## check_results
@@ -220,23 +219,23 @@ Data quality incidents controller that supports loading incidents and changing t
 ## jobs
 Jobs management controller that supports starting new jobs, such as running selected data quality checks
 
-|&nbsp;Operation&nbsp;name&nbsp;|&nbsp;HTTP&nbsp;call&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
-|----------------|------|---------------------------------|
-|[cancel_job](./jobs.md#cancel_job)|DELETE|Cancels a running job|
-|[collect_statistics_on_data_groups](./jobs.md#collect_statistics_on_data_groups)|POST|Starts a new background job that will run selected data statistics collectors on tables, calculating separate metric for each data grouping|
-|[collect_statistics_on_table](./jobs.md#collect_statistics_on_table)|POST|Starts a new background job that will run selected data statistics collectors on a whole table|
-|[delete_stored_data](./jobs.md#delete_stored_data)|POST|Starts a new background job that will delete stored data about check results, sensor readouts etc.|
-|[get_all_jobs](./jobs.md#get_all_jobs)|GET|Retrieves a list of all queued and recently finished jobs.|
-|[get_job](./jobs.md#get_job)|GET|Retrieves the current status of a single job, identified by a job id.|
-|[get_job_changes_since](./jobs.md#get_job_changes_since)|GET|Retrieves an incremental list of job changes (new jobs or job status changes)|
-|[import_tables](./jobs.md#import_tables)|POST|Starts a new background job that will import selected tables.|
-|[is_cron_scheduler_running](./jobs.md#is_cron_scheduler_running)|GET|Checks if the DQOps internal CRON scheduler is running and processing jobs scheduled using cron expressions.|
-|[run_checks](./jobs.md#run_checks)|POST|Starts a new background job that will run selected data quality checks|
-|[start_cron_scheduler](./jobs.md#start_cron_scheduler)|POST|Starts the job scheduler that runs monitoring jobs that are scheduled by assigning cron expressions.|
-|[stop_cron_scheduler](./jobs.md#stop_cron_scheduler)|POST|Stops the job scheduler that runs monitoring jobs that are scheduled by assigning cron expressions.|
-|[synchronize_folders](./jobs.md#synchronize_folders)|POST|Starts multiple file synchronization jobs that will synchronize files from selected DQOps User home folders to the DQOps Cloud. The default synchronization mode is a full synchronization (upload local files, download new files from the cloud).|
-|[wait_for_job](./jobs.md#wait_for_job)|GET|Waits for a job to finish. Returns the status of a finished job or a current state of a job that is still running, but the wait timeout elapsed.|
-|[wait_for_run_checks_job](./jobs.md#wait_for_run_checks_job)|GET|Waits for a job to finish. Returns the status of a finished job or a current state of a job that is still running, but the wait timeout elapsed.|
+| &nbsp;Operation&nbsp;name&nbsp;                                                  |&nbsp;HTTP&nbsp;call&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|----------------------------------------------------------------------------------|------|---------------------------------|
+| [cancel_job](./jobs.md#cancel_job)                                               |DELETE|Cancels a running job|
+| [collect_statistics_on_data_groups](./jobs.md#collect_statistics_on_data_groups) |POST|Starts a new background job that will run selected data statistics collectors on tables, calculating separate metric for each data grouping|
+| [collect_statistics_on_table](./jobs.md#collect_statistics_on_table)             |POST|Starts a new background job that will run selected data statistics collectors on a whole table|
+| [delete_stored_data](./jobs.md#delete_stored_data)                               |POST|Starts a new background job that will delete stored data about check results, sensor readouts etc.|
+| [get_all_jobs](./jobs.md#get_all_jobs)                                           |GET|Retrieves a list of all queued and recently finished jobs.|
+| [get_job](./jobs.md#get_job)                                                     |GET|Retrieves the current status of a single job, identified by a job id.|
+| [get_job_changes_since](./jobs.md#get_job_changes_since)                         |GET|Retrieves an incremental list of job changes (new jobs or job status changes)|
+| [import_tables](./jobs.md#import_tables)                                         |POST|Starts a new background job that will import selected tables.|
+| [is_cron_scheduler_running](./jobs.md#is_cron_scheduler_running)                 |GET|Checks if the DQOps internal CRON scheduler is running and processing jobs scheduled using cron expressions.|
+| [run_checks](./jobs.md#run_checks)                                               |POST|Starts a new background job that will run selected data quality checks|
+| [start_cron_scheduler](./jobs.md#start_cron_scheduler)                           |POST|Starts the job scheduler that runs monitoring jobs that are scheduled by assigning cron expressions.|
+| [stop_cron_scheduler](./jobs.md#stop_cron_scheduler)                             |POST|Stops the job scheduler that runs monitoring jobs that are scheduled by assigning cron expressions.|
+| [synchronize_folders](./jobs.md#synchronize_folders)                             |POST|Starts multiple file synchronization jobs that will synchronize files from selected DQOps User home folders to the DQOps Cloud. The default synchronization mode is a full synchronization (upload local files, download new files from the cloud).|
+| [wait_for_job](./jobs.md#wait_for_job)                                           |GET|Waits for a job to finish. Returns the status of a finished job or a current state of a job that is still running, but the wait timeout elapsed.|
+| [wait_for_run_checks_job](./jobs.md#wait_for_run_checks_job)                     |GET|Waits for a job to finish. Returns the status of a finished job or a current state of a job that is still running, but the wait timeout elapsed.|
 
 
 ## log_shipping

@@ -1,7 +1,5 @@
 # dqo scheduler command
-
-
-Controls the repeating task scheduler by starting, stopping or running a foreground job scheduler.
+The reference of the **scheduler** command in DQOps. Controls the repeating task scheduler by starting, stopping or running a foreground job scheduler.
 
 
 

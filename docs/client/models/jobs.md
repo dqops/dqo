@@ -1,3 +1,6 @@
+# DQOps REST API jobs models reference
+The references of all objects used by [jobs](../operations/jobs.md) REST API operations are listed below.
+
 
 ## CollectStatisticsResult
 
@@ -40,7 +43,7 @@ ___
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[job_id](./Common.md#dqoqueuejobid)|Job id that identifies a job that was started on the DQOps job queue.|[DqoQueueJobId](./Common.md#dqoqueuejobid)|
+|[job_id](./common.md#dqoqueuejobid)|Job id that identifies a job that was started on the DQOps job queue.|[DqoQueueJobId](./common.md#dqoqueuejobid)|
 |[result](#collectstatisticsresult)|Optional result object that is returned only when the wait parameter was true and the &quot;collect statistics&quot; job has finished. Contains the summary result of collecting basic statistics, including the number of statistics collectors (queries) that managed to capture metrics about the table(s). |[CollectStatisticsResult](#collectstatisticsresult)|
 |[status](#dqojobstatus)|Job status|[DqoJobStatus](#dqojobstatus)|
 
@@ -151,7 +154,7 @@ Object returned from the operation that queues a &quot;delete stored data&quot; 
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[job_id](./Common.md#dqoqueuejobid)|Job id that identifies a job that was started on the DQOps job queue.|[DqoQueueJobId](./Common.md#dqoqueuejobid)|
+|[job_id](./common.md#dqoqueuejobid)|Job id that identifies a job that was started on the DQOps job queue.|[DqoQueueJobId](./common.md#dqoqueuejobid)|
 |[result](#deletestoreddataresult)|Optional result object that is returned only when the wait parameter was true and the &quot;delete stored data&quot; job has finished. Contains a list of partitions that were deleted or updated.|[DeleteStoredDataResult](#deletestoreddataresult)|
 |[status](./jobs.md#dqojobstatus)|Job status|[DqoJobStatus](./jobs.md#dqojobstatus)|
 
@@ -292,7 +295,7 @@ ___
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_search_filters](./Common.md#checksearchfilters)|Target data quality checks filter.|[CheckSearchFilters](./Common.md#checksearchfilters)|
+|[check_search_filters](./common.md#checksearchfilters)|Target data quality checks filter.|[CheckSearchFilters](./common.md#checksearchfilters)|
 |[time_window_filter](#timewindowfilterparameters)|Optional time window filter, configures the time range that is analyzed or the number of recent days/months to analyze for day or month partitioned data.|[TimeWindowFilterParameters](#timewindowfilterparameters)|
 |dummy_execution|Set the value to true when the data quality checks should be executed in a dummy mode (without running checks on the target systems and storing the results). Only the jinja2 sensors will be rendered.|boolean|
 |[run_checks_result](#runchecksresult)|The result of running the check, updated when the run checks job finishes. Contains the count of executed checks.|[RunChecksResult](#runchecksresult)|
@@ -312,7 +315,7 @@ ___
 |connection|The name of the target connection.|string|
 |max_jobs_per_connection|The maximum number of concurrent &#x27;run checks on table&#x27; jobs that could be run on this connection. Limits the number of concurrent jobs.|integer|
 |[table](./columns.md#physicaltablename)|The full physical name (schema.table) of the target table.|[PhysicalTableName](./columns.md#physicaltablename)|
-|[check_search_filters](./Common.md#checksearchfilters)|Target data quality checks filter.|[CheckSearchFilters](./Common.md#checksearchfilters)|
+|[check_search_filters](./common.md#checksearchfilters)|Target data quality checks filter.|[CheckSearchFilters](./common.md#checksearchfilters)|
 |[time_window_filter](./jobs.md#timewindowfilterparameters)|Optional time window filter, configures the time range that is analyzed or the number of recent days/months to analyze for day or month partitioned data.|[TimeWindowFilterParameters](./jobs.md#timewindowfilterparameters)|
 |dummy_execution|Set the value to true when the data quality checks should be executed in a dummy mode (without running checks on the target systems and storing the results). Only the jinja2 sensors will be rendered.|boolean|
 |[run_checks_result](./jobs.md#runchecksresult)|The result of running the check, updated when the run checks job finishes. Contains the count of executed checks.|[RunChecksResult](./jobs.md#runchecksresult)|
@@ -466,7 +469,7 @@ Model object returned to UI that has typed fields for each supported job paramet
 |---------------|---------------------------------|-----------|
 |[synchronize_root_folder_parameters](#synchronizerootfolderdqoqueuejobparameters)||[SynchronizeRootFolderDqoQueueJobParameters](#synchronizerootfolderdqoqueuejobparameters)|
 |[synchronize_multiple_folders_parameters](./jobs.md#SynchronizeMultipleFoldersDqoQueueJobParameters)||[SynchronizeMultipleFoldersDqoQueueJobParameters](./jobs.md#SynchronizeMultipleFoldersDqoQueueJobParameters)|
-|[run_scheduled_checks_parameters](./Common.md#monitoringschedulespec)||[MonitoringScheduleSpec](./Common.md#monitoringschedulespec)|
+|[run_scheduled_checks_parameters](./common.md#monitoringschedulespec)||[MonitoringScheduleSpec](./common.md#monitoringschedulespec)|
 |[run_checks_parameters](./jobs.md#RunChecksParameters)||[RunChecksParameters](./jobs.md#RunChecksParameters)|
 |[run_checks_on_table_parameters](#runchecksontableparameters)||[RunChecksOnTableParameters](#runchecksontableparameters)|
 |[collect_statistics_parameters](#collectstatisticsqueuejobparameters)||[CollectStatisticsQueueJobParameters](#collectstatisticsqueuejobparameters)|
@@ -488,7 +491,7 @@ Model of a single job that was scheduled or has finished. It is stored in the jo
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[job_id](./Common.md#dqoqueuejobid)||[DqoQueueJobId](./Common.md#dqoqueuejobid)|
+|[job_id](./common.md#dqoqueuejobid)||[DqoQueueJobId](./common.md#dqoqueuejobid)|
 |[job_type](#dqojobtype)||[DqoJobType](#dqojobtype)|
 |[parameters](#dqojobentryparametersmodel)||[DqoJobEntryParametersModel](#dqojobentryparametersmodel)|
 |[status](./jobs.md#dqojobstatus)||[DqoJobStatus](./jobs.md#dqojobstatus)|
@@ -507,7 +510,7 @@ Describes a change to the job status or the job queue (such as a new job was add
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |[status](./jobs.md#dqojobstatus)||[DqoJobStatus](./jobs.md#dqojobstatus)|
-|[job_id](./Common.md#dqoqueuejobid)||[DqoQueueJobId](./Common.md#dqoqueuejobid)|
+|[job_id](./common.md#dqoqueuejobid)||[DqoQueueJobId](./common.md#dqoqueuejobid)|
 |change_sequence||long|
 |[updated_model](./jobs.md#dqojobhistoryentrymodel)||[DqoJobHistoryEntryModel](./jobs.md#dqojobhistoryentrymodel)|
 
@@ -607,7 +610,7 @@ Object returned from the operation that queues a &quot;import tables&quot; job. 
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[job_id](./Common.md#dqoqueuejobid)|Job id that identifies a job that was started on the DQOps job queue.|[DqoQueueJobId](./Common.md#dqoqueuejobid)|
+|[job_id](./common.md#dqoqueuejobid)|Job id that identifies a job that was started on the DQOps job queue.|[DqoQueueJobId](./common.md#dqoqueuejobid)|
 |[result](#importtablesresult)|Optional result object that is returned only when the wait parameter was true and the &quot;import tables&quot; job has finished. Contains the summary result of importing tables, including table and column schemas of imported tables. |[ImportTablesResult](#importtablesresult)|
 |[status](./jobs.md#dqojobstatus)|Job status|[DqoJobStatus](./jobs.md#dqojobstatus)|
 
@@ -623,7 +626,7 @@ ___
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[job_id](./Common.md#dqoqueuejobid)|Job id that identifies a job that was started on the DQOps job queue.|[DqoQueueJobId](./Common.md#dqoqueuejobid)|
+|[job_id](./common.md#dqoqueuejobid)|Job id that identifies a job that was started on the DQOps job queue.|[DqoQueueJobId](./common.md#dqoqueuejobid)|
 |[result](./jobs.md#runchecksresult)|Optional result object that is returned only when the wait parameter was true and the &quot;run checks&quot; job has finished. Contains the summary result of the data quality checks executed, including the severity of the most severe issue detected. The calling code (the data pipeline) can decide if further processing should be continued.|[RunChecksResult](./jobs.md#runchecksresult)|
 |[status](./jobs.md#dqojobstatus)|Job status|[DqoJobStatus](./jobs.md#dqojobstatus)|
 
@@ -640,7 +643,7 @@ Object returned from the operation that queues a &quot;synchronize multiple fold
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[job_id](./Common.md#dqoqueuejobid)|Job id that identifies a job that was started on the DQOps job queue.|[DqoQueueJobId](./Common.md#dqoqueuejobid)|
+|[job_id](./common.md#dqoqueuejobid)|Job id that identifies a job that was started on the DQOps job queue.|[DqoQueueJobId](./common.md#dqoqueuejobid)|
 |[status](./jobs.md#dqojobstatus)|Job status|[DqoJobStatus](./jobs.md#dqojobstatus)|
 
 

@@ -45,7 +45,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/connections")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "CheckResultsOverview", description = "Returns the overview of the recently executed checks on tables and columns.")
+@Api(value = "CheckResultsOverview", description = "Returns the overview of the recently executed checks on tables and columns, returning a summary of the last 5 runs.")
 public class CheckResultsOverviewController {
     private UserHomeContextFactory userHomeContextFactory;
     private CheckResultsDataService checkResultsDataService;

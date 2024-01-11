@@ -1,7 +1,5 @@
 # dqo cloud command
-
-
-Manage the DQOps Cloud account. This group of commands supports connecting this DQOps instance to a DQOps Cloud account, changing the password and synchronizing local data with the Data Quality Data Warehouse hosted by DQOps Cloud
+The reference of the **cloud** command in DQOps. Manage the DQOps Cloud account. This group of commands supports connecting this DQOps instance to a DQOps Cloud account, changing the password and synchronizing local data with the Data Quality Data Warehouse hosted by DQOps Cloud
 
 
 

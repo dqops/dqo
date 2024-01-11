@@ -46,7 +46,7 @@ import java.util.stream.Stream;
 @RestController
 @RequestMapping("/api/")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "Users", description = "User management service")
+@Api(value = "Users", description = "Operations for managing access for DQOps users in a multi-user installations. User management is supported in the TEAM and ENTERPRISE licences.")
 public class UsersController {
     private UserManagementService userManagementService;
 

@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 
 public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationModelFactory {
 
-    public static final String SHARED_MODELS_IDENTIFIER = "Common";
+    public static final String SHARED_MODELS_IDENTIFIER = "common";
 
     private final DocumentationReflectionService documentationReflectionService = new DocumentationReflectionServiceImpl(new ReflectionServiceImpl());
     private static final CommentFormatter commentFormatter = new CommentFormatter();
@@ -55,9 +55,12 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
 
         Map<String, ComponentModel> componentModelMap = componentModels.stream().collect(Collectors.toMap(ComponentModel::getClassName, Function.identity()));
 
-        return generateModelsSuperiorObjectDocumentationModel(SHARED_MODELS_IDENTIFIER + ".md",
-                sharedModels,
-                componentModelMap);
+        ModelsSuperiorObjectDocumentationModel modelsSuperiorObjectDocumentationModel =
+                generateModelsSuperiorObjectDocumentationModel(SHARED_MODELS_IDENTIFIER + ".md",
+                    "common",
+                    sharedModels,
+                    componentModelMap);
+        return modelsSuperiorObjectDocumentationModel;
     }
 
     @Override
@@ -87,7 +90,7 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
             controllerModels.sort(Comparator.comparing(ComponentModel::getClassName));
             controllerModels.addAll(subModels);
             ModelsSuperiorObjectDocumentationModel controllerDocumentation = generateModelsSuperiorObjectDocumentationModel(
-                    controllerName + ".md", controllerModels, componentModelMap);
+                    controllerName + ".md", controllerName, controllerModels, componentModelMap);
             documentationModels.add(controllerDocumentation);
         }
         documentationModels.sort(
@@ -170,6 +173,7 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
     }
 
     private ModelsSuperiorObjectDocumentationModel generateModelsSuperiorObjectDocumentationModel(String destinationPath,
+                                                                                                  String modelGroupName,
                                                                                                   Collection<ComponentModel> componentModels,
                                                                                                   Map<String, ComponentModel> componentModelMap) {
         List<ComponentModel> topLevelModels = componentModels.stream()
@@ -192,6 +196,7 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
         ModelsSuperiorObjectDocumentationModel modelsSuperiorObjectDocumentationModel = new ModelsSuperiorObjectDocumentationModel();
         modelsSuperiorObjectDocumentationModel.setClassObjects(renderedObjectsList);
         modelsSuperiorObjectDocumentationModel.setLocationFilePath(destinationPath);
+        modelsSuperiorObjectDocumentationModel.setModelsGroupName(modelGroupName);
         return modelsSuperiorObjectDocumentationModel;
     }
 

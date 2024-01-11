@@ -47,7 +47,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/connections")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "SensorReadouts", description = "Returns the complete sensor readouts of executed checks on tables and columns.")
+@Api(value = "SensorReadouts", description = "Operations that are retrieving the data quality sensor readouts of executed checks on tables and columns.")
 public class SensorReadoutsController {
     private UserHomeContextFactory userHomeContextFactory;
     private SensorReadoutsDataService sensorReadoutsDataService;

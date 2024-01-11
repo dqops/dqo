@@ -1,10 +1,11 @@
+# DQOps REST API dashboards operations
 Provides access to data quality dashboards
 
 
 ___
 ## get_all_dashboards
 Returns a list of root folders with dashboards
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_all_dashboards.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_all_dashboards.py) to see the source code on GitHub.
 
 
 **GET**
@@ -129,7 +130,7 @@ http://localhost:8888/api/dashboards
 ___
 ## get_dashboard_level_1
 Returns a single dashboard in the tree of folder with a temporary authenticated url
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_dashboard_level_1.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_dashboard_level_1.py) to see the source code on GitHub.
 
 
 **GET**
@@ -271,7 +272,7 @@ http://localhost:8888/api/dashboards/{folder}/{dashboardName}
 ___
 ## get_dashboard_level_2
 Returns a single dashboard in the tree of folders with a temporary authenticated url
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_dashboard_level_2.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_dashboard_level_2.py) to see the source code on GitHub.
 
 
 **GET**
@@ -418,7 +419,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}
 ___
 ## get_dashboard_level_3
 Returns a single dashboard in the tree of folders with a temporary authenticated url
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_dashboard_level_3.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_dashboard_level_3.py) to see the source code on GitHub.
 
 
 **GET**
@@ -570,7 +571,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardNam
 ___
 ## get_dashboard_level_4
 Returns a single dashboard in the tree of folders with a temporary authenticated url
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_dashboard_level_4.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_dashboard_level_4.py) to see the source code on GitHub.
 
 
 **GET**
@@ -727,7 +728,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{da
 ___
 ## get_dashboard_level_5
 Returns a single dashboard in the tree of folders with a temporary authenticated url
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_dashboard_level_5.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_dashboard_level_5.py) to see the source code on GitHub.
 
 
 **GET**

@@ -45,7 +45,7 @@ The following steps are performed by the DQOps engine to run a data quality chec
      the target table and match the target checks by name, type, time scale or a column name.
      DQOps accesses the *DQOps user home* folder, reads all YAML files and finds the list of checks that are selected.
 
-     Please read the reference of the [CheckSearchFilters](../../client/models/Common.md#checksearchfilters)
+     Please read the reference of the [CheckSearchFilters](../../client/models/common.md#checksearchfilters)
      parameter that is passed to the [run checks](../../client/operations/jobs.md#run_checks) operation
      when using the DQOps Python client or running data quality checks using a REST API.
 

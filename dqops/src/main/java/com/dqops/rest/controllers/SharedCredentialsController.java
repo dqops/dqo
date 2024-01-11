@@ -52,7 +52,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "SharedCredentials", description = "Shared credentials management for managing credentials that are stored in the shared .credentials folder in the DQOps user's home folder.")
+@Api(value = "SharedCredentials", description = "Operations for managing shared credentials in DQOps. Credentials that are stored in the shared .credentials folder in the DQOps user's home folder.")
 public class SharedCredentialsController {
     private UserHomeContextFactory userHomeContextFactory;
 

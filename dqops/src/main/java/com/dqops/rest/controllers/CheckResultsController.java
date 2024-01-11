@@ -51,7 +51,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/connections")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "CheckResults", description = "Returns the complete results of executed checks on tables and columns.")
+@Api(value = "CheckResults", description = "Returns all the data quality check results of executed checks on tables and columns.")
 public class CheckResultsController {
     private UserHomeContextFactory userHomeContextFactory;
     private CheckResultsDataService checkResultsDataService;

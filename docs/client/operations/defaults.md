@@ -1,10 +1,11 @@
+# DQOps REST API defaults operations
 Default settings management for configuring the default data quality checks that are configured for all imported tables and columns.
 
 
 ___
 ## get_default_data_observability_daily_monitoring_column_checks
 Returns UI model to show and edit the default configuration of the daily monitoring (Data Observability and monitoring) checks that are configured for all imported columns on a column level.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/get_default_data_observability_daily_monitoring_column_checks.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/get_default_data_observability_daily_monitoring_column_checks.py) to see the source code on GitHub.
 
 
 **GET**
@@ -16,7 +17,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../models/Common.md#checkcontainermodel)||[CheckContainerModel](../models/Common.md#checkcontainermodel)|
+|[check_container_model](../models/common.md#checkcontainermodel)||[CheckContainerModel](../models/common.md#checkcontainermodel)|
 
 
 
@@ -152,7 +153,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 ___
 ## get_default_data_observability_daily_monitoring_table_checks
 Returns UI model to show and edit the default configuration of the daily monitoring (Data Observability and monitoring) checks that are configured for all imported tables on a table level.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/get_default_data_observability_daily_monitoring_table_checks.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/get_default_data_observability_daily_monitoring_table_checks.py) to see the source code on GitHub.
 
 
 **GET**
@@ -164,7 +165,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../models/Common.md#checkcontainermodel)||[CheckContainerModel](../models/Common.md#checkcontainermodel)|
+|[check_container_model](../models/common.md#checkcontainermodel)||[CheckContainerModel](../models/common.md#checkcontainermodel)|
 
 
 
@@ -300,7 +301,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 ___
 ## get_default_data_observability_monthly_monitoring_column_checks
 Returns UI model to show and edit the default configuration of the monthly monitoring (Data Observability end of month scores) checks that are configured for all imported columns on a column level.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/get_default_data_observability_monthly_monitoring_column_checks.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/get_default_data_observability_monthly_monitoring_column_checks.py) to see the source code on GitHub.
 
 
 **GET**
@@ -312,7 +313,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../models/Common.md#checkcontainermodel)||[CheckContainerModel](../models/Common.md#checkcontainermodel)|
+|[check_container_model](../models/common.md#checkcontainermodel)||[CheckContainerModel](../models/common.md#checkcontainermodel)|
 
 
 
@@ -448,7 +449,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 ___
 ## get_default_data_observability_monthly_monitoring_table_checks
 Returns UI model to show and edit the default configuration of the monthly monitoring (Data Observability end of month scores) checks that are configured for all imported tables on a table level.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/get_default_data_observability_monthly_monitoring_table_checks.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/get_default_data_observability_monthly_monitoring_table_checks.py) to see the source code on GitHub.
 
 
 **GET**
@@ -460,7 +461,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../models/Common.md#checkcontainermodel)||[CheckContainerModel](../models/Common.md#checkcontainermodel)|
+|[check_container_model](../models/common.md#checkcontainermodel)||[CheckContainerModel](../models/common.md#checkcontainermodel)|
 
 
 
@@ -596,7 +597,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 ___
 ## get_default_profiling_column_checks
 Returns UI model to show and edit the default configuration of the profiling checks that are configured for all imported column on a column level.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/get_default_profiling_column_checks.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/get_default_profiling_column_checks.py) to see the source code on GitHub.
 
 
 **GET**
@@ -608,7 +609,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../models/Common.md#checkcontainermodel)||[CheckContainerModel](../models/Common.md#checkcontainermodel)|
+|[check_container_model](../models/common.md#checkcontainermodel)||[CheckContainerModel](../models/common.md#checkcontainermodel)|
 
 
 
@@ -744,7 +745,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 ___
 ## get_default_profiling_table_checks
 Returns UI model to show and edit the default configuration of the profiling checks that are configured for all imported tables on a table level.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/get_default_profiling_table_checks.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/get_default_profiling_table_checks.py) to see the source code on GitHub.
 
 
 **GET**
@@ -756,7 +757,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../models/Common.md#checkcontainermodel)||[CheckContainerModel](../models/Common.md#checkcontainermodel)|
+|[check_container_model](../models/common.md#checkcontainermodel)||[CheckContainerModel](../models/common.md#checkcontainermodel)|
 
 
 
@@ -892,7 +893,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 ___
 ## get_default_schedule
 Returns spec to show and edit the default configuration of schedules.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/get_default_schedule.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/get_default_schedule.py) to see the source code on GitHub.
 
 
 **GET**
@@ -904,7 +905,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[monitoring_schedule_spec](../models/Common.md#monitoringschedulespec)||[MonitoringScheduleSpec](../models/Common.md#monitoringschedulespec)|
+|[monitoring_schedule_spec](../models/common.md#monitoringschedulespec)||[MonitoringScheduleSpec](../models/common.md#monitoringschedulespec)|
 
 
 
@@ -913,7 +914,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|[scheduling_group](../models/Common.md#checkrunschedulegroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../models/Common.md#checkrunschedulegroup)|:material-check-bold:|
+|[scheduling_group](../models/common.md#checkrunschedulegroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../models/common.md#checkrunschedulegroup)|:material-check-bold:|
 
 
 
@@ -1030,7 +1031,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 ___
 ## get_default_webhooks
 Returns spec to show and edit the default configuration of webhooks.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/get_default_webhooks.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/get_default_webhooks.py) to see the source code on GitHub.
 
 
 **GET**
@@ -1160,7 +1161,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
 ___
 ## update_default_data_observability_daily_monitoring_column_checks
 New configuration of the default daily monitoring (data observability) checks on a column level. These checks will be applied on new columns.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/update_default_data_observability_daily_monitoring_column_checks.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/update_default_data_observability_daily_monitoring_column_checks.py) to see the source code on GitHub.
 
 
 **PUT**
@@ -1176,7 +1177,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the default configuration of the data observability daily monitoring checks configuration|[CheckContainerModel](../models/Common.md#checkcontainermodel)| |
+|Model with the changes to be applied to the default configuration of the data observability daily monitoring checks configuration|[CheckContainerModel](../models/common.md#checkcontainermodel)| |
 
 
 
@@ -1423,7 +1424,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 ___
 ## update_default_data_observability_daily_monitoring_table_checks
 New configuration of the default daily monitoring (data observability) checks on a table level. These checks will be applied on new tables.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/update_default_data_observability_daily_monitoring_table_checks.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/update_default_data_observability_daily_monitoring_table_checks.py) to see the source code on GitHub.
 
 
 **PUT**
@@ -1439,7 +1440,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the default configuration of the data observability daily monitoring checks configuration|[CheckContainerModel](../models/Common.md#checkcontainermodel)| |
+|Model with the changes to be applied to the default configuration of the data observability daily monitoring checks configuration|[CheckContainerModel](../models/common.md#checkcontainermodel)| |
 
 
 
@@ -1686,7 +1687,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 ___
 ## update_default_data_observability_monthly_monitoring_column_checks
 New configuration of the default monthly monitoring checkpoints on a column level. These checks will be applied on new columns.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/update_default_data_observability_monthly_monitoring_column_checks.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/update_default_data_observability_monthly_monitoring_column_checks.py) to see the source code on GitHub.
 
 
 **PUT**
@@ -1702,7 +1703,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the default configuration of the data observability monthly monitoring checks configuration|[CheckContainerModel](../models/Common.md#checkcontainermodel)| |
+|Model with the changes to be applied to the default configuration of the data observability monthly monitoring checks configuration|[CheckContainerModel](../models/common.md#checkcontainermodel)| |
 
 
 
@@ -1949,7 +1950,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 ___
 ## update_default_data_observability_monthly_monitoring_table_checks
 New configuration of the default monthly monitoring checkpoints on a table level. These checks will be applied on new tables.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/update_default_data_observability_monthly_monitoring_table_checks.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/update_default_data_observability_monthly_monitoring_table_checks.py) to see the source code on GitHub.
 
 
 **PUT**
@@ -1965,7 +1966,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the default configuration of the data observability monthly monitoring checks configuration|[CheckContainerModel](../models/Common.md#checkcontainermodel)| |
+|Model with the changes to be applied to the default configuration of the data observability monthly monitoring checks configuration|[CheckContainerModel](../models/common.md#checkcontainermodel)| |
 
 
 
@@ -2212,7 +2213,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 ___
 ## update_default_profiling_column_checks
 New configuration of the default profiling checks on a column level. These checks will be applied to new columns.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/update_default_profiling_column_checks.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/update_default_profiling_column_checks.py) to see the source code on GitHub.
 
 
 **PUT**
@@ -2228,7 +2229,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the data quality profiling checks configuration|[CheckContainerModel](../models/Common.md#checkcontainermodel)| |
+|Model with the changes to be applied to the data quality profiling checks configuration|[CheckContainerModel](../models/common.md#checkcontainermodel)| |
 
 
 
@@ -2475,7 +2476,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 ___
 ## update_default_profiling_table_checks
 New configuration of the default profiling checks on a table level. These checks will be applied to new tables.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/update_default_profiling_table_checks.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/update_default_profiling_table_checks.py) to see the source code on GitHub.
 
 
 **PUT**
@@ -2491,7 +2492,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the data quality profiling checks configuration|[CheckContainerModel](../models/Common.md#checkcontainermodel)| |
+|Model with the changes to be applied to the data quality profiling checks configuration|[CheckContainerModel](../models/common.md#checkcontainermodel)| |
 
 
 
@@ -2738,7 +2739,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 ___
 ## update_default_schedules
 New configuration of the default schedules.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/update_default_schedules.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/update_default_schedules.py) to see the source code on GitHub.
 
 
 **PUT**
@@ -2752,7 +2753,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|[scheduling_group](../models/Common.md#checkrunschedulegroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../models/Common.md#checkrunschedulegroup)|:material-check-bold:|
+|[scheduling_group](../models/common.md#checkrunschedulegroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../models/common.md#checkrunschedulegroup)|:material-check-bold:|
 
 
 
@@ -2761,7 +2762,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Spec with default schedules changes to be applied to the default configuration.|[MonitoringScheduleSpec](../models/Common.md#monitoringschedulespec)| |
+|Spec with default schedules changes to be applied to the default configuration.|[MonitoringScheduleSpec](../models/common.md#monitoringschedulespec)| |
 
 
 
@@ -2896,7 +2897,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 ___
 ## update_default_webhooks
 New configuration of the default webhooks.
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/update_default_webhooks.py)
+Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/defaults/update_default_webhooks.py) to see the source code on GitHub.
 
 
 **PUT**

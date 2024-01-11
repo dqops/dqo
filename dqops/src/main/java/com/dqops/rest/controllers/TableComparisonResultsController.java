@@ -41,7 +41,7 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/api/connections")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "TableComparisonResults", description = "Controller that returns the results of the most recent table comparison that was performed between the compared table and the reference table (the source of truth).")
+@Api(value = "TableComparisonResults", description = "Operations that returns the results of the most recent table comparison that was performed between the compared table and the reference table (the source of truth).")
 public class TableComparisonResultsController {
     private UserHomeContextFactory userHomeContextFactory;
     private CheckResultsDataService checkResultsDataService;
