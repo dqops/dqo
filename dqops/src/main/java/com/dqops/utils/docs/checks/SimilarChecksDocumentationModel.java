@@ -15,8 +15,6 @@
  */
 package com.dqops.utils.docs.checks;
 
-import com.dqops.utils.docs.rules.RuleDocumentationModel;
-import com.dqops.utils.docs.sensors.SensorDocumentationModel;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -28,14 +26,9 @@ import java.util.List;
 @Data
 public class SimilarChecksDocumentationModel {
     /**
-     * Sensor documentation model.
+     * Similar check root name (e.g. daily_partition_row_count -> row_count).
      */
-    private SensorDocumentationModel sensor;
-
-    /**
-     * Rule documentation model.
-     */
-    private RuleDocumentationModel rule;
+    private String checkRootName;
 
     /**
      * Check description extracted from the JavaDoc comment for the whole check definition class.

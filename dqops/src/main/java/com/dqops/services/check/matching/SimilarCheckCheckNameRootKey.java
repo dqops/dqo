@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 DQOps (support@dqops.com)
+ * Copyright © 2024 DQOps (support@dqops.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,19 +21,14 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 /**
- * Key object that stores a sensor name and rule names. It is used to find similar checks in other check types.
+ * Key object that stores a check name root (i.e. daily_partitioned_row_count -> row_count). It is used to find similar checks in other check types.
  * It supports equals and hashcode.
  */
-@Deprecated
 @AllArgsConstructor
-@Getter
 @EqualsAndHashCode
-public class SimilarCheckSensorRuleKey implements SimilarCheckGroupingKey {
-    private String sensorName;
-    private Class<?> sensorParametersClass;
-    private String warningRuleName;
-    private String errorRuleName;
-    private String fatalRuleName;
+@Getter
+public class SimilarCheckCheckNameRootKey implements SimilarCheckGroupingKey {
+    private String checkNameRoot;
 
     /**
      * Predicate method to determine whether the check belongs to the similar check group identified by this key.
@@ -42,10 +37,6 @@ public class SimilarCheckSensorRuleKey implements SimilarCheckGroupingKey {
      */
     @Override
     public boolean matches(AbstractCheckSpec<?, ?, ?, ?> checkSpec) {
-        return sensorName.equals(checkSpec.getParameters().getSensorDefinitionName())
-                && sensorParametersClass.equals(checkSpec.getParameters().getClass())
-                && warningRuleName.equals(checkSpec.getRuleDefinitionName())
-                && errorRuleName.equals(checkSpec.getRuleDefinitionName())
-                && fatalRuleName.equals(checkSpec.getRuleDefinitionName());
+        return checkSpec.getCheckName() != null && checkSpec.getCheckName().contains(checkNameRoot);
     }
 }

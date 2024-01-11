@@ -74,6 +74,7 @@ import com.dqops.services.check.matching.SimilarChecksContainer;
 import com.dqops.services.check.matching.SimilarChecksGroup;
 import com.dqops.utils.docs.LinkageStore;
 import com.dqops.utils.docs.ProviderTypeModel;
+import com.dqops.utils.docs.rules.RuleDocumentationModel;
 import com.dqops.utils.docs.rules.RuleDocumentationModelFactory;
 import com.dqops.utils.docs.sensors.SensorDocumentationModel;
 import com.dqops.utils.docs.sensors.SensorDocumentationModelFactory;
@@ -290,14 +291,8 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                     }
                 }
 
-                SensorDocumentationModel sensorDocumentation = this.sensorDocumentationModelFactory.createSensorDocumentation(
-                        firstCheckModel.getCheckModel().getSensorParametersSpec());
-                similarChecksDocumentationModel.setSensor(sensorDocumentation);
-                similarChecksDocumentationModel.setRule(this.ruleDocumentationModelFactory.createRuleDocumentation(
-                        firstCheckModel.getCheckModel().getRule().findFirstNotNullRule().getRuleParametersSpec()));
-
                 for (SimilarCheckModel similarCheckModel : similarChecksGroup.getSimilarChecks()) {
-                    CheckDocumentationModel checkDocumentationModel = buildCheckDocumentationModel(similarCheckModel, tableSpec, sensorDocumentation);
+                    CheckDocumentationModel checkDocumentationModel = buildCheckDocumentationModel(similarCheckModel, tableSpec);
                     similarChecksDocumentationModel.getAllChecks().add(checkDocumentationModel);
                 }
 
@@ -319,19 +314,26 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
      * Builds documentation for a single check.
      * @param similarCheckModel Similar check model.
      * @param tableSpec Table specification that will be used to generate a YAML example.
-     * @param sensorDocumentation Sensor documentation, useful to render the SQL.
      * @return Documentation for a single check.
      */
     public CheckDocumentationModel buildCheckDocumentationModel(SimilarCheckModel similarCheckModel,
-                                                                TableSpec tableSpec,
-                                                                SensorDocumentationModel sensorDocumentation) {
-        CheckDocumentationModel checkDocumentationModel = new CheckDocumentationModel();
+                                                                TableSpec tableSpec) {
         CheckModel checkModel = similarCheckModel.getCheckModel();
+
+        CheckDocumentationModel checkDocumentationModel = new CheckDocumentationModel();
         checkDocumentationModel.setCheckName(checkModel.getCheckName());
         checkDocumentationModel.setCheckType(similarCheckModel.getCheckType().getDisplayName());
         checkDocumentationModel.setCheckClass(checkModel.isStandard() ? "standard" : "advanced");
         checkDocumentationModel.setTimeScale(similarCheckModel.getTimeScale() != null ? similarCheckModel.getTimeScale().name() : null);
         checkDocumentationModel.setQualityDimension(similarCheckModel.getCheckModel().getQualityDimension());
+
+        SensorDocumentationModel sensorDocumentation = this.sensorDocumentationModelFactory.createSensorDocumentation(
+                checkModel.getSensorParametersSpec());
+        checkDocumentationModel.setSensor(sensorDocumentation);
+        RuleDocumentationModel ruleDocumentationModel = this.ruleDocumentationModelFactory.createRuleDocumentation(
+                checkModel.getRule().findFirstNotNullRule().getRuleParametersSpec());
+        checkDocumentationModel.setRule(ruleDocumentationModel);
+
         checkDocumentationModel.setCheckHelp(checkModel.getHelpText());
         checkDocumentationModel.setCheckModel(checkModel);
         String checkCategoryName = similarCheckModel.getCategory();

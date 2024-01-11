@@ -15,6 +15,8 @@
  */
 package com.dqops.services.check.matching;
 
+import lombok.Getter;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -23,23 +25,22 @@ import java.util.List;
  * Container of definitions of similar checks for different categories and check types.
  */
 public class SimilarChecksGroup {
-    private SimilarCheckSensorRuleKey matchingKey;
+    /**
+     * -- GETTER --
+     *  Returns the similar checks matching key. The matching key uses the sensor name and rule names for matching.
+     *
+     * @return Similar checks matching key.
+     */
+    @Getter
+    private SimilarCheckGroupingKey matchingKey;
     private List<SimilarCheckModel> similarChecks = new ArrayList<>();
 
     /**
      * Create a similar check set, given the matching key.
      * @param matchingKey Matching key (sensor name, rule names).
      */
-    public SimilarChecksGroup(SimilarCheckSensorRuleKey matchingKey) {
+    public SimilarChecksGroup(SimilarCheckGroupingKey matchingKey) {
         this.matchingKey = matchingKey;
-    }
-
-    /**
-     * Returns the similar checks matching key. The matching key uses the sensor name and rule names for matching.
-     * @return Similar checks matching key.
-     */
-    public SimilarCheckSensorRuleKey getMatchingKey() {
-        return matchingKey;
     }
 
     /**

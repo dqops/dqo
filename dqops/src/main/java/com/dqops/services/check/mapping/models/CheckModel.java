@@ -23,7 +23,6 @@ import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.sensors.AbstractSensorParametersSpec;
 import com.dqops.services.check.matching.SimilarCheckModel;
-import com.dqops.services.check.matching.SimilarCheckSensorRuleKey;
 import com.dqops.utils.docs.generators.SampleStringsRegistry;
 import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.dqops.utils.exceptions.DqoRuntimeException;
@@ -34,6 +33,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +46,7 @@ import java.util.stream.Collectors;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "CheckModel", description = "Model that returns the form definition and the form data to edit a single data quality check.")
+@NoArgsConstructor
 public class CheckModel implements Cloneable {
     /**
      * Data quality check name that is used in YAML file. Identifies the data quality check.
@@ -237,22 +238,6 @@ public class CheckModel implements Cloneable {
     @JsonPropertyDescription("The check hash code that identifies the check instance.")
     public Long getCheckHash() {
         return this.checkSpec != null && this.checkSpec.getHierarchyId() != null ? this.checkSpec.getHierarchyId().hashCode64() : null;
-    }
-
-    public CheckModel() {
-    }
-
-    /**
-     * Create a matching key with the sensor name and rule names. Used to match similar checks that are based on the same sensor and rules.
-     * @return Check sensor rule key.
-     */
-    public SimilarCheckSensorRuleKey createSimilarCheckMatchKey() {
-        return new SimilarCheckSensorRuleKey(
-                this.sensorName,
-                this.sensorParametersSpec != null ? this.sensorParametersSpec.getClass() : null,
-                this.rule.getWarning() != null ? this.rule.getWarning().getRuleName() : null,
-                this.rule.getError() != null ? this.rule.getError().getRuleName() : null,
-                this.rule.getFatal() != null ? this.rule.getFatal().getRuleName() : null);
     }
 
     /**

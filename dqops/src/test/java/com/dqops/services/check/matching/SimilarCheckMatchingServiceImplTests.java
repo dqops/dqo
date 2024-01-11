@@ -27,7 +27,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -44,7 +43,7 @@ public class SimilarCheckMatchingServiceImplTests extends BaseTest {
         SpecToModelCheckMappingServiceImpl specToModelCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
                 new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl(), new RuleDefinitionFindServiceImpl());
         DqoHomeContextFactory dqoHomeContextFactory = DqoHomeContextFactoryObjectMother.getRealDqoHomeContextFactory();
-        this.sut = new SimilarCheckMatchingServiceImpl(specToModelCheckMappingService, dqoHomeContextFactory);
+        this.sut = new SimilarCheckMatchingServiceImpl(specToModelCheckMappingService, dqoHomeContextFactory, new SimilarCheckGroupingKeyFactoryImpl());
     }
 
     @Test

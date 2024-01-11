@@ -313,7 +313,7 @@ public class GenerateDocumentationPostProcessor {
             public DqoHomeContext openLocalDqoHome() {
                 return dqoHomeContext;
             }
-        });
+        }, new SimilarCheckGroupingKeyFactoryImpl());
     }
 
     /**

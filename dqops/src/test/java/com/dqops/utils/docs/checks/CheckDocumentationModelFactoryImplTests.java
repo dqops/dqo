@@ -25,6 +25,7 @@ import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextObjectMother;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingService;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingServiceImpl;
 import com.dqops.services.check.mapping.ModelToSpecCheckMappingServiceImpl;
+import com.dqops.services.check.matching.SimilarCheckGroupingKeyFactoryImpl;
 import com.dqops.services.check.matching.SimilarCheckMatchingServiceImpl;
 import com.dqops.utils.docs.LinkageStore;
 import com.dqops.utils.docs.rules.RuleDocumentationModelFactoryImpl;
@@ -55,7 +56,7 @@ public class CheckDocumentationModelFactoryImplTests extends BaseTest {
                 reflectionService, new SensorDefinitionFindServiceImpl(), new RuleDefinitionFindServiceImpl());
         DqoHomeContext dqoHomeContext = DqoHomeContextObjectMother.getRealDqoHomeContext();
         SimilarCheckMatchingServiceImpl similarCheckMatchingService = new SimilarCheckMatchingServiceImpl(specToModelCheckMappingService,
-                DqoHomeContextFactoryObjectMother.getRealDqoHomeContextFactory());
+                DqoHomeContextFactoryObjectMother.getRealDqoHomeContextFactory(), new SimilarCheckGroupingKeyFactoryImpl());
         ModelToSpecCheckMappingServiceImpl uiToSpecCheckMappingService = new ModelToSpecCheckMappingServiceImpl(reflectionService);
         this.sut = new CheckDocumentationModelFactoryImpl(
                 similarCheckMatchingService,
