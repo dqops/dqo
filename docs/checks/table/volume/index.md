@@ -23,6 +23,7 @@ Evaluates the overall quality of the table by verifying the number of rows.
 |------------|------------|-------------|-------|
 |[profile_row_count_anomaly](./row-count-anomaly.md#profile-row-count-anomaly)|profiling|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 90 days.|advanced|
 |[daily_row_count_anomaly](./row-count-anomaly.md#daily-row-count-anomaly)|monitoring|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during the last 90 days.|advanced|
+|[daily_partition_row_count_anomaly](./row-count-anomaly.md#daily-partition-row-count-anomaly)|partitioned|Verifies that the total row count of the tested table is within a percentile from measurements made during the last 90 days.|advanced|
 
 
 
@@ -57,12 +58,6 @@ Evaluates the overall quality of the table by verifying the number of rows.
 |[profile_row_count_change_30_days](./row-count-change-30-days.md#profile-row-count-change-30-days)|profiling|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last month. Allows for exact match to readouts from 30 days ago or past readouts lookup.|advanced|
 |[daily_row_count_change_30_days](./row-count-change-30-days.md#daily-row-count-change-30-days)|monitoring|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from the last month. Allows for exact match to readouts from 30 days ago or past readouts lookup.|advanced|
 |[daily_partition_row_count_change_30_days](./row-count-change-30-days.md#daily-partition-row-count-change-30-days)|partitioned|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last month. Allows for exact match to readouts from 30 days ago or past readouts lookup.|advanced|
-
-
-
-| Check name | Check type | Description | Class |
-|------------|------------|-------------|-------|
-|[daily_partition_row_count_anomaly](./row-count-anomaly.md#daily-partition-row-count-anomaly)|partitioned|Verifies that the total row count of the tested table is within a percentile from measurements made during the last 90 days.|advanced|
 
 
 

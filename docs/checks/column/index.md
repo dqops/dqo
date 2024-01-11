@@ -131,6 +131,7 @@ Detects anomalous (unexpected) changes and outliers in the time series of data q
 |------------|------------|-------------|-------|
 |[profile_sum_anomaly](./anomaly/sum-anomaly.md#profile-sum-anomaly)|profiling|Verifies that the sum in a column changes in a rate within a percentile boundary during the last 90 days.|standard|
 |[daily_sum_anomaly](./anomaly/sum-anomaly.md#daily-sum-anomaly)|monitoring|Verifies that the sum in a column changes in a rate within a percentile boundary during the last 90 days.|standard|
+|[daily_partition_sum_anomaly](./anomaly/sum-anomaly.md#daily-partition-sum-anomaly)|partitioned|Verifies that the sum in a column is within a percentile from measurements made during the last 90 days.|standard|
 
 
 
@@ -233,12 +234,6 @@ Detects anomalous (unexpected) changes and outliers in the time series of data q
 |[profile_sum_change_30_days](./anomaly/sum-change-30-days.md#profile-sum-change-30-days)|profiling|Verifies that the sum in a column changed in a fixed rate since the last readout from last month.|advanced|
 |[daily_sum_change_30_days](./anomaly/sum-change-30-days.md#daily-sum-change-30-days)|monitoring|Verifies that the sum in a column changed in a fixed rate since the last readout from the last month.|advanced|
 |[daily_partition_sum_change_30_days](./anomaly/sum-change-30-days.md#daily-partition-sum-change-30-days)|partitioned|Verifies that the sum in a column changed in a fixed rate since the last readout from the last month.|advanced|
-
-
-
-| Check name | Check type | Description | Class |
-|------------|------------|-------------|-------|
-|[daily_partition_sum_anomaly](./anomaly/sum-anomaly.md#daily-partition-sum-anomaly)|partitioned|Verifies that the sum in a column is within a percentile from measurements made during the last 90 days.|standard|
 
 
 
@@ -1296,6 +1291,7 @@ Counts the number or percent of duplicate or unique values in a column.
 |------------|------------|-------------|-------|
 |[profile_distinct_count_anomaly](./uniqueness/distinct-count-anomaly.md#profile-distinct-count-anomaly)|profiling|Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|standard|
 |[daily_distinct_count_anomaly](./uniqueness/distinct-count-anomaly.md#daily-distinct-count-anomaly)|monitoring|Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|standard|
+|[daily_partition_distinct_count_anomaly](./uniqueness/distinct-count-anomaly.md#daily-partition-distinct-count-anomaly)|partitioned|Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|advanced|
 
 
 
@@ -1372,12 +1368,6 @@ Counts the number or percent of duplicate or unique values in a column.
 |[profile_distinct_percent_change_30_days](./uniqueness/distinct-percent-change-30-days.md#profile-distinct-percent-change-30-days)|profiling|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last month.|advanced|
 |[daily_distinct_percent_change_30_days](./uniqueness/distinct-percent-change-30-days.md#daily-distinct-percent-change-30-days)|monitoring|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last month.|advanced|
 |[daily_partition_distinct_percent_change_30_days](./uniqueness/distinct-percent-change-30-days.md#daily-partition-distinct-percent-change-30-days)|partitioned|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from the last month.|advanced|
-
-
-
-| Check name | Check type | Description | Class |
-|------------|------------|-------------|-------|
-|[daily_partition_distinct_count_anomaly](./uniqueness/distinct-count-anomaly.md#daily-partition-distinct-count-anomaly)|partitioned|Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|advanced|
 
 
 

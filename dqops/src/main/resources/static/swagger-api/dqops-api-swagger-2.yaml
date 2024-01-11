@@ -11004,7 +11004,8 @@ paths:
       - name: "wait"
         in: "query"
         description: "Wait until the statistic collection job finishes to run, the\
-          \ default value is false (queue a background job and return the job id)"
+          \ default value is true (queue a background job and wait for the job to\
+          \ finish, up to waitTimeout seconds)"
         required: false
         type: "boolean"
       - name: "waitTimeout"
@@ -11063,7 +11064,8 @@ paths:
       - name: "wait"
         in: "query"
         description: "Wait until the statistic collection job finishes to run, the\
-          \ default value is false (queue a background job and return the job id)"
+          \ default value is true (queue a background job and wait for the job to\
+          \ finish, up to waitTimeout seconds)"
         required: false
         type: "boolean"
       - name: "waitTimeout"
@@ -11122,7 +11124,8 @@ paths:
       - name: "wait"
         in: "query"
         description: "Wait until the import tables job finishes to run, the default\
-          \ value is false (queue a background job and return the job id)"
+          \ value is true (queue a background job and wait for the job to finish,\
+          \ up to waitTimeout seconds)"
         required: false
         type: "boolean"
       - name: "waitTimeout"
@@ -11178,7 +11181,8 @@ paths:
       - name: "wait"
         in: "query"
         description: "Wait until the import tables job finishes to run, the default\
-          \ value is false (queue a background job and return the job id)"
+          \ value is true (queue a background job and wait for the job to finish,\
+          \ up to waitTimeout seconds)"
         required: false
         type: "boolean"
       - name: "waitTimeout"
@@ -11387,8 +11391,9 @@ paths:
         type: "string"
       - name: "wait"
         in: "query"
-        description: "Wait until the checks finish to run, the default value is false\
-          \ (queue a background job and return the job id)"
+        description: "Wait until the checks finish to run, the default value is true\
+          \ (queue a background job and wait for the job to finish, up to waitTimeout\
+          \ seconds)"
         required: false
         type: "boolean"
       - name: "waitTimeout"
@@ -11559,8 +11564,8 @@ paths:
       - name: "wait"
         in: "query"
         description: "Wait until the synchronize multiple folders job finishes to\
-          \ run, the default value is false (queue a background job and return the\
-          \ job id)"
+          \ run, the default value is true (queue a background job and wait for the\
+          \ job to finish, up to waitTimeout seconds)"
         required: false
         type: "boolean"
       - name: "waitTimeout"

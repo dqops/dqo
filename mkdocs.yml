@@ -233,7 +233,6 @@ nav:
         - row count change 1 day: 'checks/table/volume/row-count-change-1-day.md'
         - row count change 7 days: 'checks/table/volume/row-count-change-7-days.md'
         - row count change 30 days: 'checks/table/volume/row-count-change-30-days.md'
-        - row count anomaly: 'checks/table/volume/row-count-anomaly.md'
     - column:
       - 'checks/column/index.md'
       - accepted_values:
@@ -267,7 +266,6 @@ nav:
         - sum change 1 day: 'checks/column/anomaly/sum-change-1-day.md'
         - sum change 7 days: 'checks/column/anomaly/sum-change-7-days.md'
         - sum change 30 days: 'checks/column/anomaly/sum-change-30-days.md'
-        - sum anomaly: 'checks/column/anomaly/sum-anomaly.md'
       - blanks:
         - 'checks/column/blanks/index.md'
         - empty text found: 'checks/column/blanks/empty-text-found.md'
@@ -404,7 +402,6 @@ nav:
         - distinct percent change 1 day: 'checks/column/uniqueness/distinct-percent-change-1-day.md'
         - distinct percent change 7 days: 'checks/column/uniqueness/distinct-percent-change-7-days.md'
         - distinct percent change 30 days: 'checks/column/uniqueness/distinct-percent-change-30-days.md'
-        - distinct count anomaly: 'checks/column/uniqueness/distinct-count-anomaly.md'
 ########## END INCLUDE CHECK REFERENCE
   - Reference:
     - 'reference/index.md'

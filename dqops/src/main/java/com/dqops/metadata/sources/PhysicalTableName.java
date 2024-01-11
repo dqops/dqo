@@ -17,6 +17,7 @@ package com.dqops.metadata.sources;
 
 import com.dqops.core.filesystem.virtual.FileNameSanitizer;
 import com.dqops.metadata.search.StringPatternComparer;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.dqops.utils.string.StringCompareUtility;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -304,5 +305,12 @@ public class PhysicalTableName implements Cloneable, Comparable<PhysicalTableNam
      */
     public String toTableSearchFilter() {
         return this.schemaName + "." + this.tableName;
+    }
+
+    public static class PhysicalTableNameSampleFactory implements SampleValueFactory<PhysicalTableName> {
+        @Override
+        public PhysicalTableName createSample() {
+            return new PhysicalTableName("schema_name", "table_name");
+        }
     }
 }

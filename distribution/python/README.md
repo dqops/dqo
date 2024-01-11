@@ -108,8 +108,7 @@ request_body = RunChecksParameters(
       connection='sample_connection',
       full_table_name='sample_schema.sample_table',
       enabled=True
-  ),
-  dummy_execution=False
+  )
 )
 
 check_results = run_checks.sync(
@@ -118,6 +117,29 @@ check_results = run_checks.sync(
 )
 
 ```
+
+The [`run_checks`](https://dqops.com/docs/client/operations/jobs/#run_checks) operation returns a summary of executed data quality checks, and the highest
+data quality issue severity level. In the following example, the most severe issue was at an **error** severity level.
+
+```json
+{
+  "jobId" : {
+    "jobId" : 123456789,
+    "createdAt" : "2023-10-11T13:42:00Z"
+  },
+  "result" : {
+    "highest_severity" : "error",
+    "executed_checks" : 10,
+    "valid_results" : 7,
+    "warnings" : 1,
+    "errors" : 2,
+    "fatals" : 0,
+    "execution_errors" : 0
+  },
+  "status" : "succeeded"
+}
+```
+
 
 Learn more about the DQOps Python client in the [DQOps REST API client](https://dqops.com/docs/client/) reference
 documentation that shows Python code examples for every operation supported by the client.

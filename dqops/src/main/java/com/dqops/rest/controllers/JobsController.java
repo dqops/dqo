@@ -153,7 +153,7 @@ public class JobsController {
             @RequestBody RunChecksParameters runChecksParameters,
             @ApiParam(name = "jobBusinessKey", value = "Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.", required = false)
             @RequestParam(required = false) Optional<String> jobBusinessKey,
-            @ApiParam(name = "wait", value = "Wait until the checks finish to run, the default value is false (queue a background job and return the job id)", required = false)
+            @ApiParam(name = "wait", value = "Wait until the checks finish to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)", required = false)
             @RequestParam(required = false) Optional<Boolean> wait,
             @ApiParam(name = "waitTimeout", value = "The wait timeout in seconds, when the wait timeout elapses and the checks are still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the 'dqo' cli command documentation).", required = false)
             @RequestParam(required = false) Optional<Integer> waitTimeout) {
@@ -166,7 +166,7 @@ public class JobsController {
 
         PushJobResult<CheckExecutionSummary> pushJobResult = this.parentDqoJobQueue.pushJob(runChecksJob, principal);
 
-        if (wait.isPresent() && wait.get()) {
+        if (!wait.isPresent() || wait.get()) {
             // wait for the result
             long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() :
                     this.dqoQueueWaitTimeoutsConfigurationProperties.getRunChecks();
@@ -297,7 +297,7 @@ public class JobsController {
             @ApiParam("Data statistics collectors filter") @RequestBody StatisticsCollectorSearchFilters statisticsCollectorSearchFilters,
             @ApiParam(name = "jobBusinessKey", value = "Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.", required = false)
             @RequestParam(required = false) Optional<String> jobBusinessKey,
-            @ApiParam(name = "wait", value = "Wait until the statistic collection job finishes to run, the default value is false (queue a background job and return the job id)", required = false)
+            @ApiParam(name = "wait", value = "Wait until the statistic collection job finishes to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)", required = false)
             @RequestParam(required = false) Optional<Boolean> wait,
             @ApiParam(name = "waitTimeout", value = "The wait timeout in seconds, when the wait timeout elapses and the job is still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the 'dqo' cli command documentation).", required = false)
             @RequestParam(required = false) Optional<Integer> waitTimeout) {
@@ -314,7 +314,7 @@ public class JobsController {
 
         PushJobResult<StatisticsCollectionExecutionSummary> pushJobResult = this.parentDqoJobQueue.pushJob(runProfilersJob, principal);
 
-        if (wait.isPresent() && wait.get()) {
+        if (!wait.isPresent() || wait.get()) {
             // wait for the result
             long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() :
                     this.dqoQueueWaitTimeoutsConfigurationProperties.getRunChecks();
@@ -364,7 +364,7 @@ public class JobsController {
             @ApiParam("Data statistics collectors filter") @RequestBody StatisticsCollectorSearchFilters statisticsCollectorSearchFilters,
             @ApiParam(name = "jobBusinessKey", value = "Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.", required = false)
             @RequestParam(required = false) Optional<String> jobBusinessKey,
-            @ApiParam(name = "wait", value = "Wait until the statistic collection job finishes to run, the default value is false (queue a background job and return the job id)", required = false)
+            @ApiParam(name = "wait", value = "Wait until the statistic collection job finishes to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)", required = false)
             @RequestParam(required = false) Optional<Boolean> wait,
             @ApiParam(name = "waitTimeout", value = "The wait timeout in seconds, when the wait timeout elapses and the job is still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the 'dqo' cli command documentation).", required = false)
             @RequestParam(required = false) Optional<Integer> waitTimeout) {
@@ -381,7 +381,7 @@ public class JobsController {
 
         PushJobResult<StatisticsCollectionExecutionSummary> pushJobResult = this.parentDqoJobQueue.pushJob(runProfilersJob, principal);
 
-        if (wait.isPresent() && wait.get()) {
+        if (!wait.isPresent() || wait.get()) {
             // wait for the result
             long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() :
                     this.dqoQueueWaitTimeoutsConfigurationProperties.getCollectStatistics();
@@ -606,7 +606,7 @@ public class JobsController {
             @RequestBody ImportTablesQueueJobParameters importParameters,
             @ApiParam(name = "jobBusinessKey", value = "Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.", required = false)
             @RequestParam(required = false) Optional<String> jobBusinessKey,
-            @ApiParam(name = "wait", value = "Wait until the import tables job finishes to run, the default value is false (queue a background job and return the job id)", required = false)
+            @ApiParam(name = "wait", value = "Wait until the import tables job finishes to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)", required = false)
             @RequestParam(required = false) Optional<Boolean> wait,
             @ApiParam(name = "waitTimeout", value = "The wait timeout in seconds, when the wait timeout elapses and the import tables job is still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the 'dqo' cli command documentation).", required = false)
             @RequestParam(required = false) Optional<Integer> waitTimeout) {
@@ -616,7 +616,7 @@ public class JobsController {
 
         PushJobResult<ImportTablesResult> pushJobResult = this.dqoJobQueue.pushJob(importTablesJob, principal);
 
-        if (wait.isPresent() && wait.get()) {
+        if (!wait.isPresent() || wait.get()) {
             // wait for the result
             long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() :
                     this.dqoQueueWaitTimeoutsConfigurationProperties.getImportTables();
@@ -664,7 +664,7 @@ public class JobsController {
             @RequestBody DeleteStoredDataQueueJobParameters deleteStoredDataParameters,
             @ApiParam(name = "jobBusinessKey", value = "Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.", required = false)
             @RequestParam(required = false) Optional<String> jobBusinessKey,
-            @ApiParam(name = "wait", value = "Wait until the import tables job finishes to run, the default value is false (queue a background job and return the job id)", required = false)
+            @ApiParam(name = "wait", value = "Wait until the import tables job finishes to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)", required = false)
             @RequestParam(required = false) Optional<Boolean> wait,
             @ApiParam(name = "waitTimeout", value = "The wait timeout in seconds, when the wait timeout elapses and the delete stored data job is still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the 'dqo' cli command documentation).", required = false)
             @RequestParam(required = false) Optional<Integer> waitTimeout) {
@@ -674,7 +674,7 @@ public class JobsController {
 
         PushJobResult<DeleteStoredDataResult> pushJobResult = this.dqoJobQueue.pushJob(deleteStoredDataJob, principal);
 
-        if (wait.isPresent() && wait.get()) {
+        if (!wait.isPresent() || wait.get()) {
             // wait for the result
             long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() :
                     this.dqoQueueWaitTimeoutsConfigurationProperties.getDeleteStoredData();
@@ -723,7 +723,7 @@ public class JobsController {
             @RequestBody SynchronizeMultipleFoldersDqoQueueJobParameters synchronizeFolderParameters,
             @ApiParam(name = "jobBusinessKey", value = "Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.", required = false)
             @RequestParam(required = false) Optional<String> jobBusinessKey,
-            @ApiParam(name = "wait", value = "Wait until the synchronize multiple folders job finishes to run, the default value is false (queue a background job and return the job id)", required = false)
+            @ApiParam(name = "wait", value = "Wait until the synchronize multiple folders job finishes to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)", required = false)
             @RequestParam(required = false) Optional<Boolean> wait,
             @ApiParam(name = "waitTimeout", value = "The wait timeout in seconds, when the wait timeout elapses and the synchronization with the DQOps Cloud is still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the 'dqo' cli command documentation).", required = false)
             @RequestParam(required = false) Optional<Integer> waitTimeout) {
@@ -733,7 +733,7 @@ public class JobsController {
 
         PushJobResult<Void> pushJobResult = this.parentDqoJobQueue.pushJob(synchronizeMultipleFoldersJob, principal);
 
-        if (wait.isPresent() && wait.get()) {
+        if (!wait.isPresent() || wait.get()) {
             // wait for the result
             long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() :
                     this.dqoQueueWaitTimeoutsConfigurationProperties.getSynchronizeMultipleFolders();

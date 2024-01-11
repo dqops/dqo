@@ -60,6 +60,7 @@ public class RunChecksParameters implements Cloneable {
      * Set the value to true when the data quality checks should be executed in a dummy mode (without running checks on the target systems and storing the results). Only the jinja2 sensors will be rendered.
      */
     @JsonPropertyDescription("Set the value to true when the data quality checks should be executed in a dummy mode (without running checks on the target systems and storing the results). Only the jinja2 sensors will be rendered.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean dummyExecution;
 
     /**

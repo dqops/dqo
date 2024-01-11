@@ -147,7 +147,7 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |job_business_key|Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.|string| |
-|wait|Wait until the statistic collection job finishes to run, the default value is false (queue a background job and return the job id)|boolean| |
+|wait|Wait until the statistic collection job finishes to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)|boolean| |
 |wait_timeout|The wait timeout in seconds, when the wait timeout elapses and the job is still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|long| |
 
 
@@ -333,7 +333,7 @@ http://localhost:8888/api/jobs/collectstatistics/table
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |job_business_key|Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.|string| |
-|wait|Wait until the statistic collection job finishes to run, the default value is false (queue a background job and return the job id)|boolean| |
+|wait|Wait until the statistic collection job finishes to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)|boolean| |
 |wait_timeout|The wait timeout in seconds, when the wait timeout elapses and the job is still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|long| |
 
 
@@ -519,7 +519,7 @@ http://localhost:8888/api/jobs/deletestoreddata
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |job_business_key|Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.|string| |
-|wait|Wait until the import tables job finishes to run, the default value is false (queue a background job and return the job id)|boolean| |
+|wait|Wait until the import tables job finishes to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)|boolean| |
 |wait_timeout|The wait timeout in seconds, when the wait timeout elapses and the delete stored data job is still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|long| |
 
 
@@ -1146,7 +1146,7 @@ http://localhost:8888/api/jobs/importtables
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |job_business_key|Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.|string| |
-|wait|Wait until the import tables job finishes to run, the default value is false (queue a background job and return the job id)|boolean| |
+|wait|Wait until the import tables job finishes to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)|boolean| |
 |wait_timeout|The wait timeout in seconds, when the wait timeout elapses and the import tables job is still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|long| |
 
 
@@ -1437,7 +1437,7 @@ http://localhost:8888/api/jobs/runchecks
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |job_business_key|Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.|string| |
-|wait|Wait until the checks finish to run, the default value is false (queue a background job and return the job id)|boolean| |
+|wait|Wait until the checks finish to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)|boolean| |
 |wait_timeout|The wait timeout in seconds, when the wait timeout elapses and the checks are still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|long| |
 
 
@@ -1461,7 +1461,7 @@ http://localhost:8888/api/jobs/runchecks
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"check_search_filters\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"column\":\"sample_column\",\"columnDataType\":\"string\"},\"dummy_execution\":false}"
+		"{\"check_search_filters\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"column\":\"sample_column\",\"columnDataType\":\"string\"}}"
 	
     ```
 
@@ -1601,7 +1601,20 @@ http://localhost:8888/api/jobs/runchecks
 ??? "Return value sample"
     ```js
     {
-	  "status" : "queued"
+	  "jobId" : {
+	    "jobId" : 123456789,
+	    "createdAt" : "2007-10-11T13:42:00Z"
+	  },
+	  "result" : {
+	    "highest_severity" : "error",
+	    "executed_checks" : 10,
+	    "valid_results" : 7,
+	    "warnings" : 1,
+	    "errors" : 2,
+	    "fatals" : 0,
+	    "execution_errors" : 0
+	  },
+	  "status" : "succeeded"
 	}
     ```
 
@@ -1849,7 +1862,7 @@ http://localhost:8888/api/jobs/synchronize
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |job_business_key|Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.|string| |
-|wait|Wait until the synchronize multiple folders job finishes to run, the default value is false (queue a background job and return the job id)|boolean| |
+|wait|Wait until the synchronize multiple folders job finishes to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)|boolean| |
 |wait_timeout|The wait timeout in seconds, when the wait timeout elapses and the synchronization with the DQOps Cloud is still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|long| |
 
 
@@ -2317,7 +2330,20 @@ http://localhost:8888/api/jobs/runchecks/{jobId}/wait
 ??? "Return value sample"
     ```js
     {
-	  "status" : "queued"
+	  "jobId" : {
+	    "jobId" : 123456789,
+	    "createdAt" : "2007-10-11T13:42:00Z"
+	  },
+	  "result" : {
+	    "highest_severity" : "error",
+	    "executed_checks" : 10,
+	    "valid_results" : 7,
+	    "warnings" : 1,
+	    "errors" : 2,
+	    "fatals" : 0,
+	    "execution_errors" : 0
+	  },
+	  "status" : "succeeded"
 	}
     ```
 

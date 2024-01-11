@@ -29,6 +29,7 @@ Detects anomalous (unexpected) changes and outliers in the time series of data q
 |------------|------------|-------------|-------|
 |[profile_sum_anomaly](./sum-anomaly.md#profile-sum-anomaly)|profiling|Verifies that the sum in a column changes in a rate within a percentile boundary during the last 90 days.|standard|
 |[daily_sum_anomaly](./sum-anomaly.md#daily-sum-anomaly)|monitoring|Verifies that the sum in a column changes in a rate within a percentile boundary during the last 90 days.|standard|
+|[daily_partition_sum_anomaly](./sum-anomaly.md#daily-partition-sum-anomaly)|partitioned|Verifies that the sum in a column is within a percentile from measurements made during the last 90 days.|standard|
 
 
 
@@ -131,12 +132,6 @@ Detects anomalous (unexpected) changes and outliers in the time series of data q
 |[profile_sum_change_30_days](./sum-change-30-days.md#profile-sum-change-30-days)|profiling|Verifies that the sum in a column changed in a fixed rate since the last readout from last month.|advanced|
 |[daily_sum_change_30_days](./sum-change-30-days.md#daily-sum-change-30-days)|monitoring|Verifies that the sum in a column changed in a fixed rate since the last readout from the last month.|advanced|
 |[daily_partition_sum_change_30_days](./sum-change-30-days.md#daily-partition-sum-change-30-days)|partitioned|Verifies that the sum in a column changed in a fixed rate since the last readout from the last month.|advanced|
-
-
-
-| Check name | Check type | Description | Class |
-|------------|------------|-------------|-------|
-|[daily_partition_sum_anomaly](./sum-anomaly.md#daily-partition-sum-anomaly)|partitioned|Verifies that the sum in a column is within a percentile from measurements made during the last 90 days.|standard|
 
 
 
