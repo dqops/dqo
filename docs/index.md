@@ -12,7 +12,7 @@ DQOps comes with more than 140 predefined data quality checks which helps you mo
 - Table and column-level [data quality checks](./dqo-concepts/checks/index.md) which allows writing your own SQL queries
 - Daily and monthly date [partition testing](./dqo-concepts/checks/partition-checks/partition-checks.md)
 - [Data grouping](./dqo-concepts/data-grouping/data-grouping.md) by up to 9 different columns
-- Built-in [job scheduler](working-with-dqo/configure-scheduling-of-data-quality-checks/configure-scheduling-of-data-quality-checks)
+- Built-in [job scheduler](working-with-dqo/configure-scheduling-of-data-quality-checks/index.md)
 - Calculation of [data quality KPIs](./dqo-concepts/data-quality-kpis/data-quality-kpis.md)
 - Built-in [data quality dashboards](./dqo-concepts/data-quality-dashboards/data-quality-dashboards.md)
 - [Incremental data quality monitoring](./dqo-concepts/data-quality-kpis/incremental-data-quality-monitoring.md) to detect issues early

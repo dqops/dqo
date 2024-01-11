@@ -179,7 +179,7 @@ After importing new tables, DQOps sets the schedule for 12:00 P.M. (noon) every 
    Once a schedule is set up for a particular connection, it will execute all the checks that have been configured across
    all tables associated with that connection.
 
-   You can [read more about scheduling here](../../working-with-dqo/configure-scheduling-of-data-quality-checks/configure-scheduling-of-data-quality-checks).
+   You can [read more about scheduling here](../../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md).
 
    You might also want to check the [Running checks with a scheduler](../data-quality-monitoring/running-checks-with-a-scheduler.md) example.
 

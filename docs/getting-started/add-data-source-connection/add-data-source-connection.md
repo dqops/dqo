@@ -107,7 +107,7 @@ There are several tabs to explore in the **Data sources** section that differs d
 The following tabs are shown at the connection level:
 
 - **Connection** - provide details about the connection parameters.
-- **Schedule** - allows setting schedule for running checks. [Learn how to configure schedules](../../working-with-dqo/configure-scheduling-of-data-quality-checks/configure-scheduling-of-data-quality-checks).
+- **Schedule** - allows setting schedule for running checks. [Learn how to configure schedules](../../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md).
 - **Comments** - allows adding comments to your connection.
 - **Labels** - allows adding labels to your connection.
 - **Schemas** - displays currently imported schemas and allows importing more schemas and tables.
@@ -119,7 +119,7 @@ The following tabs are shown at the connection level:
 At the table level in the **Data sources** section, there are the following tabs:
 
 - **Table** - provide details about the table and allows you to add filter, priority or stage name (for example, "Ingestion").
-- **Schedule** - allows setting schedule for running checks. [Learn how to configure schedules](../../working-with-dqo/configure-scheduling-of-data-quality-checks/configure-scheduling-of-data-quality-checks).
+- **Schedule** - allows setting schedule for running checks. [Learn how to configure schedules](../../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md).
 - **Comments** - allows adding comments to your tables.
 - **Labels** - allows adding labels to your tables.
 - **Data groupings** - allows setting up data grouping at the table level. [Learn how to configure data grouping](../../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md).

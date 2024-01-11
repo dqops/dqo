@@ -39,7 +39,7 @@ The following steps are performed by the DQOps engine to run a data quality chec
          by calling the [run checks](../../client/operations/jobs.md#run_checks) operation.
      
      -   the checks can be also scheduled for regular execution and triggered by
-         an [internal CRON scheduler](../../working-with-dqo/configure-scheduling-of-data-quality-checks/configure-scheduling-of-data-quality-checks). 
+         an [internal CRON scheduler](../../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md). 
 
 2.   All parameters passed to the `run checks` job are used to identify the target data source,
      the target table and match the target checks by name, type, time scale or a column name.

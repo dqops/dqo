@@ -157,7 +157,7 @@ After importing new tables, DQOps sets the schedule for 12:00 P.M. (noon) every 
 Once a schedule is set up for a particular connection, it will execute all the checks that have been configured across
 all tables associated with that connection.
 
-You can [read more about scheduling here](../../working-with-dqo/configure-scheduling-of-data-quality-checks/configure-scheduling-of-data-quality-checks).
+You can [read more about scheduling here](../../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md).
 
 You might also want to check the [Running checks with a scheduler](../data-quality-monitoring/running-checks-with-a-scheduler.md) example.
 
@@ -289,5 +289,5 @@ If it does, you will get a warning, error or fatal results.
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
 - For details on the [text_matching_date_pattern_percent check used in this example, go to the check details section](../../checks/column/patterns/text-matching-date-pattern-percent.md).
 - You might be interested in another validity check that [evaluates that the percentage of valid currency code strings in the monitored column does not fall below set thresholds.](./percentage-of-valid-currency-codes.md).
-- With DQOps, you can easily customize when the checks are run at the level of the entire connection, table, or individual check. [Learn more about how to set schedules here](../../working-with-dqo/configure-scheduling-of-data-quality-checks/configure-scheduling-of-data-quality-checks). 
+- With DQOps, you can easily customize when the checks are run at the level of the entire connection, table, or individual check. [Learn more about how to set schedules here](../../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md). 
 - DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md) and [Slack notifications](../../integrations/slack/configuring-slack-notifications.md).

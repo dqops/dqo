@@ -523,7 +523,7 @@ spec:
 1.  The container of the column-level [monitoring checks](./monitoring-checks/monitoring-checks.md).
 2.  The container of the daily monitoring checks.
 
-When the [scheduling](../../working-with-dqo/configure-scheduling-of-data-quality-checks/configure-scheduling-of-data-quality-checks) is enabled, these checks will be executed daily,
+When the [scheduling](../../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md) is enabled, these checks will be executed daily,
 detecting if any rows with null values were identified (measuring the completeness of the *cumulative_confirmed* column).
 Also, DQOps will retrieve the table schema from the data source and verify if the column is still found in the table's metadata. 
 

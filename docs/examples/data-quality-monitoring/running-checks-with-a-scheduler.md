@@ -58,7 +58,7 @@ checks that require more frequent runs, we will set individual check-level sched
 The schedule for the [daily_number_in_range_percent](../../checks/column/numeric/number-in-range-percent.md) check will be temporarily disabled.
 
 If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
-You can read more about scheduling [here](../../working-with-dqo/configure-scheduling-of-data-quality-checks/configure-scheduling-of-data-quality-checks). 
+You can read more about scheduling [here](../../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md). 
 
 **VALUE**
 
@@ -319,6 +319,6 @@ take place every 10 minutes.
 ## Next step
 - Now that you have set up a schedule and get first results, you can evaluate them on dashboards. 
   You can find instructions on how to do this [here](../../getting-started/review-results-on-dashboards/review-results-on-dashboards.md).
-- With DQOps, you can easily customize when the checks are run at the level of the entire connection, table, or individual check. [Learn more about how to set schedules here](../../working-with-dqo/configure-scheduling-of-data-quality-checks/configure-scheduling-of-data-quality-checks). 
+- With DQOps, you can easily customize when the checks are run at the level of the entire connection, table, or individual check. [Learn more about how to set schedules here](../../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md). 
 - DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md) and [Slack notifications](../../integrations/slack/configuring-slack-notifications.md).
 - The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md) can help you to calculate separate data quality KPI scores for different groups of rows.
