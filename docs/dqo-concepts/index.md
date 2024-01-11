@@ -67,7 +67,7 @@ These topics introduce the basic concepts of DQOps.
     of the [null_percent](../reference/sensors/column/nulls-column-sensors.md#null-percent) sensor is valid.
 
 
- - **[Data quality KPIs](./data-quality-kpis/data-quality-kpis.md)**
+ - **[Data quality KPIs](data-quality-kpis.md)**
 
     The data quality is measured by data quality KPIs (Key Performance Indicators).
     The definition of a data quality KPI in DQOps is a percentage of passed data quality checks out of all executed data quality checks.

@@ -101,7 +101,7 @@ A warning level alerting threshold raises warnings for less important data quali
 usually anomalies or expected random or seasonal data quality issues. Warnings are
 not treated as data quality issues. Data quality checks that did not pass the warning alerting rule, but did pass the
 error and fatal alerting rules are still counted as passed data quality checks and do not reduce the
-[data quality KPIs](../data-quality-kpis/data-quality-kpis.md) score. Warnings should be used to identify potential data
+[data quality KPIs](../data-quality-kpis.md) score. Warnings should be used to identify potential data
 quality issues that should be monitored, but the data producer should not take accountability for them.
 
 For example, a percentage of data quality check monitoring null value may raise a warning when the percentage of rows with a null value exceeds 1% of all rows.
@@ -110,7 +110,7 @@ For example, a percentage of data quality check monitoring null value may raise 
 ### **Error**
 The error is the default alerting level for monitoring checks, comparable to the "error" level in logging libraries.
 Data quality checks that failed to pass the rule evaluation at the "error" severity level
-are considered failed data quality checks for the purpose of calculating the [data quality KPI](../data-quality-kpis/data-quality-kpis.md) score.
+are considered failed data quality checks for the purpose of calculating the [data quality KPI](../data-quality-kpis.md) score.
 
 For example, a percentage of data quality check monitoring null value may raise an error when the percentage of rows with a null value exceeds 5% of all rows.
 
@@ -118,7 +118,7 @@ For example, a percentage of data quality check monitoring null value may raise 
 ### **Fatal**
 The fatal severity level is the highest alerting threshold that should only be used to identify severe data quality issues.
 These issues should result in stopping the data pipelines before the issue spreads throughout the system. Fatal data
-quality issues are treated as failed data quality checks and reduce the [data quality KPIs](../data-quality-kpis/data-quality-kpis.md)
+quality issues are treated as failed data quality checks and reduce the [data quality KPIs](../data-quality-kpis.md)
 score. The fatal threshold should be used with caution. It is mainly useful when the data pipeline can trigger the data
 quality check assessment and wait for the result. If any data quality check raises a fatal data quality issue, the data
 pipeline should be stopped.
@@ -173,7 +173,7 @@ Knowing the time when the data quality issue was present is essential for knowin
 The data quality issue will be fixed, but the same data quality issue can happen again in the future.
 
 DQOps stores [historical data quality results](../data-storage-of-data-quality-results.md) for further analysis, and
-to measure the trustworthiness of the data source by calculating a [data quality KPI](../data-quality-kpis/data-quality-kpis.md) score.
+to measure the trustworthiness of the data source by calculating a [data quality KPI](../data-quality-kpis.md) score.
 
 
 ### **Time periods in SQL queries**

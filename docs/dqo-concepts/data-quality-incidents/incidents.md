@@ -18,7 +18,7 @@ and data quality incident is described below.
     Data quality issues are stored in the [check_results](../../reference/parquetfiles/check_results.md) parquet table.
     The data quality issues can be counted on the data quality dashboards for [counting issues](../data-quality-dashboards/data-quality-dashboards.md#data-quality-issues-count).
     The percentage of data quality issues within the total number of data quality checks performed is also
-    used to measure the overall quality of data by calculating the [data quality KPIs](../data-quality-kpis/data-quality-kpis.md).
+    used to measure the overall quality of data by calculating the [data quality KPIs](../data-quality-kpis.md).
  
  -  A **data quality incident** is a group of similar data quality issues that share the same properties. 
     When the first data quality issue is identified that does not match any active incident, a new data quality incident is created

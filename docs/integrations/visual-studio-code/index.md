@@ -148,7 +148,7 @@ The following elements are supported, not including the data quality issue thres
 - `disabled` enables disabling a configured check temporarily from running, but preserving the configuration in the YAML file
 - `exclude_from_kpi` boolean flag when set to *true* will set a reverse value, *false* in the *include_in_kpi* field
   stored in the [check_results](../../reference/parquetfiles/check_results.md) parquet table, not counting the result
-  of this check in the [data quality KPI](../../dqo-concepts/data-quality-kpis/data-quality-kpis.md).
+  of this check in the [data quality KPI](../../dqo-concepts/data-quality-kpis.md).
 - `include_in_sla` boolean flag is the value stored in the *include_in_sla* field
   stored in the [check_results](../../reference/parquetfiles/check_results.md) parquet table. Data quality SLAs
   can be used to group data quality checks that must pass to meet a Data Contract.

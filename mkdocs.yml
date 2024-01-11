@@ -26,7 +26,7 @@ nav:
       - Data quality dashboards: "dqo-concepts/data-quality-dashboards/data-quality-dashboards.md"
       - Data quality dimensions: "dqo-concepts/data-quality-dimensions/data-quality-dimensions.md"
       - Data grouping: "dqo-concepts/data-grouping/data-grouping.md"
-      - Data quality KPIs: "dqo-concepts/data-quality-kpis/data-quality-kpis.md"
+      - Data quality KPIs: "dqo-concepts/data-quality-kpis.md"
       - Incremental data quality monitoring: "dqo-concepts/incremental-data-quality-monitoring.md"
       - Incident management: "dqo-concepts/data-quality-incidents/incidents.md"
       - User interface overview: "dqo-concepts/user-interface-overview.md"

@@ -14,7 +14,7 @@ activated for every newly imported table.
 
 The [profiling checks](../dqo-concepts/checks/profiling-checks/profiling-checks.md) capture advanced data quality
 statistics and store the most current value for each month. Their role is to monitor the overall quality of data,
-without affecting the [data quality KPIs](../dqo-concepts/data-quality-kpis/data-quality-kpis.md).
+without affecting the [data quality KPIs](../dqo-concepts/data-quality-kpis.md).
 
 The [monitoring checks](../dqo-concepts/checks/monitoring-checks/monitoring-checks.md) are the primary type of data quality checks
 used in DQOps for continuous monitoring of the data quality of the data source.

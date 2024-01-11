@@ -165,7 +165,7 @@ The supported values for the **source** field are:
 
 - **tag** - the data grouping level is static, assigning the same hardcoded data grouping value to all data quality results
   (sensor readouts, data quality check results). Tagging is used for grouping the results of similar tables, especially
-  for calculating [data quality KPIs](../data-quality-kpis/data-quality-kpis.md) for different data areas, data pipelines,
+  for calculating [data quality KPIs](../data-quality-kpis.md) for different data areas, data pipelines,
   or data sources.
 
 
@@ -218,7 +218,7 @@ When the results are tagged, the values are stored in the sensor readout and rul
 The [data quality dashboards](../data-quality-dashboards/data-quality-dashboards.md) in DQOps always have a filter
 for **data group**, allowing to deep-dive into data quality issues related to that source, or the data suppliers.
 
-Tagging data quality results becomes even more important when combined with [data quality KPIs](../data-quality-kpis/data-quality-kpis.md),
+Tagging data quality results becomes even more important when combined with [data quality KPIs](../data-quality-kpis.md),
 because a separate data quality KPI score can be calculated for each data supplier, vendor, department, or any other data area.
 
 The tags are defined under the *level_1*, ..., *level_9* nodes as show below. 
@@ -293,7 +293,7 @@ group of data (the country in this example) as a separate data quality incident.
 
 The data quality dashboards in DQOps have a configuration parameter to select the data grouping for which we want to
 find the most recent data quality issues or calculate the data quality KPI.
-The [data quality KPI](../data-quality-kpis/data-quality-kpis.md) scores that is calculated for each data source (data grouping)
+The [data quality KPI](../data-quality-kpis.md) scores that is calculated for each data source (data grouping)
 simplify the root cause analysis by linking the data quality issue to a data source, a data group,
 an external data supplier, a data provider, or simply a separate data pipeline that has loaded invalid data.
 
@@ -387,6 +387,6 @@ identification of the source of the data quality issue.
 
 
 ## What's next
-- Learn how DQOps calculated [data quality KPIs](../data-quality-kpis/data-quality-kpis.md)
+- Learn how DQOps calculated [data quality KPIs](../data-quality-kpis.md)
 - Read how the data quality results are [stored as a Hive-compliant local data warehouse](../data-storage-of-data-quality-results.md)
 - Check how the **data groups** are aggregated on the [data quality dashboards](../data-quality-dashboards/data-quality-dashboards.md) 

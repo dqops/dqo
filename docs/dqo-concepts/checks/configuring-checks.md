@@ -107,7 +107,7 @@ The configuration of data quality checks will be shown on the example of a profi
 ### **Table-level profiling checks**
 The table [profiling checks](./profiling-checks/profiling-checks.md) are meant to capture advanced data quality
 statistics and store the most current value for each month. Their role is to track the overall quality of data,
-without affecting the [data quality KPIs](../data-quality-kpis/data-quality-kpis.md).
+without affecting the [data quality KPIs](../data-quality-kpis.md).
 
 The example below shows a configuration of the [profile_row_count](../../checks/table/volume/row-count.md#profile-row-count)
 with only a **warning** severity rule that verifies if the table's row count is at least one row.
@@ -155,7 +155,7 @@ The elements of the profiling checks configuration are listed in the table below
 ### **Table-level monitoring checks**
 The [monitoring checks](./monitoring-checks/monitoring-checks.md) are the primary type of data quality checks
 used in DQOps for continuous monitoring of the data quality of the data source. 
-The data quality issues raised by these checks are decreasing the [data quality KPI](../data-quality-kpis/data-quality-kpis.md). 
+The data quality issues raised by these checks are decreasing the [data quality KPI](../data-quality-kpis.md). 
 
 The monitoring checks are configured in the `spec.monitoring_checks` node and are divided into *daily* and *monthly* monitoring checks.
 The daily monitoring checks keep only the most current check result for the day when the check was executed. Running the same check
@@ -738,7 +738,7 @@ spec:
 ### **Table stage**
 The tables can be grouped into stages, allowing to detect data quality issues for different stages, such as
 landing zones, staging, cleansing, data marts, or other stage names specific to the environment.
-Dividing tables by stage allows to calculate the [data quality KPIs](../data-quality-kpis/data-quality-kpis.md)
+Dividing tables by stage allows to calculate the [data quality KPIs](../data-quality-kpis.md)
 for each stage.
 
 DQOps does not enforce any naming convention for stages. The stages are free-form string values assigned to
@@ -777,7 +777,7 @@ in DQOps by assigning numerical priorities to all tables that are initially impo
 
 When the tables are assigned to priorities (1, 2, 3, ...), an agile data quality project should focus on improving the
 data quality of the priority `1` tables first. When a satisfactory level of data quality, measured using
-the [data quality KPIs](../data-quality-kpis/data-quality-kpis.md) is achieved, the tables from the next priority
+the [data quality KPIs](../data-quality-kpis.md) is achieved, the tables from the next priority
 level are assigned to be improved in the next iteration.
 
 The value of the `priority` field that was configured on the table at the time of running the check is saved in the
