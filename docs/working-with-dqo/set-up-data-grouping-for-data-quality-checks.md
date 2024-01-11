@@ -8,7 +8,7 @@ In  DQOps, data grouping in a single table can be identified by a discriminator 
 vendor, data provider or subsidiary. Data from separate tables can also be aggregated into single data group by adding a tag with the name
 of the data source.
 
-Data groups are used to calculate separate [data quality KPI](../dqo-concepts/data-quality-kpis.md) scores for
+Data groups are used to calculate separate [data quality KPI](../dqo-concepts/definition-of-data-quality-kpis.md) scores for
 different groups of rows. 
 
 For more information about data grouping, see [data grouping in the DQOps concepts section](../dqo-concepts/data-grouping/data-grouping.md).

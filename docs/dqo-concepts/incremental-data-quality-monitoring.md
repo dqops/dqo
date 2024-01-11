@@ -128,6 +128,6 @@ The *partition_by_column* should be the name of the **date dimension** column.
 
 
 ## What's next
-- Learn how data quality KPIs [data quality KPIs](data-quality-kpis.md) are measured
+- Learn how data quality KPIs [data quality KPIs](definition-of-data-quality-kpis) are measured
 - Find out more about [partitioned checks](checks/partition-checks/partition-checks.md)
 - Learn how DQOps [stores the results of partitioned checks](data-storage-of-data-quality-results.md#partition-checks)

@@ -2,7 +2,7 @@
 
 ## Overview
 
-DQOps has multiple built-in data quality dashboards for displaying [data quality KPI](../dqo-concepts/data-quality-kpis.md).
+DQOps has multiple built-in data quality dashboards for displaying [data quality KPI](../dqo-concepts/definition-of-data-quality-kpis.md).
 Our dashboards use [Looker Studio](https://lookerstudio.google.com/overview) (formerly Google Data Studio) business
 intelligence environment.
 

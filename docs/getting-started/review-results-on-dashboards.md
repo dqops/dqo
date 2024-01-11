@@ -42,7 +42,7 @@ Here we can see the correct result from one daily_row_count check that we execut
 
 Data quality KPIs are the calculated percentage of passed data quality checks.
 Data quality KPIs dashboards show high-level data quality KPIs, aggregated on a macro scale that can be shared at a corporate level.
-To read more about [data quality KPIs, check DQO concept section](../dqo-concepts/data-quality-kpis.md).
+To read more about [data quality KPIs, check DQO concept section](../dqo-concepts/definition-of-data-quality-kpis.md).
 
 Data quality KPIs dashboards review key data metrics per connection,
 [data quality dimensions](../dqo-concepts/data-quality-dimensions/data-quality-dimensions.md),
