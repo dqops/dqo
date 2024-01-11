@@ -8,7 +8,7 @@ The folder on the disk where the files are stored is called a `DQOps user home`.
 Five most important kinds of files are stored in the `DQOps user home`.
 
 - **YAML** files with the configuration of activated data quality checks on tables, data source connection settings and several
-  other configuration files used for defining custom [sensors](sensors/sensors.md), [rules](rules/rules.md)
+  other configuration files used for defining custom [sensors](sensors/sensors.md), [rules](definition-of-data-quality-rules.md)
   and [checks](definition-of-data-quality-checks/index.md).
 
 - **Shared credentials** are just regular files, both text and binary. Shared credentials can be referenced in the YAML files.
@@ -87,7 +87,7 @@ $DQO_USER_HOME
      Please review all the *--logging.\** and *--dqo.logging.\** parameters passed to DQOps as 
      the [entry point parameters](../command-line-interface/dqo.md) to learn how to configure logging. 
 8.   The *.checks* folder stores the definition of custom data quality [checks](definition-of-data-quality-checks/index.md).
-9.   The *.rules* folder stores the definition of custom and overwritten data quality [rules](rules/rules.md).
+9.   The *.rules* folder stores the definition of custom and overwritten data quality [rules](definition-of-data-quality-rules.md).
 10.  The *.sensors* folder stores the definition of custom and overwritten data quality [sensors](sensors/sensors.md).
 11.  The *.settings* folder stores shared settings that can be committed to Git. The shared settings include the list
      of custom data quality dashboards or the default configuration of data observability checks that are applied on
@@ -107,7 +107,7 @@ The files stored directly in the `DQOps user home` folder and all folders are de
 | *.index*                           | The *.index* folder is used internally by DQOps to track the file synchronization status between the local `DQOps user home` folder and the DQOps Cloud Data Lake. The files in this folder should not be modified manually. |                          |
 | *.logs*                            | The *.logs* folder stores error logs locally. The files in the folder are rotated to save space. In case that an error is reported when running DQOps, the content of the folder should be sent to the DQOps support. Please review all the *--logging.\** and *--dqo.logging.\** parameters passed to DQOps as the [entry point parameters](../command-line-interface/dqo.md) to learn how to configure logging. |                          |
 | *checks*                           | The *.checks* folder stores the definition of custom data quality [checks](definition-of-data-quality-checks/index.md). |     :material-check:     |
-| *rules*                            | The *.rules* folder stores the definition of custom and overwritten data quality [rules](rules/rules.md). |     :material-check:     |
+| *rules*                            | The *.rules* folder stores the definition of custom and overwritten data quality [rules](definition-of-data-quality-rules.md). |     :material-check:     |
 | *sensors*                          | The *.sensors* folder stores the definition of custom and overwritten data quality [sensors](sensors/sensors.md). |     :material-check:     |
 | *settings*                         | The *.settings* folder stores shared settings that can be committed to Git. The shared settings include the list of custom data quality dashboards or the default configuration of data observability checks that are applied on all imported data sources. |     :material-check:     |
 | **sources**                        |  The *.sources* folder is the most important folder in the `DQOps user home`. It is the folder where DQOps stores the connection parameters to the data sources and the data quality checks configuration for all monitored tables. |     :material-check:     |
@@ -275,7 +275,7 @@ A custom sensor must have at least three files:
 
 
 ## Custom rules
-Custom data quality [rules](rules/rules.md) are defined as two files. 
+Custom data quality [rules](definition-of-data-quality-rules.md) are defined as two files. 
 The [.dqorule.yaml](../reference/yaml/RuleDefinitionYaml.md) file with the rule parameters and configuration.
 The second file is a Python module that must have a `evaluate_rule` function.
 

@@ -5,7 +5,7 @@ These topics introduce the basic concepts of DQOps.
  - **[Data quality checks](definition-of-data-quality-checks/index.md)**
 
     A data quality check detects data quality issues. The check in DQOps is defined as a pair
-    of a [sensor](./sensors/sensors.md) that captures metrics from the data source and a [rule](./rules/rules.md) that verifies the sensor's readout.
+    of a [sensor](./sensors/sensors.md) that captures metrics from the data source and a [rule](definition-of-data-quality-rules.md) that verifies the sensor's readout.
     For example, the [nulls_percent](../checks/column/nulls/nulls-percent.md) check uses both the [null_percent](../reference/sensors/column/nulls-column-sensors.md#null-percent) sensor
     and the [max_percent](../reference/rules/Comparison.md#max-percent) rule to detect if the maximum percent
     of null values in a tested column is satisfied.
@@ -26,7 +26,7 @@ These topics introduce the basic concepts of DQOps.
  - **[Configuring data quality checks](configuring-data-quality-checks-and-rules.md)**
 
     Data quality checks are configured by setting the incident alerting thresholds
-    by setting the [data quality rule](./rules/rules.md) parameters.
+    by setting the [data quality rule](definition-of-data-quality-rules.md) parameters.
 
     DQOps uses YAML files to keep the configuration of data sources and the activated data quality checks on monitored tables.
     The DQOps YAML file format is fully documented and the YAML schema files are published.
@@ -58,7 +58,7 @@ These topics introduce the basic concepts of DQOps.
     a `sensor readout` in DQOps.
 
 
- - **[Data quality rules](./rules/rules.md)**
+ - **[Data quality rules](definition-of-data-quality-rules.md)**
 
     Data quality rules in DQOps are Python functions that receive the `sensor readout`
     that was captured by sensor (a result of an SQL query).
@@ -157,15 +157,15 @@ These topics introduce the basic concepts of DQOps.
     Please read the [data storage](data-storage-of-data-quality-results.md) concept guide to understand the data lake structure.
 
 
- - **[Deployment architecture](./architecture/dqops-architecture.md)**
+ - **[Deployment architecture](architecture/dqops-architecture.md)**
 
     DQOps can be hosted locally, in the cloud or as a hybrid deployment, running a semi-offline DQOps instances
     on-premise or in the customer's cloud environment.
 
 
- - **[Check execution flow](./architecture/data-quality-check-execution-flow.md)**
+ - **[Check execution flow](architecture/data-quality-check-execution-flow.md)**
 
     Detailed data quality execution flows that show how DQOps executes [data quality sensors](./sensors/sensors.md),
-    [data quality rules](./rules/rules.md), [data quality checks](definition-of-data-quality-checks/index.md),
+    [data quality rules](definition-of-data-quality-rules.md), [data quality checks](definition-of-data-quality-checks/index.md),
     and how the data is [stored](data-storage-of-data-quality-results.md). Learn how execution errors are stored.
  

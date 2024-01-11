@@ -127,7 +127,7 @@ Code completion for custom checks is limited to the structure, the list of possi
 values are not validated.
 
 ### **Adding an alerting threshold**
-The data quality issue alerting thresholds are defined by configuring [data quality rules](../../dqo-concepts/rules/rules.md).
+The data quality issue alerting thresholds are defined by configuring [data quality rules](../../dqo-concepts/definition-of-data-quality-rules.md).
 The data quality rules to configure are:
 
 - `warning` configures the least severe, **warning** severity rule

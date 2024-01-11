@@ -3,7 +3,7 @@ Data quality checks are responsible for detecting data quality issues, and asser
 
 ## Data quality check definition
 In DQOps, a check is a data quality test that can be run on both table or column levels. The data quality check consists of a 
-[data quality sensor](../sensors/sensors.md) and a [data quality rule](../rules/rules.md).
+[data quality sensor](../sensors/sensors.md) and a [data quality rule](../definition-of-data-quality-rules.md).
 
 The data quality sensor reads the value from the data source at a given point in time. The data quality rule includes 
 a set of conditions (thresholds) that the sensor readout must meet. When the conditions are not met, the check detects 
@@ -26,7 +26,7 @@ The data quality check is evaluated on a monitored table (or column) in three ph
   data measure that will be evaluated with data quality rules.
 
 
-- The data quality metric (called *sensor readout* in DQOps) is passed to a [data quality rule](../rules/rules.md) that is
+- The data quality metric (called *sensor readout* in DQOps) is passed to a [data quality rule](../definition-of-data-quality-rules.md) that is
   a Python function that will decide if the measure (sensor readout) should be accepted, or the data quality
   check should fail and generate a data quality issue at one of three severity levels: warning, error, fatal.
   
@@ -90,7 +90,7 @@ The structure of the table configuration file is described in the [configuring c
 ## Issue severity levels
 Each data quality check supports configuring the alerting thresholds at three levels: *warning*, *error* and *fatal*.
 DQOps will pass the [sensor](../sensors/sensors.md) (the captured data quality metric, such as a percentage of null values)
-to all three [data quality rules](../rules/rules.md), using different thresholds.
+to all three [data quality rules](../definition-of-data-quality-rules.md), using different thresholds.
 If rules at multiple severity levels identify a data quality issue (the rule fails), DQOps picks the severity level
 of the most severe rule that failed in the order: *fatal*, *error*, *warning*.
 
@@ -202,7 +202,7 @@ ORDER BY time_period, time_period_utc
 ```
 
 1.  Actual value returned by the [data quality sensor](../sensors/sensors.md), called the **sensor readout**.
-    It is the measure captured by the data quality sensor. It will be verified by the [data quality rule](../rules/rules.md).
+    It is the measure captured by the data quality sensor. It will be verified by the [data quality rule](../definition-of-data-quality-rules.md).
 
 2.  The time period for which the **sensor readout** is valid, using a local time zone of the monitored database.
     The current time is truncated (casted) to a local date.

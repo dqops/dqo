@@ -134,7 +134,7 @@ spec:
     where the profiling checks are configured.
 2.  A *volume* category node. Other categories are sibling nodes of the *volume*.
 3.  The configuration of the [profile_row_count](../checks/table/volume/row-count.md#profile-row-count) data quality check.
-4.  The configuration of a [data quality rule](rules/rules.md) at a **warning** severity level. This rule will raise
+4.  The configuration of a [data quality rule](definition-of-data-quality-rules.md) at a **warning** severity level. This rule will raise
     a **warning** severity level data quality issue if the *sensor readout* does not meet the rule parameter. 
 5.  The rule parameter for the [min_count](../reference/rules/Comparison.md#min-count) rule. It is the smallest
     accepted row count (the *sensor readout* captured by the data quality check's sensor) that will make the rule pass.
@@ -147,7 +147,7 @@ The elements of the profiling checks configuration are listed in the table below
 | 6     | `profiling_checks`                                                                                                             | The table-level [profiling checks container profiling checks specification](../reference/yaml/profiling/table-profiling-checks.md#tableprofilingcheckcategoriesspec) where the profiling checks are configured.                    |
 | 7     | `profiling_checks.volume`                                                                                                      | A *volume* category node. Similar data quality checks are grouped in caregories. Other categories are sibling nodes of this node.                                                                                                     |
 | 8     | `profiling_checks.volume.` `profile_row_count`                                                                                 | The configuration of the [profile_row_count](../checks/table/volume/row-count.md#profile-row-count) data quality check. When a node with the name of the data quality check is added to the category node,check becomes activated. |
-| 9     | `profiling_checks.volume.` `profile_row_count.warning`                                                                         | The configuration of a [data quality rule](rules/rules.md) at a **warning** severity level. This rule will raise  a **warning** severity level data quality issue if the *sensor readout* does not meet the rule parameter.        |
+| 9     | `profiling_checks.volume.` `profile_row_count.warning`                                                                         | The configuration of a [data quality rule](definition-of-data-quality-rules.md) at a **warning** severity level. This rule will raise  a **warning** severity level data quality issue if the *sensor readout* does not meet the rule parameter.        |
 | 10    | `profiling_checks.volume.` `profile_row_count.warning.min_count`                                                               | The rule parameter for the [min_count](../reference/rules/Comparison.md#min-count) rule. It is the smallest accepted row count (the *sensor readout* captured by the data quality check's sensor) that will make the rule pass.    |
 | 11    | `profiling_checks.schema`                                                                                                      | Yet another check category node.                                                                                                                                                                                                      |   
 
@@ -337,7 +337,7 @@ spec:
 
 
 ## Rules without parameters
-Some data quality [rules](rules/rules.md) do not have any parameters (thresholds).
+Some data quality [rules](definition-of-data-quality-rules.md) do not have any parameters (thresholds).
 Configuring these rules uses the same YAML/JSON trick to set the value of the rule to a JSON `{}` object,
 enabling the rule at the given severity level.
 

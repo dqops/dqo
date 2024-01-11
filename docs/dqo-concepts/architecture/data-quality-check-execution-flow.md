@@ -16,7 +16,7 @@ in [running checks](../running-data-quality-checks.md) article, DQOps queues a `
 on an internal job queue. 
 
 The `run checks` job is executed as a sequence of steps, involving [sensors](../sensors/sensors.md),
-[rules](../rules/rules.md), [checks](../definition-of-data-quality-checks/index.md), running SQL queries on the data sources using JDBC drivers
+[rules](../definition-of-data-quality-rules.md), [checks](../definition-of-data-quality-checks/index.md), running SQL queries on the data sources using JDBC drivers
 and finally storing the results in the local data lake in the *$DQO_USER_HOME/.data* folder.
 
 The sequence of steps for running data quality checks is shown on the diagram below.
@@ -68,7 +68,7 @@ The following steps are performed by the DQOps engine to run a data quality chec
 5.   Anomaly detection and change detection data quality checks require historical values of *sensor readouts*.
      
      All *sensor readouts* captured over a period of time for the same data quality check are a time series.
-     Before reading historical *sensor readouts*, DQOps loads the [rule](../rules/rules.md) definition
+     Before reading historical *sensor readouts*, DQOps loads the [rule](../definition-of-data-quality-rules.md) definition
      [.dqorule.yaml](../../reference/yaml/RuleDefinitionYaml.md) file to decide if the rule requires historical data
      to evaluate the *sensor readout*. The configuration fields in
      the [RuleDefinitionSpec](../../reference/yaml/RuleDefinitionYaml.md#ruledefinitionspec) are:
@@ -77,7 +77,7 @@ The following steps are performed by the DQOps engine to run a data quality chec
      
      -   *time_window* - configures the size of the time window for rules that use historical values
 
-6.   Data quality [rules](../rules/rules.md) are called to evaluate every captured *sensor readout*.
+6.   Data quality [rules](../definition-of-data-quality-rules.md) are called to evaluate every captured *sensor readout*.
      The rule that is configured to use historical values (the *mode* is *previous_readouts*) will also receive
      an array of all previous historical *sensor readouts*.
 
@@ -127,7 +127,7 @@ The following steps are performed by the DQOps engine to run a data quality chec
 ## Custom checks and errors flow
 DQOps supports both defining custom data quality checks and customizing the definition of built-in checks.
 The data quality [checks](../definition-of-data-quality-checks/index.md) are defined as a pair of a [sensor](../sensors/sensors.md) that will capture
-a metric and a [rule](../rules/rules.md) that verifies the metric, raising a data quality issue if the rule fails.
+a metric and a [rule](../definition-of-data-quality-rules.md) that verifies the metric, raising a data quality issue if the rule fails.
 
 The definitions of custom checks, sensors and rules are stored in the *DQOps user home* folder. The check execution engine
 will look up custom definitions when the data quality checks are executed. If a built-in sensor or rule is shadowed by
@@ -186,7 +186,7 @@ The steps are described below.
      [sensor_readouts](../../reference/parquetfiles/sensor_readouts.md) local parquet table.
 
 8.   `Read previous sensor readout` is a conditional step performed only to evaluate data quality
-     [rules](../rules/rules.md) that require historical values to detect anomalies. 
+     [rules](../definition-of-data-quality-rules.md) that require historical values to detect anomalies. 
      The previous historical value can be used to detect changes from the last known value, such as
      detecting schema changes such as the [daily_column_count_changed](../../checks/table/schema/column-count-changed.md#daily-column-count-changed)
      check that detects if the column count has changed.
@@ -197,7 +197,7 @@ The steps are described below.
      Both built-in and custom rule definitions (from the *DQOps user home*) are used, preferring custom rules.
 
 10.  `Append error` after the *Evaluate sensor readouts* is run when the Python function fails to execute.
-     This step is not called when the [rule](../rules/rules.md) Python functions finishes successfully, but returning
+     This step is not called when the [rule](../definition-of-data-quality-rules.md) Python functions finishes successfully, but returning
      a failure (not passed) status of the evaluated *sensor readout*.
      
      The rule execution errors are written to the [errors](../../reference/parquetfiles/errors.md) parquet table,

@@ -22,7 +22,7 @@ nav:
       - DQOps user home: "dqo-concepts/dqops-user-home-folder.md"
       - Running checks: "dqo-concepts/running-data-quality-checks.md"
       - Data quality sensors: "dqo-concepts/sensors/sensors.md"
-      - Data quality rules: "dqo-concepts/rules/rules.md"
+      - Data quality rules: "dqo-concepts/definition-of-data-quality-rules.md"
       - Data quality dashboards: "dqo-concepts/types-of-data-quality-dashboards.md"
       - Data quality dimensions: "dqo-concepts/data-quality-dimensions.md"
       - Data grouping: "dqo-concepts/measuring-data-quality-with-data-grouping.md"

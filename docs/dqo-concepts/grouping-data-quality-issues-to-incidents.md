@@ -14,7 +14,7 @@ grouping of similar data quality issues into **data quality incidents**. The dif
 and data quality incident is described below.
 
  -  A **data quality issue** is a single data quality [check](definition-of-data-quality-checks/index.md) result that was not accepted by 
-    a data quality [rule](rules/rules.md), and was assigned a severity rule, which is one of *warning*, *error* or *fatal*.
+    a data quality [rule](definition-of-data-quality-rules.md), and was assigned a severity rule, which is one of *warning*, *error* or *fatal*.
     Data quality issues are stored in the [check_results](../reference/parquetfiles/check_results.md) parquet table.
     The data quality issues can be counted on the data quality dashboards for [counting issues](types-of-data-quality-dashboards.md#data-quality-issues-count).
     The percentage of data quality issues within the total number of data quality checks performed is also

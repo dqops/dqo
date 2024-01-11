@@ -47,7 +47,7 @@ Passed data quality checks are shown as green boxes. Data quality issues that de
 are shown as orange (*error* severity issue) and red (*fatal* severity issue) boxes.
 
 ### **Issue severity levels**
-DQOps supports configuring [data quality rules](rules/rules.md) at three severity levels:
+DQOps supports configuring [data quality rules](definition-of-data-quality-rules.md) at three severity levels:
 
 - *warning* severity issues are dedicated for anomalies and less severe data quality issues that the data producer
   (the data owner) should not be accountable, because those type of issues are expected.

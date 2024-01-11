@@ -101,10 +101,10 @@ generated from the [data quality sensor](sensors/sensors.md) template on the mon
 The query results (called the **sensor readouts** in DQOps) are stored
 in the [sensor_readouts](../reference/parquetfiles/sensor_readouts.md) Parquet table.
 
-The **sensor readouts** are processed by [data quality rules](rules/rules.md), identifying invalid data quality results.
+The **sensor readouts** are processed by [data quality rules](definition-of-data-quality-rules.md), identifying invalid data quality results.
 Each sensor readout row is copied to the [check_results](../reference/parquetfiles/check_results.md) table, but additional columns such as the `severity` are added.
 
-Otherwise, if the data quality SQL query fails to execute, or the [data quality rule](rules/rules.md) Python function fails,
+Otherwise, if the data quality SQL query fails to execute, or the [data quality rule](definition-of-data-quality-rules.md) Python function fails,
 the error is stored in the [errors](../reference/parquetfiles/errors.md) table.
 
 ### **Sensor readout mapping**

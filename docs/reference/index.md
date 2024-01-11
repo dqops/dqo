@@ -1,6 +1,6 @@
 # DQOps reference
 The reference of DQOps file formats, [data quality sensors](../dqo-concepts/sensors/sensors.md) and
-[data quality rules](../dqo-concepts/rules/rules.md) is provided below.
+[data quality rules](../dqo-concepts/definition-of-data-quality-rules.md) is provided below.
 
 
 ## Sensor and rule references
@@ -14,7 +14,7 @@ The following reference documentation shows the definition of data quality senso
 
  - **[Data quality rules reference](./rules/index.md)**
 
-    The reference of [data quality rules](../dqo-concepts/rules/rules.md) shows the Python source code
+    The reference of [data quality rules](../dqo-concepts/definition-of-data-quality-rules.md) shows the Python source code
     of data quality rules.
 
 

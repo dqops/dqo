@@ -1,5 +1,5 @@
 # Data quality percentile rules
-The list of percentile [data quality rules](../../dqo-concepts/rules/rules.md) supported by DQOps. The source code is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-architecture.md#dqops-home)/rules/percentile* folder in the DQOps distribution.
+The list of percentile [data quality rules](../../dqo-concepts/definition-of-data-quality-rules.md) supported by DQOps. The source code is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-architecture.md#dqops-home)/rules/percentile* folder in the DQOps distribution.
 
 
 ---
