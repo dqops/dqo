@@ -55,5 +55,5 @@ Other dashboards have buttons to change the view between the current and previou
 
 ## What's next
 
-- [Learn how to run data quality checks](run-data-quality-checks/run-data-quality-checks.md).
+- [Learn how to run data quality checks](run-data-quality-checks.md).
 - [Learn about setting schedules](schedules/index.md) to easily customize when checks are run.

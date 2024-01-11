@@ -33,7 +33,7 @@ The following steps are performed by the DQOps engine to run a data quality chec
      -   triggering the check by a user from the CLI using
          the [check run](../../command-line-interface/check.md#dqo-check-run) command
      
-     -   triggering the checks from the [user interface](../../working-with-dqo/run-data-quality-checks/run-data-quality-checks.md)
+     -   triggering the checks from the [user interface](../../working-with-dqo/run-data-quality-checks.md)
      
      -   submitting a 'run checks' job to the queue using a REST API client
          by calling the [run checks](../../client/operations/jobs.md#run_checks) operation.

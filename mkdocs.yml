@@ -86,7 +86,7 @@ nav:
   - Working with DQOps:
       - Daily monitoring of data quality: "working-with-dqo/daily-monitoring-of-data-quality.md"
       - Basic data statistics: "working-with-dqo/collecting-basic-data-statistics.md"
-      - Run data quality checks: "working-with-dqo/run-data-quality-checks/run-data-quality-checks.md"
+      - Run data quality checks: "working-with-dqo/run-data-quality-checks.md"
       - Review the results of data quality monitoring on dashboards: "working-with-dqo/reviewing-results-on-data-quality-dashboards.md"
       - Delete data quality results: "working-with-dqo/delete-data-quality-results.md"
       - Schedules:

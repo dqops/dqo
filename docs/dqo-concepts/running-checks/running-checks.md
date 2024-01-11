@@ -518,6 +518,6 @@ dqo> check run --connection=sales-dwh --full-table-name=public.fact_sales --chec
 
 ## What's next
 
-- Learn how to [run checks from the user interface](../../working-with-dqo/run-data-quality-checks/run-data-quality-checks.md).
+- Learn how to [run checks from the user interface](../../working-with-dqo/run-data-quality-checks.md).
 - Read about how the [check results are stored](../data-storage/data-storage.md).
 - Learn how DQOps [executed the checks](../architecture/check-execution-flow.md).

@@ -80,4 +80,4 @@ Note that the results displayed may vary depending on the data type.
 
 ## What's next
 
-- [Learn how to run data quality checks](run-data-quality-checks/run-data-quality-checks.md).
+- [Learn how to run data quality checks](run-data-quality-checks.md).

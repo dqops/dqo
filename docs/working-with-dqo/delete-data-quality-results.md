@@ -12,7 +12,7 @@ Hive compatible folder tree, partitioned by connection name, table name, and mon
 
 For more information where and how the sensor readouts and check results are stored, see [DQOps concepts section](../dqo-concepts/data-storage/data-storage.md).
 
-You can learn [how to run data quality checks here](run-data-quality-checks/run-data-quality-checks.md).
+You can learn [how to run data quality checks here](run-data-quality-checks.md).
 
 
 ## Delete data quality results using the user interface
