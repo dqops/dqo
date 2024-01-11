@@ -77,7 +77,7 @@ These examples use openly available datasets from [Google Cloud](https://cloud.g
 
 To use the examples you need:
 
-- [Installed DQOps](../getting-started/installation/installation.md).
+- [Installed DQOps](../getting-started/installation.md).
 - A BiqQuery service account with **BigQuery > BigQuery Job User** permission. [You can create a free trial Google Cloud account here](https://cloud.google.com/free).
 - A working [Google Cloud CLI](https://cloud.google.com/sdk/docs/install) if you want to use [Google Application Credentials authentication](../data-sources/bigquery.md#using-google-application-credentials-authentication).
 
@@ -89,7 +89,7 @@ gcloud auth application-default login
 
 ## Location of the examples
 
-[Standard DQOps installation](../getting-started/installation/installation.md) comes with a set of examples, which can 
+[Standard DQOps installation](../getting-started/installation.md) comes with a set of examples, which can 
 be found in the `example/` directory. You can view a complete list of the examples with links to detailed explanation by
 scrolling to the bottom of the page.
 

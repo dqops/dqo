@@ -27,7 +27,7 @@ The navigation bar allows you to select the specific sections that you want to f
     that are standard checks that monitor data quality.
 - The **Partition Checks** section allows you to [enable and run daily or monthly partition data quality checks](../../working-with-dqo/run-data-quality-checks.md)
     that measure data quality for each daily or monthly partition by creating a separate data quality score.
-- The **Data Quality Dashboards** section lets you [review the summaries of data quality monitoring](../../getting-started/review-results-on-dashboards/review-results-on-dashboards.md) on multiple built-in data quality dashboards.
+- The **Data Quality Dashboards** section lets you [review the summaries of data quality monitoring](../../getting-started/review-results-on-dashboards.md) on multiple built-in data quality dashboards.
 - The **Incidents** section helps you [review and manage the issues that arise during data quality monitoring](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md).
 - The **Configuration** section lets you customize built-in data quality sensors and rules.  
 

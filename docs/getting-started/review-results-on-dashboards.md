@@ -2,12 +2,12 @@
 
 ## Overview
 
-In the [previous step](../review-results-and-run-monitoring-checks/review-results-and-run-monitoring-checks.md) we reviewed
+In the [previous step](review-results-and-run-monitoring-checks.md) we reviewed
 the initial results from the basic statistics and profiling checks, as well as run one monitoring check. Now let's review
 the results on the data quality dashboards. 
 
 In DQOps, you can choose from a variety of built-in dashboard groups.
-You can read more about the [data quality dashboards](../../dqo-concepts/data-quality-dashboards/data-quality-dashboards.md)
+You can read more about the [data quality dashboards](../dqo-concepts/data-quality-dashboards/data-quality-dashboards.md)
 in the DQOps concepts section.
 
 ## Prerequisite
@@ -42,12 +42,12 @@ Here we can see the correct result from one daily_row_count check that we execut
 
 Data quality KPIs are the calculated percentage of passed data quality checks.
 Data quality KPIs dashboards show high-level data quality KPIs, aggregated on a macro scale that can be shared at a corporate level.
-To read more about [data quality KPIs, check DQO concept section](../../dqo-concepts/data-quality-kpis/data-quality-kpis.md).
+To read more about [data quality KPIs, check DQO concept section](../dqo-concepts/data-quality-kpis/data-quality-kpis.md).
 
 Data quality KPIs dashboards review key data metrics per connection,
-[data quality dimensions](../../dqo-concepts/data-quality-dimensions/data-quality-dimensions.md),
-[check category](../../dqo-concepts/checks/index.md#categories-of-checks) and
-[data grouping](../../dqo-concepts/data-grouping/data-grouping.md).
+[data quality dimensions](../dqo-concepts/data-quality-dimensions/data-quality-dimensions.md),
+[check category](../dqo-concepts/checks/index.md#categories-of-checks) and
+[data grouping](../dqo-concepts/data-grouping/data-grouping.md).
 
 To review the summary KPIs of all run checks use the **KPIs scorecard - summary** dashboards.
 
@@ -64,11 +64,11 @@ You have completed our quick tutorial, and now you know how to add connections, 
 ## Next steps
 
 - We have provided a variety of use cases which use openly available datasets [Google Cloud](https://cloud.google.com/datasets)
-  to help you in using DQOps effectively. You can find the [full list of use cases here](../../examples/index.md). 
+  to help you in using DQOps effectively. You can find the [full list of use cases here](../examples/index.md). 
 - DQOps allows you to keep track of the issues that arise during data quality monitoring and 
   send alert notifications directly to Slack. 
-  Learn more about [incidents](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md) and 
-  [Slack notifications](../../integrations/slack/configuring-slack-notifications.md).
+  Learn more about [incidents](../working-with-dqo/managing-data-quality-incidents-with-dqops.md) and 
+  [Slack notifications](../integrations/slack/configuring-slack-notifications.md).
 - The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. 
-  Learn how [data grouping in DQOps](../../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md)
+  Learn how [data grouping in DQOps](../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md)
   can help you to calculate separate data quality KPI scores for different groups of rows.

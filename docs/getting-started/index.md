@@ -7,12 +7,12 @@ Finally, we will review the results on the [data quality dashboards](../dqo-conc
 
 ## Overview
 
-1. [Installation](./installation/installation.md)
+1. [Installation](installation.md)
 
-2. [Connect to a data source](./add-data-source-connection/add-data-source-connection.md)
+2. [Connect to a data source](add-data-source-connection.md)
 
-3. [Review the initial results and run monitoring checks](./review-results-and-run-monitoring-checks/review-results-and-run-monitoring-checks.md)
+3. [Review the initial results and run monitoring checks](review-results-and-run-monitoring-checks.md)
 
-4. [Review the results on data quality dashboards](./review-results-on-dashboards/review-results-on-dashboards.md) 
+4. [Review the results on data quality dashboards](review-results-on-dashboards.md) 
 
  

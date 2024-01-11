@@ -7,10 +7,10 @@ nav:
   - What is DQOps?: "index.md"
   - Getting started:
       - "getting-started/index.md"
-      - Installation: "getting-started/installation/installation.md"
-      - Connect to a data source: "getting-started/add-data-source-connection/add-data-source-connection.md"
-      - Review initial results and run monitoring checks: "getting-started/review-results-and-run-monitoring-checks/review-results-and-run-monitoring-checks.md"
-      - Review results on the dashboards: "getting-started/review-results-on-dashboards/review-results-on-dashboards.md"
+      - Installation: "getting-started/installation.md"
+      - Connect to a data source: "getting-started/add-data-source-connection.md"
+      - Review initial results and run monitoring checks: "getting-started/review-results-and-run-monitoring-checks.md"
+      - Review results on the dashboards: "getting-started/review-results-on-dashboards.md"
   - DQOps concepts:
       - "dqo-concepts/index.md"
       - Data quality checks:

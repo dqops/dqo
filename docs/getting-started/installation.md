@@ -4,9 +4,9 @@
 
 DQOps is available in the  [PyPi repository](https://pypi.org/project/dqops/).
 
-If you want to [install DQOps directly from Git go to this section](../../dqops-installation/install-dqops-from-git.md).
+If you want to [install DQOps directly from Git go to this section](../dqops-installation/install-dqops-from-git.md).
 
-You can also [run DQOps as a Docker container](../../dqops-installation/run-dqops-as-docker-container.md) for the production use.
+You can also [run DQOps as a Docker container](../dqops-installation/run-dqops-as-docker-container.md) for the production use.
 
 
 ## Prerequisites
@@ -35,7 +35,7 @@ To use DQOps you need:
 
 1. Create an empty folder that will be used to store the configuration. 
    This folder is called the `DQOps user home` and is documented in the
-   [DQOps user home concept](../../dqo-concepts/home-folders/dqops-user-home.md) guide.
+   [DQOps user home concept](../dqo-concepts/home-folders/dqops-user-home.md) guide.
    DQOps will store the configuration of data sources, configured data quality checks and the data quality check
    results in this folder.
 
@@ -79,13 +79,13 @@ To use DQOps you need:
     You can also log in to your existing DQOps Cloud account.
 
     During the first registration, DQOps Cloud will generate your DQOps Cloud Pairing Key that is used to connect your local
-    DQOps instance to the [data quality dashboards](../../dqo-concepts/data-quality-dashboards/data-quality-dashboards.md).
+    DQOps instance to the [data quality dashboards](../dqo-concepts/data-quality-dashboards/data-quality-dashboards.md).
     You don't need to copy the DQOps Cloud Pairing Key. DQOps is smart enough to pick the DQOps Cloud API Key for you.
 
     ![DQOps API Key retrieved](https://dqops.com/docs/images/getting-started/dqops-api-key-retrieved.png)
 
     In case that you cancelled the registration procedure, you can copy the DQOps Cloud Pairing Key and configure your DQOps instance
-    by using the following command from the [DQOps command-line shell](../../dqo-concepts/command-line-interface/command-line-interface.md)
+    by using the following command from the [DQOps command-line shell](../dqo-concepts/command-line-interface/command-line-interface.md)
 
     ```
     dqo> settings apikey set <your DQOps Cloud Pairing API Key>
@@ -99,4 +99,4 @@ To use DQOps you need:
 ## Next step
 
 Now that you have installed and opened DQOps, it is time to
-[connect your first data source](../add-data-source-connection/add-data-source-connection.md).
+[connect your first data source](add-data-source-connection.md).
