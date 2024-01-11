@@ -6,8 +6,8 @@ Hive compatible folder tree, partitioned by the connection name, table name, and
 For example, check results for February 2023 for a single table would be stored in a file
 `.data/check_results/c=bigquery-public-data/t=america_health_rankings.ahr/m=2023-02-01/rule_results.0.parquet`.
 
-The data files are stored locally in the `.data` subfolder inside the **[DQOps User Home](../home-folders/dqops-user-home.md)** folder.
-**[DQOps User Home](../home-folders/dqops-user-home.md)** folder is the place on the disk where DQOps
+The data files are stored locally in the `.data` subfolder inside the **[DQOps User Home](home-folders/dqops-user-home.md)** folder.
+**[DQOps User Home](home-folders/dqops-user-home.md)** folder is the place on the disk where DQOps
 stores both the configuration files and the data result files.
 
 The `.data` folder is organized as an offline Data Quality Data Lake, storing files in a Hive-compatible partitioning folder structure.
@@ -67,13 +67,13 @@ $DQO_USER_HOME
     └─...   
 ```
 
-1. The data quality [check results](../../reference/parquetfiles/check_results.md).
-2. The execution [errors](../../reference/parquetfiles/errors.md) detected during the sensor's Jinja2 template rendering, running Python rules or returned
+1. The data quality [check results](../reference/parquetfiles/check_results.md).
+2. The execution [errors](../reference/parquetfiles/errors.md) detected during the sensor's Jinja2 template rendering, running Python rules or returned
    by the data source when the query is executed.
-3. The data quality [incidents](../../reference/parquetfiles/incidents.md)  which are groups of similar
+3. The data quality [incidents](../reference/parquetfiles/incidents.md)  which are groups of similar
    data quality issues (failed data quality checks) grouped into a single incident.
-4. The [sensor readouts](../../reference/parquetfiles/sensor_readouts.md) which are the captured metrics about the quality of the data source. 
-5. Basic [statistics](../../reference/parquetfiles/statistics.md) about the data sources at a table and column level, including the top 10 most common values for each column.
+4. The [sensor readouts](../reference/parquetfiles/sensor_readouts.md) which are the captured metrics about the quality of the data source. 
+5. Basic [statistics](../reference/parquetfiles/statistics.md) about the data sources at a table and column level, including the top 10 most common values for each column.
 6. The `.index` folder is used internally by DQOps to track the synchronization status of local files with the DQOps Cloud Data Lake.
    This folder is not intended to be modified manually.
 
@@ -86,30 +86,30 @@ The schema of the following tables are documented:
 
 | Table name      | Purpose                                                                                                         | Table folder and schema                                                  |
 |-----------------|-----------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------|
-| check results   | the results of data quality checks, evaluated by data quality rules                                             | [.data/check_results](../../reference/parquetfiles/check_results.md)     |
-| errors          | execution errors captured during the sensor rendering, rule evaluation or by running a query on the data source | [.data/errors](../../reference/parquetfiles/errors.md)                   |
-| incidents       | data quality incidents tracked by DQOps                                                                         | [.data/incidents](../../reference/parquetfiles/incidents.md)             |
-| sensor readouts | measures captured by data quality sensors                                                                       | [.data/sensor_readouts](../../reference/parquetfiles/sensor_readouts.md) |
-| statistics      | basic statistics about the data source, including column sample values                                          | [.data/statistics](../../reference/parquetfiles/statistics.md)           |
+| check results   | the results of data quality checks, evaluated by data quality rules                                             | [.data/check_results](../reference/parquetfiles/check_results.md)     |
+| errors          | execution errors captured during the sensor rendering, rule evaluation or by running a query on the data source | [.data/errors](../reference/parquetfiles/errors.md)                   |
+| incidents       | data quality incidents tracked by DQOps                                                                         | [.data/incidents](../reference/parquetfiles/incidents.md)             |
+| sensor readouts | measures captured by data quality sensors                                                                       | [.data/sensor_readouts](../reference/parquetfiles/sensor_readouts.md) |
+| statistics      | basic statistics about the data source, including column sample values                                          | [.data/statistics](../reference/parquetfiles/statistics.md)           |
 
 
 ## How data quality results are stored
 
 ### **Parquet tables**
-When a [data quality check](../checks/index.md) is [run](../running-data-quality-checks.md), DQOps runs the SQL query
-generated from the [data quality sensor](../sensors/sensors.md) template on the monitored data source.
+When a [data quality check](checks/index.md) is [run](running-data-quality-checks.md), DQOps runs the SQL query
+generated from the [data quality sensor](sensors/sensors.md) template on the monitored data source.
 The query results (called the **sensor readouts** in DQOps) are stored
-in the [sensor_readouts](../../reference/parquetfiles/sensor_readouts.md) Parquet table.
+in the [sensor_readouts](../reference/parquetfiles/sensor_readouts.md) Parquet table.
 
-The **sensor readouts** are processed by [data quality rules](../rules/rules.md), identifying invalid data quality results.
-Each sensor readout row is copied to the [check_results](../../reference/parquetfiles/check_results.md) table, but additional columns such as the `severity` are added.
+The **sensor readouts** are processed by [data quality rules](rules/rules.md), identifying invalid data quality results.
+Each sensor readout row is copied to the [check_results](../reference/parquetfiles/check_results.md) table, but additional columns such as the `severity` are added.
 
-Otherwise, if the data quality SQL query fails to execute, or the [data quality rule](../rules/rules.md) Python function fails,
-the error is stored in the [errors](../../reference/parquetfiles/errors.md) table.
+Otherwise, if the data quality SQL query fails to execute, or the [data quality rule](rules/rules.md) Python function fails,
+the error is stored in the [errors](../reference/parquetfiles/errors.md) table.
 
 ### **Sensor readout mapping**
-Let's suppose that the [profiling_nulls_percent](../../checks/column/nulls/nulls-percent.md#profile-nulls-percent) check is executed
-on [PostgreSQL](../../data-sources/postgresql.md) database.
+Let's suppose that the [profiling_nulls_percent](../checks/column/nulls/nulls-percent.md#profile-nulls-percent) check is executed
+on [PostgreSQL](../data-sources/postgresql.md) database.
 
 The SQL query generated by DQOps is shown below.
 
@@ -149,32 +149,32 @@ The additional columns that are captured are:
 
 - The `time_period_utc` for which the **sensor readout** is valid, but converted to a UTC timestamp.
 
-The result of the query is stored in the [sensor_readouts](../../reference/parquetfiles/sensor_readouts.md) Parquet table.
+The result of the query is stored in the [sensor_readouts](../reference/parquetfiles/sensor_readouts.md) Parquet table.
 
 ### **Additional sensor readout columns**
 The generated SQL query can also include the data grouping columns,
 such as `grouping_level_1`. Sample SQL queries generated with data grouping by column clauses are
-shown in the [data grouping concept](../data-grouping/data-grouping.md) guide.
+shown in the [data grouping concept](data-grouping/data-grouping.md) guide.
 
 DQOps will also store information about the monitored data source, table, column, data quality check name, type, category and dimension.
 
 
 ### **Identifiers**
-The rows in the [sensor_readouts](../../reference/parquetfiles/sensor_readouts.md), [check_results](../../reference/parquetfiles/check_results.md) and [errors](../../reference/parquetfiles/errors.md)
+The rows in the [sensor_readouts](../reference/parquetfiles/sensor_readouts.md), [check_results](../reference/parquetfiles/check_results.md) and [errors](../reference/parquetfiles/errors.md)
 share common identity columns that identify each data quality result, and each time series stream.
 
 | Column            | Description                                                                                                                                                                                                                                        | Sample value                         |
 |:------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------|
 | `time_period`     | The time period, for which the **sensor readout** is valid. The value may be truncated for some types of data quality checks.                                                                                                                      | 2023-04-01T00:00:00                  |
 | `check_hash`      | Hash code calculated from the data source (connection) name, schema name, table name, column name (optional) and the check name.                                                                                                                   | 4907661392389800303                  |
-| `data_group_hash` | Hash code calculated from the [data grouping](../data-grouping/data-grouping.md) level columns.                                                                                                                                                    | 3432492748264648423                  |
+| `data_group_hash` | Hash code calculated from the [data grouping](data-grouping/data-grouping.md) level columns.                                                                                                                                                    | 3432492748264648423                  |
 | `time_series_id`  | Unique identifier of each time series, a time series is a collection of data quality results captured by the same data quality check (identified by the `check_hash`), for the same data group that is identified by the `data_group_hash` column. | 441b8408-d34b-016f-19d0-ca77a4156fba |
 | **`id`**          | Primary key of the row. Calculated as as hash value of the `time_series_id`, `check_hash`, and the `time_period` columns, that identify each data quality result within a time series by the time period.                                          | ef606aaf-dec8-5207-4d54-db2f5669c32d |
 
 
 DQOps de-duplicates results stored in the data quality data warehouse by overwriting previous results identified by
 the same **`id`** column value. This means that the result of executing the same data quality check again will overwrite the previous result.
-The behavior is further described for each [type of data quality checks](../checks/index.md#types-of-checks).
+The behavior is further described for each [type of data quality checks](checks/index.md#types-of-checks).
 
 
 ## Storage of check results
@@ -182,7 +182,7 @@ The way check results data are stored varies depending on the type of check used
 
 ### **Profiling checks**
 
-When the [profiling data quality check](../checks/profiling-checks/profiling-checks.md) is run, 
+When the [profiling data quality check](checks/profiling-checks/profiling-checks.md) is run, 
 all sensor readouts are saved. As an illustration, if the check
 is run three times, the table with the results could look like this:
 
@@ -326,17 +326,17 @@ The local, offline copy of the Data Quality Data Lake enables multiple deploymen
 DQOps local instance authenticates to DQOps Cloud using a `DQOps Cloud Pairing API Key`, which can be found
 on the [https://cloud.dqops.com/account](https://cloud.dqops.com/account) page.
 
-The `DQOps Cloud Pairing API Key` is stored in the [`DQOps user home`*/.localsettings.dqosettings.yaml*](../../reference/yaml/LocalSettingsYaml.md) file.
+The `DQOps Cloud Pairing API Key` is stored in the [`DQOps user home`*/.localsettings.dqosettings.yaml*](../reference/yaml/LocalSettingsYaml.md) file.
 The file does not need to be modified manually. DQOps automates the process of issuing and downloading the `DQOps Cloud Pairing API Key`
 in a secure way.
 
-Open the [DQOps Shell](../command-line-interface.md) and type the command
+Open the [DQOps Shell](command-line-interface.md) and type the command
 
-&gt; [`cloud login`](../../command-line-interface/cloud.md#dqo-cloud-login)
+&gt; [`cloud login`](../command-line-interface/cloud.md#dqo-cloud-login)
 
 DQOps will open a browser window, navigate to the [https://cloud.dqops.com/account](https://cloud.dqops.com/account), and download the pairing key.
 
-Alternatively, if [DQOps is started as a Docker container](../../dqops-installation/run-dqops-as-docker-container.md), and 
+Alternatively, if [DQOps is started as a Docker container](../dqops-installation/run-dqops-as-docker-container.md), and 
 opening a browser window is not possible, it is also possible to pass the `DQOps Cloud Pairing API Key` using a `--dqo.cloud.api-key=KEY` parameter.
 Instead of using a parameter, the key can be passed by setting (and exporting) a `DQO_CLOUD_API_KEY` environment variable
 that holds the value of the `DQOps Cloud Pairing API Key`.
@@ -368,22 +368,22 @@ The synchronization can be triggered from the DQOps command line. The following 
 
 | Command&nbsp;name                                                                                 | Description                                                                                                                                                              |
 |---------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| &gt; [`cloud sync all`](../../command-line-interface/cloud.md#dqo-cloud-sync-all)                 | Synchronizes all files between the local `DQOps user home` folder and the DQOps Cloud Data Lake                                                                          |
-| &gt; [`cloud sync data`](../../command-line-interface/cloud.md#dqo-cloud-sync-data)               | Synchronizes only parquet (data) files between the local `DQOps user home`*/.data* folder and the DQOps Cloud Data Lake                                                  |
-| &gt; [`cloud sync sources`](../../command-line-interface/cloud.md#dqo-cloud-sync-sources)         | Synchronizes only the configuration of data sources (YAML files) between the local `DQOps user home`*/sources* folder and the DQOps Cloud Data Lake                      |
-| &gt; [`cloud sync sensors`](../../command-line-interface/cloud.md#dqo-cloud-sync-sensors)         | Synchronizes only the definition of custom data quality sensors (query templates) between the local `DQOps user home`*/sensors* folder and the DQOps Cloud Data Lake     |
-| &gt; [`cloud sync rules`](../../command-line-interface/cloud.md#dqo-cloud-sync-rules)             | Synchronizes only the definition of custom data quality rules (Python functions) between the local `DQOps user home`*/rules* folder and the DQOps Cloud Data Lake        |
-| &gt; [`cloud sync checks`](../../command-line-interface/cloud.md#dqo-cloud-sync-checks)           | Synchronizes only the definition of custom data quality checks (sensor and rule pairs) between the local `DQOps user home`*/checks* folder and the DQOps Cloud Data Lake |
-| &gt; [`cloud sync settings`](../../command-line-interface/cloud.md#dqo-cloud-sync-settings)       | Synchronizes only the configuration (setting) files between the local `DQOps user home`*/settings* folder and the DQOps Cloud Data Lake                                  |
-| &gt; [`cloud sync credentials`](../../command-line-interface/cloud.md#dqo-cloud-sync-credentials) | Synchronizes only the shared credential files between the local `DQOps user home`*/credentials* folder and the DQOps Cloud Data Lake                                     |
+| &gt; [`cloud sync all`](../command-line-interface/cloud.md#dqo-cloud-sync-all)                 | Synchronizes all files between the local `DQOps user home` folder and the DQOps Cloud Data Lake                                                                          |
+| &gt; [`cloud sync data`](../command-line-interface/cloud.md#dqo-cloud-sync-data)               | Synchronizes only parquet (data) files between the local `DQOps user home`*/.data* folder and the DQOps Cloud Data Lake                                                  |
+| &gt; [`cloud sync sources`](../command-line-interface/cloud.md#dqo-cloud-sync-sources)         | Synchronizes only the configuration of data sources (YAML files) between the local `DQOps user home`*/sources* folder and the DQOps Cloud Data Lake                      |
+| &gt; [`cloud sync sensors`](../command-line-interface/cloud.md#dqo-cloud-sync-sensors)         | Synchronizes only the definition of custom data quality sensors (query templates) between the local `DQOps user home`*/sensors* folder and the DQOps Cloud Data Lake     |
+| &gt; [`cloud sync rules`](../command-line-interface/cloud.md#dqo-cloud-sync-rules)             | Synchronizes only the definition of custom data quality rules (Python functions) between the local `DQOps user home`*/rules* folder and the DQOps Cloud Data Lake        |
+| &gt; [`cloud sync checks`](../command-line-interface/cloud.md#dqo-cloud-sync-checks)           | Synchronizes only the definition of custom data quality checks (sensor and rule pairs) between the local `DQOps user home`*/checks* folder and the DQOps Cloud Data Lake |
+| &gt; [`cloud sync settings`](../command-line-interface/cloud.md#dqo-cloud-sync-settings)       | Synchronizes only the configuration (setting) files between the local `DQOps user home`*/settings* folder and the DQOps Cloud Data Lake                                  |
+| &gt; [`cloud sync credentials`](../command-line-interface/cloud.md#dqo-cloud-sync-credentials) | Synchronizes only the shared credential files between the local `DQOps user home`*/credentials* folder and the DQOps Cloud Data Lake                                     |
 
 
 ### **Automatic synchronization**
 DQOps automatically runs an initial synchronization when the application is started in a shell mode (without any commands to run and exit),
-or when DQOps is started in a server mode, using the [`dqo run`](../../command-line-interface/run.md) command.
+or when DQOps is started in a server mode, using the [`dqo run`](../command-line-interface/run.md) command.
 
 After DQOps is started, teh synchronization is performed according to the CRON schedule configured in the 
-[`--dqo.scheduler.synchronize-cron-schedule`](../../command-line-interface/dqo.md#--dqo.scheduler.synchronize-cron-schedule) parameter.
+[`--dqo.scheduler.synchronize-cron-schedule`](../command-line-interface/dqo.md#--dqo.scheduler.synchronize-cron-schedule) parameter.
 
 !!! note "FREE (community) version limits"
 
@@ -394,7 +394,7 @@ After DQOps is started, teh synchronization is performed according to the CRON s
 ### **Trigger synchronization from DQOps Python client**
 Synchronization of a DQOps instance with the DQOps Cloud Data Lake can be also triggered using a DQOps Python client.
 
-Please find the documentation of all parameters in the [`synchronize_folders` command reference](../../client/operations/jobs.md#synchronize_folders).
+Please find the documentation of all parameters in the [`synchronize_folders` command reference](../client/operations/jobs.md#synchronize_folders).
 
 
 ```python
@@ -451,7 +451,7 @@ AWS Athena, and AWS Redshift Spectrum.
 
 
 ## What's next
-- Review the [Parquet schema](../../reference/parquetfiles/index.md) of all tables stored in the `.data` folder
-- Learn how to [delete selected data quality results](../../working-with-dqo/delete-data-quality-results.md)
-- Learn about other folders stored in the **[DQOps user home](../home-folders/dqops-user-home.md)** folder
-- Review the architecture of DQOps and [how folders in the `DQOps user home` are handled](../architecture/dqops-architecture.md)
+- Review the [Parquet schema](../reference/parquetfiles/index.md) of all tables stored in the `.data` folder
+- Learn how to [delete selected data quality results](../working-with-dqo/delete-data-quality-results.md)
+- Learn about other folders stored in the **[DQOps user home](home-folders/dqops-user-home.md)** folder
+- Review the architecture of DQOps and [how folders in the `DQOps user home` are handled](architecture/dqops-architecture.md)

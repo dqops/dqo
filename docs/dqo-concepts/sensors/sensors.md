@@ -121,5 +121,5 @@ DQOps stores a copy of the sensor data locally on the monitoring agent. The data
 in an Apache Hive compatible folder tree, partitioned by the data source, monitored table name, and the month.
 The sensor's query results are called **sensor readouts** in DQOps. The results are stored
 in a [sensor_readouts](../../reference/parquetfiles/sensor_readouts.md) parquet table as described in
-the [data storage](../data-storage/data-storage.md) concept.
+the [data storage](../data-storage-of-data-quality-results.md) concept.
 

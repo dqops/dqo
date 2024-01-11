@@ -83,7 +83,7 @@ These topics introduce the basic concepts of DQOps.
     - or a combination of any other dimensions
 
 
- - **[Incremental data quality monitoring](./data-quality-kpis/incremental-data-quality-monitoring.md)**
+ - **[Incremental data quality monitoring](incremental-data-quality-monitoring.md)**
 
     Learn how [partition checks](./checks/partition-checks/partition-checks.md) are used to analyze data quality incrementally,
     even for very big tables, reaching terabyte or petabyte scale.
@@ -148,13 +148,13 @@ These topics introduce the basic concepts of DQOps.
     Command-line access to DQOps is supported by a shell interface. The DQOps shell supports command and table name completion.
 
 
- - **[Data storage](./data-storage/data-storage.md)**
+ - **[Data storage](data-storage-of-data-quality-results.md)**
 
     DQOps stores both the configuration of data sources, the configuration of data quality checks activated on tables
     and the data quality check execution results locally in a `DQOps user home` folder.
 
     The data quality results are stored in a *$DQO_USER_HOME/.data* folder that is a Hive-compliant local data lake.
-    Please read the [data storage](./data-storage/data-storage.md) concept guide to understand the data lake structure.
+    Please read the [data storage](data-storage-of-data-quality-results.md) concept guide to understand the data lake structure.
 
 
  - **[Deployment architecture](./architecture/dqops-architecture.md)**
@@ -167,5 +167,5 @@ These topics introduce the basic concepts of DQOps.
 
     Detailed data quality execution flows that show how DQOps executes [data quality sensors](./sensors/sensors.md),
     [data quality rules](./rules/rules.md), [data quality checks](./checks/index.md),
-    and how the data is [stored](./data-storage/data-storage.md). Learn how execution errors are stored.
+    and how the data is [stored](data-storage-of-data-quality-results.md). Learn how execution errors are stored.
  

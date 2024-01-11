@@ -377,7 +377,7 @@ The following list describes the role of each internal component.
      container's memory limit. For example, to run *dqops/dqo* container with a limit of 8 GB, use *docker run -m 8g dqops/dqo run*.
 
 13.  `Local data quality lake` is a local copy of the Parquet files that are managed by the Parquet in-memory cache.
-     The list of tables and their partitioning formats is described in the [data storage](../data-storage/data-storage.md) article.
+     The list of tables and their partitioning formats is described in the [data storage](../data-storage-of-data-quality-results.md) article.
 
 14.  `Notification queue` is an internal component that calls [notifications](../../integrations/webhooks/index.md)
      webhooks, sending new data quality incidents and incident's status changes.

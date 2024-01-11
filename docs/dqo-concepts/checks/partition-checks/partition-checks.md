@@ -147,7 +147,7 @@ nulls_percent.
 
 
 ## What's next
-- Learn how partition checks are used for [incremental data quality monitoring](../../data-quality-kpis/incremental-data-quality-monitoring.md)
+- Learn how partition checks are used for [incremental data quality monitoring](../../incremental-data-quality-monitoring.md)
 - [Learn more about profiling checks](../profiling-checks/profiling-checks.md)
 - [Learn more about monitoring checks](../monitoring-checks/monitoring-checks.md)
 

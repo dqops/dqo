@@ -10,7 +10,7 @@ In DQOps, there are two ways to delete stored data quality results:
 In DQOps, sensor readouts and check results are stored as Apache Parquet files following the Apache
 Hive compatible folder tree, partitioned by connection name, table name, and month.
 
-For more information where and how the sensor readouts and check results are stored, see [DQOps concepts section](../dqo-concepts/data-storage/data-storage.md).
+For more information where and how the sensor readouts and check results are stored, see [DQOps concepts section](../dqo-concepts/data-storage-of-data-quality-results.md).
 
 You can learn [how to run data quality checks here](run-data-quality-checks.md).
 

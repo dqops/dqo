@@ -125,7 +125,7 @@ To start the DQOps application with the example, follow the steps below.
 
     ![Initializing DQOps user home folder](https://dqops.com/docs/images/getting-started/initializing-user-home-folder2.png)
 
-    The DQOps user home folder locally stores data such as sensor and checkout readings, as well as data source configurations. [You can learn more about data storage here](../dqo-concepts/data-storage/data-storage.md).
+    The DQOps user home folder locally stores data such as sensor and checkout readings, as well as data source configurations. [You can learn more about data storage here](../dqo-concepts/data-storage-of-data-quality-results.md).
 
 
 3. Login to DQOps Cloud.

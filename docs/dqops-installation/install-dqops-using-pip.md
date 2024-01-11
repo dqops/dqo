@@ -64,7 +64,7 @@ DQOps is available on [PyPi repository](https://pypi.org/project/dqops/).
     After installation, you will be asked whether to initialize the DQOps `DQOps User Home` folder in the default location.
     Type Y to initialize the folder content.  
     The `DQOps User Home` folder locally stores data such as sensor readouts and checkout results, as well as data source configurations.
-    [You can learn more about data storage here](../dqo-concepts/data-storage/data-storage.md). 
+    [You can learn more about data storage here](../dqo-concepts/data-storage-of-data-quality-results.md). 
 
     ![Initializing DQOps user home folder](https://dqops.com/docs/images/getting-started/initializing-user-home-folder2.png)
 

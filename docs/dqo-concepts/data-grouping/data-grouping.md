@@ -388,5 +388,5 @@ identification of the source of the data quality issue.
 
 ## What's next
 - Learn how DQOps calculated [data quality KPIs](../data-quality-kpis/data-quality-kpis.md)
-- Read how the data quality results are [stored as a Hive-compliant local data warehouse](../data-storage/data-storage.md)
+- Read how the data quality results are [stored as a Hive-compliant local data warehouse](../data-storage-of-data-quality-results.md)
 - Check how the **data groups** are aggregated on the [data quality dashboards](../data-quality-dashboards/data-quality-dashboards.md) 

@@ -18,7 +18,7 @@ To run DQOps as a Docker container you need
     definitions and results in the cloud or data quality dashboards. [Create a new DQOps Cloud account here](https://cloud.dqops.com/registration).
 - A `DQOps User Home` folder is created locally which will be mounted to your container. Volumes are the preferred mechanism for persisting data generated
     by and used by Docker containers. The `DQOps User Home` folder will locally store data such as sensor readouts, checkout results, and data source configurations.
-    [You can learn more about data storage here](../dqo-concepts/data-storage/data-storage.md).
+    [You can learn more about data storage here](../dqo-concepts/data-storage-of-data-quality-results.md).
 
 
 ## Start DQOps in Shell mode

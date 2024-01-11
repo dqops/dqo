@@ -21,7 +21,7 @@ DQOps achieves its principal idea by separating the platform into four core comp
 
 - `DQOps user home` - Local folder storing the configuration of activated data quality checks and a local copy of all
   data quality results, enabling offline and hybrid deployment models.
-  The data model is described in the [Data storage](../data-storage/data-storage.md) documentation.
+  The data model is described in the [Data storage](../data-storage-of-data-quality-results.md) documentation.
 
  
 - `DQOps Cloud` - DQOps hosted cloud backend for exposing data quality dashboards which has the following components:
@@ -128,7 +128,7 @@ by setting the [--server.port](../../command-line-interface/dqo.md) startup para
 ### **DQOps user home**
 
 The *DQOps user home* folder (abbreviated as the *$D.U.H*) is the location where DQOps stores YAML metadata files, custom definitions for data quality checks
-and the data folders. The detailed description of the folder is [here](../data-storage/data-storage.md).
+and the data folders. The detailed description of the folder is [here](../data-storage-of-data-quality-results.md).
 DQOps uses the current working folder as the *DQOps user home*, unless a different folder was specified
 by setting the `$DQO_USER_HOME` environment variable or passing a *--dqo.user.home=&lt;alternative_user_home_location&gt;* startup parameter.
 

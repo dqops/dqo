@@ -165,14 +165,14 @@ of monitoring checks: *daily* checks and *monthly* checks.
 In contrast to monitoring checks, partition checks capture a separate data quality result for each partition.
 To run a partition check, you need to select a column that serves as the time partitioning key for the data.
 Partition checks are also divided into two categories: daily checks and monthly checks.
-Partition checks are designed for [incremental data quality monitoring](../data-quality-kpis/incremental-data-quality-monitoring.md).
+Partition checks are designed for [incremental data quality monitoring](../incremental-data-quality-monitoring.md).
 
 
 ## Tested time periods
 Knowing the time when the data quality issue was present is essential for knowing when the issue has begun.
 The data quality issue will be fixed, but the same data quality issue can happen again in the future.
 
-DQOps stores [historical data quality results](../data-storage/data-storage.md) for further analysis, and
+DQOps stores [historical data quality results](../data-storage-of-data-quality-results.md) for further analysis, and
 to measure the trustworthiness of the data source by calculating a [data quality KPI](../data-quality-kpis/data-quality-kpis.md) score.
 
 
@@ -323,7 +323,7 @@ is designed to measure the data quality of *append-only* tables, such as fact ta
 It is also designed for measuring the quality of very big tables, analyzing only the *tail* of the database, and avoiding
 unnecessary pressure on the data source caused by data quality monitoring.
 
-Please read the [monitoring data quality incrementally](../data-quality-kpis/incremental-data-quality-monitoring.md) guide for details
+Please read the [monitoring data quality incrementally](../incremental-data-quality-monitoring.md) guide for details
 and additional use cases.
 
 
