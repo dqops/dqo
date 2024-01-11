@@ -48,7 +48,7 @@ http://localhost:8888/api/environment/settings
 	    raise_on_unexpected_status=True
 	)
 	
-	get_dqo_settings.sync(
+	call_result = get_dqo_settings.sync(
 	    client=dqops_client
 	)
 	
@@ -66,11 +66,9 @@ http://localhost:8888/api/environment/settings
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_dqo_settings.asyncio(
+	call_result = await get_dqo_settings.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -89,7 +87,7 @@ http://localhost:8888/api/environment/settings
 	    raise_on_unexpected_status=True
 	)
 	
-	get_dqo_settings.sync(
+	call_result = get_dqo_settings.sync(
 	    client=dqops_client
 	)
 	
@@ -110,11 +108,9 @@ http://localhost:8888/api/environment/settings
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_dqo_settings.asyncio(
+	call_result = await get_dqo_settings.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -175,7 +171,7 @@ http://localhost:8888/api/environment/profile
 	    raise_on_unexpected_status=True
 	)
 	
-	get_user_profile.sync(
+	call_result = get_user_profile.sync(
 	    client=dqops_client
 	)
 	
@@ -193,11 +189,9 @@ http://localhost:8888/api/environment/profile
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_user_profile.asyncio(
+	call_result = await get_user_profile.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -216,7 +210,7 @@ http://localhost:8888/api/environment/profile
 	    raise_on_unexpected_status=True
 	)
 	
-	get_user_profile.sync(
+	call_result = get_user_profile.sync(
 	    client=dqops_client
 	)
 	
@@ -237,11 +231,9 @@ http://localhost:8888/api/environment/profile
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_user_profile.asyncio(
+	call_result = await get_user_profile.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -316,7 +308,7 @@ http://localhost:8888/api/environment/issueapikey
 	    raise_on_unexpected_status=True
 	)
 	
-	issue_api_key.sync(
+	call_result = issue_api_key.sync(
 	    client=dqops_client
 	)
 	
@@ -334,11 +326,9 @@ http://localhost:8888/api/environment/issueapikey
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = issue_api_key.asyncio(
+	call_result = await issue_api_key.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -357,7 +347,7 @@ http://localhost:8888/api/environment/issueapikey
 	    raise_on_unexpected_status=True
 	)
 	
-	issue_api_key.sync(
+	call_result = issue_api_key.sync(
 	    client=dqops_client
 	)
 	
@@ -378,11 +368,9 @@ http://localhost:8888/api/environment/issueapikey
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = issue_api_key.asyncio(
+	call_result = await issue_api_key.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 

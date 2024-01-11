@@ -102,7 +102,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		columns=ColumnSpecMap()
 	)
 	
-	create_table.sync(
+	call_result = create_table.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -166,15 +166,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		columns=ColumnSpecMap()
 	)
 	
-	async_result = create_table.asyncio(
+	call_result = await create_table.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -235,7 +233,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		columns=ColumnSpecMap()
 	)
 	
-	create_table.sync(
+	call_result = create_table.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -302,15 +300,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		columns=ColumnSpecMap()
 	)
 	
-	async_result = create_table.asyncio(
+	call_result = await create_table.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -372,7 +368,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    'http://localhost:8888/'
 	)
 	
-	delete_table.sync(
+	call_result = delete_table.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -392,14 +388,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    'http://localhost:8888/'
 	)
 	
-	async_result = delete_table.asyncio(
+	call_result = await delete_table.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -417,7 +411,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    token=token
 	)
 	
-	delete_table.sync(
+	call_result = delete_table.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -440,14 +434,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    token=token
 	)
 	
-	async_result = delete_table.asyncio(
+	call_result = await delete_table.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -518,7 +510,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table.sync(
+	call_result = get_table.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -539,14 +531,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table.asyncio(
+	call_result = await get_table.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -565,7 +555,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table.sync(
+	call_result = get_table.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -589,14 +579,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table.asyncio(
+	call_result = await get_table.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -666,7 +654,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_basic.sync(
+	call_result = get_table_basic.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -687,14 +675,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_basic.asyncio(
+	call_result = await get_table_basic.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -713,7 +699,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_basic.sync(
+	call_result = get_table_basic.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -737,14 +723,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_basic.asyncio(
+	call_result = await get_table_basic.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -864,7 +848,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_columns_monitoring_checks_model.sync(
+	call_result = get_table_columns_monitoring_checks_model.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -886,15 +870,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_columns_monitoring_checks_model.asyncio(
+	call_result = await get_table_columns_monitoring_checks_model.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    CheckTimeScale.daily,
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -913,7 +895,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_columns_monitoring_checks_model.sync(
+	call_result = get_table_columns_monitoring_checks_model.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -938,15 +920,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_columns_monitoring_checks_model.asyncio(
+	call_result = await get_table_columns_monitoring_checks_model.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    CheckTimeScale.daily,
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -1034,7 +1014,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_columns_partitioned_checks_model.sync(
+	call_result = get_table_columns_partitioned_checks_model.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -1056,15 +1036,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_columns_partitioned_checks_model.asyncio(
+	call_result = await get_table_columns_partitioned_checks_model.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    CheckTimeScale.daily,
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -1083,7 +1061,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_columns_partitioned_checks_model.sync(
+	call_result = get_table_columns_partitioned_checks_model.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -1108,15 +1086,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_columns_partitioned_checks_model.asyncio(
+	call_result = await get_table_columns_partitioned_checks_model.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    CheckTimeScale.daily,
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -1203,7 +1179,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_columns_profiling_checks_model.sync(
+	call_result = get_table_columns_profiling_checks_model.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -1224,14 +1200,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_columns_profiling_checks_model.asyncio(
+	call_result = await get_table_columns_profiling_checks_model.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -1250,7 +1224,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_columns_profiling_checks_model.sync(
+	call_result = get_table_columns_profiling_checks_model.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -1274,14 +1248,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_columns_profiling_checks_model.asyncio(
+	call_result = await get_table_columns_profiling_checks_model.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -1361,7 +1333,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_comments.sync(
+	call_result = get_table_comments.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -1382,14 +1354,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_comments.asyncio(
+	call_result = await get_table_comments.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -1408,7 +1378,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_comments.sync(
+	call_result = get_table_comments.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -1432,14 +1402,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_comments.asyncio(
+	call_result = await get_table_comments.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -1519,7 +1487,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_daily_monitoring_checks.sync(
+	call_result = get_table_daily_monitoring_checks.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -1540,14 +1508,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_daily_monitoring_checks.asyncio(
+	call_result = await get_table_daily_monitoring_checks.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -1566,7 +1532,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_daily_monitoring_checks.sync(
+	call_result = get_table_daily_monitoring_checks.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -1590,14 +1556,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_daily_monitoring_checks.asyncio(
+	call_result = await get_table_daily_monitoring_checks.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -1673,7 +1637,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_daily_partitioned_checks.sync(
+	call_result = get_table_daily_partitioned_checks.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -1694,14 +1658,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_daily_partitioned_checks.asyncio(
+	call_result = await get_table_daily_partitioned_checks.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -1720,7 +1682,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_daily_partitioned_checks.sync(
+	call_result = get_table_daily_partitioned_checks.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -1744,14 +1706,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_daily_partitioned_checks.asyncio(
+	call_result = await get_table_daily_partitioned_checks.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -1827,7 +1787,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_default_grouping_configuration.sync(
+	call_result = get_table_default_grouping_configuration.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -1848,14 +1808,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_default_grouping_configuration.asyncio(
+	call_result = await get_table_default_grouping_configuration.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -1874,7 +1832,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_default_grouping_configuration.sync(
+	call_result = get_table_default_grouping_configuration.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -1898,14 +1856,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_default_grouping_configuration.asyncio(
+	call_result = await get_table_default_grouping_configuration.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -1978,7 +1934,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_incident_grouping.sync(
+	call_result = get_table_incident_grouping.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -1999,14 +1955,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_incident_grouping.asyncio(
+	call_result = await get_table_incident_grouping.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -2025,7 +1979,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_incident_grouping.sync(
+	call_result = get_table_incident_grouping.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -2049,14 +2003,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_incident_grouping.asyncio(
+	call_result = await get_table_incident_grouping.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -2129,7 +2081,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_labels.sync(
+	call_result = get_table_labels.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -2150,14 +2102,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_labels.asyncio(
+	call_result = await get_table_labels.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -2176,7 +2126,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_labels.sync(
+	call_result = get_table_labels.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -2200,14 +2150,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_labels.asyncio(
+	call_result = await get_table_labels.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -2276,7 +2224,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_monitoring_checks_basic_model.sync(
+	call_result = get_table_monitoring_checks_basic_model.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -2298,15 +2246,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_monitoring_checks_basic_model.asyncio(
+	call_result = await get_table_monitoring_checks_basic_model.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    CheckTimeScale.daily,
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -2325,7 +2271,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_monitoring_checks_basic_model.sync(
+	call_result = get_table_monitoring_checks_basic_model.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -2350,15 +2296,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_monitoring_checks_basic_model.asyncio(
+	call_result = await get_table_monitoring_checks_basic_model.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    CheckTimeScale.daily,
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -2462,7 +2406,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_monitoring_checks_model.sync(
+	call_result = get_table_monitoring_checks_model.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -2484,15 +2428,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_monitoring_checks_model.asyncio(
+	call_result = await get_table_monitoring_checks_model.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    CheckTimeScale.daily,
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -2511,7 +2453,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_monitoring_checks_model.sync(
+	call_result = get_table_monitoring_checks_model.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -2536,15 +2478,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_monitoring_checks_model.asyncio(
+	call_result = await get_table_monitoring_checks_model.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    CheckTimeScale.daily,
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -2638,7 +2578,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_monitoring_checks_model_filter.sync(
+	call_result = get_table_monitoring_checks_model_filter.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -2662,7 +2602,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_monitoring_checks_model_filter.asyncio(
+	call_result = await get_table_monitoring_checks_model_filter.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -2671,8 +2611,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    'sample_check',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -2691,7 +2629,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_monitoring_checks_model_filter.sync(
+	call_result = get_table_monitoring_checks_model_filter.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -2718,7 +2656,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_monitoring_checks_model_filter.asyncio(
+	call_result = await get_table_monitoring_checks_model_filter.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -2727,8 +2665,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    'sample_check',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -2819,7 +2755,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_monitoring_checks_monthly.sync(
+	call_result = get_table_monitoring_checks_monthly.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -2840,14 +2776,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_monitoring_checks_monthly.asyncio(
+	call_result = await get_table_monitoring_checks_monthly.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -2866,7 +2800,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_monitoring_checks_monthly.sync(
+	call_result = get_table_monitoring_checks_monthly.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -2890,14 +2824,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_monitoring_checks_monthly.asyncio(
+	call_result = await get_table_monitoring_checks_monthly.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -2976,7 +2908,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_monitoring_checks_templates.sync(
+	call_result = get_table_monitoring_checks_templates.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -2998,15 +2930,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_monitoring_checks_templates.asyncio(
+	call_result = await get_table_monitoring_checks_templates.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    CheckTimeScale.daily,
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -3025,7 +2955,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_monitoring_checks_templates.sync(
+	call_result = get_table_monitoring_checks_templates.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -3050,15 +2980,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_monitoring_checks_templates.asyncio(
+	call_result = await get_table_monitoring_checks_templates.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    CheckTimeScale.daily,
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -3133,7 +3061,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_partitioned_checks_basic_model.sync(
+	call_result = get_table_partitioned_checks_basic_model.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -3155,15 +3083,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_partitioned_checks_basic_model.asyncio(
+	call_result = await get_table_partitioned_checks_basic_model.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    CheckTimeScale.daily,
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -3182,7 +3108,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_partitioned_checks_basic_model.sync(
+	call_result = get_table_partitioned_checks_basic_model.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -3207,15 +3133,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_partitioned_checks_basic_model.asyncio(
+	call_result = await get_table_partitioned_checks_basic_model.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    CheckTimeScale.daily,
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -3319,7 +3243,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_partitioned_checks_model.sync(
+	call_result = get_table_partitioned_checks_model.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -3341,15 +3265,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_partitioned_checks_model.asyncio(
+	call_result = await get_table_partitioned_checks_model.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    CheckTimeScale.daily,
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -3368,7 +3290,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_partitioned_checks_model.sync(
+	call_result = get_table_partitioned_checks_model.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -3393,15 +3315,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_partitioned_checks_model.asyncio(
+	call_result = await get_table_partitioned_checks_model.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    CheckTimeScale.daily,
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -3495,7 +3415,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_partitioned_checks_model_filter.sync(
+	call_result = get_table_partitioned_checks_model_filter.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -3519,7 +3439,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_partitioned_checks_model_filter.asyncio(
+	call_result = await get_table_partitioned_checks_model_filter.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -3528,8 +3448,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    'sample_check',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -3548,7 +3466,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_partitioned_checks_model_filter.sync(
+	call_result = get_table_partitioned_checks_model_filter.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -3575,7 +3493,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_partitioned_checks_model_filter.asyncio(
+	call_result = await get_table_partitioned_checks_model_filter.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -3584,8 +3502,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    'sample_check',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -3676,7 +3592,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_partitioned_checks_monthly.sync(
+	call_result = get_table_partitioned_checks_monthly.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -3697,14 +3613,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_partitioned_checks_monthly.asyncio(
+	call_result = await get_table_partitioned_checks_monthly.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -3723,7 +3637,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_partitioned_checks_monthly.sync(
+	call_result = get_table_partitioned_checks_monthly.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -3747,14 +3661,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_partitioned_checks_monthly.asyncio(
+	call_result = await get_table_partitioned_checks_monthly.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -3833,7 +3745,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_partitioned_checks_templates.sync(
+	call_result = get_table_partitioned_checks_templates.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -3855,15 +3767,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_partitioned_checks_templates.asyncio(
+	call_result = await get_table_partitioned_checks_templates.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    CheckTimeScale.daily,
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -3882,7 +3792,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_partitioned_checks_templates.sync(
+	call_result = get_table_partitioned_checks_templates.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -3907,15 +3817,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_partitioned_checks_templates.asyncio(
+	call_result = await get_table_partitioned_checks_templates.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    CheckTimeScale.daily,
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -3989,7 +3897,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_partitioning.sync(
+	call_result = get_table_partitioning.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -4010,14 +3918,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_partitioning.asyncio(
+	call_result = await get_table_partitioning.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -4036,7 +3942,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_partitioning.sync(
+	call_result = get_table_partitioning.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -4060,14 +3966,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_partitioning.asyncio(
+	call_result = await get_table_partitioning.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -4151,7 +4055,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_profiling_checks.sync(
+	call_result = get_table_profiling_checks.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -4172,14 +4076,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_profiling_checks.asyncio(
+	call_result = await get_table_profiling_checks.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -4198,7 +4100,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_profiling_checks.sync(
+	call_result = get_table_profiling_checks.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -4222,14 +4124,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_profiling_checks.asyncio(
+	call_result = await get_table_profiling_checks.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -4305,7 +4205,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_profiling_checks_basic_model.sync(
+	call_result = get_table_profiling_checks_basic_model.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -4326,14 +4226,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_profiling_checks_basic_model.asyncio(
+	call_result = await get_table_profiling_checks_basic_model.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -4352,7 +4250,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_profiling_checks_basic_model.sync(
+	call_result = get_table_profiling_checks_basic_model.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -4376,14 +4274,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_profiling_checks_basic_model.asyncio(
+	call_result = await get_table_profiling_checks_basic_model.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -4486,7 +4382,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_profiling_checks_model.sync(
+	call_result = get_table_profiling_checks_model.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -4507,14 +4403,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_profiling_checks_model.asyncio(
+	call_result = await get_table_profiling_checks_model.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -4533,7 +4427,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_profiling_checks_model.sync(
+	call_result = get_table_profiling_checks_model.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -4557,14 +4451,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_profiling_checks_model.asyncio(
+	call_result = await get_table_profiling_checks_model.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -4657,7 +4549,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_profiling_checks_model_filter.sync(
+	call_result = get_table_profiling_checks_model_filter.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -4680,7 +4572,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_profiling_checks_model_filter.asyncio(
+	call_result = await get_table_profiling_checks_model_filter.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -4688,8 +4580,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    'sample_check',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -4708,7 +4598,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_profiling_checks_model_filter.sync(
+	call_result = get_table_profiling_checks_model_filter.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -4734,7 +4624,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_profiling_checks_model_filter.asyncio(
+	call_result = await get_table_profiling_checks_model_filter.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -4742,8 +4632,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    'sample_check',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -4836,7 +4724,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_profiling_checks_templates.sync(
+	call_result = get_table_profiling_checks_templates.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -4857,14 +4745,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_profiling_checks_templates.asyncio(
+	call_result = await get_table_profiling_checks_templates.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -4883,7 +4769,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_profiling_checks_templates.sync(
+	call_result = get_table_profiling_checks_templates.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -4907,14 +4793,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_profiling_checks_templates.asyncio(
+	call_result = await get_table_profiling_checks_templates.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -4989,7 +4873,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_scheduling_group_override.sync(
+	call_result = get_table_scheduling_group_override.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -5011,15 +4895,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_scheduling_group_override.asyncio(
+	call_result = await get_table_scheduling_group_override.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    CheckRunScheduleGroup.partitioned_daily,
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -5038,7 +4920,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_scheduling_group_override.sync(
+	call_result = get_table_scheduling_group_override.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -5063,15 +4945,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_scheduling_group_override.asyncio(
+	call_result = await get_table_scheduling_group_override.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    CheckRunScheduleGroup.partitioned_daily,
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -5141,7 +5021,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_statistics.sync(
+	call_result = get_table_statistics.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -5162,14 +5042,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_statistics.asyncio(
+	call_result = await get_table_statistics.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -5188,7 +5066,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_statistics.sync(
+	call_result = get_table_statistics.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -5212,14 +5090,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_statistics.asyncio(
+	call_result = await get_table_statistics.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -5288,7 +5164,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_tables.sync(
+	call_result = get_tables.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    client=dqops_client
@@ -5308,13 +5184,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_tables.asyncio(
+	call_result = await get_tables.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -5333,7 +5207,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_tables.sync(
+	call_result = get_tables.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    client=dqops_client
@@ -5356,13 +5230,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_tables.asyncio(
+	call_result = await get_tables.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -5607,7 +5479,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		columns=ColumnSpecMap()
 	)
 	
-	update_table.sync(
+	call_result = update_table.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -5671,15 +5543,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		columns=ColumnSpecMap()
 	)
 	
-	async_result = update_table.asyncio(
+	call_result = await update_table.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -5740,7 +5610,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		columns=ColumnSpecMap()
 	)
 	
-	update_table.sync(
+	call_result = update_table.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -5807,15 +5677,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		columns=ColumnSpecMap()
 	)
 	
-	async_result = update_table.asyncio(
+	call_result = await update_table.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -5933,7 +5801,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	update_table_basic.sync(
+	call_result = update_table_basic.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -6007,15 +5875,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	async_result = update_table_basic.asyncio(
+	call_result = await update_table_basic.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -6086,7 +5952,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	update_table_basic.sync(
+	call_result = update_table_basic.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -6163,15 +6029,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	async_result = update_table_basic.asyncio(
+	call_result = await update_table_basic.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -6254,7 +6118,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		)
 	]
 	
-	update_table_comments.sync(
+	call_result = update_table_comments.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -6293,15 +6157,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		)
 	]
 	
-	async_result = update_table_comments.asyncio(
+	call_result = await update_table_comments.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -6337,7 +6199,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		)
 	]
 	
-	update_table_comments.sync(
+	call_result = update_table_comments.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -6379,15 +6241,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		)
 	]
 	
-	async_result = update_table_comments.asyncio(
+	call_result = await update_table_comments.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -6470,7 +6330,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		comparisons=TableComparisonDailyMonitoringChecksSpecMap()
 	)
 	
-	update_table_daily_monitoring_checks.sync(
+	call_result = update_table_daily_monitoring_checks.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -6509,15 +6369,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		comparisons=TableComparisonDailyMonitoringChecksSpecMap()
 	)
 	
-	async_result = update_table_daily_monitoring_checks.asyncio(
+	call_result = await update_table_daily_monitoring_checks.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -6553,7 +6411,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		comparisons=TableComparisonDailyMonitoringChecksSpecMap()
 	)
 	
-	update_table_daily_monitoring_checks.sync(
+	call_result = update_table_daily_monitoring_checks.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -6595,15 +6453,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		comparisons=TableComparisonDailyMonitoringChecksSpecMap()
 	)
 	
-	async_result = update_table_daily_monitoring_checks.asyncio(
+	call_result = await update_table_daily_monitoring_checks.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -6677,7 +6533,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		)
 	)
 	
-	update_table_default_grouping_configuration.sync(
+	call_result = update_table_default_grouping_configuration.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -6707,15 +6563,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		)
 	)
 	
-	async_result = update_table_default_grouping_configuration.asyncio(
+	call_result = await update_table_default_grouping_configuration.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -6742,7 +6596,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		)
 	)
 	
-	update_table_default_grouping_configuration.sync(
+	call_result = update_table_default_grouping_configuration.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -6775,15 +6629,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		)
 	)
 	
-	async_result = update_table_default_grouping_configuration.asyncio(
+	call_result = await update_table_default_grouping_configuration.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -6857,7 +6709,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		disabled=False
 	)
 	
-	update_table_incident_grouping.sync(
+	call_result = update_table_incident_grouping.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -6887,15 +6739,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		disabled=False
 	)
 	
-	async_result = update_table_incident_grouping.asyncio(
+	call_result = await update_table_incident_grouping.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -6922,7 +6772,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		disabled=False
 	)
 	
-	update_table_incident_grouping.sync(
+	call_result = update_table_incident_grouping.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -6955,15 +6805,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		disabled=False
 	)
 	
-	async_result = update_table_incident_grouping.asyncio(
+	call_result = await update_table_incident_grouping.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -7034,7 +6882,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		'sampleString_3'
 	]
 	
-	update_table_labels.sync(
+	call_result = update_table_labels.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -7061,15 +6909,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		'sampleString_3'
 	]
 	
-	async_result = update_table_labels.asyncio(
+	call_result = await update_table_labels.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -7093,7 +6939,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		'sampleString_3'
 	]
 	
-	update_table_labels.sync(
+	call_result = update_table_labels.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -7123,15 +6969,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		'sampleString_3'
 	]
 	
-	async_result = update_table_labels.asyncio(
+	call_result = await update_table_labels.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -7233,7 +7077,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=False
 	)
 	
-	update_table_monitoring_checks_model.sync(
+	call_result = update_table_monitoring_checks_model.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -7291,7 +7135,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=False
 	)
 	
-	async_result = update_table_monitoring_checks_model.asyncio(
+	call_result = await update_table_monitoring_checks_model.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -7299,8 +7143,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -7354,7 +7196,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=False
 	)
 	
-	update_table_monitoring_checks_model.sync(
+	call_result = update_table_monitoring_checks_model.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -7415,7 +7257,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=False
 	)
 	
-	async_result = update_table_monitoring_checks_model.asyncio(
+	call_result = await update_table_monitoring_checks_model.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -7423,8 +7265,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -7507,7 +7347,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		comparisons=TableComparisonMonthlyMonitoringChecksSpecMap()
 	)
 	
-	update_table_monitoring_checks_monthly.sync(
+	call_result = update_table_monitoring_checks_monthly.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -7546,15 +7386,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		comparisons=TableComparisonMonthlyMonitoringChecksSpecMap()
 	)
 	
-	async_result = update_table_monitoring_checks_monthly.asyncio(
+	call_result = await update_table_monitoring_checks_monthly.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -7590,7 +7428,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		comparisons=TableComparisonMonthlyMonitoringChecksSpecMap()
 	)
 	
-	update_table_monitoring_checks_monthly.sync(
+	call_result = update_table_monitoring_checks_monthly.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -7632,15 +7470,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		comparisons=TableComparisonMonthlyMonitoringChecksSpecMap()
 	)
 	
-	async_result = update_table_monitoring_checks_monthly.asyncio(
+	call_result = await update_table_monitoring_checks_monthly.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -7723,7 +7559,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		comparisons=TableComparisonDailyPartitionedChecksSpecMap()
 	)
 	
-	update_table_partitioned_checks_daily.sync(
+	call_result = update_table_partitioned_checks_daily.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -7762,15 +7598,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		comparisons=TableComparisonDailyPartitionedChecksSpecMap()
 	)
 	
-	async_result = update_table_partitioned_checks_daily.asyncio(
+	call_result = await update_table_partitioned_checks_daily.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -7806,7 +7640,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		comparisons=TableComparisonDailyPartitionedChecksSpecMap()
 	)
 	
-	update_table_partitioned_checks_daily.sync(
+	call_result = update_table_partitioned_checks_daily.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -7848,15 +7682,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		comparisons=TableComparisonDailyPartitionedChecksSpecMap()
 	)
 	
-	async_result = update_table_partitioned_checks_daily.asyncio(
+	call_result = await update_table_partitioned_checks_daily.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -7958,7 +7790,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=False
 	)
 	
-	update_table_partitioned_checks_model.sync(
+	call_result = update_table_partitioned_checks_model.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -8016,7 +7848,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=False
 	)
 	
-	async_result = update_table_partitioned_checks_model.asyncio(
+	call_result = await update_table_partitioned_checks_model.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -8024,8 +7856,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -8079,7 +7909,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=False
 	)
 	
-	update_table_partitioned_checks_model.sync(
+	call_result = update_table_partitioned_checks_model.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -8140,7 +7970,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=False
 	)
 	
-	async_result = update_table_partitioned_checks_model.asyncio(
+	call_result = await update_table_partitioned_checks_model.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -8148,8 +7978,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -8232,7 +8060,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		comparisons=TableComparisonMonthlyPartitionedChecksSpecMap()
 	)
 	
-	update_table_partitioned_checks_monthly.sync(
+	call_result = update_table_partitioned_checks_monthly.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -8271,15 +8099,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		comparisons=TableComparisonMonthlyPartitionedChecksSpecMap()
 	)
 	
-	async_result = update_table_partitioned_checks_monthly.asyncio(
+	call_result = await update_table_partitioned_checks_monthly.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -8315,7 +8141,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		comparisons=TableComparisonMonthlyPartitionedChecksSpecMap()
 	)
 	
-	update_table_partitioned_checks_monthly.sync(
+	call_result = update_table_partitioned_checks_monthly.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -8357,15 +8183,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		comparisons=TableComparisonMonthlyPartitionedChecksSpecMap()
 	)
 	
-	async_result = update_table_partitioned_checks_monthly.asyncio(
+	call_result = await update_table_partitioned_checks_monthly.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -8453,7 +8277,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_edit=True
 	)
 	
-	update_table_partitioning.sync(
+	call_result = update_table_partitioning.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -8497,15 +8321,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_edit=True
 	)
 	
-	async_result = update_table_partitioning.asyncio(
+	call_result = await update_table_partitioning.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -8546,7 +8368,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_edit=True
 	)
 	
-	update_table_partitioning.sync(
+	call_result = update_table_partitioning.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -8593,15 +8415,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_edit=True
 	)
 	
-	async_result = update_table_partitioning.asyncio(
+	call_result = await update_table_partitioning.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -8682,7 +8502,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		)
 	)
 	
-	update_table_profiling_checks.sync(
+	call_result = update_table_profiling_checks.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -8719,15 +8539,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		)
 	)
 	
-	async_result = update_table_profiling_checks.asyncio(
+	call_result = await update_table_profiling_checks.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -8761,7 +8579,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		)
 	)
 	
-	update_table_profiling_checks.sync(
+	call_result = update_table_profiling_checks.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -8801,15 +8619,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		)
 	)
 	
-	async_result = update_table_profiling_checks.asyncio(
+	call_result = await update_table_profiling_checks.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -8909,7 +8725,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=False
 	)
 	
-	update_table_profiling_checks_model.sync(
+	call_result = update_table_profiling_checks_model.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -8965,15 +8781,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=False
 	)
 	
-	async_result = update_table_profiling_checks_model.asyncio(
+	call_result = await update_table_profiling_checks_model.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -9026,7 +8840,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=False
 	)
 	
-	update_table_profiling_checks_model.sync(
+	call_result = update_table_profiling_checks_model.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -9085,15 +8899,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=False
 	)
 	
-	async_result = update_table_profiling_checks_model.asyncio(
+	call_result = await update_table_profiling_checks_model.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -9165,7 +8977,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		disabled=False
 	)
 	
-	update_table_scheduling_group_override.sync(
+	call_result = update_table_scheduling_group_override.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -9193,7 +9005,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		disabled=False
 	)
 	
-	async_result = update_table_scheduling_group_override.asyncio(
+	call_result = await update_table_scheduling_group_override.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -9201,8 +9013,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -9226,7 +9036,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		disabled=False
 	)
 	
-	update_table_scheduling_group_override.sync(
+	call_result = update_table_scheduling_group_override.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -9257,7 +9067,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		disabled=False
 	)
 	
-	async_result = update_table_scheduling_group_override.asyncio(
+	call_result = await update_table_scheduling_group_override.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -9265,8 +9075,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 

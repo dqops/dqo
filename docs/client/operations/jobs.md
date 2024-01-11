@@ -47,7 +47,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}
 	    'http://localhost:8888/'
 	)
 	
-	cancel_job.sync(
+	call_result = cancel_job.sync(
 	    '123123124324324',
 	    client=dqops_client
 	)
@@ -65,12 +65,10 @@ http://localhost:8888/api/jobs/jobs/{jobId}
 	    'http://localhost:8888/'
 	)
 	
-	async_result = cancel_job.asyncio(
+	call_result = await cancel_job.asyncio(
 	    '123123124324324',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -88,7 +86,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}
 	    token=token
 	)
 	
-	cancel_job.sync(
+	call_result = cancel_job.sync(
 	    '123123124324324',
 	    client=dqops_client
 	)
@@ -109,12 +107,10 @@ http://localhost:8888/api/jobs/jobs/{jobId}
 	    token=token
 	)
 	
-	async_result = cancel_job.asyncio(
+	call_result = await cancel_job.asyncio(
 	    '123123124324324',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -147,7 +143,7 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |job_business_key|Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.|string| |
-|wait|Wait until the statistic collection job finishes to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)|boolean| |
+|wait|Wait until the statistic collection job finishes to run, the default value is false (queue a background job and return the job id)|boolean| |
 |wait_timeout|The wait timeout in seconds, when the wait timeout elapses and the job is still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|long| |
 
 
@@ -196,7 +192,7 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
 		enabled=True
 	)
 	
-	collect_statistics_on_data_groups.sync(
+	call_result = collect_statistics_on_data_groups.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -224,12 +220,10 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
 		enabled=True
 	)
 	
-	async_result = collect_statistics_on_data_groups.asyncio(
+	call_result = await collect_statistics_on_data_groups.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -257,7 +251,7 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
 		enabled=True
 	)
 	
-	collect_statistics_on_data_groups.sync(
+	call_result = collect_statistics_on_data_groups.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -288,12 +282,10 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
 		enabled=True
 	)
 	
-	async_result = collect_statistics_on_data_groups.asyncio(
+	call_result = await collect_statistics_on_data_groups.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -333,7 +325,7 @@ http://localhost:8888/api/jobs/collectstatistics/table
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |job_business_key|Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.|string| |
-|wait|Wait until the statistic collection job finishes to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)|boolean| |
+|wait|Wait until the statistic collection job finishes to run, the default value is false (queue a background job and return the job id)|boolean| |
 |wait_timeout|The wait timeout in seconds, when the wait timeout elapses and the job is still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|long| |
 
 
@@ -382,7 +374,7 @@ http://localhost:8888/api/jobs/collectstatistics/table
 		enabled=True
 	)
 	
-	collect_statistics_on_table.sync(
+	call_result = collect_statistics_on_table.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -410,12 +402,10 @@ http://localhost:8888/api/jobs/collectstatistics/table
 		enabled=True
 	)
 	
-	async_result = collect_statistics_on_table.asyncio(
+	call_result = await collect_statistics_on_table.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -443,7 +433,7 @@ http://localhost:8888/api/jobs/collectstatistics/table
 		enabled=True
 	)
 	
-	collect_statistics_on_table.sync(
+	call_result = collect_statistics_on_table.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -474,12 +464,10 @@ http://localhost:8888/api/jobs/collectstatistics/table
 		enabled=True
 	)
 	
-	async_result = collect_statistics_on_table.asyncio(
+	call_result = await collect_statistics_on_table.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -519,7 +507,7 @@ http://localhost:8888/api/jobs/deletestoreddata
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |job_business_key|Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.|string| |
-|wait|Wait until the import tables job finishes to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)|boolean| |
+|wait|Wait until the import tables job finishes to run, the default value is false (queue a background job and return the job id)|boolean| |
 |wait_timeout|The wait timeout in seconds, when the wait timeout elapses and the delete stored data job is still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|long| |
 
 
@@ -570,7 +558,7 @@ http://localhost:8888/api/jobs/deletestoreddata
 		]
 	)
 	
-	delete_stored_data.sync(
+	call_result = delete_stored_data.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -600,12 +588,10 @@ http://localhost:8888/api/jobs/deletestoreddata
 		]
 	)
 	
-	async_result = delete_stored_data.asyncio(
+	call_result = await delete_stored_data.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -635,7 +621,7 @@ http://localhost:8888/api/jobs/deletestoreddata
 		]
 	)
 	
-	delete_stored_data.sync(
+	call_result = delete_stored_data.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -668,12 +654,10 @@ http://localhost:8888/api/jobs/deletestoreddata
 		]
 	)
 	
-	async_result = delete_stored_data.asyncio(
+	call_result = await delete_stored_data.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -738,7 +722,7 @@ http://localhost:8888/api/jobs/jobs
 	    raise_on_unexpected_status=True
 	)
 	
-	get_all_jobs.sync(
+	call_result = get_all_jobs.sync(
 	    client=dqops_client
 	)
 	
@@ -756,11 +740,9 @@ http://localhost:8888/api/jobs/jobs
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_all_jobs.asyncio(
+	call_result = await get_all_jobs.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -779,7 +761,7 @@ http://localhost:8888/api/jobs/jobs
 	    raise_on_unexpected_status=True
 	)
 	
-	get_all_jobs.sync(
+	call_result = get_all_jobs.sync(
 	    client=dqops_client
 	)
 	
@@ -800,11 +782,9 @@ http://localhost:8888/api/jobs/jobs
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_all_jobs.asyncio(
+	call_result = await get_all_jobs.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -886,7 +866,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}
 	    raise_on_unexpected_status=True
 	)
 	
-	get_job.sync(
+	call_result = get_job.sync(
 	    '123123124324324',
 	    client=dqops_client
 	)
@@ -905,12 +885,10 @@ http://localhost:8888/api/jobs/jobs/{jobId}
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_job.asyncio(
+	call_result = await get_job.asyncio(
 	    '123123124324324',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -929,7 +907,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}
 	    raise_on_unexpected_status=True
 	)
 	
-	get_job.sync(
+	call_result = get_job.sync(
 	    '123123124324324',
 	    client=dqops_client
 	)
@@ -951,12 +929,10 @@ http://localhost:8888/api/jobs/jobs/{jobId}
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_job.asyncio(
+	call_result = await get_job.asyncio(
 	    '123123124324324',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -1022,7 +998,7 @@ http://localhost:8888/api/jobs/jobchangessince/{sequenceNumber}
 	    raise_on_unexpected_status=True
 	)
 	
-	get_job_changes_since.sync(
+	call_result = get_job_changes_since.sync(
 	    3854372,
 	    client=dqops_client
 	)
@@ -1041,12 +1017,10 @@ http://localhost:8888/api/jobs/jobchangessince/{sequenceNumber}
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_job_changes_since.asyncio(
+	call_result = await get_job_changes_since.asyncio(
 	    3854372,
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -1065,7 +1039,7 @@ http://localhost:8888/api/jobs/jobchangessince/{sequenceNumber}
 	    raise_on_unexpected_status=True
 	)
 	
-	get_job_changes_since.sync(
+	call_result = get_job_changes_since.sync(
 	    3854372,
 	    client=dqops_client
 	)
@@ -1087,12 +1061,10 @@ http://localhost:8888/api/jobs/jobchangessince/{sequenceNumber}
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_job_changes_since.asyncio(
+	call_result = await get_job_changes_since.asyncio(
 	    3854372,
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -1146,7 +1118,7 @@ http://localhost:8888/api/jobs/importtables
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |job_business_key|Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.|string| |
-|wait|Wait until the import tables job finishes to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)|boolean| |
+|wait|Wait until the import tables job finishes to run, the default value is false (queue a background job and return the job id)|boolean| |
 |wait_timeout|The wait timeout in seconds, when the wait timeout elapses and the import tables job is still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|long| |
 
 
@@ -1193,7 +1165,7 @@ http://localhost:8888/api/jobs/importtables
 		]
 	)
 	
-	import_tables.sync(
+	call_result = import_tables.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -1219,12 +1191,10 @@ http://localhost:8888/api/jobs/importtables
 		]
 	)
 	
-	async_result = import_tables.asyncio(
+	call_result = await import_tables.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -1250,7 +1220,7 @@ http://localhost:8888/api/jobs/importtables
 		]
 	)
 	
-	import_tables.sync(
+	call_result = import_tables.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -1279,12 +1249,10 @@ http://localhost:8888/api/jobs/importtables
 		]
 	)
 	
-	async_result = import_tables.asyncio(
+	call_result = await import_tables.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -1338,7 +1306,7 @@ http://localhost:8888/api/jobs/scheduler/isrunning
 	    raise_on_unexpected_status=True
 	)
 	
-	is_cron_scheduler_running.sync(
+	call_result = is_cron_scheduler_running.sync(
 	    client=dqops_client
 	)
 	
@@ -1356,11 +1324,9 @@ http://localhost:8888/api/jobs/scheduler/isrunning
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = is_cron_scheduler_running.asyncio(
+	call_result = await is_cron_scheduler_running.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -1379,7 +1345,7 @@ http://localhost:8888/api/jobs/scheduler/isrunning
 	    raise_on_unexpected_status=True
 	)
 	
-	is_cron_scheduler_running.sync(
+	call_result = is_cron_scheduler_running.sync(
 	    client=dqops_client
 	)
 	
@@ -1400,11 +1366,9 @@ http://localhost:8888/api/jobs/scheduler/isrunning
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = is_cron_scheduler_running.asyncio(
+	call_result = await is_cron_scheduler_running.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -1437,7 +1401,7 @@ http://localhost:8888/api/jobs/runchecks
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |job_business_key|Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.|string| |
-|wait|Wait until the checks finish to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)|boolean| |
+|wait|Wait until the checks finish to run, the default value is false (queue a background job and return the job id)|boolean| |
 |wait_timeout|The wait timeout in seconds, when the wait timeout elapses and the checks are still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|long| |
 
 
@@ -1488,7 +1452,7 @@ http://localhost:8888/api/jobs/runchecks
 		dummy_execution=False
 	)
 	
-	run_checks.sync(
+	call_result = run_checks.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -1518,12 +1482,10 @@ http://localhost:8888/api/jobs/runchecks
 		dummy_execution=False
 	)
 	
-	async_result = run_checks.asyncio(
+	call_result = await run_checks.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -1553,7 +1515,7 @@ http://localhost:8888/api/jobs/runchecks
 		dummy_execution=False
 	)
 	
-	run_checks.sync(
+	call_result = run_checks.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -1586,12 +1548,10 @@ http://localhost:8888/api/jobs/runchecks
 		dummy_execution=False
 	)
 	
-	async_result = run_checks.asyncio(
+	call_result = await run_checks.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -1657,7 +1617,7 @@ http://localhost:8888/api/jobs/scheduler/status/start
 	    'http://localhost:8888/'
 	)
 	
-	start_cron_scheduler.sync(
+	call_result = start_cron_scheduler.sync(
 	    client=dqops_client
 	)
 	
@@ -1674,11 +1634,9 @@ http://localhost:8888/api/jobs/scheduler/status/start
 	    'http://localhost:8888/'
 	)
 	
-	async_result = start_cron_scheduler.asyncio(
+	call_result = await start_cron_scheduler.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -1696,7 +1654,7 @@ http://localhost:8888/api/jobs/scheduler/status/start
 	    token=token
 	)
 	
-	start_cron_scheduler.sync(
+	call_result = start_cron_scheduler.sync(
 	    client=dqops_client
 	)
 	
@@ -1716,11 +1674,9 @@ http://localhost:8888/api/jobs/scheduler/status/start
 	    token=token
 	)
 	
-	async_result = start_cron_scheduler.asyncio(
+	call_result = await start_cron_scheduler.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -1766,7 +1722,7 @@ http://localhost:8888/api/jobs/scheduler/status/stop
 	    'http://localhost:8888/'
 	)
 	
-	stop_cron_scheduler.sync(
+	call_result = stop_cron_scheduler.sync(
 	    client=dqops_client
 	)
 	
@@ -1783,11 +1739,9 @@ http://localhost:8888/api/jobs/scheduler/status/stop
 	    'http://localhost:8888/'
 	)
 	
-	async_result = stop_cron_scheduler.asyncio(
+	call_result = await stop_cron_scheduler.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -1805,7 +1759,7 @@ http://localhost:8888/api/jobs/scheduler/status/stop
 	    token=token
 	)
 	
-	stop_cron_scheduler.sync(
+	call_result = stop_cron_scheduler.sync(
 	    client=dqops_client
 	)
 	
@@ -1825,11 +1779,9 @@ http://localhost:8888/api/jobs/scheduler/status/stop
 	    token=token
 	)
 	
-	async_result = stop_cron_scheduler.asyncio(
+	call_result = await stop_cron_scheduler.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -1862,7 +1814,7 @@ http://localhost:8888/api/jobs/synchronize
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |job_business_key|Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.|string| |
-|wait|Wait until the synchronize multiple folders job finishes to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)|boolean| |
+|wait|Wait until the synchronize multiple folders job finishes to run, the default value is false (queue a background job and return the job id)|boolean| |
 |wait_timeout|The wait timeout in seconds, when the wait timeout elapses and the synchronization with the DQOps Cloud is still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|long| |
 
 
@@ -1920,7 +1872,7 @@ http://localhost:8888/api/jobs/synchronize
 		synchronize_folder_with_local_changes=False
 	)
 	
-	synchronize_folders.sync(
+	call_result = synchronize_folders.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -1957,12 +1909,10 @@ http://localhost:8888/api/jobs/synchronize
 		synchronize_folder_with_local_changes=False
 	)
 	
-	async_result = synchronize_folders.asyncio(
+	call_result = await synchronize_folders.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -1999,7 +1949,7 @@ http://localhost:8888/api/jobs/synchronize
 		synchronize_folder_with_local_changes=False
 	)
 	
-	synchronize_folders.sync(
+	call_result = synchronize_folders.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -2039,12 +1989,10 @@ http://localhost:8888/api/jobs/synchronize
 		synchronize_folder_with_local_changes=False
 	)
 	
-	async_result = synchronize_folders.asyncio(
+	call_result = await synchronize_folders.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -2113,7 +2061,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}/wait
 	    raise_on_unexpected_status=True
 	)
 	
-	wait_for_job.sync(
+	call_result = wait_for_job.sync(
 	    '123123124324324',
 	    client=dqops_client
 	)
@@ -2132,12 +2080,10 @@ http://localhost:8888/api/jobs/jobs/{jobId}/wait
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = wait_for_job.asyncio(
+	call_result = await wait_for_job.asyncio(
 	    '123123124324324',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -2156,7 +2102,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}/wait
 	    raise_on_unexpected_status=True
 	)
 	
-	wait_for_job.sync(
+	call_result = wait_for_job.sync(
 	    '123123124324324',
 	    client=dqops_client
 	)
@@ -2178,12 +2124,10 @@ http://localhost:8888/api/jobs/jobs/{jobId}/wait
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = wait_for_job.asyncio(
+	call_result = await wait_for_job.asyncio(
 	    '123123124324324',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -2250,7 +2194,7 @@ http://localhost:8888/api/jobs/runchecks/{jobId}/wait
 	    raise_on_unexpected_status=True
 	)
 	
-	wait_for_run_checks_job.sync(
+	call_result = wait_for_run_checks_job.sync(
 	    '123123124324324',
 	    client=dqops_client
 	)
@@ -2269,12 +2213,10 @@ http://localhost:8888/api/jobs/runchecks/{jobId}/wait
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = wait_for_run_checks_job.asyncio(
+	call_result = await wait_for_run_checks_job.asyncio(
 	    '123123124324324',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -2293,7 +2235,7 @@ http://localhost:8888/api/jobs/runchecks/{jobId}/wait
 	    raise_on_unexpected_status=True
 	)
 	
-	wait_for_run_checks_job.sync(
+	call_result = wait_for_run_checks_job.sync(
 	    '123123124324324',
 	    client=dqops_client
 	)
@@ -2315,12 +2257,10 @@ http://localhost:8888/api/jobs/runchecks/{jobId}/wait
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = wait_for_run_checks_job.asyncio(
+	call_result = await wait_for_run_checks_job.asyncio(
 	    '123123124324324',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 

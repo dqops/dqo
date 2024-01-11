@@ -48,7 +48,7 @@ http://localhost:8888/api/incidentstat
 	    raise_on_unexpected_status=True
 	)
 	
-	find_connection_incident_stats.sync(
+	call_result = find_connection_incident_stats.sync(
 	    client=dqops_client
 	)
 	
@@ -66,11 +66,9 @@ http://localhost:8888/api/incidentstat
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = find_connection_incident_stats.asyncio(
+	call_result = await find_connection_incident_stats.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -89,7 +87,7 @@ http://localhost:8888/api/incidentstat
 	    raise_on_unexpected_status=True
 	)
 	
-	find_connection_incident_stats.sync(
+	call_result = find_connection_incident_stats.sync(
 	    client=dqops_client
 	)
 	
@@ -110,11 +108,9 @@ http://localhost:8888/api/incidentstat
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = find_connection_incident_stats.asyncio(
+	call_result = await find_connection_incident_stats.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -197,7 +193,7 @@ http://localhost:8888/api/incidents/{connectionName}
 	    raise_on_unexpected_status=True
 	)
 	
-	find_recent_incidents_on_connection.sync(
+	call_result = find_recent_incidents_on_connection.sync(
 	    'sample_connection',
 	    client=dqops_client
 	)
@@ -217,12 +213,10 @@ http://localhost:8888/api/incidents/{connectionName}
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = find_recent_incidents_on_connection.asyncio(
+	call_result = await find_recent_incidents_on_connection.asyncio(
 	    'sample_connection',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -242,7 +236,7 @@ http://localhost:8888/api/incidents/{connectionName}
 	    raise_on_unexpected_status=True
 	)
 	
-	find_recent_incidents_on_connection.sync(
+	call_result = find_recent_incidents_on_connection.sync(
 	    'sample_connection',
 	    client=dqops_client
 	)
@@ -265,12 +259,10 @@ http://localhost:8888/api/incidents/{connectionName}
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = find_recent_incidents_on_connection.asyncio(
+	call_result = await find_recent_incidents_on_connection.asyncio(
 	    'sample_connection',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -357,7 +349,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	    raise_on_unexpected_status=True
 	)
 	
-	get_incident.sync(
+	call_result = get_incident.sync(
 	    'sample_connection',
 	    2007,
 	    10,
@@ -379,15 +371,13 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_incident.asyncio(
+	call_result = await get_incident.asyncio(
 	    'sample_connection',
 	    2007,
 	    10,
 	    'sample_incident',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -406,7 +396,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	    raise_on_unexpected_status=True
 	)
 	
-	get_incident.sync(
+	call_result = get_incident.sync(
 	    'sample_connection',
 	    2007,
 	    10,
@@ -431,15 +421,13 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_incident.asyncio(
+	call_result = await get_incident.asyncio(
 	    'sample_connection',
 	    2007,
 	    10,
 	    'sample_incident',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -519,7 +507,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	    raise_on_unexpected_status=True
 	)
 	
-	get_incident_histogram.sync(
+	call_result = get_incident_histogram.sync(
 	    'sample_connection',
 	    2007,
 	    10,
@@ -541,15 +529,13 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_incident_histogram.asyncio(
+	call_result = await get_incident_histogram.asyncio(
 	    'sample_connection',
 	    2007,
 	    10,
 	    'sample_incident',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -568,7 +554,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	    raise_on_unexpected_status=True
 	)
 	
-	get_incident_histogram.sync(
+	call_result = get_incident_histogram.sync(
 	    'sample_connection',
 	    2007,
 	    10,
@@ -593,15 +579,13 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_incident_histogram.asyncio(
+	call_result = await get_incident_histogram.asyncio(
 	    'sample_connection',
 	    2007,
 	    10,
 	    'sample_incident',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -687,7 +671,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	    raise_on_unexpected_status=True
 	)
 	
-	get_incident_issues.sync(
+	call_result = get_incident_issues.sync(
 	    'sample_connection',
 	    2007,
 	    10,
@@ -710,15 +694,13 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_incident_issues.asyncio(
+	call_result = await get_incident_issues.asyncio(
 	    'sample_connection',
 	    2007,
 	    10,
 	    'sample_incident',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -738,7 +720,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	    raise_on_unexpected_status=True
 	)
 	
-	get_incident_issues.sync(
+	call_result = get_incident_issues.sync(
 	    'sample_connection',
 	    2007,
 	    10,
@@ -764,15 +746,13 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_incident_issues.asyncio(
+	call_result = await get_incident_issues.asyncio(
 	    'sample_connection',
 	    2007,
 	    10,
 	    'sample_incident',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -915,7 +895,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	    'http://localhost:8888/'
 	)
 	
-	set_incident_issue_url.sync(
+	call_result = set_incident_issue_url.sync(
 	    'sample_connection',
 	    2007,
 	    10,
@@ -936,15 +916,13 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	    'http://localhost:8888/'
 	)
 	
-	async_result = set_incident_issue_url.asyncio(
+	call_result = await set_incident_issue_url.asyncio(
 	    'sample_connection',
 	    2007,
 	    10,
 	    'sample_incident',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -962,7 +940,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	    token=token
 	)
 	
-	set_incident_issue_url.sync(
+	call_result = set_incident_issue_url.sync(
 	    'sample_connection',
 	    2007,
 	    10,
@@ -986,15 +964,13 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	    token=token
 	)
 	
-	async_result = set_incident_issue_url.asyncio(
+	call_result = await set_incident_issue_url.asyncio(
 	    'sample_connection',
 	    2007,
 	    10,
 	    'sample_incident',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -1051,7 +1027,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	    'http://localhost:8888/'
 	)
 	
-	set_incident_status.sync(
+	call_result = set_incident_status.sync(
 	    'sample_connection',
 	    2007,
 	    10,
@@ -1072,15 +1048,13 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	    'http://localhost:8888/'
 	)
 	
-	async_result = set_incident_status.asyncio(
+	call_result = await set_incident_status.asyncio(
 	    'sample_connection',
 	    2007,
 	    10,
 	    'sample_incident',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -1098,7 +1072,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	    token=token
 	)
 	
-	set_incident_status.sync(
+	call_result = set_incident_status.sync(
 	    'sample_connection',
 	    2007,
 	    10,
@@ -1122,15 +1096,13 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	    token=token
 	)
 	
-	async_result = set_incident_status.asyncio(
+	call_result = await set_incident_status.asyncio(
 	    'sample_connection',
 	    2007,
 	    10,
 	    'sample_incident',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 

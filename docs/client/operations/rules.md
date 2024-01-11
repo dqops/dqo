@@ -69,7 +69,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 		can_edit=True
 	)
 	
-	create_rule.sync(
+	call_result = create_rule.sync(
 	    'sample_target/sample_category/sample_rule',
 	    client=dqops_client,
 	    json_body=request_body
@@ -100,13 +100,11 @@ http://localhost:8888/api/rules/{fullRuleName}
 		can_edit=True
 	)
 	
-	async_result = create_rule.asyncio(
+	call_result = await create_rule.asyncio(
 	    'sample_target/sample_category/sample_rule',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -136,7 +134,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 		can_edit=True
 	)
 	
-	create_rule.sync(
+	call_result = create_rule.sync(
 	    'sample_target/sample_category/sample_rule',
 	    client=dqops_client,
 	    json_body=request_body
@@ -170,13 +168,11 @@ http://localhost:8888/api/rules/{fullRuleName}
 		can_edit=True
 	)
 	
-	async_result = create_rule.asyncio(
+	call_result = await create_rule.asyncio(
 	    'sample_target/sample_category/sample_rule',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -229,7 +225,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 	    'http://localhost:8888/'
 	)
 	
-	delete_rule.sync(
+	call_result = delete_rule.sync(
 	    'sample_target/sample_category/sample_rule',
 	    client=dqops_client
 	)
@@ -247,12 +243,10 @@ http://localhost:8888/api/rules/{fullRuleName}
 	    'http://localhost:8888/'
 	)
 	
-	async_result = delete_rule.asyncio(
+	call_result = await delete_rule.asyncio(
 	    'sample_target/sample_category/sample_rule',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -270,7 +264,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 	    token=token
 	)
 	
-	delete_rule.sync(
+	call_result = delete_rule.sync(
 	    'sample_target/sample_category/sample_rule',
 	    client=dqops_client
 	)
@@ -291,12 +285,10 @@ http://localhost:8888/api/rules/{fullRuleName}
 	    token=token
 	)
 	
-	async_result = delete_rule.asyncio(
+	call_result = await delete_rule.asyncio(
 	    'sample_target/sample_category/sample_rule',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -350,7 +342,7 @@ http://localhost:8888/api/rules
 	    raise_on_unexpected_status=True
 	)
 	
-	get_all_rules.sync(
+	call_result = get_all_rules.sync(
 	    client=dqops_client
 	)
 	
@@ -368,11 +360,9 @@ http://localhost:8888/api/rules
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_all_rules.asyncio(
+	call_result = await get_all_rules.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -391,7 +381,7 @@ http://localhost:8888/api/rules
 	    raise_on_unexpected_status=True
 	)
 	
-	get_all_rules.sync(
+	call_result = get_all_rules.sync(
 	    client=dqops_client
 	)
 	
@@ -412,11 +402,9 @@ http://localhost:8888/api/rules
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_all_rules.asyncio(
+	call_result = await get_all_rules.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -500,7 +488,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 	    raise_on_unexpected_status=True
 	)
 	
-	get_rule.sync(
+	call_result = get_rule.sync(
 	    'sample_target/sample_category/sample_rule',
 	    client=dqops_client
 	)
@@ -519,12 +507,10 @@ http://localhost:8888/api/rules/{fullRuleName}
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_rule.asyncio(
+	call_result = await get_rule.asyncio(
 	    'sample_target/sample_category/sample_rule',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -543,7 +529,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 	    raise_on_unexpected_status=True
 	)
 	
-	get_rule.sync(
+	call_result = get_rule.sync(
 	    'sample_target/sample_category/sample_rule',
 	    client=dqops_client
 	)
@@ -565,12 +551,10 @@ http://localhost:8888/api/rules/{fullRuleName}
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_rule.asyncio(
+	call_result = await get_rule.asyncio(
 	    'sample_target/sample_category/sample_rule',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -637,7 +621,7 @@ http://localhost:8888/api/definitions/rules
 	    raise_on_unexpected_status=True
 	)
 	
-	get_rule_folder_tree.sync(
+	call_result = get_rule_folder_tree.sync(
 	    client=dqops_client
 	)
 	
@@ -655,11 +639,9 @@ http://localhost:8888/api/definitions/rules
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_rule_folder_tree.asyncio(
+	call_result = await get_rule_folder_tree.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -678,7 +660,7 @@ http://localhost:8888/api/definitions/rules
 	    raise_on_unexpected_status=True
 	)
 	
-	get_rule_folder_tree.sync(
+	call_result = get_rule_folder_tree.sync(
 	    client=dqops_client
 	)
 	
@@ -699,11 +681,9 @@ http://localhost:8888/api/definitions/rules
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_rule_folder_tree.asyncio(
+	call_result = await get_rule_folder_tree.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -834,7 +814,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 		can_edit=True
 	)
 	
-	update_rule.sync(
+	call_result = update_rule.sync(
 	    'sample_target/sample_category/sample_rule',
 	    client=dqops_client,
 	    json_body=request_body
@@ -865,13 +845,11 @@ http://localhost:8888/api/rules/{fullRuleName}
 		can_edit=True
 	)
 	
-	async_result = update_rule.asyncio(
+	call_result = await update_rule.asyncio(
 	    'sample_target/sample_category/sample_rule',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -901,7 +879,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 		can_edit=True
 	)
 	
-	update_rule.sync(
+	call_result = update_rule.sync(
 	    'sample_target/sample_category/sample_rule',
 	    client=dqops_client,
 	    json_body=request_body
@@ -935,13 +913,11 @@ http://localhost:8888/api/rules/{fullRuleName}
 		can_edit=True
 	)
 	
-	async_result = update_rule.asyncio(
+	call_result = await update_rule.asyncio(
 	    'sample_target/sample_category/sample_rule',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 

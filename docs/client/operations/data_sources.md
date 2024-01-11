@@ -55,7 +55,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
 	    raise_on_unexpected_status=True
 	)
 	
-	get_remote_data_source_schemas.sync(
+	call_result = get_remote_data_source_schemas.sync(
 	    'sample_connection',
 	    client=dqops_client
 	)
@@ -74,12 +74,10 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_remote_data_source_schemas.asyncio(
+	call_result = await get_remote_data_source_schemas.asyncio(
 	    'sample_connection',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -98,7 +96,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
 	    raise_on_unexpected_status=True
 	)
 	
-	get_remote_data_source_schemas.sync(
+	call_result = get_remote_data_source_schemas.sync(
 	    'sample_connection',
 	    client=dqops_client
 	)
@@ -120,12 +118,10 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_remote_data_source_schemas.asyncio(
+	call_result = await get_remote_data_source_schemas.asyncio(
 	    'sample_connection',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -198,7 +194,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
 	    raise_on_unexpected_status=True
 	)
 	
-	get_remote_data_source_tables.sync(
+	call_result = get_remote_data_source_tables.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    client=dqops_client
@@ -218,13 +214,11 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_remote_data_source_tables.asyncio(
+	call_result = await get_remote_data_source_tables.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -243,7 +237,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
 	    raise_on_unexpected_status=True
 	)
 	
-	get_remote_data_source_tables.sync(
+	call_result = get_remote_data_source_tables.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    client=dqops_client
@@ -266,13 +260,11 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_remote_data_source_tables.asyncio(
+	call_result = await get_remote_data_source_tables.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -409,7 +401,7 @@ http://localhost:8888/api/datasource/testconnection
 		can_delete_data=True
 	)
 	
-	test_connection.sync(
+	call_result = test_connection.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -483,12 +475,10 @@ http://localhost:8888/api/datasource/testconnection
 		can_delete_data=True
 	)
 	
-	async_result = test_connection.asyncio(
+	call_result = await test_connection.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -562,7 +552,7 @@ http://localhost:8888/api/datasource/testconnection
 		can_delete_data=True
 	)
 	
-	test_connection.sync(
+	call_result = test_connection.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -639,12 +629,10 @@ http://localhost:8888/api/datasource/testconnection
 		can_delete_data=True
 	)
 	
-	async_result = test_connection.asyncio(
+	call_result = await test_connection.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 

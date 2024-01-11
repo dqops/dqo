@@ -52,7 +52,7 @@ http://localhost:8888/api/mypassword
 	
 	request_body = 'sample_string_value'
 	
-	change_caller_password.sync(
+	call_result = change_caller_password.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -72,12 +72,10 @@ http://localhost:8888/api/mypassword
 	
 	request_body = 'sample_string_value'
 	
-	async_result = change_caller_password.asyncio(
+	call_result = await change_caller_password.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -97,7 +95,7 @@ http://localhost:8888/api/mypassword
 	
 	request_body = 'sample_string_value'
 	
-	change_caller_password.sync(
+	call_result = change_caller_password.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -120,12 +118,10 @@ http://localhost:8888/api/mypassword
 	
 	request_body = 'sample_string_value'
 	
-	async_result = change_caller_password.asyncio(
+	call_result = await change_caller_password.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -190,7 +186,7 @@ http://localhost:8888/api/users/{email}/password
 	
 	request_body = 'sample_string_value'
 	
-	change_user_password.sync(
+	call_result = change_user_password.sync(
 	    'sample_user@mail.com',
 	    client=dqops_client,
 	    json_body=request_body
@@ -211,13 +207,11 @@ http://localhost:8888/api/users/{email}/password
 	
 	request_body = 'sample_string_value'
 	
-	async_result = change_user_password.asyncio(
+	call_result = await change_user_password.asyncio(
 	    'sample_user@mail.com',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -237,7 +231,7 @@ http://localhost:8888/api/users/{email}/password
 	
 	request_body = 'sample_string_value'
 	
-	change_user_password.sync(
+	call_result = change_user_password.sync(
 	    'sample_user@mail.com',
 	    client=dqops_client,
 	    json_body=request_body
@@ -261,13 +255,11 @@ http://localhost:8888/api/users/{email}/password
 	
 	request_body = 'sample_string_value'
 	
-	async_result = change_user_password.asyncio(
+	call_result = await change_user_password.asyncio(
 	    'sample_user@mail.com',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -329,7 +321,7 @@ http://localhost:8888/api/users
 		account_role=DqoUserRole.OPERATOR
 	)
 	
-	create_user.sync(
+	call_result = create_user.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -353,12 +345,10 @@ http://localhost:8888/api/users
 		account_role=DqoUserRole.OPERATOR
 	)
 	
-	async_result = create_user.asyncio(
+	call_result = await create_user.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -382,7 +372,7 @@ http://localhost:8888/api/users
 		account_role=DqoUserRole.OPERATOR
 	)
 	
-	create_user.sync(
+	call_result = create_user.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -409,12 +399,10 @@ http://localhost:8888/api/users
 		account_role=DqoUserRole.OPERATOR
 	)
 	
-	async_result = create_user.asyncio(
+	call_result = await create_user.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -467,7 +455,7 @@ http://localhost:8888/api/users/{email}
 	    'http://localhost:8888/'
 	)
 	
-	delete_user.sync(
+	call_result = delete_user.sync(
 	    'sample_user@mail.com',
 	    client=dqops_client
 	)
@@ -485,12 +473,10 @@ http://localhost:8888/api/users/{email}
 	    'http://localhost:8888/'
 	)
 	
-	async_result = delete_user.asyncio(
+	call_result = await delete_user.asyncio(
 	    'sample_user@mail.com',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -508,7 +494,7 @@ http://localhost:8888/api/users/{email}
 	    token=token
 	)
 	
-	delete_user.sync(
+	call_result = delete_user.sync(
 	    'sample_user@mail.com',
 	    client=dqops_client
 	)
@@ -529,12 +515,10 @@ http://localhost:8888/api/users/{email}
 	    token=token
 	)
 	
-	async_result = delete_user.asyncio(
+	call_result = await delete_user.asyncio(
 	    'sample_user@mail.com',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -588,7 +572,7 @@ http://localhost:8888/api/users
 	    raise_on_unexpected_status=True
 	)
 	
-	get_all_users.sync(
+	call_result = get_all_users.sync(
 	    client=dqops_client
 	)
 	
@@ -606,11 +590,9 @@ http://localhost:8888/api/users
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_all_users.asyncio(
+	call_result = await get_all_users.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -629,7 +611,7 @@ http://localhost:8888/api/users
 	    raise_on_unexpected_status=True
 	)
 	
-	get_all_users.sync(
+	call_result = get_all_users.sync(
 	    client=dqops_client
 	)
 	
@@ -650,11 +632,9 @@ http://localhost:8888/api/users
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_all_users.asyncio(
+	call_result = await get_all_users.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -729,7 +709,7 @@ http://localhost:8888/api/users/{email}
 	    raise_on_unexpected_status=True
 	)
 	
-	get_user.sync(
+	call_result = get_user.sync(
 	    'sample_user@mail.com',
 	    client=dqops_client
 	)
@@ -748,12 +728,10 @@ http://localhost:8888/api/users/{email}
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_user.asyncio(
+	call_result = await get_user.asyncio(
 	    'sample_user@mail.com',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -772,7 +750,7 @@ http://localhost:8888/api/users/{email}
 	    raise_on_unexpected_status=True
 	)
 	
-	get_user.sync(
+	call_result = get_user.sync(
 	    'sample_user@mail.com',
 	    client=dqops_client
 	)
@@ -794,12 +772,10 @@ http://localhost:8888/api/users/{email}
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_user.asyncio(
+	call_result = await get_user.asyncio(
 	    'sample_user@mail.com',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -876,7 +852,7 @@ http://localhost:8888/api/users/{email}
 		account_role=DqoUserRole.OPERATOR
 	)
 	
-	update_user.sync(
+	call_result = update_user.sync(
 	    'sample_user@mail.com',
 	    client=dqops_client,
 	    json_body=request_body
@@ -901,13 +877,11 @@ http://localhost:8888/api/users/{email}
 		account_role=DqoUserRole.OPERATOR
 	)
 	
-	async_result = update_user.asyncio(
+	call_result = await update_user.asyncio(
 	    'sample_user@mail.com',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -931,7 +905,7 @@ http://localhost:8888/api/users/{email}
 		account_role=DqoUserRole.OPERATOR
 	)
 	
-	update_user.sync(
+	call_result = update_user.sync(
 	    'sample_user@mail.com',
 	    client=dqops_client,
 	    json_body=request_body
@@ -959,13 +933,11 @@ http://localhost:8888/api/users/{email}
 		account_role=DqoUserRole.OPERATOR
 	)
 	
-	async_result = update_user.asyncio(
+	call_result = await update_user.asyncio(
 	    'sample_user@mail.com',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 

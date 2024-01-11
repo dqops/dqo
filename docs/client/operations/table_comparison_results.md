@@ -59,7 +59,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_comparison_monitoring_results.sync(
+	call_result = get_table_comparison_monitoring_results.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -82,7 +82,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_comparison_monitoring_results.asyncio(
+	call_result = await get_table_comparison_monitoring_results.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -90,8 +90,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    'sample_table_comparison',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -110,7 +108,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_comparison_monitoring_results.sync(
+	call_result = get_table_comparison_monitoring_results.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -136,7 +134,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_comparison_monitoring_results.asyncio(
+	call_result = await get_table_comparison_monitoring_results.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -144,8 +142,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    'sample_table_comparison',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -218,7 +214,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_comparison_partitioned_results.sync(
+	call_result = get_table_comparison_partitioned_results.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -241,7 +237,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_comparison_partitioned_results.asyncio(
+	call_result = await get_table_comparison_partitioned_results.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -249,8 +245,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    'sample_table_comparison',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -269,7 +263,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_comparison_partitioned_results.sync(
+	call_result = get_table_comparison_partitioned_results.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -295,7 +289,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_comparison_partitioned_results.asyncio(
+	call_result = await get_table_comparison_partitioned_results.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -303,8 +297,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    'sample_table_comparison',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -376,7 +368,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_comparison_profiling_results.sync(
+	call_result = get_table_comparison_profiling_results.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -398,15 +390,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_comparison_profiling_results.asyncio(
+	call_result = await get_table_comparison_profiling_results.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    'sample_table_comparison',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -425,7 +415,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_comparison_profiling_results.sync(
+	call_result = get_table_comparison_profiling_results.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -450,15 +440,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_comparison_profiling_results.asyncio(
+	call_result = await get_table_comparison_profiling_results.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    'sample_table_comparison',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 

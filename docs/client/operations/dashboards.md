@@ -48,7 +48,7 @@ http://localhost:8888/api/dashboards
 	    raise_on_unexpected_status=True
 	)
 	
-	get_all_dashboards.sync(
+	call_result = get_all_dashboards.sync(
 	    client=dqops_client
 	)
 	
@@ -66,11 +66,9 @@ http://localhost:8888/api/dashboards
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_all_dashboards.asyncio(
+	call_result = await get_all_dashboards.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -89,7 +87,7 @@ http://localhost:8888/api/dashboards
 	    raise_on_unexpected_status=True
 	)
 	
-	get_all_dashboards.sync(
+	call_result = get_all_dashboards.sync(
 	    client=dqops_client
 	)
 	
@@ -110,11 +108,9 @@ http://localhost:8888/api/dashboards
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_all_dashboards.asyncio(
+	call_result = await get_all_dashboards.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -182,7 +178,7 @@ http://localhost:8888/api/dashboards/{folder}/{dashboardName}
 	    raise_on_unexpected_status=True
 	)
 	
-	get_dashboard_level_1.sync(
+	call_result = get_dashboard_level_1.sync(
 	    'sample_folder_0',
 	    'sample_dashboard',
 	    client=dqops_client
@@ -202,13 +198,11 @@ http://localhost:8888/api/dashboards/{folder}/{dashboardName}
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_dashboard_level_1.asyncio(
+	call_result = await get_dashboard_level_1.asyncio(
 	    'sample_folder_0',
 	    'sample_dashboard',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -227,7 +221,7 @@ http://localhost:8888/api/dashboards/{folder}/{dashboardName}
 	    raise_on_unexpected_status=True
 	)
 	
-	get_dashboard_level_1.sync(
+	call_result = get_dashboard_level_1.sync(
 	    'sample_folder_0',
 	    'sample_dashboard',
 	    client=dqops_client
@@ -250,13 +244,11 @@ http://localhost:8888/api/dashboards/{folder}/{dashboardName}
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_dashboard_level_1.asyncio(
+	call_result = await get_dashboard_level_1.asyncio(
 	    'sample_folder_0',
 	    'sample_dashboard',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -325,7 +317,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}
 	    raise_on_unexpected_status=True
 	)
 	
-	get_dashboard_level_2.sync(
+	call_result = get_dashboard_level_2.sync(
 	    'sample_folder_1',
 	    'sample_folder_2',
 	    'sample_dashboard',
@@ -346,14 +338,12 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_dashboard_level_2.asyncio(
+	call_result = await get_dashboard_level_2.asyncio(
 	    'sample_folder_1',
 	    'sample_folder_2',
 	    'sample_dashboard',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -372,7 +362,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}
 	    raise_on_unexpected_status=True
 	)
 	
-	get_dashboard_level_2.sync(
+	call_result = get_dashboard_level_2.sync(
 	    'sample_folder_1',
 	    'sample_folder_2',
 	    'sample_dashboard',
@@ -396,14 +386,12 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_dashboard_level_2.asyncio(
+	call_result = await get_dashboard_level_2.asyncio(
 	    'sample_folder_1',
 	    'sample_folder_2',
 	    'sample_dashboard',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -473,7 +461,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardNam
 	    raise_on_unexpected_status=True
 	)
 	
-	get_dashboard_level_3.sync(
+	call_result = get_dashboard_level_3.sync(
 	    'sample_folder_1',
 	    'sample_folder_2',
 	    'sample_folder_3',
@@ -495,15 +483,13 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardNam
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_dashboard_level_3.asyncio(
+	call_result = await get_dashboard_level_3.asyncio(
 	    'sample_folder_1',
 	    'sample_folder_2',
 	    'sample_folder_3',
 	    'sample_dashboard',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -522,7 +508,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardNam
 	    raise_on_unexpected_status=True
 	)
 	
-	get_dashboard_level_3.sync(
+	call_result = get_dashboard_level_3.sync(
 	    'sample_folder_1',
 	    'sample_folder_2',
 	    'sample_folder_3',
@@ -547,15 +533,13 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardNam
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_dashboard_level_3.asyncio(
+	call_result = await get_dashboard_level_3.asyncio(
 	    'sample_folder_1',
 	    'sample_folder_2',
 	    'sample_folder_3',
 	    'sample_dashboard',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -626,7 +610,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{da
 	    raise_on_unexpected_status=True
 	)
 	
-	get_dashboard_level_4.sync(
+	call_result = get_dashboard_level_4.sync(
 	    'sample_folder_1',
 	    'sample_folder_2',
 	    'sample_folder_3',
@@ -649,7 +633,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{da
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_dashboard_level_4.asyncio(
+	call_result = await get_dashboard_level_4.asyncio(
 	    'sample_folder_1',
 	    'sample_folder_2',
 	    'sample_folder_3',
@@ -657,8 +641,6 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{da
 	    'sample_dashboard',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -677,7 +659,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{da
 	    raise_on_unexpected_status=True
 	)
 	
-	get_dashboard_level_4.sync(
+	call_result = get_dashboard_level_4.sync(
 	    'sample_folder_1',
 	    'sample_folder_2',
 	    'sample_folder_3',
@@ -703,7 +685,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{da
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_dashboard_level_4.asyncio(
+	call_result = await get_dashboard_level_4.asyncio(
 	    'sample_folder_1',
 	    'sample_folder_2',
 	    'sample_folder_3',
@@ -711,8 +693,6 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{da
 	    'sample_dashboard',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -784,7 +764,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{fo
 	    raise_on_unexpected_status=True
 	)
 	
-	get_dashboard_level_5.sync(
+	call_result = get_dashboard_level_5.sync(
 	    'sample_folder_1',
 	    'sample_folder_2',
 	    'sample_folder_3',
@@ -808,7 +788,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{fo
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_dashboard_level_5.asyncio(
+	call_result = await get_dashboard_level_5.asyncio(
 	    'sample_folder_1',
 	    'sample_folder_2',
 	    'sample_folder_3',
@@ -817,8 +797,6 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{fo
 	    'sample_dashboard',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -837,7 +815,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{fo
 	    raise_on_unexpected_status=True
 	)
 	
-	get_dashboard_level_5.sync(
+	call_result = get_dashboard_level_5.sync(
 	    'sample_folder_1',
 	    'sample_folder_2',
 	    'sample_folder_3',
@@ -864,7 +842,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{fo
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_dashboard_level_5.asyncio(
+	call_result = await get_dashboard_level_5.asyncio(
 	    'sample_folder_1',
 	    'sample_folder_2',
 	    'sample_folder_3',
@@ -873,8 +851,6 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{fo
 	    'sample_dashboard',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 

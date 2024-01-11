@@ -90,7 +90,7 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkac
 		override_conflicts=True
 	)
 	
-	bulk_activate_connection_checks.sync(
+	call_result = bulk_activate_connection_checks.sync(
 	    'sample_connection',
 	    'sample_check',
 	    client=dqops_client,
@@ -142,14 +142,12 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkac
 		override_conflicts=True
 	)
 	
-	async_result = bulk_activate_connection_checks.asyncio(
+	call_result = await bulk_activate_connection_checks.asyncio(
 	    'sample_connection',
 	    'sample_check',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -199,7 +197,7 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkac
 		override_conflicts=True
 	)
 	
-	bulk_activate_connection_checks.sync(
+	call_result = bulk_activate_connection_checks.sync(
 	    'sample_connection',
 	    'sample_check',
 	    client=dqops_client,
@@ -254,14 +252,12 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkac
 		override_conflicts=True
 	)
 	
-	async_result = bulk_activate_connection_checks.asyncio(
+	call_result = await bulk_activate_connection_checks.asyncio(
 	    'sample_connection',
 	    'sample_check',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -336,7 +332,7 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkde
 		)
 	)
 	
-	bulk_deactivate_connection_checks.sync(
+	call_result = bulk_deactivate_connection_checks.sync(
 	    'sample_connection',
 	    'sample_check',
 	    client=dqops_client,
@@ -367,14 +363,12 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkde
 		)
 	)
 	
-	async_result = bulk_deactivate_connection_checks.asyncio(
+	call_result = await bulk_deactivate_connection_checks.asyncio(
 	    'sample_connection',
 	    'sample_check',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -403,7 +397,7 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkde
 		)
 	)
 	
-	bulk_deactivate_connection_checks.sync(
+	call_result = bulk_deactivate_connection_checks.sync(
 	    'sample_connection',
 	    'sample_check',
 	    client=dqops_client,
@@ -437,14 +431,12 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkde
 		)
 	)
 	
-	async_result = bulk_deactivate_connection_checks.asyncio(
+	call_result = await bulk_deactivate_connection_checks.asyncio(
 	    'sample_connection',
 	    'sample_check',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -534,7 +526,7 @@ http://localhost:8888/api/connections/{connectionName}
 		)
 	)
 	
-	create_connection.sync(
+	call_result = create_connection.sync(
 	    'sample_connection',
 	    client=dqops_client,
 	    json_body=request_body
@@ -580,13 +572,11 @@ http://localhost:8888/api/connections/{connectionName}
 		)
 	)
 	
-	async_result = create_connection.asyncio(
+	call_result = await create_connection.asyncio(
 	    'sample_connection',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -631,7 +621,7 @@ http://localhost:8888/api/connections/{connectionName}
 		)
 	)
 	
-	create_connection.sync(
+	call_result = create_connection.sync(
 	    'sample_connection',
 	    client=dqops_client,
 	    json_body=request_body
@@ -680,13 +670,11 @@ http://localhost:8888/api/connections/{connectionName}
 		)
 	)
 	
-	async_result = create_connection.asyncio(
+	call_result = await create_connection.asyncio(
 	    'sample_connection',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -805,7 +793,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
 		can_delete_data=True
 	)
 	
-	create_connection_basic.sync(
+	call_result = create_connection_basic.sync(
 	    'sample_connection',
 	    client=dqops_client,
 	    json_body=request_body
@@ -880,13 +868,11 @@ http://localhost:8888/api/connections/{connectionName}/basic
 		can_delete_data=True
 	)
 	
-	async_result = create_connection_basic.asyncio(
+	call_result = await create_connection_basic.asyncio(
 	    'sample_connection',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -960,7 +946,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
 		can_delete_data=True
 	)
 	
-	create_connection_basic.sync(
+	call_result = create_connection_basic.sync(
 	    'sample_connection',
 	    client=dqops_client,
 	    json_body=request_body
@@ -1038,13 +1024,11 @@ http://localhost:8888/api/connections/{connectionName}/basic
 		can_delete_data=True
 	)
 	
-	async_result = create_connection_basic.asyncio(
+	call_result = await create_connection_basic.asyncio(
 	    'sample_connection',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -1104,7 +1088,7 @@ http://localhost:8888/api/connections/{connectionName}
 	    'http://localhost:8888/'
 	)
 	
-	delete_connection.sync(
+	call_result = delete_connection.sync(
 	    'sample_connection',
 	    client=dqops_client
 	)
@@ -1122,12 +1106,10 @@ http://localhost:8888/api/connections/{connectionName}
 	    'http://localhost:8888/'
 	)
 	
-	async_result = delete_connection.asyncio(
+	call_result = await delete_connection.asyncio(
 	    'sample_connection',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -1145,7 +1127,7 @@ http://localhost:8888/api/connections/{connectionName}
 	    token=token
 	)
 	
-	delete_connection.sync(
+	call_result = delete_connection.sync(
 	    'sample_connection',
 	    client=dqops_client
 	)
@@ -1166,12 +1148,10 @@ http://localhost:8888/api/connections/{connectionName}
 	    token=token
 	)
 	
-	async_result = delete_connection.asyncio(
+	call_result = await delete_connection.asyncio(
 	    'sample_connection',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -1233,7 +1213,7 @@ http://localhost:8888/api/connections
 	    raise_on_unexpected_status=True
 	)
 	
-	get_all_connections.sync(
+	call_result = get_all_connections.sync(
 	    client=dqops_client
 	)
 	
@@ -1251,11 +1231,9 @@ http://localhost:8888/api/connections
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_all_connections.asyncio(
+	call_result = await get_all_connections.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -1274,7 +1252,7 @@ http://localhost:8888/api/connections
 	    raise_on_unexpected_status=True
 	)
 	
-	get_all_connections.sync(
+	call_result = get_all_connections.sync(
 	    client=dqops_client
 	)
 	
@@ -1295,11 +1273,9 @@ http://localhost:8888/api/connections
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_all_connections.asyncio(
+	call_result = await get_all_connections.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -1503,7 +1479,7 @@ http://localhost:8888/api/connections/{connectionName}
 	    raise_on_unexpected_status=True
 	)
 	
-	get_connection.sync(
+	call_result = get_connection.sync(
 	    'sample_connection',
 	    client=dqops_client
 	)
@@ -1522,12 +1498,10 @@ http://localhost:8888/api/connections/{connectionName}
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_connection.asyncio(
+	call_result = await get_connection.asyncio(
 	    'sample_connection',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -1546,7 +1520,7 @@ http://localhost:8888/api/connections/{connectionName}
 	    raise_on_unexpected_status=True
 	)
 	
-	get_connection.sync(
+	call_result = get_connection.sync(
 	    'sample_connection',
 	    client=dqops_client
 	)
@@ -1568,12 +1542,10 @@ http://localhost:8888/api/connections/{connectionName}
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_connection.asyncio(
+	call_result = await get_connection.asyncio(
 	    'sample_connection',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -1641,7 +1613,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
 	    raise_on_unexpected_status=True
 	)
 	
-	get_connection_basic.sync(
+	call_result = get_connection_basic.sync(
 	    'sample_connection',
 	    client=dqops_client
 	)
@@ -1660,12 +1632,10 @@ http://localhost:8888/api/connections/{connectionName}/basic
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_connection_basic.asyncio(
+	call_result = await get_connection_basic.asyncio(
 	    'sample_connection',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -1684,7 +1654,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
 	    raise_on_unexpected_status=True
 	)
 	
-	get_connection_basic.sync(
+	call_result = get_connection_basic.sync(
 	    'sample_connection',
 	    client=dqops_client
 	)
@@ -1706,12 +1676,10 @@ http://localhost:8888/api/connections/{connectionName}/basic
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_connection_basic.asyncio(
+	call_result = await get_connection_basic.asyncio(
 	    'sample_connection',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -1823,7 +1791,7 @@ http://localhost:8888/api/connections/{connectionName}/comments
 	    raise_on_unexpected_status=True
 	)
 	
-	get_connection_comments.sync(
+	call_result = get_connection_comments.sync(
 	    'sample_connection',
 	    client=dqops_client
 	)
@@ -1842,12 +1810,10 @@ http://localhost:8888/api/connections/{connectionName}/comments
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_connection_comments.asyncio(
+	call_result = await get_connection_comments.asyncio(
 	    'sample_connection',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -1866,7 +1832,7 @@ http://localhost:8888/api/connections/{connectionName}/comments
 	    raise_on_unexpected_status=True
 	)
 	
-	get_connection_comments.sync(
+	call_result = get_connection_comments.sync(
 	    'sample_connection',
 	    client=dqops_client
 	)
@@ -1888,12 +1854,10 @@ http://localhost:8888/api/connections/{connectionName}/comments
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_connection_comments.asyncio(
+	call_result = await get_connection_comments.asyncio(
 	    'sample_connection',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -1971,7 +1935,7 @@ http://localhost:8888/api/connections/{connectionName}/commoncolumns
 	    raise_on_unexpected_status=True
 	)
 	
-	get_connection_common_columns.sync(
+	call_result = get_connection_common_columns.sync(
 	    'sample_connection',
 	    client=dqops_client
 	)
@@ -1990,12 +1954,10 @@ http://localhost:8888/api/connections/{connectionName}/commoncolumns
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_connection_common_columns.asyncio(
+	call_result = await get_connection_common_columns.asyncio(
 	    'sample_connection',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -2014,7 +1976,7 @@ http://localhost:8888/api/connections/{connectionName}/commoncolumns
 	    raise_on_unexpected_status=True
 	)
 	
-	get_connection_common_columns.sync(
+	call_result = get_connection_common_columns.sync(
 	    'sample_connection',
 	    client=dqops_client
 	)
@@ -2036,12 +1998,10 @@ http://localhost:8888/api/connections/{connectionName}/commoncolumns
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_connection_common_columns.asyncio(
+	call_result = await get_connection_common_columns.asyncio(
 	    'sample_connection',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -2113,7 +2073,7 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
 	    raise_on_unexpected_status=True
 	)
 	
-	get_connection_default_grouping_configuration.sync(
+	call_result = get_connection_default_grouping_configuration.sync(
 	    'sample_connection',
 	    client=dqops_client
 	)
@@ -2132,12 +2092,10 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_connection_default_grouping_configuration.asyncio(
+	call_result = await get_connection_default_grouping_configuration.asyncio(
 	    'sample_connection',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -2156,7 +2114,7 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
 	    raise_on_unexpected_status=True
 	)
 	
-	get_connection_default_grouping_configuration.sync(
+	call_result = get_connection_default_grouping_configuration.sync(
 	    'sample_connection',
 	    client=dqops_client
 	)
@@ -2178,12 +2136,10 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_connection_default_grouping_configuration.asyncio(
+	call_result = await get_connection_default_grouping_configuration.asyncio(
 	    'sample_connection',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -2254,7 +2210,7 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 	    raise_on_unexpected_status=True
 	)
 	
-	get_connection_incident_grouping.sync(
+	call_result = get_connection_incident_grouping.sync(
 	    'sample_connection',
 	    client=dqops_client
 	)
@@ -2273,12 +2229,10 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_connection_incident_grouping.asyncio(
+	call_result = await get_connection_incident_grouping.asyncio(
 	    'sample_connection',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -2297,7 +2251,7 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 	    raise_on_unexpected_status=True
 	)
 	
-	get_connection_incident_grouping.sync(
+	call_result = get_connection_incident_grouping.sync(
 	    'sample_connection',
 	    client=dqops_client
 	)
@@ -2319,12 +2273,10 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_connection_incident_grouping.asyncio(
+	call_result = await get_connection_incident_grouping.asyncio(
 	    'sample_connection',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -2402,7 +2354,7 @@ http://localhost:8888/api/connections/{connectionName}/labels
 	    raise_on_unexpected_status=True
 	)
 	
-	get_connection_labels.sync(
+	call_result = get_connection_labels.sync(
 	    'sample_connection',
 	    client=dqops_client
 	)
@@ -2421,12 +2373,10 @@ http://localhost:8888/api/connections/{connectionName}/labels
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_connection_labels.asyncio(
+	call_result = await get_connection_labels.asyncio(
 	    'sample_connection',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -2445,7 +2395,7 @@ http://localhost:8888/api/connections/{connectionName}/labels
 	    raise_on_unexpected_status=True
 	)
 	
-	get_connection_labels.sync(
+	call_result = get_connection_labels.sync(
 	    'sample_connection',
 	    client=dqops_client
 	)
@@ -2467,12 +2417,10 @@ http://localhost:8888/api/connections/{connectionName}/labels
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_connection_labels.asyncio(
+	call_result = await get_connection_labels.asyncio(
 	    'sample_connection',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -2539,7 +2487,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 	    raise_on_unexpected_status=True
 	)
 	
-	get_connection_scheduling_group.sync(
+	call_result = get_connection_scheduling_group.sync(
 	    'sample_connection',
 	    CheckRunScheduleGroup.partitioned_daily,
 	    client=dqops_client
@@ -2559,13 +2507,11 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_connection_scheduling_group.asyncio(
+	call_result = await get_connection_scheduling_group.asyncio(
 	    'sample_connection',
 	    CheckRunScheduleGroup.partitioned_daily,
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -2584,7 +2530,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 	    raise_on_unexpected_status=True
 	)
 	
-	get_connection_scheduling_group.sync(
+	call_result = get_connection_scheduling_group.sync(
 	    'sample_connection',
 	    CheckRunScheduleGroup.partitioned_daily,
 	    client=dqops_client
@@ -2607,13 +2553,11 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_connection_scheduling_group.asyncio(
+	call_result = await get_connection_scheduling_group.asyncio(
 	    'sample_connection',
 	    CheckRunScheduleGroup.partitioned_daily,
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -2710,7 +2654,7 @@ http://localhost:8888/api/connections/{connectionName}
 		)
 	)
 	
-	update_connection.sync(
+	call_result = update_connection.sync(
 	    'sample_connection',
 	    client=dqops_client,
 	    json_body=request_body
@@ -2756,13 +2700,11 @@ http://localhost:8888/api/connections/{connectionName}
 		)
 	)
 	
-	async_result = update_connection.asyncio(
+	call_result = await update_connection.asyncio(
 	    'sample_connection',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -2807,7 +2749,7 @@ http://localhost:8888/api/connections/{connectionName}
 		)
 	)
 	
-	update_connection.sync(
+	call_result = update_connection.sync(
 	    'sample_connection',
 	    client=dqops_client,
 	    json_body=request_body
@@ -2856,13 +2798,11 @@ http://localhost:8888/api/connections/{connectionName}
 		)
 	)
 	
-	async_result = update_connection.asyncio(
+	call_result = await update_connection.asyncio(
 	    'sample_connection',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -2981,7 +2921,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
 		can_delete_data=True
 	)
 	
-	update_connection_basic.sync(
+	call_result = update_connection_basic.sync(
 	    'sample_connection',
 	    client=dqops_client,
 	    json_body=request_body
@@ -3056,13 +2996,11 @@ http://localhost:8888/api/connections/{connectionName}/basic
 		can_delete_data=True
 	)
 	
-	async_result = update_connection_basic.asyncio(
+	call_result = await update_connection_basic.asyncio(
 	    'sample_connection',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -3136,7 +3074,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
 		can_delete_data=True
 	)
 	
-	update_connection_basic.sync(
+	call_result = update_connection_basic.sync(
 	    'sample_connection',
 	    client=dqops_client,
 	    json_body=request_body
@@ -3214,13 +3152,11 @@ http://localhost:8888/api/connections/{connectionName}/basic
 		can_delete_data=True
 	)
 	
-	async_result = update_connection_basic.asyncio(
+	call_result = await update_connection_basic.asyncio(
 	    'sample_connection',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -3301,7 +3237,7 @@ http://localhost:8888/api/connections/{connectionName}/comments
 		)
 	]
 	
-	update_connection_comments.sync(
+	call_result = update_connection_comments.sync(
 	    'sample_connection',
 	    client=dqops_client,
 	    json_body=request_body
@@ -3338,13 +3274,11 @@ http://localhost:8888/api/connections/{connectionName}/comments
 		)
 	]
 	
-	async_result = update_connection_comments.asyncio(
+	call_result = await update_connection_comments.asyncio(
 	    'sample_connection',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -3380,7 +3314,7 @@ http://localhost:8888/api/connections/{connectionName}/comments
 		)
 	]
 	
-	update_connection_comments.sync(
+	call_result = update_connection_comments.sync(
 	    'sample_connection',
 	    client=dqops_client,
 	    json_body=request_body
@@ -3420,13 +3354,11 @@ http://localhost:8888/api/connections/{connectionName}/comments
 		)
 	]
 	
-	async_result = update_connection_comments.asyncio(
+	call_result = await update_connection_comments.asyncio(
 	    'sample_connection',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -3498,7 +3430,7 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
 		)
 	)
 	
-	update_connection_default_grouping_configuration.sync(
+	call_result = update_connection_default_grouping_configuration.sync(
 	    'sample_connection',
 	    client=dqops_client,
 	    json_body=request_body
@@ -3526,13 +3458,11 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
 		)
 	)
 	
-	async_result = update_connection_default_grouping_configuration.asyncio(
+	call_result = await update_connection_default_grouping_configuration.asyncio(
 	    'sample_connection',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -3559,7 +3489,7 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
 		)
 	)
 	
-	update_connection_default_grouping_configuration.sync(
+	call_result = update_connection_default_grouping_configuration.sync(
 	    'sample_connection',
 	    client=dqops_client,
 	    json_body=request_body
@@ -3590,13 +3520,11 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
 		)
 	)
 	
-	async_result = update_connection_default_grouping_configuration.asyncio(
+	call_result = await update_connection_default_grouping_configuration.asyncio(
 	    'sample_connection',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -3677,7 +3605,7 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 		)
 	)
 	
-	update_connection_incident_grouping.sync(
+	call_result = update_connection_incident_grouping.sync(
 	    'sample_connection',
 	    client=dqops_client,
 	    json_body=request_body
@@ -3714,13 +3642,11 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 		)
 	)
 	
-	async_result = update_connection_incident_grouping.asyncio(
+	call_result = await update_connection_incident_grouping.asyncio(
 	    'sample_connection',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -3756,7 +3682,7 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 		)
 	)
 	
-	update_connection_incident_grouping.sync(
+	call_result = update_connection_incident_grouping.sync(
 	    'sample_connection',
 	    client=dqops_client,
 	    json_body=request_body
@@ -3796,13 +3722,11 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 		)
 	)
 	
-	async_result = update_connection_incident_grouping.asyncio(
+	call_result = await update_connection_incident_grouping.asyncio(
 	    'sample_connection',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -3871,7 +3795,7 @@ http://localhost:8888/api/connections/{connectionName}/labels
 		'sampleString_3'
 	]
 	
-	update_connection_labels.sync(
+	call_result = update_connection_labels.sync(
 	    'sample_connection',
 	    client=dqops_client,
 	    json_body=request_body
@@ -3896,13 +3820,11 @@ http://localhost:8888/api/connections/{connectionName}/labels
 		'sampleString_3'
 	]
 	
-	async_result = update_connection_labels.asyncio(
+	call_result = await update_connection_labels.asyncio(
 	    'sample_connection',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -3926,7 +3848,7 @@ http://localhost:8888/api/connections/{connectionName}/labels
 		'sampleString_3'
 	]
 	
-	update_connection_labels.sync(
+	call_result = update_connection_labels.sync(
 	    'sample_connection',
 	    client=dqops_client,
 	    json_body=request_body
@@ -3954,13 +3876,11 @@ http://localhost:8888/api/connections/{connectionName}/labels
 		'sampleString_3'
 	]
 	
-	async_result = update_connection_labels.asyncio(
+	call_result = await update_connection_labels.asyncio(
 	    'sample_connection',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -4030,7 +3950,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 		disabled=False
 	)
 	
-	update_connection_scheduling_group.sync(
+	call_result = update_connection_scheduling_group.sync(
 	    'sample_connection',
 	    CheckRunScheduleGroup.partitioned_daily,
 	    client=dqops_client,
@@ -4056,14 +3976,12 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 		disabled=False
 	)
 	
-	async_result = update_connection_scheduling_group.asyncio(
+	call_result = await update_connection_scheduling_group.asyncio(
 	    'sample_connection',
 	    CheckRunScheduleGroup.partitioned_daily,
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -4087,7 +4005,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 		disabled=False
 	)
 	
-	update_connection_scheduling_group.sync(
+	call_result = update_connection_scheduling_group.sync(
 	    'sample_connection',
 	    CheckRunScheduleGroup.partitioned_daily,
 	    client=dqops_client,
@@ -4116,14 +4034,12 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 		disabled=False
 	)
 	
-	async_result = update_connection_scheduling_group.asyncio(
+	call_result = await update_connection_scheduling_group.asyncio(
 	    'sample_connection',
 	    CheckRunScheduleGroup.partitioned_daily,
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 

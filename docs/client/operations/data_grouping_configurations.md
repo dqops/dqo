@@ -73,7 +73,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_edit=True
 	)
 	
-	create_table_grouping_configuration.sync(
+	call_result = create_table_grouping_configuration.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -108,15 +108,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_edit=True
 	)
 	
-	async_result = create_table_grouping_configuration.asyncio(
+	call_result = await create_table_grouping_configuration.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -148,7 +146,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_edit=True
 	)
 	
-	create_table_grouping_configuration.sync(
+	call_result = create_table_grouping_configuration.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -186,15 +184,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_edit=True
 	)
 	
-	async_result = create_table_grouping_configuration.asyncio(
+	call_result = await create_table_grouping_configuration.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -250,7 +246,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    'http://localhost:8888/'
 	)
 	
-	delete_table_grouping_configuration.sync(
+	call_result = delete_table_grouping_configuration.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -271,15 +267,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    'http://localhost:8888/'
 	)
 	
-	async_result = delete_table_grouping_configuration.asyncio(
+	call_result = await delete_table_grouping_configuration.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    'sample_data_grouping',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -297,7 +291,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    token=token
 	)
 	
-	delete_table_grouping_configuration.sync(
+	call_result = delete_table_grouping_configuration.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -321,15 +315,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    token=token
 	)
 	
-	async_result = delete_table_grouping_configuration.asyncio(
+	call_result = await delete_table_grouping_configuration.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    'sample_data_grouping',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -393,7 +385,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_grouping_configuration.sync(
+	call_result = get_table_grouping_configuration.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -415,15 +407,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_grouping_configuration.asyncio(
+	call_result = await get_table_grouping_configuration.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    'sample_data_grouping',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -442,7 +432,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_grouping_configuration.sync(
+	call_result = get_table_grouping_configuration.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -467,15 +457,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_grouping_configuration.asyncio(
+	call_result = await get_table_grouping_configuration.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    'sample_data_grouping',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -545,7 +533,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_grouping_configurations.sync(
+	call_result = get_table_grouping_configurations.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -566,14 +554,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_grouping_configurations.asyncio(
+	call_result = await get_table_grouping_configurations.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -592,7 +578,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_grouping_configurations.sync(
+	call_result = get_table_grouping_configurations.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -616,14 +602,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_grouping_configurations.asyncio(
+	call_result = await get_table_grouping_configurations.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -693,7 +677,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    'http://localhost:8888/'
 	)
 	
-	set_table_default_grouping_configuration.sync(
+	call_result = set_table_default_grouping_configuration.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -713,14 +697,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    'http://localhost:8888/'
 	)
 	
-	async_result = set_table_default_grouping_configuration.asyncio(
+	call_result = await set_table_default_grouping_configuration.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -738,7 +720,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    token=token
 	)
 	
-	set_table_default_grouping_configuration.sync(
+	call_result = set_table_default_grouping_configuration.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -761,14 +743,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    token=token
 	)
 	
-	async_result = set_table_default_grouping_configuration.asyncio(
+	call_result = await set_table_default_grouping_configuration.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -848,7 +828,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_edit=True
 	)
 	
-	update_table_grouping_configuration.sync(
+	call_result = update_table_grouping_configuration.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -884,7 +864,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_edit=True
 	)
 	
-	async_result = update_table_grouping_configuration.asyncio(
+	call_result = await update_table_grouping_configuration.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -892,8 +872,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -925,7 +903,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_edit=True
 	)
 	
-	update_table_grouping_configuration.sync(
+	call_result = update_table_grouping_configuration.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -964,7 +942,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_edit=True
 	)
 	
-	async_result = update_table_grouping_configuration.asyncio(
+	call_result = await update_table_grouping_configuration.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -972,8 +950,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 

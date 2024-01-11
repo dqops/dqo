@@ -48,7 +48,7 @@ http://localhost:8888/api/ishealthy
 	    raise_on_unexpected_status=True
 	)
 	
-	is_healthy.sync(
+	call_result = is_healthy.sync(
 	    client=dqops_client
 	)
 	
@@ -66,11 +66,9 @@ http://localhost:8888/api/ishealthy
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = is_healthy.asyncio(
+	call_result = await is_healthy.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -89,7 +87,7 @@ http://localhost:8888/api/ishealthy
 	    raise_on_unexpected_status=True
 	)
 	
-	is_healthy.sync(
+	call_result = is_healthy.sync(
 	    client=dqops_client
 	)
 	
@@ -110,11 +108,9 @@ http://localhost:8888/api/ishealthy
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = is_healthy.asyncio(
+	call_result = await is_healthy.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 

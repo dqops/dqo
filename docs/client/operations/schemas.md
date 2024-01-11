@@ -67,7 +67,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
 	    raise_on_unexpected_status=True
 	)
 	
-	get_schema_monitoring_checks_model.sync(
+	call_result = get_schema_monitoring_checks_model.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    CheckTimeScale.daily,
@@ -89,14 +89,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_schema_monitoring_checks_model.asyncio(
+	call_result = await get_schema_monitoring_checks_model.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    CheckTimeScale.daily,
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -116,7 +114,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
 	    raise_on_unexpected_status=True
 	)
 	
-	get_schema_monitoring_checks_model.sync(
+	call_result = get_schema_monitoring_checks_model.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    CheckTimeScale.daily,
@@ -141,14 +139,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_schema_monitoring_checks_model.asyncio(
+	call_result = await get_schema_monitoring_checks_model.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    CheckTimeScale.daily,
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -232,7 +228,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 	    raise_on_unexpected_status=True
 	)
 	
-	get_schema_monitoring_checks_templates.sync(
+	call_result = get_schema_monitoring_checks_templates.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    CheckTimeScale.daily,
@@ -254,14 +250,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_schema_monitoring_checks_templates.asyncio(
+	call_result = await get_schema_monitoring_checks_templates.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    CheckTimeScale.daily,
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -281,7 +275,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 	    raise_on_unexpected_status=True
 	)
 	
-	get_schema_monitoring_checks_templates.sync(
+	call_result = get_schema_monitoring_checks_templates.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    CheckTimeScale.daily,
@@ -306,14 +300,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_schema_monitoring_checks_templates.asyncio(
+	call_result = await get_schema_monitoring_checks_templates.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    CheckTimeScale.daily,
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -397,7 +389,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
 	    raise_on_unexpected_status=True
 	)
 	
-	get_schema_partitioned_checks_model.sync(
+	call_result = get_schema_partitioned_checks_model.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    CheckTimeScale.daily,
@@ -419,14 +411,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_schema_partitioned_checks_model.asyncio(
+	call_result = await get_schema_partitioned_checks_model.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    CheckTimeScale.daily,
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -446,7 +436,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
 	    raise_on_unexpected_status=True
 	)
 	
-	get_schema_partitioned_checks_model.sync(
+	call_result = get_schema_partitioned_checks_model.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    CheckTimeScale.daily,
@@ -471,14 +461,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_schema_partitioned_checks_model.asyncio(
+	call_result = await get_schema_partitioned_checks_model.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    CheckTimeScale.daily,
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -562,7 +550,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 	    raise_on_unexpected_status=True
 	)
 	
-	get_schema_partitioned_checks_templates.sync(
+	call_result = get_schema_partitioned_checks_templates.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    CheckTimeScale.daily,
@@ -584,14 +572,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_schema_partitioned_checks_templates.asyncio(
+	call_result = await get_schema_partitioned_checks_templates.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    CheckTimeScale.daily,
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -611,7 +597,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 	    raise_on_unexpected_status=True
 	)
 	
-	get_schema_partitioned_checks_templates.sync(
+	call_result = get_schema_partitioned_checks_templates.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    CheckTimeScale.daily,
@@ -636,14 +622,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_schema_partitioned_checks_templates.asyncio(
+	call_result = await get_schema_partitioned_checks_templates.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    CheckTimeScale.daily,
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -725,7 +709,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
 	    raise_on_unexpected_status=True
 	)
 	
-	get_schema_profiling_checks_model.sync(
+	call_result = get_schema_profiling_checks_model.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    client=dqops_client
@@ -745,13 +729,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_schema_profiling_checks_model.asyncio(
+	call_result = await get_schema_profiling_checks_model.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -770,7 +752,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
 	    raise_on_unexpected_status=True
 	)
 	
-	get_schema_profiling_checks_model.sync(
+	call_result = get_schema_profiling_checks_model.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    client=dqops_client
@@ -793,13 +775,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_schema_profiling_checks_model.asyncio(
+	call_result = await get_schema_profiling_checks_model.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -881,7 +861,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 	    raise_on_unexpected_status=True
 	)
 	
-	get_schema_profiling_checks_templates.sync(
+	call_result = get_schema_profiling_checks_templates.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    client=dqops_client
@@ -901,13 +881,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_schema_profiling_checks_templates.asyncio(
+	call_result = await get_schema_profiling_checks_templates.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -926,7 +904,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 	    raise_on_unexpected_status=True
 	)
 	
-	get_schema_profiling_checks_templates.sync(
+	call_result = get_schema_profiling_checks_templates.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    client=dqops_client
@@ -949,13 +927,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_schema_profiling_checks_templates.asyncio(
+	call_result = await get_schema_profiling_checks_templates.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -1027,7 +1003,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas
 	    raise_on_unexpected_status=True
 	)
 	
-	get_schemas.sync(
+	call_result = get_schemas.sync(
 	    'sample_connection',
 	    client=dqops_client
 	)
@@ -1046,12 +1022,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_schemas.asyncio(
+	call_result = await get_schemas.asyncio(
 	    'sample_connection',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -1070,7 +1044,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas
 	    raise_on_unexpected_status=True
 	)
 	
-	get_schemas.sync(
+	call_result = get_schemas.sync(
 	    'sample_connection',
 	    client=dqops_client
 	)
@@ -1092,12 +1066,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_schemas.asyncio(
+	call_result = await get_schemas.asyncio(
 	    'sample_connection',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 

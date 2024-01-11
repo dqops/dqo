@@ -78,7 +78,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	create_table_comparison_configuration.sync(
+	call_result = create_table_comparison_configuration.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -118,15 +118,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	async_result = create_table_comparison_configuration.asyncio(
+	call_result = await create_table_comparison_configuration.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -163,7 +161,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	create_table_comparison_configuration.sync(
+	call_result = create_table_comparison_configuration.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -206,15 +204,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	async_result = create_table_comparison_configuration.asyncio(
+	call_result = await create_table_comparison_configuration.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -334,7 +330,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	create_table_comparison_monitoring_daily.sync(
+	call_result = create_table_comparison_monitoring_daily.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -410,15 +406,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	async_result = create_table_comparison_monitoring_daily.asyncio(
+	call_result = await create_table_comparison_monitoring_daily.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -491,7 +485,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	create_table_comparison_monitoring_daily.sync(
+	call_result = create_table_comparison_monitoring_daily.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -570,15 +564,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	async_result = create_table_comparison_monitoring_daily.asyncio(
+	call_result = await create_table_comparison_monitoring_daily.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -698,7 +690,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	create_table_comparison_monitoring_monthly.sync(
+	call_result = create_table_comparison_monitoring_monthly.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -774,15 +766,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	async_result = create_table_comparison_monitoring_monthly.asyncio(
+	call_result = await create_table_comparison_monitoring_monthly.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -855,7 +845,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	create_table_comparison_monitoring_monthly.sync(
+	call_result = create_table_comparison_monitoring_monthly.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -934,15 +924,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	async_result = create_table_comparison_monitoring_monthly.asyncio(
+	call_result = await create_table_comparison_monitoring_monthly.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -1062,7 +1050,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	create_table_comparison_partitioned_daily.sync(
+	call_result = create_table_comparison_partitioned_daily.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -1138,15 +1126,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	async_result = create_table_comparison_partitioned_daily.asyncio(
+	call_result = await create_table_comparison_partitioned_daily.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -1219,7 +1205,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	create_table_comparison_partitioned_daily.sync(
+	call_result = create_table_comparison_partitioned_daily.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -1298,15 +1284,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	async_result = create_table_comparison_partitioned_daily.asyncio(
+	call_result = await create_table_comparison_partitioned_daily.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -1426,7 +1410,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	create_table_comparison_partitioned_monthly.sync(
+	call_result = create_table_comparison_partitioned_monthly.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -1502,15 +1486,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	async_result = create_table_comparison_partitioned_monthly.asyncio(
+	call_result = await create_table_comparison_partitioned_monthly.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -1583,7 +1565,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	create_table_comparison_partitioned_monthly.sync(
+	call_result = create_table_comparison_partitioned_monthly.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -1662,15 +1644,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	async_result = create_table_comparison_partitioned_monthly.asyncio(
+	call_result = await create_table_comparison_partitioned_monthly.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -1790,7 +1770,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	create_table_comparison_profiling.sync(
+	call_result = create_table_comparison_profiling.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -1866,15 +1846,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	async_result = create_table_comparison_profiling.asyncio(
+	call_result = await create_table_comparison_profiling.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -1947,7 +1925,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	create_table_comparison_profiling.sync(
+	call_result = create_table_comparison_profiling.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -2026,15 +2004,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	async_result = create_table_comparison_profiling.asyncio(
+	call_result = await create_table_comparison_profiling.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -2090,7 +2066,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    'http://localhost:8888/'
 	)
 	
-	delete_table_comparison_configuration.sync(
+	call_result = delete_table_comparison_configuration.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -2111,15 +2087,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    'http://localhost:8888/'
 	)
 	
-	async_result = delete_table_comparison_configuration.asyncio(
+	call_result = await delete_table_comparison_configuration.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    'sample_table_comparison',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -2137,7 +2111,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    token=token
 	)
 	
-	delete_table_comparison_configuration.sync(
+	call_result = delete_table_comparison_configuration.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -2161,15 +2135,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    token=token
 	)
 	
-	async_result = delete_table_comparison_configuration.asyncio(
+	call_result = await delete_table_comparison_configuration.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    'sample_table_comparison',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -2233,7 +2205,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_comparison_configuration.sync(
+	call_result = get_table_comparison_configuration.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -2255,15 +2227,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_comparison_configuration.asyncio(
+	call_result = await get_table_comparison_configuration.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    'sample_table_comparison',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -2282,7 +2252,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_comparison_configuration.sync(
+	call_result = get_table_comparison_configuration.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -2307,15 +2277,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_comparison_configuration.asyncio(
+	call_result = await get_table_comparison_configuration.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    'sample_table_comparison',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -2398,7 +2366,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_comparison_configurations.sync(
+	call_result = get_table_comparison_configurations.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -2420,14 +2388,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_comparison_configurations.asyncio(
+	call_result = await get_table_comparison_configurations.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -2447,7 +2413,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_comparison_configurations.sync(
+	call_result = get_table_comparison_configurations.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -2472,14 +2438,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_comparison_configurations.asyncio(
+	call_result = await get_table_comparison_configurations.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -2584,7 +2548,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_comparison_monitoring_daily.sync(
+	call_result = get_table_comparison_monitoring_daily.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -2606,15 +2570,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_comparison_monitoring_daily.asyncio(
+	call_result = await get_table_comparison_monitoring_daily.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    'sample_table_comparison',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -2633,7 +2595,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_comparison_monitoring_daily.sync(
+	call_result = get_table_comparison_monitoring_daily.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -2658,15 +2620,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_comparison_monitoring_daily.asyncio(
+	call_result = await get_table_comparison_monitoring_daily.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    'sample_table_comparison',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -2778,7 +2738,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_comparison_monitoring_monthly.sync(
+	call_result = get_table_comparison_monitoring_monthly.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -2800,15 +2760,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_comparison_monitoring_monthly.asyncio(
+	call_result = await get_table_comparison_monitoring_monthly.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    'sample_table_comparison',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -2827,7 +2785,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_comparison_monitoring_monthly.sync(
+	call_result = get_table_comparison_monitoring_monthly.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -2852,15 +2810,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_comparison_monitoring_monthly.asyncio(
+	call_result = await get_table_comparison_monitoring_monthly.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    'sample_table_comparison',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -2972,7 +2928,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_comparison_partitioned_daily.sync(
+	call_result = get_table_comparison_partitioned_daily.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -2994,15 +2950,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_comparison_partitioned_daily.asyncio(
+	call_result = await get_table_comparison_partitioned_daily.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    'sample_table_comparison',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -3021,7 +2975,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_comparison_partitioned_daily.sync(
+	call_result = get_table_comparison_partitioned_daily.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -3046,15 +3000,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_comparison_partitioned_daily.asyncio(
+	call_result = await get_table_comparison_partitioned_daily.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    'sample_table_comparison',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -3166,7 +3118,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_comparison_partitioned_monthly.sync(
+	call_result = get_table_comparison_partitioned_monthly.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -3188,15 +3140,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_comparison_partitioned_monthly.asyncio(
+	call_result = await get_table_comparison_partitioned_monthly.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    'sample_table_comparison',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -3215,7 +3165,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_comparison_partitioned_monthly.sync(
+	call_result = get_table_comparison_partitioned_monthly.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -3240,15 +3190,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_comparison_partitioned_monthly.asyncio(
+	call_result = await get_table_comparison_partitioned_monthly.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    'sample_table_comparison',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -3360,7 +3308,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_comparison_profiling.sync(
+	call_result = get_table_comparison_profiling.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -3382,15 +3330,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_comparison_profiling.asyncio(
+	call_result = await get_table_comparison_profiling.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    'sample_table_comparison',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -3409,7 +3355,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	get_table_comparison_profiling.sync(
+	call_result = get_table_comparison_profiling.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -3434,15 +3380,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_table_comparison_profiling.asyncio(
+	call_result = await get_table_comparison_profiling.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
 	    'sample_table_comparison',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -3575,7 +3519,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	update_table_comparison_configuration.sync(
+	call_result = update_table_comparison_configuration.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -3616,7 +3560,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	async_result = update_table_comparison_configuration.asyncio(
+	call_result = await update_table_comparison_configuration.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -3624,8 +3568,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -3662,7 +3604,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	update_table_comparison_configuration.sync(
+	call_result = update_table_comparison_configuration.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -3706,7 +3648,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	async_result = update_table_comparison_configuration.asyncio(
+	call_result = await update_table_comparison_configuration.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -3714,8 +3656,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -3836,7 +3776,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	update_table_comparison_monitoring_daily.sync(
+	call_result = update_table_comparison_monitoring_daily.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -3913,7 +3853,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	async_result = update_table_comparison_monitoring_daily.asyncio(
+	call_result = await update_table_comparison_monitoring_daily.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -3921,8 +3861,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -3995,7 +3933,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	update_table_comparison_monitoring_daily.sync(
+	call_result = update_table_comparison_monitoring_daily.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -4075,7 +4013,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	async_result = update_table_comparison_monitoring_daily.asyncio(
+	call_result = await update_table_comparison_monitoring_daily.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -4083,8 +4021,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -4205,7 +4141,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	update_table_comparison_monitoring_monthly.sync(
+	call_result = update_table_comparison_monitoring_monthly.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -4282,7 +4218,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	async_result = update_table_comparison_monitoring_monthly.asyncio(
+	call_result = await update_table_comparison_monitoring_monthly.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -4290,8 +4226,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -4364,7 +4298,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	update_table_comparison_monitoring_monthly.sync(
+	call_result = update_table_comparison_monitoring_monthly.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -4444,7 +4378,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	async_result = update_table_comparison_monitoring_monthly.asyncio(
+	call_result = await update_table_comparison_monitoring_monthly.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -4452,8 +4386,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -4574,7 +4506,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	update_table_comparison_partitioned_daily.sync(
+	call_result = update_table_comparison_partitioned_daily.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -4651,7 +4583,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	async_result = update_table_comparison_partitioned_daily.asyncio(
+	call_result = await update_table_comparison_partitioned_daily.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -4659,8 +4591,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -4733,7 +4663,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	update_table_comparison_partitioned_daily.sync(
+	call_result = update_table_comparison_partitioned_daily.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -4813,7 +4743,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	async_result = update_table_comparison_partitioned_daily.asyncio(
+	call_result = await update_table_comparison_partitioned_daily.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -4821,8 +4751,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -4943,7 +4871,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	update_table_comparison_partitioned_monthly.sync(
+	call_result = update_table_comparison_partitioned_monthly.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -5020,7 +4948,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	async_result = update_table_comparison_partitioned_monthly.asyncio(
+	call_result = await update_table_comparison_partitioned_monthly.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -5028,8 +4956,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -5102,7 +5028,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	update_table_comparison_partitioned_monthly.sync(
+	call_result = update_table_comparison_partitioned_monthly.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -5182,7 +5108,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	async_result = update_table_comparison_partitioned_monthly.asyncio(
+	call_result = await update_table_comparison_partitioned_monthly.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -5190,8 +5116,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -5312,7 +5236,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	update_table_comparison_profiling.sync(
+	call_result = update_table_comparison_profiling.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -5389,7 +5313,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	async_result = update_table_comparison_profiling.asyncio(
+	call_result = await update_table_comparison_profiling.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -5397,8 +5321,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -5471,7 +5393,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	update_table_comparison_profiling.sync(
+	call_result = update_table_comparison_profiling.sync(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -5551,7 +5473,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		can_delete_data=True
 	)
 	
-	async_result = update_table_comparison_profiling.asyncio(
+	call_result = await update_table_comparison_profiling.asyncio(
 	    'sample_connection',
 	    'sample_schema',
 	    'sample_table',
@@ -5559,8 +5481,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 

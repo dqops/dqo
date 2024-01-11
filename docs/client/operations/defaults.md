@@ -48,7 +48,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 	    raise_on_unexpected_status=True
 	)
 	
-	get_default_data_observability_daily_monitoring_column_checks.sync(
+	call_result = get_default_data_observability_daily_monitoring_column_checks.sync(
 	    client=dqops_client
 	)
 	
@@ -66,11 +66,9 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_default_data_observability_daily_monitoring_column_checks.asyncio(
+	call_result = await get_default_data_observability_daily_monitoring_column_checks.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -89,7 +87,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 	    raise_on_unexpected_status=True
 	)
 	
-	get_default_data_observability_daily_monitoring_column_checks.sync(
+	call_result = get_default_data_observability_daily_monitoring_column_checks.sync(
 	    client=dqops_client
 	)
 	
@@ -110,11 +108,9 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_default_data_observability_daily_monitoring_column_checks.asyncio(
+	call_result = await get_default_data_observability_daily_monitoring_column_checks.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -196,7 +192,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 	    raise_on_unexpected_status=True
 	)
 	
-	get_default_data_observability_daily_monitoring_table_checks.sync(
+	call_result = get_default_data_observability_daily_monitoring_table_checks.sync(
 	    client=dqops_client
 	)
 	
@@ -214,11 +210,9 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_default_data_observability_daily_monitoring_table_checks.asyncio(
+	call_result = await get_default_data_observability_daily_monitoring_table_checks.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -237,7 +231,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 	    raise_on_unexpected_status=True
 	)
 	
-	get_default_data_observability_daily_monitoring_table_checks.sync(
+	call_result = get_default_data_observability_daily_monitoring_table_checks.sync(
 	    client=dqops_client
 	)
 	
@@ -258,11 +252,9 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_default_data_observability_daily_monitoring_table_checks.asyncio(
+	call_result = await get_default_data_observability_daily_monitoring_table_checks.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -344,7 +336,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 	    raise_on_unexpected_status=True
 	)
 	
-	get_default_data_observability_monthly_monitoring_column_checks.sync(
+	call_result = get_default_data_observability_monthly_monitoring_column_checks.sync(
 	    client=dqops_client
 	)
 	
@@ -362,11 +354,9 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_default_data_observability_monthly_monitoring_column_checks.asyncio(
+	call_result = await get_default_data_observability_monthly_monitoring_column_checks.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -385,7 +375,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 	    raise_on_unexpected_status=True
 	)
 	
-	get_default_data_observability_monthly_monitoring_column_checks.sync(
+	call_result = get_default_data_observability_monthly_monitoring_column_checks.sync(
 	    client=dqops_client
 	)
 	
@@ -406,11 +396,9 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_default_data_observability_monthly_monitoring_column_checks.asyncio(
+	call_result = await get_default_data_observability_monthly_monitoring_column_checks.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -492,7 +480,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 	    raise_on_unexpected_status=True
 	)
 	
-	get_default_data_observability_monthly_monitoring_table_checks.sync(
+	call_result = get_default_data_observability_monthly_monitoring_table_checks.sync(
 	    client=dqops_client
 	)
 	
@@ -510,11 +498,9 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_default_data_observability_monthly_monitoring_table_checks.asyncio(
+	call_result = await get_default_data_observability_monthly_monitoring_table_checks.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -533,7 +519,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 	    raise_on_unexpected_status=True
 	)
 	
-	get_default_data_observability_monthly_monitoring_table_checks.sync(
+	call_result = get_default_data_observability_monthly_monitoring_table_checks.sync(
 	    client=dqops_client
 	)
 	
@@ -554,11 +540,9 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_default_data_observability_monthly_monitoring_table_checks.asyncio(
+	call_result = await get_default_data_observability_monthly_monitoring_table_checks.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -640,7 +624,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 	    raise_on_unexpected_status=True
 	)
 	
-	get_default_profiling_column_checks.sync(
+	call_result = get_default_profiling_column_checks.sync(
 	    client=dqops_client
 	)
 	
@@ -658,11 +642,9 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_default_profiling_column_checks.asyncio(
+	call_result = await get_default_profiling_column_checks.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -681,7 +663,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 	    raise_on_unexpected_status=True
 	)
 	
-	get_default_profiling_column_checks.sync(
+	call_result = get_default_profiling_column_checks.sync(
 	    client=dqops_client
 	)
 	
@@ -702,11 +684,9 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_default_profiling_column_checks.asyncio(
+	call_result = await get_default_profiling_column_checks.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -788,7 +768,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 	    raise_on_unexpected_status=True
 	)
 	
-	get_default_profiling_table_checks.sync(
+	call_result = get_default_profiling_table_checks.sync(
 	    client=dqops_client
 	)
 	
@@ -806,11 +786,9 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_default_profiling_table_checks.asyncio(
+	call_result = await get_default_profiling_table_checks.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -829,7 +807,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 	    raise_on_unexpected_status=True
 	)
 	
-	get_default_profiling_table_checks.sync(
+	call_result = get_default_profiling_table_checks.sync(
 	    client=dqops_client
 	)
 	
@@ -850,11 +828,9 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_default_profiling_table_checks.asyncio(
+	call_result = await get_default_profiling_table_checks.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -943,7 +919,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 	    raise_on_unexpected_status=True
 	)
 	
-	get_default_schedule.sync(
+	call_result = get_default_schedule.sync(
 	    CheckRunScheduleGroup.partitioned_daily,
 	    client=dqops_client
 	)
@@ -962,12 +938,10 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_default_schedule.asyncio(
+	call_result = await get_default_schedule.asyncio(
 	    CheckRunScheduleGroup.partitioned_daily,
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -986,7 +960,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 	    raise_on_unexpected_status=True
 	)
 	
-	get_default_schedule.sync(
+	call_result = get_default_schedule.sync(
 	    CheckRunScheduleGroup.partitioned_daily,
 	    client=dqops_client
 	)
@@ -1008,12 +982,10 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_default_schedule.asyncio(
+	call_result = await get_default_schedule.asyncio(
 	    CheckRunScheduleGroup.partitioned_daily,
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -1074,7 +1046,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
 	    raise_on_unexpected_status=True
 	)
 	
-	get_default_webhooks.sync(
+	call_result = get_default_webhooks.sync(
 	    client=dqops_client
 	)
 	
@@ -1092,11 +1064,9 @@ http://localhost:8888/api/defaults/defaultwebhooks
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_default_webhooks.asyncio(
+	call_result = await get_default_webhooks.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -1115,7 +1085,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
 	    raise_on_unexpected_status=True
 	)
 	
-	get_default_webhooks.sync(
+	call_result = get_default_webhooks.sync(
 	    client=dqops_client
 	)
 	
@@ -1136,11 +1106,9 @@ http://localhost:8888/api/defaults/defaultwebhooks
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_default_webhooks.asyncio(
+	call_result = await get_default_webhooks.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -1241,7 +1209,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 		can_delete_data=False
 	)
 	
-	update_default_data_observability_daily_monitoring_column_checks.sync(
+	call_result = update_default_data_observability_daily_monitoring_column_checks.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -1294,12 +1262,10 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 		can_delete_data=False
 	)
 	
-	async_result = update_default_data_observability_daily_monitoring_column_checks.asyncio(
+	call_result = await update_default_data_observability_daily_monitoring_column_checks.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -1352,7 +1318,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 		can_delete_data=False
 	)
 	
-	update_default_data_observability_daily_monitoring_column_checks.sync(
+	call_result = update_default_data_observability_daily_monitoring_column_checks.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -1408,12 +1374,10 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 		can_delete_data=False
 	)
 	
-	async_result = update_default_data_observability_daily_monitoring_column_checks.asyncio(
+	call_result = await update_default_data_observability_daily_monitoring_column_checks.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -1504,7 +1468,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 		can_delete_data=False
 	)
 	
-	update_default_data_observability_daily_monitoring_table_checks.sync(
+	call_result = update_default_data_observability_daily_monitoring_table_checks.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -1557,12 +1521,10 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 		can_delete_data=False
 	)
 	
-	async_result = update_default_data_observability_daily_monitoring_table_checks.asyncio(
+	call_result = await update_default_data_observability_daily_monitoring_table_checks.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -1615,7 +1577,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 		can_delete_data=False
 	)
 	
-	update_default_data_observability_daily_monitoring_table_checks.sync(
+	call_result = update_default_data_observability_daily_monitoring_table_checks.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -1671,12 +1633,10 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 		can_delete_data=False
 	)
 	
-	async_result = update_default_data_observability_daily_monitoring_table_checks.asyncio(
+	call_result = await update_default_data_observability_daily_monitoring_table_checks.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -1767,7 +1727,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 		can_delete_data=False
 	)
 	
-	update_default_data_observability_monthly_monitoring_column_checks.sync(
+	call_result = update_default_data_observability_monthly_monitoring_column_checks.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -1820,12 +1780,10 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 		can_delete_data=False
 	)
 	
-	async_result = update_default_data_observability_monthly_monitoring_column_checks.asyncio(
+	call_result = await update_default_data_observability_monthly_monitoring_column_checks.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -1878,7 +1836,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 		can_delete_data=False
 	)
 	
-	update_default_data_observability_monthly_monitoring_column_checks.sync(
+	call_result = update_default_data_observability_monthly_monitoring_column_checks.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -1934,12 +1892,10 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 		can_delete_data=False
 	)
 	
-	async_result = update_default_data_observability_monthly_monitoring_column_checks.asyncio(
+	call_result = await update_default_data_observability_monthly_monitoring_column_checks.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -2030,7 +1986,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 		can_delete_data=False
 	)
 	
-	update_default_data_observability_monthly_monitoring_table_checks.sync(
+	call_result = update_default_data_observability_monthly_monitoring_table_checks.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -2083,12 +2039,10 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 		can_delete_data=False
 	)
 	
-	async_result = update_default_data_observability_monthly_monitoring_table_checks.asyncio(
+	call_result = await update_default_data_observability_monthly_monitoring_table_checks.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -2141,7 +2095,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 		can_delete_data=False
 	)
 	
-	update_default_data_observability_monthly_monitoring_table_checks.sync(
+	call_result = update_default_data_observability_monthly_monitoring_table_checks.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -2197,12 +2151,10 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 		can_delete_data=False
 	)
 	
-	async_result = update_default_data_observability_monthly_monitoring_table_checks.asyncio(
+	call_result = await update_default_data_observability_monthly_monitoring_table_checks.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -2293,7 +2245,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 		can_delete_data=False
 	)
 	
-	update_default_profiling_column_checks.sync(
+	call_result = update_default_profiling_column_checks.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -2346,12 +2298,10 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 		can_delete_data=False
 	)
 	
-	async_result = update_default_profiling_column_checks.asyncio(
+	call_result = await update_default_profiling_column_checks.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -2404,7 +2354,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 		can_delete_data=False
 	)
 	
-	update_default_profiling_column_checks.sync(
+	call_result = update_default_profiling_column_checks.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -2460,12 +2410,10 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 		can_delete_data=False
 	)
 	
-	async_result = update_default_profiling_column_checks.asyncio(
+	call_result = await update_default_profiling_column_checks.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -2556,7 +2504,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 		can_delete_data=False
 	)
 	
-	update_default_profiling_table_checks.sync(
+	call_result = update_default_profiling_table_checks.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -2609,12 +2557,10 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 		can_delete_data=False
 	)
 	
-	async_result = update_default_profiling_table_checks.asyncio(
+	call_result = await update_default_profiling_table_checks.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -2667,7 +2613,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 		can_delete_data=False
 	)
 	
-	update_default_profiling_table_checks.sync(
+	call_result = update_default_profiling_table_checks.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -2723,12 +2669,10 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 		can_delete_data=False
 	)
 	
-	async_result = update_default_profiling_table_checks.asyncio(
+	call_result = await update_default_profiling_table_checks.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -2797,7 +2741,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 		disabled=False
 	)
 	
-	update_default_schedules.sync(
+	call_result = update_default_schedules.sync(
 	    CheckRunScheduleGroup.partitioned_daily,
 	    client=dqops_client,
 	    json_body=request_body
@@ -2822,13 +2766,11 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 		disabled=False
 	)
 	
-	async_result = update_default_schedules.asyncio(
+	call_result = await update_default_schedules.asyncio(
 	    CheckRunScheduleGroup.partitioned_daily,
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -2852,7 +2794,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 		disabled=False
 	)
 	
-	update_default_schedules.sync(
+	call_result = update_default_schedules.sync(
 	    CheckRunScheduleGroup.partitioned_daily,
 	    client=dqops_client,
 	    json_body=request_body
@@ -2880,13 +2822,11 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 		disabled=False
 	)
 	
-	async_result = update_default_schedules.asyncio(
+	call_result = await update_default_schedules.asyncio(
 	    CheckRunScheduleGroup.partitioned_daily,
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -2949,7 +2889,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
 		incident_muted_webhook_url='https://sample_url.com/muted'
 	)
 	
-	update_default_webhooks.sync(
+	call_result = update_default_webhooks.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -2974,12 +2914,10 @@ http://localhost:8888/api/defaults/defaultwebhooks
 		incident_muted_webhook_url='https://sample_url.com/muted'
 	)
 	
-	async_result = update_default_webhooks.asyncio(
+	call_result = await update_default_webhooks.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -3004,7 +2942,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
 		incident_muted_webhook_url='https://sample_url.com/muted'
 	)
 	
-	update_default_webhooks.sync(
+	call_result = update_default_webhooks.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -3032,12 +2970,10 @@ http://localhost:8888/api/defaults/defaultwebhooks
 		incident_muted_webhook_url='https://sample_url.com/muted'
 	)
 	
-	async_result = update_default_webhooks.asyncio(
+	call_result = await update_default_webhooks.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 

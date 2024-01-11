@@ -68,7 +68,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 		can_edit=True
 	)
 	
-	create_check.sync(
+	call_result = create_check.sync(
 	    'sample_target/sample_category/sample_check',
 	    client=dqops_client,
 	    json_body=request_body
@@ -98,13 +98,11 @@ http://localhost:8888/api/checks/{fullCheckName}
 		can_edit=True
 	)
 	
-	async_result = create_check.asyncio(
+	call_result = await create_check.asyncio(
 	    'sample_target/sample_category/sample_check',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -133,7 +131,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 		can_edit=True
 	)
 	
-	create_check.sync(
+	call_result = create_check.sync(
 	    'sample_target/sample_category/sample_check',
 	    client=dqops_client,
 	    json_body=request_body
@@ -166,13 +164,11 @@ http://localhost:8888/api/checks/{fullCheckName}
 		can_edit=True
 	)
 	
-	async_result = create_check.asyncio(
+	call_result = await create_check.asyncio(
 	    'sample_target/sample_category/sample_check',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -225,7 +221,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 	    'http://localhost:8888/'
 	)
 	
-	delete_check.sync(
+	call_result = delete_check.sync(
 	    'sample_target/sample_category/sample_check',
 	    client=dqops_client
 	)
@@ -243,12 +239,10 @@ http://localhost:8888/api/checks/{fullCheckName}
 	    'http://localhost:8888/'
 	)
 	
-	async_result = delete_check.asyncio(
+	call_result = await delete_check.asyncio(
 	    'sample_target/sample_category/sample_check',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -266,7 +260,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 	    token=token
 	)
 	
-	delete_check.sync(
+	call_result = delete_check.sync(
 	    'sample_target/sample_category/sample_check',
 	    client=dqops_client
 	)
@@ -287,12 +281,10 @@ http://localhost:8888/api/checks/{fullCheckName}
 	    token=token
 	)
 	
-	async_result = delete_check.asyncio(
+	call_result = await delete_check.asyncio(
 	    'sample_target/sample_category/sample_check',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -346,7 +338,7 @@ http://localhost:8888/api/checks
 	    raise_on_unexpected_status=True
 	)
 	
-	get_all_checks.sync(
+	call_result = get_all_checks.sync(
 	    client=dqops_client
 	)
 	
@@ -364,11 +356,9 @@ http://localhost:8888/api/checks
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_all_checks.asyncio(
+	call_result = await get_all_checks.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -387,7 +377,7 @@ http://localhost:8888/api/checks
 	    raise_on_unexpected_status=True
 	)
 	
-	get_all_checks.sync(
+	call_result = get_all_checks.sync(
 	    client=dqops_client
 	)
 	
@@ -408,11 +398,9 @@ http://localhost:8888/api/checks
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_all_checks.asyncio(
+	call_result = await get_all_checks.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -496,7 +484,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 	    raise_on_unexpected_status=True
 	)
 	
-	get_check.sync(
+	call_result = get_check.sync(
 	    'sample_target/sample_category/sample_check',
 	    client=dqops_client
 	)
@@ -515,12 +503,10 @@ http://localhost:8888/api/checks/{fullCheckName}
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_check.asyncio(
+	call_result = await get_check.asyncio(
 	    'sample_target/sample_category/sample_check',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -539,7 +525,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 	    raise_on_unexpected_status=True
 	)
 	
-	get_check.sync(
+	call_result = get_check.sync(
 	    'sample_target/sample_category/sample_check',
 	    client=dqops_client
 	)
@@ -561,12 +547,10 @@ http://localhost:8888/api/checks/{fullCheckName}
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_check.asyncio(
+	call_result = await get_check.asyncio(
 	    'sample_target/sample_category/sample_check',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -634,7 +618,7 @@ http://localhost:8888/api/definitions/checks
 	    raise_on_unexpected_status=True
 	)
 	
-	get_check_folder_tree.sync(
+	call_result = get_check_folder_tree.sync(
 	    client=dqops_client
 	)
 	
@@ -652,11 +636,9 @@ http://localhost:8888/api/definitions/checks
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_check_folder_tree.asyncio(
+	call_result = await get_check_folder_tree.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -675,7 +657,7 @@ http://localhost:8888/api/definitions/checks
 	    raise_on_unexpected_status=True
 	)
 	
-	get_check_folder_tree.sync(
+	call_result = get_check_folder_tree.sync(
 	    client=dqops_client
 	)
 	
@@ -696,11 +678,9 @@ http://localhost:8888/api/definitions/checks
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_check_folder_tree.asyncio(
+	call_result = await get_check_folder_tree.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -779,7 +759,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 		can_edit=True
 	)
 	
-	update_check.sync(
+	call_result = update_check.sync(
 	    'sample_target/sample_category/sample_check',
 	    client=dqops_client,
 	    json_body=request_body
@@ -809,13 +789,11 @@ http://localhost:8888/api/checks/{fullCheckName}
 		can_edit=True
 	)
 	
-	async_result = update_check.asyncio(
+	call_result = await update_check.asyncio(
 	    'sample_target/sample_category/sample_check',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -844,7 +822,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 		can_edit=True
 	)
 	
-	update_check.sync(
+	call_result = update_check.sync(
 	    'sample_target/sample_category/sample_check',
 	    client=dqops_client,
 	    json_body=request_body
@@ -877,13 +855,11 @@ http://localhost:8888/api/checks/{fullCheckName}
 		can_edit=True
 	)
 	
-	async_result = update_check.asyncio(
+	call_result = await update_check.asyncio(
 	    'sample_target/sample_category/sample_check',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 

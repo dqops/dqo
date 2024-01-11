@@ -57,7 +57,7 @@ http://localhost:8888/api/credentials
 		text_value='sample_credential_text_value'
 	)
 	
-	create_shared_credential.sync(
+	call_result = create_shared_credential.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -82,12 +82,10 @@ http://localhost:8888/api/credentials
 		text_value='sample_credential_text_value'
 	)
 	
-	async_result = create_shared_credential.asyncio(
+	call_result = await create_shared_credential.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -112,7 +110,7 @@ http://localhost:8888/api/credentials
 		text_value='sample_credential_text_value'
 	)
 	
-	create_shared_credential.sync(
+	call_result = create_shared_credential.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -140,12 +138,10 @@ http://localhost:8888/api/credentials
 		text_value='sample_credential_text_value'
 	)
 	
-	async_result = create_shared_credential.asyncio(
+	call_result = await create_shared_credential.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -198,7 +194,7 @@ http://localhost:8888/api/credentials/{credentialName}
 	    'http://localhost:8888/'
 	)
 	
-	delete_shared_credential.sync(
+	call_result = delete_shared_credential.sync(
 	    'sample_credential',
 	    client=dqops_client
 	)
@@ -216,12 +212,10 @@ http://localhost:8888/api/credentials/{credentialName}
 	    'http://localhost:8888/'
 	)
 	
-	async_result = delete_shared_credential.asyncio(
+	call_result = await delete_shared_credential.asyncio(
 	    'sample_credential',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -239,7 +233,7 @@ http://localhost:8888/api/credentials/{credentialName}
 	    token=token
 	)
 	
-	delete_shared_credential.sync(
+	call_result = delete_shared_credential.sync(
 	    'sample_credential',
 	    client=dqops_client
 	)
@@ -260,12 +254,10 @@ http://localhost:8888/api/credentials/{credentialName}
 	    token=token
 	)
 	
-	async_result = delete_shared_credential.asyncio(
+	call_result = await delete_shared_credential.asyncio(
 	    'sample_credential',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -319,7 +311,7 @@ http://localhost:8888/api/credentials/{credentialName}/download
 	    raise_on_unexpected_status=True
 	)
 	
-	download_shared_credential.sync(
+	call_result = download_shared_credential.sync(
 	    'sample_credential',
 	    client=dqops_client
 	)
@@ -338,12 +330,10 @@ http://localhost:8888/api/credentials/{credentialName}/download
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = download_shared_credential.asyncio(
+	call_result = await download_shared_credential.asyncio(
 	    'sample_credential',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -362,7 +352,7 @@ http://localhost:8888/api/credentials/{credentialName}/download
 	    raise_on_unexpected_status=True
 	)
 	
-	download_shared_credential.sync(
+	call_result = download_shared_credential.sync(
 	    'sample_credential',
 	    client=dqops_client
 	)
@@ -384,12 +374,10 @@ http://localhost:8888/api/credentials/{credentialName}/download
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = download_shared_credential.asyncio(
+	call_result = await download_shared_credential.asyncio(
 	    'sample_credential',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -443,7 +431,7 @@ http://localhost:8888/api/credentials
 	    raise_on_unexpected_status=True
 	)
 	
-	get_all_shared_credentials.sync(
+	call_result = get_all_shared_credentials.sync(
 	    client=dqops_client
 	)
 	
@@ -461,11 +449,9 @@ http://localhost:8888/api/credentials
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_all_shared_credentials.asyncio(
+	call_result = await get_all_shared_credentials.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -484,7 +470,7 @@ http://localhost:8888/api/credentials
 	    raise_on_unexpected_status=True
 	)
 	
-	get_all_shared_credentials.sync(
+	call_result = get_all_shared_credentials.sync(
 	    client=dqops_client
 	)
 	
@@ -505,11 +491,9 @@ http://localhost:8888/api/credentials
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_all_shared_credentials.asyncio(
+	call_result = await get_all_shared_credentials.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -584,7 +568,7 @@ http://localhost:8888/api/credentials/{credentialName}
 	    raise_on_unexpected_status=True
 	)
 	
-	get_shared_credential.sync(
+	call_result = get_shared_credential.sync(
 	    'sample_credential',
 	    client=dqops_client
 	)
@@ -603,12 +587,10 @@ http://localhost:8888/api/credentials/{credentialName}
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_shared_credential.asyncio(
+	call_result = await get_shared_credential.asyncio(
 	    'sample_credential',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -627,7 +609,7 @@ http://localhost:8888/api/credentials/{credentialName}
 	    raise_on_unexpected_status=True
 	)
 	
-	get_shared_credential.sync(
+	call_result = get_shared_credential.sync(
 	    'sample_credential',
 	    client=dqops_client
 	)
@@ -649,12 +631,10 @@ http://localhost:8888/api/credentials/{credentialName}
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_shared_credential.asyncio(
+	call_result = await get_shared_credential.asyncio(
 	    'sample_credential',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -733,7 +713,7 @@ http://localhost:8888/api/credential/{credentialName}
 		text_value='sample_credential_text_value'
 	)
 	
-	update_shared_credential.sync(
+	call_result = update_shared_credential.sync(
 	    'sample_credential',
 	    client=dqops_client,
 	    json_body=request_body
@@ -759,13 +739,11 @@ http://localhost:8888/api/credential/{credentialName}
 		text_value='sample_credential_text_value'
 	)
 	
-	async_result = update_shared_credential.asyncio(
+	call_result = await update_shared_credential.asyncio(
 	    'sample_credential',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -790,7 +768,7 @@ http://localhost:8888/api/credential/{credentialName}
 		text_value='sample_credential_text_value'
 	)
 	
-	update_shared_credential.sync(
+	call_result = update_shared_credential.sync(
 	    'sample_credential',
 	    client=dqops_client,
 	    json_body=request_body
@@ -819,13 +797,11 @@ http://localhost:8888/api/credential/{credentialName}
 		text_value='sample_credential_text_value'
 	)
 	
-	async_result = update_shared_credential.asyncio(
+	call_result = await update_shared_credential.asyncio(
 	    'sample_credential',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 

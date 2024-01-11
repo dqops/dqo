@@ -55,7 +55,7 @@ http://localhost:8888/api/logs/debug
 		message='Sample log message.'
 	)
 	
-	log_debug.sync(
+	call_result = log_debug.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -78,12 +78,10 @@ http://localhost:8888/api/logs/debug
 		message='Sample log message.'
 	)
 	
-	async_result = log_debug.asyncio(
+	call_result = await log_debug.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -106,7 +104,7 @@ http://localhost:8888/api/logs/debug
 		message='Sample log message.'
 	)
 	
-	log_debug.sync(
+	call_result = log_debug.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -132,12 +130,10 @@ http://localhost:8888/api/logs/debug
 		message='Sample log message.'
 	)
 	
-	async_result = log_debug.asyncio(
+	call_result = await log_debug.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -198,7 +194,7 @@ http://localhost:8888/api/logs/error
 		message='Sample log message.'
 	)
 	
-	log_error.sync(
+	call_result = log_error.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -221,12 +217,10 @@ http://localhost:8888/api/logs/error
 		message='Sample log message.'
 	)
 	
-	async_result = log_error.asyncio(
+	call_result = await log_error.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -249,7 +243,7 @@ http://localhost:8888/api/logs/error
 		message='Sample log message.'
 	)
 	
-	log_error.sync(
+	call_result = log_error.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -275,12 +269,10 @@ http://localhost:8888/api/logs/error
 		message='Sample log message.'
 	)
 	
-	async_result = log_error.asyncio(
+	call_result = await log_error.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -341,7 +333,7 @@ http://localhost:8888/api/logs/info
 		message='Sample log message.'
 	)
 	
-	log_info.sync(
+	call_result = log_info.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -364,12 +356,10 @@ http://localhost:8888/api/logs/info
 		message='Sample log message.'
 	)
 	
-	async_result = log_info.asyncio(
+	call_result = await log_info.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -392,7 +382,7 @@ http://localhost:8888/api/logs/info
 		message='Sample log message.'
 	)
 	
-	log_info.sync(
+	call_result = log_info.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -418,12 +408,10 @@ http://localhost:8888/api/logs/info
 		message='Sample log message.'
 	)
 	
-	async_result = log_info.asyncio(
+	call_result = await log_info.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -484,7 +472,7 @@ http://localhost:8888/api/logs/warn
 		message='Sample log message.'
 	)
 	
-	log_warn.sync(
+	call_result = log_warn.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -507,12 +495,10 @@ http://localhost:8888/api/logs/warn
 		message='Sample log message.'
 	)
 	
-	async_result = log_warn.asyncio(
+	call_result = await log_warn.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -535,7 +521,7 @@ http://localhost:8888/api/logs/warn
 		message='Sample log message.'
 	)
 	
-	log_warn.sync(
+	call_result = log_warn.sync(
 	    client=dqops_client,
 	    json_body=request_body
 	)
@@ -561,12 +547,10 @@ http://localhost:8888/api/logs/warn
 		message='Sample log message.'
 	)
 	
-	async_result = log_warn.asyncio(
+	call_result = await log_warn.asyncio(
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 

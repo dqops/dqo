@@ -13,11 +13,8 @@ from dqops.client.api.{{moduleName}} import {{apiMethodName}}
 
 {{#if requestBody}}request_body = {{{requestBody}}}
 
-{{/if}}{{#if async}}async_result = {{/if}}{{apiMethodName}}.{{#if async}}asyncio{{else}}sync{{/if}}(
+{{/if}}call_result = {{#if async}}await {{/if}}{{apiMethodName}}.{{#if async}}asyncio{{else}}sync{{/if}}(
     {{#each pathParameters}}{{{.}}},
     {{/each}}client=dqops_client{{#if requestBody}},
     json_body=request_body{{/if}}
 )
-{{#if async}}
-await async_result
-{{/if}}

@@ -76,7 +76,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 		can_edit=True
 	)
 	
-	create_sensor.sync(
+	call_result = create_sensor.sync(
 	    'sample_target/sample_category/sample_sensor',
 	    client=dqops_client,
 	    json_body=request_body
@@ -114,13 +114,11 @@ http://localhost:8888/api/sensors/{fullSensorName}
 		can_edit=True
 	)
 	
-	async_result = create_sensor.asyncio(
+	call_result = await create_sensor.asyncio(
 	    'sample_target/sample_category/sample_sensor',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -157,7 +155,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 		can_edit=True
 	)
 	
-	create_sensor.sync(
+	call_result = create_sensor.sync(
 	    'sample_target/sample_category/sample_sensor',
 	    client=dqops_client,
 	    json_body=request_body
@@ -198,13 +196,11 @@ http://localhost:8888/api/sensors/{fullSensorName}
 		can_edit=True
 	)
 	
-	async_result = create_sensor.asyncio(
+	call_result = await create_sensor.asyncio(
 	    'sample_target/sample_category/sample_sensor',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -257,7 +253,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 	    'http://localhost:8888/'
 	)
 	
-	delete_sensor.sync(
+	call_result = delete_sensor.sync(
 	    'sample_target/sample_category/sample_sensor',
 	    client=dqops_client
 	)
@@ -275,12 +271,10 @@ http://localhost:8888/api/sensors/{fullSensorName}
 	    'http://localhost:8888/'
 	)
 	
-	async_result = delete_sensor.asyncio(
+	call_result = await delete_sensor.asyncio(
 	    'sample_target/sample_category/sample_sensor',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -298,7 +292,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 	    token=token
 	)
 	
-	delete_sensor.sync(
+	call_result = delete_sensor.sync(
 	    'sample_target/sample_category/sample_sensor',
 	    client=dqops_client
 	)
@@ -319,12 +313,10 @@ http://localhost:8888/api/sensors/{fullSensorName}
 	    token=token
 	)
 	
-	async_result = delete_sensor.asyncio(
+	call_result = await delete_sensor.asyncio(
 	    'sample_target/sample_category/sample_sensor',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -378,7 +370,7 @@ http://localhost:8888/api/sensors
 	    raise_on_unexpected_status=True
 	)
 	
-	get_all_sensors.sync(
+	call_result = get_all_sensors.sync(
 	    client=dqops_client
 	)
 	
@@ -396,11 +388,9 @@ http://localhost:8888/api/sensors
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_all_sensors.asyncio(
+	call_result = await get_all_sensors.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -419,7 +409,7 @@ http://localhost:8888/api/sensors
 	    raise_on_unexpected_status=True
 	)
 	
-	get_all_sensors.sync(
+	call_result = get_all_sensors.sync(
 	    client=dqops_client
 	)
 	
@@ -440,11 +430,9 @@ http://localhost:8888/api/sensors
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_all_sensors.asyncio(
+	call_result = await get_all_sensors.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -522,7 +510,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 	    raise_on_unexpected_status=True
 	)
 	
-	get_sensor.sync(
+	call_result = get_sensor.sync(
 	    'sample_target/sample_category/sample_sensor',
 	    client=dqops_client
 	)
@@ -541,12 +529,10 @@ http://localhost:8888/api/sensors/{fullSensorName}
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_sensor.asyncio(
+	call_result = await get_sensor.asyncio(
 	    'sample_target/sample_category/sample_sensor',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -565,7 +551,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 	    raise_on_unexpected_status=True
 	)
 	
-	get_sensor.sync(
+	call_result = get_sensor.sync(
 	    'sample_target/sample_category/sample_sensor',
 	    client=dqops_client
 	)
@@ -587,12 +573,10 @@ http://localhost:8888/api/sensors/{fullSensorName}
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_sensor.asyncio(
+	call_result = await get_sensor.asyncio(
 	    'sample_target/sample_category/sample_sensor',
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -667,7 +651,7 @@ http://localhost:8888/api/definitions/sensors
 	    raise_on_unexpected_status=True
 	)
 	
-	get_sensor_folder_tree.sync(
+	call_result = get_sensor_folder_tree.sync(
 	    client=dqops_client
 	)
 	
@@ -685,11 +669,9 @@ http://localhost:8888/api/definitions/sensors
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_sensor_folder_tree.asyncio(
+	call_result = await get_sensor_folder_tree.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -708,7 +690,7 @@ http://localhost:8888/api/definitions/sensors
 	    raise_on_unexpected_status=True
 	)
 	
-	get_sensor_folder_tree.sync(
+	call_result = get_sensor_folder_tree.sync(
 	    client=dqops_client
 	)
 	
@@ -729,11 +711,9 @@ http://localhost:8888/api/definitions/sensors
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_sensor_folder_tree.asyncio(
+	call_result = await get_sensor_folder_tree.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -823,7 +803,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 		can_edit=True
 	)
 	
-	update_sensor.sync(
+	call_result = update_sensor.sync(
 	    'sample_target/sample_category/sample_sensor',
 	    client=dqops_client,
 	    json_body=request_body
@@ -861,13 +841,11 @@ http://localhost:8888/api/sensors/{fullSensorName}
 		can_edit=True
 	)
 	
-	async_result = update_sensor.asyncio(
+	call_result = await update_sensor.asyncio(
 	    'sample_target/sample_category/sample_sensor',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 
@@ -904,7 +882,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 		can_edit=True
 	)
 	
-	update_sensor.sync(
+	call_result = update_sensor.sync(
 	    'sample_target/sample_category/sample_sensor',
 	    client=dqops_client,
 	    json_body=request_body
@@ -945,13 +923,11 @@ http://localhost:8888/api/sensors/{fullSensorName}
 		can_edit=True
 	)
 	
-	async_result = update_sensor.asyncio(
+	call_result = await update_sensor.asyncio(
 	    'sample_target/sample_category/sample_sensor',
 	    client=dqops_client,
 	    json_body=request_body
 	)
-	
-	await async_result
 	
     ```
 

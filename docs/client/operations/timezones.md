@@ -48,7 +48,7 @@ http://localhost:8888/api/timezones
 	    raise_on_unexpected_status=True
 	)
 	
-	get_available_zone_ids.sync(
+	call_result = get_available_zone_ids.sync(
 	    client=dqops_client
 	)
 	
@@ -66,11 +66,9 @@ http://localhost:8888/api/timezones
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_available_zone_ids.asyncio(
+	call_result = await get_available_zone_ids.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
@@ -89,7 +87,7 @@ http://localhost:8888/api/timezones
 	    raise_on_unexpected_status=True
 	)
 	
-	get_available_zone_ids.sync(
+	call_result = get_available_zone_ids.sync(
 	    client=dqops_client
 	)
 	
@@ -110,11 +108,9 @@ http://localhost:8888/api/timezones
 	    raise_on_unexpected_status=True
 	)
 	
-	async_result = get_available_zone_ids.asyncio(
+	call_result = await get_available_zone_ids.asyncio(
 	    client=dqops_client
 	)
-	
-	await async_result
 	
     ```
 
