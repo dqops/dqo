@@ -1,5 +1,5 @@
-# Number of rows in the table
-This sample shows how to use data quality checks to detect the number of rows in the table and view the results on data quality dashboards.
+# Detect empty tables
+This sample shows how to use data quality checks in the DQOps platform to detect empty tables and view the results on data quality dashboards.
 
 ## Overview
 
@@ -50,7 +50,7 @@ The following is a fragment of the `bigquery-public-data.america_health_rankings
 | 2021    | 2021 Health Disparities | Able-Bodied  | California    | Female        | 87    |
 | 2021    | 2021 Health Disparities | Able-Bodied  | Colorado      | Female        | 87    |
 
-## Run the example using ge user interface - validation if the table is not empty
+## Run the example using the user interface - validation if the table is not empty
 
 ### **Navigate to a list of checks**
 
@@ -334,6 +334,6 @@ rows in a table does not fall below the minimum accepted count. If it does, you 
 
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../dqops-installation/install-dqops-using-pip.md) or [run DQO as a Docker container](../../dqops-installation/run-dqops-as-docker-container.md).
 - For details on the [row_count check used in this example, go to the check details section](../../checks/table/volume/row-count.md).
-- You might be interested in another completeness check that [evaluates that the number of nulls in a column does not exceed the maximum accepted count](../data-completeness/number-of-null-values.md).
+- You might be interested in another completeness check that [evaluates that the number of nulls in a column does not exceed the maximum accepted count](../data-completeness/detect-null-values.md).
 - Would you like to add your own connection? Here you can find [information about supported databases and how to add new connection](../../data-sources/index.md).
 - With DQOps, you can easily customize when the checks are run at the level of the entire connection, table, or individual check. [Learn more about how to set schedules here](../../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md).

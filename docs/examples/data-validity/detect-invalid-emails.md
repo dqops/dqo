@@ -1,5 +1,5 @@
-# Number of invalid emails
-This sample shows how to use data quality checks in the DQOps platform to detect the number of invalid emails and view the results on data quality dashboards.
+# Detect invalid emails
+This sample shows how to use data quality checks in the DQOps platform to detect invalid emails and view the results on data quality dashboards.
 
 ## Overview
 
@@ -282,6 +282,6 @@ the number of invalid emails in a monitored column does not exceed the maximum a
 
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../dqops-installation/install-dqops-using-pip.md) or [run DQOps as a Docker container](../../dqops-installation/run-dqops-as-docker-container.md).
 - For details on the [invalid_email_format_found check used in this example, go to the check details section](../../checks/column/patterns/invalid-email-format-found.md).
-- You might be interested in another validity check that [evaluates that the number of invalid IP4 address in a column does not exceed the maximum accepted count](../data-validity/number-of-invalid-ip4-addresses.md).
+- You might be interested in another validity check that [evaluates that the number of invalid IP4 address in a column does not exceed the maximum accepted count](../data-validity/detect-invalid-ip4-addresses.md).
 - With DQOps, you can easily customize when the checks are run at the level of the entire connection, table, or individual check. [Learn more about how to set schedules here](../../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md). 
 - DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md) and [Slack notifications](../../integrations/slack/configuring-slack-notifications.md).

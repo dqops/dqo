@@ -1,5 +1,5 @@
-# Number of invalid IP4 addresses
-This sample shows how to use data quality checks to detect the number of invalid IP4 addresses and view the results on data quality dashboards.
+# Detect invalid IP4 addresses
+This sample shows how to use data quality checks in the DQOps platform to detect invalid IP4 addresses and view the results on data quality dashboards.
 
 ## Overview
 

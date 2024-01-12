@@ -58,8 +58,8 @@ nav:
       - Data availability:
           - Detect table availability issues: "examples/data-availability/detect-table-availability-issues.md"
       - Data completeness:
-          - Number of null values: "examples/data-completeness/number-of-null-values.md"
-          - Number of rows in the table: "examples/data-completeness/number-of-rows-in-the-table.md"
+          - Detect null values: "examples/data-completeness/detect-null-values.md"
+          - Detect columns with null values: "examples/data-completeness/detect-empty-tables.md"
       - Data consistency:
           - Percentage of rows having a text in from a set: "examples/data-consistency/percentage-of-rows-with-a-text-found-in-set.md"
       - Data reasonability:
@@ -69,8 +69,8 @@ nav:
       - Data uniqueness:
           - Percentage of duplicates: "examples/data-uniqueness/percentage-of-duplicates.md"
       - Data validity:
-          - Number of invalid emails: "examples/data-validity/number-of-invalid-emails.md"
-          - Number of invalid IP4 address: "examples/data-validity/number-of-invalid-ip4-addresses.md"
+          - Detect invalid emails: "examples/data-validity/detect-invalid-emails.md"
+          - Detect invalid IP4 address: "examples/data-validity/detect-invalid-ip4-addresses.md"
           - Percentage of negative values: "examples/data-validity/percentage-of-negative-values.md"
           - Percentage of rows passing SQL condition: "examples/data-validity/percentage-of-rows-passing-sql-condition.md"
           - Percentage of texts matching date regex: "examples/data-validity/percentage-of-texts-matching-date-regex.md"
