@@ -1,4 +1,5 @@
 # Percentage of valid UUID
+This sample shows how to use data quality checks to detect the percentage of valid UUID values in a column and view the results on data quality dashboards.
 
 ## Overview
 
@@ -54,11 +55,13 @@ The `uuid ` column of interest contains both valid and invalid UUID values.
 | **26b5daf8-925b-11ed-a1eb-0242ac120002**  | 1      | 1/11/2023 |
 | **26b5c8b0925b11eda1eb0242ac120002**      | 1      | 1/11/2023 |
 
-## Running the checks in the example and evaluating the results using the user interface
+## Run the example using the user interface
 
-A detailed explanation of [how to run the example is described here](../index.md#running-the-use-cases).
+A detailed explanation of [how to start DQOps platform and run the example is described here](../index.md#running-the-use-cases).
 
-To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview.md):
+### **Navigate to a list of checks**
+
+To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview.md):
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-string-valid-uuid-percent-checks1.png)
 
@@ -77,54 +80,61 @@ To execute the check prepared in the example using the [user interface](../../dq
     This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../dqo-concepts/user-interface-overview.md#check-editor).
 
 
-4. Run the activated check using the **Run check** button.
+### **Run checks**
 
-    You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
+Run the activated check using the **Run check** button.
 
-    ![Run check](https://dqops.com/docs/images/examples/daily-string-valid-uuid-percent-run-checks1.png)
+You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
-
-5. Access the results by clicking the **Results** button.
-
-    Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
-    The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
-    The Sensor readouts category displays the values obtained by the sensors from the data source.
-    The Execution errors category displays any error that occurred during the check's execution.
-
-    Review the results which should be similar to the one below.
-
-    ![String-valid-uuid-percent check results](https://dqops.com/docs/images/examples/daily-string-valid-uuid-percent-checks-result1.png)
-
-    The actual value in this example is 75%, which is below the minimum threshold level set in the warning (100.0%).
-    The check gives a fatal error (notice the red square to the left of the check name).
+![Run check](https://dqops.com/docs/images/examples/daily-string-valid-uuid-percent-run-checks1.png)
 
 
-6. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
+### **View detailed check results**
 
-    Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
+Access the detailed results by clicking the **Results** button. The results should be similar to the one below.
 
-7. To review the results on the [data quality dashboards](../../working-with-dqo/reviewing-results-on-data-quality-dashboards.md)
-    go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
+![String-valid-uuid-percent check results](https://dqops.com/docs/images/examples/daily-string-valid-uuid-percent-checks-result1.png)
 
-    Below you can see the results displayed on the **Current data quality checks results** dashboard located in the Check results group. This dashboard 
-    displays all executed checks run on tables and columns and allows reviewing their set parameters, as well as actual and expected values.
+Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
+The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
+The Sensor readouts category displays the values obtained by the sensors from the data source.
+The Execution errors category displays any error that occurred during the check's execution.
 
-    This dashboard allows filtering data by:
+The actual value in this example is 75%, which is below the minimum threshold level set in the warning (100.0%).
+The check gives a fatal error (notice the red square to the left of the check name).
+
+
+### **Synchronize the results with the cloud account**
+
+Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner
+of the user interface.
+
+Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
+
+### **Review the results on the data quality dashboards**
+
+To review the results on the [data quality dashboards](../../working-with-dqo/reviewing-results-on-data-quality-dashboards.md)
+go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.  
+
+Below you can see the results displayed on the **Current data quality checks results** dashboard located in the Check results group. This dashboard 
+displays all executed checks run on tables and columns and allows reviewing their set parameters, as well as actual and expected values.
+
+This dashboard allows filtering data by:
     
-    * time window (from last 7 days to last 6 months)
-    * connection,
-    * schema,
-    * data group,
-    * data quality dimension,
-    * check category,
-    * stages,
-    * priorities,
-    * table,
-    * column,
-    * check name,
-    * issue severity.
+* time window (from last 7 days to last 6 months)
+* connection,
+* schema,
+* data group,
+* data quality dimension,
+* check category,
+* stages,
+* priorities,
+* table,
+* column,
+* check name,
+* issue severity.
 
-    ![String-valid-uuid-percent check results on Current data quality checks results dashboard](https://dqops.com/docs/images/examples/daily-string-valid-uuid-percent-checks-result-on-current-results-dashboard.png)
+![String-valid-uuid-percent check results on Current data quality checks results dashboard](https://dqops.com/docs/images/examples/daily-string-valid-uuid-percent-checks-result-on-current-results-dashboard.png)
 
 ## YAML configuration file
 
@@ -168,9 +178,9 @@ spec:
         nullable: true
 ```
 
-## Running the checks in the example and evaluating the results using DQOps Shell
+## Run the checks in the example using the DQOps Shell
 
-A detailed explanation of [how to run the example is described here](../index.md#running-the-use-cases).
+A detailed explanation of [how to start DQOps platform and run the example is described here](../index.md#running-the-use-cases).
 
 To execute the check prepared in the example, run the following command in DQOps Shell:
 

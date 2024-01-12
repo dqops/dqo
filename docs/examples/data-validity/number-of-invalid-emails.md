@@ -1,4 +1,5 @@
 # Number of invalid emails
+This sample shows how to use data quality checks in the DQOps platform to detect the number of invalid emails and view the results on data quality dashboards.
 
 ## Overview
 
@@ -44,11 +45,13 @@ The `email` column of interest contains both valid and invalid email values.
 | 15  | **user7@mail**              | 1        | Connecticu               | 1                           | missing          |
 
 
-## Running the checks in the example and evaluating the results using the user interface
+## Run the example using the user interface
 
-A detailed explanation of [how to run the example is described here](../index.md#running-the-use-cases).
+A detailed explanation of [how to start DQOps platform and run the example is described here](../index.md#running-the-use-cases).
 
-To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview.md):
+### **Navigate to a list of checks**
+
+To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview.md):
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-string-invalid-email-count-checks1.png)
 
@@ -67,54 +70,61 @@ To execute the check prepared in the example using the [user interface](../../dq
     This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../dqo-concepts/user-interface-overview.md#check-editor).
 
 
-4. Run the activated check using the **Run check** button.
+### **Run checks**
 
-    You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
+Run the activated check using the **Run check** button.
 
-    ![Run check](https://dqops.com/docs/images/examples/daily-string-invalid-email-count-run-checks1.png)
+You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
-
-5. Access the results by clicking the **Results** button.
-
-    Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
-    The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
-    The Sensor readouts category displays the values obtained by the sensors from the data source.
-    The Execution errors category displays any error that occurred during the check's execution.
-
-    Review the results which should be similar to the one below.
-
-    ![String-invalid-email-count check results](https://dqops.com/docs/images/examples/daily-string-invalid-email-count-check-results1.png)
-
-    The actual value in this example is 22, which is above the maximum threshold level set in the warning (0).
-    The check gives a fatal error (notice the red square to the left of the check name).
+![Run check](https://dqops.com/docs/images/examples/daily-string-invalid-email-count-run-checks1.png)
 
 
-6. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
+### **View detailed check results**
 
-    Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
+Access the detailed results by clicking the **Results** button. The results should be similar to the one below.
 
-7. To review the results on the [data quality dashboards](../../working-with-dqo/reviewing-results-on-data-quality-dashboards.md)
-    go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
+![String-invalid-email-count check results](https://dqops.com/docs/images/examples/daily-string-invalid-email-count-check-results1.png)
+
+Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
+The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
+The Sensor readouts category displays the values obtained by the sensors from the data source.
+The Execution errors category displays any error that occurred during the check's execution.
+
+The actual value in this example is 22, which is above the maximum threshold level set in the warning (0).
+The check gives a fatal error (notice the red square to the left of the check name).
+
+
+### **Synchronize the results with the cloud account**
+
+Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner
+of the user interface.
+
+Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
+
+### **Review the results on the data quality dashboards**
+
+To review the results on the [data quality dashboards](../../working-with-dqo/reviewing-results-on-data-quality-dashboards.md)
+go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.  
  
-    Below you can see the results displayed on the **Current column status** dashboard located in Current status group.
-    This dashboard allow data engineers and data owners to quickly evaluate the data quality of monitored
-    tables and columns. The dashboards display a color-coded status that indicates the severity level detected by run
-    checks. When the status is green, it means that the monitored column has no data quality issues. However, if the status
-    is yellow, orange, or red, it indicates that there were some issues detected. The dashboard also displays the number
-    of detected issues per severity threshold, making it easier to identify and address tables and columns with issues.
+Below you can see the results displayed on the **Current column status** dashboard located in Current status group.
+This dashboard allow data engineers and data owners to quickly evaluate the data quality of monitored
+tables and columns. The dashboards display a color-coded status that indicates the severity level detected by run
+checks. When the status is green, it means that the monitored column has no data quality issues. However, if the status
+is yellow, orange, or red, it indicates that there were some issues detected. The dashboard also displays the number
+of detected issues per severity threshold, making it easier to identify and address tables and columns with issues.
 
-    These dashboards allow filtering data by:
+These dashboards allow filtering data by:
     
-    * time frame,
-    * connection,
-    * schema,
-    * data quality dimension,
-    * check category,
-    * data group,
-    * table,
-    * column.
+* time frame,
+* connection,
+* schema,
+* data quality dimension,
+* check category,
+* data group,
+* table,
+* column.
     
-    ![String-invalid-email-count results on Current column status dashboard](https://dqops.com/docs/images/examples/daily-string-invalid-email-count-check-results-on-current-column-status-dashboard.png)
+![String-invalid-email-count results on Current column status dashboard](https://dqops.com/docs/images/examples/daily-string-invalid-email-count-check-results-on-current-column-status-dashboard.png)
 
 ## Change a schedule at the connection level
 
@@ -198,9 +208,9 @@ spec:
         nullable: true
 ```
 
-## Running the checks in the example and evaluating the results using DQOps Shell
+## Run the checks in the example using the DQOps Shell
 
-A detailed explanation of [how to run the example is described here](../index.md#running-the-use-cases).
+A detailed explanation of [how to start DQOps platform and run the example is described here](../index.md#running-the-use-cases).
 
 To execute the check prepared in the example, run the following command in DQOps Shell:
 
@@ -272,6 +282,6 @@ the number of invalid emails in a monitored column does not exceed the maximum a
 
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../dqops-installation/install-dqops-using-pip.md) or [run DQOps as a Docker container](../../dqops-installation/run-dqops-as-docker-container.md).
 - For details on the [invalid_email_format_found check used in this example, go to the check details section](../../checks/column/patterns/invalid-email-format-found.md).
-- You might be interested in another validity check that [evaluates that the number of invalid IP4 address in a column does not exceed the maximum accepted count](../data-validity/number-of-invalid-IP4-address.md).
+- You might be interested in another validity check that [evaluates that the number of invalid IP4 address in a column does not exceed the maximum accepted count](../data-validity/number-of-invalid-ip4-addresses.md).
 - With DQOps, you can easily customize when the checks are run at the level of the entire connection, table, or individual check. [Learn more about how to set schedules here](../../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md). 
 - DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md) and [Slack notifications](../../integrations/slack/configuring-slack-notifications.md).

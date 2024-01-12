@@ -1,4 +1,5 @@
 # Number of null values
+This sample shows how to use data quality checks to detect null values in the table and view the results on data quality dashboards.
 
 ## Overview
 
@@ -12,13 +13,13 @@ The platform analyzes more than 340 measures of behaviors, social and economic f
 Data is based on public-use data sets, such as the U.S. Census and the Centers for Disease Control and Prevention’s Behavioral Risk Factor Surveillance System (BRFSS),
 the world’s largest, annual population-based telephone survey of over 400,000 people.
 
-We want to verify the number of null values on `source ` column.
+We want to verify the number of null values on `source` column.
 
 **SOLUTION**
 
 We will verify the data of `bigquery-public-data.america_health_rankings.ahr` using monitoring
 [nulls_count](../../checks/column/nulls/nulls-count.md) column check.
-Our goal is to verify that the number of null values in the `source ` column does not exceed the set thresholds.
+Our goal is to verify that the number of null values in the `source` column does not exceed the set thresholds.
 
 In this example, we will set three maximum number thresholds levels for the check:
 
@@ -35,7 +36,7 @@ If the number of not nulls values exceed 5, a warning alert will be triggered.
 ## Data structure
 
 The following is a fragment of the `bigquery-public-data.america_health_rankings.ahr` dataset. Some columns were omitted for clarity.  
-The `source ` column of interest contains NULL values.
+The `source` column of interest contains NULL values.
 
 | report_type             | measure_name                   | state_name    | subpopulation                 | source                                              |
 |:------------------------|:-------------------------------|:--------------|:------------------------------|:----------------------------------------------------|
@@ -50,11 +51,13 @@ The `source ` column of interest contains NULL values.
 | 2021 Health Disparities | Dedicated Health Care Provider | Alabama       | Male                          | **CDC, Behavioral Risk Factor Surveillance System** |
 | 2021 Health Disparities | Dedicated Health Care Provider | Alaska        | Male                          | **CDC, Behavioral Risk Factor Surveillance System** |
 
-## Running the checks in the example and evaluating the results using the user interface
+## Run the example using the user interface
 
-A detailed explanation of [how to run the example is described here](../index.md#running-the-use-cases).
+A detailed explanation of [how to start DQOps platform and run the example is described here](../index.md#running-the-use-cases).
 
-To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview.md):
+### **Navigate to a list of checks**
+
+To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview.md):
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-null-count-checks2.png)
 
@@ -73,55 +76,62 @@ To execute the check prepared in the example using the [user interface](../../dq
     This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../dqo-concepts/user-interface-overview.md#check-editor).
 
 
-4. Run the activated check using the **Run check** button.
+### **Run checks**
 
-    You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
+Run the activated check using the **Run check** button.
 
-    ![Run check](https://dqops.com/docs/images/examples/daily-null-count-run-checks2.png)
+You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
-
-5. Access the results by clicking the **Results** button.
-
-    Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
-    The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
-    The Sensor readouts category displays the values obtained by the sensors from the data source.
-    The Execution errors category displays any error that occurred during the check's execution.
-
-    Review the results which should be similar to the one below.
-
-    ![Null-count check results](https://dqops.com/docs/images/examples/daily-null-count-check-results1.png)
-
-    The actual value of null values in this example is 8, which is above the maximum threshold level set in the warning (5).
-    The check gives a warning result (notice the yellow square to the left of the check name).
+![Run check](https://dqops.com/docs/images/examples/daily-null-count-run-checks2.png)
 
 
-6. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
+### **View detailed check results**
 
-    Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
+Access the detailed results by clicking the **Results** button. The results should be similar to the one below.
 
-7. To review the results on the [data quality dashboards](../../working-with-dqo/reviewing-results-on-data-quality-dashboards.md)
-    go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
+![Null-count check results](https://dqops.com/docs/images/examples/daily-null-count-check-results1.png)
+
+Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
+The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
+The Sensor readouts category displays the values obtained by the sensors from the data source.
+The Execution errors category displays any error that occurred during the check's execution.
+
+The actual value of null values in this example is 8, which is above the maximum threshold level set in the warning (5).
+The check gives a warning result (notice the yellow square to the left of the check name).
+
+
+### **Synchronize the results with the cloud account**
+
+Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner
+of the user interface.
+
+Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
+
+### **Review the results on the data quality dashboards**
+
+To review the results on the [data quality dashboards](../../working-with-dqo/reviewing-results-on-data-quality-dashboards.md)
+go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.  
  
-    Below you can see the results displayed on the **Current completeness issues on columns** dashboard located in Data Quality Dimensions/Completeness group.
-    This dashboard displays results from most recently executed null checks on columns ([null_count](../../checks/column/nulls/nulls-count.md), [null_percent](../../checks/column/nulls/nulls-percent.md),
-    [not_nulls_count](../../checks/column/nulls/not-nulls-count.md) and [not_nulls_percent](../../checks/column/nulls/not-nulls-percent.md)).
+Below you can see the results displayed on the **Current completeness issues on columns** dashboard located in Data Quality Dimensions/Completeness group.
+This dashboard displays results from most recently executed null checks on columns ([null_count](../../checks/column/nulls/nulls-count.md), [null_percent](../../checks/column/nulls/nulls-percent.md),
+[not_nulls_count](../../checks/column/nulls/not-nulls-count.md) and [not_nulls_percent](../../checks/column/nulls/not-nulls-percent.md)).
 
-    This dashboard allows filtering data by:
+This dashboard allows filtering data by:
     
-    * time window (from last 7 days to last 3 months)
-    * connection,
-    * schema,
-    * data group,
-    * data quality dimension,
-    * check category,
-    * check name,
-    * stages,
-    * priorities,
-    * table,
-    * column,
-    * issue severity
+* time window (from last 7 days to last 3 months)
+* connection,
+* schema,
+* data group,
+* data quality dimension,
+* check category,
+* check name,
+* stages,
+* priorities,
+* table,
+* column,
+* issue severity
 
-    ![Null-count check results on current completeness issues on columns dashboard](https://dqops.com/docs/images/examples/current-completeness-issues-on-columns-dashboard.png)
+![Null-count check results on current completeness issues on columns dashboard](https://dqops.com/docs/images/examples/current-completeness-issues-on-columns-dashboard.png)
 
 ## Change a schedule at the connection level
 
@@ -205,9 +215,9 @@ spec:
                 max_count: 15
 ```
 
-## Running the checks in the example and evaluating the results using DQOps Shell
+## Run the checks in the example using the DQOps Shell
 
-A detailed explanation of [how to run the example is described here](../index.md#running-the-use-cases).
+A detailed explanation of [how to start DQOps platform and run the example is described here](../index.md#running-the-use-cases).
 
 To execute the check prepared in the example, run the following command in DQOps Shell:
 

@@ -1,4 +1,5 @@
 # Percentage of passed SQL condition on table
+This sample shows how to use data quality checks to detect the percentage of passed SQL condition on table and view the results on data quality dashboards.
 
 ## Overview
 
@@ -72,11 +73,13 @@ The following is a fragment of the `bigquery-public-data.america_health_rankings
 
 You can see that in the fourth row the value in the lower_ci column is bigger than in the upper_ci column. 
 
-## Run checks in the example using the user interface
+## Run the example using the user interface
 
-A detailed explanation of [how to run the example is described here](../index.md#running-the-use-cases).
+A detailed explanation of [how to start DQOps platform and run the example is described here](../index.md#running-the-use-cases).
 
-To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview.md):
+### **Navigate to a list of checks**
+
+To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview.md):
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-sql-condition-passed-percent-on-table-checks1.png)
 
@@ -98,36 +101,39 @@ To execute the check prepared in the example using the [user interface](../../dq
     
     The condition in our example is `upper_ci >= lower_ci`
 
-    Learn more about [navigating the check editor](../../dqo-concepts/user-interface-overview.md#check-editor).
+Learn more about [navigating the check editor](../../dqo-concepts/user-interface-overview.md#check-editor).
 
 
-4. Run the activated check using the **Run check** button.
+### **Run checks**
 
-    You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
+Run the activated check using the **Run check** button.
 
-    ![Run check](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-run-checks1.png)
+You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
-## Review data quality issues
+![Run check](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-run-checks1.png)
+
+### **View detailed check results**
 
 To access the results, click on the **Results** button.
+
+![SQL-condition-passed-percent check results](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-checks-results1.png)
 
 Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
 The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
 The Sensor readouts category displays the values obtained by the sensors from the data source.
 The Execution errors category displays any error that occurred during the check's execution.
 
-Review the results which should be similar to the one below.
-
-![SQL-condition-passed-percent check results](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-checks-results1.png)
-
 The actual value in this example is 92.6%, which is below the minimum threshold level set in the fatal error (95.0%).
 The check gives a fatal error (notice the red square to the left of the check name).
 
-## Review data quality issues on dashboards
+### **Synchronize the results with the cloud account**
 
-First you need to synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
+Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner
+of the user interface.
 
 Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
+
+### **Review the results on the data quality dashboards**
 
 To review the results on the [data quality dashboards](../../working-with-dqo/reviewing-results-on-data-quality-dashboards.md)
 go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
@@ -199,7 +205,7 @@ To learn more about incidents go to the [Incidents overview section](../../worki
 
 ## Notifications
 
-With DQOps you can also receive notifications whenever an issue is detected in  your data and a new incident is created or modified.
+With DQOps you can also receive notifications whenever an issue is detected in your data and a new incident is created or modified.
 A notification contains the most important information about an incident you may want to review in order to resolve an issue.
 
 An example of notification in Slack is shown below.
@@ -248,9 +254,9 @@ spec:
         nullable: true
 ```
 
-## Running the checks in the example and evaluating the results using DQOps Shell
+## Run the checks in the example using the DQOps Shell
 
-A detailed explanation of [how to run the example is described here](../index.md#running-the-use-cases).
+A detailed explanation of [how to start DQOps platform and run the example is described here](../index.md#running-the-use-cases).
 
 To execute the check prepared in the example, run the following command in DQOps Shell:
 
@@ -368,6 +374,6 @@ the percentage of rows passed a custom SQL condition does not fall below the set
 
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../dqops-installation/install-dqops-using-pip.md) or [run DQOps as a Docker container](../../dqops-installation/run-dqops-as-docker-container.md).
 - For details on the [sql_condition_passed_percent check used in this example, go to the check details section](../../checks/table/custom_sql/sql-condition-passed-percent-on-table.md).
-- You might be interested in another validity check that [evaluates that the percentage of strings matching the date format regex in a column does not exceed the maximum accepted percentage](./percentage-of-strings-matching-date-regex.md).
+- You might be interested in another validity check that [evaluates that the percentage of strings matching the date format regex in a column does not exceed the maximum accepted percentage](./percentage-of-texts-matching-date-regex.md).
 - Would you like to add your own connection? Here you can find [information about supported databases and how to add new connection](../../data-sources/index.md).
 - The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md) can help you to calculate separate data quality KPI scores for different groups of rows.

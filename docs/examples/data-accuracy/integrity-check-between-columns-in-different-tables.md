@@ -1,4 +1,5 @@
 # Integrity check between columns in different tables
+This sample shows how to use data quality checks to detect integrity between columns in different tables and view the results on data quality dashboards.
 
 ## Overview
 
@@ -72,11 +73,13 @@ a list of all states and other related regions and with their unique codes (`sta
 | **12**          | FL                        | Florida              | 294478       |
 
 
-## Running the checks in the example and evaluating the results using the user interface
+## Run the example using the user interface
 
-A detailed explanation of [how to run the example is described here](../index.md#running-the-use-cases).
+A detailed explanation of [how to start DQOps platform and run the example is described here](../index.md#running-the-use-cases).
 
-To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview.md):
+### **Navigate to a list of checks**
+
+To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview.md):
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-foreign-key-match-percent-checks1.png)
 
@@ -101,51 +104,59 @@ To execute the check prepared in the example using the [user interface](../../dq
     In our example we use names of the table `fips_codes_states` and column `state_fips_code` which were also imported.
 
 
-4. Run the activated check using the **Run check** button.
+### **Run checks**
 
-    You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
+Run the activated check using the **Run check** button.
 
-    ![Run check](https://dqops.com/docs/images/examples/daily-foreign-key-match-percent-run-checks1.png)
+You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
+
+![Run check](https://dqops.com/docs/images/examples/daily-foreign-key-match-percent-run-checks1.png)
 
 
-5. Access the results by clicking the **Results** button.
+### **View detailed check results**
 
-    Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
-    The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
-    The Sensor readouts category displays the values obtained by the sensors from the data source.
-    The Execution errors category displays any error that occurred during the check's execution.
+Access the detailed results by clicking the **Results** button. The results should be similar to the one below.
+
+![Foreign-key-match-percent check results](https://dqops.com/docs/images/examples/daily-foreign-key-match-percent-checks-results1.png)
+
+Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
+The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
+The Sensor readouts category displays the values obtained by the sensors from the data source.
+The Execution errors category displays any error that occurred during the check's execution.
  
-    The results should be similar to the one below.
-
-    ![Foreign-key-match-percent check results](https://dqops.com/docs/images/examples/daily-foreign-key-match-percent-checks-results1.png)
-
-    The actual value in this example is 100%, which is above the minimum threshold level set in the warning (99.0%).
-    The check gives a valid result (notice the green square to the left of the check name).
+The actual value in this example is 100%, which is above the minimum threshold level set in the warning (99.0%).
+The check gives a valid result (notice the green square to the left of the check name).
 
 
-6. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
+### **Synchronize the results with the cloud account**
 
-    Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
+Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner
+of the user interface.
 
-7. To review the results on the [data quality dashboards](../../working-with-dqo/reviewing-results-on-data-quality-dashboards.md)
-    go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
+Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
+
+
+### **Review the results on the data quality dashboards**
+
+To review the results on the [data quality dashboards](../../working-with-dqo/reviewing-results-on-data-quality-dashboards.md)
+go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
     
-    Below you can see the results displayed on the **KPIs per table - summary** dashboard located in the Data quality KPIs group.
-    This dashboard shows high-level data quality KPIs, aggregated on a macro scale that can be shared at a
-    corporate level. DQOps calculates data quality KPIs as a percentage of passed [data quality checks](../../dqo-concepts/definition-of-data-quality-checks/index.md)
-    for each connection, schema, data grouping, etc. With this dashboard, senior management can review a summary of 
-    KPIs per table
+Below you can see the results displayed on the **KPIs per table - summary** dashboard located in the Data quality KPIs group.
+This dashboard shows high-level data quality KPIs, aggregated on a macro scale that can be shared at a
+corporate level. DQOps calculates data quality KPIs as a percentage of passed [data quality checks](../../dqo-concepts/definition-of-data-quality-checks/index.md)
+for each connection, schema, data grouping, etc. With this dashboard, senior management can review a summary of 
+KPIs per table
 
-    This dashboard allows filtering data by:
+This dashboard allows filtering data by:
     
-    * current and previous month,
-    * connection,
-    * schema,
-    * data group,
-    * data quality dimension,
-    * check category,
+* current and previous month,
+* connection,
+* schema,
+* data group,
+* data quality dimension,
+* check category,
    
-    ![Foreign-key-match-percent results on KPIs per table - summary dashboard](https://dqops.com/docs/images/examples/daily-foreign-key-match-percent-checks-results-on-kpis-dashboard.png)
+![Foreign-key-match-percent results on KPIs per table - summary dashboard](https://dqops.com/docs/images/examples/daily-foreign-key-match-percent-checks-results-on-kpis-dashboard.png)
 
 ## YAML configuration file
 
@@ -202,8 +213,8 @@ spec:
                 min_percent: 95.0
 ```
 
-## Running the checks in the example and evaluating the results using DQOps Shell
-A detailed explanation of [how to run the example is described here](../index.md#running-the-use-cases).
+## Run the checks in the example using the DQOps Shell
+A detailed explanation of [how to start DQOps platform and run the example is described here](../index.md#running-the-use-cases).
 
 To execute the check prepared in the example, run the following command in DQOps Shell:
 

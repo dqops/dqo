@@ -1,4 +1,5 @@
 # Detect empty tables
+This sample shows how to use the default DQOps data quality checks to detect empty tables and view the results on data quality dashboards.
 
 ## Overview
 
@@ -77,11 +78,13 @@ You can then modify the **Profiling checks**, **Monitoring daily**, and **Monito
 For more [general information about checks, see the DQOps concepts](../../dqo-concepts/definition-of-data-quality-checks/index.md) section.
 
 
-## Running the checks in the example and evaluating the results using the user interface
+## Run the example using the user interface
 
-A detailed explanation of [how to run the example is described here](../index.md#running-the-use-cases).
+A detailed explanation of [how to start DQOps platform and run the example is described here](../index.md#running-the-use-cases).
 
-To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview.md):
+### **Navigate to a list of checks**
+
+To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview.md):
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/detect-empty-tables-navigating-to-a-list-of-checks.png)
 
@@ -101,58 +104,64 @@ To execute the check prepared in the example using the [user interface](../../dq
     Here you can view the list of all table monitoring checks. Noticed the checks that have been activated upon importing new tables have switched on the toggle button.
     The icons located before the name of each check allow you to: activate and deactivate it, configure settings, run a check, review results, and get more information about it.
 
-    Learn more about [navigating the check editor](../../dqo-concepts/user-interface-overview.md#check-editor).
+Learn more about [navigating the check editor](../../dqo-concepts/user-interface-overview.md#check-editor).
+
+### **Run checks**
+
+Run the activated [daily_row_count](../../checks/table/volume/row-count.md) check using the **Run check** button.
+
+You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
+
+![Run check](https://dqops.com/docs/images/examples/detect-empty-tables-run-checks.png)
 
 
-4. Run the activated [daily_row_count](../../checks/table/volume/row-count.md) check using the **Run check** button.
+### **View detailed check results**
 
-    You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
+Access the detailed results by clicking the **Results** button. The results should be similar to the one below.
 
-    ![Run check](https://dqops.com/docs/images/examples/detect-empty-tables-run-checks.png)
+![Daily row count check results](https://dqops.com/docs/images/examples/detect-empty-tables-checks-results.png)
 
+Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
+The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
+The Sensor readouts category displays the values obtained by the sensors from the data source.
+The Execution errors category displays any error that occurred during the check's execution.
 
-5. Access the results by clicking the **Results** button.
-
-    Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
-    The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
-    The Sensor readouts category displays the values obtained by the sensors from the data source.
-    The Execution errors category displays any error that occurred during the check's execution.
-
-    Review the results which should be similar to the one below.
-
-    ![Daily row count check results](https://dqops.com/docs/images/examples/detect-empty-tables-checks-results.png)
-
-    The actual value in this example is 1 748 850, which is above the maximum threshold level set in the warning (1).
-    The check gives a valid result (notice the green square to the left of the check name). 
+The actual value in this example is 1 748 850, which is above the maximum threshold level set in the warning (1).
+The check gives a valid result (notice the green square to the left of the check name). 
 
 
-6. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
+### **Synchronize the results with the cloud account**
 
-    Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
+Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner
+of the user interface.
+
+Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
 
-7. To review the results on the [data quality dashboards](../../working-with-dqo/reviewing-results-on-data-quality-dashboards.md)
-    go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
+### **Review the results on the data quality dashboards**
 
-    Below you can see the results displayed on the **Current table status** dashboard located in the Current status group.     
+To review the results on the [data quality dashboards](../../working-with-dqo/reviewing-results-on-data-quality-dashboards.md)
+go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
+
+Below you can see the results displayed on the **Current table status** dashboard located in the Current status group.     
     
-    This dashboard allows data engineers and data owners to quickly evaluate the data quality of monitored
-    tables. The dashboards display a color-coded status that indicates the severity level detected by run
-    checks. When the status is green, it means that the monitored table has no data quality issues. However, if the status
-    is yellow, orange, or red, it indicates that there were some issues detected. The dashboard also displays the number
-    of detected issues per severity threshold, making it easier to identify and address tables and columns with issues.
+This dashboard allows data engineers and data owners to quickly evaluate the data quality of monitored
+tables. The dashboards display a color-coded status that indicates the severity level detected by run
+checks. When the status is green, it means that the monitored table has no data quality issues. However, if the status
+is yellow, orange, or red, it indicates that there were some issues detected. The dashboard also displays the number
+of detected issues per severity threshold, making it easier to identify and address tables and columns with issues.
  
-    This dashboard allow filtering data by:
+This dashboard allow filtering data by:
  
-    * time frame,
-    * connection,
-    * schema,
-    * data quality dimension,
-    * check category,
-    * data group,
-    * table.
+* time frame,
+* connection,
+* schema,
+* data quality dimension,
+* check category,
+* data group,
+* table.
  
-    ![Daily row count check results on Current table status dashboard](https://dqops.com/docs/images/examples/daily-row-count-check-results-on-current-table-status-dashboard.png)
+![Daily row count check results on Current table status dashboard](https://dqops.com/docs/images/examples/daily-row-count-check-results-on-current-table-status-dashboard.png)
 
 ## YAML configuration file
 

@@ -1,4 +1,5 @@
 # Percentage of duplicates
+This sample shows how to use data quality checks in the DQOps platform to detect the percentage of duplicates and view the results on data quality dashboards.
 
 ## Overview
 
@@ -47,11 +48,13 @@ The `unique_key` column of interest contains unique values.
 | **14-00150037** | Street Light Issue- Multiple poles/multiple streets | Phone  | Closed | 7/21/2014 14:52:20  | 7/21/2014 14:36:47  |
 | **14-00181676** | Parking Machine Issue                               | Phone  | Closed | 8/28/2014 10:40:32  | 8/27/2014 11:32:21  |
 
-## Running the checks in the example and evaluating the results using the user interface
+## Run the example using the user interface
 
-A detailed explanation of [how to run the example is described here](../index.md#running-the-use-cases).
+A detailed explanation of [how to start DQOps platform and run the example is described here](../index.md#running-the-use-cases).
 
-To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview.md):
+### **Navigate to a list of checks**
+
+To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview.md):
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-duplicate-percent-checks1.png)
 
@@ -70,52 +73,59 @@ To execute the check prepared in the example using the [user interface](../../dq
     This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../dqo-concepts/user-interface-overview.md#check-editor).
 
 
-4. Run the activated check using the **Run check** button.
+### **Run checks**
 
-    You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
+Run the activated check using the **Run check** button.
 
-    ![Run check](https://dqops.com/docs/images/examples/daily-duplicate-percent-run-checks1.png)
+You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
+
+![Run check](https://dqops.com/docs/images/examples/daily-duplicate-percent-run-checks1.png)
 
 
-5. Access the results by clicking the **Results** button.
+### **View detailed check results**
 
-    Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
-    The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
-    The Sensor readouts category displays the values obtained by the sensors from the data source.
-    The Execution errors category displays any error that occurred during the check's execution.
+Access the detailed results by clicking the **Results** button. The results should be similar to the one below.
 
-    Review the results which should be similar to the one below.
+![Duplicate-percent check results](https://dqops.com/docs/images/examples/daily-duplicate-percent-checks-results1.png)
 
-    ![Duplicate-percent check results](https://dqops.com/docs/images/examples/daily-duplicate-percent-checks-results1.png)
+Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
+The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
+The Sensor readouts category displays the values obtained by the sensors from the data source.
+The Execution errors category displays any error that occurred during the check's execution.
 
-    The actual value in this example is 0%, which is below the maximum threshold level set in the warning (1.0%).
-    The check gives a valid result (notice the green square to the left of the check name).
+The actual value in this example is 0%, which is below the maximum threshold level set in the warning (1.0%).
+The check gives a valid result (notice the green square to the left of the check name).
 
-6. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
+### **Synchronize the results with the cloud account**
 
-    Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
+Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner
+of the user interface.
 
-7. To review the results on the [data quality dashboards](../../working-with-dqo/reviewing-results-on-data-quality-dashboards.md)
-    go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
+Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
+
+### **Review the results on the data quality dashboards**
+
+To review the results on the [data quality dashboards](../../working-with-dqo/reviewing-results-on-data-quality-dashboards.md)
+go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.  
  
-    Below you can see the results displayed on the **Highest issue severity per column and day** dashboard located in Highest issue severity group.
-    This dashboard allows for reviewing and filtering a summary number of issues that arise from data quality checks per day. 
-    This dashboard help evaluate the areas with the highest number of data quality issues that should be addressed.
-    It also allows to review how the issue severity changed per day of the month.
+Below you can see the results displayed on the **Highest issue severity per column and day** dashboard located in Highest issue severity group.
+This dashboard allows for reviewing and filtering a summary number of issues that arise from data quality checks per day. 
+This dashboard help evaluate the areas with the highest number of data quality issues that should be addressed.
+It also allows to review how the issue severity changed per day of the month.
 
-    This dashboard allows filtering data by:
+This dashboard allows filtering data by:
     
-    * current and previous month,
-    * connection,
-    * schema,
-    * data group,
-    * data quality dimension,
-    * check category,
-    * check name,
-    * table,
-    * column.
+* current and previous month,
+* connection,
+* schema,
+* data group,
+* data quality dimension,
+* check category,
+* check name,
+* table,
+* column.
 
-    ![Duplicate-percent check results on Highest issue severity per column and day dashboard](https://dqops.com/docs/images/examples/highest-issue-severity-per-column-and-day-dashboard.png)
+![Duplicate-percent check results on Highest issue severity per column and day dashboard](https://dqops.com/docs/images/examples/highest-issue-severity-per-column-and-day-dashboard.png)
 
 ## Change a schedule at the connection level
 
@@ -195,9 +205,9 @@ spec:
         nullable: true
 ```
 
-## Running the checks in the example and evaluating the results using DQOps Shell
+## Run the checks in the example using the DQOps Shell
 
-A detailed explanation of [how to run the example is described here](../index.md#running-the-use-cases).
+A detailed explanation of [how to start DQOps platform and run the example is described here](../index.md#running-the-use-cases).
 
 To execute the check prepared in the example, run the following command in DQOps Shell:
 

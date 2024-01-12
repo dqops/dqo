@@ -1,4 +1,5 @@
-# Schema detection
+# Detect table schema changes
+This sample shows how to use data quality checks in the DQOps platform to detect table schema changes and view the results on data quality dashboards.
 
 ## Overview
 
@@ -48,11 +49,13 @@ The `bigquery-public-data.example_dataset` dataset which we use in the example c
 | date_created | DATETIME    |
 | date_updated | DATETIME    |
 
-## Running the checks in the example and evaluating the results using the user interface
+## Run the example using the user interface
 
-A detailed explanation of [how to run the example is described here](../index.md#running-the-use-cases).
+A detailed explanation of [how to start DQOps platform and run the example is described here](../index.md#running-the-use-cases).
 
-To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview.md):
+### **Navigate to a list of checks**
+
+To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview.md):
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-schema-detection-checks.png)
 
@@ -74,117 +77,126 @@ To execute the check prepared in the example using the [user interface](../../dq
     This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../dqo-concepts/user-interface-overview.md#check-editor).
 
 
-4. Run the activated check using the **Run check** button.
+### **Run checks**
 
-    You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
-    You can run all checks for the connection by clicking on the three dots icon next to the connection name in the tree view, and selecting the **Run checks** option.
+Run the activated check using the **Run check** button.
 
-    ![Run check](https://dqops.com/docs/images/examples/schema-detection-run-checks.png)
+You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
+You can run all checks for the connection by clicking on the three dots icon next to the connection name in the tree view, and selecting the **Run checks** option.
+
+![Run check](https://dqops.com/docs/images/examples/schema-detection-run-checks.png)
 
 
-5. Access the results by clicking the **Results** button.
+### **View detailed check results**
 
-    Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
-    The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
-    The Sensor readouts category displays the values obtained by the sensors from the data source.
-    The Execution errors category displays any error that occurred during the check's execution.
+Access the detailed results by clicking the **Results** button. The results should be similar to the one below.
 
-    Review the results which should be similar to the one below.
+![Schema detection check results](https://dqops.com/docs/images/examples/schema-detection-checks-results.png)
 
-    ![Schema detection check results](https://dqops.com/docs/images/examples/schema-detection-checks-results.png)
-  
-    All the checks in the example gives valid results (notice the green square to the left of the checks name).
+Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
+The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
+The Sensor readouts category displays the values obtained by the sensors from the data source.
+The Execution errors category displays any error that occurred during the check's execution.
 
-6. Now we will modify the columns, so when we run the checks again we can the error alerts.
+All the checks in the example gives valid results (notice the green square to the left of the checks name).
 
-    We are going to run the SQL queries to make the following modifications in the columns:
+### **Modify the table schema**
 
-    - remove the `date_updated` column from the `product1` table
+Now we will modify the table schema, so when we run the checks again we can see the error alerts.
+
+We are going to run the SQL queries to make the following modifications in the columns:
+
+- remove the `date_updated` column from the `product1` table
+    
+    ```sql
+    ALTER TABLE `dqo-ai-testing.example_dataset.products1`
+    DROP COLUMN date_updated;
+    ```
+
+- rename column `product_id` to `id` in the `product2` table
+    
+    ```sql
+    ALTER TABLE `dqo-ai-testing.example_dataset.products2`
+    RENAME COLUMN product_id TO id;
+    ```
+    
+- change the `date_updated` column type from DATETIME to DATE in the `product3` table
+    
+    ```sql
+    ALTER TABLE `dqo-ai-testing.example_dataset.products3`
+    DROP COLUMN date_updated;
         
-        ```sql
-        ALTER TABLE `dqo-ai-testing.example_dataset.products1`
-        DROP COLUMN date_updated;
-        ```
-
-    - rename column `product_id` to `id` in the `product2` table
+    ALTER TABLE `dqo-ai-testing.example_dataset.products3`
+    ADD COLUMN date_updated DATE;
+    ```
     
-        ```sql
-        ALTER TABLE `dqo-ai-testing.example_dataset.products2`
-        RENAME COLUMN product_id TO id;
-        ```
+- change the order of columns `date_created` and `date_updated` in the `product4` table
     
-    - change the `date_updated` column type from DATETIME to DATE in the `product3` table
-    
-        ```sql
-        ALTER TABLE `dqo-ai-testing.example_dataset.products3`
-        DROP COLUMN date_updated;
+    ```sql
+    ALTER TABLE `dqo-ai-testing.example_dataset.products4`
+    DROP COLUMN date_created,
+    DROP COLUMN date_updated;
         
-        ALTER TABLE `dqo-ai-testing.example_dataset.products3`
-        ADD COLUMN date_updated DATE;
-        ```
+    ALTER TABLE `dqo-ai-testing.example_dataset.products4`
+    ADD COLUMN date_updated DATETIME,
+    ADD COLUMN date_created DATETIME;
+    ```
+
+### **Evaluate results after table schema changes**
+
+Evaluate the results after the changes made in the columns. Because the daily checks stores the most recent result for
+each day when the data quality check was evaluated, the checks were run on the next day.
     
-    - change the order of columns `date_created` and `date_updated` in the `product4` table
+- for the `product1` table where whe have remove the `date_updated` column we can see errors alerts in all run checks because
+    with the removal of the column both the number of columns and the list of columns has changed (notice the orange squares to the left of the checks names).
+
+    ![Schema detection check results after removing columns](https://dqops.com/docs/images/examples/schema-detection-checks-results-after-removing-columns.png)
+
+- for the `product2` table where whe have renamed the column `product_id` to `id` we can see errors in checks that detects changes in the 
+    list of columns i.e. [daily_column_list_changed](../../checks/table/schema/column-list-changed.md), [daily_column_list_or_order_changed](../../checks/table/schema/column-list-or-order-changed.md),
+    and [daily_column_types_changed](../../checks/table/schema/column-types-changed.md).
     
-        ```sql
-        ALTER TABLE `dqo-ai-testing.example_dataset.products4`
-        DROP COLUMN date_created,
-        DROP COLUMN date_updated;
-        
-        ALTER TABLE `dqo-ai-testing.example_dataset.products4`
-        ADD COLUMN date_updated DATETIME,
-        ADD COLUMN date_created DATETIME;
-        ```
+    ![Schema detection check results after renaming columns](https://dqops.com/docs/images/examples/schema-detection-checks-results-after-renaming-columns.png)
 
-7. Evaluate the results after the changes made in the columns. Because the daily checks stores the most recent result for
-    each day when the data quality check was evaluated, the checks were run next day.
-    
-    - for the `product1` table where whe have remove the `date_updated` column we can see errors alerts in all run checks because
-        with the removal of the column both the number of columns and the list of columns has changed (notice the orange squares to the left of the checks names).
-
-        ![Schema detection check results after removing columns](https://dqops.com/docs/images/examples/schema-detection-checks-results-after-removing-columns.png)
-
-    - for the `product2` table where whe have renamed the column `product_id` to `id` we can see errors in checks that detects changes in the 
-        list of columns i.e. [daily_column_list_changed](../../checks/table/schema/column-list-changed.md), [daily_column_list_or_order_changed](../../checks/table/schema/column-list-or-order-changed.md),
-        and [daily_column_types_changed](../../checks/table/schema/column-types-changed.md).
-
-        ![Schema detection check results after renaming columns](https://dqops.com/docs/images/examples/schema-detection-checks-results-after-renaming-columns.png)
-
-    - for the `product3` table where whe have changed the type of the column `date_updated` from DATETIME to DATE we can see error only in the check 
-        [daily_column_types_changed](../../checks/table/schema/column-types-changed.md).
+- for the `product3` table where whe have changed the type of the column `date_updated` from DATETIME to DATE we can see error only in the check 
+    [daily_column_types_changed](../../checks/table/schema/column-types-changed.md).
  
-        ![Schema detection check results after changing datatype](https://dqops.com/docs/images/examples/schema-detection-checks-results-after-changing-datatype.png)
+    ![Schema detection check results after changing datatype](https://dqops.com/docs/images/examples/schema-detection-checks-results-after-changing-datatype.png)
 
-    - for the `product4` table where whe have changed the order of columns `date_created` and `date_updated` we can see error only in the check
-        [daily_column_list_or_order_changed](../../checks/table/schema/column-list-or-order-changed.md)
+- for the `product4` table where whe have changed the order of columns `date_created` and `date_updated` we can see error only in the check
+    [daily_column_list_or_order_changed](../../checks/table/schema/column-list-or-order-changed.md)
 
-        ![Schema detection check results after changing column order](https://dqops.com/docs/images/examples/schema-detection-checks-results-after-changing-column-order.png)
+    ![Schema detection check results after changing column order](https://dqops.com/docs/images/examples/schema-detection-checks-results-after-changing-column-order.png)
 
+### **Synchronize the results with the cloud account**
 
-8. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
+Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
 
-    Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
+Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
-9. To review the results on the [data quality dashboards](../../working-with-dqo/reviewing-results-on-data-quality-dashboards.md)
-    go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
+### **Review the results on the data quality dashboards**
 
-    Below you can see the results displayed on the **Schema changes - summary of changes in columns** dashboard located in the Schema changes/Table-level issues group. 
-    This dashboard summarizes results from schema changes checks.
+To review the results on the [data quality dashboards](../../working-with-dqo/reviewing-results-on-data-quality-dashboards.md)
+go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
+
+Below you can see the results displayed on the **Schema changes - summary of changes in columns** dashboard located in the Schema changes/Table-level issues group. 
+This dashboard summarizes results from schema changes checks.
     
-    This dashboard allows filtering data by:
+This dashboard allows filtering data by:
 
-    * connection,
-    * schema,
-    * data group,
-    * stages,
-    * priorities,
-    * check name,
-    * issue severity level,
-    * table.
+* connection,
+* schema,
+* data group,
+* stages,
+* priorities,
+* check name,
+* issue severity level,
+* table.
    
-    At the bottom of the dashboard there is a table summarizing the results from all executed schema change checks. You can check other dashboards in this group for 
-    details per every schema change check type. 
+At the bottom of the dashboard there is a table summarizing the results from all executed schema change checks. You can check other dashboards in this group for 
+details per every schema change check type. 
 
-    ![Schema change checks results on the Schema changes - summary of changes in columns dashboard](https://dqops.com/docs/images/examples/schema-checks-result-on-schema-summary-dashboard.png)
+![Schema change checks results on the Schema changes - summary of changes in columns dashboard](https://dqops.com/docs/images/examples/schema-checks-result-on-schema-summary-dashboard.png)
 
 
 ## YAML configuration file

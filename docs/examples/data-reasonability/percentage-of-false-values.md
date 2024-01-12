@@ -1,4 +1,5 @@
 # Percentage of false boolean values
+This sample shows how to use data quality checks to detect the percentage of false boolean values and view the results on data quality dashboards.
 
 ## Overview
 
@@ -56,11 +57,13 @@ The `invalidOcr` column of interest contains both TRUE and FALSE values.
 | 4925540251205632 | Alaskans For Don Young         | 1500800    | MANUAL     | **FALSE**  |
 | 5155591651590144 | POL/ Ted Cruz/R/US SEN / TX    | 1610000    | MANUAL     | **FALSE**  |
 
-## Running the checks in the example and evaluating the results using the user interface
+## Run the example using the user interface
 
-A detailed explanation of [how to run the example is described here](../index.md#running-the-use-cases).
+A detailed explanation of [how to start DQOps platform and run the example is described here](../index.md#running-the-use-cases).
 
-To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview.md):
+### **Navigate to a list of checks**
+
+To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview.md):
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-false-percent-checks1.png)
 
@@ -79,55 +82,62 @@ To execute the check prepared in the example using the [user interface](../../dq
     This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../dqo-concepts/user-interface-overview.md#check-editor).
 
 
-4. Run the activated check using the **Run check** button.
+### **Run checks**
 
-    You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
+Run the activated check using the **Run check** button.
 
-    ![Run check](https://dqops.com/docs/images/examples/daily-false-percent-run-checks1.png)
+You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
-
-5. Access the results by clicking the **Results** button.
-
-    Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
-    The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
-    The Sensor readouts category displays the values obtained by the sensors from the data source.
-    The Execution errors category displays any error that occurred during the check's execution.
-
-    Review the results which should be similar to the one below.
-
-    ![False-percent check results](https://dqops.com/docs/images/examples/daily-false-percent-check-results1.png)
-
-    The actual value in this example is 99%, which is above the minimum threshold level set in the warning (99%).
-    The check gives a valid result (notice the green square to the left of the check name).
+![Run check](https://dqops.com/docs/images/examples/daily-false-percent-run-checks1.png)
 
 
-6. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
+### **View detailed check results**
 
-    Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
+Access the detailed results by clicking the **Results** button. The results should be similar to the one below.
 
-7. To review the results on the [data quality dashboards](../../working-with-dqo/reviewing-results-on-data-quality-dashboards.md)
-    go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
+![False-percent check results](https://dqops.com/docs/images/examples/daily-false-percent-check-results1.png)
 
-    Below you can see the results displayed on the **Current column status** dashboard located in the Current status group. 
+Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
+The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
+The Sensor readouts category displays the values obtained by the sensors from the data source.
+The Execution errors category displays any error that occurred during the check's execution.
 
-    This dashboard allows data engineers and data owners to quickly evaluate the data quality of monitored
-    columns. The dashboards display a color-coded status that indicates the severity level detected by run
-    checks. When the status is green, it means that the monitored column has no data quality issues. However, if the status
-    is yellow, orange, or red, it indicates that there were some issues detected. The dashboard also displays the number
-    of detected issues per severity threshold, making it easier to identify and address tables and columns with issues.
+The actual value in this example is 99%, which is above the minimum threshold level set in the warning (99%).
+The check gives a valid result (notice the green square to the left of the check name).
+
+
+### **Synchronize the results with the cloud account**
+
+Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner
+of the user interface.
+
+Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
+
+### **Review the results on the data quality dashboards**
+
+To review the results on the [data quality dashboards](../../working-with-dqo/reviewing-results-on-data-quality-dashboards.md)
+go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
+
+Below you can see the results displayed on the **Current column status** dashboard located in the Current status group. 
+
+This dashboard allows data engineers and data owners to quickly evaluate the data quality of monitored
+columns. The dashboards display a color-coded status that indicates the severity level detected by run
+checks. When the status is green, it means that the monitored column has no data quality issues. However, if the status
+is yellow, orange, or red, it indicates that there were some issues detected. The dashboard also displays the number
+of detected issues per severity threshold, making it easier to identify and address tables and columns with issues.
     
-    This dashboard allow filtering data by:
+This dashboard allow filtering data by:
     
-    * time frame,
-    * connection,
-    * schema,
-    * data quality dimension,
-    * check category,
-    * data group,
-    * table,
-    * column.
+* time frame,
+* connection,
+* schema,
+* data quality dimension,
+* check category,
+* data group,
+* table,
+* column.
 
-    ![False-percent check results on the Current column status dashboard](https://dqops.com/docs/images/examples/daily-false-percent-check-results-on-current-column-status-dashboard.png)
+![False-percent check results on the Current column status dashboard](https://dqops.com/docs/images/examples/daily-false-percent-check-results-on-current-column-status-dashboard.png)
 
 ## Change a schedule at the connection level
 
@@ -207,9 +217,9 @@ spec:
                 min_percent: 95.0
 ```
 
-## Running the checks in the example and evaluating the results using DQOps Shell
+## Run the checks in the example using the DQOps Shell
 
-A detailed explanation of [how to run the example is described here](../index.md#running-the-use-cases). 
+A detailed explanation of [how to start DQOps platform and run the example is described here](../index.md#running-the-use-cases). 
 
 To execute the check prepared in the example, run the following command in DQOps Shell:
 

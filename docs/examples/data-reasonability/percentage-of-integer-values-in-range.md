@@ -1,4 +1,5 @@
 # Percentage of integer values in range
+This sample shows how to use data quality checks to detect the percentage of integer values in range and view the results on data quality dashboards.
 
 ## Overview
 
@@ -51,11 +52,13 @@ The `value` column of interest contains values in range between 0 and 100,000.
 | 2021    | 2021 Health Disparities | Able-Bodied  | Arkansas      | Female        | **78** |
 
 
-## Running the checks in the example and evaluating the results using the user interface
+## Run the example using the user interface
 
-A detailed explanation of [how to run the example is described here](../index.md#running-the-use-cases).
+A detailed explanation of [how to start DQOps platform and run the example is described here](../index.md#running-the-use-cases).
 
-To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview.md):
+### **Navigate to a list of checks**
+
+To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview.md):
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-values-in-range-numeric-percent-checks1.png)
 
@@ -77,54 +80,61 @@ To execute the check prepared in the example using the [user interface](../../dq
     has an additional parameters to select the **min_values** and **max_values** range.
 
 
-4. Run the activated check using the **Run check** button.
+### **Run checks**
 
-    You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
+Run the activated check using the **Run check** button.
 
-    ![Run check](https://dqops.com/docs/images/examples/daily-values-in-range-numeric-percent-run-checks1.png)
+You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
+
+![Run check](https://dqops.com/docs/images/examples/daily-values-in-range-numeric-percent-run-checks1.png)
 
 
-5. Access the results by clicking the **Results** button.
+### **View detailed check results**
 
-    Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
-    The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
-    The Sensor readouts category displays the values obtained by the sensors from the data source.
-    The Execution errors category displays any error that occurred during the check's execution.
+Access the detailed results by clicking the **Results** button. The results should be similar to the one below.
 
-    Review the results which should be similar to the one below.
+![Values-in-range-numeric-percent check results](https://dqops.com/docs/images/examples/daily-values-in-range-numeric-percent-checks-results1.png)
 
-    ![Values-in-range-numeric-percent check results](https://dqops.com/docs/images/examples/daily-values-in-range-numeric-percent-checks-results1.png)
+Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
+The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
+The Sensor readouts category displays the values obtained by the sensors from the data source.
+The Execution errors category displays any error that occurred during the check's execution.
+
+The actual value in this example is 92%, which is below the minimum threshold level set in the error (95.0%).
+The check raises an error issue (notice the orange square to the left of the check name).
+
+
+### **Synchronize the results with the cloud account**
+
+Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner
+of the user interface.
+
+Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
+
+### **Review the results on the data quality dashboards**
+
+To review the results on the [data quality dashboards](../../working-with-dqo/reviewing-results-on-data-quality-dashboards.md)
+go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
+
+Below you can see the results displayed on the **Current data quality checks results** dashboard located in the Check results group. This dashboard
+displays all executed checks run on tables and columns and allows reviewing their set parameters, as well as actual and expected values.
     
-    The actual value in this example is 92%, which is below the minimum threshold level set in the error (95.0%).
-    The check raises an error issue (notice the orange square to the left of the check name).
-
-
-6. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
-
-    Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
-
-7. To review the results on the [data quality dashboards](../../working-with-dqo/reviewing-results-on-data-quality-dashboards.md)
-    go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
-
-    Below you can see the results displayed on the **Current data quality checks results** dashboard located in the Check results group. This dashboard
-    displays all executed checks run on tables and columns and allows reviewing their set parameters, as well as actual and expected values.
+This dashboard allows filtering data by:
     
-    This dashboard allows filtering data by:
-    
-    * time window (from last 7 days to last 6 months)
-    * connection,
-    * schema,
-    * data group,
-    * data quality dimension,
-    * check category,
-    * stages,
-    * priorities,
-    * table,
-    * column,
-    * check name,
-    * issue severity.
+* time window (from last 7 days to last 6 months)
+* connection,
+* schema,
+* data group,
+* data quality dimension,
+* check category,
+* stages,
+* priorities,
+* table,
+* column,
+* check name,
+* issue severity.
    
-    ![Values-in-range-numeric-percent check results on Current data quality checks results dashboard](https://dqops.com/docs/images/examples/daily-values-in-range-numeric-percent-checks-results-on-currrent-results-dashboard.png)
+![Values-in-range-numeric-percent check results on Current data quality checks results dashboard](https://dqops.com/docs/images/examples/daily-values-in-range-numeric-percent-checks-results-on-currrent-results-dashboard.png)
 
 ## Change a schedule at the connection level
 
@@ -203,9 +213,9 @@ spec:
                 min_percent: 90.0
 ```
 
-## Running the checks in the example and evaluating the results using DQOps Shell
+## Run the checks in the example using the DQOps Shell
 
-A detailed explanation of [how to run the example is described here](../index.md#running-the-use-cases).
+A detailed explanation of [how to start DQOps platform and run the example is described here](../index.md#running-the-use-cases).
 
 To execute the check prepared in the example, run the following command in DQOps Shell:
 
@@ -278,6 +288,6 @@ of integer values from a range in a column does not exceed the minimum accepted 
 
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../dqops-installation/install-dqops-using-pip.md) or [run DQOps as a Docker container](../../dqops-installation/run-dqops-as-docker-container.md).
 - For details on the [profile_number_in_range_percent check used in this example, go to the check details section](../../checks/column/numeric/number-in-range-percent.md).
-- You might be interested in another reasonability check that [evaluates that the length of the string does not exceed the indicated value](../data-reasonability/string-not-exceeding-a-set-length.md).
+- You might be interested in another reasonability check that [evaluates that the length of the string does not exceed the indicated value](../data-reasonability/text-not-exceeding-a-maximum-length.md).
 - Would you like to add your own connection? Here you can find [information about supported databases and how to add new connection](../../data-sources/index.md).
 - The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md) can help you to calculate separate data quality KPI scores for different groups of rows.

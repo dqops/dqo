@@ -1,4 +1,5 @@
-# Percentage of valid latitude and longitude
+# Percentage of valid latitude and longitude values
+This sample shows how to use data quality checks to detect the percentage of valid latitude and longitude values and view the results on dashboards.
 
 ## Overview
 
@@ -54,11 +55,13 @@ The `latitude` and `longitude` columns of interest contains valid values.
 | 14-00001652 | ARR Missed Yard Trimmings /Organics | PROVENCIAL                          | **30.28755755** | **-97.66188875** |
 | 14-00001654 | Parking Ticket Complaint            | 9TH                                 | **30.27091532** | **-97.7417791**  |
 
-## Running the checks in the example and evaluating the results using the user interface
+## Run the example using the user interface
 
-A detailed explanation of [how to run the example is described here](../index.md#running-the-use-cases).
+A detailed explanation of [how to start DQOps platform and run the example is described here](../index.md#running-the-use-cases).
 
-To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview.md):
+### **Navigate to a list of checks**
+
+To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview.md):
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-valid-latitude-and-longitude-percent-checks1.png)
 
@@ -77,58 +80,64 @@ To execute the check prepared in the example using the [user interface](../../dq
     This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../dqo-concepts/user-interface-overview.md#check-editor).
 
 
-4. Run the activated check using the **Run check** button.
-    Run checks on latitude and longitude columns. 
+### **Run checks**
 
-    You can also run all the checks for an entire connection. Click on the three dots icon next to the name of the 
-    connection in the tree view and click on **Run checks**. 
+Run the activated check using the **Run check** button. Run checks on latitude and longitude columns. 
 
-    ![Run check](https://dqops.com/docs/images/examples/daily-valid-latitude-and-longitude-percent-run-checks1.png)
+You can also run all the checks for an entire connection. Click on the three dots icon next to the name of the 
+connection in the tree view and click on **Run checks**. 
 
-
-5. Access the results by clicking the **Results** button.
-
-    Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
-    The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
-    The Sensor readouts category displays the values obtained by the sensors from the data source.
-    The Execution errors category displays any error that occurred during the check's execution.
-
-    Review the results which should be similar to the one below.
-
-    ![Valid-latitude-and-longitude-percent check results](https://dqops.com/docs/images/examples/daily-valid-latitude-and-longitude-percent-checks-results1.png)
-
-    The actual value in this example is 99.24% for both longitude and latitude checks, which is above the minimum
-    threshold level set in the warning (99.0%).
-    The check gives a valid result (notice the green square to the left of the check name).
+![Run check](https://dqops.com/docs/images/examples/daily-valid-latitude-and-longitude-percent-run-checks1.png)
 
 
-6. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
+### **View detailed check results**
 
-    Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
+Access the detailed results by clicking the **Results** button. The results should be similar to the one below.
 
-7. To review the results on the [data quality dashboards](../../working-with-dqo/reviewing-results-on-data-quality-dashboards.md)
-    go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
+![Valid-latitude-and-longitude-percent check results](https://dqops.com/docs/images/examples/daily-valid-latitude-and-longitude-percent-checks-results1.png)
+
+Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
+The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
+The Sensor readouts category displays the values obtained by the sensors from the data source.
+The Execution errors category displays any error that occurred during the check's execution.
+
+The actual value in this example is 99.24% for both longitude and latitude checks, which is above the minimum
+threshold level set in the warning (99.0%).
+The check gives a valid result (notice the green square to the left of the check name).
+
+
+### **Synchronize the results with the cloud account**
+
+Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner
+of the user interface.
+
+Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
+
+### **Review the results on the data quality dashboards**
+
+To review the results on the [data quality dashboards](../../working-with-dqo/reviewing-results-on-data-quality-dashboards.md)
+go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
  
-    Below you can see the results displayed on the **Highest issue severity per check and day table** dashboard which is located in the
-    Highest issue severity per day group of dashboards. This dashboard allows for reviewing and filtering a summary 
-    number of issues that arise from data quality checks per day, grouped by [check category](../../dqo-concepts/definition-of-data-quality-checks/index.md#categories-of-checks).
-
-    This dashboard helps evaluate the areas with the highest number of data quality issues that should be addressed.
-    It also allows to review how the issue severity changed per day of the month.
-
-    This dashboard allow filtering data by:
+Below you can see the results displayed on the **Highest issue severity per check and day table** dashboard which is located in the
+Highest issue severity per day group of dashboards. This dashboard allows for reviewing and filtering a summary 
+number of issues that arise from data quality checks per day, grouped by [check category](../../dqo-concepts/definition-of-data-quality-checks/index.md#categories-of-checks).
     
-    * current and previous month,
-    * connection,
-    * schema,
-    * data group,
-    * data quality dimension,
-    * check category,
-    * check name,
-    * table,
-    * column.
+This dashboard helps evaluate the areas with the highest number of data quality issues that should be addressed.
+It also allows to review how the issue severity changed per day of the month.
 
-    ![Valid-latitude-and-longitude-percent check results on Highest issue severity per check and day dashboard](https://dqops.com/docs/images/examples/daily-valid-latitude-and-longitude-percent-checks-results-on-dashboard1.png)
+This dashboard allow filtering data by:
+    
+* current and previous month,
+* connection,
+* schema,
+* data group,
+* data quality dimension,
+* check category,
+* check name,
+* table,
+* column.
+
+![Valid-latitude-and-longitude-percent check results on Highest issue severity per check and day dashboard](https://dqops.com/docs/images/examples/daily-valid-latitude-and-longitude-percent-checks-results-on-dashboard1.png)
 
 ## Change a schedule at the connection level
 
@@ -219,9 +228,9 @@ spec:
                 min_percent: 95.0
 ```
 
-## Running the checks in the example and evaluating the results using DQOps Shell
+## Run the checks in the example using the DQOps Shell
 
-A detailed explanation of [how to run the example is described here](../index.md#running-the-use-cases).
+A detailed explanation of [how to start DQOps platform and run the example is described here](../index.md#running-the-use-cases).
 
 To execute the check prepared in the example, run the following command in DQOps Shell:
 

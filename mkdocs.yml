@@ -56,30 +56,30 @@ nav:
       - Data accuracy:
           - Integrity check between columns in different tables: "examples/data-accuracy/integrity-check-between-columns-in-different-tables.md"
       - Data availability:
-          - Table availability: "examples/data-availability/table-availability.md"
+          - Detect table availability issues: "examples/data-availability/detect-table-availability-issues.md"
       - Data completeness:
-          - Number of rows in the table: "examples/data-completeness/number-of-rows-in-the-table.md"
           - Number of null values: "examples/data-completeness/number-of-null-values.md"
+          - Number of rows in the table: "examples/data-completeness/number-of-rows-in-the-table.md"
       - Data consistency:
-          - Percent of rows with string values in set: "examples/data-consistency/percentage-of-rows-with-a-text-in-set.md"
+          - Percentage of rows having a text in from a set: "examples/data-consistency/percentage-of-rows-with-a-text-found-in-set.md"
+      - Data reasonability:
+          - Percentage of false boolean values: "examples/data-reasonability/percentage-of-false-values.md"
+          - Percentage of values in range: "examples/data-reasonability/percentage-of-integer-values-in-range.md"
+          - A text not exceeding a maximum length: "examples/data-reasonability/text-not-exceeding-a-maximum-length.md"
       - Data uniqueness:
           - Percentage of duplicates: "examples/data-uniqueness/percentage-of-duplicates.md"
       - Data validity:
-          - Percentage of rows containing USA zipcodes: "examples/data-validity/percentage-of-values-that-contains-usa-zipcode.md"
           - Number of invalid emails: "examples/data-validity/number-of-invalid-emails.md"
-          - Percentage of valid latitude and longitude: "examples/data-validity/percentage-of-valid-latitude-and-longitude.md"
-          - Number of invalid IP4 address: "examples/data-validity/number-of-invalid-IP4-address.md"
-          - Percentage of strings matching date regex: "examples/data-validity/percentage-of-strings-matching-date-regex.md"
-          - Percentage of rows passing SQL condition: "examples/data-validity/percentage-of-rows-passing-sql-condition.md"
-          - Percentage of valid currency codes: "examples/data-validity/percentage-of-valid-currency-codes.md"
+          - Number of invalid IP4 address: "examples/data-validity/number-of-invalid-ip4-addresses.md"
           - Percentage of negative values: "examples/data-validity/percentage-of-negative-values.md"
+          - Percentage of rows passing SQL condition: "examples/data-validity/percentage-of-rows-passing-sql-condition.md"
+          - Percentage of texts matching date regex: "examples/data-validity/percentage-of-texts-matching-date-regex.md"
+          - Percentage of valid currency codes: "examples/data-validity/percentage-of-valid-currency-codes.md"
+          - Percentage of valid latitude and longitude: "examples/data-validity/percentage-of-valid-latitude-and-longitude.md"
           - Percentage of valid UUID: "examples/data-validity/percentage-of-valid-uuid.md"
-      - Data reasonability:
-          - Percentage of values in range: "examples/data-reasonability/percentage-of-integer-values-in-range.md"
-          - A string not exceeding a set length: "examples/data-reasonability/string-not-exceeding-a-set-length.md"
-          - Percentage of false boolean values: "examples/data-reasonability/percentage-of-false-values.md"
+          - Percentage of rows containing USA zipcodes: "examples/data-validity/percentage-of-values-that-contains-usa-zipcode.md"
       - Schema:
-          - Table schema detection: "examples/schema/schema-detection.md"
+          - Detect table schema changes: "examples/schema/detect-table-schema-changes.md"
       - Data quality monitoring:
           - Detect empty tables: "examples/data-quality-monitoring/detect-empty-tables.md"
           - Running checks with a scheduler: "examples/data-quality-monitoring/running-checks-with-a-scheduler.md"
@@ -201,7 +201,7 @@ nav:
         - total row count match percent: 'checks/table/accuracy/total-row-count-match-percent.md'
       - availability:
         - 'checks/table/availability/index.md'
-        - table availability: 'checks/table/availability/table-availability.md'
+        - table availability: 'checks/table/availability/detect-table-availability-issues.md'
       - comparisons:
         - 'checks/table/comparisons/index.md'
         - row count match: 'checks/table/comparisons/row-count-match.md'

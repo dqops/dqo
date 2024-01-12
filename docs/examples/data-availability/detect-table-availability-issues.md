@@ -1,4 +1,5 @@
-# Table availability
+# Detect table availability issues
+This sample shows how to use data quality checks to detect table availability issues and view the results on data quality dashboards.
 
 ## Overview
 
@@ -47,11 +48,14 @@ If you want to learn more about checks and threshold levels, please refer to the
 
 If the number of failures exceeds 0, a warning alert will be triggered.
 
-## Running the checks in the example and evaluating the results using the user interface
+## Run the example using the user interface
 
-A detailed explanation of [how to run the example is described here](../index.md#running-the-use-cases).
+A detailed explanation of [how to start DQOps platform and run the example is described here](../index.md#running-the-use-cases).
 
-To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview.md):
+### **Navigate to a list of checks**
+
+To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview.md):
+
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-table-availability-checks1.png)
 
@@ -70,52 +74,59 @@ To execute the check prepared in the example using the [user interface](../../dq
     This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../dqo-concepts/user-interface-overview.md#check-editor).
 
 
-4. Run the activated check using the **Run check** button.
+### **Run checks**
 
-    You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
+Run the activated check using the **Run check** button.
 
-    ![Run check](https://dqops.com/docs/images/examples/daily-table-availability-run-checks1.png)
+You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
-
-5. Access the results by clicking the **Results** button.
-
-    Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
-    The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
-    The Sensor readouts category displays the values obtained by the sensors from the data source.
-    The Execution errors category displays any error that occurred during the check's execution.
-
-    Review the results which should be similar to the one below.
-
-    ![Table-availability check results](https://dqops.com/docs/images/examples/daily-table-availability-checks-results1.png)
-  
-    The actual value in this example is 0.
-    The check gives a valid result (notice the green square to the left of the check name).
+![Run check](https://dqops.com/docs/images/examples/daily-table-availability-run-checks1.png)
 
 
-6. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
+### **View detailed check results**
 
-    Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
+Access the detailed results by clicking the **Results** button. The results should be similar to the one below.
 
-7. To review the results on the [data quality dashboards](../../working-with-dqo/reviewing-results-on-data-quality-dashboards.md)
-    go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
+![Table-availability check results](https://dqops.com/docs/images/examples/daily-table-availability-checks-results1.png)
 
-    Below you can see the results displayed on the **Current table availability** dashboard located in the Data Quality Dimension/Availability group. 
-    This dashboard summarizes results from [table_availability](../../checks/table/availability/table-availability.md) checks.
-    Because we did not detect any issues there is no data on the tables. You can view the Correct results by clicking on
-    the checkbox **Only availability issues** and show also correct results. 
+Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
+The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
+The Sensor readouts category displays the values obtained by the sensors from the data source.
+The Execution errors category displays any error that occurred during the check's execution.
 
-    This dashboard allows filtering data by:
+The actual value in this example is 0.
+The check gives a valid result (notice the green square to the left of the check name).
+
+
+### **Synchronize the results with the cloud account**
+
+Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner
+of the user interface.
+
+Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
+
+### **Review the results on the data quality dashboards**
+
+To review the results on the [data quality dashboards](../../working-with-dqo/reviewing-results-on-data-quality-dashboards.md)
+go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.  
+
+Below you can see the results displayed on the **Current table availability** dashboard located in the Data Quality Dimension/Availability group. 
+This dashboard summarizes results from [table_availability](../../checks/table/availability/table-availability.md) checks.
+Because we did not detect any issues there is no data on the tables. You can view the Correct results by clicking on
+the checkbox **Only availability issues** and show also correct results. 
+
+This dashboard allows filtering data by:
     
-    * Current and previous month,
-    * connection,
-    * schema,
-    * data group,
-    * stages,
-    * priorities,
-    * issue severity level,
-    * table
+* Current and previous month,
+* connection,
+* schema,
+* data group,
+* stages,
+* priorities,
+* issue severity level,
+* table
 
-    ![Table-availability check results on the Table availability dashboard](https://dqops.com/docs/images/examples/table-availability-check-result-on-table-availability-dashboard1.png)
+![Table-availability check results on the Table availability dashboard](https://dqops.com/docs/images/examples/table-availability-check-result-on-table-availability-dashboard1.png)
 
 
 ## YAML configuration file
@@ -165,9 +176,9 @@ spec:
         nullable: true
 ```
 
-## Running the checks in the example and evaluating the results using DQOps Shell
+## Run the checks in the example using the DQOps Shell
 
-A detailed explanation of [how to run the example is described here](../index.md#running-the-use-cases).
+A detailed explanation of [how to start DQOps platform and run the example is described here](../index.md#running-the-use-cases).
 
 To execute the check prepared in the example, run the following command in DQOps Shell:
 

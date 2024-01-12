@@ -1,4 +1,5 @@
 # Running checks with a scheduler
+This sample shows how to run data quality checks with a scheduler and set different schedules on multiple checks with the DQOps platform. 
 
 ## Overview
 
