@@ -88,6 +88,7 @@ public class YamlDocumentationGeneratorImpl implements YamlDocumentationGenerato
                                                                              List<YamlSuperiorObjectDocumentationModel> allSuperiorObjectDocumentationModels) {
         MainPageYamlDocumentationModel indexPage = new MainPageYamlDocumentationModel();
         indexPage.setHeader(checkTypeString);
+        indexPage.setHelpText("The reference of YAML objects for the " + checkTypeString + " type of data quality checks.");
         CheckTarget[] checkTargets = CheckTarget.values();
         for (CheckTarget checkTarget : checkTargets) {
             MainPageYamlDocumentationModel checkTargetPage = new MainPageYamlDocumentationModel();

@@ -64,20 +64,6 @@ The structure of this object is described below
 ___
 
 
-## ParameterDefinitionsListSpec
-List of parameter definitions - the parameters for custom sensors or custom rules.
-
-
-
-
-
-
-
-
-
-___
-
-
 ## ParameterDefinitionSpec
 Defines a single field that is a sensor parameter or a rule parameter.
 
@@ -101,6 +87,20 @@ The structure of this object is described below
 |required|True when the value for the parameter must be provided.|boolean| | | |
 |allowed_values|List of allowed values for a field that is of an enum type.|List[string]| | | |
 |sample_values|List of sample values. The sample values are used in the documentation or help messages.|List[string]| | | |
+
+
+
+
+
+
+
+
+
+___
+
+
+## ParameterDefinitionsListSpec
+List of parameter definitions - the parameters for custom sensors or custom rules.
 
 
 
