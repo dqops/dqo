@@ -26,7 +26,8 @@ import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
 import com.dqops.metadata.sources.TableSpec;
-import com.dqops.metadata.storage.localfiles.credentials.*;
+import com.dqops.metadata.storage.localfiles.credentials.AwsCredentialProfileSettingNames;
+import com.dqops.metadata.storage.localfiles.credentials.AwsProfileProvider;
 import com.dqops.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
 import org.apache.parquet.Strings;
@@ -41,6 +42,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 
 /**
@@ -149,10 +151,10 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
                 break;
 
             case default_credentials:
-                Profile profile = awsProfileProvider.provideProfile(secretValueLookupContext);
-                if(profile != null){
-                    dataSourceProperties.put("AccessKeyId", profile.property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID).orElse(null));  // AccessKeyId alias for User
-                    dataSourceProperties.put("SecretAccessKey", profile.property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY).orElse(null));  // SecretAccessKey alias for Password
+                Optional<Profile> profile = awsProfileProvider.provideProfile(secretValueLookupContext);
+                if(profile.isEmpty()){
+                    dataSourceProperties.put("AccessKeyId", profile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID).orElse(null));  // AccessKeyId alias for User
+                    dataSourceProperties.put("SecretAccessKey", profile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY).orElse(null));  // SecretAccessKey alias for Password
                 } else {
                     dataSourceProperties.put("CredentialsProvider", "DefaultChain");    // The use of the local ~/.aws/credentials file with default profile
                 }

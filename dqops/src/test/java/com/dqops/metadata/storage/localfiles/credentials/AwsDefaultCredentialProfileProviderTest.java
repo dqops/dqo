@@ -21,6 +21,7 @@ import software.amazon.awssdk.profiles.Profile;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Optional;
 
 @SpringBootTest
 public class AwsDefaultCredentialProfileProviderTest extends BaseTest {
@@ -58,12 +59,7 @@ public class AwsDefaultCredentialProfileProviderTest extends BaseTest {
         Path defaultAwsCredentialsPath = userHomePath.resolve(BuiltInFolderNames.CREDENTIALS)
                 .resolve(DefaultCloudCredentialFileNames.AWS_DEFAULT_CREDENTIALS_NAME);
 
-//        if (Files.exists(defaultAwsCredentialsPath)) {
-//            FileUtils.deleteDirectory(defaultAwsCredentialsPath.toFile());
-//        }
-
         if (!Files.exists(defaultAwsCredentialsPath)) {
-            // todo: make second test with default creation like below
             Files.writeString(defaultAwsCredentialsPath, DefaultCloudCredentialFileContent.AWS_DEFAULT_CREDENTIALS_INITIAL_CONTENT);
 
             String credentialFileContent = DefaultCloudCredentialFileContent.AWS_DEFAULT_CREDENTIALS_INITIAL_CONTENT
@@ -73,13 +69,15 @@ public class AwsDefaultCredentialProfileProviderTest extends BaseTest {
             Files.writeString(defaultAwsCredentialsPath, credentialFileContent);
         }
 
-        Profile profile = this.sut.provideProfile(secretValueLookupContext);
+        Optional<Profile> profile = this.sut.provideProfile(secretValueLookupContext);
+
+        Assertions.assertTrue(profile.isPresent());
 
         Assertions.assertEquals("my_custom_access_key_id",
-                profile.property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID).orElse(null));
+                profile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID).orElse(null));
 
         Assertions.assertEquals("my_custom_secret_access_key",
-                profile.property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY).orElse(null));
+                profile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY).orElse(null));
     }
 
     @Test
@@ -88,16 +86,12 @@ public class AwsDefaultCredentialProfileProviderTest extends BaseTest {
         Path defaultAwsCredentialsPath = userHomePath.resolve(BuiltInFolderNames.CREDENTIALS)
                 .resolve(DefaultCloudCredentialFileNames.AWS_DEFAULT_CREDENTIALS_NAME);
 
-//        if (Files.exists(defaultAwsCredentialsPath)) {
-//            FileUtils.deleteDirectory(defaultAwsCredentialsPath.toFile());
-//        }
-
         if (!Files.exists(defaultAwsCredentialsPath)) {
             Files.writeString(defaultAwsCredentialsPath, DefaultCloudCredentialFileContent.AWS_DEFAULT_CREDENTIALS_INITIAL_CONTENT);
         }
 
-        Profile profile = this.sut.provideProfile(secretValueLookupContext);
+        Optional<Profile> profile = this.sut.provideProfile(secretValueLookupContext);
 
-        Assertions.assertNull(profile);
+        Assertions.assertTrue(profile.isEmpty());
     }
 }
