@@ -136,11 +136,13 @@ const JobItem = ({
                       className="w-3 h-3"
                       style={{
                         backgroundColor: getColor(
-                          job.parameters?.runChecksParameters?.run_checks_result
+                          job.parameters?.runChecksParameters?.run_checks_result?.execution_errors && 
+                          job.parameters?.runChecksParameters?.run_checks_result?.execution_errors > 0 ? 'execution_error' :
+                          (job.parameters?.runChecksParameters?.run_checks_result
                             ?.highest_severity
                             ? job.parameters?.runChecksParameters
                                 ?.run_checks_result?.highest_severity
-                            : 'error'
+                            : 'error')
                         )
                       }}
                     />
@@ -165,22 +167,25 @@ const JobItem = ({
                       <div
                         style={{
                           color: getColor(
-                            job.parameters?.runChecksParameters?.run_checks_result
+                            job.parameters?.runChecksParameters?.run_checks_result?.execution_errors && 
+                            job.parameters?.runChecksParameters?.run_checks_result?.execution_errors > 0 ? 'execution_error' :
+                            (job.parameters?.runChecksParameters?.run_checks_result
                               ?.highest_severity
                               ? job.parameters?.runChecksParameters
                                   ?.run_checks_result?.highest_severity
-                              : 'error'
+                              : 'error')
                           )
                         }}
                       >
                         {
-                          job.parameters?.runChecksParameters?.run_checks_result
-                            ?.highest_severity
+                          job.parameters?.runChecksParameters?.run_checks_result?.execution_errors && 
+                          job.parameters?.runChecksParameters?.run_checks_result?.execution_errors > 0 ? "execution error" :
+                          job.parameters?.runChecksParameters?.run_checks_result?.highest_severity
                         }
                       </div>
                     </div>
                     <div className="flex gap-x-2">
-                      <div className="font-light">Executed check:</div>
+                      <div className="font-light">Executed checks:</div>
                       <div>
                         {
                           job.parameters?.runChecksParameters?.run_checks_result
@@ -189,7 +194,7 @@ const JobItem = ({
                       </div>
                     </div>
                     <div className="flex gap-x-2">
-                      <div className="font-light">Valid result:</div>
+                      <div className="font-light">Valid results:</div>
                       <div>
                         {job.parameters?.runChecksParameters?.run_checks_result
                           ?.valid_results === 0
@@ -209,7 +214,7 @@ const JobItem = ({
                       </div>
                     </div>
                     <div className="flex gap-x-2">
-                      <div className="font-light">Errors</div>
+                      <div className="font-light">Errors:</div>
                       <div>
                         {job.parameters?.runChecksParameters?.run_checks_result
                           ?.errors === 0
@@ -229,7 +234,7 @@ const JobItem = ({
                       </div>
                     </div>
                     <div className="flex gap-x-2">
-                      <div className="font-light">Execution Fatals:</div>
+                      <div className="font-light">Execution errors:</div>
                       <div>
                         {job.parameters?.runChecksParameters?.run_checks_result
                           ?.execution_errors === 0
