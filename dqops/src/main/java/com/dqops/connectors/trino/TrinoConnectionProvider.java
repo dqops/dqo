@@ -106,7 +106,6 @@ public class TrinoConnectionProvider extends AbstractSqlConnectionProvider {
         }
 
         TrinoEngineType trinoEngineType = terminalReader.promptEnum("Trino engine type (--trino-engine)", TrinoEngineType.class, null, false);
-//        String trinoEngine = terminalReader.prompt("Trino engine type (--trino-engine)", "${TRINO_ENGINE}", true);
         trinoSpec.setTrinoEngineType(trinoEngineType);
 
         switch (trinoEngineType){
@@ -150,21 +149,30 @@ public class TrinoConnectionProvider extends AbstractSqlConnectionProvider {
 
     private void promptForAthenaConnectionParameters(TrinoParametersSpec trinoSpec, boolean isHeadless, TerminalReader terminalReader) {
 
-        if(trinoSpec.getAthenaAuthenticationMode().equals(AthenaAuthenticationMode.iam)){ // todo: switch
-            if (Strings.isNullOrEmpty(trinoSpec.getUser())) {
-                if (isHeadless) {
-                    throw new CliRequiredParameterMissingException("--trino-user");
+        AthenaAuthenticationMode athenaAuthenticationMode = terminalReader.promptEnum("Athena authentication mode (--athena-authentication-mode)", AthenaAuthenticationMode.class, null, false);
+        trinoSpec.setAthenaAuthenticationMode(athenaAuthenticationMode);
+
+        switch (athenaAuthenticationMode){
+            case iam:
+                if (Strings.isNullOrEmpty(trinoSpec.getUser())) {
+                    if (isHeadless) {
+                        throw new CliRequiredParameterMissingException("--trino-user");
+                    }
+                    trinoSpec.setUser(terminalReader.prompt(" (--trino-region)", "${TRINO_USER}", false));
                 }
-                trinoSpec.setUser(terminalReader.prompt(" (--trino-region)", "${TRINO_USER}", false));
-            }
-            if (Strings.isNullOrEmpty(trinoSpec.getPassword())) {
-                if (isHeadless) {
-                    throw new CliRequiredParameterMissingException("--trino-password");
+                if (Strings.isNullOrEmpty(trinoSpec.getPassword())) {
+                    if (isHeadless) {
+                        throw new CliRequiredParameterMissingException("--trino-password");
+                    }
+                    trinoSpec.setPassword(terminalReader.prompt(" (--trino-password)", "${TRINO_PASSWORD}", false));
                 }
-                trinoSpec.setPassword(terminalReader.prompt(" (--trino-password)", "${TRINO_PASSWORD}", false));
-            }
-        } else {
-            // todo
+                break;
+
+            case default_credentials: // todo
+
+                break;
+            default:
+                new RuntimeException("Given enum is not supported : " + trinoSpec.getAthenaAuthenticationMode());
         }
 
         if (Strings.isNullOrEmpty(trinoSpec.getAthenaRegion())) {

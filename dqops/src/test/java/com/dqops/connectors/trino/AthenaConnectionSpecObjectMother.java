@@ -23,8 +23,6 @@ import com.dqops.utils.BeanFactoryObjectMother;
 import org.springframework.beans.factory.BeanFactory;
 import org.testcontainers.containers.TrinoContainer;
 
-import java.util.Map;
-
 /**
  * Object mother for a testable Athena connection spec that provides access to the sandbox database.
  */
@@ -57,7 +55,7 @@ public class AthenaConnectionSpecObjectMother {
                 setCatalog("awsdatacatalog");
                 setAthenaWorkGroup("primary");
                 setAthenaOutputLocation("s3://dqops-athena-test/results/");
-                setProperties(Map.of("CredentialsProvider","DefaultChain"));    // can only by used in the local environment
+//                setProperties(Map.of("CredentialsProvider","DefaultChain"));    // can only by used in the local environment
                 setTrinoEngineType(TrinoEngineType.athena);
             }});
         }};

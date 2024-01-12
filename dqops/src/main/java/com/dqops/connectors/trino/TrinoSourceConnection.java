@@ -26,6 +26,7 @@ import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.storage.localfiles.credentials.*;
 import com.dqops.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
 import org.apache.parquet.Strings;
@@ -33,6 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import software.amazon.awssdk.profiles.Profile;
 import tech.tablesaw.api.Table;
 
 import java.sql.ResultSet;
@@ -130,18 +132,31 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
             dataSourceProperties.putAll(trinoSpec.getProperties());
         }
 
-        if(trinoSpec.getAthenaAuthenticationMode().equals(AthenaAuthenticationMode.iam)){ // todo: switch
-            String user = this.getSecretValueProvider().expandValue(trinoSpec.getUser(), secretValueLookupContext);
-            if (!Strings.isNullOrEmpty(user)){
-                dataSourceProperties.put("AccessKeyId", user);  // AccessKeyId alias for User
-            }
+        switch(trinoSpec.getAthenaAuthenticationMode()){
+            case iam:
+                String user = this.getSecretValueProvider().expandValue(trinoSpec.getUser(), secretValueLookupContext);
+                if (!Strings.isNullOrEmpty(user)){
+                    dataSourceProperties.put("AccessKeyId", user);  // AccessKeyId alias for User
+                }
 
-            String password = this.getSecretValueProvider().expandValue(trinoSpec.getPassword(), secretValueLookupContext);
-            if (!Strings.isNullOrEmpty(password)){
-                dataSourceProperties.put("SecretAccessKey", password);  // SecretAccessKey alias for Password
-            }
-        } else {
-            // todo
+                String password = this.getSecretValueProvider().expandValue(trinoSpec.getPassword(), secretValueLookupContext);
+                if (!Strings.isNullOrEmpty(password)){
+                    dataSourceProperties.put("SecretAccessKey", password);  // SecretAccessKey alias for Password
+                }
+                break;
+
+            case default_credentials:
+                Profile profile = AwsDefaultCredentialProfileProvider.provideDefaultProfile(secretValueLookupContext);
+                if(profile != null){
+                    dataSourceProperties.put("AccessKeyId", profile.property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID).orElse(null));  // AccessKeyId alias for User
+                    dataSourceProperties.put("SecretAccessKey", profile.property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY).orElse(null));  // SecretAccessKey alias for Password
+                } else {
+                    dataSourceProperties.put("CredentialsProvider", "DefaultChain");    // The use of the local ~/.aws/credentials file with default profile
+                }
+                break;
+
+            default:
+                new RuntimeException("Given enum is not supported : " + trinoSpec.getAthenaAuthenticationMode());
         }
 
         String region = this.getSecretValueProvider().expandValue(trinoSpec.getAthenaRegion(), secretValueLookupContext);
