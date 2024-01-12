@@ -97,6 +97,7 @@ nav:
           - Time zone configuration: "working-with-dqo/configure-scheduling-of-data-quality-checks/timezone-configuration.md"
           - Cron formatting: "working-with-dqo/configure-scheduling-of-data-quality-checks/cron-formatting.md"
       - Incidents and notifications: "working-with-dqo/managing-data-quality-incidents-with-dqops.md"
+      - Activate and deactivate multiple checks: "working-with-dqo/activate-and-deactivate-multiple-checks.md"
       - Set up data grouping: "working-with-dqo/set-up-data-grouping-for-data-quality-checks.md"
       - Compare tables: "working-with-dqo/compare-tables-between-data-sources.md"
       - User and access management: "working-with-dqo/access-management.md"
