@@ -22,6 +22,28 @@ nav:
       - DQOps user home: "dqo-concepts/dqops-user-home-folder.md"
       - Running checks: "dqo-concepts/running-data-quality-checks.md"
 ########## INCLUDE TYPES OF CHECKS REFERENCE - DO NOT MODIFY MANUALLY
+      - Categories of checks:
+        - 'dqo-concepts/types-of-data-quality-checks/index.md'
+        - Data accuracy: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-accuracy-data-quality-issues.md'
+        - Table availability: 'dqo-concepts/types-of-data-quality-checks/how-to-table-availability-issues-and-downtimes.md'
+        - Compare tables: 'dqo-concepts/types-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md'
+        - Custom SQL: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-with-custom-sql.md'
+        - Table schema changes: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-table-schema-changes.md'
+        - Timeliness and freshness: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md'
+        - Data volume: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md'
+        - Accepted values: 'dqo-concepts/types-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md'
+        - Numeric anomalies: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md'
+        - Blanks and whitespaces: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md'
+        - Bool values: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md'
+        - Data type detection: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-datatype-data-quality-issues.md'
+        - Date and time values: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-dates.md'
+        - Data integrity: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-data-integrity-issues.md'
+        - Null values: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-nulls-data-quality-issues.md'
+        - Numeric values: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md'
+        - Text patterns: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md'
+        - PII values: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-pii-data-quality-issues.md'
+        - Text values: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md'
+        - Uniqueness and duplicates: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md'
 ########## END INCLUDE TYPES OF CHECKS REFERENCE
       - Data quality sensors: "dqo-concepts/definition-of-data-quality-sensors.md"
       - Data quality rules: "dqo-concepts/definition-of-data-quality-rules.md"

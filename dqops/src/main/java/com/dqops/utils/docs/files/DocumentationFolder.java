@@ -99,7 +99,7 @@ public class DocumentationFolder {
      */
     public DocumentationMarkdownFile getFileByName(String fileName) {
         for (DocumentationMarkdownFile file : this.files) {
-            if (Objects.equals(folderName, file.getFileName())) {
+            if (Objects.equals(fileName, file.getFileName())) {
                 return file;
             }
         }

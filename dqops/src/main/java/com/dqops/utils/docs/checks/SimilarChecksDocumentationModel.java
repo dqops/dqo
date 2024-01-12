@@ -51,6 +51,11 @@ public class SimilarChecksDocumentationModel {
     private String checkClass;
 
     /**
+     * True for standard data quality checks, false for advanced.
+     */
+    private boolean standard;
+
+    /**
      * The name of the data quality dimension from the primary check class.
      */
     private String qualityDimension;

@@ -240,12 +240,12 @@ public class GenerateDocumentationPostProcessor {
         DocumentationFolder currentCheckCategoriesConceptDocFiles = DocumentationFolderFactory.loadCurrentFiles(categoriesConceptDocPath);
 
         currentCheckCategoriesConceptDocFiles.setFolderName("types-of-data-quality-checks");
-        DocumentationFolder dqoConceptsFolder = new DocumentationFolder("dqo-concepts", dqoConceptsDocPath);
-        dqoConceptsFolder.getSubFolders().add(currentCheckCategoriesConceptDocFiles);
+        DocumentationFolder currentDqoConceptsFolder = new DocumentationFolder("dqo-concepts", dqoConceptsDocPath);
+        currentDqoConceptsFolder.getSubFolders().add(currentCheckCategoriesConceptDocFiles);
 
         DocumentationFolder currentRootFolder = new DocumentationFolder("", docsRootFolderPath);
         currentRootFolder.getSubFolders().add(currentCheckDocFiles);
-        currentRootFolder.getSubFolders().add(dqoConceptsFolder);
+        currentRootFolder.getSubFolders().add(currentDqoConceptsFolder);
 
         DocumentationFolder renderedDocumentation = checkDocumentationGenerator.renderCheckDocumentation(projectRoot, currentRootFolder);
         renderedDocumentation.writeModifiedFiles(currentRootFolder);
@@ -257,7 +257,7 @@ public class GenerateDocumentationPostProcessor {
                 "########## INCLUDE CHECK REFERENCE - DO NOT MODIFY MANUALLY",
                 "########## END INCLUDE CHECK REFERENCE");
 
-        DocumentationFolder newTypesOfChecksFolder = renderedDocumentation.getFolderByName("dqo-concepts").getFolderByName("types-of-data-quality-checks");
+        DocumentationFolder newTypesOfChecksFolder = renderedDocumentation.getFolderByName("dqo-concepts/types-of-data-quality-checks");
         List<String> renderedCheckTypesIndexYaml = newTypesOfChecksFolder.generateMkDocsNavigation(6);
         FileContentIndexReplaceUtility.replaceContentLines(projectRoot.resolve("../mkdocs.yml"),
                 renderedCheckTypesIndexYaml,

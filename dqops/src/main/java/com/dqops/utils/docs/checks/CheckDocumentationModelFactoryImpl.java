@@ -283,6 +283,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
 
                 similarChecksDocumentationModel.setPrimaryCheckName(firstCheckName.replace('_', ' '));
                 similarChecksDocumentationModel.setCheckClass(firstCheckModel.getCheckModel().isStandard() ? "standard" : "advanced");
+                similarChecksDocumentationModel.setStandard(firstCheckModel.getCheckModel().isStandard());
                 similarChecksDocumentationModel.setQualityDimension(firstCheckModel.getCheckModel().getQualityDimension());
 
                 ClassJavadoc checkClassJavadoc = RuntimeJavadoc.getJavadoc(firstCheckModel.getCheckModel().getCheckSpec().getClass());

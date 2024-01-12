@@ -31,6 +31,52 @@ import java.util.stream.Stream;
  * Rule documentation generator that generates documentation for rules.
  */
 public class CheckDocumentationGeneratorImpl implements CheckDocumentationGenerator {
+    /**
+     * Alternative file names for check categories.
+     */
+    private static final Map<String, String> CATEGORY_FILE_NAMES = new LinkedHashMap<>() {{
+        put("timeliness", "how-to-detect-timeliness-and-freshness-issues.md");
+        put("schema", "how-to-detect-table-schema-changes.md");
+        put("patterns", "how-to-detect-bad-values-not-matching-patterns.md");
+        put("comparisons", "how-to-reconcile-data-and-detect-differences.md");
+        put("text", "how-to-detect-data-quality-issues-in-text-fields.md");
+        put("bool", "how-to-detect-data-quality-issues-in-bool-fields.md");
+        put("numeric", "how-to-detect-data-quality-issues-in-numeric-fields.md");
+        put("datetime", "how-to-detect-data-quality-issues-in-dates.md");
+        put("integrity", "how-to-detect-data-integrity-issues.md");
+        put("blanks", "how-to-detect-blank-and-whitespace-values.md");
+        put("availability", "how-to-table-availability-issues-and-downtimes.md");
+        put("accepted_values", "how-to-validate-accepted-values-in-columns.md");
+        put("volume", "how-to-detect-data-volume-issues-and-changes.md");
+        put("custom_sql", "how-to-detect-data-quality-issues-with-custom-sql.md");
+        put("uniqueness", "how-to-detect-data-uniqueness-issues-and-duplicates.md");
+    }};
+
+    /**
+     * Alternative link names for check categories used in the table of content of the mkdocs.yml.
+     */
+    private static final Map<String, String> CATEGORY_LINK_NAMES = new LinkedHashMap<>() {{
+        put("timeliness", "Timeliness and freshness");
+        put("schema", "Table schema changes");
+        put("pii", "PII values");
+        put("integrity", "Data integrity");
+        put("comparisons", "Compare tables");
+        put("blanks", "Blanks and whitespaces");
+        put("patterns", "Text patterns");
+        put("datatype", "Data type detection");
+        put("anomaly", "Numeric anomalies");
+        put("availability", "Table availability");
+        put("bool", "Bool values");
+        put("numeric", "Numeric values");
+        put("datetime", "Date and time values");
+        put("text", "Text values");
+        put("nulls", "Null values");
+        put("accuracy", "Data accuracy");
+        put("custom_sql", "Custom SQL");
+        put("volume", "Data volume");
+        put("uniqueness", "Uniqueness and duplicates");
+    }};
+
     private CheckDocumentationModelFactory checkDocumentationModelFactory;
 
     public CheckDocumentationGeneratorImpl(CheckDocumentationModelFactory checkDocumentationModelFactory) {
@@ -108,53 +154,66 @@ public class CheckDocumentationGeneratorImpl implements CheckDocumentationGenera
         }
 
         Template checkCategoryTemplate = HandlebarsDocumentationUtilities.compileTemplate("checks/check_category_index");
-        DocumentationFolder dqoConceptsFolder = new DocumentationFolder("dqo-concepts");
-        dqoConceptsFolder.setDirectPath(projectRootPath.resolve("../docs/dqo-concepts").toAbsolutePath().normalize());
-        DocumentationFolder categoriesOfChecksFolder = new DocumentationFolder("types-of-data-quality-checks");
-        categoriesOfChecksFolder.setDirectPath(dqoConceptsFolder.getDirectPath().resolve(categoriesOfChecksFolder.getFolderName()).toAbsolutePath().normalize());
-        dqoConceptsFolder.getSubFolders().add(categoriesOfChecksFolder);
+        DocumentationFolder typesOfChecksFolder = new DocumentationFolder("dqo-concepts/types-of-data-quality-checks");
+        typesOfChecksFolder.setLinkName("Categories of checks");
+        typesOfChecksFolder.setDirectPath(projectRootPath.resolve("../docs")
+                .resolve(typesOfChecksFolder.getFolderName()).toAbsolutePath().normalize());
 
         DocumentationFolder currentTypesOfChecksFolder = currentRootFolder.getFolderByName("dqo-concepts")
                 .getFolderByName("types-of-data-quality-checks");
 
+        DocumentationMarkdownFile newCategoryIndexFile = typesOfChecksFolder.addNestedFile("index.md");
+        DocumentationMarkdownFile currentCategoryIndexFile = currentTypesOfChecksFolder.getFileByName("index.md");
+        newCategoryIndexFile.setFileContent(currentCategoryIndexFile.getFileContent());
+
         for (CheckCategoryDocumentationModel checkCategoryModel : checkCategoryDocumentationModels) {
             String renderedCategoryContent = HandlebarsDocumentationUtilities.renderTemplate(checkCategoryTemplate, checkCategoryModel);
-            String categoryFileName = "how-to-detect-" + checkCategoryModel.getCategoryName().replace('_', '-') + "-data-quality-issues.md";
+            String categoryFileName =
+                    CATEGORY_FILE_NAMES.containsKey(checkCategoryModel.getCategoryName()) ? CATEGORY_FILE_NAMES.get(checkCategoryModel.getCategoryName()) :
+                    "how-to-detect-" + checkCategoryModel.getCategoryName().replace('_', '-') + "-data-quality-issues.md";
             String categoryNameWithSpaces = checkCategoryModel.getCategoryName().replace('_', ' ');
             String listOfTableChecksBeginMarker = "## List of " + categoryNameWithSpaces + " checks at a table level";
             String listOfColumnChecksBeginMarker = "## List of " + categoryNameWithSpaces + " checks at a column level";
 
             DocumentationMarkdownFile oldCategoryFileContent = currentTypesOfChecksFolder != null ?
                     currentTypesOfChecksFolder.getFileByName(categoryFileName) : null;
-            DocumentationMarkdownFile newCategoryFileContent = categoriesOfChecksFolder.getFileByName(categoryFileName);
+            DocumentationMarkdownFile newCategoryFileContent = typesOfChecksFolder.getFileByName(categoryFileName);
 
             if (newCategoryFileContent == null) {
-                newCategoryFileContent = categoriesOfChecksFolder.addNestedFile(categoryFileName);
+                newCategoryFileContent = typesOfChecksFolder.addNestedFile(categoryFileName);
 
                 if (oldCategoryFileContent == null) {
                     // creating a placeholder for a category
                     newCategoryFileContent.setFileContent(
                             "# Detecting data quality issues with " + categoryNameWithSpaces + "\n" +
-                            "The type of " + categoryNameWithSpaces + " is documented here\n" +
+                            "Read this guide to learn what types of data quality checks are supported in DQOps to detect issues related to " + categoryNameWithSpaces + ".\n" +
+                            "The data quality checks are configured in the `" + checkCategoryModel.getCategoryName() + "` category in DQOps.\n" +
                             "\n" +
-                            "## Detecting " + categoryNameWithSpaces + " at a table level\n" +
-                            "How to detect " + categoryNameWithSpaces + " on tables\n" +
+                            "## " + categoryNameWithSpaces + " category\n" +
+                            "Data quality checks that are detecting issues related to " + categoryNameWithSpaces + " are listed below.\n" +
+                            "\n" +
+                            "## Detecting " + categoryNameWithSpaces + " issues\n" +
+                            "How to detect " + categoryNameWithSpaces + " data quality issues.\n" +
                             "\n" +
                             listOfTableChecksBeginMarker + "\n" +
-                            "\n" +
-                            "## Detecting " + categoryNameWithSpaces + " at a column level\n" +
-                            "How to detect " + categoryNameWithSpaces + " on column\n" +
                             "\n" +
                             listOfColumnChecksBeginMarker + "\n" +
                             "\n" +
                             "## What's next\n" +
-                            "- Learn now to [run data quality checks](../running-data-quality-checks.md#targeting-a-category-of-checks) filtering by a check category name\n"
+                            "- Learn how to [run data quality checks](../running-data-quality-checks.md#targeting-a-category-of-checks) filtering by a check category name\n" +
+                            "- Learn how to [configure data quality checks](../configuring-data-quality-checks-and-rules.md) and apply alerting rules\n" +
+                            "- Read the definition of [data quality dimensions](../data-quality-dimensions.md) used by DQOps\n"
                             );
                 } else {
                     newCategoryFileContent.setFileContent(oldCategoryFileContent.getFileContent());
                 }
             }
 
+            String categoryNameLink = CATEGORY_LINK_NAMES.containsKey(checkCategoryModel.getCategoryName()) ?
+                    CATEGORY_LINK_NAMES.get(checkCategoryModel.getCategoryName()) :
+                    checkCategoryModel.getCategoryName().substring(0, 1).toUpperCase(Locale.ROOT) +
+                    checkCategoryModel.getCategoryName().substring(1).replace('_', ' ');
+            newCategoryFileContent.setLinkName(categoryNameLink);
             List<String> originalFileLines = newCategoryFileContent.getFileContent().lines().collect(Collectors.toList());
             List<String> renderedCategoryContentLines = renderedCategoryContent.lines().collect(Collectors.toList());
             List<String> newReplacedLines = FileContentIndexReplaceUtility.replaceLinesBetweenMarkers(originalFileLines, renderedCategoryContentLines,
@@ -171,7 +230,7 @@ public class CheckDocumentationGeneratorImpl implements CheckDocumentationGenera
         rootFolder.setFolderName("");
         rootFolder.setDirectPath(projectRootPath.resolve("../docs").toAbsolutePath().normalize());
         rootFolder.getSubFolders().add(checksFolder);
-        rootFolder.getSubFolders().add(dqoConceptsFolder);
+        rootFolder.getSubFolders().add(typesOfChecksFolder);
 
         return rootFolder;
     }

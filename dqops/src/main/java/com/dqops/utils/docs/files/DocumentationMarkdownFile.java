@@ -15,6 +15,7 @@
  */
 package com.dqops.utils.docs.files;
 
+import com.dqops.utils.exceptions.DqoRuntimeException;
 import lombok.Data;
 
 import java.nio.file.Path;
@@ -23,7 +24,7 @@ import java.nio.file.Path;
  * Content of a single markdown file.
  */
 @Data
-public class DocumentationMarkdownFile {
+public class DocumentationMarkdownFile implements Cloneable {
     /**
      * File name (without the folder path, but including the .md file extension).
      */
@@ -53,4 +54,17 @@ public class DocumentationMarkdownFile {
      * Excludes this file from adding to the table of content in mkdocs.yml file.
      */
     private boolean excludeFromTableOfContent;
+
+    /**
+     * Creates and returns a copy of this object.
+     */
+    @Override
+    public DocumentationMarkdownFile clone() {
+        try {
+            return (DocumentationMarkdownFile) super.clone();
+        }
+        catch (CloneNotSupportedException cex) {
+            throw new DqoRuntimeException("Clone not supported", cex);
+        }
+    }
 }
