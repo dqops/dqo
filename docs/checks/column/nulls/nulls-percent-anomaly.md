@@ -15,7 +15,7 @@ The **nulls percent anomaly** data quality check has the following variants for 
 
 Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 90 days.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_nulls_percent_anomaly|profiling| |Consistency|[null_percent](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[anomaly_stationary_percentile_moving_average](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|
 
@@ -1163,7 +1163,7 @@ ___
 
 Verifies that the null percent value in a column changes in a rate within a percentile boundary during the last 90 days.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_nulls_percent_anomaly|monitoring|daily|Consistency|[null_percent](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[anomaly_stationary_percentile_moving_average](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|
 
@@ -2313,7 +2313,7 @@ ___
 
 Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 90 days.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_nulls_percent_anomaly|partitioned|daily|Consistency|[null_percent](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[anomaly_stationary_percentile_moving_average](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|
 

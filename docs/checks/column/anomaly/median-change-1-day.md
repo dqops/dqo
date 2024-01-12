@@ -15,7 +15,7 @@ The **median change 1 day** data quality check has the following variants for ea
 
 Verifies that the median in a column changed in a fixed rate since the last readout from yesterday.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_median_change_1_day|profiling| |Consistency|[percentile](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[change_percent_1_day](../../../reference/rules/Change.md#change-percent-1-day)|
 
@@ -1311,7 +1311,7 @@ ___
 
 Verifies that the median in a column changed in a fixed rate since the last readout from yesterday.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_median_change_1_day|monitoring|daily|Consistency|[percentile](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[change_percent_1_day](../../../reference/rules/Change.md#change-percent-1-day)|
 
@@ -2609,7 +2609,7 @@ ___
 
 Verifies that the median in a column changed in a fixed rate since the last readout from yesterday.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_median_change_1_day|partitioned|daily|Consistency|[percentile](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[change_percent_1_day](../../../reference/rules/Change.md#change-percent-1-day)|
 

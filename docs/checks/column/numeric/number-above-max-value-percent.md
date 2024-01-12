@@ -15,7 +15,7 @@ The **number above max value percent** data quality check has the following vari
 
 The check counts the percentage of values in the column that is above the value defined by the user as a parameter.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_number_above_max_value_percent|profiling| |Validity|[number_above_max_value_percent](../../../reference/sensors/column/numeric-column-sensors.md#number-above-max-value-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 
@@ -1083,7 +1083,7 @@ ___
 
 The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_number_above_max_value_percent|monitoring|daily|Validity|[number_above_max_value_percent](../../../reference/sensors/column/numeric-column-sensors.md#number-above-max-value-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 
@@ -2153,7 +2153,7 @@ ___
 
 The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Stores the most recent value for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_number_above_max_value_percent|monitoring|monthly|Validity|[number_above_max_value_percent](../../../reference/sensors/column/numeric-column-sensors.md#number-above-max-value-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 
@@ -3223,7 +3223,7 @@ ___
 
 The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each daily partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_number_above_max_value_percent|partitioned|daily|Validity|[number_above_max_value_percent](../../../reference/sensors/column/numeric-column-sensors.md#number-above-max-value-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 
@@ -4315,7 +4315,7 @@ ___
 
 The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each monthly partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_number_above_max_value_percent|partitioned|monthly|Validity|[number_above_max_value_percent](../../../reference/sensors/column/numeric-column-sensors.md#number-above-max-value-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 

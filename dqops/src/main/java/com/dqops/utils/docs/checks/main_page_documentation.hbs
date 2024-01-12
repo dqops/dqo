@@ -9,8 +9,8 @@
 {{#if (gt checkTargets.length 1)}}#{{/if}}## **{{categoryName}}**
 {{categoryHelp}}
 {{#each checkGroups}}
-| Check name | Check type | Description | Class |
-|------------|------------|-------------|-------|
+| Data quality check name | Check type | Description | Class |
+|-------------------------|------------|-------------|-------|
 {{#each allChecks}}|[{{checkName}}](/docs/checks/{{target}}/{{categoryName}}/{{replace primaryCheckName " " "-"}}.md#{{replace checkName "_" "-"}})|{{checkType}}|{{checkHelp}}|{{checkClass}}|
 {{/each}}
 

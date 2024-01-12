@@ -15,7 +15,7 @@ The **distinct percent change 30 days** data quality check has the following var
 
 Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last month.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_distinct_percent_change_30_days|profiling| |Consistency|[distinct_percent](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[change_percent_30_days](../../../reference/rules/Change.md#change-percent-30-days)|
 
@@ -993,7 +993,7 @@ ___
 
 Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last month.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_distinct_percent_change_30_days|monitoring|daily|Consistency|[distinct_percent](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[change_percent_30_days](../../../reference/rules/Change.md#change-percent-30-days)|
 
@@ -1973,7 +1973,7 @@ ___
 
 Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from the last month.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_distinct_percent_change_30_days|partitioned|daily|Consistency|[distinct_percent](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[change_percent_30_days](../../../reference/rules/Change.md#change-percent-30-days)|
 

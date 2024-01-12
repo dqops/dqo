@@ -15,7 +15,7 @@ The **text matching name pattern percent** data quality check has the following 
 
 Verifies that the percentage of texts matching the name regular expression does not fall below the minimum accepted percentage.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_text_matching_name_pattern_percent|profiling| |Validity|[text_matching_name_pattern_percent](../../../reference/sensors/column/patterns-column-sensors.md#text-matching-name-pattern-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -1207,7 +1207,7 @@ ___
 
 Verifies that the percentage of texts matching the name regular expression does not fall below the minimum accepted percentage.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_text_matching_name_pattern_percent|monitoring|daily|Validity|[text_matching_name_pattern_percent](../../../reference/sensors/column/patterns-column-sensors.md#text-matching-name-pattern-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -2401,7 +2401,7 @@ ___
 
 Verifies that the percentage of texts matching the name regular expression does not fall below the minimum accepted percentage.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_text_matching_name_pattern_percent|monitoring|monthly|Validity|[text_matching_name_pattern_percent](../../../reference/sensors/column/patterns-column-sensors.md#text-matching-name-pattern-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -3595,7 +3595,7 @@ ___
 
 Verifies that the percentage of texts matching the name regular expression does not fall below the minimum accepted percentage.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_text_matching_name_pattern_percent|partitioned|daily|Validity|[text_matching_name_pattern_percent](../../../reference/sensors/column/patterns-column-sensors.md#text-matching-name-pattern-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -4811,7 +4811,7 @@ ___
 
 Verifies that the percentage of texts matching the name regular expression does not fall below the minimum accepted percentage.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_text_matching_name_pattern_percent|partitioned|monthly|Validity|[text_matching_name_pattern_percent](../../../reference/sensors/column/patterns-column-sensors.md#text-matching-name-pattern-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 

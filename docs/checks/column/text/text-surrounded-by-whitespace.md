@@ -15,7 +15,7 @@ The **text surrounded by whitespace** data quality check has the following varia
 
 The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_text_surrounded_by_whitespace|profiling| |Validity|[text_surrounded_by_whitespace_count](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -1423,7 +1423,7 @@ ___
 
 The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_text_surrounded_by_whitespace|monitoring|daily|Validity|[text_surrounded_by_whitespace_count](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -2833,7 +2833,7 @@ ___
 
 The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Stores the most recent captured value for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_text_surrounded_by_whitespace|monitoring|monthly|Validity|[text_surrounded_by_whitespace_count](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -4243,7 +4243,7 @@ ___
 
 The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_text_surrounded_by_whitespace|partitioned|daily|Validity|[text_surrounded_by_whitespace_count](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -5675,7 +5675,7 @@ ___
 
 The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_text_surrounded_by_whitespace|partitioned|monthly|Validity|[text_surrounded_by_whitespace_count](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 

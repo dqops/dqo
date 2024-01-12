@@ -15,7 +15,7 @@ The **not nulls count** data quality check has the following variants for each
 
 Detects empty columns. The default rule min_count&#x3D;1 verifies that the column has any values. Verifies that the number of not null values in a column does not exceed the minimum accepted count.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_not_nulls_count|profiling| |Completeness|[not_null_count](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[min_count](../../../reference/rules/Comparison.md#min-count)|
 
@@ -839,7 +839,7 @@ ___
 
 Detects empty columns. The default rule min_count&#x3D;1 verifies that the column has any values. Verifies that the number of not null values in a column does not exceed the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_not_nulls_count|monitoring|daily|Completeness|[not_null_count](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[min_count](../../../reference/rules/Comparison.md#min-count)|
 
@@ -1665,7 +1665,7 @@ ___
 
 Detects columns that are empty and have no values (with the rule threshold min_count&#x3D;1). Verifies that the number of not null values in a column does not exceed the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_not_nulls_count|monitoring|monthly|Completeness|[not_null_count](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[min_count](../../../reference/rules/Comparison.md#min-count)|
 
@@ -2491,7 +2491,7 @@ ___
 
 Detects empty columns. The default rule min_count&#x3D;1 verifies that the column has any values. Verifies that the number of not null values in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_not_nulls_count|partitioned|daily|Completeness|[not_null_count](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[min_count](../../../reference/rules/Comparison.md#min-count)|
 
@@ -3339,7 +3339,7 @@ ___
 
 Detects empty columns. The default rule min_count&#x3D;1 verifies that the column has any values. Verifies that the number of not null values in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_not_nulls_count|partitioned|monthly|Completeness|[not_null_count](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[min_count](../../../reference/rules/Comparison.md#min-count)|
 

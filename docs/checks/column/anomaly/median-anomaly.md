@@ -15,7 +15,7 @@ The **median anomaly** data quality check has the following variants for each
 
 Verifies that the median in a column changes in a rate within a percentile boundary during the last 90 days.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_median_anomaly|profiling| |Consistency|[percentile](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[anomaly_stationary_percentile_moving_average](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|
 
@@ -1305,7 +1305,7 @@ ___
 
 Verifies that the median in a column changes in a rate within a percentile boundary during the last 90 days.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_median_anomaly|monitoring|daily|Consistency|[percentile](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[anomaly_stationary_percentile_moving_average](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|
 
@@ -2597,7 +2597,7 @@ ___
 
 Verifies that the median in a column is within a percentile from measurements made during the last 90 days.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_median_anomaly|partitioned|daily|Consistency|[percentile](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[anomaly_stationary_percentile_moving_average](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|
 

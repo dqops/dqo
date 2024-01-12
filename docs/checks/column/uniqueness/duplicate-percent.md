@@ -15,7 +15,7 @@ The **duplicate percent** data quality check has the following variants for each
 
 Verifies that the percentage of duplicate values in a column does not exceed the maximum accepted percentage.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_duplicate_percent|profiling| |Uniqueness|[duplicate_percent](../../../reference/sensors/column/uniqueness-column-sensors.md#duplicate-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 
@@ -1031,7 +1031,7 @@ ___
 
 Verifies that the percentage of duplicate values in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_duplicate_percent|monitoring|daily|Uniqueness|[duplicate_percent](../../../reference/sensors/column/uniqueness-column-sensors.md#duplicate-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 
@@ -2049,7 +2049,7 @@ ___
 
 Verifies that the percentage of duplicate values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_duplicate_percent|monitoring|monthly|Uniqueness|[duplicate_percent](../../../reference/sensors/column/uniqueness-column-sensors.md#duplicate-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 
@@ -3067,7 +3067,7 @@ ___
 
 Verifies that the percent of duplicate values in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_duplicate_percent|partitioned|daily|Uniqueness|[duplicate_percent](../../../reference/sensors/column/uniqueness-column-sensors.md#duplicate-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 
@@ -4107,7 +4107,7 @@ ___
 
 Verifies that the percent of duplicate values in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each monthly partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_duplicate_percent|partitioned|monthly|Uniqueness|[duplicate_percent](../../../reference/sensors/column/uniqueness-column-sensors.md#duplicate-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 

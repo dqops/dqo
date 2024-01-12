@@ -15,7 +15,7 @@ The **text parsable to float percent** data quality check has the following vari
 
 Verifies that the percentage text values that are parsable to a float value in a column does not fall below the minimum accepted percentage
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_text_parsable_to_float_percent|profiling| |Validity|[text_parsable_to_float_percent](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-float-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -1059,7 +1059,7 @@ ___
 
 Verifies that the percentage text values that are parsable to a float value in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_text_parsable_to_float_percent|monitoring|daily|Validity|[text_parsable_to_float_percent](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-float-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -2105,7 +2105,7 @@ ___
 
 Verifies that the percentage text values that are parsable to a float value in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_text_parsable_to_float_percent|monitoring|monthly|Validity|[text_parsable_to_float_percent](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-float-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -3151,7 +3151,7 @@ ___
 
 Verifies that the percentage text values that are parsable to a float value in a column does not fall below the minimum accepted percentage. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_text_parsable_to_float_percent|partitioned|daily|Validity|[text_parsable_to_float_percent](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-float-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -4219,7 +4219,7 @@ ___
 
 Verifies that the percentage text values that are parsable to a float value in a column does not fall below the minimum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_text_parsable_to_float_percent|partitioned|monthly|Validity|[text_parsable_to_float_percent](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-float-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 

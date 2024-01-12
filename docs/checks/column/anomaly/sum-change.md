@@ -15,7 +15,7 @@ The **sum change** data quality check has the following variants for each
 
 Verifies that the sum in a column changed in a fixed rate since the last readout.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_sum_change|profiling| |Consistency|[sum](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[change_percent](../../../reference/rules/Change.md#change-percent)|
 
@@ -811,7 +811,7 @@ ___
 
 Verifies that the sum in a column changed in a fixed rate since the last readout.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_sum_change|monitoring|daily|Consistency|[sum](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[change_percent](../../../reference/rules/Change.md#change-percent)|
 
@@ -1609,7 +1609,7 @@ ___
 
 Verifies that the sum in a column changed in a fixed rate since the last readout.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_sum_change|monitoring|monthly|Consistency|[sum](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[change_percent](../../../reference/rules/Change.md#change-percent)|
 
@@ -2407,7 +2407,7 @@ ___
 
 Verifies that the sum in a column changed in a fixed rate since the last readout.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_sum_change|partitioned|daily|Consistency|[sum](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[change_percent](../../../reference/rules/Change.md#change-percent)|
 
@@ -3227,7 +3227,7 @@ ___
 
 Verifies that the sum in a column changed in a fixed rate since the last readout.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_sum_change|partitioned|monthly|Consistency|[sum](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[change_percent](../../../reference/rules/Change.md#change-percent)|
 

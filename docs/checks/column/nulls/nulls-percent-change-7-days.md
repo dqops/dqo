@@ -15,7 +15,7 @@ The **nulls percent change 7 days** data quality check has the following variant
 
 Verifies that the null percent value in a column changed in a fixed rate since last readout from last week.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_nulls_percent_change_7_days|profiling| |Consistency|[null_percent](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[change_percent_7_days](../../../reference/rules/Change.md#change-percent-7-days)|
 
@@ -1169,7 +1169,7 @@ ___
 
 Verifies that the null percent value in a column changed in a fixed rate since the last readout from the last week.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_nulls_percent_change_7_days|monitoring|daily|Consistency|[null_percent](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[change_percent_7_days](../../../reference/rules/Change.md#change-percent-7-days)|
 
@@ -2325,7 +2325,7 @@ ___
 
 Verifies that the null percent value in a column changed in a fixed rate since the last readout from the last week.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_nulls_percent_change_7_days|partitioned|daily|Consistency|[null_percent](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[change_percent_7_days](../../../reference/rules/Change.md#change-percent-7-days)|
 

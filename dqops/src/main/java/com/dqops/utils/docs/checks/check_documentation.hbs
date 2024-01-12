@@ -16,7 +16,7 @@ The **{{replace primaryCheckName "_" " "}}** data quality check has the followin
 
 {{checkHelp}}
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |{{checkName}}|{{checkType}}|{{#if timeScale}}{{timeScale}}{{else}} {{/if}}|{{qualityDimension}}|[{{sensor.sensorName}}](../../../reference/sensors/{{target}}/{{sensor.category}}-{{target}}-sensors.md#{{replace sensor.sensorName "_" "-"}})|[{{rule.ruleName}}](../../../reference/rules/{{capitalizeFirst rule.category}}.md#{{replace rule.ruleName "_" "-"}})|
 

@@ -15,7 +15,7 @@ The **mean change 7 days** data quality check has the following variants for eac
 
 Verifies that the mean value in a column changed in a fixed rate since the last readout from the last week.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_mean_change_7_days|profiling| |Consistency|[mean](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[change_percent_7_days](../../../reference/rules/Change.md#change-percent-7-days)|
 
@@ -817,7 +817,7 @@ ___
 
 Verifies that the mean value in a column changed in a fixed rate since last readout from last week.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_mean_change_7_days|monitoring|daily|Consistency|[mean](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[change_percent_7_days](../../../reference/rules/Change.md#change-percent-7-days)|
 
@@ -1621,7 +1621,7 @@ ___
 
 Verifies that the mean value in a column changed in a fixed rate since the last readout from the last week.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_mean_change_7_days|partitioned|daily|Consistency|[mean](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[change_percent_7_days](../../../reference/rules/Change.md#change-percent-7-days)|
 

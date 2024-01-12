@@ -15,7 +15,7 @@ The **datetime value in range date percent** data quality check has the followin
 
 Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_datetime_value_in_range_date_percent|profiling| |Validity|[value_in_range_date_percent](../../../reference/sensors/column/datetime-column-sensors.md#value-in-range-date-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 
@@ -1450,7 +1450,7 @@ ___
 
 Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_datetime_value_in_range_date_percent|monitoring|daily|Validity|[value_in_range_date_percent](../../../reference/sensors/column/datetime-column-sensors.md#value-in-range-date-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 
@@ -2887,7 +2887,7 @@ ___
 
 Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_datetime_value_in_range_date_percent|monitoring|monthly|Validity|[value_in_range_date_percent](../../../reference/sensors/column/datetime-column-sensors.md#value-in-range-date-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 
@@ -4324,7 +4324,7 @@ ___
 
 Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_datetime_value_in_range_date_percent|partitioned|daily|Validity|[value_in_range_date_percent](../../../reference/sensors/column/datetime-column-sensors.md#value-in-range-date-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 
@@ -5780,7 +5780,7 @@ ___
 
 Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_datetime_value_in_range_date_percent|partitioned|monthly|Validity|[value_in_range_date_percent](../../../reference/sensors/column/datetime-column-sensors.md#value-in-range-date-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 

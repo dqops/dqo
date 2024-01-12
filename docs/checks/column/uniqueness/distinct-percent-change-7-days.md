@@ -15,7 +15,7 @@ The **distinct percent change 7 days** data quality check has the following vari
 
 Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last week.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_distinct_percent_change_7_days|profiling| |Consistency|[distinct_percent](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[change_percent_7_days](../../../reference/rules/Change.md#change-percent-7-days)|
 
@@ -993,7 +993,7 @@ ___
 
 Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last week.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_distinct_percent_change_7_days|monitoring|daily|Consistency|[distinct_percent](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[change_percent_7_days](../../../reference/rules/Change.md#change-percent-7-days)|
 
@@ -1973,7 +1973,7 @@ ___
 
 Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from the last week.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_distinct_percent_change_7_days|partitioned|daily|Consistency|[distinct_percent](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[change_percent_7_days](../../../reference/rules/Change.md#change-percent-7-days)|
 

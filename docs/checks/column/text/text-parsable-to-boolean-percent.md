@@ -15,7 +15,7 @@ The **text parsable to boolean percent** data quality check has the following va
 
 Verifies that the percentage of text values that are parsable to a boolean value does not fall below the minimum accepted percentage, text values identified as boolean placeholders are: 0, 1, true, false, t, f, yes, no, y, n.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_text_parsable_to_boolean_percent|profiling| |Validity|[text_parsable_to_boolean_percent](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-boolean-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -1203,7 +1203,7 @@ ___
 
 Verifies that the percentage of text values that are parsable to a boolean value does not fall below the minimum accepted percentage, text values identified as boolean placeholders are: 0, 1, true, false, t, f, yes, no, y, n. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_text_parsable_to_boolean_percent|monitoring|daily|Validity|[text_parsable_to_boolean_percent](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-boolean-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -2393,7 +2393,7 @@ ___
 
 Verifies that the percentage of text values that are parsable to a boolean value does not fall below the minimum accepted percentage, text values identified as boolean placeholders are: 0, 1, true, false, t, f, yes, no, y, n. Stores the most recent captured value for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_text_parsable_to_boolean_percent|monitoring|monthly|Validity|[text_parsable_to_boolean_percent](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-boolean-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -3583,7 +3583,7 @@ ___
 
 Verifies that the percentage of text values that are parsable to a boolean value does not fall below the minimum accepted percentage, text values identified as boolean placeholders are: 0, 1, true, false, t, f, yes, no, y, n. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_text_parsable_to_boolean_percent|partitioned|daily|Validity|[text_parsable_to_boolean_percent](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-boolean-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -4795,7 +4795,7 @@ ___
 
 Verifies that the percentage of text values that are parsable to a boolean value does not fall below the minimum accepted percentage, text values identified as boolean placeholders are: 0, 1, true, false, t, f, yes, no, y, n. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_text_parsable_to_boolean_percent|partitioned|monthly|Validity|[text_parsable_to_boolean_percent](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-boolean-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 

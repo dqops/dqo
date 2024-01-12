@@ -15,7 +15,7 @@ The **column count** data quality check has the following variants for each
 
 Detects if the number of column matches an expected number. Retrieves the metadata of the monitored table, counts the number of columns and compares it to an expected value (an expected number of columns).
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_column_count|profiling| |Completeness|[column_count](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[equals_integer](../../../reference/rules/Comparison.md#equals-integer)|
 
@@ -95,7 +95,7 @@ ___
 
 Detects if the number of column matches an expected number. Retrieves the metadata of the monitored table, counts the number of columns and compares it to an expected value (an expected number of columns). Stores the most recent column count for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_column_count|monitoring|daily|Completeness|[column_count](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[equals_integer](../../../reference/rules/Comparison.md#equals-integer)|
 
@@ -176,7 +176,7 @@ ___
 
 Detects if the number of column matches an expected number. Retrieves the metadata of the monitored table, counts the number of columns and compares it to an expected value (an expected number of columns). Stores the most recent column count for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_column_count|monitoring|monthly|Completeness|[column_count](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[equals_integer](../../../reference/rules/Comparison.md#equals-integer)|
 

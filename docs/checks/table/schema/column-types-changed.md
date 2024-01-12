@@ -18,7 +18,7 @@ The **column types changed** data quality check has the following variants for e
 
 Detects if new columns were added, removed or their data types have changed. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names and the data types (including the length, scale, precision, nullability). Compares the current hash to the previously known hash to detect any changes to the list of columns or their types.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_column_types_changed|profiling| |Consistency|[column_types_hash](../../../reference/sensors/table/schema-table-sensors.md#column-types-hash)|[value_changed](../../../reference/rules/Comparison.md#value-changed)|
 
@@ -95,7 +95,7 @@ ___
 
 Detects if new columns were added, removed or their data types have changed since the most recent day. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names and the data types (including the length, scale, precision, nullability). Compares the current hash to the previously known hash to detect any changes to the list of columns or their types.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_column_types_changed|monitoring|daily|Consistency|[column_types_hash](../../../reference/sensors/table/schema-table-sensors.md#column-types-hash)|[value_changed](../../../reference/rules/Comparison.md#value-changed)|
 
@@ -173,7 +173,7 @@ ___
 
 Detects if new columns were added, removed or their data types have changed since the last month. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names and the data types (including the length, scale, precision, nullability). Compares the current hash to the previously known hash to detect any changes to the list of columns or their types.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_column_types_changed|monitoring|monthly|Consistency|[column_types_hash](../../../reference/sensors/table/schema-table-sensors.md#column-types-hash)|[value_changed](../../../reference/rules/Comparison.md#value-changed)|
 

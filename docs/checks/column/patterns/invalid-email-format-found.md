@@ -15,7 +15,7 @@ The **invalid email format found** data quality check has the following variants
 
 Verifies that the number of invalid emails in a text column does not exceed the maximum accepted count.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_invalid_email_format_found|profiling| |Validity|[invalid_email_format_count](../../../reference/sensors/column/patterns-column-sensors.md#invalid-email-format-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -1071,7 +1071,7 @@ ___
 
 Verifies that the number of invalid emails in a text column does not exceed the maximum accepted count.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_invalid_email_format_found|monitoring|daily|Validity|[invalid_email_format_count](../../../reference/sensors/column/patterns-column-sensors.md#invalid-email-format-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -2129,7 +2129,7 @@ ___
 
 Verifies that the number of invalid emails in a text column does not exceed the maximum accepted count.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_invalid_email_format_found|monitoring|monthly|Validity|[invalid_email_format_count](../../../reference/sensors/column/patterns-column-sensors.md#invalid-email-format-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -3187,7 +3187,7 @@ ___
 
 Verifies that the number of invalid emails in a text column does not exceed the maximum accepted count.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_invalid_email_format_found|partitioned|daily|Validity|[invalid_email_format_count](../../../reference/sensors/column/patterns-column-sensors.md#invalid-email-format-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -4267,7 +4267,7 @@ ___
 
 Verifies that the number of invalid emails in a text column does not exceed the maximum accepted count.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_invalid_email_format_found|partitioned|monthly|Validity|[invalid_email_format_count](../../../reference/sensors/column/patterns-column-sensors.md#invalid-email-format-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 

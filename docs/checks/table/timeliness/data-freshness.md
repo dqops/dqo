@@ -17,7 +17,7 @@ The **data freshness** data quality check has the following variants for each
 
 Calculates the number of days since the most recent event timestamp (freshness)
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_data_freshness|profiling| |Timeliness|[data_freshness](../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)|[max_days](../../../reference/rules/Comparison.md#max-days)|
 
@@ -1495,7 +1495,7 @@ ___
 
 Daily  calculating the number of days since the most recent event timestamp (freshness)
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_data_freshness|monitoring|daily|Timeliness|[data_freshness](../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)|[max_days](../../../reference/rules/Comparison.md#max-days)|
 
@@ -2975,7 +2975,7 @@ ___
 
 Monthly monitoring calculating the number of days since the most recent event timestamp (freshness)
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_data_freshness|monitoring|monthly|Timeliness|[data_freshness](../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)|[max_days](../../../reference/rules/Comparison.md#max-days)|
 
@@ -4455,7 +4455,7 @@ ___
 
 Daily partitioned check calculating the number of days since the most recent event timestamp (freshness)
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_data_freshness|partitioned|daily|Timeliness|[data_freshness](../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)|[max_days](../../../reference/rules/Comparison.md#max-days)|
 
@@ -5955,7 +5955,7 @@ ___
 
 Monthly partitioned check calculating the number of days since the most recent event (freshness)
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_data_freshness|partitioned|monthly|Timeliness|[data_freshness](../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)|[max_days](../../../reference/rules/Comparison.md#max-days)|
 

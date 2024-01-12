@@ -16,7 +16,7 @@ The **detected datatype in text** data quality check has the following variants 
 
 Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_detected_datatype_in_text|profiling| |Consistency|[string_datatype_detect](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[detected_datatype_equals](../../../reference/rules/Comparison.md#detected-datatype-equals)|
 
@@ -3656,7 +3656,7 @@ ___
 
 Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_detected_datatype_in_text|monitoring|daily|Consistency|[string_datatype_detect](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[detected_datatype_equals](../../../reference/rules/Comparison.md#detected-datatype-equals)|
 
@@ -7298,7 +7298,7 @@ ___
 
 Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores the most recent row count for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_detected_datatype_in_text|monitoring|monthly|Consistency|[string_datatype_detect](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[detected_datatype_equals](../../../reference/rules/Comparison.md#detected-datatype-equals)|
 
@@ -10940,7 +10940,7 @@ ___
 
 Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Creates a separate data quality check (and an alert) for each daily partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_detected_datatype_in_text|partitioned|daily|Consistency|[string_datatype_detect](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[detected_datatype_equals](../../../reference/rules/Comparison.md#detected-datatype-equals)|
 
@@ -14602,7 +14602,7 @@ ___
 
 Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Creates a separate data quality check (and an alert) for each monthly partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_detected_datatype_in_text|partitioned|monthly|Consistency|[string_datatype_detect](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[detected_datatype_equals](../../../reference/rules/Comparison.md#detected-datatype-equals)|
 

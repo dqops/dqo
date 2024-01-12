@@ -18,7 +18,7 @@ The **data staleness** data quality check has the following variants for each
 
 Calculates the time difference in days between the current date and the most recent data ingestion timestamp (staleness)
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_data_staleness|profiling| |Timeliness|[data_staleness](../../../reference/sensors/table/timeliness-table-sensors.md#data-staleness)|[max_days](../../../reference/rules/Comparison.md#max-days)|
 
@@ -1498,7 +1498,7 @@ ___
 
 Daily  calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_data_staleness|monitoring|daily|Timeliness|[data_staleness](../../../reference/sensors/table/timeliness-table-sensors.md#data-staleness)|[max_days](../../../reference/rules/Comparison.md#max-days)|
 
@@ -2980,7 +2980,7 @@ ___
 
 Monthly monitoring calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_data_staleness|monitoring|monthly|Timeliness|[data_staleness](../../../reference/sensors/table/timeliness-table-sensors.md#data-staleness)|[max_days](../../../reference/rules/Comparison.md#max-days)|
 
@@ -4462,7 +4462,7 @@ ___
 
 Daily partitioned check calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_data_staleness|partitioned|daily|Timeliness|[data_staleness](../../../reference/sensors/table/timeliness-table-sensors.md#data-staleness)|[max_days](../../../reference/rules/Comparison.md#max-days)|
 
@@ -5964,7 +5964,7 @@ ___
 
 Monthly partitioned check calculating the time difference in days between the current date and the most recent data data ingestion timestamp (staleness)
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_data_staleness|partitioned|monthly|Timeliness|[data_staleness](../../../reference/sensors/table/timeliness-table-sensors.md#data-staleness)|[max_days](../../../reference/rules/Comparison.md#max-days)|
 

@@ -15,7 +15,7 @@ The **non negative values** data quality check has the following variants for ea
 
 Verifies that the number of non-negative values in a column does not exceed the maximum accepted count.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_non_negative_values|profiling| |Validity|[non_negative_count](../../../reference/sensors/column/numeric-column-sensors.md#non-negative-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -1033,7 +1033,7 @@ ___
 
 Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_non_negative_values|monitoring|daily|Validity|[non_negative_count](../../../reference/sensors/column/numeric-column-sensors.md#non-negative-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -2053,7 +2053,7 @@ ___
 
 Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Stores the most recent value for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_non_negative_values|monitoring|monthly|Validity|[non_negative_count](../../../reference/sensors/column/numeric-column-sensors.md#non-negative-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -3073,7 +3073,7 @@ ___
 
 Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_non_negative_values|partitioned|daily|Validity|[non_negative_count](../../../reference/sensors/column/numeric-column-sensors.md#non-negative-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -4115,7 +4115,7 @@ ___
 
 Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_non_negative_values|partitioned|monthly|Validity|[non_negative_count](../../../reference/sensors/column/numeric-column-sensors.md#non-negative-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 

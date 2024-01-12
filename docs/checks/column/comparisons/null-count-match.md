@@ -16,7 +16,7 @@ The **null count match** data quality check has the following variants for each
 
 Verifies that percentage of the difference between the count of null values in a tested column in a parent table and the count of null values in a column in the reference table. The difference must be below defined percentage thresholds.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_null_count_match|profiling| |Accuracy|[null_count](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
 
@@ -552,7 +552,7 @@ ___
 
 Verifies that percentage of the difference between the count of null values in a tested column in a parent table and the count of null values in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_null_count_match|monitoring|daily|Accuracy|[null_count](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
 
@@ -1089,7 +1089,7 @@ ___
 
 Verifies that percentage of the difference between the count of null values in a tested column in a parent table and the count of null values in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_null_count_match|monitoring|monthly|Accuracy|[null_count](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
 
@@ -1626,7 +1626,7 @@ ___
 
 Verifies that percentage of the difference between the count of null values in a tested column in a parent table and the count of null values in a column in the reference table. The difference must be below defined percentage thresholds. Compares each daily partition (each day of data) between the compared table and the reference table (the source of truth).
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_null_count_match|partitioned|daily|Accuracy|[null_count](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
 
@@ -2177,7 +2177,7 @@ ___
 
 Verifies that percentage of the difference between the count of null values in a tested column in a parent table and the count of null values in a column in the reference table. The difference must be below defined percentage thresholds. Compares each monthly partition (each month of data) between the compared table and the reference table (the source of truth).
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_null_count_match|partitioned|monthly|Accuracy|[null_count](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
 

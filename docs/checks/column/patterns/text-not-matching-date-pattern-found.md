@@ -15,7 +15,7 @@ The **text not matching date pattern found** data quality check has the followin
 
 Verifies that the number of texts not matching the date format regular expression does not exceed the maximum accepted count.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_text_not_matching_date_pattern_found|profiling| |Validity|[text_not_matching_date_pattern_count](../../../reference/sensors/column/patterns-column-sensors.md#text-not-matching-date-pattern-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -1523,7 +1523,7 @@ ___
 
 Verifies that the number of texts not matching the date format regular expression does not exceed the maximum accepted count.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_text_not_matching_date_pattern_found|monitoring|daily|Validity|[text_not_matching_date_pattern_count](../../../reference/sensors/column/patterns-column-sensors.md#text-not-matching-date-pattern-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -3033,7 +3033,7 @@ ___
 
 Verifies that the number of texts not matching the date format regular expression does not exceed the maximum accepted count.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_text_not_matching_date_pattern_found|monitoring|monthly|Validity|[text_not_matching_date_pattern_count](../../../reference/sensors/column/patterns-column-sensors.md#text-not-matching-date-pattern-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -4543,7 +4543,7 @@ ___
 
 Verifies that the number of texts not matching the date format regular expression does not exceed the maximum accepted count.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_text_not_matching_date_pattern_found|partitioned|daily|Validity|[text_not_matching_date_pattern_count](../../../reference/sensors/column/patterns-column-sensors.md#text-not-matching-date-pattern-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -6075,7 +6075,7 @@ ___
 
 Verifies that the number of texts not matching the date format regular expression does not exceed the maximum accepted count.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_text_not_matching_date_pattern_found|partitioned|monthly|Validity|[text_not_matching_date_pattern_count](../../../reference/sensors/column/patterns-column-sensors.md#text-not-matching-date-pattern-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 

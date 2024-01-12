@@ -15,7 +15,7 @@ The **valid uuid format percent** data quality check has the following variants 
 
 Verifies that the percentage of valid UUID in a text column does not fall below the minimum accepted percentage.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_valid_uuid_format_percent|profiling| |Validity|[valid_uuid_format_percent](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -1203,7 +1203,7 @@ ___
 
 Verifies that the percentage of valid UUID in a text column does not fall below the minimum accepted percentage.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_valid_uuid_format_percent|monitoring|daily|Validity|[valid_uuid_format_percent](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -2393,7 +2393,7 @@ ___
 
 Verifies that the percentage of valid UUID in a text column does not fall below the minimum accepted percentage.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_valid_uuid_format_percent|monitoring|monthly|Validity|[valid_uuid_format_percent](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -3583,7 +3583,7 @@ ___
 
 Verifies that the percentage of valid UUID in a text column does not fall below the minimum accepted percentage.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_valid_uuid_format_percent|partitioned|daily|Validity|[valid_uuid_format_percent](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -4795,7 +4795,7 @@ ___
 
 Verifies that the percentage of valid UUID in a text column does not fall below the minimum accepted percentage.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_valid_uuid_format_percent|partitioned|monthly|Validity|[valid_uuid_format_percent](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 

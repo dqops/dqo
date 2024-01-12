@@ -15,7 +15,7 @@ The **row count change 1 day** data quality check has the following variants for
 
 Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from yesterday. Allows for exact match to readouts from yesterday or past readouts lookup.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_row_count_change_1_day|profiling| |Consistency|[row_count](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[change_percent_1_day](../../../reference/rules/Change.md#change-percent-1-day)|
 
@@ -789,7 +789,7 @@ ___
 
 Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from yesterday. Allows for exact match to readouts from yesterday or past readouts lookup.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_row_count_change_1_day|monitoring|daily|Consistency|[row_count](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[change_percent_1_day](../../../reference/rules/Change.md#change-percent-1-day)|
 
@@ -1565,7 +1565,7 @@ ___
 
 Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from yesterday. Allows for exact match to readouts from yesterday or past readouts lookup.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_row_count_change_1_day|partitioned|daily|Consistency|[row_count](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[change_percent_1_day](../../../reference/rules/Change.md#change-percent-1-day)|
 

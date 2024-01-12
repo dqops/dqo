@@ -1,0 +1,4 @@
+| Data quality check name | Data quality dimension | Description | Class |
+|-------------------------|------------------------|-------------|-------|
+{{#each checkGroups}}|[{{replace primaryCheckName " " "_"}}](/docs/checks/{{target}}/{{category}}/{{replace primaryCheckName " " "-"}}.md)|{{qualityDimension}}|{{checkSpecClassJavaDoc}}|{{checkClass}}|
+{{/each}}

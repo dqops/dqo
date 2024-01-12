@@ -15,7 +15,7 @@ The **row count change 7 days** data quality check has the following variants fo
 
 Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last week. Allows for exact match to readouts from 7 days ago or past readouts lookup.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_row_count_change_7_days|profiling| |Consistency|[row_count](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[change_percent_7_days](../../../reference/rules/Change.md#change-percent-7-days)|
 
@@ -789,7 +789,7 @@ ___
 
 Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from the last week. Allows for exact match to readouts from 7 days ago or past readouts lookup.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_row_count_change_7_days|monitoring|daily|Consistency|[row_count](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[change_percent_7_days](../../../reference/rules/Change.md#change-percent-7-days)|
 
@@ -1565,7 +1565,7 @@ ___
 
 Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last week. Allows for exact match to readouts from 7 days ago or past readouts lookup.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_row_count_change_7_days|partitioned|daily|Consistency|[row_count](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[change_percent_7_days](../../../reference/rules/Change.md#change-percent-7-days)|
 

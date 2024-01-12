@@ -15,7 +15,7 @@ The **empty text found** data quality check has the following variants for each
 
 Verifies that empty strings in a column does not exceed the maximum accepted count.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_empty_text_found|profiling| |Completeness|[empty_text_count](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -1209,7 +1209,7 @@ ___
 
 Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_empty_text_found|monitoring|daily|Completeness|[empty_text_count](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -2405,7 +2405,7 @@ ___
 
 Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_empty_text_found|monitoring|monthly|Completeness|[empty_text_count](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -3601,7 +3601,7 @@ ___
 
 Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_empty_text_found|partitioned|daily|Completeness|[empty_text_count](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -4819,7 +4819,7 @@ ___
 
 Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_empty_text_found|partitioned|monthly|Completeness|[empty_text_count](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 

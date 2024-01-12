@@ -15,7 +15,7 @@ The **distinct count change 1 day** data quality check has the following variant
 
 Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from yesterday.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_distinct_count_change_1_day|profiling| |Consistency|[distinct_count](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[change_percent_1_day](../../../reference/rules/Change.md#change-percent-1-day)|
 
@@ -905,7 +905,7 @@ ___
 
 Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from yesterday.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_distinct_count_change_1_day|monitoring|daily|Consistency|[distinct_count](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[change_percent_1_day](../../../reference/rules/Change.md#change-percent-1-day)|
 
@@ -1797,7 +1797,7 @@ ___
 
 Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from yesterday.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_distinct_count_change_1_day|partitioned|daily|Consistency|[distinct_count](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[change_percent_1_day](../../../reference/rules/Change.md#change-percent-1-day)|
 

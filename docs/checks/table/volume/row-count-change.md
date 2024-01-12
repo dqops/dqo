@@ -15,7 +15,7 @@ The **row count change** data quality check has the following variants for each
 
 Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_row_count_change|profiling| |Consistency|[row_count](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[change_percent](../../../reference/rules/Change.md#change-percent)|
 
@@ -783,7 +783,7 @@ ___
 
 Verifies that the total row count of the tested table has changed by a fixed rate since the last day with a row count captured.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_row_count_change|monitoring|daily|Consistency|[row_count](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[change_percent](../../../reference/rules/Change.md#change-percent)|
 
@@ -1553,7 +1553,7 @@ ___
 
 Verifies that the total row count of the tested table has changed by a fixed rate since the last month.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_row_count_change|monitoring|monthly|Consistency|[row_count](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[change_percent](../../../reference/rules/Change.md#change-percent)|
 
@@ -2323,7 +2323,7 @@ ___
 
 Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_row_count_change|partitioned|daily|Consistency|[row_count](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[change_percent](../../../reference/rules/Change.md#change-percent)|
 
@@ -3115,7 +3115,7 @@ ___
 
 Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_row_count_change|partitioned|monthly|Consistency|[row_count](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[change_percent](../../../reference/rules/Change.md#change-percent)|
 

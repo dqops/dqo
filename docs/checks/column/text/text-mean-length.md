@@ -15,7 +15,7 @@ The **text mean length** data quality check has the following variants for each
 
 Verifies that the length of a text in a column does not exceed the mean accepted length
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_text_mean_length|profiling| |Reasonableness|[text_mean_length](../../../reference/sensors/column/text-column-sensors.md#text-mean-length)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
 
@@ -1163,7 +1163,7 @@ ___
 
 Verifies that the length of a text in a column does not exceed the mean accepted length. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_text_mean_length|monitoring|daily|Reasonableness|[text_mean_length](../../../reference/sensors/column/text-column-sensors.md#text-mean-length)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
 
@@ -2313,7 +2313,7 @@ ___
 
 Verifies that the length of a text in a column does not exceed the mean accepted length. Stores the most recent captured value for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_text_mean_length|monitoring|monthly|Reasonableness|[text_mean_length](../../../reference/sensors/column/text-column-sensors.md#text-mean-length)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
 
@@ -3463,7 +3463,7 @@ ___
 
 Verifies that the length of a text in a column does not exceed the mean accepted length. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_text_mean_length|partitioned|daily|Reasonableness|[text_mean_length](../../../reference/sensors/column/text-column-sensors.md#text-mean-length)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
 
@@ -4635,7 +4635,7 @@ ___
 
 Verifies that the length of a text in a column does not exceed the mean accepted length. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_text_mean_length|partitioned|monthly|Reasonableness|[text_mean_length](../../../reference/sensors/column/text-column-sensors.md#text-mean-length)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
 

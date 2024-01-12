@@ -15,7 +15,7 @@ The **distinct count change** data quality check has the following variants for 
 
 Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_distinct_count_change|profiling| |Consistency|[distinct_count](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[change_percent](../../../reference/rules/Change.md#change-percent)|
 
@@ -899,7 +899,7 @@ ___
 
 Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_distinct_count_change|monitoring|daily|Consistency|[distinct_count](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[change_percent](../../../reference/rules/Change.md#change-percent)|
 
@@ -1785,7 +1785,7 @@ ___
 
 Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_distinct_count_change|monitoring|monthly|Consistency|[distinct_count](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[change_percent](../../../reference/rules/Change.md#change-percent)|
 
@@ -2671,7 +2671,7 @@ ___
 
 Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_distinct_count_change|partitioned|daily|Consistency|[distinct_count](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[change_percent](../../../reference/rules/Change.md#change-percent)|
 
@@ -3579,7 +3579,7 @@ ___
 
 Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_distinct_count_change|partitioned|monthly|Consistency|[distinct_count](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[change_percent](../../../reference/rules/Change.md#change-percent)|
 

@@ -21,6 +21,8 @@ nav:
       - Configuring checks: "dqo-concepts/configuring-data-quality-checks-and-rules.md"
       - DQOps user home: "dqo-concepts/dqops-user-home-folder.md"
       - Running checks: "dqo-concepts/running-data-quality-checks.md"
+########## INCLUDE TYPES OF CHECKS REFERENCE - DO NOT MODIFY MANUALLY
+########## END INCLUDE TYPES OF CHECKS REFERENCE
       - Data quality sensors: "dqo-concepts/definition-of-data-quality-sensors.md"
       - Data quality rules: "dqo-concepts/definition-of-data-quality-rules.md"
       - Data quality dashboards: "dqo-concepts/types-of-data-quality-dashboards.md"
@@ -201,7 +203,7 @@ nav:
         - total row count match percent: 'checks/table/accuracy/total-row-count-match-percent.md'
       - availability:
         - 'checks/table/availability/index.md'
-        - table availability: 'checks/table/availability/detect-table-availability-issues.md'
+        - table availability: 'checks/table/availability/table-availability.md'
       - comparisons:
         - 'checks/table/comparisons/index.md'
         - row count match: 'checks/table/comparisons/row-count-match.md'

@@ -15,7 +15,7 @@ The **row count match** data quality check has the following variants for each
 
 Verifies that the row count of the tested (parent) table matches the row count of the reference table. Compares each group of data with a GROUP BY clause.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_row_count_match|profiling| |Accuracy|[row_count](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
 
@@ -426,7 +426,7 @@ ___
 
 Verifies that the row count of the tested (parent) table matches the row count of the reference table. Compares each group of data with a GROUP BY clause. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_row_count_match|monitoring|daily|Accuracy|[row_count](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
 
@@ -838,7 +838,7 @@ ___
 
 Verifies that the row count of the tested (parent) table matches the row count of the reference table. Compares each group of data with a GROUP BY clause. Stores the most recent captured value for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_row_count_match|monitoring|monthly|Accuracy|[row_count](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
 
@@ -1250,7 +1250,7 @@ ___
 
 Verifies that the row count of the tested (parent) table matches the row count of the reference table. Compares each group of data with a GROUP BY clause on the time period (the daily partition) and all other data grouping columns. Stores the most recent captured value for each daily partition that was analyzed.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_row_count_match|partitioned|daily|Accuracy|[row_count](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
 
@@ -1676,7 +1676,7 @@ ___
 
 Verifies that the row count of the tested (parent) table matches the row count of the reference table, for each monthly partition (grouping rows by the time period, truncated to the month). Compares each group of data with a GROUP BY clause. Stores the most recent captured value for each monthly partition and optionally data groups.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_row_count_match|partitioned|monthly|Accuracy|[row_count](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
 

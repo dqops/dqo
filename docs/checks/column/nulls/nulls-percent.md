@@ -15,7 +15,7 @@ The **nulls percent** data quality check has the following variants for each
 
 Measures the percent of null values in a column. Raises a data quality exception when the percentage of null values is above the minimum accepted percentage.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_nulls_percent|profiling| |Completeness|[null_percent](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 
@@ -1163,7 +1163,7 @@ ___
 
 Measures the percent of null values in a column. Raises a data quality exception when the percentage of null values is above the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_nulls_percent|monitoring|daily|Completeness|[null_percent](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 
@@ -2313,7 +2313,7 @@ ___
 
 Measures the percent of null values in a column. Raises a data quality exception when the percentage of null values is above the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_nulls_percent|monitoring|monthly|Completeness|[null_percent](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 
@@ -3463,7 +3463,7 @@ ___
 
 Measures the percent of null values in a column. Raises a data quality exception when the percentage of null values is above the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_nulls_percent|partitioned|daily|Completeness|[null_percent](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 
@@ -4635,7 +4635,7 @@ ___
 
 Measures the percent of null values in a column. Raises a data quality exception when the percentage of null values is above the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_nulls_percent|partitioned|monthly|Completeness|[null_percent](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 

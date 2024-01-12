@@ -16,7 +16,7 @@ The **sum match** data quality check has the following variants for each
 
 Verifies that percentage of the difference between the sum of values in a tested column in a parent table and the sum of a values in a column in the reference table. The difference must be below defined percentage thresholds.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_sum_match|profiling| |Accuracy|[sum](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
 
@@ -442,7 +442,7 @@ ___
 
 Verifies that percentage of the difference between the sum of values in a tested column in a parent table and the sum of a values in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_sum_match|monitoring|daily|Accuracy|[sum](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
 
@@ -869,7 +869,7 @@ ___
 
 Verifies that percentage of the difference between the sum of values in a tested column in a parent table and the sum of a values in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_sum_match|monitoring|monthly|Accuracy|[sum](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
 
@@ -1296,7 +1296,7 @@ ___
 
 Verifies that percentage of the difference between the sum of values in a tested column in a parent table and the sum of a values in a column in the reference table. The difference must be below defined percentage thresholds. Compares each daily partition (each day of data) between the compared table and the reference table (the source of truth).
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_sum_match|partitioned|daily|Accuracy|[sum](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
 
@@ -1737,7 +1737,7 @@ ___
 
 Verifies that percentage of the difference between the sum of values in a tested column in a parent table and the sum of a values in a column in the reference table. The difference must be below defined percentage thresholds. Compares each monthly partition (each month of data) between the compared table and the reference table (the source of truth).
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_sum_match|partitioned|monthly|Accuracy|[sum](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
 

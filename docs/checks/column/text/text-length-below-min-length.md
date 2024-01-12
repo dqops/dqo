@@ -15,7 +15,7 @@ The **text length below min length** data quality check has the following varian
 
 The check counts the number of text values in the column that is below the length defined by the user as a parameter
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_text_length_below_min_length|profiling| |Reasonableness|[text_length_below_min_length_count](../../../reference/sensors/column/text-column-sensors.md#text-length-below-min-length-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -1259,7 +1259,7 @@ ___
 
 The check counts the number of text values in the column that is below the length defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_text_length_below_min_length|monitoring|daily|Reasonableness|[text_length_below_min_length_count](../../../reference/sensors/column/text-column-sensors.md#text-length-below-min-length-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -2505,7 +2505,7 @@ ___
 
 The check counts the number of text values in the column that is below the length defined by the user as a parameter. Stores the most recent captured value for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_text_length_below_min_length|monitoring|monthly|Reasonableness|[text_length_below_min_length_count](../../../reference/sensors/column/text-column-sensors.md#text-length-below-min-length-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -3751,7 +3751,7 @@ ___
 
 The check counts the number of text values in the column that is below the length defined by the user as a parameter. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_text_length_below_min_length|partitioned|daily|Reasonableness|[text_length_below_min_length_count](../../../reference/sensors/column/text-column-sensors.md#text-length-below-min-length-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -5019,7 +5019,7 @@ ___
 
 The check counts the number of text values in the column that is below the length defined by the user as a parameter. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_text_length_below_min_length|partitioned|monthly|Reasonableness|[text_length_below_min_length_count](../../../reference/sensors/column/text-column-sensors.md#text-length-below-min-length-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 

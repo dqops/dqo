@@ -15,7 +15,7 @@ The **valid latitude percent** data quality check has the following variants for
 
 Verifies that the percentage of valid latitude values in a column does not fall below the minimum accepted percentage.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_valid_latitude_percent|profiling| |Validity|[valid_latitude_percent](../../../reference/sensors/column/numeric-column-sensors.md#valid-latitude-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -1039,7 +1039,7 @@ ___
 
 Verifies that the percentage of valid latitude values in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_valid_latitude_percent|monitoring|daily|Validity|[valid_latitude_percent](../../../reference/sensors/column/numeric-column-sensors.md#valid-latitude-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -2065,7 +2065,7 @@ ___
 
 Verifies that the percentage of valid latitude values in a column does not fall below the minimum accepted percentage. Stores the most recent value for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_valid_latitude_percent|monitoring|monthly|Validity|[valid_latitude_percent](../../../reference/sensors/column/numeric-column-sensors.md#valid-latitude-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -3091,7 +3091,7 @@ ___
 
 Verifies that the percentage of valid latitude values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_valid_latitude_percent|partitioned|daily|Validity|[valid_latitude_percent](../../../reference/sensors/column/numeric-column-sensors.md#valid-latitude-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -4139,7 +4139,7 @@ ___
 
 Verifies that the percentage of valid latitude values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_valid_latitude_percent|partitioned|monthly|Validity|[valid_latitude_percent](../../../reference/sensors/column/numeric-column-sensors.md#valid-latitude-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 

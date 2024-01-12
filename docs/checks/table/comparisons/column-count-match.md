@@ -15,7 +15,7 @@ The **column count match** data quality check has the following variants for eac
 
 Verifies that the column count of the tested (parent) table matches the column count of the reference table. Only one comparison result is returned, without data grouping.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_column_count_match|profiling| |Accuracy|[column_count](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
 
@@ -115,7 +115,7 @@ ___
 
 Verifies that the column count of the tested (parent) table matches the column count of the reference table. Only one comparison result is returned, without data grouping. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_column_count_match|monitoring|daily|Accuracy|[column_count](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
 
@@ -216,7 +216,7 @@ ___
 
 Verifies that the column count of the tested (parent) table matches the column count of the reference table. Only one comparison result is returned, without data grouping. Stores the most recent captured value for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_column_count_match|monitoring|monthly|Accuracy|[column_count](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
 

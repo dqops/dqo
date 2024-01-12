@@ -15,7 +15,7 @@ The **total not null count match percent** data quality check has the following 
 
 Verifies that the percentage of difference in total not null count of a column in a table and total not null count of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_total_not_null_count_match_percent|profiling| |Accuracy|[total_not_null_count_match_percent](../../../reference/sensors/column/accuracy-column-sensors.md#total-not-null-count-match-percent)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
 
@@ -492,7 +492,7 @@ ___
 
 Verifies that the percentage of difference in total not null count of a column in a table and total not null count of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_total_not_null_count_match_percent|monitoring|daily|Accuracy|[total_not_null_count_match_percent](../../../reference/sensors/column/accuracy-column-sensors.md#total-not-null-count-match-percent)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
 
@@ -970,7 +970,7 @@ ___
 
 Verifies that the percentage of difference in total not null count of a column in a table and total not null count of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_total_not_null_count_match_percent|monitoring|monthly|Accuracy|[total_not_null_count_match_percent](../../../reference/sensors/column/accuracy-column-sensors.md#total-not-null-count-match-percent)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
 

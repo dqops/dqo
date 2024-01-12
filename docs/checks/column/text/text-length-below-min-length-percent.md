@@ -15,7 +15,7 @@ The **text length below min length percent** data quality check has the followin
 
 The check measures the percentage of text values in the column that is below the length defined by the user as a parameter
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_text_length_below_min_length_percent|profiling| |Reasonableness|[text_length_below_min_length_percent](../../../reference/sensors/column/text-column-sensors.md#text-length-below-min-length-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 
@@ -1389,7 +1389,7 @@ ___
 
 The check measures the percentage of text values in the column that is below the length defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_text_length_below_min_length_percent|monitoring|daily|Reasonableness|[text_length_below_min_length_percent](../../../reference/sensors/column/text-column-sensors.md#text-length-below-min-length-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 
@@ -2765,7 +2765,7 @@ ___
 
 The check measures the percentage of text values in the column that is below the length defined by the user as a parameter. Stores the most recent captured value for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_text_length_below_min_length_percent|monitoring|monthly|Reasonableness|[text_length_below_min_length_percent](../../../reference/sensors/column/text-column-sensors.md#text-length-below-min-length-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 
@@ -4141,7 +4141,7 @@ ___
 
 The check measures the percentage of text values in the column that is below the length defined by the user as a parameter. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_text_length_below_min_length_percent|partitioned|daily|Reasonableness|[text_length_below_min_length_percent](../../../reference/sensors/column/text-column-sensors.md#text-length-below-min-length-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 
@@ -5539,7 +5539,7 @@ ___
 
 The check measures the percentage of text values in the column that is below the length defined by the user as a parameter. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_text_length_below_min_length_percent|partitioned|monthly|Reasonableness|[text_length_below_min_length_percent](../../../reference/sensors/column/text-column-sensors.md#text-length-below-min-length-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 

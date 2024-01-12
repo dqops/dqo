@@ -15,7 +15,7 @@ The **text length in range percent** data quality check has the following varian
 
 The check measures the percentage of those text values with length in the range provided by the user in the column
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_text_length_in_range_percent|profiling| |Reasonableness|[text_length_in_range_percent](../../../reference/sensors/column/text-column-sensors.md#text-length-in-range-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -1279,7 +1279,7 @@ ___
 
 The check measures the percentage of those text values with length in the range provided by the user in the column. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_text_length_in_range_percent|monitoring|daily|Reasonableness|[text_length_in_range_percent](../../../reference/sensors/column/text-column-sensors.md#text-length-in-range-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -2545,7 +2545,7 @@ ___
 
 The check measures the percentage of those text values with length in the range provided by the user in the column. Stores the most recent captured value for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_text_length_in_range_percent|monitoring|monthly|Reasonableness|[text_length_in_range_percent](../../../reference/sensors/column/text-column-sensors.md#text-length-in-range-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -3811,7 +3811,7 @@ ___
 
 The check measures the percentage of those text values with length in the range provided by the user in the column. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_text_length_in_range_percent|partitioned|daily|Reasonableness|[text_length_in_range_percent](../../../reference/sensors/column/text-column-sensors.md#text-length-in-range-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -5099,7 +5099,7 @@ ___
 
 The check measures the percentage of those text values with length in the range provided by the user in the column. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_text_length_in_range_percent|partitioned|monthly|Reasonableness|[text_length_in_range_percent](../../../reference/sensors/column/text-column-sensors.md#text-length-in-range-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 

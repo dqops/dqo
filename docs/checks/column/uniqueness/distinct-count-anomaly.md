@@ -15,7 +15,7 @@ The **distinct count anomaly** data quality check has the following variants for
 
 Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_distinct_count_anomaly|profiling| |Consistency|[distinct_count](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[anomaly_differencing_percentile_moving_average](../../../reference/rules/Percentile.md#anomaly-differencing-percentile-moving-average)|
 
@@ -899,7 +899,7 @@ ___
 
 Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_distinct_count_anomaly|monitoring|daily|Consistency|[distinct_count](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[anomaly_differencing_percentile_moving_average](../../../reference/rules/Percentile.md#anomaly-differencing-percentile-moving-average)|
 
@@ -1785,7 +1785,7 @@ ___
 
 Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_distinct_count_anomaly|partitioned|daily|Consistency|[distinct_count](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[anomaly_stationary_percentile_moving_average](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|
 

@@ -15,7 +15,7 @@ The **lookup key not found** data quality check has the following variants for e
 
 Verifies that the number of values in a column that does not match values in another table column does not exceed the set count.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_lookup_key_not_found|profiling| |Integrity|[foreign_key_not_match_count](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -1289,7 +1289,7 @@ ___
 
 Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_lookup_key_not_found|monitoring|daily|Integrity|[foreign_key_not_match_count](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -2565,7 +2565,7 @@ ___
 
 Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores the most recent row count for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_lookup_key_not_found|monitoring|monthly|Integrity|[foreign_key_not_match_count](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -3841,7 +3841,7 @@ ___
 
 Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_lookup_key_not_found|partitioned|daily|Integrity|[foreign_key_not_match_count](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -5139,7 +5139,7 @@ ___
 
 Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Creates a separate data quality check (and an alert) for each monthly partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_lookup_key_not_found|partitioned|monthly|Integrity|[foreign_key_not_match_count](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 

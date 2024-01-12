@@ -15,7 +15,7 @@ The **whitespace text percent** data quality check has the following variants fo
 
 Verifies that the percentage of whitespace strings in a column does not exceed the minimum accepted percentage.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_whitespace_text_percent|profiling| |Completeness|[whitespace_text_percent](../../../reference/sensors/column/blanks-column-sensors.md#whitespace-text-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 
@@ -1387,7 +1387,7 @@ ___
 
 Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_whitespace_text_percent|monitoring|daily|Completeness|[whitespace_text_percent](../../../reference/sensors/column/blanks-column-sensors.md#whitespace-text-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 
@@ -2761,7 +2761,7 @@ ___
 
 Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_whitespace_text_percent|monitoring|monthly|Completeness|[whitespace_text_percent](../../../reference/sensors/column/blanks-column-sensors.md#whitespace-text-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 
@@ -4135,7 +4135,7 @@ ___
 
 Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_whitespace_text_percent|partitioned|daily|Completeness|[whitespace_text_percent](../../../reference/sensors/column/blanks-column-sensors.md#whitespace-text-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 
@@ -5531,7 +5531,7 @@ ___
 
 Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each monthly partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_whitespace_text_percent|partitioned|monthly|Completeness|[whitespace_text_percent](../../../reference/sensors/column/blanks-column-sensors.md#whitespace-text-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 

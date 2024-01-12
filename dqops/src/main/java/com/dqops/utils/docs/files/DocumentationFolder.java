@@ -65,6 +65,57 @@ public class DocumentationFolder {
      */
     private List<DocumentationMarkdownFile> files = new ArrayList<>();
 
+    public DocumentationFolder() {
+    }
+
+    public DocumentationFolder(String folderName) {
+        this.folderName = folderName;
+    }
+
+    public DocumentationFolder(String folderName, Path directPath) {
+        this.folderName = folderName;
+        this.directPath = directPath;
+    }
+
+    /**
+     * Finds a child folder by name or returns null.
+     * @param folderName Child folder name.
+     * @return Child folder or null when not found.
+     */
+    public DocumentationFolder getFolderByName(String folderName) {
+        for (DocumentationFolder childFolder : this.subFolders) {
+            if (Objects.equals(folderName, childFolder.getFolderName())) {
+                return childFolder;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Finds a file inside the folder by name.
+     * @param fileName File name.
+     * @return File content or null when the file was not found.
+     */
+    public DocumentationMarkdownFile getFileByName(String fileName) {
+        for (DocumentationMarkdownFile file : this.files) {
+            if (Objects.equals(folderName, file.getFileName())) {
+                return file;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Checks if this folder is excluded from the table of content entirely.
+     * @return Exclude from the table of content generated in the mkdocs.yml.
+     */
+    public boolean isExcludedFromTableOfContent() {
+        return this.files.stream().allMatch(file -> file.isExcludeFromTableOfContent()) &&
+                this.subFolders.stream().allMatch(folder -> folder.isExcludedFromTableOfContent());
+    }
+
     /**
      * Adds a nested file.
      * @param fileName File name of a markdown file, preceded by the folder path. For example: tables/strings/some_string_sensor.md
@@ -163,7 +214,8 @@ public class DocumentationFolder {
         resultLines.add(stringBuilder.toString());
 
         List<DocumentationMarkdownFile> markdownFiles = this.files.stream()
-                .filter(file -> !file.getFileName().equals(INDEX_FILE_NAME)).collect(Collectors.toList());
+                .filter(file -> !file.isExcludeFromTableOfContent() && !file.getFileName().equals(INDEX_FILE_NAME))
+                .collect(Collectors.toList());
         if (markdownFiles.size() < files.size()) {
             StringBuilder fileLineBuilder = new StringBuilder();
             fileLineBuilder.append(indent); // base indent
@@ -178,7 +230,8 @@ public class DocumentationFolder {
             resultLines.add(fileLineBuilder.toString());
         }
 
-        for (DocumentationFolder subFolder : this.subFolders) {
+        List<DocumentationFolder> folders = this.subFolders.stream().filter(folder -> !isExcludedFromTableOfContent()).collect(Collectors.toList());
+        for (DocumentationFolder subFolder : folders) {
             String subFolderPrefix = folderNamePrefix + this.folderName + "/";
             List<String> subfolderLines = subFolder.generateMkDocsNavigation(indentSpaces + 2, subFolderPrefix);
             resultLines.addAll(subfolderLines);
@@ -225,7 +278,7 @@ public class DocumentationFolder {
             subFolder.writeModifiedFiles(matchingCurrentSubFolder);
         }
 
-        for (DocumentationMarkdownFile documentationFile : this.files){
+        for (DocumentationMarkdownFile documentationFile : this.files) {
             DocumentationMarkdownFile matchingCurrentFile = currentReferenceFiles != null ?
                     ListFindUtils.findElement(currentReferenceFiles.getFiles(), f -> Objects.equals(documentationFile.getFileName(), f.getFileName()))
                     : null;

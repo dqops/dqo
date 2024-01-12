@@ -19,7 +19,7 @@ The **data ingestion delay** data quality check has the following variants for e
 
 Calculates the time difference in days between the most recent event timestamp and the most recent ingestion timestamp
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_data_ingestion_delay|profiling| |Timeliness|[data_ingestion_delay](../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[max_days](../../../reference/rules/Comparison.md#max-days)|
 
@@ -1597,7 +1597,7 @@ ___
 
 Daily  calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_data_ingestion_delay|monitoring|daily|Timeliness|[data_ingestion_delay](../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[max_days](../../../reference/rules/Comparison.md#max-days)|
 
@@ -3177,7 +3177,7 @@ ___
 
 Monthly monitoring calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_data_ingestion_delay|monitoring|monthly|Timeliness|[data_ingestion_delay](../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[max_days](../../../reference/rules/Comparison.md#max-days)|
 
@@ -4757,7 +4757,7 @@ ___
 
 Daily partitioned check calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_data_ingestion_delay|partitioned|daily|Timeliness|[data_ingestion_delay](../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[max_days](../../../reference/rules/Comparison.md#max-days)|
 
@@ -6357,7 +6357,7 @@ ___
 
 Monthly partitioned check calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_data_ingestion_delay|partitioned|monthly|Timeliness|[data_ingestion_delay](../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[max_days](../../../reference/rules/Comparison.md#max-days)|
 

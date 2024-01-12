@@ -17,7 +17,7 @@ The **column count changed** data quality check has the following variants for e
 
 Detects if the count of columns has changed. Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_column_count_changed|profiling| |Consistency|[column_count](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[value_changed](../../../reference/rules/Comparison.md#value-changed)|
 
@@ -94,7 +94,7 @@ ___
 
 Detects if the count of columns has changed since the most recent day. Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time. Stores the most recent column count for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_column_count_changed|monitoring|daily|Consistency|[column_count](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[value_changed](../../../reference/rules/Comparison.md#value-changed)|
 
@@ -172,7 +172,7 @@ ___
 
 Detects if the count of columns has changed since the last month. Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time. Stores the most recent column count for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_column_count_changed|monitoring|monthly|Consistency|[column_count](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[value_changed](../../../reference/rules/Comparison.md#value-changed)|
 

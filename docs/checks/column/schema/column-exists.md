@@ -16,7 +16,7 @@ The **column exists** data quality check has the following variants for each
 
 Checks the metadata of the monitored table and verifies if the column exists.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_column_exists|profiling| |Completeness|[column_exists](../../../reference/sensors/column/schema-column-sensors.md#column-exists)|[equals_1](../../../reference/rules/Comparison.md#equals-1)|
 
@@ -96,7 +96,7 @@ ___
 
 Checks the metadata of the monitored table and verifies if the column exists. Stores the most recent value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_column_exists|monitoring|daily|Completeness|[column_exists](../../../reference/sensors/column/schema-column-sensors.md#column-exists)|[equals_1](../../../reference/rules/Comparison.md#equals-1)|
 
@@ -177,7 +177,7 @@ ___
 
 Checks the metadata of the monitored table and verifies if the column exists. Stores the most recent value for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_column_exists|monitoring|monthly|Completeness|[column_exists](../../../reference/sensors/column/schema-column-sensors.md#column-exists)|[equals_1](../../../reference/rules/Comparison.md#equals-1)|
 

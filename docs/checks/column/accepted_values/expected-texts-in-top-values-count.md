@@ -19,7 +19,7 @@ The **expected texts in top values count** data quality check has the following 
 
 Verifies that the top X most popular column values contain all values from a list of expected values.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_expected_texts_in_top_values_count|profiling| |Reasonableness|[expected_texts_in_top_values_count](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-texts-in-top-values-count)|[max_missing](../../../reference/rules/Comparison.md#max-missing)|
 
@@ -2913,7 +2913,7 @@ ___
 
 Verifies that the top X most popular column values contain all values from a list of expected values. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_expected_texts_in_top_values_count|monitoring|daily|Reasonableness|[expected_texts_in_top_values_count](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-texts-in-top-values-count)|[max_missing](../../../reference/rules/Comparison.md#max-missing)|
 
@@ -5809,7 +5809,7 @@ ___
 
 Verifies that the top X most popular column values contain all values from a list of expected values. Stores the most recent captured value for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_expected_texts_in_top_values_count|monitoring|monthly|Reasonableness|[expected_texts_in_top_values_count](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-texts-in-top-values-count)|[max_missing](../../../reference/rules/Comparison.md#max-missing)|
 
@@ -8705,7 +8705,7 @@ ___
 
 Verifies that the top X most popular column values contain all values from a list of expected values. Creates a separate data quality check (and an alert) for each daily partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_expected_texts_in_top_values_count|partitioned|daily|Reasonableness|[expected_texts_in_top_values_count](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-texts-in-top-values-count)|[max_missing](../../../reference/rules/Comparison.md#max-missing)|
 
@@ -11621,7 +11621,7 @@ ___
 
 Verifies that the top X most popular column values contain all values from a list of expected values. Creates a separate data quality check (and an alert) for each monthly partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_expected_texts_in_top_values_count|partitioned|monthly|Reasonableness|[expected_texts_in_top_values_count](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-texts-in-top-values-count)|[max_missing](../../../reference/rules/Comparison.md#max-missing)|
 

@@ -15,7 +15,7 @@ The **nulls count** data quality check has the following variants for each
 
 Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_nulls_count|profiling| |Completeness|[null_count](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -1031,7 +1031,7 @@ ___
 
 Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_nulls_count|monitoring|daily|Completeness|[null_count](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -2049,7 +2049,7 @@ ___
 
 Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_nulls_count|monitoring|monthly|Completeness|[null_count](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -3067,7 +3067,7 @@ ___
 
 Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_nulls_count|partitioned|daily|Completeness|[null_count](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -4107,7 +4107,7 @@ ___
 
 Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_nulls_count|partitioned|monthly|Completeness|[null_count](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 

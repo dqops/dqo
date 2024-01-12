@@ -15,7 +15,7 @@ The **distinct count** data quality check has the following variants for each
 
 Verifies that the number of distinct values in a column does not fall below the minimum accepted count.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_distinct_count|profiling| |Uniqueness|[distinct_count](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[count_between](../../../reference/rules/Comparison.md#count-between)|
 
@@ -905,7 +905,7 @@ ___
 
 Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_distinct_count|monitoring|daily|Uniqueness|[distinct_count](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[count_between](../../../reference/rules/Comparison.md#count-between)|
 
@@ -1797,7 +1797,7 @@ ___
 
 Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_distinct_count|monitoring|monthly|Uniqueness|[distinct_count](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[count_between](../../../reference/rules/Comparison.md#count-between)|
 
@@ -2689,7 +2689,7 @@ ___
 
 Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_distinct_count|partitioned|daily|Uniqueness|[distinct_count](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[count_between](../../../reference/rules/Comparison.md#count-between)|
 
@@ -3603,7 +3603,7 @@ ___
 
 Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_distinct_count|partitioned|monthly|Uniqueness|[distinct_count](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[count_between](../../../reference/rules/Comparison.md#count-between)|
 

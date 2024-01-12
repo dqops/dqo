@@ -15,7 +15,7 @@ The **sum change 30 days** data quality check has the following variants for eac
 
 Verifies that the sum in a column changed in a fixed rate since the last readout from last month.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_sum_change_30_days|profiling| |Consistency|[sum](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[change_percent_30_days](../../../reference/rules/Change.md#change-percent-30-days)|
 
@@ -817,7 +817,7 @@ ___
 
 Verifies that the sum in a column changed in a fixed rate since the last readout from the last month.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_sum_change_30_days|monitoring|daily|Consistency|[sum](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[change_percent_30_days](../../../reference/rules/Change.md#change-percent-30-days)|
 
@@ -1621,7 +1621,7 @@ ___
 
 Verifies that the sum in a column changed in a fixed rate since the last readout from the last month.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_sum_change_30_days|partitioned|daily|Consistency|[sum](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[change_percent_30_days](../../../reference/rules/Change.md#change-percent-30-days)|
 

@@ -15,7 +15,7 @@ The **percentile in range** data quality check has the following variants for ea
 
 Verifies that the percentile of all values in a column is not outside the set range.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_percentile_in_range|profiling| |Reasonableness|[percentile](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
 
@@ -1307,7 +1307,7 @@ ___
 
 Verifies that the percentile of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_percentile_in_range|monitoring|daily|Reasonableness|[percentile](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
 
@@ -2601,7 +2601,7 @@ ___
 
 Verifies that the percentile of all values in a column is not outside the set range. Stores the most recent value for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_percentile_in_range|monitoring|monthly|Reasonableness|[percentile](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
 
@@ -3895,7 +3895,7 @@ ___
 
 Verifies that the percentile of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_percentile_in_range|partitioned|daily|Reasonableness|[percentile](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
 
@@ -5209,7 +5209,7 @@ ___
 
 Verifies that the percentile of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_percentile_in_range|partitioned|monthly|Reasonableness|[percentile](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
 

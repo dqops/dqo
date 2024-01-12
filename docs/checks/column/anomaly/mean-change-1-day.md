@@ -15,7 +15,7 @@ The **mean change 1 day** data quality check has the following variants for each
 
 Verifies that the mean value in a column changed in a fixed rate since the last readout from yesterday.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_mean_change_1_day|profiling| |Consistency|[mean](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[change_percent_1_day](../../../reference/rules/Change.md#change-percent-1-day)|
 
@@ -817,7 +817,7 @@ ___
 
 Verifies that the mean value in a column changed in a fixed rate since last readout from yesterday.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_mean_change_1_day|monitoring|daily|Consistency|[mean](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[change_percent_1_day](../../../reference/rules/Change.md#change-percent-1-day)|
 
@@ -1621,7 +1621,7 @@ ___
 
 Verifies that the mean value in a column changed in a fixed rate since the last readout from yesterday.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_mean_change_1_day|partitioned|daily|Consistency|[mean](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[change_percent_1_day](../../../reference/rules/Change.md#change-percent-1-day)|
 

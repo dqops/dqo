@@ -15,7 +15,7 @@ The **total row count match percent** data quality check has the following varia
 
 Verifies that the total row count of the tested table matches the total row count of another (reference) table.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_total_row_count_match_percent|profiling| |Accuracy|[total_row_count_match_percent](../../../reference/sensors/table/accuracy-table-sensors.md#total-row-count-match-percent)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
 
@@ -447,7 +447,7 @@ ___
 
 Verifies the total ow count of a tested table and compares it to a row count of a reference table. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_total_row_count_match_percent|monitoring|daily|Accuracy|[total_row_count_match_percent](../../../reference/sensors/table/accuracy-table-sensors.md#total-row-count-match-percent)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
 
@@ -880,7 +880,7 @@ ___
 
 Verifies the total row count of a tested table and compares it to a row count of a reference table. Stores the most recent row count for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_total_row_count_match_percent|monitoring|monthly|Accuracy|[total_row_count_match_percent](../../../reference/sensors/table/accuracy-table-sensors.md#total-row-count-match-percent)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
 

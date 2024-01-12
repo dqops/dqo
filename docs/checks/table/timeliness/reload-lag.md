@@ -19,7 +19,7 @@ The **reload lag** data quality check has the following variants for each
 
 Daily partitioned check calculating the longest time a row waited to be load
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_reload_lag|partitioned|daily|Timeliness|[partition_reload_lag](../../../reference/sensors/table/timeliness-table-sensors.md#partition-reload-lag)|[max_days](../../../reference/rules/Comparison.md#max-days)|
 
@@ -1709,7 +1709,7 @@ ___
 
 Monthly partitioned check calculating the longest time a row waited to be load
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_reload_lag|partitioned|monthly|Timeliness|[partition_reload_lag](../../../reference/sensors/table/timeliness-table-sensors.md#partition-reload-lag)|[max_days](../../../reference/rules/Comparison.md#max-days)|
 

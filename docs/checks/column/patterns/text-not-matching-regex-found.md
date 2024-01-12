@@ -15,7 +15,7 @@ The **text not matching regex found** data quality check has the following varia
 
 Verifies that the number of text values not matching the custom regular expression pattern does not exceed the maximum accepted count.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_text_not_matching_regex_found|profiling| |Validity|[text_not_matching_regex_count](../../../reference/sensors/column/patterns-column-sensors.md#text-not-matching-regex-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -1403,7 +1403,7 @@ ___
 
 Verifies that the number of text values not matching the custom regular expression pattern does not exceed the maximum accepted count.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_text_not_matching_regex_found|monitoring|daily|Validity|[text_not_matching_regex_count](../../../reference/sensors/column/patterns-column-sensors.md#text-not-matching-regex-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -2793,7 +2793,7 @@ ___
 
 Verifies that the number of text values not matching the custom regular expression pattern does not exceed the maximum accepted count.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_text_not_matching_regex_found|monitoring|monthly|Validity|[text_not_matching_regex_count](../../../reference/sensors/column/patterns-column-sensors.md#text-not-matching-regex-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -4183,7 +4183,7 @@ ___
 
 Verifies that the number of text values not matching the custom regular expression pattern does not exceed the maximum accepted count.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_text_not_matching_regex_found|partitioned|daily|Validity|[text_not_matching_regex_count](../../../reference/sensors/column/patterns-column-sensors.md#text-not-matching-regex-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -5595,7 +5595,7 @@ ___
 
 Verifies that the number of text values not matching the custom regular expression pattern does not exceed the maximum accepted count.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_text_not_matching_regex_found|partitioned|monthly|Validity|[text_not_matching_regex_count](../../../reference/sensors/column/patterns-column-sensors.md#text-not-matching-regex-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 

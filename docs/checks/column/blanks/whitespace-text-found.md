@@ -15,7 +15,7 @@ The **whitespace text found** data quality check has the following variants for 
 
 Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_whitespace_text_found|profiling| |Completeness|[whitespace_text_count](../../../reference/sensors/column/blanks-column-sensors.md#whitespace-text-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -1253,7 +1253,7 @@ ___
 
 Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_whitespace_text_found|monitoring|daily|Completeness|[whitespace_text_count](../../../reference/sensors/column/blanks-column-sensors.md#whitespace-text-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -2493,7 +2493,7 @@ ___
 
 Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_whitespace_text_found|monitoring|monthly|Completeness|[whitespace_text_count](../../../reference/sensors/column/blanks-column-sensors.md#whitespace-text-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -3733,7 +3733,7 @@ ___
 
 Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_whitespace_text_found|partitioned|daily|Completeness|[whitespace_text_count](../../../reference/sensors/column/blanks-column-sensors.md#whitespace-text-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -4995,7 +4995,7 @@ ___
 
 Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_whitespace_text_found|partitioned|monthly|Completeness|[whitespace_text_count](../../../reference/sensors/column/blanks-column-sensors.md#whitespace-text-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 

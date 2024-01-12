@@ -15,7 +15,7 @@ The **true percent** data quality check has the following variants for each
 
 Verifies that the percentage of true values in a column does not exceed the minimum accepted percentage.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_true_percent|profiling| |Reasonableness|[true_percent](../../../reference/sensors/column/bool-column-sensors.md#true-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -1203,7 +1203,7 @@ ___
 
 Verifies that the percentage of true values in a column does not exceed the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_true_percent|monitoring|daily|Reasonableness|[true_percent](../../../reference/sensors/column/bool-column-sensors.md#true-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -2393,7 +2393,7 @@ ___
 
 Verifies that the percentage of true values in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_true_percent|monitoring|monthly|Reasonableness|[true_percent](../../../reference/sensors/column/bool-column-sensors.md#true-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -3583,7 +3583,7 @@ ___
 
 Verifies that the percentage of true values in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_true_percent|partitioned|daily|Reasonableness|[true_percent](../../../reference/sensors/column/bool-column-sensors.md#true-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -4795,7 +4795,7 @@ ___
 
 Verifies that the percentage of true values in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_true_percent|partitioned|monthly|Reasonableness|[true_percent](../../../reference/sensors/column/bool-column-sensors.md#true-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 

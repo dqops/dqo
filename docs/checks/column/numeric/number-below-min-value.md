@@ -15,7 +15,7 @@ The **number below min value** data quality check has the following variants for
 
 The check counts the number of values in the column that is below the value defined by the user as a parameter.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_number_below_min_value|profiling| |Validity|[number_below_min_value_count](../../../reference/sensors/column/numeric-column-sensors.md#number-below-min-value-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -1039,7 +1039,7 @@ ___
 
 The check counts the number of values in the column that is below the value defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_number_below_min_value|monitoring|daily|Validity|[number_below_min_value_count](../../../reference/sensors/column/numeric-column-sensors.md#number-below-min-value-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -2065,7 +2065,7 @@ ___
 
 The check counts the number of values in the column that is below the value defined by the user as a parameter. Stores the most recent value for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_number_below_min_value|monitoring|monthly|Validity|[number_below_min_value_count](../../../reference/sensors/column/numeric-column-sensors.md#number-below-min-value-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -3091,7 +3091,7 @@ ___
 
 The check counts the number of values in the column that is below the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each daily partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_number_below_min_value|partitioned|daily|Validity|[number_below_min_value_count](../../../reference/sensors/column/numeric-column-sensors.md#number-below-min-value-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -4139,7 +4139,7 @@ ___
 
 The check counts the number of values in the column that is below the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each monthly partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_number_below_min_value|partitioned|monthly|Validity|[number_below_min_value_count](../../../reference/sensors/column/numeric-column-sensors.md#number-below-min-value-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 

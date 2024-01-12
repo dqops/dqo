@@ -15,7 +15,7 @@ The **date values in future percent** data quality check has the following varia
 
 Verifies that the percentage of date values in future in a column does not exceed the maximum accepted percentage.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_date_values_in_future_percent|profiling| |Validity|[date_values_in_future_percent](../../../reference/sensors/column/datetime-column-sensors.md#date-values-in-future-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 
@@ -1755,7 +1755,7 @@ ___
 
 Verifies that the percentage of date values in future in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_date_values_in_future_percent|monitoring|daily|Validity|[date_values_in_future_percent](../../../reference/sensors/column/datetime-column-sensors.md#date-values-in-future-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 
@@ -3497,7 +3497,7 @@ ___
 
 Verifies that the percentage of date values in future in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_date_values_in_future_percent|monitoring|monthly|Validity|[date_values_in_future_percent](../../../reference/sensors/column/datetime-column-sensors.md#date-values-in-future-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 
@@ -5239,7 +5239,7 @@ ___
 
 Verifies that the percentage of date values in future in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_date_values_in_future_percent|partitioned|daily|Validity|[date_values_in_future_percent](../../../reference/sensors/column/datetime-column-sensors.md#date-values-in-future-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 
@@ -7003,7 +7003,7 @@ ___
 
 Verifies that the percentage of date values in future in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_date_values_in_future_percent|partitioned|monthly|Validity|[date_values_in_future_percent](../../../reference/sensors/column/datetime-column-sensors.md#date-values-in-future-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 

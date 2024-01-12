@@ -15,7 +15,7 @@ The **negative values percent** data quality check has the following variants fo
 
 Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_negative_values_percent|profiling| |Validity|[negative_percent](../../../reference/sensors/column/numeric-column-sensors.md#negative-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 
@@ -1163,7 +1163,7 @@ ___
 
 Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_negative_values_percent|monitoring|daily|Validity|[negative_percent](../../../reference/sensors/column/numeric-column-sensors.md#negative-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 
@@ -2313,7 +2313,7 @@ ___
 
 Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Stores the most recent value for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_negative_values_percent|monitoring|monthly|Validity|[negative_percent](../../../reference/sensors/column/numeric-column-sensors.md#negative-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 
@@ -3463,7 +3463,7 @@ ___
 
 Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_negative_values_percent|partitioned|daily|Validity|[negative_percent](../../../reference/sensors/column/numeric-column-sensors.md#negative-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 
@@ -4635,7 +4635,7 @@ ___
 
 Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_negative_values_percent|partitioned|monthly|Validity|[negative_percent](../../../reference/sensors/column/numeric-column-sensors.md#negative-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 

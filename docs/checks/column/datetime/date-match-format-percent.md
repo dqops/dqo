@@ -15,7 +15,7 @@ The **date match format percent** data quality check has the following variants 
 
 Verifies that the percentage of date values matching the given format in a column does not exceed the minimum accepted percentage.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_date_match_format_percent|profiling| |Validity|[date_match_format_percent](../../../reference/sensors/column/datetime-column-sensors.md#date-match-format-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -1497,7 +1497,7 @@ ___
 
 Verifies that the percentage of date values matching the given format in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily monitoring.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_date_match_format_percent|monitoring|daily|Validity|[date_match_format_percent](../../../reference/sensors/column/datetime-column-sensors.md#date-match-format-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -2981,7 +2981,7 @@ ___
 
 Verifies that the percentage of date values matching the given format in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly monitoring.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_date_match_format_percent|monitoring|monthly|Validity|[date_match_format_percent](../../../reference/sensors/column/datetime-column-sensors.md#date-match-format-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -4465,7 +4465,7 @@ ___
 
 Verifies that the percentage of date values matching the given format in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_date_match_format_percent|partitioned|daily|Validity|[date_match_format_percent](../../../reference/sensors/column/datetime-column-sensors.md#date-match-format-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -5971,7 +5971,7 @@ ___
 
 Verifies that the percentage of date values matching the given format in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_date_match_format_percent|partitioned|monthly|Validity|[date_match_format_percent](../../../reference/sensors/column/datetime-column-sensors.md#date-match-format-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 

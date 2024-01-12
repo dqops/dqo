@@ -48,4 +48,9 @@ public class DocumentationMarkdownFile {
      * Object passed to the Handlebars template. The model with the information to be rendered.
      */
     private Object renderContext;
+
+    /**
+     * Excludes this file from adding to the table of content in mkdocs.yml file.
+     */
+    private boolean excludeFromTableOfContent;
 }

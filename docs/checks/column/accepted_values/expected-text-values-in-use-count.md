@@ -17,7 +17,7 @@ The **expected text values in use count** data quality check has the following v
 
 Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing).
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_expected_text_values_in_use_count|profiling| |Reasonableness|[expected_text_values_in_use_count](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-text-values-in-use-count)|[max_missing](../../../reference/rules/Comparison.md#max-missing)|
 
@@ -1639,7 +1639,7 @@ ___
 
 Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_expected_text_values_in_use_count|monitoring|daily|Reasonableness|[expected_text_values_in_use_count](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-text-values-in-use-count)|[max_missing](../../../reference/rules/Comparison.md#max-missing)|
 
@@ -3263,7 +3263,7 @@ ___
 
 Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent captured value for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_expected_text_values_in_use_count|monitoring|monthly|Reasonableness|[expected_text_values_in_use_count](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-text-values-in-use-count)|[max_missing](../../../reference/rules/Comparison.md#max-missing)|
 
@@ -4887,7 +4887,7 @@ ___
 
 Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Creates a separate data quality check (and an alert) for each daily partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_expected_text_values_in_use_count|partitioned|daily|Reasonableness|[expected_text_values_in_use_count](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-text-values-in-use-count)|[max_missing](../../../reference/rules/Comparison.md#max-missing)|
 
@@ -6533,7 +6533,7 @@ ___
 
 Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Creates a separate data quality check (and an alert) for each monthly partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_expected_text_values_in_use_count|partitioned|monthly|Reasonableness|[expected_text_values_in_use_count](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-text-values-in-use-count)|[max_missing](../../../reference/rules/Comparison.md#max-missing)|
 

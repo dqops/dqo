@@ -17,7 +17,7 @@ The **detected datatype in text changed** data quality check has the following v
 
 Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_detected_datatype_in_text_changed|profiling| |Consistency|[string_datatype_detect](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[value_changed](../../../reference/rules/Comparison.md#value-changed)|
 
@@ -3657,7 +3657,7 @@ ___
 
 Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_detected_datatype_in_text_changed|monitoring|daily|Consistency|[string_datatype_detect](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[value_changed](../../../reference/rules/Comparison.md#value-changed)|
 
@@ -7299,7 +7299,7 @@ ___
 
 Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_detected_datatype_in_text_changed|monitoring|monthly|Consistency|[string_datatype_detect](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[value_changed](../../../reference/rules/Comparison.md#value-changed)|
 
@@ -10941,7 +10941,7 @@ ___
 
 Detects that the data type of texts stored in a text column has changed when compared to an earlier not empty partition. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Creates a separate data quality check (and an alert) for each daily partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_detected_datatype_in_text_changed|partitioned|daily|Consistency|[string_datatype_detect](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[value_changed](../../../reference/rules/Comparison.md#value-changed)|
 
@@ -14603,7 +14603,7 @@ ___
 
 Detects that the data type of texts stored in a text column has changed when compared to an earlier not empty partition. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Creates a separate data quality check (and an alert) for each monthly partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_detected_datatype_in_text_changed|partitioned|monthly|Consistency|[string_datatype_detect](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[value_changed](../../../reference/rules/Comparison.md#value-changed)|
 

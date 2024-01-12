@@ -15,7 +15,7 @@ The **text surrounded by whitespace percent** data quality check has the followi
 
 Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_text_surrounded_by_whitespace_percent|profiling| |Validity|[text_surrounded_by_whitespace_percent](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 
@@ -1561,7 +1561,7 @@ ___
 
 Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_text_surrounded_by_whitespace_percent|monitoring|daily|Validity|[text_surrounded_by_whitespace_percent](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 
@@ -3109,7 +3109,7 @@ ___
 
 Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_text_surrounded_by_whitespace_percent|monitoring|monthly|Validity|[text_surrounded_by_whitespace_percent](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 
@@ -4657,7 +4657,7 @@ ___
 
 Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_text_surrounded_by_whitespace_percent|partitioned|daily|Validity|[text_surrounded_by_whitespace_percent](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 
@@ -6227,7 +6227,7 @@ ___
 
 Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_text_surrounded_by_whitespace_percent|partitioned|monthly|Validity|[text_surrounded_by_whitespace_percent](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
 

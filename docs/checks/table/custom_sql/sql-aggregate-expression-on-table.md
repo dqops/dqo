@@ -15,7 +15,7 @@ The **sql aggregate expression on table** data quality check has the following v
 
 Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_sql_aggregate_expression_on_table|profiling| |Reasonableness|[sql_aggregated_expression](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-aggregated-expression)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
 
@@ -828,7 +828,7 @@ ___
 
 Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_sql_aggregate_expression_on_table|monitoring|daily|Reasonableness|[sql_aggregated_expression](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-aggregated-expression)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
 
@@ -1643,7 +1643,7 @@ ___
 
 Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_sql_aggregate_expression_on_table|monitoring|monthly|Reasonableness|[sql_aggregated_expression](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-aggregated-expression)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
 
@@ -2458,7 +2458,7 @@ ___
 
 Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_sql_aggregate_expression_on_table|partitioned|daily|Reasonableness|[sql_aggregated_expression](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-aggregated-expression)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
 
@@ -3295,7 +3295,7 @@ ___
 
 Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_sql_aggregate_expression_on_table|partitioned|monthly|Reasonableness|[sql_aggregated_expression](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-aggregated-expression)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
 

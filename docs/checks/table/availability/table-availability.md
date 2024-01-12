@@ -17,7 +17,7 @@ The **table availability** data quality check has the following variants for eac
 
 Verifies availability of a table in a monitored database using a simple query.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_table_availability|profiling| |Availability|[table_availability](../../../reference/sensors/table/availability-table-sensors.md#table-availability)|[max_failures](../../../reference/rules/Comparison.md#max-failures)|
 
@@ -495,7 +495,7 @@ ___
 
 Verifies availability of a table in a monitored database using a simple query. Stores the most recent table availability status for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_table_availability|monitoring|daily|Availability|[table_availability](../../../reference/sensors/table/availability-table-sensors.md#table-availability)|[max_failures](../../../reference/rules/Comparison.md#max-failures)|
 
@@ -974,7 +974,7 @@ ___
 
 Verifies availability of a table in a monitored database using a simple query. Stores the most recent table availability status for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_table_availability|monitoring|monthly|Availability|[table_availability](../../../reference/sensors/table/availability-table-sensors.md#table-availability)|[max_failures](../../../reference/rules/Comparison.md#max-failures)|
 

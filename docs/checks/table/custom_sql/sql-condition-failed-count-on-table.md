@@ -15,7 +15,7 @@ The **sql condition failed count on table** data quality check has the following
 
 Verifies that a set number of rows failed a custom SQL condition (expression).
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_sql_condition_failed_count_on_table|profiling| |Validity|[sql_condition_failed_count](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-condition-failed-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -1090,7 +1090,7 @@ ___
 
 Verifies that a set number of rows failed a custom SQL condition (expression). Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_sql_condition_failed_count_on_table|monitoring|daily|Validity|[sql_condition_failed_count](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-condition-failed-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -2167,7 +2167,7 @@ ___
 
 Verifies that a set number of rows failed a custom SQL condition (expression). Stores the most recent row count for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_sql_condition_failed_count_on_table|monitoring|monthly|Validity|[sql_condition_failed_count](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-condition-failed-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -3244,7 +3244,7 @@ ___
 
 Verifies that a set number of rows failed a custom SQL condition (expression). Creates a separate data quality check (and an alert) for each daily partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_sql_condition_failed_count_on_table|partitioned|daily|Validity|[sql_condition_failed_count](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-condition-failed-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -4343,7 +4343,7 @@ ___
 
 Verifies that a set number of rows failed a custom SQL condition (expression). Creates a separate data quality check (and an alert) for each monthly partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_sql_condition_failed_count_on_table|partitioned|monthly|Validity|[sql_condition_failed_count](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-condition-failed-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 

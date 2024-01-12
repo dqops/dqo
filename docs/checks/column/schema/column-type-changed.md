@@ -17,7 +17,7 @@ The **column type changed** data quality check has the following variants for ea
 
 Checks the metadata of the monitored column and detects if the data type (including the length, precision, scale, nullability) has changed.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_column_type_changed|profiling| |Consistency|[column_type_hash](../../../reference/sensors/column/schema-column-sensors.md#column-type-hash)|[value_changed](../../../reference/rules/Comparison.md#value-changed)|
 
@@ -97,7 +97,7 @@ ___
 
 Checks the metadata of the monitored column and detects if the data type (including the length, precision, scale, nullability) has changed since the last day. Stores the most recent hash for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_column_type_changed|monitoring|daily|Consistency|[column_type_hash](../../../reference/sensors/column/schema-column-sensors.md#column-type-hash)|[value_changed](../../../reference/rules/Comparison.md#value-changed)|
 
@@ -178,7 +178,7 @@ ___
 
 Checks the metadata of the monitored column and detects if the data type (including the length, precision, scale, nullability) has changed since the last month. Stores the most recent hash for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_column_type_changed|monitoring|monthly|Consistency|[column_type_hash](../../../reference/sensors/column/schema-column-sensors.md#column-type-hash)|[value_changed](../../../reference/rules/Comparison.md#value-changed)|
 

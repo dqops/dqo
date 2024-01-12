@@ -15,7 +15,7 @@ The **integer in range percent** data quality check has the following variants f
 
 Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_integer_in_range_percent|profiling| |Reasonableness|[integer_in_range_percent](../../../reference/sensors/column/numeric-column-sensors.md#integer-in-range-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -1049,7 +1049,7 @@ ___
 
 Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_integer_in_range_percent|monitoring|daily|Reasonableness|[integer_in_range_percent](../../../reference/sensors/column/numeric-column-sensors.md#integer-in-range-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -2085,7 +2085,7 @@ ___
 
 Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent value for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_integer_in_range_percent|monitoring|monthly|Reasonableness|[integer_in_range_percent](../../../reference/sensors/column/numeric-column-sensors.md#integer-in-range-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -3121,7 +3121,7 @@ ___
 
 Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_integer_in_range_percent|partitioned|daily|Reasonableness|[integer_in_range_percent](../../../reference/sensors/column/numeric-column-sensors.md#integer-in-range-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -4179,7 +4179,7 @@ ___
 
 Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_integer_in_range_percent|partitioned|monthly|Reasonableness|[integer_in_range_percent](../../../reference/sensors/column/numeric-column-sensors.md#integer-in-range-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 

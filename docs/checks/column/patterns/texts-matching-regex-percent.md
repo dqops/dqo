@@ -15,7 +15,7 @@ The **texts matching regex percent** data quality check has the following varian
 
 Verifies that the percentage of strings matching the custom regular expression pattern does not fall below the minimum accepted percentage.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_texts_matching_regex_percent|profiling| |Validity|[texts_matching_regex_percent](../../../reference/sensors/column/patterns-column-sensors.md#texts-matching-regex-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -1399,7 +1399,7 @@ ___
 
 Verifies that the percentage of strings matching the custom regular expression pattern does not fall below the minimum accepted percentage.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_texts_matching_regex_percent|monitoring|daily|Validity|[texts_matching_regex_percent](../../../reference/sensors/column/patterns-column-sensors.md#texts-matching-regex-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -2785,7 +2785,7 @@ ___
 
 Verifies that the percentage of strings matching the custom regular expression pattern does not fall below the minimum accepted percentage.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_texts_matching_regex_percent|monitoring|monthly|Validity|[texts_matching_regex_percent](../../../reference/sensors/column/patterns-column-sensors.md#texts-matching-regex-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -4171,7 +4171,7 @@ ___
 
 Verifies that the percentage of strings matching the custom regular expression pattern does not fall below the minimum accepted percentage.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_texts_matching_regex_percent|partitioned|daily|Validity|[texts_matching_regex_percent](../../../reference/sensors/column/patterns-column-sensors.md#texts-matching-regex-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 
@@ -5579,7 +5579,7 @@ ___
 
 Verifies that the percentage of strings matching the custom regular expression pattern does not fall below the minimum accepted percentage.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_texts_matching_regex_percent|partitioned|monthly|Validity|[texts_matching_regex_percent](../../../reference/sensors/column/patterns-column-sensors.md#texts-matching-regex-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
 

@@ -15,7 +15,7 @@ The **mean change** data quality check has the following variants for each
 
 Verifies that the mean value in a column changed in a fixed rate since the last readout.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_mean_change|profiling| |Consistency|[mean](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[change_percent](../../../reference/rules/Change.md#change-percent)|
 
@@ -811,7 +811,7 @@ ___
 
 Verifies that the mean value in a column changed in a fixed rate since the last readout.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_mean_change|monitoring|daily|Consistency|[mean](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[change_percent](../../../reference/rules/Change.md#change-percent)|
 
@@ -1609,7 +1609,7 @@ ___
 
 Verifies that the mean value in a column changed in a fixed rate since the last readout.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_mean_change|monitoring|monthly|Consistency|[mean](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[change_percent](../../../reference/rules/Change.md#change-percent)|
 
@@ -2407,7 +2407,7 @@ ___
 
 Verifies that the mean value in a column changed in a fixed rate since last readout.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_mean_change|partitioned|daily|Consistency|[mean](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[change_percent](../../../reference/rules/Change.md#change-percent)|
 
@@ -3227,7 +3227,7 @@ ___
 
 Verifies that the mean value in a column changed in a fixed rate since the last readout.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_mean_change|partitioned|monthly|Consistency|[mean](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[change_percent](../../../reference/rules/Change.md#change-percent)|
 
