@@ -113,14 +113,14 @@ const TrinoConnection = ({
           <>
             <FieldTypeInput
               data={sharedCredentials}
-              label="Athena AccessKeyId"
+              label="AWS AccessKeyId"
               className="mb-4"
               value={trino?.user}
               onChange={(value) => handleChange({ user: value })}
             />
             <FieldTypeInput
               data={sharedCredentials}
-              label="Athena SecretAccessKey"
+              label="AWS SecretAccessKey"
               value={trino?.password}
               onChange={(value) => handleChange({ password: value })}
             />

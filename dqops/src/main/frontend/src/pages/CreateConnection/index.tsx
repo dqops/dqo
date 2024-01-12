@@ -8,6 +8,7 @@ import {
   BigQueryParametersSpecJobsCreateProjectEnum, 
   ConnectionModel, 
   ConnectionModelProviderTypeEnum,
+  TrinoParametersSpecAthenaAuthenticationModeEnum,
   TrinoParametersSpecTrinoEngineTypeEnum } from '../../api';
 import { BigQueryAuthenticationMode } from '../../shared/enums/bigquery.enum';
 
@@ -55,6 +56,7 @@ const CreateConnection = () => {
         copiedDatabase.trino = { 
           port: '8080', 
           trino_engine_type: (nameOfDatabase?.toLowerCase() as TrinoParametersSpecTrinoEngineTypeEnum),
+          athena_authentication_mode: TrinoParametersSpecAthenaAuthenticationModeEnum.iam,
           catalog: (
             (nameOfDatabase?.toLowerCase() as TrinoParametersSpecTrinoEngineTypeEnum 
             ) === TrinoParametersSpecTrinoEngineTypeEnum.athena 
