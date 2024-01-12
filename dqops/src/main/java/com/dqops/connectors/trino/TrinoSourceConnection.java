@@ -52,6 +52,7 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
 
     private final static Object initializeLock = new Object();
     private static boolean athenaInitialized = false;
+    private final AwsProfileProvider awsProfileProvider;
 
     /**
      * Injection constructor for the trino connection.
@@ -60,9 +61,11 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
      */
     @Autowired
     public TrinoSourceConnection(JdbcConnectionPool jdbcConnectionPool,
-                                  SecretValueProvider secretValueProvider,
-                                  TrinoConnectionProvider trinoConnectionProvider) {
+                                 SecretValueProvider secretValueProvider,
+                                 TrinoConnectionProvider trinoConnectionProvider,
+                                 AwsProfileProvider awsProfileProvider) {
         super(jdbcConnectionPool, secretValueProvider, trinoConnectionProvider);
+        this.awsProfileProvider = awsProfileProvider;
     }
 
     /**
@@ -146,7 +149,7 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
                 break;
 
             case default_credentials:
-                Profile profile = AwsDefaultCredentialProfileProvider.provideDefaultProfile(secretValueLookupContext);
+                Profile profile = awsProfileProvider.provideProfile(secretValueLookupContext);
                 if(profile != null){
                     dataSourceProperties.put("AccessKeyId", profile.property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID).orElse(null));  // AccessKeyId alias for User
                     dataSourceProperties.put("SecretAccessKey", profile.property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY).orElse(null));  // SecretAccessKey alias for Password

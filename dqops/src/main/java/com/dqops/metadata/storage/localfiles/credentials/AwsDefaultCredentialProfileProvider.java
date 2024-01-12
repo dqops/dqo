@@ -1,15 +1,17 @@
 package com.dqops.metadata.storage.localfiles.credentials;
 
 import com.dqops.core.secrets.SecretValueLookupContext;
+import org.springframework.stereotype.Component;
 import software.amazon.awssdk.profiles.Profile;
 import software.amazon.awssdk.profiles.ProfileFile;
 
 import java.nio.file.Path;
 import java.util.Objects;
 
-public class AwsDefaultCredentialProfileProvider {
+@Component
+public class AwsDefaultCredentialProfileProvider implements AwsProfileProvider {
 
-    public static Profile provideDefaultProfile(SecretValueLookupContext secretValueLookupContext){
+    public Profile provideProfile(SecretValueLookupContext secretValueLookupContext){
 
         String sectionName = "profiles";
         String sectionTitle = "default";
@@ -20,6 +22,7 @@ public class AwsDefaultCredentialProfileProvider {
 
         if (defaultCredentialsSharedSecret != null && defaultCredentialsSharedSecret.getObject() != null &&
                 !Objects.equals(defaultCredentialsSharedSecret.getObject().getTextContent(), DefaultCloudCredentialFileContent.AWS_DEFAULT_CREDENTIALS_INITIAL_CONTENT)) {
+
             Path credentialFilePath = defaultCredentialsSharedSecret.toAbsoluteFilePath();
             ProfileFile profileFile = ProfileFile.builder().content(credentialFilePath).type(ProfileFile.Type.CREDENTIALS).build();
             Profile profile = profileFile.getSection(sectionName, sectionTitle).orElse(null);
