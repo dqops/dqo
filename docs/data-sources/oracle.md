@@ -142,6 +142,7 @@ dqo> table import --connection={connection name}
 --schema={schema name}
 --table={table name}
 ```
+
 DQOps supports the use of the asterisk character * as a wildcard when selecting schemas and tables, which can substitute
 any number of characters. For example, use  pub* to find all schema a name with a name starting with "pub". The *
 character can be used at the beginning, in the middle or at the end of the name.

@@ -26,6 +26,8 @@ import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.storage.localfiles.credentials.AwsCredentialProfileSettingNames;
+import com.dqops.metadata.storage.localfiles.credentials.AwsProfileProvider;
 import com.dqops.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
 import org.apache.parquet.Strings;
@@ -33,12 +35,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import software.amazon.awssdk.profiles.Profile;
 import tech.tablesaw.api.Table;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 
 /**
@@ -50,17 +54,21 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
 
     private final static Object initializeLock = new Object();
     private static boolean athenaInitialized = false;
+    private final AwsProfileProvider awsProfileProvider;
 
     /**
      * Injection constructor for the trino connection.
      * @param jdbcConnectionPool Jdbc connection pool.
      * @param secretValueProvider Secret value provider for the environment variable expansion.
+     * @param awsProfileProvider AWS profile provider for the connection establishment.
      */
     @Autowired
     public TrinoSourceConnection(JdbcConnectionPool jdbcConnectionPool,
-                                  SecretValueProvider secretValueProvider,
-                                  TrinoConnectionProvider trinoConnectionProvider) {
+                                 SecretValueProvider secretValueProvider,
+                                 TrinoConnectionProvider trinoConnectionProvider,
+                                 AwsProfileProvider awsProfileProvider) {
         super(jdbcConnectionPool, secretValueProvider, trinoConnectionProvider);
+        this.awsProfileProvider = awsProfileProvider;
     }
 
     /**
@@ -128,6 +136,35 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
         Properties dataSourceProperties = new Properties();
         if (trinoSpec.getProperties() != null) {
             dataSourceProperties.putAll(trinoSpec.getProperties());
+        }
+
+        switch(trinoSpec.getAthenaAuthenticationMode()){
+            case iam:
+                String user = this.getSecretValueProvider().expandValue(trinoSpec.getUser(), secretValueLookupContext);
+                if (!Strings.isNullOrEmpty(user)){
+                    dataSourceProperties.put("AccessKeyId", user);  // AccessKeyId alias for User
+                }
+
+                String password = this.getSecretValueProvider().expandValue(trinoSpec.getPassword(), secretValueLookupContext);
+                if (!Strings.isNullOrEmpty(password)){
+                    dataSourceProperties.put("SecretAccessKey", password);  // SecretAccessKey alias for Password
+                }
+                break;
+
+            case default_credentials:
+                Optional<Profile> profile = awsProfileProvider.provideProfile(secretValueLookupContext);
+                if(profile.isPresent()
+                        && profile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID).isPresent()
+                        && profile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY).isPresent()){
+                    dataSourceProperties.put("AccessKeyId", profile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID).get());  // AccessKeyId alias for User
+                    dataSourceProperties.put("SecretAccessKey", profile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY).get());  // SecretAccessKey alias for Password
+                } else {
+                    dataSourceProperties.put("CredentialsProvider", "DefaultChain");    // The use of the local ~/.aws/credentials file with default profile
+                }
+                break;
+
+            default:
+                new RuntimeException("Given enum is not supported : " + trinoSpec.getAthenaAuthenticationMode());
         }
 
         String region = this.getSecretValueProvider().expandValue(trinoSpec.getAthenaRegion(), secretValueLookupContext);

@@ -106,7 +106,6 @@ public class TrinoConnectionProvider extends AbstractSqlConnectionProvider {
         }
 
         TrinoEngineType trinoEngineType = terminalReader.promptEnum("Trino engine type (--trino-engine)", TrinoEngineType.class, null, false);
-//        String trinoEngine = terminalReader.prompt("Trino engine type (--trino-engine)", "${TRINO_ENGINE}", true);
         trinoSpec.setTrinoEngineType(trinoEngineType);
 
         switch (trinoEngineType){
@@ -149,6 +148,33 @@ public class TrinoConnectionProvider extends AbstractSqlConnectionProvider {
     }
 
     private void promptForAthenaConnectionParameters(TrinoParametersSpec trinoSpec, boolean isHeadless, TerminalReader terminalReader) {
+
+        AthenaAuthenticationMode athenaAuthenticationMode = terminalReader.promptEnum("Athena authentication mode (--athena-authentication-mode)", AthenaAuthenticationMode.class, null, false);
+        trinoSpec.setAthenaAuthenticationMode(athenaAuthenticationMode);
+
+        switch (athenaAuthenticationMode){
+            case iam:
+                if (Strings.isNullOrEmpty(trinoSpec.getUser())) {
+                    if (isHeadless) {
+                        throw new CliRequiredParameterMissingException("--trino-user");
+                    }
+                    trinoSpec.setUser(terminalReader.prompt(" (--trino-region)", "${TRINO_USER}", false));
+                }
+                if (Strings.isNullOrEmpty(trinoSpec.getPassword())) {
+                    if (isHeadless) {
+                        throw new CliRequiredParameterMissingException("--trino-password");
+                    }
+                    trinoSpec.setPassword(terminalReader.prompt(" (--trino-password)", "${TRINO_PASSWORD}", false));
+                }
+                break;
+
+            case default_credentials:
+                    // Default credentials are set automatically from the file when the jdbc connection string creation.
+                break;
+            default:
+                new RuntimeException("Given enum is not supported : " + trinoSpec.getAthenaAuthenticationMode());
+        }
+
         if (Strings.isNullOrEmpty(trinoSpec.getAthenaRegion())) {
             if (isHeadless) {
                 throw new CliRequiredParameterMissingException("--athena-region");

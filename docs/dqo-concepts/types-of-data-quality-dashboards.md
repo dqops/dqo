@@ -350,7 +350,8 @@ This dashboard allows filtering data by:
 **Checks no longer in use** dashboards show summary tables and charts of checks that are no longer in use.
 
 
-## Aggregated results for all check types
+## What's next
 
-**Aggregated results for all check types** group contains **Data quality issues count** and **Data quality KPIs** groups of 
-dashboards with results aggregated from all check types (profiling, monitoring, and partitions).
+- Check the [Data quality KPIs concept guide](./definition-of-data-quality-kpis.md), to learn how to measure the data quality KPI score with DQOps, what is the formula used to calculate the score, and how to improve data quality KPIs.
+- DQOps allows you to [create custom data quality dashboards using Looker Studio](../integrations/looker-studio/creating-custom-dashboards.md). Check the guide to learn more.
+- You might also be interested in learning [how to use data quality dashboards](../working-with-dqo/reviewing-results-on-data-quality-dashboards.md).
