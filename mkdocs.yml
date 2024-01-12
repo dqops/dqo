@@ -47,6 +47,7 @@ nav:
       - MySQL: "data-sources/mysql.md"
       - Oracle: "data-sources/oracle.md"
       - PostgreSQL: "data-sources/postgresql.md"
+      - Presto: "data-sources/presto.md"
       - Redshift: "data-sources/redshift.md"
       - Snowflake: "data-sources/snowflake.md"
       - Spark: "data-sources/spark.md"
