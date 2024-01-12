@@ -168,8 +168,8 @@ public class TrinoConnectionProvider extends AbstractSqlConnectionProvider {
                 }
                 break;
 
-            case default_credentials: // todo
-
+            case default_credentials:
+                    // Default credentials are set automatically from the file when the jdbc connection string creation.
                 break;
             default:
                 new RuntimeException("Given enum is not supported : " + trinoSpec.getAthenaAuthenticationMode());

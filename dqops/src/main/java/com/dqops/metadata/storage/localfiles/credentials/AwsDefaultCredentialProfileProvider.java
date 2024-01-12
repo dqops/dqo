@@ -12,11 +12,17 @@ import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.Optional;
 
-// todo javadoc
+/**
+ * AWS default profile provider that use the keys available in the credential folder of DQO.
+ */
 @Component
 public class AwsDefaultCredentialProfileProvider implements AwsProfileProvider {
 
-    // todo javadoc
+    /**
+     * Provides the AWS profile with credentials.
+     * @param secretValueLookupContext Secret value lookup context used to access shared credentials.
+     * @return AWS default profile created from the credential files available in DQOps shared credentials.
+     */
     public Optional<Profile> provideProfile(SecretValueLookupContext secretValueLookupContext){
 
         String sectionName = "profiles";
@@ -38,13 +44,7 @@ public class AwsDefaultCredentialProfileProvider implements AwsProfileProvider {
                 throw new RuntimeException("Failed to read AWS default credentials.");
             }
 
-            Optional<Profile> profile = profileFile.getSection(sectionName, sectionTitle);
-            if(profile.isEmpty()
-                    || profile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID).isEmpty()
-                    || profile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY).isEmpty()) {
-                return Optional.empty();
-            }
-            return profile;
+            return profileFile.getSection(sectionName, sectionTitle);
         }
         return Optional.empty();
     }

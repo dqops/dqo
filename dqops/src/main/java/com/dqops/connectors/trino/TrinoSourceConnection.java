@@ -60,6 +60,7 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
      * Injection constructor for the trino connection.
      * @param jdbcConnectionPool Jdbc connection pool.
      * @param secretValueProvider Secret value provider for the environment variable expansion.
+     * @param awsProfileProvider AWS profile provider for the connection establishment.
      */
     @Autowired
     public TrinoSourceConnection(JdbcConnectionPool jdbcConnectionPool,
@@ -152,9 +153,11 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
 
             case default_credentials:
                 Optional<Profile> profile = awsProfileProvider.provideProfile(secretValueLookupContext);
-                if(profile.isEmpty()){
-                    dataSourceProperties.put("AccessKeyId", profile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID).orElse(null));  // AccessKeyId alias for User
-                    dataSourceProperties.put("SecretAccessKey", profile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY).orElse(null));  // SecretAccessKey alias for Password
+                if(profile.isPresent()
+                        && profile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID).isPresent()
+                        && profile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY).isPresent()){
+                    dataSourceProperties.put("AccessKeyId", profile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID).get());  // AccessKeyId alias for User
+                    dataSourceProperties.put("SecretAccessKey", profile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY).get());  // SecretAccessKey alias for Password
                 } else {
                     dataSourceProperties.put("CredentialsProvider", "DefaultChain");    // The use of the local ~/.aws/credentials file with default profile
                 }
