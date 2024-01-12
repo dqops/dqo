@@ -270,6 +270,12 @@ export const databaseOptions: IDatabaseOption[] = [
     displayName: 'AlloyDB for PostgreSQL'
   },
   {
+    type: ConnectionModelProviderTypeEnum.trino,
+    name: 'Athena',
+    iconName: 'athena',
+    displayName: 'Amazon Athena'
+  },
+  {
     type: ConnectionModelProviderTypeEnum.postgresql,
     name: 'Amazon Aurora',
     iconName: 'amazonrds',

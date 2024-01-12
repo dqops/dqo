@@ -6,7 +6,8 @@ import {
   ConnectionModelProviderTypeEnum,
   ConnectionTestModel,
   ConnectionTestModelConnectionTestResultEnum,
-  SharedCredentialListModel
+  SharedCredentialListModel,
+  TrinoParametersSpecTrinoEngineTypeEnum
 } from '../../../api';
 import {
   ConnectionApiClient,
@@ -48,13 +49,15 @@ interface IDatabaseConnectionProps {
   onChange: (db: ConnectionModel) => void;
   nameOfDatabase?: string;
   onBack: () => void;
+  onNameOfDatabaseChange: (newName: string) => void;
 }
 
 const DatabaseConnection = ({
   database,
   onChange,
   nameOfDatabase,
-  onBack
+  onBack,
+  onNameOfDatabaseChange
 }: IDatabaseConnectionProps) => {
   const { addConnection } = useTree();
   const [isTesting, setIsTesting] = useState(false);
@@ -146,8 +149,12 @@ const DatabaseConnection = ({
     setShowError(true);
   };
 
-  const getTitle = (provider?: ConnectionModelProviderTypeEnum) => {
-    switch (provider) {
+  const getTitle = (database?: ConnectionModel): string => {
+    if(nameOfDatabase){
+      return nameOfDatabase + ' Connection Settings';
+    }
+
+    switch (database?.provider_type) {
       case ConnectionModelProviderTypeEnum.bigquery:
         return 'Google BigQuery Connection Settings';
       case ConnectionModelProviderTypeEnum.snowflake:
@@ -174,6 +181,20 @@ const DatabaseConnection = ({
         return 'Database Connection Settings';
     }
   };
+
+  const getIcon = () => {
+    if(nameOfDatabase){
+      return (<SvgIcon
+        name={nameOfDatabase?.toLowerCase().replace(/\s/g, '')}
+        className={clsx(
+          'mb-3 w-20 text-blue-500',
+          nameOfDatabase === 'Spark' && 'w-35',
+          nameOfDatabase === 'Trino' && 'max-w-11',
+        )}
+      />);
+    }
+    return (<img src={dbImage} className="h-16" alt="db logo" />);
+  }
 
   const getSharedCredentials = async () => {
     await SharedCredentialsApi.getAllSharedCredentials().then((res) =>
@@ -231,8 +252,22 @@ const DatabaseConnection = ({
     [ConnectionModelProviderTypeEnum.trino]: (
       <TrinoConnection
         trino={database.trino}
+        // trino={{ ...database.trino, 
+        //   port: '8080', 
+        //   trino_engine_type: (database.trino?.trino_engine_type ? database?.trino?.trino_engine_type : nameOfDatabase?.toLowerCase() as TrinoParametersSpecTrinoEngineTypeEnum),
+        //   catalog: (
+        //     (database.trino?.trino_engine_type 
+        //       ? database.trino?.trino_engine_type 
+        //       : nameOfDatabase?.toLowerCase() as TrinoParametersSpecTrinoEngineTypeEnum 
+        //     ) === TrinoParametersSpecTrinoEngineTypeEnum.athena 
+        //       ? "awsdatacatalog" : ""
+        //   ),
+        //   athena_work_group: 'primary'
+        // }}
         onChange={(trino) => onChange({ ...database, trino })}
         sharedCredentials={sharedCredentials}
+        nameOfDatabase={nameOfDatabase ? nameOfDatabase : ''}
+        onNameOfDatabaseChange={onNameOfDatabaseChange}
       />
     ),
     [ConnectionModelProviderTypeEnum.mysql]: (
@@ -309,22 +344,10 @@ const DatabaseConnection = ({
         <div>
           <div className="text-2xl font-semibold mb-3">Connect a database</div>
           <div>
-            {nameOfDatabase
-              ? nameOfDatabase + ' Connection Settings'
-              : getTitle(database.provider_type)}
+            {getTitle(database)}
           </div>
         </div>
-        {nameOfDatabase ? (
-          <SvgIcon
-            name={nameOfDatabase.toLowerCase().replace(/\s/g, '')}
-            className={clsx(
-              'mb-3 w-20 text-blue-500',
-              nameOfDatabase === 'Spark' && 'w-35'
-            )}
-          />
-        ) : (
-          <img src={dbImage} className="h-16" alt="db logo" />
-        )}
+        {getIcon()}
       </div>
 
       <div className="bg-white rounded-lg px-4 py-6 border border-gray-100">
