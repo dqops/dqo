@@ -71,88 +71,88 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
         }
     };
 
-    @JsonPropertyDescription("The check counts the number of values in the column that is below the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("The check counts the number of values in the column that is below the value defined by the user as a parameter. Stores a separate data quality check result for each monthly partition.")
     private ColumnNumberBelowMinValueCheckSpec monthlyPartitionNumberBelowMinValue;
 
-    @JsonPropertyDescription("The check counts the number of values in the column that is above the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("The check counts the number of values in the column that is above the value defined by the user as a parameter. Stores a separate data quality check result for each monthly partition.")
     private ColumnNumberAboveMaxValueCheckSpec monthlyPartitionNumberAboveMaxValue;
 
-    @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.")
     private ColumnNegativeCountCheckSpec monthlyPartitionNegativeValues;
 
-    @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.")
     private ColumnNegativePercentCheckSpec monthlyPartitionNegativeValuesPercent;
 
-    @JsonPropertyDescription("The check counts the percentage of values in the column that is below the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("The check counts the percentage of values in the column that is below the value defined by the user as a parameter. Stores a separate data quality check result for each monthly partition.")
     private ColumnNumberBelowMinValuePercentCheckSpec monthlyPartitionNumberBelowMinValuePercent;
 
-    @JsonPropertyDescription("The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Stores a separate data quality check result for each monthly partition.")
     private ColumnNumberAboveMaxValuePercentCheckSpec monthlyPartitionNumberAboveMaxValuePercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.")
     private ColumnNumberInRangePercentCheckSpec monthlyPartitionNumberInRangePercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.")
     private ColumnIntegerInRangePercentCheckSpec monthlyPartitionIntegerInRangePercent;
 
-    @JsonPropertyDescription("Verifies that the minimal value in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the minimal value in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.")
     private ColumnMinInRangeCheckSpec monthlyPartitionMinInRange;
 
-    @JsonPropertyDescription("Verifies that the maximal value in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the maximal value in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.")
     private ColumnMaxInRangeCheckSpec monthlyPartitionMaxInRange;
 
-    @JsonPropertyDescription("Verifies that the sum of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the sum of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.")
     private ColumnSumInRangeCheckSpec monthlyPartitionSumInRange;
 
-    @JsonPropertyDescription("Verifies that the average (mean) of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the average (mean) of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.")
     private ColumnMeanInRangeCheckSpec monthlyPartitionMeanInRange;
 
-    @JsonPropertyDescription("Verifies that the median of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the median of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.")
     private ColumnMedianInRangeCheckSpec monthlyPartitionMedianInRange;
 
-    @JsonPropertyDescription("Verifies that the percentile of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the percentile of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.")
     private ColumnPercentileInRangeCheckSpec monthlyPartitionPercentileInRange;
 
-    @JsonPropertyDescription("Verifies that the percentile 10 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the percentile 10 of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.")
     private ColumnPercentile10InRangeCheckSpec monthlyPartitionPercentile_10InRange;
 
-    @JsonPropertyDescription("Verifies that the percentile 25 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the percentile 25 of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.")
     private ColumnPercentile25InRangeCheckSpec monthlyPartitionPercentile_25InRange;
 
-    @JsonPropertyDescription("Verifies that the percentile 75 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the percentile 75 of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.")
     private ColumnPercentile75InRangeCheckSpec monthlyPartitionPercentile_75InRange;
 
-    @JsonPropertyDescription("Verifies that the percentile 90 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the percentile 90 of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.")
     private ColumnPercentile90InRangeCheckSpec monthlyPartitionPercentile_90InRange;
 
-    @JsonPropertyDescription("Verifies that the sample standard deviation of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the sample standard deviation of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.")
     private ColumnSampleStddevInRangeCheckSpec monthlyPartitionSampleStddevInRange;
 
-    @JsonPropertyDescription("Verifies that the population standard deviation of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the population standard deviation of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.")
     private ColumnPopulationStddevInRangeCheckSpec monthlyPartitionPopulationStddevInRange;
 
-    @JsonPropertyDescription("Verifies that the sample variance of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the sample variance of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.")
     private ColumnSampleVarianceInRangeCheckSpec monthlyPartitionSampleVarianceInRange;
 
-    @JsonPropertyDescription("Verifies that the population variance of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the population variance of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.")
     private ColumnPopulationVarianceInRangeCheckSpec monthlyPartitionPopulationVarianceInRange;
 
-    @JsonPropertyDescription("Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.")
     private ColumnInvalidLatitudeCountCheckSpec monthlyPartitionInvalidLatitude;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid latitude values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the percentage of valid latitude values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.")
     private ColumnValidLatitudePercentCheckSpec monthlyPartitionValidLatitudePercent;
 
-    @JsonPropertyDescription("Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.")
     private ColumnInvalidLongitudeCountCheckSpec monthlyPartitionInvalidLongitude;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.")
     private ColumnValidLongitudePercentCheckSpec monthlyPartitionValidLongitudePercent;
 
-    @JsonPropertyDescription("Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.")
     private ColumnNonNegativeCountCheckSpec monthlyPartitionNonNegativeValues;
 
-    @JsonPropertyDescription("Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.")
     private ColumnNonNegativePercentCheckSpec monthlyPartitionNonNegativeValuesPercent;
 
     /**

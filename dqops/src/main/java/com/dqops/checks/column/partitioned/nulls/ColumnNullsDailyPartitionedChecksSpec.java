@@ -57,16 +57,16 @@ public class ColumnNullsDailyPartitionedChecksSpec extends AbstractCheckCategory
         }
     };
 
-    @JsonPropertyDescription("Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.")
     private ColumnNullsCountCheckSpec dailyPartitionNullsCount;
 
-    @JsonPropertyDescription("Measures the percent of null values in a column. Raises a data quality exception when the percentage of null values is above the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Measures the percent of null values in a column. Raises a data quality exception when the percentage of null values is above the minimum accepted percentage. Stores a separate data quality check result for each daily partition.")
     private ColumnNullsPercentCheckSpec dailyPartitionNullsPercent;
 
-    @JsonPropertyDescription("Detects empty columns. The default rule min_count=1 verifies that the column has any values. Verifies that the number of not null values in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Detects empty columns. The default rule min_count=1 verifies that the column has any values. Verifies that the number of not null values in a column does not exceed the minimum accepted count. Stores a separate data quality check result for each daily partition.")
     private ColumnNotNullsCountCheckSpec dailyPartitionNotNullsCount;
 
-    @JsonPropertyDescription("Measures the percent of not null values in a column. Raises a data quality exception when the percentage of not null values is below a minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Measures the percent of not null values in a column. Raises a data quality exception when the percentage of not null values is below a minimum accepted percentage. Stores a separate data quality check result for each daily partition.")
     private ColumnNotNullsPercentCheckSpec dailyPartitionNotNullsPercent;
 
     @JsonPropertyDescription("Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 90 days.")

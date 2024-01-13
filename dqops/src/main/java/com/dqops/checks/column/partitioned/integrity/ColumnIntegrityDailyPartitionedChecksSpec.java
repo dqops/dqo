@@ -47,10 +47,10 @@ public class ColumnIntegrityDailyPartitionedChecksSpec extends AbstractCheckCate
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores a separate data quality check result for each daily partition.")
     private ColumnIntegrityLookupKeyNotFoundCountCheckSpec dailyPartitionLookupKeyNotFound;
 
-    @JsonPropertyDescription("Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Stores a separate data quality check result for each daily partition.")
     private ColumnIntegrityForeignKeyMatchPercentCheckSpec dailyPartitionLookupKeyFoundPercent;
 
     /**

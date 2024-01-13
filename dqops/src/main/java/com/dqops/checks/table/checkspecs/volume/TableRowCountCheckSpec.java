@@ -58,7 +58,7 @@ public class TableRowCountCheckSpec extends AbstractCheckSpec<TableVolumeRowCoun
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MinCountRule0WarningParametersSpec warning;
 
-    @JsonPropertyDescription("Default alerting threshold for a row count that raises a data quality error (alert)")
+    @JsonPropertyDescription("Default alerting thresholdthat raises a data quality issue at an error severity level")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MinCountRule1ParametersSpec error;

@@ -58,7 +58,7 @@ public class TableAvailabilityCheckSpec extends AbstractCheckSpec<TableAvailabil
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MaxFailuresRule0ParametersSpec warning;
 
-    @JsonPropertyDescription("Default alerting threshold for a row count that raises a data quality error (alert)")
+    @JsonPropertyDescription("Default alerting threshold with the maximum number of consecutive table availability issues that raises a data quality error (alert)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MaxFailuresRule5ParametersSpec error;

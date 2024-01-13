@@ -50,14 +50,14 @@ public class TableCustomSqlDailyPartitionedChecksSpec extends AbstractCheckCateg
 
     @JsonPropertyDescription("Verifies that a custom SQL expression is met for each row. Counts the number of rows where the expression is not satisfied, and raises an issue if too many failures were detected. " +
             "This check is used also to compare values between columns: `{alias}.col_price > {alias}.col_tax`. " +
-            "Creates a separate data quality check (and an alert) for each daily partition.")
+            "Stores a separate data quality check result for each daily partition.")
     private TableSqlConditionFailedCheckSpec dailyPartitionSqlConditionFailedOnTable;
 
     @JsonPropertyDescription("Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Reference the current table by using tokens, for example: `{alias}.col_price > {alias}.col_tax`. " +
-            "Creates a separate data quality check (and an alert) for each daily partition.")
+            "Stores a separate data quality check result for each daily partition.")
     private TableSqlConditionPassedPercentCheckSpec dailyPartitionSqlConditionPassedPercentOnTable;
 
-    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range. Stores a separate data quality check result for each daily partition.")
     private TableSqlAggregateExpressionCheckSpec dailyPartitionSqlAggregateExpressionOnTable;
 
     /**

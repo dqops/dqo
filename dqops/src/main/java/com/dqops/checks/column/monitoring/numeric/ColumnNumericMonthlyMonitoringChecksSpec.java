@@ -95,46 +95,46 @@ public class ColumnNumericMonthlyMonitoringChecksSpec extends AbstractCheckCateg
     @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnIntegerInRangePercentCheckSpec monthlyIntegerInRangePercent;
 
-    @JsonPropertyDescription("Verifies that the minimal value in a column does not exceed the set range. Stores the most recent value for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the minimal value in a column does not exceed the expected range. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnMinInRangeCheckSpec monthlyMinInRange;
 
-    @JsonPropertyDescription("Verifies that the maximal value in a column does not exceed the set range. Stores the most recent value for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the maximal value in a column does not exceed the expected range. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnMaxInRangeCheckSpec monthlyMaxInRange;
 
-    @JsonPropertyDescription("Verifies that the sum of all values in a column does not exceed the set range. Stores the most recent value for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the sum of all values in a column does not exceed the expected range. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnSumInRangeCheckSpec monthlySumInRange;
 
-    @JsonPropertyDescription("Verifies that the average (mean) of all values in a column does not exceed the set range. Stores the most recent value for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the average (mean) of all values in a column does not exceed the expected range. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnMeanInRangeCheckSpec monthlyMeanInRange;
 
-    @JsonPropertyDescription("Verifies that the median of all values in a column is not outside the set range. Stores the most recent value for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the median of all values in a column is not outside the expected range. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnMedianInRangeCheckSpec monthlyMedianInRange;
 
-    @JsonPropertyDescription("Verifies that the percentile of all values in a column is not outside the set range. Stores the most recent value for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentile of all values in a column is not outside the expected range. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnPercentileInRangeCheckSpec monthlyPercentileInRange;
 
-    @JsonPropertyDescription("Verifies that the percentile 10 of all values in a column is not outside the set range. Stores the most recent value for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentile 10 of all values in a column is not outside the expected range. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnPercentile10InRangeCheckSpec monthlyPercentile_10InRange;
 
-    @JsonPropertyDescription("Verifies that the percentile 25 of all values in a column is not outside the set range. Stores the most recent value for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentile 25 of all values in a column is not outside the expected range. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnPercentile25InRangeCheckSpec monthlyPercentile_25InRange;
 
-    @JsonPropertyDescription("Verifies that the percentile 75 of all values in a column is not outside the set range. Stores the most recent value for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentile 75 of all values in a column is not outside the expected range. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnPercentile75InRangeCheckSpec monthlyPercentile_75InRange;
 
-    @JsonPropertyDescription("Verifies that the percentile 90 of all values in a column is not outside the set range. Stores the most recent value for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentile 90 of all values in a column is not outside the expected range. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnPercentile90InRangeCheckSpec monthlyPercentile_90InRange;
 
-    @JsonPropertyDescription("Verifies that the sample standard deviation of all values in a column is not outside the set range. Stores the most recent value for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the sample standard deviation of all values in a column is not outside the expected range. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnSampleStddevInRangeCheckSpec monthlySampleStddevInRange;
 
-    @JsonPropertyDescription("Verifies that the population standard deviation of all values in a column is not outside the set range. Stores the most recent value for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the population standard deviation of all values in a column is not outside the expected range. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnPopulationStddevInRangeCheckSpec monthlyPopulationStddevInRange;
 
-    @JsonPropertyDescription("Verifies that the sample variance of all values in a column is not outside the set range. Stores the most recent value for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the sample variance of all values in a column is not outside the expected range. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnSampleVarianceInRangeCheckSpec monthlySampleVarianceInRange;
 
-    @JsonPropertyDescription("Verifies that the population variance of all values in a column is not outside the set range. Stores the most recent value for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the population variance of all values in a column is not outside the expected range. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnPopulationVarianceInRangeCheckSpec monthlyPopulationVarianceInRange;
 
     @JsonPropertyDescription("Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count. Stores the most recent value for each month when the data quality check was evaluated.")

@@ -53,10 +53,10 @@ public class ColumnCustomSqlMonthlyMonitoringChecksSpec extends AbstractCheckCat
             "Stores the most recent captured count of failed rows for each month when the data quality check was evaluated.")
     private ColumnSqlConditionFailedCheckSpec monthlySqlConditionFailedOnColumn;
 
-    @JsonPropertyDescription("Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Reference the current column by using tokens, for example: `{alias}.{column} > {alias}.col_tax`.  Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Reference the current column by using tokens, for example: `{alias}.{column} > {alias}.col_tax`.  Stores the most recent check result for each month when the data quality check was evaluated.")
     private ColumnSqlConditionPassedPercentCheckSpec monthlySqlConditionPassedPercentOnColumn;
 
-    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range. Stores the most recent check result for each month when the data quality check was evaluated.")
     private ColumnSqlAggregateExpressionCheckSpec monthlySqlAggregateExpressionOnColumn;
 
     /**

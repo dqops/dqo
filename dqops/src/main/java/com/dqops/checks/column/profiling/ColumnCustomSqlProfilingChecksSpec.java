@@ -55,7 +55,7 @@ public class ColumnCustomSqlProfilingChecksSpec extends AbstractCheckCategorySpe
     @JsonPropertyDescription("Verifies that a number of rows failed a custom SQL condition(expression) does not exceed the maximum accepted count.")
     private ColumnSqlConditionFailedCheckSpec profileSqlConditionFailedCountOnColumn;
 
-    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range.")
+    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range.")
     private ColumnSqlAggregateExpressionCheckSpec profileSqlAggregateExpressionOnColumn;
 
     /**

@@ -51,16 +51,16 @@ public class ColumnNullsMonthlyMonitoringChecksSpec extends AbstractCheckCategor
         }
     };
 
-    @JsonPropertyDescription("Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores the most recent count check result for each month when the data quality check was evaluated.")
     private ColumnNullsCountCheckSpec monthlyNullsCount;
 
-    @JsonPropertyDescription("Measures the percent of null values in a column. Raises a data quality exception when the percentage of null values is above the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Measures the percent of null values in a column. Raises a data quality exception when the percentage of null values is above the minimum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.")
     private ColumnNullsPercentCheckSpec monthlyNullsPercent;
 
-    @JsonPropertyDescription("Detects columns that are empty and have no values (with the rule threshold min_count=1). Verifies that the number of not null values in a column does not exceed the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Detects columns that are empty and have no values (with the rule threshold min_count=1). Verifies that the number of not null values in a column does not exceed the minimum accepted count. Stores the most recent check result for each month when the data quality check was evaluated.")
     private ColumnNotNullsCountCheckSpec monthlyNotNullsCount;
 
-    @JsonPropertyDescription("Measures the percent of not null values in a column. Raises a data quality exception when the percentage of not null values is below a minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Measures the percent of not null values in a column. Raises a data quality exception when the percentage of not null values is below a minimum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.")
     private ColumnNotNullsPercentCheckSpec monthlyNotNullsPercent;
 
     /**

@@ -47,10 +47,10 @@ public class ColumnIntegrityMonthlyMonitoringChecksSpec extends AbstractCheckCat
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores the most recent check result for each month when the data quality check was evaluated.")
     private ColumnIntegrityLookupKeyNotFoundCountCheckSpec monthlyLookupKeyNotFound;
 
-    @JsonPropertyDescription("Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Stores the most recent check result for each month when the data quality check was evaluated.")
     private ColumnIntegrityForeignKeyMatchPercentCheckSpec monthlyLookupKeyFoundPercent;
 
 
