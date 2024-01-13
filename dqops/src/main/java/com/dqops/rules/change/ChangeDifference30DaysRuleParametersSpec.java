@@ -52,7 +52,6 @@ public class ChangeDifference30DaysRuleParametersSpec extends AbstractRuleParame
 
     @JsonPropertyDescription("When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. " +
             "If the parameter is selected (exact_day: true), the rule compares only with the results from the past 30 days. If no results are found from that time, no results or errors will be generated.")
-    @SampleValues(values = "false")
     private Boolean exactDay = false;
 
     /**

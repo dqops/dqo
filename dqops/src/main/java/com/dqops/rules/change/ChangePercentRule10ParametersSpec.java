@@ -47,7 +47,6 @@ public class ChangePercentRule10ParametersSpec extends AbstractRuleParametersSpe
     }
 
     @JsonPropertyDescription("Percentage of maximum accepted change compared to previous readout (inclusive).")
-    @SampleValues(values = "5")
     private Double maxPercent = 10.0;
 
     /**
