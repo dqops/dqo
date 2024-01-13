@@ -95,10 +95,10 @@ public class ColumnNumericDailyMonitoringChecksSpec extends AbstractCheckCategor
     @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnIntegerInRangePercentCheckSpec dailyIntegerInRangePercent;
 
-    @JsonPropertyDescription("Verifies that the minimal value in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the minimum value in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnMinInRangeCheckSpec dailyMinInRange;
 
-    @JsonPropertyDescription("Verifies that the maximal value in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the maximum value in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnMaxInRangeCheckSpec dailyMaxInRange;
 
     @JsonPropertyDescription("Verifies that the sum of all values in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.")

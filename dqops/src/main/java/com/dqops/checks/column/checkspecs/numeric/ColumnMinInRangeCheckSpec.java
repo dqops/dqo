@@ -33,7 +33,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that the minimal values are in an expected range in a monitored column.
+ * Column level check that ensures that the minimum values are in an expected range in a monitored column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -55,7 +55,7 @@ public class ColumnMinInRangeCheckSpec
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private BetweenFloatsRuleParametersSpec warning;
 
-    @JsonPropertyDescription("Default alerting threshold for a minimal values in range in a column that raises a data quality error (alert).")
+    @JsonPropertyDescription("Default alerting threshold for a minimum values in range in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private BetweenFloatsRuleParametersSpec error;

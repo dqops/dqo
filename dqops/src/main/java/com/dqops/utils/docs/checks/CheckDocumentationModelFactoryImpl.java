@@ -79,6 +79,7 @@ import com.dqops.utils.docs.rules.RuleDocumentationModelFactory;
 import com.dqops.utils.docs.sensors.SensorDocumentationModel;
 import com.dqops.utils.docs.sensors.SensorDocumentationModelFactory;
 import com.dqops.utils.exceptions.DqoRuntimeException;
+import com.dqops.utils.serialization.JsonSerializer;
 import com.dqops.utils.serialization.YamlSerializer;
 import com.github.therapi.runtimejavadoc.ClassJavadoc;
 import com.github.therapi.runtimejavadoc.CommentFormatter;
@@ -125,6 +126,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
     private RuleDocumentationModelFactory ruleDocumentationModelFactory;
     private ModelToSpecCheckMappingService modelToSpecCheckMappingService;
     private YamlSerializer yamlSerializer;
+    private JsonSerializer jsonSerializer;
     private JinjaTemplateRenderService jinjaTemplateRenderService;
     private final LinkageStore<Class<?>> linkageStore;
 
@@ -136,6 +138,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
      * @param ruleDocumentationModelFactory   Rule documentation factory for generating the documentation for the sensor, maybe we want to pick some information about the rule.
      * @param modelToSpecCheckMappingService  UI check model to specification adapter that can generate a sample usage for us.
      * @param yamlSerializer                  Yaml serializer, used to render the table yaml files with a sample usage.
+     * @param jsonSerializer                  Json serializer, used to serialize samples to detect if they would generate the same value.
      * @param jinjaTemplateRenderService      Jinja template rendering service. Used to render how the SQL template will be filled for the given parameters.
      * @param linkageStore
      */
@@ -144,6 +147,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                                               RuleDocumentationModelFactory ruleDocumentationModelFactory,
                                               ModelToSpecCheckMappingService modelToSpecCheckMappingService,
                                               YamlSerializer yamlSerializer,
+                                              JsonSerializer jsonSerializer,
                                               JinjaTemplateRenderService jinjaTemplateRenderService,
                                               LinkageStore<Class<?>> linkageStore) {
         this.similarCheckMatchingService = similarCheckMatchingService;
@@ -151,6 +155,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         this.ruleDocumentationModelFactory = ruleDocumentationModelFactory;
         this.modelToSpecCheckMappingService = modelToSpecCheckMappingService;
         this.yamlSerializer = yamlSerializer;
+        this.jsonSerializer = jsonSerializer;
         this.jinjaTemplateRenderService = jinjaTemplateRenderService;
         this.linkageStore = linkageStore;
     }
@@ -445,13 +450,18 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         AbstractCheckSpec<?, ?, ?, ?> checkSpec = (AbstractCheckSpec<?, ?, ?, ?>) checkCategoryContainer.getChild(checkModel.getCheckName());
         if (checkSpec == null) {
             System.err.println("Sorry but check category container: " + checkCategoryContainer.getClass().getName() + " has no check named " + checkModel.getCheckName());
+            throw new DqoRuntimeException("Check " + checkModel.getCheckName() + " not found in the " + checkCategoryContainer.getClass().getName() + " container class.");
         }
 
-        if (Objects.equals(checkSpec.getWarning(), checkSpec.getError())) {
+        String warningYaml = checkSpec.getWarning() != null ? this.jsonSerializer.serialize(checkSpec.getWarning()) : null;
+        String errorYaml = checkSpec.getError() != null ? this.jsonSerializer.serialize(checkSpec.getError()) : null;
+        String fatalYaml = checkSpec.getFatal() != null ? this.jsonSerializer.serialize(checkSpec.getFatal()) : null;
+
+        if (Objects.equals(warningYaml, errorYaml)) {
             checkSpec.setWarning(null); // we don't need the sample of the warning, because the rule has the same parameters
         }
 
-        if (Objects.equals(checkSpec.getFatal(), checkSpec.getError())) {
+        if (Objects.equals(fatalYaml, errorYaml)) {
             checkSpec.setFatal(null); // we don't need the sample of the fatal rule, because the rule has the same parameters
         }
 

@@ -43,7 +43,7 @@ public class ColumnTextTextLengthInRangePercentSensorParametersSpec extends Abst
     @JsonPropertyDescription("Sets a maximum text length")
     private int maxLength = 100;
 
-    /** Returns a minimal string length range.
+    /** Returns a minimum string length range.
      *
      * @return lowerLengthBound
      */
@@ -51,7 +51,7 @@ public class ColumnTextTextLengthInRangePercentSensorParametersSpec extends Abst
         return minLength;
     }
 
-    /** Sets a minimal string length range.
+    /** Sets a minimum string length range.
      *
      * @param minLength
      */
@@ -60,7 +60,7 @@ public class ColumnTextTextLengthInRangePercentSensorParametersSpec extends Abst
         this.minLength = minLength;
     }
 
-    /** Returns a maximal string length range.
+    /** Returns a maximum string length range.
      *
      * @return Return a upperLengthBound
      */
@@ -68,7 +68,7 @@ public class ColumnTextTextLengthInRangePercentSensorParametersSpec extends Abst
         return maxLength;
     }
 
-    /** Sets a maximal string length range.
+    /** Sets a maximum string length range.
      *
      * @param maxLength
      */

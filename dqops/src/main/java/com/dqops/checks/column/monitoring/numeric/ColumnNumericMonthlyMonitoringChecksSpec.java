@@ -95,10 +95,10 @@ public class ColumnNumericMonthlyMonitoringChecksSpec extends AbstractCheckCateg
     @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnIntegerInRangePercentCheckSpec monthlyIntegerInRangePercent;
 
-    @JsonPropertyDescription("Verifies that the minimal value in a column does not exceed the expected range. Stores the most recent value for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the minimum value in a column does not exceed the expected range. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnMinInRangeCheckSpec monthlyMinInRange;
 
-    @JsonPropertyDescription("Verifies that the maximal value in a column does not exceed the expected range. Stores the most recent value for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the maximum value in a column does not exceed the expected range. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnMaxInRangeCheckSpec monthlyMaxInRange;
 
     @JsonPropertyDescription("Verifies that the sum of all values in a column does not exceed the expected range. Stores the most recent value for each month when the data quality check was evaluated.")

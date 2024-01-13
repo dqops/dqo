@@ -323,6 +323,7 @@ public class GenerateDocumentationPostProcessor {
                 createRuleDocumentationModelFactory(projectRoot, dqoHomeContext),
                 new ModelToSpecCheckMappingServiceImpl(reflectionService),
                 new YamlSerializerImpl(configurationProperties, null),
+                new JsonSerializerImpl(),
                 new JinjaTemplateRenderServiceImpl(pythonCallerService, pythonConfigurationProperties),
                 linkageStore);
         return checkDocumentationModelFactory;

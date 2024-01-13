@@ -95,10 +95,10 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
     @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each daily partition.")
     private ColumnIntegerInRangePercentCheckSpec dailyPartitionIntegerInRangePercent;
 
-    @JsonPropertyDescription("Verifies that the minimal value in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.")
+    @JsonPropertyDescription("Verifies that the minimum value in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.")
     private ColumnMinInRangeCheckSpec dailyPartitionMinInRange;
 
-    @JsonPropertyDescription("Verifies that the maximal value in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.")
+    @JsonPropertyDescription("Verifies that the maximum value in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.")
     private ColumnMaxInRangeCheckSpec dailyPartitionMaxInRange;
 
     @JsonPropertyDescription("Verifies that the sum of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.")

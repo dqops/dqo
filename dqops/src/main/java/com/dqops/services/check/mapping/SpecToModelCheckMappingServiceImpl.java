@@ -1019,6 +1019,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         parameterDefinitionSpec.setDisplayName(fieldInfo.getDisplayName());
         parameterDefinitionSpec.setHelpText(fieldInfo.getHelpText());
         parameterDefinitionSpec.setDisplayHint(fieldInfo.getDisplayHint());
+        parameterDefinitionSpec.setRequired(fieldInfo.isRequiredOrNotNullable());
         parameterDefinitionSpec.setSampleValues(fieldInfo.getSampleValues() != null ? List.of(fieldInfo.getSampleValues()) : null);
         if (fieldInfo.getDataType() == ParameterDataType.enum_type) {
             List<String> supportedEnumValues = new ArrayList<>(fieldInfo.getEnumValuesByName().keySet());
@@ -1028,6 +1029,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         // TODO: support the parameterDefinitionSpec.required using javax.validation annotations like @NotNull
 
         fieldModel.setDefinition(parameterDefinitionSpec);
+        fieldModel.setOptional(!fieldInfo.isRequiredOrNotNullable());
 
         if (fieldValue != null) {
             switch (fieldInfo.getDataType()) {
@@ -1082,6 +1084,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         Object fieldValue = parentObject != null ? parentObject.getParameter(parameterDefinitionSpec.getFieldName()) : null;
         FieldModel fieldModel = new FieldModel();
         fieldModel.setDefinition(parameterDefinitionSpec);
+        fieldModel.setOptional(!parameterDefinitionSpec.isRequired());
 
         if (fieldValue != null) {
             try {

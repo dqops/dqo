@@ -12,7 +12,8 @@ spec:
   fields:
   - field_name: max_difference
     display_name: max_difference
-    help_text: Maximum accepted absolute difference compared to a readout 7 days ago (inclusive).
+    help_text: Maximum accepted absolute difference compared to a readout 7 days ago
+      (inclusive).
     data_type: double
     sample_values:
     - 10
@@ -24,5 +25,3 @@ spec:
       \ with the results from the past 7 days. If no results are found from that time,\
       \ no results or errors will be generated."
     data_type: boolean
-    sample_values:
-    - "false"

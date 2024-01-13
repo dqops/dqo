@@ -54,7 +54,7 @@ public class ColumnSampleVarianceInRangeCheckSpec
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private BetweenFloatsRuleParametersSpec warning;
 
-    @JsonPropertyDescription("Default alerting threshold for a sample (unbiased) maximal values in range in a column that raises a data quality error (alert).")
+    @JsonPropertyDescription("Default alerting threshold for a sample (unbiased) maximum values in range in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private BetweenFloatsRuleParametersSpec error;

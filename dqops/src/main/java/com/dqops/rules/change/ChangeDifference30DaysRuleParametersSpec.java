@@ -19,6 +19,7 @@ import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
+import com.dqops.utils.reflection.RequiredField;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -48,6 +49,7 @@ public class ChangeDifference30DaysRuleParametersSpec extends AbstractRuleParame
 
     @JsonPropertyDescription("Maximum accepted absolute difference compared to a readout 30 days ago (inclusive).")
     @SampleValues(values = "10")
+    @RequiredField
     private Double maxDifference;
 
     @JsonPropertyDescription("When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. " +
@@ -55,15 +57,15 @@ public class ChangeDifference30DaysRuleParametersSpec extends AbstractRuleParame
     private Boolean exactDay = false;
 
     /**
-     * Gets the maximal accepted absolute change for a data quality check readout.
-     * @return Maximal accepted absolute change for a data quality check readout.
+     * Gets the maximum accepted absolute change for a data quality check readout.
+     * @return Maximum accepted absolute change for a data quality check readout.
      */
     public Double getMaxDifference() {
         return maxDifference;
     }
 
     /**
-     * Changes the maximal accepted absolute value for a data quality readout's change.
+     * Changes the maximum accepted absolute value for a data quality readout's change.
      * @param maxDifference New accepted absolute change.
      */
     public void setMaxDifference(Double maxDifference) {

@@ -230,8 +230,6 @@ The rule definition YAML file *change/between_change_1_day.dqorule.yaml* with th
           \ with the results from the past 1 day. If no results are found from that time,\
           \ no results or errors will be generated."
         data_type: boolean
-        sample_values:
-        - "false"
     ```
 
 
@@ -412,8 +410,6 @@ The rule definition YAML file *change/between_change_30_days.dqorule.yaml* with 
           \ with the results from the past 30 days. If no results are found from that\
           \ time, no results or errors will be generated."
         data_type: boolean
-        sample_values:
-        - "false"
     ```
 
 
@@ -594,8 +590,6 @@ The rule definition YAML file *change/between_change_7_days.dqorule.yaml* with t
           \ with the results from the past 7 days. If no results are found from that time,\
           \ no results or errors will be generated."
         data_type: boolean
-        sample_values:
-        - "false"
     ```
 
 
@@ -933,8 +927,6 @@ The rule definition YAML file *change/between_percent_change_1_day.dqorule.yaml*
           \ with the results from the past 1 day. If no results are found from that time,\
           \ no results or errors will be generated."
         data_type: boolean
-        sample_values:
-        - "false"
     ```
 
 
@@ -1285,8 +1277,6 @@ The rule definition YAML file *change/between_percent_change_7_days.dqorule.yaml
           \ with the results from the past 7 days. If no results are found from that time,\
           \ no results or errors will be generated."
         data_type: boolean
-        sample_values:
-        - "false"
     ```
 
 
@@ -1591,7 +1581,8 @@ The rule definition YAML file *change/change_difference_1_day.dqorule.yaml* with
       fields:
       - field_name: max_difference
         display_name: max_difference
-        help_text: Maximum accepted absolute difference compared to a readout 1 day ago (inclusive).
+        help_text: Maximum accepted absolute difference compared to a readout 1 day ago
+          (inclusive).
         data_type: double
         sample_values:
         - 10
@@ -1603,8 +1594,6 @@ The rule definition YAML file *change/change_difference_1_day.dqorule.yaml* with
           \ with the results from the past 1 day. If no results are found from that time,\
           \ no results or errors will be generated."
         data_type: boolean
-        sample_values:
-        - "false"
     ```
 
 
@@ -1759,7 +1748,8 @@ The rule definition YAML file *change/change_difference_30_days.dqorule.yaml* wi
       fields:
       - field_name: max_difference
         display_name: max_difference
-        help_text: Maximum accepted absolute difference compared to a readout 30 days ago (inclusive).
+        help_text: Maximum accepted absolute difference compared to a readout 30 days
+          ago (inclusive).
         data_type: double
         sample_values:
         - 10
@@ -1771,8 +1761,6 @@ The rule definition YAML file *change/change_difference_30_days.dqorule.yaml* wi
           \ with the results from the past 30 days. If no results are found from that\
           \ time, no results or errors will be generated."
         data_type: boolean
-        sample_values:
-        - "false"
     ```
 
 
@@ -1927,7 +1915,8 @@ The rule definition YAML file *change/change_difference_7_days.dqorule.yaml* wit
       fields:
       - field_name: max_difference
         display_name: max_difference
-        help_text: Maximum accepted absolute difference compared to a readout 7 days ago (inclusive).
+        help_text: Maximum accepted absolute difference compared to a readout 7 days ago
+          (inclusive).
         data_type: double
         sample_values:
         - 10
@@ -1939,8 +1928,6 @@ The rule definition YAML file *change/change_difference_7_days.dqorule.yaml* wit
           \ with the results from the past 7 days. If no results are found from that time,\
           \ no results or errors will be generated."
         data_type: boolean
-        sample_values:
-        - "false"
     ```
 
 
@@ -2097,8 +2084,6 @@ The rule definition YAML file *change/change_percent.dqorule.yaml* with the time
         help_text: Percentage of maximum accepted change compared to previous readout
           (inclusive).
         data_type: double
-        sample_values:
-        - 5
     ```
 
 
@@ -2245,10 +2230,9 @@ The rule definition YAML file *change/change_percent_1_day.dqorule.yaml* with th
       fields:
       - field_name: max_percent
         display_name: max_percent
-        help_text: Percentage of maximum accepted change compared to a readout 1 day ago (inclusive).
+        help_text: Percentage of maximum accepted change compared to a readout 1 day ago
+          (inclusive).
         data_type: double
-        sample_values:
-        - 5
       - field_name: exact_day
         display_name: exact_day
         help_text: "When the exact_day parameter is unchecked (exact_day: false), the\
@@ -2257,8 +2241,6 @@ The rule definition YAML file *change/change_percent_1_day.dqorule.yaml* with th
           \ only with the results from the past 1 day. If no results are found from that\
           \ time, no results or errors will be generated."
         data_type: boolean
-        sample_values:
-        - "false"
     ```
 
 
@@ -2413,10 +2395,9 @@ The rule definition YAML file *change/change_percent_30_days.dqorule.yaml* with 
       fields:
       - field_name: max_percent
         display_name: max_percent
-        help_text: Percentage of maximum accepted change compared to a readout 30 days ago (inclusive).
+        help_text: Percentage of maximum accepted change compared to a readout 30 days
+          ago (inclusive).
         data_type: double
-        sample_values:
-        - 5
       - field_name: exact_day
         display_name: exact_day
         help_text: "When the exact_day parameter is unchecked (exact_day: false), rule\
@@ -2425,8 +2406,6 @@ The rule definition YAML file *change/change_percent_30_days.dqorule.yaml* with 
           \ with the results from the past 30 days. If no results are found from that\
           \ time, no results or errors will be generated."
         data_type: boolean
-        sample_values:
-        - "false"
     ```
 
 
@@ -2581,10 +2560,9 @@ The rule definition YAML file *change/change_percent_7_days.dqorule.yaml* with t
       fields:
       - field_name: max_percent
         display_name: max_percent
-        help_text: Percentage of maximum accepted change compared to a readout 7 days ago (inclusive).
+        help_text: Percentage of maximum accepted change compared to a readout 7 days
+          ago (inclusive).
         data_type: double
-        sample_values:
-        - 5
       - field_name: exact_day
         display_name: exact_day
         help_text: "When the exact_day parameter is unchecked (exact_day: false), rule\
@@ -2593,8 +2571,6 @@ The rule definition YAML file *change/change_percent_7_days.dqorule.yaml* with t
           \ with the results from the past 7 days. If no results are found from that time,\
           \ no results or errors will be generated."
         data_type: boolean
-        sample_values:
-        - "false"
     ```
 
 

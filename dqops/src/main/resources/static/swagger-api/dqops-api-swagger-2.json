@@ -31123,26 +31123,6 @@
         }
       }
     },
-    "MinCountRule0WarningParametersSpec" : {
-      "type" : "object",
-      "properties" : {
-        "min_count" : {
-          "type" : "integer",
-          "format" : "int64",
-          "description" : "Minimum accepted value for the actual_value returned by the sensor (inclusive)."
-        }
-      }
-    },
-    "MinCountRule100FatalParametersSpec" : {
-      "type" : "object",
-      "properties" : {
-        "min_count" : {
-          "type" : "integer",
-          "format" : "int64",
-          "description" : "Minimum accepted value for the actual_value returned by the sensor (inclusive)."
-        }
-      }
-    },
     "MinCountRule1ParametersSpec" : {
       "type" : "object",
       "properties" : {
@@ -34697,15 +34677,15 @@
         },
         "warning" : {
           "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-          "$ref" : "#/definitions/MinCountRule0WarningParametersSpec"
+          "$ref" : "#/definitions/MinCountRule1ParametersSpec"
         },
         "error" : {
-          "description" : "Default alerting thresholdthat raises a data quality issue at an error severity level",
+          "description" : "Default alerting threshold that raises a data quality issue at an error severity level",
           "$ref" : "#/definitions/MinCountRule1ParametersSpec"
         },
         "fatal" : {
           "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-          "$ref" : "#/definitions/MinCountRule100FatalParametersSpec"
+          "$ref" : "#/definitions/MinCountRule1ParametersSpec"
         }
       }
     },

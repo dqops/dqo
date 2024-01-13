@@ -30,5 +30,3 @@ spec:
       \ with the results from the past 1 day. If no results are found from that time,\
       \ no results or errors will be generated."
     data_type: boolean
-    sample_values:
-    - "false"

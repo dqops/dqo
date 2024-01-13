@@ -95,10 +95,10 @@ public class ColumnNumericProfilingChecksSpec extends AbstractCheckCategorySpec 
     @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage.")
     private ColumnIntegerInRangePercentCheckSpec profileIntegerInRangePercent;
 
-    @JsonPropertyDescription("Verifies that the minimal value in a column is not outside the expected range.")
+    @JsonPropertyDescription("Verifies that the minimum value in a column is not outside the expected range.")
     private ColumnMinInRangeCheckSpec profileMinInRange;
 
-    @JsonPropertyDescription("Verifies that the maximal value in a column is not outside the expected range.")
+    @JsonPropertyDescription("Verifies that the maximum value in a column is not outside the expected range.")
     private ColumnMaxInRangeCheckSpec profileMaxInRange;
 
     @JsonPropertyDescription("Verifies that the sum of all values in a column is not outside the expected range.")

@@ -46,11 +46,11 @@ public class BetweenChange7DaysRuleParametersSpec extends AbstractRuleParameters
     public BetweenChange7DaysRuleParametersSpec() {
     }
 
-    @JsonPropertyDescription("Minimal accepted change with regards to the previous readout (inclusive).")
+    @JsonPropertyDescription("Minimum accepted change with regards to the previous readout (inclusive).")
     @SampleValues(values = "10")
     private Double from;
 
-    @JsonPropertyDescription("Maximal accepted change with regards to the previous readout (inclusive).")
+    @JsonPropertyDescription("Maximum accepted change with regards to the previous readout (inclusive).")
     @SampleValues(values = "20")
     private Double to;
 
@@ -60,7 +60,7 @@ public class BetweenChange7DaysRuleParametersSpec extends AbstractRuleParameters
 
     /**
      * Gets the lower bound for the accepted change for a data quality check readout.
-     * @return Minimal accepted change for a data quality check readout.
+     * @return Minimum accepted change for a data quality check readout.
      */
     public Double getFrom() {
         return from;
@@ -77,7 +77,7 @@ public class BetweenChange7DaysRuleParametersSpec extends AbstractRuleParameters
 
     /**
      * Gets the upper bound for the accepted change for a data quality check readout.
-     * @return Maximal accepted change for a data quality check readout.
+     * @return Maximum accepted change for a data quality check readout.
      */
     public Double getTo() {
         return to;

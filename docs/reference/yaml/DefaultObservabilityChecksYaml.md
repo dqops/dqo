@@ -2,9 +2,9 @@
 The definition of YAML files used by DQOps to configure the data sources, monitored tables, and the configuration of activated data quality checks.
 
 
-## DefaultProfilingTableObservabilityCheckSettingsSpec
-The default configuration of checks that are enabled as data observability profiling checks that will be detecting anomalies
- for all tables that are imported. This configuration of checks is copied to the list of enabled table level checks on all tables that are imported, for profiling checks only.
+## DefaultDailyMonitoringTableObservabilityCheckSettingsSpec
+The default configuration of checks that are enabled as data observability daily monitoring checks that will be detecting anomalies
+ for all tables that are imported. This configuration of checks is copied to the list of enabled table level checks on all tables that are imported, for daily monitoring checks only.
 
 
 
@@ -18,9 +18,9 @@ The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[volume](./profiling/table-profiling-checks.md#TableVolumeProfilingChecksSpec)|The default configuration of volume data quality checks on a table level.|[TableVolumeProfilingChecksSpec](./profiling/table-profiling-checks.md#TableVolumeProfilingChecksSpec)| | | |
-|[availability](./profiling/table-profiling-checks.md#TableAvailabilityProfilingChecksSpec)|The default configuration of the table availability data quality checks on a table level.|[TableAvailabilityProfilingChecksSpec](./profiling/table-profiling-checks.md#TableAvailabilityProfilingChecksSpec)| | | |
-|[schema](./profiling/table-profiling-checks.md#TableSchemaProfilingChecksSpec)|The default configuration of schema (column count and schema) data quality checks on a table level.|[TableSchemaProfilingChecksSpec](./profiling/table-profiling-checks.md#TableSchemaProfilingChecksSpec)| | | |
+|[volume](./monitoring/table-daily-monitoring-checks.md#TableVolumeDailyMonitoringChecksSpec)|The default configuration of volume data quality checks on a table level.|[TableVolumeDailyMonitoringChecksSpec](./monitoring/table-daily-monitoring-checks.md#TableVolumeDailyMonitoringChecksSpec)| | | |
+|[availability](./monitoring/table-daily-monitoring-checks.md#TableAvailabilityDailyMonitoringChecksSpec)|The default configuration of the table availability data quality checks on a table level.|[TableAvailabilityDailyMonitoringChecksSpec](./monitoring/table-daily-monitoring-checks.md#TableAvailabilityDailyMonitoringChecksSpec)| | | |
+|[schema](./monitoring/table-daily-monitoring-checks.md#TableSchemaDailyMonitoringChecksSpec)|The default configuration of schema (column count and schema) data quality checks on a table level.|[TableSchemaDailyMonitoringChecksSpec](./monitoring/table-daily-monitoring-checks.md#TableSchemaDailyMonitoringChecksSpec)| | | |
 |[custom](./profiling/table-profiling-checks.md#CustomCheckSpecMap)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](./profiling/table-profiling-checks.md#CustomCheckSpecMap)| | | |
 
 
@@ -73,9 +73,9 @@ The structure of this object is described below
 ___
 
 
-## DefaultProfilingObservabilityCheckSettingsSpec
-The default configuration of checks that are enabled as data observability profiling checks that will be detecting anomalies
- for all columns and tables that are imported. This configuration of checks is copied to the list of enabled checks on all tables and columns that are imported, for profiling checks only.
+## DefaultDailyMonitoringObservabilityCheckSettingsSpec
+The default configuration of checks that are enabled as data observability daily monitoring checks that will be detecting anomalies
+ for all columns and tables that are imported. This configuration of checks is copied to the list of enabled checks on all tables and columns that are imported, for daily monitoring checks only.
 
 
 
@@ -89,8 +89,8 @@ The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[table](./DefaultObservabilityChecksYaml.md#DefaultProfilingTableObservabilityCheckSettingsSpec)|The default configuration of profiling checks on a table level.|[DefaultProfilingTableObservabilityCheckSettingsSpec](./DefaultObservabilityChecksYaml.md#DefaultProfilingTableObservabilityCheckSettingsSpec)| | | |
-|[column](./DefaultObservabilityChecksYaml.md#DefaultProfilingColumnObservabilityCheckSettingsSpec)|The default configuration of profiling checks on a column level.|[DefaultProfilingColumnObservabilityCheckSettingsSpec](./DefaultObservabilityChecksYaml.md#DefaultProfilingColumnObservabilityCheckSettingsSpec)| | | |
+|[table](./DefaultObservabilityChecksYaml.md#DefaultDailyMonitoringTableObservabilityCheckSettingsSpec)|The default configuration of daily monitoring checks on a table level.|[DefaultDailyMonitoringTableObservabilityCheckSettingsSpec](./DefaultObservabilityChecksYaml.md#DefaultDailyMonitoringTableObservabilityCheckSettingsSpec)| | | |
+|[column](./DefaultObservabilityChecksYaml.md#DefaultDailyMonitoringColumnObservabilityCheckSettingsSpec)|The default configuration of daily monitoring checks on a column level.|[DefaultDailyMonitoringColumnObservabilityCheckSettingsSpec](./DefaultObservabilityChecksYaml.md#DefaultDailyMonitoringColumnObservabilityCheckSettingsSpec)| | | |
 
 
 
@@ -103,9 +103,9 @@ The structure of this object is described below
 ___
 
 
-## DefaultDailyMonitoringTableObservabilityCheckSettingsSpec
-The default configuration of checks that are enabled as data observability daily monitoring checks that will be detecting anomalies
- for all tables that are imported. This configuration of checks is copied to the list of enabled table level checks on all tables that are imported, for daily monitoring checks only.
+## DefaultObservabilityChecksYaml
+The configuration of default data quality checks that are activated for all imported tables and columns.
+ The default observability checks are stored in the *$DQO_USER_HOME/settings/defaultchecks.dqochecks.yaml* file in the DQOps user&#x27;s home folder.
 
 
 
@@ -119,49 +119,9 @@ The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[volume](./monitoring/table-daily-monitoring-checks.md#TableVolumeDailyMonitoringChecksSpec)|The default configuration of volume data quality checks on a table level.|[TableVolumeDailyMonitoringChecksSpec](./monitoring/table-daily-monitoring-checks.md#TableVolumeDailyMonitoringChecksSpec)| | | |
-|[availability](./monitoring/table-daily-monitoring-checks.md#TableAvailabilityDailyMonitoringChecksSpec)|The default configuration of the table availability data quality checks on a table level.|[TableAvailabilityDailyMonitoringChecksSpec](./monitoring/table-daily-monitoring-checks.md#TableAvailabilityDailyMonitoringChecksSpec)| | | |
-|[schema](./monitoring/table-daily-monitoring-checks.md#TableSchemaDailyMonitoringChecksSpec)|The default configuration of schema (column count and schema) data quality checks on a table level.|[TableSchemaDailyMonitoringChecksSpec](./monitoring/table-daily-monitoring-checks.md#TableSchemaDailyMonitoringChecksSpec)| | | |
-|[custom](./profiling/table-profiling-checks.md#CustomCheckSpecMap)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](./profiling/table-profiling-checks.md#CustomCheckSpecMap)| | | |
-
-
-
-
-
-
-
-
-
-___
-
-
-## DefaultDailyMonitoringColumnObservabilityCheckSettingsSpec
-The default configuration of checks that are enabled as data observability daily monitoring checks that will be detecting anomalies
- for all columns that are imported. This configuration of checks is copied to the list of enabled column level checks on all columns that are imported, for daily monitoring checks only.
-
-
-
-
-
-
-
-
-
-The structure of this object is described below
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[nulls](./monitoring/column-daily-monitoring-checks.md#ColumnNullsDailyMonitoringChecksSpec)|The default configuration of column level checks that verify nulls and blanks.|[ColumnNullsDailyMonitoringChecksSpec](./monitoring/column-daily-monitoring-checks.md#ColumnNullsDailyMonitoringChecksSpec)| | | |
-|[numeric](./monitoring/column-daily-monitoring-checks.md#ColumnNumericDailyMonitoringChecksSpec)|The default configuration of column level checks that verify negative values.|[ColumnNumericDailyMonitoringChecksSpec](./monitoring/column-daily-monitoring-checks.md#ColumnNumericDailyMonitoringChecksSpec)| | | |
-|[text](./monitoring/column-daily-monitoring-checks.md#ColumnTextDailyMonitoringChecksSpec)|The default configuration of strings checks on a column level.|[ColumnTextDailyMonitoringChecksSpec](./monitoring/column-daily-monitoring-checks.md#ColumnTextDailyMonitoringChecksSpec)| | | |
-|[uniqueness](./monitoring/column-daily-monitoring-checks.md#ColumnUniquenessDailyMonitoringChecksSpec)|The default configuration of uniqueness checks on a column level.|[ColumnUniquenessDailyMonitoringChecksSpec](./monitoring/column-daily-monitoring-checks.md#ColumnUniquenessDailyMonitoringChecksSpec)| | | |
-|[datetime](./monitoring/column-daily-monitoring-checks.md#ColumnDatetimeDailyMonitoringChecksSpec)|The default configuration of datetime checks on a column level.|[ColumnDatetimeDailyMonitoringChecksSpec](./monitoring/column-daily-monitoring-checks.md#ColumnDatetimeDailyMonitoringChecksSpec)| | | |
-|[pii](./monitoring/column-daily-monitoring-checks.md#ColumnPiiDailyMonitoringChecksSpec)|The default configuration of Personal Identifiable Information (PII) checks on a column level.|[ColumnPiiDailyMonitoringChecksSpec](./monitoring/column-daily-monitoring-checks.md#ColumnPiiDailyMonitoringChecksSpec)| | | |
-|[bool](./monitoring/column-daily-monitoring-checks.md#ColumnBoolDailyMonitoringChecksSpec)|The default configuration of booleans checks on a column level.|[ColumnBoolDailyMonitoringChecksSpec](./monitoring/column-daily-monitoring-checks.md#ColumnBoolDailyMonitoringChecksSpec)| | | |
-|[datatype](./monitoring/column-daily-monitoring-checks.md#ColumnDatatypeDailyMonitoringChecksSpec)|The default configuration of datatype checks on a column level.|[ColumnDatatypeDailyMonitoringChecksSpec](./monitoring/column-daily-monitoring-checks.md#ColumnDatatypeDailyMonitoringChecksSpec)| | | |
-|[anomaly](./monitoring/column-daily-monitoring-checks.md#ColumnAnomalyDailyMonitoringChecksSpec)|The default configuration of anomaly checks on a column level.|[ColumnAnomalyDailyMonitoringChecksSpec](./monitoring/column-daily-monitoring-checks.md#ColumnAnomalyDailyMonitoringChecksSpec)| | | |
-|[schema](./monitoring/column-daily-monitoring-checks.md#ColumnSchemaDailyMonitoringChecksSpec)|The default configuration of schema checks on a column level.|[ColumnSchemaDailyMonitoringChecksSpec](./monitoring/column-daily-monitoring-checks.md#ColumnSchemaDailyMonitoringChecksSpec)| | | |
-|[custom](./profiling/table-profiling-checks.md#CustomCheckSpecMap)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](./profiling/table-profiling-checks.md#CustomCheckSpecMap)| | | |
+|api_version||string| | | |
+|kind||enum|default_schedules<br/>settings<br/>default_notifications<br/>rule<br/>sensor<br/>source<br/>check<br/>dashboards<br/>default_checks<br/>table<br/>provider_sensor<br/>file_index<br/>| | |
+|[spec](./DefaultObservabilityChecksYaml.md#DefaultObservabilityChecksSpec)||[DefaultObservabilityChecksSpec](./DefaultObservabilityChecksYaml.md#DefaultObservabilityChecksSpec)| | | |
 
 
 
@@ -205,9 +165,9 @@ The structure of this object is described below
 ___
 
 
-## DefaultDailyMonitoringObservabilityCheckSettingsSpec
-The default configuration of checks that are enabled as data observability daily monitoring checks that will be detecting anomalies
- for all columns and tables that are imported. This configuration of checks is copied to the list of enabled checks on all tables and columns that are imported, for daily monitoring checks only.
+## DefaultProfilingObservabilityCheckSettingsSpec
+The default configuration of checks that are enabled as data observability profiling checks that will be detecting anomalies
+ for all columns and tables that are imported. This configuration of checks is copied to the list of enabled checks on all tables and columns that are imported, for profiling checks only.
 
 
 
@@ -221,8 +181,8 @@ The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[table](./DefaultObservabilityChecksYaml.md#DefaultDailyMonitoringTableObservabilityCheckSettingsSpec)|The default configuration of daily monitoring checks on a table level.|[DefaultDailyMonitoringTableObservabilityCheckSettingsSpec](./DefaultObservabilityChecksYaml.md#DefaultDailyMonitoringTableObservabilityCheckSettingsSpec)| | | |
-|[column](./DefaultObservabilityChecksYaml.md#DefaultDailyMonitoringColumnObservabilityCheckSettingsSpec)|The default configuration of daily monitoring checks on a column level.|[DefaultDailyMonitoringColumnObservabilityCheckSettingsSpec](./DefaultObservabilityChecksYaml.md#DefaultDailyMonitoringColumnObservabilityCheckSettingsSpec)| | | |
+|[table](./DefaultObservabilityChecksYaml.md#DefaultProfilingTableObservabilityCheckSettingsSpec)|The default configuration of profiling checks on a table level.|[DefaultProfilingTableObservabilityCheckSettingsSpec](./DefaultObservabilityChecksYaml.md#DefaultProfilingTableObservabilityCheckSettingsSpec)| | | |
+|[column](./DefaultObservabilityChecksYaml.md#DefaultProfilingColumnObservabilityCheckSettingsSpec)|The default configuration of profiling checks on a column level.|[DefaultProfilingColumnObservabilityCheckSettingsSpec](./DefaultObservabilityChecksYaml.md#DefaultProfilingColumnObservabilityCheckSettingsSpec)| | | |
 
 
 
@@ -274,9 +234,9 @@ The structure of this object is described below
 ___
 
 
-## DefaultObservabilityChecksYaml
-The configuration of default data quality checks that are activated for all imported tables and columns.
- The default observability checks are stored in the *$DQO_USER_HOME/settings/defaultchecks.dqochecks.yaml* file in the DQOps user&#x27;s home folder.
+## DefaultProfilingTableObservabilityCheckSettingsSpec
+The default configuration of checks that are enabled as data observability profiling checks that will be detecting anomalies
+ for all tables that are imported. This configuration of checks is copied to the list of enabled table level checks on all tables that are imported, for profiling checks only.
 
 
 
@@ -290,9 +250,10 @@ The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|api_version||string| | | |
-|kind||enum|default_schedules<br/>settings<br/>default_notifications<br/>rule<br/>sensor<br/>source<br/>check<br/>dashboards<br/>default_checks<br/>table<br/>provider_sensor<br/>file_index<br/>| | |
-|[spec](./DefaultObservabilityChecksYaml.md#DefaultObservabilityChecksSpec)||[DefaultObservabilityChecksSpec](./DefaultObservabilityChecksYaml.md#DefaultObservabilityChecksSpec)| | | |
+|[volume](./profiling/table-profiling-checks.md#TableVolumeProfilingChecksSpec)|The default configuration of volume data quality checks on a table level.|[TableVolumeProfilingChecksSpec](./profiling/table-profiling-checks.md#TableVolumeProfilingChecksSpec)| | | |
+|[availability](./profiling/table-profiling-checks.md#TableAvailabilityProfilingChecksSpec)|The default configuration of the table availability data quality checks on a table level.|[TableAvailabilityProfilingChecksSpec](./profiling/table-profiling-checks.md#TableAvailabilityProfilingChecksSpec)| | | |
+|[schema](./profiling/table-profiling-checks.md#TableSchemaProfilingChecksSpec)|The default configuration of schema (column count and schema) data quality checks on a table level.|[TableSchemaProfilingChecksSpec](./profiling/table-profiling-checks.md#TableSchemaProfilingChecksSpec)| | | |
+|[custom](./profiling/table-profiling-checks.md#CustomCheckSpecMap)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](./profiling/table-profiling-checks.md#CustomCheckSpecMap)| | | |
 
 
 
@@ -323,6 +284,45 @@ The structure of this object is described below
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[table](./DefaultObservabilityChecksYaml.md#DefaultMonthlyMonitoringTableObservabilityCheckSettingsSpec)|The default configuration of monthly monitoring checks on a table level.|[DefaultMonthlyMonitoringTableObservabilityCheckSettingsSpec](./DefaultObservabilityChecksYaml.md#DefaultMonthlyMonitoringTableObservabilityCheckSettingsSpec)| | | |
 |[column](./DefaultObservabilityChecksYaml.md#DefaultMonthlyMonitoringColumnObservabilityCheckSettingsSpec)|The default configuration of monthly monitoring checks on a column level.|[DefaultMonthlyMonitoringColumnObservabilityCheckSettingsSpec](./DefaultObservabilityChecksYaml.md#DefaultMonthlyMonitoringColumnObservabilityCheckSettingsSpec)| | | |
+
+
+
+
+
+
+
+
+
+___
+
+
+## DefaultDailyMonitoringColumnObservabilityCheckSettingsSpec
+The default configuration of checks that are enabled as data observability daily monitoring checks that will be detecting anomalies
+ for all columns that are imported. This configuration of checks is copied to the list of enabled column level checks on all columns that are imported, for daily monitoring checks only.
+
+
+
+
+
+
+
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[nulls](./monitoring/column-daily-monitoring-checks.md#ColumnNullsDailyMonitoringChecksSpec)|The default configuration of column level checks that verify nulls and blanks.|[ColumnNullsDailyMonitoringChecksSpec](./monitoring/column-daily-monitoring-checks.md#ColumnNullsDailyMonitoringChecksSpec)| | | |
+|[numeric](./monitoring/column-daily-monitoring-checks.md#ColumnNumericDailyMonitoringChecksSpec)|The default configuration of column level checks that verify negative values.|[ColumnNumericDailyMonitoringChecksSpec](./monitoring/column-daily-monitoring-checks.md#ColumnNumericDailyMonitoringChecksSpec)| | | |
+|[text](./monitoring/column-daily-monitoring-checks.md#ColumnTextDailyMonitoringChecksSpec)|The default configuration of strings checks on a column level.|[ColumnTextDailyMonitoringChecksSpec](./monitoring/column-daily-monitoring-checks.md#ColumnTextDailyMonitoringChecksSpec)| | | |
+|[uniqueness](./monitoring/column-daily-monitoring-checks.md#ColumnUniquenessDailyMonitoringChecksSpec)|The default configuration of uniqueness checks on a column level.|[ColumnUniquenessDailyMonitoringChecksSpec](./monitoring/column-daily-monitoring-checks.md#ColumnUniquenessDailyMonitoringChecksSpec)| | | |
+|[datetime](./monitoring/column-daily-monitoring-checks.md#ColumnDatetimeDailyMonitoringChecksSpec)|The default configuration of datetime checks on a column level.|[ColumnDatetimeDailyMonitoringChecksSpec](./monitoring/column-daily-monitoring-checks.md#ColumnDatetimeDailyMonitoringChecksSpec)| | | |
+|[pii](./monitoring/column-daily-monitoring-checks.md#ColumnPiiDailyMonitoringChecksSpec)|The default configuration of Personal Identifiable Information (PII) checks on a column level.|[ColumnPiiDailyMonitoringChecksSpec](./monitoring/column-daily-monitoring-checks.md#ColumnPiiDailyMonitoringChecksSpec)| | | |
+|[bool](./monitoring/column-daily-monitoring-checks.md#ColumnBoolDailyMonitoringChecksSpec)|The default configuration of booleans checks on a column level.|[ColumnBoolDailyMonitoringChecksSpec](./monitoring/column-daily-monitoring-checks.md#ColumnBoolDailyMonitoringChecksSpec)| | | |
+|[datatype](./monitoring/column-daily-monitoring-checks.md#ColumnDatatypeDailyMonitoringChecksSpec)|The default configuration of datatype checks on a column level.|[ColumnDatatypeDailyMonitoringChecksSpec](./monitoring/column-daily-monitoring-checks.md#ColumnDatatypeDailyMonitoringChecksSpec)| | | |
+|[anomaly](./monitoring/column-daily-monitoring-checks.md#ColumnAnomalyDailyMonitoringChecksSpec)|The default configuration of anomaly checks on a column level.|[ColumnAnomalyDailyMonitoringChecksSpec](./monitoring/column-daily-monitoring-checks.md#ColumnAnomalyDailyMonitoringChecksSpec)| | | |
+|[schema](./monitoring/column-daily-monitoring-checks.md#ColumnSchemaDailyMonitoringChecksSpec)|The default configuration of schema checks on a column level.|[ColumnSchemaDailyMonitoringChecksSpec](./monitoring/column-daily-monitoring-checks.md#ColumnSchemaDailyMonitoringChecksSpec)| | | |
+|[custom](./profiling/table-profiling-checks.md#CustomCheckSpecMap)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](./profiling/table-profiling-checks.md#CustomCheckSpecMap)| | | |
 
 
 

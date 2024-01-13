@@ -19,6 +19,7 @@ import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.sensors.AbstractSensorParametersSpec;
+import com.dqops.utils.reflection.RequiredField;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -49,9 +50,11 @@ public class ColumnStringsExpectedTextsInTopValuesCountSensorParametersSpec exte
 
     @JsonPropertyDescription("List of expected string values that should be found in the tested column among the TOP most popular (highest distinct count) column values.")
     @SampleValues(values = { "USD", "GBP", "EUR" })
+    @RequiredField
     private List<String> expectedValues;
 
     @JsonPropertyDescription("The number of the most popular values (with the highest distinct count) that are analyzed to find the expected values.")
+    @RequiredField
     private Long top;
 
     /**
