@@ -65,3 +65,42 @@ dqo> check run --help
 
 You can find the complete list of commands and parameters in the [command-line](../command-line-interface/index.md) interface section.
 
+## Integrating DQOps into shell scripts
+All DQOps commands can be executed directly from the operating system shell, such as **bash** or Windows Command Line.
+DQOps script [`dqo`](../command-line-interface/dqo.md) (on Linux/MacOS) or `dqo.com` on Windows always returns the error of executing the command as an exit code.
+
+The following *bash* script shows an example of running data quality checks for a given connection.
+The script will exit with an error if the [`dqo check run` command](../command-line-interface/check.md#dqo-check-run) detected any data quality issues.
+The `$DQO_HOME` environment variable should contain the location where DQOps was [installed from a release package](../dqops-installation/install-dqops-from-release-package.md). 
+
+```bash
+#! /bin/bash
+#### your code before running DQOps
+
+$DQO_HOME/bin/dqo check run -c=connection_name
+
+if [ $? -ne 0 ]; then
+  echo "Data quality checks failed, the highest severity issue is at a severity level $?" 
+  exit $?
+fi
+
+#### your code after running DQOps
+```
+
+The exit codes of the [`dqo check run`](../command-line-interface/check.md#dqo-check-run) command are listed below.
+
+| Exit code | Run checks result                                                                                                                                                        |
+|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 0         | All data quality checks passed, no data quality issues were detected                                                                                                     |
+| 1         | A **warning** level severity issue was detected                                                                                                                          | 
+| 2         | An **error** level severity issue was detected                                                                                                                           | 
+| 3         | A **fatal** level severity issue was detected                                                                                                                            | 
+| 4         | A data quality check failed to run due to an execution error, <br/>caused by problems with connectivity to a data source, an invalid template or an invalid Python rule. | 
+
+
+## What's next
+
+- Look at the full documentation of all DQOps [command-line commands](../command-line-interface/index.md).
+- If you want to integrate DQOps into Python scripts or initiate running data quality checks from external tools,
+  follow the documentation of the [DQOps REST API Python client](../client/index.md) for examples of calling 
+  any operations from Python or using *curl*.
