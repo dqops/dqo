@@ -13,9 +13,9 @@ How to detect anomaly data quality issues.
 ## List of anomaly checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |
 |-------------------------|------------------------|-------------|-------|
-|[mean_anomaly](../../checks/column/anomaly/mean-anomaly.md)|Consistency|Column level check that ensures that the mean value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.| |
-|[median_anomaly](../../checks/column/anomaly/median-anomaly.md)|Consistency|Column level check that ensures that the median in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.| |
 |[sum_anomaly](../../checks/column/anomaly/sum-anomaly.md)|Consistency|Column level check that ensures that the sum in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|:material-check-bold:|
+|[mean_anomaly](../../checks/column/anomaly/mean-anomaly.md)|Consistency|Column level check that ensures that the mean value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|:material-check-bold:|
+|[median_anomaly](../../checks/column/anomaly/median-anomaly.md)|Consistency|Column level check that ensures that the median in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.| |
 |[mean_change](../../checks/column/anomaly/mean-change.md)|Consistency|Column level check that ensures that the mean value in a monitored column has changed by a fixed rate since the last readout.| |
 |[mean_change_1_day](../../checks/column/anomaly/mean-change-1-day.md)|Consistency|Column level check that ensures that the mean value in a monitored column has changed by a fixed rate since the last readout from yesterday.| |
 |[mean_change_7_days](../../checks/column/anomaly/mean-change-7-days.md)|Consistency|Column level check that ensures that the mean value in a monitored column has changed by a fixed rate since the last readout from last week.| |
@@ -24,7 +24,7 @@ How to detect anomaly data quality issues.
 |[median_change_1_day](../../checks/column/anomaly/median-change-1-day.md)|Consistency|Column level check that ensures that the median in a monitored column has changed by a fixed rate since the last readout from yesterday.| |
 |[median_change_7_days](../../checks/column/anomaly/median-change-7-days.md)|Consistency|Column level check that ensures that the median in a monitored column has changed by a fixed rate since the last readout from last week.| |
 |[median_change_30_days](../../checks/column/anomaly/median-change-30-days.md)|Consistency|Column level check that ensures that the median in a monitored column has changed by a fixed rate since the last readout from last month.| |
-|[sum_change](../../checks/column/anomaly/sum-change.md)|Consistency|Column level check that ensures that the sum in a monitored column has changed by a fixed rate since the last readout.|:material-check-bold:|
+|[sum_change](../../checks/column/anomaly/sum-change.md)|Consistency|Column level check that ensures that the sum in a monitored column has changed by a fixed rate since the last readout.| |
 |[sum_change_1_day](../../checks/column/anomaly/sum-change-1-day.md)|Consistency|Column level check that ensures that the sum in a monitored column has changed by a fixed rate since the last readout from yesterday.| |
 |[sum_change_7_days](../../checks/column/anomaly/sum-change-7-days.md)|Consistency|Column level check that ensures that the sum in a monitored column has changed by a fixed rate since the last readout from last week.| |
 |[sum_change_30_days](../../checks/column/anomaly/sum-change-30-days.md)|Consistency|Column level check that ensures that the sum in a monitored column has changed by a fixed rate since the last readout from last month.| |

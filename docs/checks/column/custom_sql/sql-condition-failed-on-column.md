@@ -1,53 +1,101 @@
-# sql condition failed count on column data quality checks
+# sql condition failed on column data quality checks
 
-Column level check that ensures that there are no more than a set number of rows fail a custom SQL condition (expression) evaluated for a given column.
+Column level check that uses a custom SQL expression on each column to verify (assert) that all rows pass a custom condition defined as an SQL expression.
+ Use the {alias} token to reference the tested table, and the {column} to reference the column that is tested. This data quality check can be used to compare columns on the same table.
+ For example, when this check is applied on a *col_price* column, the condition can verify that the *col_price* is higher than the *col_tax* using an SQL expression: &#x60;{alias}.{column} &gt; {alias}.col_tax&#x60;
+ Use an SQL expression that returns a *true* value for valid values and *false* for invalid values, because it is an assertion.
 
 
 ___
-The **sql condition failed count on column** data quality check has the following variants for each
+The **sql condition failed on column** data quality check has the following variants for each
 [type of data quality](../../../dqo-concepts/definition-of-data-quality-checks/index.md#types-of-checks) checks supported by DQOps.
 
 
-## profile sql condition failed count on column
+## profile sql condition failed on column
 
 
 **Check description**
 
-Verifies that a number of rows failed a custom SQL condition(expression) does not exceed the maximum accepted count.
+Verifies that a custom SQL expression is met for each row. Counts the number of rows where the expression is not satisfied, and raises an issue if too many failures were detected. This check is used also to compare values between the current column and another column: &#x60;{alias}.{column} &gt; col_tax&#x60;.
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_sql_condition_failed_count_on_column|profiling| |Validity|[sql_condition_failed_count](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-condition-failed-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|profile_sql_condition_failed_on_column|profiling| |Validity|[sql_condition_failed_count](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-condition-failed-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile sql condition failed count on column data quality check.
+Please expand the section below to see the DQOps command-line examples to run or activate the profile sql condition failed on column data quality check.
 
-??? example "Managing profile sql condition failed count on column check from DQOps shell"
+??? example "Managing profile sql condition failed on column check from DQOps shell"
 
-    === "Activate check"
+    === "Activate the check with a warning rule"
 
-        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -ch=profile_sql_condition_failed_count_on_column
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=profile_sql_condition_failed_on_column --enable-warning
         ```
 
-    === "Run check on connection"
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=profile_sql_condition_failed_on_column --enable-warning
+        ```
+        
+        Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=profile_sql_condition_failed_on_column --enable-warning
+                            -Wmax_count=value
+        ```
+
+
+    === "Activate the check with an error rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=profile_sql_condition_failed_on_column --enable-error
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=profile_sql_condition_failed_on_column --enable-error
+        ```
+        
+        Additional rule parameters are passed using the *-Erule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=profile_sql_condition_failed_on_column --enable-error
+                            -Emax_count=value
+        ```
+
+
+    === "Run all configured checks"
 
         Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+        The following example shows how to run the *profile_sql_condition_failed_on_column* check on all tables and columns on a single data source.
 
         ```
-        dqo> check run -c=connection_name -ch=profile_sql_condition_failed_count_on_column
+        dqo> check run -c=data_source_name -ch=profile_sql_condition_failed_on_column
         ```
 
-    === "Run check on table"
-
-        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters.
 
         ```
-        dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_sql_condition_failed_count_on_column
+        dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_sql_condition_failed_on_column
         ```
+
+        You can also run this check on all tables (and columns)  on which the *profile_sql_condition_failed_on_column* check is enabled
+        using patterns to find tables.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_*  -col=column_name_*-ch=profile_sql_condition_failed_on_column
+        ```
+
 
 **YAML configuration**
 
@@ -63,7 +111,7 @@ spec:
     target_column:
       profiling_checks:
         custom_sql:
-          profile_sql_condition_failed_count_on_column:
+          profile_sql_condition_failed_on_column:
             parameters:
               sql_condition: "{column} + col_tax = col_total_price_with_tax"
             warning:
@@ -544,7 +592,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         target_column:
           profiling_checks:
             custom_sql:
-              profile_sql_condition_failed_count_on_column:
+              profile_sql_condition_failed_on_column:
                 parameters:
                   sql_condition: "{column} + col_tax = col_total_price_with_tax"
                 warning:
@@ -1018,55 +1066,94 @@ Expand the *Configure with data grouping* section to see additional examples for
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
-
-
-
-
-
-
 ___
 
 
-## daily sql condition failed count on column
+## daily sql condition failed on column
 
 
 **Check description**
 
-Verifies that a number of rows failed a custom SQL condition(expression) does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.
+Verifies that a custom SQL expression is met for each row. Counts the number of rows where the expression is not satisfied, and raises an issue if too many failures were detected. This check is used also to compare values between the current column and another column: &#x60;{alias}.{column} &gt; col_tax&#x60;. Stores the most recent captured count of failed rows for each day when the data quality check was evaluated.
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_sql_condition_failed_count_on_column|monitoring|daily|Validity|[sql_condition_failed_count](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-condition-failed-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|daily_sql_condition_failed_on_column|monitoring|daily|Validity|[sql_condition_failed_count](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-condition-failed-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily sql condition failed count on column data quality check.
+Please expand the section below to see the DQOps command-line examples to run or activate the daily sql condition failed on column data quality check.
 
-??? example "Managing daily sql condition failed count on column check from DQOps shell"
+??? example "Managing daily sql condition failed on column check from DQOps shell"
 
-    === "Activate check"
+    === "Activate the check with a warning rule"
 
-        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -ch=daily_sql_condition_failed_count_on_column
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=daily_sql_condition_failed_on_column --enable-warning
         ```
 
-    === "Run check on connection"
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_sql_condition_failed_on_column --enable-warning
+        ```
+        
+        Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_sql_condition_failed_on_column --enable-warning
+                            -Wmax_count=value
+        ```
+
+
+    === "Activate the check with an error rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=daily_sql_condition_failed_on_column --enable-error
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_sql_condition_failed_on_column --enable-error
+        ```
+        
+        Additional rule parameters are passed using the *-Erule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_sql_condition_failed_on_column --enable-error
+                            -Emax_count=value
+        ```
+
+
+    === "Run all configured checks"
 
         Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+        The following example shows how to run the *daily_sql_condition_failed_on_column* check on all tables and columns on a single data source.
 
         ```
-        dqo> check run -c=connection_name -ch=daily_sql_condition_failed_count_on_column
+        dqo> check run -c=data_source_name -ch=daily_sql_condition_failed_on_column
         ```
 
-    === "Run check on table"
-
-        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters.
 
         ```
-        dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_sql_condition_failed_count_on_column
+        dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_sql_condition_failed_on_column
         ```
+
+        You can also run this check on all tables (and columns)  on which the *daily_sql_condition_failed_on_column* check is enabled
+        using patterns to find tables.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_*  -col=column_name_*-ch=daily_sql_condition_failed_on_column
+        ```
+
 
 **YAML configuration**
 
@@ -1083,7 +1170,7 @@ spec:
       monitoring_checks:
         daily:
           custom_sql:
-            daily_sql_condition_failed_count_on_column:
+            daily_sql_condition_failed_on_column:
               parameters:
                 sql_condition: "{column} + col_tax = col_total_price_with_tax"
               warning:
@@ -1565,7 +1652,7 @@ Expand the *Configure with data grouping* section to see additional examples for
           monitoring_checks:
             daily:
               custom_sql:
-                daily_sql_condition_failed_count_on_column:
+                daily_sql_condition_failed_on_column:
                   parameters:
                     sql_condition: "{column} + col_tax = col_total_price_with_tax"
                   warning:
@@ -2039,55 +2126,94 @@ Expand the *Configure with data grouping* section to see additional examples for
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
-
-
-
-
-
-
 ___
 
 
-## monthly sql condition failed count on column
+## monthly sql condition failed on column
 
 
 **Check description**
 
-Verifies that a number of rows failed a custom SQL condition(expression) does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.
+Verifies that a custom SQL expression is met for each row. Counts the number of rows where the expression is not satisfied, and raises an issue if too many failures were detected. This check is used also to compare values between the current column and another column: &#x60;{alias}.{column} &gt; {alias}.col_tax&#x60;. Stores the most recent captured count of failed rows for each month when the data quality check was evaluated.
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_sql_condition_failed_count_on_column|monitoring|monthly|Validity|[sql_condition_failed_count](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-condition-failed-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|monthly_sql_condition_failed_on_column|monitoring|monthly|Validity|[sql_condition_failed_count](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-condition-failed-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly sql condition failed count on column data quality check.
+Please expand the section below to see the DQOps command-line examples to run or activate the monthly sql condition failed on column data quality check.
 
-??? example "Managing monthly sql condition failed count on column check from DQOps shell"
+??? example "Managing monthly sql condition failed on column check from DQOps shell"
 
-    === "Activate check"
+    === "Activate the check with a warning rule"
 
-        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -ch=monthly_sql_condition_failed_count_on_column
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=monthly_sql_condition_failed_on_column --enable-warning
         ```
 
-    === "Run check on connection"
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_sql_condition_failed_on_column --enable-warning
+        ```
+        
+        Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_sql_condition_failed_on_column --enable-warning
+                            -Wmax_count=value
+        ```
+
+
+    === "Activate the check with an error rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=monthly_sql_condition_failed_on_column --enable-error
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_sql_condition_failed_on_column --enable-error
+        ```
+        
+        Additional rule parameters are passed using the *-Erule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_sql_condition_failed_on_column --enable-error
+                            -Emax_count=value
+        ```
+
+
+    === "Run all configured checks"
 
         Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+        The following example shows how to run the *monthly_sql_condition_failed_on_column* check on all tables and columns on a single data source.
 
         ```
-        dqo> check run -c=connection_name -ch=monthly_sql_condition_failed_count_on_column
+        dqo> check run -c=data_source_name -ch=monthly_sql_condition_failed_on_column
         ```
 
-    === "Run check on table"
-
-        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters.
 
         ```
-        dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_sql_condition_failed_count_on_column
+        dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_sql_condition_failed_on_column
         ```
+
+        You can also run this check on all tables (and columns)  on which the *monthly_sql_condition_failed_on_column* check is enabled
+        using patterns to find tables.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_*  -col=column_name_*-ch=monthly_sql_condition_failed_on_column
+        ```
+
 
 **YAML configuration**
 
@@ -2104,7 +2230,7 @@ spec:
       monitoring_checks:
         monthly:
           custom_sql:
-            monthly_sql_condition_failed_count_on_column:
+            monthly_sql_condition_failed_on_column:
               parameters:
                 sql_condition: "{column} + col_tax = col_total_price_with_tax"
               warning:
@@ -2586,7 +2712,7 @@ Expand the *Configure with data grouping* section to see additional examples for
           monitoring_checks:
             monthly:
               custom_sql:
-                monthly_sql_condition_failed_count_on_column:
+                monthly_sql_condition_failed_on_column:
                   parameters:
                     sql_condition: "{column} + col_tax = col_total_price_with_tax"
                   warning:
@@ -3060,55 +3186,94 @@ Expand the *Configure with data grouping* section to see additional examples for
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
-
-
-
-
-
-
 ___
 
 
-## daily partition sql condition failed count on column
+## daily partition sql condition failed on column
 
 
 **Check description**
 
-Verifies that a number of rows failed a custom SQL condition(expression) does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.
+Verifies that a custom SQL expression is met for each row. Counts the number of rows where the expression is not satisfied, and raises an issue if too many failures were detected. This check is used also to compare values between the current column and another column: &#x60;{alias}.{column} &gt; {alias}.col_tax&#x60;. Stores a separate data quality check result for each daily partition.
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_sql_condition_failed_count_on_column|partitioned|daily|Validity|[sql_condition_failed_count](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-condition-failed-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|daily_partition_sql_condition_failed_on_column|partitioned|daily|Validity|[sql_condition_failed_count](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-condition-failed-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition sql condition failed count on column data quality check.
+Please expand the section below to see the DQOps command-line examples to run or activate the daily partition sql condition failed on column data quality check.
 
-??? example "Managing daily partition sql condition failed count on column check from DQOps shell"
+??? example "Managing daily partition sql condition failed on column check from DQOps shell"
 
-    === "Activate check"
+    === "Activate the check with a warning rule"
 
-        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -ch=daily_partition_sql_condition_failed_count_on_column
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=daily_partition_sql_condition_failed_on_column --enable-warning
         ```
 
-    === "Run check on connection"
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_partition_sql_condition_failed_on_column --enable-warning
+        ```
+        
+        Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_partition_sql_condition_failed_on_column --enable-warning
+                            -Wmax_count=value
+        ```
+
+
+    === "Activate the check with an error rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=daily_partition_sql_condition_failed_on_column --enable-error
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_partition_sql_condition_failed_on_column --enable-error
+        ```
+        
+        Additional rule parameters are passed using the *-Erule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_partition_sql_condition_failed_on_column --enable-error
+                            -Emax_count=value
+        ```
+
+
+    === "Run all configured checks"
 
         Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+        The following example shows how to run the *daily_partition_sql_condition_failed_on_column* check on all tables and columns on a single data source.
 
         ```
-        dqo> check run -c=connection_name -ch=daily_partition_sql_condition_failed_count_on_column
+        dqo> check run -c=data_source_name -ch=daily_partition_sql_condition_failed_on_column
         ```
 
-    === "Run check on table"
-
-        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters.
 
         ```
-        dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_sql_condition_failed_count_on_column
+        dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_sql_condition_failed_on_column
         ```
+
+        You can also run this check on all tables (and columns)  on which the *daily_partition_sql_condition_failed_on_column* check is enabled
+        using patterns to find tables.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_*  -col=column_name_*-ch=daily_partition_sql_condition_failed_on_column
+        ```
+
 
 **YAML configuration**
 
@@ -3130,7 +3295,7 @@ spec:
       partitioned_checks:
         daily:
           custom_sql:
-            daily_partition_sql_condition_failed_count_on_column:
+            daily_partition_sql_condition_failed_on_column:
               parameters:
                 sql_condition: "{column} + col_tax = col_total_price_with_tax"
               warning:
@@ -3626,7 +3791,7 @@ Expand the *Configure with data grouping* section to see additional examples for
           partitioned_checks:
             daily:
               custom_sql:
-                daily_partition_sql_condition_failed_count_on_column:
+                daily_partition_sql_condition_failed_on_column:
                   parameters:
                     sql_condition: "{column} + col_tax = col_total_price_with_tax"
                   warning:
@@ -4103,55 +4268,94 @@ Expand the *Configure with data grouping* section to see additional examples for
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
-
-
-
-
-
-
 ___
 
 
-## monthly partition sql condition failed count on column
+## monthly partition sql condition failed on column
 
 
 **Check description**
 
-Verifies that a number of rows failed a custom SQL condition(expression) does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.
+Verifies that a custom SQL expression is met for each row. Counts the number of rows where the expression is not satisfied, and raises an issue if too many failures were detected. This check is used also to compare values between the current column and another column: &#x60;{alias}.{column} &gt; {alias}.col_tax&#x60;. Stores a separate data quality check result for each monthly partition.
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_sql_condition_failed_count_on_column|partitioned|monthly|Validity|[sql_condition_failed_count](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-condition-failed-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|monthly_partition_sql_condition_failed_on_column|partitioned|monthly|Validity|[sql_condition_failed_count](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-condition-failed-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition sql condition failed count on column data quality check.
+Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition sql condition failed on column data quality check.
 
-??? example "Managing monthly partition sql condition failed count on column check from DQOps shell"
+??? example "Managing monthly partition sql condition failed on column check from DQOps shell"
 
-    === "Activate check"
+    === "Activate the check with a warning rule"
 
-        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -ch=monthly_partition_sql_condition_failed_count_on_column
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=monthly_partition_sql_condition_failed_on_column --enable-warning
         ```
 
-    === "Run check on connection"
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_partition_sql_condition_failed_on_column --enable-warning
+        ```
+        
+        Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_partition_sql_condition_failed_on_column --enable-warning
+                            -Wmax_count=value
+        ```
+
+
+    === "Activate the check with an error rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=monthly_partition_sql_condition_failed_on_column --enable-error
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_partition_sql_condition_failed_on_column --enable-error
+        ```
+        
+        Additional rule parameters are passed using the *-Erule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_partition_sql_condition_failed_on_column --enable-error
+                            -Emax_count=value
+        ```
+
+
+    === "Run all configured checks"
 
         Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+        The following example shows how to run the *monthly_partition_sql_condition_failed_on_column* check on all tables and columns on a single data source.
 
         ```
-        dqo> check run -c=connection_name -ch=monthly_partition_sql_condition_failed_count_on_column
+        dqo> check run -c=data_source_name -ch=monthly_partition_sql_condition_failed_on_column
         ```
 
-    === "Run check on table"
-
-        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters.
 
         ```
-        dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_partition_sql_condition_failed_count_on_column
+        dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_partition_sql_condition_failed_on_column
         ```
+
+        You can also run this check on all tables (and columns)  on which the *monthly_partition_sql_condition_failed_on_column* check is enabled
+        using patterns to find tables.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_*  -col=column_name_*-ch=monthly_partition_sql_condition_failed_on_column
+        ```
+
 
 **YAML configuration**
 
@@ -4173,7 +4377,7 @@ spec:
       partitioned_checks:
         monthly:
           custom_sql:
-            monthly_partition_sql_condition_failed_count_on_column:
+            monthly_partition_sql_condition_failed_on_column:
               parameters:
                 sql_condition: "{column} + col_tax = col_total_price_with_tax"
               warning:
@@ -4669,7 +4873,7 @@ Expand the *Configure with data grouping* section to see additional examples for
           partitioned_checks:
             monthly:
               custom_sql:
-                monthly_partition_sql_condition_failed_count_on_column:
+                monthly_partition_sql_condition_failed_on_column:
                   parameters:
                     sql_condition: "{column} + col_tax = col_total_price_with_tax"
                   warning:
@@ -5146,12 +5350,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
-
-
-
-
-
-
 ___
 
 

@@ -8,6 +8,5 @@ spec:
     \ returns the code of the detected type of column data: 1 - integers, 2 - floats,\
     \ 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.\
     \ Raises a data quality issue when the detected data type does not match the expected\
-    \ data type. Creates a separate data quality check (and an alert) for each daily\
-    \ partition."
+    \ data type. Stores a separate data quality check result for each daily partition."
   standard: true

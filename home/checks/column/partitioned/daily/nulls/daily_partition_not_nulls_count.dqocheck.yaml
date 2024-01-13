@@ -6,6 +6,6 @@ spec:
   rule_name: comparison/min_count
   help_text: Detects empty columns. The default rule min_count=1 verifies that the
     column has any values. Verifies that the number of not null values in a column
-    does not exceed the minimum accepted count. Creates a separate data quality check
-    (and an alert) for each daily partition.
+    does not exceed the minimum accepted count. Stores a separate data quality check
+    result for each daily partition.
   standard: true

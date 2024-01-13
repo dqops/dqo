@@ -5,5 +5,5 @@ spec:
   sensor_name: column/custom_sql/sql_aggregated_expression
   rule_name: comparison/between_floats
   help_text: "Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is\
-    \ not outside the expected range. Stores the most recent row count for each month\
-    \ when the data quality check was evaluated."
+    \ not outside the expected range. Stores the most recent check result for each\
+    \ month when the data quality check was evaluated."

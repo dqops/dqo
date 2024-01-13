@@ -14,6 +14,28 @@ List of dashboard folders.
 ___
 
 
+## DashboardListSpec
+List of dashboards.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+___
+
+
 ## DashboardsFolderSpec
 Description of a folder with multiple dashboards or other folders.
 
@@ -33,28 +55,6 @@ The structure of this object is described below
 |standard|Always shows this schema tree node because it contains standard dashboards. Set the value to false to show this folder only when advanced dashboards are enabled.|boolean| | | |
 |[dashboards](./DashboardYaml.md#DashboardListSpec)|List of data quality dashboard at this level.|[DashboardListSpec](./DashboardYaml.md#DashboardListSpec)| | | |
 |[folders](./DashboardYaml.md#DashboardsFolderListSpec)|List of data quality dashboard folders at this level.|[DashboardsFolderListSpec](./DashboardYaml.md#DashboardsFolderListSpec)| | | |
-
-
-
-
-
-
-
-
-
-___
-
-
-## DashboardListSpec
-List of dashboards.
-
-
-
-
-
-
-
-
 
 
 

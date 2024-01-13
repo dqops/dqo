@@ -6,5 +6,5 @@ spec:
   rule_name: comparison/min_percent
   help_text: "Verifies that a minimum percentage of rows passed a custom SQL condition\
     \ (expression). Reference the current column by using tokens, for example: `{alias}.{column}\
-    \ > {alias}.col_tax`. Creates a separate data quality check (and an alert) for\
-    \ each monthly partition."
+    \ > {alias}.col_tax`. Stores a separate data quality check result for each monthly\
+    \ partition."

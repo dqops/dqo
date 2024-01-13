@@ -5,5 +5,5 @@ spec:
   sensor_name: column/blanks/whitespace_text_percent
   rule_name: comparison/max_percent
   help_text: Verifies that the percentage of whitespace strings in a column does not
-    exceed the maximum accepted percent. Creates a separate data quality check (and
-    an alert) for each daily partition.
+    exceed the maximum accepted percent. Stores a separate data quality check result
+    for each daily partition.

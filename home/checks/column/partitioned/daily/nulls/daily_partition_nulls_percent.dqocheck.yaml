@@ -6,4 +6,4 @@ spec:
   rule_name: comparison/max_percent
   help_text: Measures the percent of null values in a column. Raises a data quality
     exception when the percentage of null values is above the minimum accepted percentage.
-    Creates a separate data quality check (and an alert) for each daily partition.
+    Stores a separate data quality check result for each daily partition.

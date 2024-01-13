@@ -7,6 +7,5 @@ spec:
   help_text: "Verifies that a custom SQL expression is met for each row. Counts the\
     \ number of rows where the expression is not satisfied, and raises an issue if\
     \ too many failures were detected. This check is used also to compare values between\
-    \ the current column and another column: `{alias}.{column} > {alias}.col_tax`.\
-    \ Stores a separate data quality check result for each monthly partition."
+    \ the current column and another column: `{alias}.{column} > col_tax`."
   standard: true

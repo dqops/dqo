@@ -2,6 +2,39 @@
 The definition of YAML files used by DQOps to configure the data sources, monitored tables, and the configuration of activated data quality checks.
 
 
+## RuleDefinitionSpec
+Custom data quality rule specification. Provides the custom rule configuration. For example, rules that require a range of historic values will have this configuration.
+
+
+
+
+
+
+
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|type|Rule runner type|enum|python<br/>java_class<br/>| | |
+|java_class_name|Java class name for a rule runner that will execute the sensor. The &quot;type&quot; must be &quot;java_class&quot;.|string| | | |
+|mode|Rule historic (past) values mode. A rule may require just the current sensor readout or use sensor readouts from past periods to perform prediction. The number of time windows is configured in the time_window setting.|enum|previous_readouts<br/>current_value<br/>| | |
+|[time_window](./RuleDefinitionYaml.md#RuleTimeWindowSettingsSpec)|Rule time window configuration when the mode is previous_readouts. Configures the number of past time windows (sensor readouts) that are passes as a parameter to the rule. For example, to calculate the average or perform prediction on historic data.|[RuleTimeWindowSettingsSpec](./RuleDefinitionYaml.md#RuleTimeWindowSettingsSpec)| | | |
+|[fields](./SensorDefinitionYaml.md#ParameterDefinitionsListSpec)|List of fields that are parameters of a custom rule. Those fields are used by the DQOps UI to display the data quality check editing screens with proper UI controls for all required fields.|[ParameterDefinitionsListSpec](./SensorDefinitionYaml.md#ParameterDefinitionsListSpec)| | | |
+|parameters|Additional rule parameters|Dict[string, string]| | | |
+
+
+
+
+
+
+
+
+
+___
+
+
 ## RuleTimeWindowSettingsSpec
 Rule historic data configuration. Specifies the number of past values for rules that are analyzing historic data.
 
@@ -50,39 +83,6 @@ The structure of this object is described below
 |api_version||string| | | |
 |kind||enum|default_schedules<br/>settings<br/>default_notifications<br/>rule<br/>sensor<br/>source<br/>check<br/>dashboards<br/>default_checks<br/>table<br/>provider_sensor<br/>file_index<br/>| | |
 |[spec](./RuleDefinitionYaml.md#RuleDefinitionSpec)||[RuleDefinitionSpec](./RuleDefinitionYaml.md#RuleDefinitionSpec)| | | |
-
-
-
-
-
-
-
-
-
-___
-
-
-## RuleDefinitionSpec
-Custom data quality rule specification. Provides the custom rule configuration. For example, rules that require a range of historic values will have this configuration.
-
-
-
-
-
-
-
-
-
-The structure of this object is described below
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|type|Rule runner type|enum|python<br/>java_class<br/>| | |
-|java_class_name|Java class name for a rule runner that will execute the sensor. The &quot;type&quot; must be &quot;java_class&quot;.|string| | | |
-|mode|Rule historic (past) values mode. A rule may require just the current sensor readout or use sensor readouts from past periods to perform prediction. The number of time windows is configured in the time_window setting.|enum|previous_readouts<br/>current_value<br/>| | |
-|[time_window](./RuleDefinitionYaml.md#RuleTimeWindowSettingsSpec)|Rule time window configuration when the mode is previous_readouts. Configures the number of past time windows (sensor readouts) that are passes as a parameter to the rule. For example, to calculate the average or perform prediction on historic data.|[RuleTimeWindowSettingsSpec](./RuleDefinitionYaml.md#RuleTimeWindowSettingsSpec)| | | |
-|[fields](./SensorDefinitionYaml.md#ParameterDefinitionsListSpec)|List of fields that are parameters of a custom rule. Those fields are used by the DQOps UI to display the data quality check editing screens with proper UI controls for all required fields.|[ParameterDefinitionsListSpec](./SensorDefinitionYaml.md#ParameterDefinitionsListSpec)| | | |
-|parameters|Additional rule parameters|Dict[string, string]| | | |
 
 
 

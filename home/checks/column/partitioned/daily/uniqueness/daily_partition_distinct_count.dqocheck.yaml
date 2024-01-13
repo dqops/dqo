@@ -5,6 +5,6 @@ spec:
   sensor_name: column/uniqueness/distinct_count
   rule_name: comparison/count_between
   help_text: Verifies that the number of distinct values in a column does not fall
-    below the minimum accepted count. Creates a separate data quality check (and an
-    alert) for each daily partition.
+    below the minimum accepted count. Stores a separate data quality check result
+    for each daily partition.
   standard: true

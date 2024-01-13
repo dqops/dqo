@@ -20,12 +20,17 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.services.check.mapping.models.CheckModel;
+import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Similar check grouping key factory. Creates keys used to find similar checks.
+ */
+@Component
 public class SimilarCheckGroupingKeyFactoryImpl implements SimilarCheckGroupingKeyFactory {
     private final Set<String> checkTimeScaleValues;
     private final Set<String> checkTypeValues;

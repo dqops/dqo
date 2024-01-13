@@ -16018,23 +16018,23 @@
           }
         },
         "daily_partition_text_found_in_set_percent" : {
-          "description" : "The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnTextFoundInSetPercentCheckSpec"
         },
         "daily_partition_number_found_in_set_percent" : {
-          "description" : "The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnNumberFoundInSetPercentCheckSpec"
         },
         "daily_partition_expected_text_values_in_use_count" : {
-          "description" : "Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnExpectedTextValuesInUseCountCheckSpec"
         },
         "daily_partition_expected_texts_in_top_values_count" : {
-          "description" : "Verifies that the top X most popular column values contain all values from a list of expected values. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the top X most popular column values contain all values from a list of expected values. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnExpectedTextsInTopValuesCountCheckSpec"
         },
         "daily_partition_expected_numbers_in_use_count" : {
-          "description" : "Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnExpectedNumbersInUseCountCheckSpec"
         }
       }
@@ -16082,23 +16082,23 @@
           }
         },
         "monthly_partition_text_found_in_set_percent" : {
-          "description" : "The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnTextFoundInSetPercentCheckSpec"
         },
         "monthly_partition_number_found_in_set_percent" : {
-          "description" : "The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnNumberFoundInSetPercentCheckSpec"
         },
         "monthly_partition_expected_text_values_in_use_count" : {
-          "description" : "Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnExpectedTextValuesInUseCountCheckSpec"
         },
         "monthly_partition_expected_texts_in_top_values_count" : {
-          "description" : "Verifies that the top X most popular column values contain all values from a list of expected values. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the top X most popular column values contain all values from a list of expected values. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnExpectedTextsInTopValuesCountCheckSpec"
         },
         "monthly_partition_expected_numbers_in_use_count" : {
-          "description" : "Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnExpectedNumbersInUseCountCheckSpec"
         }
       }
@@ -16194,23 +16194,23 @@
           }
         },
         "monthly_total_sum_match_percent" : {
-          "description" : "Verifies that the percentage of difference in total sum of a column in a table and total sum of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.",
+          "description" : "Verifies that the percentage of difference in total sum of a column in a table and total sum of a column of another table does not exceed the set number. Stores the most recent check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnAccuracyTotalSumMatchPercentCheckSpec"
         },
         "monthly_total_min_match_percent" : {
-          "description" : "Verifies that the percentage of difference in total min of a column in a table and total min of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.",
+          "description" : "Verifies that the percentage of difference in total min of a column in a table and total min of a column of another table does not exceed the set number. Stores the most recent check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnAccuracyTotalMinMatchPercentCheckSpec"
         },
         "monthly_total_max_match_percent" : {
-          "description" : "Verifies that the percentage of difference in total max of a column in a table and total max of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.",
+          "description" : "Verifies that the percentage of difference in total max of a column in a table and total max of a column of another table does not exceed the set number. Stores the most recent check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnAccuracyTotalMaxMatchPercentCheckSpec"
         },
         "monthly_total_average_match_percent" : {
-          "description" : "Verifies that the percentage of difference in total average of a column in a table and total average of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.",
+          "description" : "Verifies that the percentage of difference in total average of a column in a table and total average of a column of another table does not exceed the set number. Stores the most recent check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnAccuracyTotalAverageMatchPercentCheckSpec"
         },
         "monthly_total_not_null_count_match_percent" : {
-          "description" : "Verifies that the percentage of difference in total not null count of a column in a table and total not null count of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.",
+          "description" : "Verifies that the percentage of difference in total not null count of a column in a table and total not null count of a column of another table does not exceed the set number. Stores the most recent check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnAccuracyTotalNotNullCountMatchPercentCheckSpec"
         }
       }
@@ -16941,27 +16941,27 @@
           }
         },
         "daily_partition_empty_text_found" : {
-          "description" : "Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
         },
         "daily_partition_whitespace_text_found" : {
-          "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
         },
         "daily_partition_null_placeholder_text_found" : {
-          "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
         },
         "daily_partition_empty_text_percent" : {
-          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
         },
         "daily_partition_whitespace_text_percent" : {
-          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
         },
         "daily_partition_null_placeholder_text_percent" : {
-          "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
         }
       }
@@ -17143,27 +17143,27 @@
           }
         },
         "monthly_partition_empty_text_found" : {
-          "description" : "Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
         },
         "monthly_partition_whitespace_text_found" : {
-          "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
         },
         "monthly_partition_null_placeholder_text_found" : {
-          "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
         },
         "monthly_partition_empty_text_percent" : {
-          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
         },
         "monthly_partition_whitespace_text_percent" : {
-          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
         },
         "monthly_partition_null_placeholder_text_percent" : {
-          "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
         }
       }
@@ -17477,11 +17477,11 @@
           }
         },
         "daily_partition_true_percent" : {
-          "description" : "Verifies that the percentage of true values in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the percentage of true values in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnTruePercentCheckSpec"
         },
         "daily_partition_false_percent" : {
-          "description" : "Verifies that the percentage of false values in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the percentage of false values in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnFalsePercentCheckSpec"
         }
       }
@@ -17506,11 +17506,11 @@
           }
         },
         "monthly_true_percent" : {
-          "description" : "Verifies that the percentage of true values in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.",
+          "description" : "Verifies that the percentage of true values in a column does not exceed the minimum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnTruePercentCheckSpec"
         },
         "monthly_false_percent" : {
-          "description" : "Verifies that the percentage of false values in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.",
+          "description" : "Verifies that the percentage of false values in a column does not exceed the minimum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnFalsePercentCheckSpec"
         }
       }
@@ -17526,11 +17526,11 @@
           }
         },
         "monthly_partition_true_percent" : {
-          "description" : "Verifies that the percentage of true values in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the percentage of true values in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnTruePercentCheckSpec"
         },
         "monthly_partition_false_percent" : {
-          "description" : "Verifies that the percentage of false values in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the percentage of false values in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnFalsePercentCheckSpec"
         }
       }
@@ -18277,11 +18277,11 @@
           "$ref" : "#/definitions/ColumnSqlConditionFailedCheckSpec"
         },
         "monthly_sql_condition_passed_percent_on_column" : {
-          "description" : "Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Reference the current column by using tokens, for example: `{alias}.{column} > {alias}.col_tax`.  Stores the most recent row count for each month when the data quality check was evaluated.",
+          "description" : "Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Reference the current column by using tokens, for example: `{alias}.{column} > {alias}.col_tax`.  Stores the most recent check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnSqlConditionPassedPercentCheckSpec"
         },
         "monthly_sql_aggregate_expression_on_column" : {
-          "description" : "Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range. Stores the most recent row count for each month when the data quality check was evaluated.",
+          "description" : "Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range. Stores the most recent check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnSqlAggregateExpressionCheckSpec"
         }
       }
@@ -18297,15 +18297,15 @@
           }
         },
         "monthly_partition_sql_condition_failed_on_column" : {
-          "description" : "Verifies that a custom SQL expression is met for each row. Counts the number of rows where the expression is not satisfied, and raises an issue if too many failures were detected. This check is used also to compare values between the current column and another column: `{alias}.{column} > {alias}.col_tax`. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that a custom SQL expression is met for each row. Counts the number of rows where the expression is not satisfied, and raises an issue if too many failures were detected. This check is used also to compare values between the current column and another column: `{alias}.{column} > {alias}.col_tax`. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnSqlConditionFailedCheckSpec"
         },
         "monthly_partition_sql_condition_passed_percent_on_column" : {
-          "description" : "Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Reference the current column by using tokens, for example: `{alias}.{column} > {alias}.col_tax`. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Reference the current column by using tokens, for example: `{alias}.{column} > {alias}.col_tax`. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnSqlConditionPassedPercentCheckSpec"
         },
         "monthly_partition_sql_aggregate_expression_on_column" : {
-          "description" : "Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnSqlAggregateExpressionCheckSpec"
         }
       }
@@ -18320,16 +18320,16 @@
             "$ref" : "#/definitions/CustomCheckSpec"
           }
         },
-        "profile_sql_condition_passed_percent_on_column" : {
-          "description" : "Verifies that a minimum percentage of rows passed a custom SQL condition (expression).",
-          "$ref" : "#/definitions/ColumnSqlConditionPassedPercentCheckSpec"
-        },
-        "profile_sql_condition_failed_count_on_column" : {
-          "description" : "Verifies that a number of rows failed a custom SQL condition(expression) does not exceed the maximum accepted count.",
+        "profile_sql_condition_failed_on_column" : {
+          "description" : "Verifies that a custom SQL expression is met for each row. Counts the number of rows where the expression is not satisfied, and raises an issue if too many failures were detected. This check is used also to compare values between the current column and another column: `{alias}.{column} > col_tax`.",
           "$ref" : "#/definitions/ColumnSqlConditionFailedCheckSpec"
         },
+        "profile_sql_condition_passed_percent_on_column" : {
+          "description" : "Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Reference the current column by using tokens, for example: `{alias}.{column} > {alias}.col_tax`.",
+          "$ref" : "#/definitions/ColumnSqlConditionPassedPercentCheckSpec"
+        },
         "profile_sql_aggregate_expression_on_column" : {
-          "description" : "Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range.",
+          "description" : "Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range.",
           "$ref" : "#/definitions/ColumnSqlAggregateExpressionCheckSpec"
         }
       }
@@ -18523,11 +18523,11 @@
           }
         },
         "daily_partition_detected_datatype_in_text" : {
-          "description" : "Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnDetectedDatatypeInTextCheckSpec"
         },
         "daily_partition_detected_datatype_in_text_changed" : {
-          "description" : "Detects that the data type of texts stored in a text column has changed when compared to an earlier not empty partition. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Detects that the data type of texts stored in a text column has changed when compared to an earlier not empty partition. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnDatatypeStringDatatypeChangedCheckSpec"
         }
       }
@@ -18543,7 +18543,7 @@
           }
         },
         "monthly_detected_datatype_in_text" : {
-          "description" : "Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores the most recent row count for each month when the data quality check was evaluated.",
+          "description" : "Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores the most recent check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnDetectedDatatypeInTextCheckSpec"
         },
         "monthly_detected_datatype_in_text_changed" : {
@@ -18563,11 +18563,11 @@
           }
         },
         "monthly_partition_detected_datatype_in_text" : {
-          "description" : "Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnDetectedDatatypeInTextCheckSpec"
         },
         "monthly_partition_detected_datatype_in_text_changed" : {
-          "description" : "Detects that the data type of texts stored in a text column has changed when compared to an earlier not empty partition. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Detects that the data type of texts stored in a text column has changed when compared to an earlier not empty partition. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnDatatypeStringDatatypeChangedCheckSpec"
         }
       }
@@ -18639,7 +18639,7 @@
           "$ref" : "#/definitions/ValueChangedRuleParametersSpec"
         },
         "error" : {
-          "description" : "Default alerting threshold for a row count that raises a data quality error (alert), detects that the data type of values stored in a column has changed since the last time it was evaluated or the data type in the current daily/monthly partition differs from the data type in the previous partition.",
+          "description" : "Default alerting thresholdthat raises a data quality issue at an error severity level, detects that the data type of values stored in a column has changed since the last time it was evaluated or the data type in the current daily/monthly partition differs from the data type in the previous partition.",
           "$ref" : "#/definitions/ValueChangedRuleParametersSpec"
         },
         "fatal" : {
@@ -18748,15 +18748,15 @@
           }
         },
         "daily_partition_date_values_in_future_percent" : {
-          "description" : "Verifies that the percentage of date values in future in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the percentage of date values in future in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnDateValuesInFuturePercentCheckSpec"
         },
         "daily_partition_datetime_value_in_range_date_percent" : {
-          "description" : "Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnDatetimeValueInRangeDatePercentCheckSpec"
         },
         "daily_partition_date_match_format_percent" : {
-          "description" : "Verifies that the percentage of date values matching the given format in a text column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the percentage of date values matching the given format in a text column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnDatetimeDateMatchFormatPercentCheckSpec"
         }
       }
@@ -18851,11 +18851,11 @@
           }
         },
         "monthly_date_values_in_future_percent" : {
-          "description" : "Verifies that the percentage of date values in future in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.",
+          "description" : "Verifies that the percentage of date values in future in a column does not exceed the maximum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnDateValuesInFuturePercentCheckSpec"
         },
         "monthly_datetime_value_in_range_date_percent" : {
-          "description" : "Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.",
+          "description" : "Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnDatetimeValueInRangeDatePercentCheckSpec"
         },
         "monthly_date_match_format_percent" : {
@@ -18875,15 +18875,15 @@
           }
         },
         "monthly_partition_date_values_in_future_percent" : {
-          "description" : "Verifies that the percentage of date values in future in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the percentage of date values in future in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnDateValuesInFuturePercentCheckSpec"
         },
         "monthly_partition_datetime_value_in_range_date_percent" : {
-          "description" : "Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnDatetimeValueInRangeDatePercentCheckSpec"
         },
         "monthly_partition_date_match_format_percent" : {
-          "description" : "Verifies that the percentage of date values matching the given format in a text column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the percentage of date values matching the given format in a text column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnDatetimeDateMatchFormatPercentCheckSpec"
         }
       }
@@ -19034,7 +19034,7 @@
           "$ref" : "#/definitions/DetectedDatatypeEqualsRuleParametersSpec"
         },
         "error" : {
-          "description" : "Default alerting threshold for a row count that raises a data quality error (alert), detects that the data type of values stored in a column matches an expected data type code (1..7).",
+          "description" : "Default alerting thresholdthat raises a data quality issue at an error severity level, detects that the data type of values stored in a column matches an expected data type code (1..7).",
           "$ref" : "#/definitions/DetectedDatatypeEqualsRuleParametersSpec"
         },
         "fatal" : {
@@ -20194,11 +20194,11 @@
           }
         },
         "daily_partition_lookup_key_not_found" : {
-          "description" : "Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnIntegrityLookupKeyNotFoundCountCheckSpec"
         },
         "daily_partition_lookup_key_found_percent" : {
-          "description" : "Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnIntegrityForeignKeyMatchPercentCheckSpec"
         }
       }
@@ -20360,11 +20360,11 @@
           }
         },
         "monthly_lookup_key_not_found" : {
-          "description" : "Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores the most recent row count for each month when the data quality check was evaluated.",
+          "description" : "Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores the most recent check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnIntegrityLookupKeyNotFoundCountCheckSpec"
         },
         "monthly_lookup_key_found_percent" : {
-          "description" : "Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Stores the most recent row count for each month when the data quality check was evaluated.",
+          "description" : "Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Stores the most recent check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnIntegrityForeignKeyMatchPercentCheckSpec"
         }
       }
@@ -20380,11 +20380,11 @@
           }
         },
         "monthly_partition_lookup_key_not_found" : {
-          "description" : "Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnIntegrityLookupKeyNotFoundCountCheckSpec"
         },
         "monthly_partition_lookup_key_found_percent" : {
-          "description" : "Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnIntegrityForeignKeyMatchPercentCheckSpec"
         }
       }
@@ -22557,19 +22557,19 @@
           }
         },
         "daily_partition_nulls_count" : {
-          "description" : "Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnNullsCountCheckSpec"
         },
         "daily_partition_nulls_percent" : {
-          "description" : "Measures the percent of null values in a column. Raises a data quality exception when the percentage of null values is above the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Measures the percent of null values in a column. Raises a data quality exception when the percentage of null values is above the minimum accepted percentage. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnNullsPercentCheckSpec"
         },
         "daily_partition_not_nulls_count" : {
-          "description" : "Detects empty columns. The default rule min_count=1 verifies that the column has any values. Verifies that the number of not null values in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Detects empty columns. The default rule min_count=1 verifies that the column has any values. Verifies that the number of not null values in a column does not exceed the minimum accepted count. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnNotNullsCountCheckSpec"
         },
         "daily_partition_not_nulls_percent" : {
-          "description" : "Measures the percent of not null values in a column. Raises a data quality exception when the percentage of not null values is below a minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Measures the percent of not null values in a column. Raises a data quality exception when the percentage of not null values is below a minimum accepted percentage. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnNotNullsPercentCheckSpec"
         },
         "daily_partition_nulls_percent_anomaly" : {
@@ -22605,19 +22605,19 @@
           }
         },
         "monthly_nulls_count" : {
-          "description" : "Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.",
+          "description" : "Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores the most recent count check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnNullsCountCheckSpec"
         },
         "monthly_nulls_percent" : {
-          "description" : "Measures the percent of null values in a column. Raises a data quality exception when the percentage of null values is above the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.",
+          "description" : "Measures the percent of null values in a column. Raises a data quality exception when the percentage of null values is above the minimum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnNullsPercentCheckSpec"
         },
         "monthly_not_nulls_count" : {
-          "description" : "Detects columns that are empty and have no values (with the rule threshold min_count=1). Verifies that the number of not null values in a column does not exceed the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.",
+          "description" : "Detects columns that are empty and have no values (with the rule threshold min_count=1). Verifies that the number of not null values in a column does not exceed the minimum accepted count. Stores the most recent check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnNotNullsCountCheckSpec"
         },
         "monthly_not_nulls_percent" : {
-          "description" : "Measures the percent of not null values in a column. Raises a data quality exception when the percentage of not null values is below a minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.",
+          "description" : "Measures the percent of not null values in a column. Raises a data quality exception when the percentage of not null values is below a minimum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnNotNullsPercentCheckSpec"
         }
       }
@@ -22633,19 +22633,19 @@
           }
         },
         "monthly_partition_nulls_count" : {
-          "description" : "Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnNullsCountCheckSpec"
         },
         "monthly_partition_nulls_percent" : {
-          "description" : "Measures the percent of null values in a column. Raises a data quality exception when the percentage of null values is above the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Measures the percent of null values in a column. Raises a data quality exception when the percentage of null values is above the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnNullsPercentCheckSpec"
         },
         "monthly_partition_not_nulls_count" : {
-          "description" : "Detects empty columns. The default rule min_count=1 verifies that the column has any values. Verifies that the number of not null values in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Detects empty columns. The default rule min_count=1 verifies that the column has any values. Verifies that the number of not null values in a column does not exceed the minimum accepted count. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnNotNullsCountCheckSpec"
         },
         "monthly_partition_not_nulls_percent" : {
-          "description" : "Measures the percent of not null values in a column. Raises a data quality exception when the percentage of not null values is below a minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Measures the percent of not null values in a column. Raises a data quality exception when the percentage of not null values is below a minimum accepted percentage. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnNotNullsPercentCheckSpec"
         }
       }
@@ -23242,59 +23242,59 @@
           "$ref" : "#/definitions/ColumnIntegerInRangePercentCheckSpec"
         },
         "daily_min_in_range" : {
-          "description" : "Verifies that the minimal value in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Verifies that the minimal value in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnMinInRangeCheckSpec"
         },
         "daily_max_in_range" : {
-          "description" : "Verifies that the maximal value in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Verifies that the maximal value in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnMaxInRangeCheckSpec"
         },
         "daily_sum_in_range" : {
-          "description" : "Verifies that the sum of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Verifies that the sum of all values in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnSumInRangeCheckSpec"
         },
         "daily_mean_in_range" : {
-          "description" : "Verifies that the average (mean) of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Verifies that the average (mean) of all values in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnMeanInRangeCheckSpec"
         },
         "daily_median_in_range" : {
-          "description" : "Verifies that the median of all values in a column is not outside the set range. Stores the most recent value for each month when the data quality check was evaluated.",
+          "description" : "Verifies that the median of all values in a column is not outside the expected range. Stores the most recent value for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnMedianInRangeCheckSpec"
         },
         "daily_percentile_in_range" : {
-          "description" : "Verifies that the percentile of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Verifies that the percentile of all values in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnPercentileInRangeCheckSpec"
         },
         "daily_percentile_10_in_range" : {
-          "description" : "Verifies that the percentile 10 of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Verifies that the percentile 10 of all values in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnPercentile10InRangeCheckSpec"
         },
         "daily_percentile_25_in_range" : {
-          "description" : "Verifies that the percentile 25 of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Verifies that the percentile 25 of all values in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnPercentile25InRangeCheckSpec"
         },
         "daily_percentile_75_in_range" : {
-          "description" : "Verifies that the percentile 75 of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Verifies that the percentile 75 of all values in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnPercentile75InRangeCheckSpec"
         },
         "daily_percentile_90_in_range" : {
-          "description" : "Verifies that the percentile 90 of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Verifies that the percentile 90 of all values in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnPercentile90InRangeCheckSpec"
         },
         "daily_sample_stddev_in_range" : {
-          "description" : "Verifies that the sample standard deviation of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Verifies that the sample standard deviation of all values in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnSampleStddevInRangeCheckSpec"
         },
         "daily_population_stddev_in_range" : {
-          "description" : "Verifies that the population standard deviation of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Verifies that the population standard deviation of all values in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnPopulationStddevInRangeCheckSpec"
         },
         "daily_sample_variance_in_range" : {
-          "description" : "Verifies that the sample variance of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Verifies that the sample variance of all values in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnSampleVarianceInRangeCheckSpec"
         },
         "daily_population_variance_in_range" : {
-          "description" : "Verifies that the population variance of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Verifies that the population variance of all values in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnPopulationVarianceInRangeCheckSpec"
         },
         "daily_invalid_latitude" : {
@@ -23334,115 +23334,115 @@
           }
         },
         "daily_partition_number_below_min_value" : {
-          "description" : "The check counts the number of values in the column that is below the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "The check counts the number of values in the column that is below the value defined by the user as a parameter. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnNumberBelowMinValueCheckSpec"
         },
         "daily_partition_number_above_max_value" : {
-          "description" : "The check counts the number of values in the column that is above the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "The check counts the number of values in the column that is above the value defined by the user as a parameter. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnNumberAboveMaxValueCheckSpec"
         },
         "daily_partition_negative_values" : {
-          "description" : "Verifies that the number of negative values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the number of negative values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnNegativeCountCheckSpec"
         },
         "daily_partition_negative_values_percent" : {
-          "description" : "Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnNegativePercentCheckSpec"
         },
         "daily_partition_number_below_min_value_percent" : {
-          "description" : "The check counts the percentage of values in the column that is below the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "The check counts the percentage of values in the column that is below the value defined by the user as a parameter. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnNumberBelowMinValuePercentCheckSpec"
         },
         "daily_partition_number_above_max_value_percent" : {
-          "description" : "The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnNumberAboveMaxValuePercentCheckSpec"
         },
         "daily_partition_number_in_range_percent" : {
-          "description" : "Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnNumberInRangePercentCheckSpec"
         },
         "daily_partition_integer_in_range_percent" : {
-          "description" : "Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnIntegerInRangePercentCheckSpec"
         },
         "daily_partition_min_in_range" : {
-          "description" : "Verifies that the minimal value in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the minimal value in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnMinInRangeCheckSpec"
         },
         "daily_partition_max_in_range" : {
-          "description" : "Verifies that the maximal value in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the maximal value in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnMaxInRangeCheckSpec"
         },
         "daily_partition_sum_in_range" : {
-          "description" : "Verifies that the sum of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the sum of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnSumInRangeCheckSpec"
         },
         "daily_partition_mean_in_range" : {
-          "description" : "Verifies that the average (mean) of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the average (mean) of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnMeanInRangeCheckSpec"
         },
         "daily_partition_median_in_range" : {
-          "description" : "Verifies that the median of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the median of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnMedianInRangeCheckSpec"
         },
         "daily_partition_percentile_in_range" : {
-          "description" : "Verifies that the percentile of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the percentile of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnPercentileInRangeCheckSpec"
         },
         "daily_partition_percentile_10_in_range" : {
-          "description" : "Verifies that the percentile 10 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the percentile 10 of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnPercentile10InRangeCheckSpec"
         },
         "daily_partition_percentile_25_in_range" : {
-          "description" : "Verifies that the percentile 25 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the percentile 25 of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnPercentile25InRangeCheckSpec"
         },
         "daily_partition_percentile_75_in_range" : {
-          "description" : "Verifies that the percentile 75 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the percentile 75 of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnPercentile75InRangeCheckSpec"
         },
         "daily_partition_percentile_90_in_range" : {
-          "description" : "Verifies that the percentile 90 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the percentile 90 of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnPercentile90InRangeCheckSpec"
         },
         "daily_partition_sample_stddev_in_range" : {
-          "description" : "Verifies that the sample standard deviation of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the sample standard deviation of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnSampleStddevInRangeCheckSpec"
         },
         "daily_partition_population_stddev_in_range" : {
-          "description" : "Verifies that the population standard deviation of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the population standard deviation of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnPopulationStddevInRangeCheckSpec"
         },
         "daily_partition_sample_variance_in_range" : {
-          "description" : "Verifies that the sample variance of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the sample variance of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnSampleVarianceInRangeCheckSpec"
         },
         "daily_partition_population_variance_in_range" : {
-          "description" : "Verifies that the population variance of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the population variance of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnPopulationVarianceInRangeCheckSpec"
         },
         "daily_partition_invalid_latitude" : {
-          "description" : "Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnInvalidLatitudeCountCheckSpec"
         },
         "daily_partition_valid_latitude_percent" : {
-          "description" : "Verifies that the percentage of valid latitude values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the percentage of valid latitude values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnValidLatitudePercentCheckSpec"
         },
         "daily_partition_invalid_longitude" : {
-          "description" : "Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnInvalidLongitudeCountCheckSpec"
         },
         "daily_partition_valid_longitude_percent" : {
-          "description" : "Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnValidLongitudePercentCheckSpec"
         },
         "daily_partition_non_negative_values" : {
-          "description" : "Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnNonNegativeCountCheckSpec"
         },
         "daily_partition_non_negative_values_percent" : {
-          "description" : "Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnNonNegativePercentCheckSpec"
         }
       }
@@ -23585,59 +23585,59 @@
           "$ref" : "#/definitions/ColumnIntegerInRangePercentCheckSpec"
         },
         "monthly_min_in_range" : {
-          "description" : "Verifies that the minimal value in a column does not exceed the set range. Stores the most recent value for each month when the data quality check was evaluated.",
+          "description" : "Verifies that the minimal value in a column does not exceed the expected range. Stores the most recent value for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnMinInRangeCheckSpec"
         },
         "monthly_max_in_range" : {
-          "description" : "Verifies that the maximal value in a column does not exceed the set range. Stores the most recent value for each month when the data quality check was evaluated.",
+          "description" : "Verifies that the maximal value in a column does not exceed the expected range. Stores the most recent value for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnMaxInRangeCheckSpec"
         },
         "monthly_sum_in_range" : {
-          "description" : "Verifies that the sum of all values in a column does not exceed the set range. Stores the most recent value for each month when the data quality check was evaluated.",
+          "description" : "Verifies that the sum of all values in a column does not exceed the expected range. Stores the most recent value for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnSumInRangeCheckSpec"
         },
         "monthly_mean_in_range" : {
-          "description" : "Verifies that the average (mean) of all values in a column does not exceed the set range. Stores the most recent value for each month when the data quality check was evaluated.",
+          "description" : "Verifies that the average (mean) of all values in a column does not exceed the expected range. Stores the most recent value for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnMeanInRangeCheckSpec"
         },
         "monthly_median_in_range" : {
-          "description" : "Verifies that the median of all values in a column is not outside the set range. Stores the most recent value for each month when the data quality check was evaluated.",
+          "description" : "Verifies that the median of all values in a column is not outside the expected range. Stores the most recent value for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnMedianInRangeCheckSpec"
         },
         "monthly_percentile_in_range" : {
-          "description" : "Verifies that the percentile of all values in a column is not outside the set range. Stores the most recent value for each month when the data quality check was evaluated.",
+          "description" : "Verifies that the percentile of all values in a column is not outside the expected range. Stores the most recent value for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnPercentileInRangeCheckSpec"
         },
         "monthly_percentile_10_in_range" : {
-          "description" : "Verifies that the percentile 10 of all values in a column is not outside the set range. Stores the most recent value for each month when the data quality check was evaluated.",
+          "description" : "Verifies that the percentile 10 of all values in a column is not outside the expected range. Stores the most recent value for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnPercentile10InRangeCheckSpec"
         },
         "monthly_percentile_25_in_range" : {
-          "description" : "Verifies that the percentile 25 of all values in a column is not outside the set range. Stores the most recent value for each month when the data quality check was evaluated.",
+          "description" : "Verifies that the percentile 25 of all values in a column is not outside the expected range. Stores the most recent value for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnPercentile25InRangeCheckSpec"
         },
         "monthly_percentile_75_in_range" : {
-          "description" : "Verifies that the percentile 75 of all values in a column is not outside the set range. Stores the most recent value for each month when the data quality check was evaluated.",
+          "description" : "Verifies that the percentile 75 of all values in a column is not outside the expected range. Stores the most recent value for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnPercentile75InRangeCheckSpec"
         },
         "monthly_percentile_90_in_range" : {
-          "description" : "Verifies that the percentile 90 of all values in a column is not outside the set range. Stores the most recent value for each month when the data quality check was evaluated.",
+          "description" : "Verifies that the percentile 90 of all values in a column is not outside the expected range. Stores the most recent value for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnPercentile90InRangeCheckSpec"
         },
         "monthly_sample_stddev_in_range" : {
-          "description" : "Verifies that the sample standard deviation of all values in a column is not outside the set range. Stores the most recent value for each month when the data quality check was evaluated.",
+          "description" : "Verifies that the sample standard deviation of all values in a column is not outside the expected range. Stores the most recent value for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnSampleStddevInRangeCheckSpec"
         },
         "monthly_population_stddev_in_range" : {
-          "description" : "Verifies that the population standard deviation of all values in a column is not outside the set range. Stores the most recent value for each month when the data quality check was evaluated.",
+          "description" : "Verifies that the population standard deviation of all values in a column is not outside the expected range. Stores the most recent value for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnPopulationStddevInRangeCheckSpec"
         },
         "monthly_sample_variance_in_range" : {
-          "description" : "Verifies that the sample variance of all values in a column is not outside the set range. Stores the most recent value for each month when the data quality check was evaluated.",
+          "description" : "Verifies that the sample variance of all values in a column is not outside the expected range. Stores the most recent value for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnSampleVarianceInRangeCheckSpec"
         },
         "monthly_population_variance_in_range" : {
-          "description" : "Verifies that the population variance of all values in a column is not outside the set range. Stores the most recent value for each month when the data quality check was evaluated.",
+          "description" : "Verifies that the population variance of all values in a column is not outside the expected range. Stores the most recent value for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnPopulationVarianceInRangeCheckSpec"
         },
         "monthly_invalid_latitude" : {
@@ -23677,115 +23677,115 @@
           }
         },
         "monthly_partition_number_below_min_value" : {
-          "description" : "The check counts the number of values in the column that is below the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "The check counts the number of values in the column that is below the value defined by the user as a parameter. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnNumberBelowMinValueCheckSpec"
         },
         "monthly_partition_number_above_max_value" : {
-          "description" : "The check counts the number of values in the column that is above the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "The check counts the number of values in the column that is above the value defined by the user as a parameter. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnNumberAboveMaxValueCheckSpec"
         },
         "monthly_partition_negative_values" : {
-          "description" : "Verifies that the number of negative values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the number of negative values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnNegativeCountCheckSpec"
         },
         "monthly_partition_negative_values_percent" : {
-          "description" : "Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnNegativePercentCheckSpec"
         },
         "monthly_partition_number_below_min_value_percent" : {
-          "description" : "The check counts the percentage of values in the column that is below the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "The check counts the percentage of values in the column that is below the value defined by the user as a parameter. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnNumberBelowMinValuePercentCheckSpec"
         },
         "monthly_partition_number_above_max_value_percent" : {
-          "description" : "The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnNumberAboveMaxValuePercentCheckSpec"
         },
         "monthly_partition_number_in_range_percent" : {
-          "description" : "Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnNumberInRangePercentCheckSpec"
         },
         "monthly_partition_integer_in_range_percent" : {
-          "description" : "Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnIntegerInRangePercentCheckSpec"
         },
         "monthly_partition_min_in_range" : {
-          "description" : "Verifies that the minimal value in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the minimal value in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnMinInRangeCheckSpec"
         },
         "monthly_partition_max_in_range" : {
-          "description" : "Verifies that the maximal value in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the maximal value in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnMaxInRangeCheckSpec"
         },
         "monthly_partition_sum_in_range" : {
-          "description" : "Verifies that the sum of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the sum of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnSumInRangeCheckSpec"
         },
         "monthly_partition_mean_in_range" : {
-          "description" : "Verifies that the average (mean) of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the average (mean) of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnMeanInRangeCheckSpec"
         },
         "monthly_partition_median_in_range" : {
-          "description" : "Verifies that the median of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the median of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnMedianInRangeCheckSpec"
         },
         "monthly_partition_percentile_in_range" : {
-          "description" : "Verifies that the percentile of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the percentile of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnPercentileInRangeCheckSpec"
         },
         "monthly_partition_percentile_10_in_range" : {
-          "description" : "Verifies that the percentile 10 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the percentile 10 of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnPercentile10InRangeCheckSpec"
         },
         "monthly_partition_percentile_25_in_range" : {
-          "description" : "Verifies that the percentile 25 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the percentile 25 of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnPercentile25InRangeCheckSpec"
         },
         "monthly_partition_percentile_75_in_range" : {
-          "description" : "Verifies that the percentile 75 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the percentile 75 of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnPercentile75InRangeCheckSpec"
         },
         "monthly_partition_percentile_90_in_range" : {
-          "description" : "Verifies that the percentile 90 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the percentile 90 of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnPercentile90InRangeCheckSpec"
         },
         "monthly_partition_sample_stddev_in_range" : {
-          "description" : "Verifies that the sample standard deviation of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the sample standard deviation of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnSampleStddevInRangeCheckSpec"
         },
         "monthly_partition_population_stddev_in_range" : {
-          "description" : "Verifies that the population standard deviation of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the population standard deviation of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnPopulationStddevInRangeCheckSpec"
         },
         "monthly_partition_sample_variance_in_range" : {
-          "description" : "Verifies that the sample variance of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the sample variance of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnSampleVarianceInRangeCheckSpec"
         },
         "monthly_partition_population_variance_in_range" : {
-          "description" : "Verifies that the population variance of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the population variance of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnPopulationVarianceInRangeCheckSpec"
         },
         "monthly_partition_invalid_latitude" : {
-          "description" : "Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnInvalidLatitudeCountCheckSpec"
         },
         "monthly_partition_valid_latitude_percent" : {
-          "description" : "Verifies that the percentage of valid latitude values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the percentage of valid latitude values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnValidLatitudePercentCheckSpec"
         },
         "monthly_partition_invalid_longitude" : {
-          "description" : "Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnInvalidLongitudeCountCheckSpec"
         },
         "monthly_partition_valid_longitude_percent" : {
-          "description" : "Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnValidLongitudePercentCheckSpec"
         },
         "monthly_partition_non_negative_values" : {
-          "description" : "Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnNonNegativeCountCheckSpec"
         },
         "monthly_partition_non_negative_values_percent" : {
-          "description" : "Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnNonNegativePercentCheckSpec"
         }
       }
@@ -24049,59 +24049,59 @@
           "$ref" : "#/definitions/ColumnIntegerInRangePercentCheckSpec"
         },
         "profile_min_in_range" : {
-          "description" : "Verifies that the minimal value in a column is not outside the set range.",
+          "description" : "Verifies that the minimal value in a column is not outside the expected range.",
           "$ref" : "#/definitions/ColumnMinInRangeCheckSpec"
         },
         "profile_max_in_range" : {
-          "description" : "Verifies that the maximal value in a column is not outside the set range.",
+          "description" : "Verifies that the maximal value in a column is not outside the expected range.",
           "$ref" : "#/definitions/ColumnMaxInRangeCheckSpec"
         },
         "profile_sum_in_range" : {
-          "description" : "Verifies that the sum of all values in a column is not outside the set range.",
+          "description" : "Verifies that the sum of all values in a column is not outside the expected range.",
           "$ref" : "#/definitions/ColumnSumInRangeCheckSpec"
         },
         "profile_mean_in_range" : {
-          "description" : "Verifies that the average (mean) of all values in a column is not outside the set range.",
+          "description" : "Verifies that the average (mean) of all values in a column is not outside the expected range.",
           "$ref" : "#/definitions/ColumnMeanInRangeCheckSpec"
         },
         "profile_median_in_range" : {
-          "description" : "Verifies that the median of all values in a column is not outside the set range.",
+          "description" : "Verifies that the median of all values in a column is not outside the expected range.",
           "$ref" : "#/definitions/ColumnMedianInRangeCheckSpec"
         },
         "profile_percentile_in_range" : {
-          "description" : "Verifies that the percentile of all values in a column is not outside the set range.",
+          "description" : "Verifies that the percentile of all values in a column is not outside the expected range.",
           "$ref" : "#/definitions/ColumnPercentileInRangeCheckSpec"
         },
         "profile_percentile_10_in_range" : {
-          "description" : "Verifies that the percentile 10 of all values in a column is not outside the set range.",
+          "description" : "Verifies that the percentile 10 of all values in a column is not outside the expected range.",
           "$ref" : "#/definitions/ColumnPercentile10InRangeCheckSpec"
         },
         "profile_percentile_25_in_range" : {
-          "description" : "Verifies that the percentile 25 of all values in a column is not outside the set range.",
+          "description" : "Verifies that the percentile 25 of all values in a column is not outside the expected range.",
           "$ref" : "#/definitions/ColumnPercentile25InRangeCheckSpec"
         },
         "profile_percentile_75_in_range" : {
-          "description" : "Verifies that the percentile 75 of all values in a column is not outside the set range.",
+          "description" : "Verifies that the percentile 75 of all values in a column is not outside the expected range.",
           "$ref" : "#/definitions/ColumnPercentile75InRangeCheckSpec"
         },
         "profile_percentile_90_in_range" : {
-          "description" : "Verifies that the percentile 90 of all values in a column is not outside the set range.",
+          "description" : "Verifies that the percentile 90 of all values in a column is not outside the expected range.",
           "$ref" : "#/definitions/ColumnPercentile90InRangeCheckSpec"
         },
         "profile_sample_stddev_in_range" : {
-          "description" : "Verifies that the sample standard deviation of all values in a column is not outside the set range.",
+          "description" : "Verifies that the sample standard deviation of all values in a column is not outside the expected range.",
           "$ref" : "#/definitions/ColumnSampleStddevInRangeCheckSpec"
         },
         "profile_population_stddev_in_range" : {
-          "description" : "Verifies that the population standard deviation of all values in a column is not outside the set range.",
+          "description" : "Verifies that the population standard deviation of all values in a column is not outside the expected range.",
           "$ref" : "#/definitions/ColumnPopulationStddevInRangeCheckSpec"
         },
         "profile_sample_variance_in_range" : {
-          "description" : "Verifies that the sample variance of all values in a column is not outside the set range.",
+          "description" : "Verifies that the sample variance of all values in a column is not outside the expected range.",
           "$ref" : "#/definitions/ColumnSampleVarianceInRangeCheckSpec"
         },
         "profile_population_variance_in_range" : {
-          "description" : "Verifies that the population variance of all values in a column is not outside the set range.",
+          "description" : "Verifies that the population variance of all values in a column is not outside the expected range.",
           "$ref" : "#/definitions/ColumnPopulationVarianceInRangeCheckSpec"
         },
         "profile_invalid_latitude" : {
@@ -25204,23 +25204,23 @@
           }
         },
         "daily_partition_contains_usa_phone_percent" : {
-          "description" : "Verifies that the percentage of rows that contains USA phone number in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the percentage of rows that contains USA phone number in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnPiiContainsUsaPhonePercentCheckSpec"
         },
         "daily_partition_contains_email_percent" : {
-          "description" : "Verifies that the percentage of rows that contains emails in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the percentage of rows that contains emails in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnPiiContainsEmailPercentCheckSpec"
         },
         "daily_partition_contains_usa_zipcode_percent" : {
-          "description" : "Verifies that the percentage of rows that contains USA zip code in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the percentage of rows that contains USA zip code in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnPiiContainsUsaZipcodePercentCheckSpec"
         },
         "daily_partition_contains_ip4_percent" : {
-          "description" : "Verifies that the percentage of rows that contains IP4 address values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the percentage of rows that contains IP4 address values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnPiiContainsIp4PercentCheckSpec"
         },
         "daily_partition_contains_ip6_percent" : {
-          "description" : "Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnPiiContainsIp6PercentCheckSpec"
         }
       }
@@ -25236,23 +25236,23 @@
           }
         },
         "monthly_contains_usa_phone_percent" : {
-          "description" : "Verifies that the percentage of rows that contains a USA phone number in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.",
+          "description" : "Verifies that the percentage of rows that contains a USA phone number in a column does not exceed the maximum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnPiiContainsUsaPhonePercentCheckSpec"
         },
         "monthly_contains_email_percent" : {
-          "description" : "Verifies that the percentage of rows that contains emails in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.",
+          "description" : "Verifies that the percentage of rows that contains emails in a column does not exceed the minimum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnPiiContainsEmailPercentCheckSpec"
         },
         "monthly_contains_usa_zipcode_percent" : {
-          "description" : "Verifies that the percentage of rows that contains a USA zip code in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.",
+          "description" : "Verifies that the percentage of rows that contains a USA zip code in a column does not exceed the maximum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnPiiContainsUsaZipcodePercentCheckSpec"
         },
         "monthly_contains_ip4_percent" : {
-          "description" : "Verifies that the percentage of rows that contains IP4 address values in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.",
+          "description" : "Verifies that the percentage of rows that contains IP4 address values in a column does not fall below the minimum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnPiiContainsIp4PercentCheckSpec"
         },
         "monthly_contains_ip6_percent" : {
-          "description" : "Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.",
+          "description" : "Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnPiiContainsIp6PercentCheckSpec"
         }
       }
@@ -25268,23 +25268,23 @@
           }
         },
         "monthly_partition_contains_usa_phone_percent" : {
-          "description" : "Verifies that the percentage of rows that contains USA phone number in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the percentage of rows that contains USA phone number in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnPiiContainsUsaPhonePercentCheckSpec"
         },
         "monthly_partition_contains_email_percent" : {
-          "description" : "Verifies that the percentage of rows that contains emails in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the percentage of rows that contains emails in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnPiiContainsEmailPercentCheckSpec"
         },
         "monthly_partition_contains_usa_zipcode_percent" : {
-          "description" : "Verifies that the percentage of rows that contains USA zip code in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the percentage of rows that contains USA zip code in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnPiiContainsUsaZipcodePercentCheckSpec"
         },
         "monthly_partition_contains_ip4_percent" : {
-          "description" : "Verifies that the percentage of rows that contains IP4 address values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the percentage of rows that contains IP4 address values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnPiiContainsIp4PercentCheckSpec"
         },
         "monthly_partition_contains_ip6_percent" : {
-          "description" : "Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnPiiContainsIp6PercentCheckSpec"
         }
       }
@@ -25918,7 +25918,7 @@
           "$ref" : "#/definitions/ValueChangedRuleParametersSpec"
         },
         "error" : {
-          "description" : "Default alerting threshold for a row count that raises a data quality error (alert)",
+          "description" : "Default alerting thresholdthat raises a data quality issue at an error severity level",
           "$ref" : "#/definitions/ValueChangedRuleParametersSpec"
         },
         "fatal" : {
@@ -28710,19 +28710,19 @@
           }
         },
         "daily_partition_distinct_count" : {
-          "description" : "Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnDistinctCountCheckSpec"
         },
         "daily_partition_distinct_percent" : {
-          "description" : "Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnDistinctPercentCheckSpec"
         },
         "daily_partition_duplicate_count" : {
-          "description" : "Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnDuplicateCountCheckSpec"
         },
         "daily_partition_duplicate_percent" : {
-          "description" : "Verifies that the percent of duplicate values in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that the percent of duplicate values in a column does not exceed the maximum accepted percent. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnDuplicatePercentCheckSpec"
         },
         "daily_partition_distinct_count_anomaly" : {
@@ -28866,19 +28866,19 @@
           }
         },
         "monthly_distinct_count" : {
-          "description" : "Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.",
+          "description" : "Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores the most recent check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnDistinctCountCheckSpec"
         },
         "monthly_distinct_percent" : {
-          "description" : "Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Stores the most recent row count for each month when the data quality check was evaluated.",
+          "description" : "Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Stores the most recent check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnDistinctPercentCheckSpec"
         },
         "monthly_duplicate_count" : {
-          "description" : "Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.",
+          "description" : "Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Stores the most recent check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnDuplicateCountCheckSpec"
         },
         "monthly_duplicate_percent" : {
-          "description" : "Verifies that the percentage of duplicate values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.",
+          "description" : "Verifies that the percentage of duplicate values in a column does not exceed the maximum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnDuplicatePercentCheckSpec"
         },
         "monthly_distinct_count_change" : {
@@ -28902,19 +28902,19 @@
           }
         },
         "monthly_partition_distinct_count" : {
-          "description" : "Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnDistinctCountCheckSpec"
         },
         "monthly_partition_distinct_percent" : {
-          "description" : "Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnDistinctPercentCheckSpec"
         },
         "monthly_partition_duplicate_count" : {
-          "description" : "Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnDuplicateCountCheckSpec"
         },
         "monthly_partition_duplicate_percent" : {
-          "description" : "Verifies that the percent of duplicate values in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that the percent of duplicate values in a column does not exceed the maximum accepted percent. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnDuplicatePercentCheckSpec"
         },
         "monthly_partition_distinct_count_change" : {
@@ -29632,7 +29632,7 @@
           "$ref" : "#/definitions/CustomRuleParametersSpec"
         },
         "error" : {
-          "description" : "Default alerting threshold for a row count that raises a data quality error (alert)",
+          "description" : "Default alerting thresholdthat raises a data quality issue at an error severity level",
           "$ref" : "#/definitions/CustomRuleParametersSpec"
         },
         "fatal" : {
@@ -32767,7 +32767,7 @@
           }
         },
         "monthly_total_row_count_match_percent" : {
-          "description" : "Verifies the total row count of a tested table and compares it to a row count of a reference table. Stores the most recent row count for each month when the data quality check was evaluated.",
+          "description" : "Verifies the total row count of a tested table and compares it to a row count of a reference table. Stores the most recent check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/TableAccuracyTotalRowCountMatchPercentCheckSpec"
         }
       }
@@ -32904,7 +32904,7 @@
           "$ref" : "#/definitions/MaxFailuresRule0ParametersSpec"
         },
         "error" : {
-          "description" : "Default alerting threshold for a row count that raises a data quality error (alert)",
+          "description" : "Default alerting threshold with the maximum number of consecutive table availability issues that raises a data quality error (alert)",
           "$ref" : "#/definitions/MaxFailuresRule5ParametersSpec"
         },
         "fatal" : {
@@ -33588,15 +33588,15 @@
           }
         },
         "daily_partition_sql_condition_failed_on_table" : {
-          "description" : "Verifies that a custom SQL expression is met for each row. Counts the number of rows where the expression is not satisfied, and raises an issue if too many failures were detected. This check is used also to compare values between columns: `{alias}.col_price > {alias}.col_tax`. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that a custom SQL expression is met for each row. Counts the number of rows where the expression is not satisfied, and raises an issue if too many failures were detected. This check is used also to compare values between columns: `{alias}.col_price > {alias}.col_tax`. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/TableSqlConditionFailedCheckSpec"
         },
         "daily_partition_sql_condition_passed_percent_on_table" : {
-          "description" : "Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Reference the current table by using tokens, for example: `{alias}.col_price > {alias}.col_tax`. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Reference the current table by using tokens, for example: `{alias}.col_price > {alias}.col_tax`. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/TableSqlConditionPassedPercentCheckSpec"
         },
         "daily_partition_sql_aggregate_expression_on_table" : {
-          "description" : "Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/TableSqlAggregateExpressionCheckSpec"
         }
       }
@@ -33636,15 +33636,15 @@
           }
         },
         "monthly_partition_sql_condition_failed_on_table" : {
-          "description" : "Verifies that a custom SQL expression is met for each row. Counts the number of rows where the expression is not satisfied, and raises an issue if too many failures were detected. This check is used also to compare values between columns: `{alias}.col_price > {alias}.col_tax`. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that a custom SQL expression is met for each row. Counts the number of rows where the expression is not satisfied, and raises an issue if too many failures were detected. This check is used also to compare values between columns: `{alias}.col_price > {alias}.col_tax`. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/TableSqlConditionFailedCheckSpec"
         },
         "monthly_partition_sql_condition_passed_percent_on_table" : {
-          "description" : "Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Reference the current table by using tokens, for example: `{alias}.col_price > {alias}.col_tax`. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Reference the current table by using tokens, for example: `{alias}.col_price > {alias}.col_tax`. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/TableSqlConditionPassedPercentCheckSpec"
         },
         "monthly_partition_sql_aggregate_expression_on_table" : {
-          "description" : "Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/TableSqlAggregateExpressionCheckSpec"
         }
       }
@@ -34700,7 +34700,7 @@
           "$ref" : "#/definitions/MinCountRule0WarningParametersSpec"
         },
         "error" : {
-          "description" : "Default alerting threshold for a row count that raises a data quality error (alert)",
+          "description" : "Default alerting thresholdthat raises a data quality issue at an error severity level",
           "$ref" : "#/definitions/MinCountRule1ParametersSpec"
         },
         "fatal" : {
@@ -34756,7 +34756,7 @@
           "$ref" : "#/definitions/ValueChangedRuleParametersSpec"
         },
         "error" : {
-          "description" : "Default alerting threshold for a row count that raises a data quality error (alert)",
+          "description" : "Default alerting thresholdthat raises a data quality issue at an error severity level",
           "$ref" : "#/definitions/ValueChangedRuleParametersSpec"
         },
         "fatal" : {
@@ -34812,7 +34812,7 @@
           "$ref" : "#/definitions/EqualsIntegerRuleParametersSpec"
         },
         "error" : {
-          "description" : "Default alerting threshold for a row count that raises a data quality error (alert)",
+          "description" : "Default alerting thresholdthat raises a data quality issue at an error severity level",
           "$ref" : "#/definitions/EqualsIntegerRuleParametersSpec"
         },
         "fatal" : {
@@ -34881,7 +34881,7 @@
           "$ref" : "#/definitions/ValueChangedRuleParametersSpec"
         },
         "error" : {
-          "description" : "Default alerting threshold for a row count that raises a data quality error (alert)",
+          "description" : "Default alerting thresholdthat raises a data quality issue at an error severity level",
           "$ref" : "#/definitions/ValueChangedRuleParametersSpec"
         },
         "fatal" : {
@@ -34937,7 +34937,7 @@
           "$ref" : "#/definitions/ValueChangedRuleParametersSpec"
         },
         "error" : {
-          "description" : "Default alerting threshold for a row count that raises a data quality error (alert)",
+          "description" : "Default alerting thresholdthat raises a data quality issue at an error severity level",
           "$ref" : "#/definitions/ValueChangedRuleParametersSpec"
         },
         "fatal" : {
@@ -34993,7 +34993,7 @@
           "$ref" : "#/definitions/ValueChangedRuleParametersSpec"
         },
         "error" : {
-          "description" : "Default alerting threshold for a row count that raises a data quality error (alert)",
+          "description" : "Default alerting thresholdthat raises a data quality issue at an error severity level",
           "$ref" : "#/definitions/ValueChangedRuleParametersSpec"
         },
         "fatal" : {

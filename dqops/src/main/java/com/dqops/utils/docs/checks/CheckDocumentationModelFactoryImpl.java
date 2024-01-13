@@ -339,6 +339,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
 
         checkDocumentationModel.setCheckHelp(checkModel.getHelpText());
         checkDocumentationModel.setCheckModel(checkModel);
+        checkDocumentationModel.setTarget(similarCheckModel.getCheckTarget().toString());
         String checkCategoryName = similarCheckModel.getCategory();
         checkDocumentationModel.setCategory(checkCategoryName);
 
