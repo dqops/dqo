@@ -41,9 +41,9 @@ import java.util.Objects;
 public class ColumnAnomalyDailyMonitoringChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAnomalyDailyMonitoringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
+            put("daily_sum_anomaly", o -> o.dailySumAnomaly);
             put("daily_mean_anomaly", o -> o.dailyMeanAnomaly);
             put("daily_median_anomaly", o -> o.dailyMedianAnomaly);
-            put("daily_sum_anomaly", o -> o.dailySumAnomaly);
 
             put("daily_mean_change", o -> o.dailyMeanChange);
             put("daily_mean_change_1_day", o -> o.dailyMeanChange1Day);
@@ -62,14 +62,14 @@ public class ColumnAnomalyDailyMonitoringChecksSpec extends AbstractCheckCategor
         }
     };
 
+    @JsonPropertyDescription("Verifies that the sum in a column changes in a rate within a percentile boundary during the last 90 days.")
+    private ColumnSumAnomalyDifferencingCheckSpec dailySumAnomaly;
+
     @JsonPropertyDescription("Verifies that the mean value in a column changes in a rate within a percentile boundary during the last 90 days.")
     private ColumnMeanAnomalyStationaryCheckSpec dailyMeanAnomaly;
 
     @JsonPropertyDescription("Verifies that the median in a column changes in a rate within a percentile boundary during the last 90 days.")
     private ColumnMedianAnomalyStationaryCheckSpec dailyMedianAnomaly;
-
-    @JsonPropertyDescription("Verifies that the sum in a column changes in a rate within a percentile boundary during the last 90 days.")
-    private ColumnSumAnomalyDifferencingCheckSpec dailySumAnomaly;
 
     @JsonPropertyDescription("Verifies that the mean value in a column changed in a fixed rate since the last readout.")
     private ColumnMeanChangeCheckSpec dailyMeanChange;
@@ -116,6 +116,23 @@ public class ColumnAnomalyDailyMonitoringChecksSpec extends AbstractCheckCategor
     @JsonPropertyDescription("Verifies that the sum in a column changed in a fixed rate since the last readout from the last month.")
     private ColumnSumChange30DaysCheckSpec dailySumChange30Days;
 
+    /**
+     * Returns a sum anomaly 90 days check specification.
+     * @return Sum anomaly 90 days check specification.
+     */
+    public ColumnSumAnomalyDifferencingCheckSpec getDailySumAnomaly() {
+        return dailySumAnomaly;
+    }
+
+    /**
+     * Sets a new specification of a sum anomaly 90 days check.
+     * @param dailySumAnomaly Sum anomaly 90 days check specification.
+     */
+    public void setDailySumAnomaly(ColumnSumAnomalyDifferencingCheckSpec dailySumAnomaly) {
+        this.setDirtyIf(!Objects.equals(this.dailySumAnomaly, dailySumAnomaly));
+        this.dailySumAnomaly = dailySumAnomaly;
+        propagateHierarchyIdToField(dailySumAnomaly, "daily_sum_anomaly");
+    }
 
     /**
      * Returns a mean value anomaly 90 days check specification.
@@ -151,24 +168,6 @@ public class ColumnAnomalyDailyMonitoringChecksSpec extends AbstractCheckCategor
         this.setDirtyIf(!Objects.equals(this.dailyMedianAnomaly, dailyMedianAnomaly));
         this.dailyMedianAnomaly = dailyMedianAnomaly;
         propagateHierarchyIdToField(dailyMedianAnomaly, "daily_median_anomaly");
-    }
-
-    /**
-     * Returns a sum anomaly 90 days check specification.
-     * @return Sum anomaly 90 days check specification.
-     */
-    public ColumnSumAnomalyDifferencingCheckSpec getDailySumAnomaly() {
-        return dailySumAnomaly;
-    }
-
-    /**
-     * Sets a new specification of a sum anomaly 90 days check.
-     * @param dailySumAnomaly Sum anomaly 90 days check specification.
-     */
-    public void setDailySumAnomaly(ColumnSumAnomalyDifferencingCheckSpec dailySumAnomaly) {
-        this.setDirtyIf(!Objects.equals(this.dailySumAnomaly, dailySumAnomaly));
-        this.dailySumAnomaly = dailySumAnomaly;
-        propagateHierarchyIdToField(dailySumAnomaly, "daily_sum_anomaly");
     }
 
     /**

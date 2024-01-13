@@ -14073,7 +14073,8 @@ definitions:
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
       parameters:
-        description: "Data quality check parameters"
+        description: "Data quality check parameters. Fill the parameters to provide\
+          \ the name of the referenced table and the referenced column."
         $ref: "#/definitions/ColumnAccuracyTotalAverageMatchPercentSensorParametersSpec"
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
@@ -14152,7 +14153,8 @@ definitions:
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
       parameters:
-        description: "Data quality check parameters"
+        description: "Data quality check parameters. Fill the parameters to provide\
+          \ the name of the referenced table and the referenced column."
         $ref: "#/definitions/ColumnAccuracyTotalMaxMatchPercentSensorParametersSpec"
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
@@ -14231,7 +14233,8 @@ definitions:
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
       parameters:
-        description: "Data quality check parameters"
+        description: "Data quality check parameters. Fill the parameters to provide\
+          \ the name of the referenced table and the referenced column."
         $ref: "#/definitions/ColumnAccuracyTotalMinMatchPercentSensorParametersSpec"
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
@@ -14310,7 +14313,8 @@ definitions:
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
       parameters:
-        description: "Data quality check parameters"
+        description: "Data quality check parameters. Fill the parameters to provide\
+          \ the name of the referenced table and the referenced column."
         $ref: "#/definitions/ColumnAccuracyTotalNotNullCountMatchPercentSensorParametersSpec"
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
@@ -14389,7 +14393,8 @@ definitions:
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
       parameters:
-        description: "Data quality check parameters"
+        description: "Data quality check parameters. Fill the parameters to provide\
+          \ the name of the referenced table and the referenced column."
         $ref: "#/definitions/ColumnAccuracyTotalSumMatchPercentSensorParametersSpec"
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
@@ -14432,6 +14437,10 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
+      daily_sum_anomaly:
+        description: "Verifies that the sum in a column changes in a rate within a\
+          \ percentile boundary during the last 90 days."
+        $ref: "#/definitions/ColumnSumAnomalyDifferencingCheckSpec"
       daily_mean_anomaly:
         description: "Verifies that the mean value in a column changes in a rate within\
           \ a percentile boundary during the last 90 days."
@@ -14440,10 +14449,6 @@ definitions:
         description: "Verifies that the median in a column changes in a rate within\
           \ a percentile boundary during the last 90 days."
         $ref: "#/definitions/ColumnMedianAnomalyStationaryCheckSpec"
-      daily_sum_anomaly:
-        description: "Verifies that the sum in a column changes in a rate within a\
-          \ percentile boundary during the last 90 days."
-        $ref: "#/definitions/ColumnSumAnomalyDifferencingCheckSpec"
       daily_mean_change:
         description: "Verifies that the mean value in a column changed in a fixed\
           \ rate since the last readout."
@@ -14503,6 +14508,10 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
+      daily_partition_sum_anomaly:
+        description: "Verifies that the sum in a column is within a percentile from\
+          \ measurements made during the last 90 days."
+        $ref: "#/definitions/ColumnSumAnomalyStationaryPartitionCheckSpec"
       daily_partition_mean_anomaly:
         description: "Verifies that the mean value in a column is within a percentile\
           \ from measurements made during the last 90 days."
@@ -14511,10 +14520,6 @@ definitions:
         description: "Verifies that the median in a column is within a percentile\
           \ from measurements made during the last 90 days."
         $ref: "#/definitions/ColumnMedianAnomalyStationaryCheckSpec"
-      daily_partition_sum_anomaly:
-        description: "Verifies that the sum in a column is within a percentile from\
-          \ measurements made during the last 90 days."
-        $ref: "#/definitions/ColumnSumAnomalyStationaryPartitionCheckSpec"
       daily_partition_mean_change:
         description: "Verifies that the mean value in a column changed in a fixed\
           \ rate since last readout."
@@ -14574,6 +14579,10 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
+      monthly_sum_change:
+        description: "Verifies that the sum in a column changed in a fixed rate since\
+          \ the last readout."
+        $ref: "#/definitions/ColumnSumChangeCheckSpec"
       monthly_mean_change:
         description: "Verifies that the mean value in a column changed in a fixed\
           \ rate since the last readout."
@@ -14582,10 +14591,6 @@ definitions:
         description: "Verifies that the median in a column changed in a fixed rate\
           \ since the last readout."
         $ref: "#/definitions/ColumnMedianChangeCheckSpec"
-      monthly_sum_change:
-        description: "Verifies that the sum in a column changed in a fixed rate since\
-          \ the last readout."
-        $ref: "#/definitions/ColumnSumChangeCheckSpec"
   ColumnAnomalyMonthlyPartitionedChecksSpec:
     type: "object"
     properties:
@@ -14597,6 +14602,10 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
+      monthly_partition_sum_change:
+        description: "Verifies that the sum in a column changed in a fixed rate since\
+          \ the last readout."
+        $ref: "#/definitions/ColumnSumChangeCheckSpec"
       monthly_partition_mean_change:
         description: "Verifies that the mean value in a column changed in a fixed\
           \ rate since the last readout."
@@ -14605,10 +14614,6 @@ definitions:
         description: "Verifies that the median in a column changed in a fixed rate\
           \ since the last readout."
         $ref: "#/definitions/ColumnMedianChangeCheckSpec"
-      monthly_partition_sum_change:
-        description: "Verifies that the sum in a column changed in a fixed rate since\
-          \ the last readout."
-        $ref: "#/definitions/ColumnSumChangeCheckSpec"
   ColumnAnomalyProfilingChecksSpec:
     type: "object"
     properties:
@@ -14620,6 +14625,10 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
+      profile_sum_anomaly:
+        description: "Verifies that the sum in a column changes in a rate within a\
+          \ percentile boundary during the last 90 days."
+        $ref: "#/definitions/ColumnSumAnomalyDifferencingCheckSpec"
       profile_mean_anomaly:
         description: "Verifies that the mean value in a column changes in a rate within\
           \ a percentile boundary during the last 90 days."
@@ -14628,10 +14637,6 @@ definitions:
         description: "Verifies that the median in a column changes in a rate within\
           \ a percentile boundary during the last 90 days."
         $ref: "#/definitions/ColumnMedianAnomalyStationaryCheckSpec"
-      profile_sum_anomaly:
-        description: "Verifies that the sum in a column changes in a rate within a\
-          \ percentile boundary during the last 90 days."
-        $ref: "#/definitions/ColumnSumAnomalyDifferencingCheckSpec"
       profile_mean_change:
         description: "Verifies that the mean value in a column changed in a fixed\
           \ rate since the last readout."
@@ -16261,20 +16266,24 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
+      daily_sql_condition_failed_on_column:
+        description: "Verifies that a custom SQL expression is met for each row. Counts\
+          \ the number of rows where the expression is not satisfied, and raises an\
+          \ issue if too many failures were detected. This check is used also to compare\
+          \ values between the current column and another column: `{alias}.{column}\
+          \ > col_tax`. Stores the most recent captured count of failed rows for each\
+          \ day when the data quality check was evaluated."
+        $ref: "#/definitions/ColumnSqlConditionFailedCheckSpec"
       daily_sql_condition_passed_percent_on_column:
         description: "Verifies that a minimum percentage of rows passed a custom SQL\
-          \ condition (expression). Stores the most recent captured value for each\
-          \ day when the data quality check was evaluated."
+          \ condition (expression). Reference the current column by using tokens,\
+          \ for example: `{alias}.{column} > {alias}.col_tax`. Stores the most recent\
+          \ captured value for each day when the data quality check was evaluated."
         $ref: "#/definitions/ColumnSqlConditionPassedPercentCheckSpec"
-      daily_sql_condition_failed_count_on_column:
-        description: "Verifies that a number of rows failed a custom SQL condition(expression)\
-          \ does not exceed the maximum accepted count. Stores the most recent captured\
-          \ value for each day when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnSqlConditionFailedCountCheckSpec"
       daily_sql_aggregate_expression_on_column:
         description: "Verifies that a custom aggregated SQL expression (MIN, MAX,\
-          \ etc.) is not outside the set range. Stores the most recent captured value\
-          \ for each day when the data quality check was evaluated."
+          \ etc.) is not outside the expected range. Stores the most recent captured\
+          \ value for each day when the data quality check was evaluated."
         $ref: "#/definitions/ColumnSqlAggregateExpressionCheckSpec"
   ColumnCustomSqlDailyPartitionedChecksSpec:
     type: "object"
@@ -16287,20 +16296,24 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
+      daily_partition_sql_condition_failed_on_column:
+        description: "Verifies that a custom SQL expression is met for each row. Counts\
+          \ the number of rows where the expression is not satisfied, and raises an\
+          \ issue if too many failures were detected. This check is used also to compare\
+          \ values between the current column and another column: `{alias}.{column}\
+          \ > {alias}.col_tax`. Stores a separate data quality check result for each\
+          \ daily partition."
+        $ref: "#/definitions/ColumnSqlConditionFailedCheckSpec"
       daily_partition_sql_condition_passed_percent_on_column:
         description: "Verifies that a minimum percentage of rows passed a custom SQL\
-          \ condition (expression). Creates a separate data quality check (and an\
-          \ alert) for each daily partition."
+          \ condition (expression). Reference the current column by using tokens,\
+          \ for example: `{alias}.{column} > {alias}.col_tax`. Stores a separate data\
+          \ quality check result for each daily partition."
         $ref: "#/definitions/ColumnSqlConditionPassedPercentCheckSpec"
-      daily_partition_sql_condition_failed_count_on_column:
-        description: "Verifies that a number of rows failed a custom SQL condition(expression)\
-          \ does not exceed the maximum accepted count. Creates a separate data quality\
-          \ check (and an alert) for each daily partition."
-        $ref: "#/definitions/ColumnSqlConditionFailedCountCheckSpec"
       daily_partition_sql_aggregate_expression_on_column:
         description: "Verifies that a custom aggregated SQL expression (MIN, MAX,\
-          \ etc.) is not outside the set range. Creates a separate data quality check\
-          \ (and an alert) for each daily partition."
+          \ etc.) is not outside the expected range. Stores a separate data quality\
+          \ check result for each daily partition."
         $ref: "#/definitions/ColumnSqlAggregateExpressionCheckSpec"
   ColumnCustomSqlMonthlyMonitoringChecksSpec:
     type: "object"
@@ -16313,20 +16326,24 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
+      monthly_sql_condition_failed_on_column:
+        description: "Verifies that a custom SQL expression is met for each row. Counts\
+          \ the number of rows where the expression is not satisfied, and raises an\
+          \ issue if too many failures were detected. This check is used also to compare\
+          \ values between the current column and another column: `{alias}.{column}\
+          \ > {alias}.col_tax`. Stores the most recent captured count of failed rows\
+          \ for each month when the data quality check was evaluated."
+        $ref: "#/definitions/ColumnSqlConditionFailedCheckSpec"
       monthly_sql_condition_passed_percent_on_column:
         description: "Verifies that a minimum percentage of rows passed a custom SQL\
-          \ condition (expression). Stores the most recent row count for each month\
-          \ when the data quality check was evaluated."
+          \ condition (expression). Reference the current column by using tokens,\
+          \ for example: `{alias}.{column} > {alias}.col_tax`.  Stores the most recent\
+          \ row count for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnSqlConditionPassedPercentCheckSpec"
-      monthly_sql_condition_failed_count_on_column:
-        description: "Verifies that a number of rows failed a custom SQL condition(expression)\
-          \ does not exceed the maximum accepted count. Stores the most recent row\
-          \ count for each month when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnSqlConditionFailedCountCheckSpec"
       monthly_sql_aggregate_expression_on_column:
         description: "Verifies that a custom aggregated SQL expression (MIN, MAX,\
-          \ etc.) is not outside the set range. Stores the most recent row count for\
-          \ each month when the data quality check was evaluated."
+          \ etc.) is not outside the expected range. Stores the most recent row count\
+          \ for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnSqlAggregateExpressionCheckSpec"
   ColumnCustomSqlMonthlyPartitionedChecksSpec:
     type: "object"
@@ -16339,20 +16356,24 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
+      monthly_partition_sql_condition_failed_on_column:
+        description: "Verifies that a custom SQL expression is met for each row. Counts\
+          \ the number of rows where the expression is not satisfied, and raises an\
+          \ issue if too many failures were detected. This check is used also to compare\
+          \ values between the current column and another column: `{alias}.{column}\
+          \ > {alias}.col_tax`. Creates a separate data quality check (and an alert)\
+          \ for each monthly partition."
+        $ref: "#/definitions/ColumnSqlConditionFailedCheckSpec"
       monthly_partition_sql_condition_passed_percent_on_column:
         description: "Verifies that a minimum percentage of rows passed a custom SQL\
-          \ condition (expression). Creates a separate data quality check (and an\
-          \ alert) for each monthly partition."
+          \ condition (expression). Reference the current column by using tokens,\
+          \ for example: `{alias}.{column} > {alias}.col_tax`. Creates a separate\
+          \ data quality check (and an alert) for each monthly partition."
         $ref: "#/definitions/ColumnSqlConditionPassedPercentCheckSpec"
-      monthly_partition_sql_condition_failed_count_on_column:
-        description: "Verifies that a number of rows failed a custom SQL condition(expression)\
-          \ does not exceed the maximum accepted count. Creates a separate data quality\
-          \ check (and an alert) for each monthly partition."
-        $ref: "#/definitions/ColumnSqlConditionFailedCountCheckSpec"
       monthly_partition_sql_aggregate_expression_on_column:
         description: "Verifies that a custom aggregated SQL expression (MIN, MAX,\
-          \ etc.) is not outside the set range. Creates a separate data quality check\
-          \ (and an alert) for each monthly partition."
+          \ etc.) is not outside the expected range. Creates a separate data quality\
+          \ check (and an alert) for each monthly partition."
         $ref: "#/definitions/ColumnSqlAggregateExpressionCheckSpec"
   ColumnCustomSqlProfilingChecksSpec:
     type: "object"
@@ -16372,7 +16393,7 @@ definitions:
       profile_sql_condition_failed_count_on_column:
         description: "Verifies that a number of rows failed a custom SQL condition(expression)\
           \ does not exceed the maximum accepted count."
-        $ref: "#/definitions/ColumnSqlConditionFailedCountCheckSpec"
+        $ref: "#/definitions/ColumnSqlConditionFailedCheckSpec"
       profile_sql_aggregate_expression_on_column:
         description: "Verifies that a custom aggregated SQL expression (MIN, MAX,\
           \ etc.) is not outside the set range."
@@ -16784,11 +16805,6 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
-      daily_date_match_format_percent:
-        description: "Verifies that the percentage of date values matching the given\
-          \ format in a column does not exceed the maximum accepted percentage. Creates\
-          \ a separate data quality check (and an alert) for each daily monitoring."
-        $ref: "#/definitions/ColumnDatetimeDateMatchFormatPercentCheckSpec"
       daily_date_values_in_future_percent:
         description: "Verifies that the percentage of date values in future in a column\
           \ does not exceed the maximum accepted percentage. Stores the most recent\
@@ -16800,6 +16816,11 @@ definitions:
           \ Stores the most recent captured value for each day when the data quality\
           \ check was evaluated."
         $ref: "#/definitions/ColumnDatetimeValueInRangeDatePercentCheckSpec"
+      daily_date_match_format_percent:
+        description: "Verifies that the percentage of date values matching the given\
+          \ format in a text column does not exceed the maximum accepted percentage.\
+          \ Creates a separate data quality check (and an alert) for each daily monitoring."
+        $ref: "#/definitions/ColumnDatetimeDateMatchFormatPercentCheckSpec"
   ColumnDatetimeDailyPartitionedChecksSpec:
     type: "object"
     properties:
@@ -16811,11 +16832,6 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
-      daily_partition_date_match_format_percent:
-        description: "Verifies that the percentage of date values matching the given\
-          \ format in a column does not exceed the maximum accepted percentage. Creates\
-          \ a separate data quality check (and an alert) for each daily partition."
-        $ref: "#/definitions/ColumnDatetimeDateMatchFormatPercentCheckSpec"
       daily_partition_date_values_in_future_percent:
         description: "Verifies that the percentage of date values in future in a column\
           \ does not exceed the maximum accepted percentage. Creates a separate data\
@@ -16826,6 +16842,11 @@ definitions:
           \ by the user in a column does not exceed the maximum accepted percentage.\
           \ Creates a separate data quality check (and an alert) for each daily partition."
         $ref: "#/definitions/ColumnDatetimeValueInRangeDatePercentCheckSpec"
+      daily_partition_date_match_format_percent:
+        description: "Verifies that the percentage of date values matching the given\
+          \ format in a text column does not exceed the maximum accepted percentage.\
+          \ Creates a separate data quality check (and an alert) for each daily partition."
+        $ref: "#/definitions/ColumnDatetimeDateMatchFormatPercentCheckSpec"
   ColumnDatetimeDateMatchFormatPercentCheckSpec:
     type: "object"
     properties:
@@ -16922,11 +16943,6 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
-      monthly_date_match_format_percent:
-        description: "Verifies that the percentage of date values matching the given\
-          \ format in a column does not exceed the maximum accepted percentage. Creates\
-          \ a separate data quality check (and an alert) for each monthly monitoring."
-        $ref: "#/definitions/ColumnDatetimeDateMatchFormatPercentCheckSpec"
       monthly_date_values_in_future_percent:
         description: "Verifies that the percentage of date values in future in a column\
           \ does not exceed the maximum accepted percentage. Stores the most recent\
@@ -16938,6 +16954,12 @@ definitions:
           \ Stores the most recent row count for each month when the data quality\
           \ check was evaluated."
         $ref: "#/definitions/ColumnDatetimeValueInRangeDatePercentCheckSpec"
+      monthly_date_match_format_percent:
+        description: "Verifies that the percentage of date values matching the given\
+          \ format in a text column does not exceed the maximum accepted percentage.\
+          \ Creates a separate data quality check (and an alert) for each monthly\
+          \ monitoring."
+        $ref: "#/definitions/ColumnDatetimeDateMatchFormatPercentCheckSpec"
   ColumnDatetimeMonthlyPartitionedChecksSpec:
     type: "object"
     properties:
@@ -16949,11 +16971,6 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
-      monthly_partition_date_match_format_percent:
-        description: "Verifies that the percentage of date values matching the given\
-          \ format in a column does not exceed the maximum accepted percentage. Creates\
-          \ a separate data quality check (and an alert) for each monthly partition."
-        $ref: "#/definitions/ColumnDatetimeDateMatchFormatPercentCheckSpec"
       monthly_partition_date_values_in_future_percent:
         description: "Verifies that the percentage of date values in future in a column\
           \ does not exceed the maximum accepted percentage. Creates a separate data\
@@ -16965,6 +16982,12 @@ definitions:
           \ Creates a separate data quality check (and an alert) for each monthly\
           \ partition."
         $ref: "#/definitions/ColumnDatetimeValueInRangeDatePercentCheckSpec"
+      monthly_partition_date_match_format_percent:
+        description: "Verifies that the percentage of date values matching the given\
+          \ format in a text column does not exceed the maximum accepted percentage.\
+          \ Creates a separate data quality check (and an alert) for each monthly\
+          \ partition."
+        $ref: "#/definitions/ColumnDatetimeDateMatchFormatPercentCheckSpec"
   ColumnDatetimeProfilingChecksSpec:
     type: "object"
     properties:
@@ -16976,10 +16999,6 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
-      profile_date_match_format_percent:
-        description: "Verifies that the percentage of date values matching the given\
-          \ format in a column does not exceed the minimum accepted percentage."
-        $ref: "#/definitions/ColumnDatetimeDateMatchFormatPercentCheckSpec"
       profile_date_values_in_future_percent:
         description: "Verifies that the percentage of date values in future in a column\
           \ does not exceed the maximum accepted percentage."
@@ -16988,6 +17007,10 @@ definitions:
         description: "Verifies that the percentage of date values in the range defined\
           \ by the user in a column does not exceed the maximum accepted percentage."
         $ref: "#/definitions/ColumnDatetimeValueInRangeDatePercentCheckSpec"
+      profile_date_match_format_percent:
+        description: "Verifies that the percentage of date values matching the given\
+          \ format in a text column does not exceed the maximum accepted percentage."
+        $ref: "#/definitions/ColumnDatetimeDateMatchFormatPercentCheckSpec"
   ColumnDatetimeValueInRangeDatePercentCheckSpec:
     type: "object"
     properties:
@@ -23635,17 +23658,17 @@ definitions:
           \ the most recent captured value for each day when the data quality check\
           \ was evaluated."
         $ref: "#/definitions/ColumnPiiContainsUsaPhonePercentCheckSpec"
+      daily_contains_email_percent:
+        description: "Verifies that the percentage of rows that contains emails in\
+          \ a column does not exceed the minimum accepted percentage. Stores the most\
+          \ recent captured value for each day when the data quality check was evaluated."
+        $ref: "#/definitions/ColumnPiiContainsEmailPercentCheckSpec"
       daily_contains_usa_zipcode_percent:
         description: "Verifies that the percentage of rows that contains a USA zip\
           \ code in a column does not exceed the maximum accepted percentage. Stores\
           \ the most recent captured value for each day when the data quality check\
           \ was evaluated."
         $ref: "#/definitions/ColumnPiiContainsUsaZipcodePercentCheckSpec"
-      daily_contains_email_percent:
-        description: "Verifies that the percentage of rows that contains emails in\
-          \ a column does not exceed the minimum accepted percentage. Stores the most\
-          \ recent captured value for each day when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnPiiContainsEmailPercentCheckSpec"
       daily_contains_ip4_percent:
         description: "Verifies that the percentage of rows that contains IP4 address\
           \ values in a column does not fall below the minimum accepted percentage.\
@@ -23674,16 +23697,16 @@ definitions:
           \ number in a column does not exceed the maximum accepted percentage. Creates\
           \ a separate data quality check (and an alert) for each daily partition."
         $ref: "#/definitions/ColumnPiiContainsUsaPhonePercentCheckSpec"
-      daily_partition_contains_usa_zipcode_percent:
-        description: "Verifies that the percentage of rows that contains USA zip code\
-          \ in a column does not exceed the maximum accepted percentage. Creates a\
-          \ separate data quality check (and an alert) for each daily partition."
-        $ref: "#/definitions/ColumnPiiContainsUsaZipcodePercentCheckSpec"
       daily_partition_contains_email_percent:
         description: "Verifies that the percentage of rows that contains emails in\
           \ a column does not exceed the minimum accepted percentage. Creates a separate\
           \ data quality check (and an alert) for each daily partition."
         $ref: "#/definitions/ColumnPiiContainsEmailPercentCheckSpec"
+      daily_partition_contains_usa_zipcode_percent:
+        description: "Verifies that the percentage of rows that contains USA zip code\
+          \ in a column does not exceed the maximum accepted percentage. Creates a\
+          \ separate data quality check (and an alert) for each daily partition."
+        $ref: "#/definitions/ColumnPiiContainsUsaZipcodePercentCheckSpec"
       daily_partition_contains_ip4_percent:
         description: "Verifies that the percentage of rows that contains IP4 address\
           \ values in a column does not fall below the minimum accepted percentage.\
@@ -23711,17 +23734,17 @@ definitions:
           \ the most recent row count for each month when the data quality check was\
           \ evaluated."
         $ref: "#/definitions/ColumnPiiContainsUsaPhonePercentCheckSpec"
+      monthly_contains_email_percent:
+        description: "Verifies that the percentage of rows that contains emails in\
+          \ a column does not exceed the minimum accepted percentage. Stores the most\
+          \ recent row count for each month when the data quality check was evaluated."
+        $ref: "#/definitions/ColumnPiiContainsEmailPercentCheckSpec"
       monthly_contains_usa_zipcode_percent:
         description: "Verifies that the percentage of rows that contains a USA zip\
           \ code in a column does not exceed the maximum accepted percentage. Stores\
           \ the most recent row count for each month when the data quality check was\
           \ evaluated."
         $ref: "#/definitions/ColumnPiiContainsUsaZipcodePercentCheckSpec"
-      monthly_contains_email_percent:
-        description: "Verifies that the percentage of rows that contains emails in\
-          \ a column does not exceed the minimum accepted percentage. Stores the most\
-          \ recent row count for each month when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnPiiContainsEmailPercentCheckSpec"
       monthly_contains_ip4_percent:
         description: "Verifies that the percentage of rows that contains IP4 address\
           \ values in a column does not fall below the minimum accepted percentage.\
@@ -23750,16 +23773,16 @@ definitions:
           \ number in a column does not exceed the maximum accepted percentage. Creates\
           \ a separate data quality check (and an alert) for each monthly partition."
         $ref: "#/definitions/ColumnPiiContainsUsaPhonePercentCheckSpec"
-      monthly_partition_contains_usa_zipcode_percent:
-        description: "Verifies that the percentage of rows that contains USA zip code\
-          \ in a column does not exceed the maximum accepted percentage. Creates a\
-          \ separate data quality check (and an alert) for each monthly partition."
-        $ref: "#/definitions/ColumnPiiContainsUsaZipcodePercentCheckSpec"
       monthly_partition_contains_email_percent:
         description: "Verifies that the percentage of rows that contains emails in\
           \ a column does not exceed the minimum accepted percentage. Creates a separate\
           \ data quality check (and an alert) for each monthly partition."
         $ref: "#/definitions/ColumnPiiContainsEmailPercentCheckSpec"
+      monthly_partition_contains_usa_zipcode_percent:
+        description: "Verifies that the percentage of rows that contains USA zip code\
+          \ in a column does not exceed the maximum accepted percentage. Creates a\
+          \ separate data quality check (and an alert) for each monthly partition."
+        $ref: "#/definitions/ColumnPiiContainsUsaZipcodePercentCheckSpec"
       monthly_partition_contains_ip4_percent:
         description: "Verifies that the percentage of rows that contains IP4 address\
           \ values in a column does not fall below the minimum accepted percentage.\
@@ -23787,14 +23810,14 @@ definitions:
         description: "Verifies that the percentage of rows that contains USA phone\
           \ number in a column does not exceed the maximum accepted percentage."
         $ref: "#/definitions/ColumnPiiContainsUsaPhonePercentCheckSpec"
-      profile_contains_usa_zipcode_percent:
-        description: "Verifies that the percentage of rows that contains USA zip code\
-          \ in a column does not exceed the maximum accepted percentage."
-        $ref: "#/definitions/ColumnPiiContainsUsaZipcodePercentCheckSpec"
       profile_contains_email_percent:
         description: "Verifies that the percentage of rows that contains valid emails\
           \ in a column does not exceed the minimum accepted percentage."
         $ref: "#/definitions/ColumnPiiContainsEmailPercentCheckSpec"
+      profile_contains_usa_zipcode_percent:
+        description: "Verifies that the percentage of rows that contains USA zip code\
+          \ in a column does not exceed the maximum accepted percentage."
+        $ref: "#/definitions/ColumnPiiContainsUsaZipcodePercentCheckSpec"
       profile_contains_ip4_percent:
         description: "Verifies that the percentage of rows that contains valid IP4\
           \ address values in a column does not fall below the minimum accepted percentage."
@@ -24536,7 +24559,7 @@ definitions:
           \ BY clause for daily partitions and/or data groups. The expression can\
           \ use {table} and {column} placeholder that are replaced with a full table\
           \ name and the analyzed column name."
-  ColumnSqlConditionFailedCountCheckSpec:
+  ColumnSqlConditionFailedCheckSpec:
     type: "object"
     properties:
       schedule_override:
@@ -31463,7 +31486,8 @@ definitions:
           \ group of rows. Use the name of one of data grouping configurations defined\
           \ on the parent table."
       parameters:
-        description: "Data quality check parameters"
+        description: "Data quality check parameters. Fill the parameters to provide\
+          \ the name of the referenced table."
         $ref: "#/definitions/TableAccuracyTotalRowCountMatchPercentSensorParametersSpec"
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
@@ -32265,23 +32289,25 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
+      daily_sql_condition_failed_on_table:
+        description: "Verifies that a custom SQL expression is met for each row. Counts\
+          \ the number of rows where the expression is not satisfied, and raises an\
+          \ issue if too many failures were detected. This check is used also to compare\
+          \ values between columns: `{alias}.col_price > {alias}.col_tax`. Stores\
+          \ the most recent count of failed rows for each day when the data quality\
+          \ check was evaluated."
+        $ref: "#/definitions/TableSqlConditionFailedCheckSpec"
       daily_sql_condition_passed_percent_on_table:
-        description: "Verifies that a set percentage of rows passed a custom SQL condition\
-          \ (expression). Stores the most recent captured value for each day when\
-          \ the data quality check was evaluated."
+        description: "Verifies that a minimum percentage of rows passed a custom SQL\
+          \ condition (expression). Reference the current table by using tokens, for\
+          \ example: `{alias}.col_price > {alias}.col_tax`. Stores the most recent\
+          \ captured percentage for each day when the data quality check was evaluated."
         $ref: "#/definitions/TableSqlConditionPassedPercentCheckSpec"
-      daily_sql_condition_failed_count_on_table:
-        description: "Verifies that a set number of rows failed a custom SQL condition\
-          \ (expression). Stores the most recent captured value for each day when\
-          \ the data quality check was evaluated."
-        $ref: "#/definitions/TableSqlConditionFailedCountCheckSpec"
       daily_sql_aggregate_expression_on_table:
         description: "Verifies that a custom aggregated SQL expression (MIN, MAX,\
-          \ etc.) is not outside the set range. Stores the most recent captured value\
-          \ for each day when the data quality check was evaluated."
+          \ etc.) is not outside the expected range. Stores the most recent captured\
+          \ value for each day when the data quality check was evaluated."
         $ref: "#/definitions/TableSqlAggregateExpressionCheckSpec"
-      min_sql_condition_passed_percent_on_table:
-        $ref: "#/definitions/TableSqlConditionPassedPercentCheckSpec"
   TableCustomSqlDailyPartitionedChecksSpec:
     type: "object"
     properties:
@@ -32293,23 +32319,24 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
+      daily_partition_sql_condition_failed_on_table:
+        description: "Verifies that a custom SQL expression is met for each row. Counts\
+          \ the number of rows where the expression is not satisfied, and raises an\
+          \ issue if too many failures were detected. This check is used also to compare\
+          \ values between columns: `{alias}.col_price > {alias}.col_tax`. Creates\
+          \ a separate data quality check (and an alert) for each daily partition."
+        $ref: "#/definitions/TableSqlConditionFailedCheckSpec"
       daily_partition_sql_condition_passed_percent_on_table:
-        description: "Verifies that a set percentage of rows passed a custom SQL condition\
-          \ (expression). Creates a separate data quality check (and an alert) for\
-          \ each daily partition."
+        description: "Verifies that a minimum percentage of rows passed a custom SQL\
+          \ condition (expression). Reference the current table by using tokens, for\
+          \ example: `{alias}.col_price > {alias}.col_tax`. Creates a separate data\
+          \ quality check (and an alert) for each daily partition."
         $ref: "#/definitions/TableSqlConditionPassedPercentCheckSpec"
-      daily_partition_sql_condition_failed_count_on_table:
-        description: "Verifies that a set number of rows failed a custom SQL condition\
-          \ (expression). Creates a separate data quality check (and an alert) for\
-          \ each daily partition."
-        $ref: "#/definitions/TableSqlConditionFailedCountCheckSpec"
       daily_partition_sql_aggregate_expression_on_table:
         description: "Verifies that a custom aggregated SQL expression (MIN, MAX,\
-          \ etc.) is not outside the set range. Creates a separate data quality check\
-          \ (and an alert) for each daily partition."
+          \ etc.) is not outside the expected range. Creates a separate data quality\
+          \ check (and an alert) for each daily partition."
         $ref: "#/definitions/TableSqlAggregateExpressionCheckSpec"
-      min_sql_condition_passed_percent_on_table:
-        $ref: "#/definitions/TableSqlConditionPassedPercentCheckSpec"
   TableCustomSqlMonthlyMonitoringChecksSpec:
     type: "object"
     properties:
@@ -32321,23 +32348,25 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
+      monthly_sql_condition_failed_on_table:
+        description: "Verifies that a custom SQL expression is met for each row. Counts\
+          \ the number of rows where the expression is not satisfied, and raises an\
+          \ issue if too many failures were detected. This check is used also to compare\
+          \ values between columns: `{alias}.col_price > {alias}.col_tax`. Stores\
+          \ the most recent count of failed rows for each month when the data quality\
+          \ check was evaluated."
+        $ref: "#/definitions/TableSqlConditionFailedCheckSpec"
       monthly_sql_condition_passed_percent_on_table:
-        description: "Verifies that a set percentage of rows passed a custom SQL condition\
-          \ (expression). Stores the most recent row count for each month when the\
-          \ data quality check was evaluated."
+        description: "Verifies that a minimum percentage of rows passed a custom SQL\
+          \ condition (expression). Reference the current table by using tokens, for\
+          \ example: `{alias}.col_price > {alias}.col_tax`. Stores the most recent\
+          \ value for each month when the data quality check was evaluated."
         $ref: "#/definitions/TableSqlConditionPassedPercentCheckSpec"
-      monthly_sql_condition_failed_count_on_table:
-        description: "Verifies that a set number of rows failed a custom SQL condition\
-          \ (expression). Stores the most recent row count for each month when the\
-          \ data quality check was evaluated."
-        $ref: "#/definitions/TableSqlConditionFailedCountCheckSpec"
       monthly_sql_aggregate_expression_on_table:
         description: "Verifies that a custom aggregated SQL expression (MIN, MAX,\
-          \ etc.) is not outside the set range. Stores the most recent row count for\
-          \ each month when the data quality check was evaluated."
+          \ etc.) is not outside the expected range. Stores the most recent value\
+          \ for each month when the data quality check was evaluated."
         $ref: "#/definitions/TableSqlAggregateExpressionCheckSpec"
-      min_sql_condition_passed_percent_on_table:
-        $ref: "#/definitions/TableSqlConditionPassedPercentCheckSpec"
   TableCustomSqlMonthlyPartitionedChecksSpec:
     type: "object"
     properties:
@@ -32349,23 +32378,24 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
+      monthly_partition_sql_condition_failed_on_table:
+        description: "Verifies that a custom SQL expression is met for each row. Counts\
+          \ the number of rows where the expression is not satisfied, and raises an\
+          \ issue if too many failures were detected. This check is used also to compare\
+          \ values between columns: `{alias}.col_price > {alias}.col_tax`. Creates\
+          \ a separate data quality check (and an alert) for each monthly partition."
+        $ref: "#/definitions/TableSqlConditionFailedCheckSpec"
       monthly_partition_sql_condition_passed_percent_on_table:
-        description: "Verifies that a set percentage of rows passed a custom SQL condition\
-          \ (expression). Creates a separate data quality check (and an alert) for\
-          \ each monthly partition."
+        description: "Verifies that a minimum percentage of rows passed a custom SQL\
+          \ condition (expression). Reference the current table by using tokens, for\
+          \ example: `{alias}.col_price > {alias}.col_tax`. Creates a separate data\
+          \ quality check (and an alert) for each monthly partition."
         $ref: "#/definitions/TableSqlConditionPassedPercentCheckSpec"
-      monthly_partition_sql_condition_failed_count_on_table:
-        description: "Verifies that a set number of rows failed a custom SQL condition\
-          \ (expression). Creates a separate data quality check (and an alert) for\
-          \ each monthly partition."
-        $ref: "#/definitions/TableSqlConditionFailedCountCheckSpec"
       monthly_partition_sql_aggregate_expression_on_table:
         description: "Verifies that a custom aggregated SQL expression (MIN, MAX,\
-          \ etc.) is not outside the set range. Creates a separate data quality check\
-          \ (and an alert) for each monthly partition."
+          \ etc.) is not outside the expected range. Creates a separate data quality\
+          \ check (and an alert) for each monthly partition."
         $ref: "#/definitions/TableSqlAggregateExpressionCheckSpec"
-      min_sql_condition_passed_percent_on_table:
-        $ref: "#/definitions/TableSqlConditionPassedPercentCheckSpec"
   TableCustomSqlProfilingChecksSpec:
     type: "object"
     properties:
@@ -32378,16 +32408,19 @@ definitions:
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
       profile_sql_condition_passed_percent_on_table:
-        description: "Verifies that a set percentage of rows passed a custom SQL condition\
-          \ (expression)."
+        description: "Verifies that a custom SQL expression is met for each row. Counts\
+          \ the number of rows where the expression is not satisfied, and raises an\
+          \ issue if too many failures were detected. This check is used also to compare\
+          \ values between columns: `{alias}.col_price > {alias}.col_tax`."
         $ref: "#/definitions/TableSqlConditionPassedPercentCheckSpec"
-      profile_sql_condition_failed_count_on_table:
-        description: "Verifies that a set number of rows failed a custom SQL condition\
-          \ (expression)."
-        $ref: "#/definitions/TableSqlConditionFailedCountCheckSpec"
+      profile_sql_condition_failed_on_table:
+        description: "Verifies that a minimum percentage of rows passed a custom SQL\
+          \ condition (expression). Reference the current table by using tokens, for\
+          \ example: `{alias}.col_price > {alias}.col_tax`."
+        $ref: "#/definitions/TableSqlConditionFailedCheckSpec"
       profile_sql_aggregate_expression_on_table:
         description: "Verifies that a custom aggregated SQL expression (MIN, MAX,\
-          \ etc.) is not outside the set range."
+          \ etc.) is not outside the expected range."
         $ref: "#/definitions/TableSqlAggregateExpressionCheckSpec"
   TableDailyMonitoringCheckCategoriesSpec:
     type: "object"
@@ -34129,7 +34162,7 @@ definitions:
           \ from rows. The expression is evaluated on a whole table or withing a GROUP\
           \ BY clause for daily partitions and/or data groups. The expression can\
           \ use {table} placeholder that is replaced with a full table name."
-  TableSqlConditionFailedCountCheckSpec:
+  TableSqlConditionFailedCheckSpec:
     type: "object"
     properties:
       schedule_override:
@@ -34177,7 +34210,7 @@ definitions:
           \ on the parent table."
       parameters:
         description: "Sensor parameters with the custom SQL condition (an expression\
-          \ that returns true/false) which is evaluated on a each row"
+          \ that returns true/false) which is evaluated on a each row."
         $ref: "#/definitions/TableSqlConditionFailedCountSensorParametersSpec"
       warning:
         description: "Alerting threshold that raises a data quality warning when a\

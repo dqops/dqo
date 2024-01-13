@@ -4,5 +4,7 @@ kind: check
 spec:
   sensor_name: table/custom_sql/sql_condition_passed_percent
   rule_name: comparison/min_percent
-  help_text: Verifies that a set percentage of rows passed a custom SQL condition
-    (expression).
+  help_text: "Verifies that a custom SQL expression is met for each row. Counts the\
+    \ number of rows where the expression is not satisfied, and raises an issue if\
+    \ too many failures were detected. This check is used also to compare values between\
+    \ columns: `{alias}.col_price > {alias}.col_tax`."

@@ -42,11 +42,14 @@ import java.util.Objects;
 public class ColumnAnomalyMonthlyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAnomalyMonthlyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
+            put("monthly_partition_sum_change", o -> o.monthlyPartitionSumChange);
             put("monthly_partition_mean_change", o -> o.monthlyPartitionMeanChange);
             put("monthly_partition_median_change", o -> o.monthlyPartitionMedianChange);
-            put("monthly_partition_sum_change", o -> o.monthlyPartitionSumChange);
         }
     };
+
+    @JsonPropertyDescription("Verifies that the sum in a column changed in a fixed rate since the last readout.")
+    private ColumnSumChangeCheckSpec monthlyPartitionSumChange;
 
     @JsonPropertyDescription("Verifies that the mean value in a column changed in a fixed rate since the last readout.")
     private ColumnMeanChangeCheckSpec monthlyPartitionMeanChange;
@@ -54,8 +57,23 @@ public class ColumnAnomalyMonthlyPartitionedChecksSpec extends AbstractCheckCate
     @JsonPropertyDescription("Verifies that the median in a column changed in a fixed rate since the last readout.")
     private ColumnMedianChangeCheckSpec monthlyPartitionMedianChange;
 
-    @JsonPropertyDescription("Verifies that the sum in a column changed in a fixed rate since the last readout.")
-    private ColumnSumChangeCheckSpec monthlyPartitionSumChange;
+    /**
+     * Returns the sum change check.
+     * @return Sum change check.
+     */
+    public ColumnSumChangeCheckSpec getMonthlyPartitionSumChange() {
+        return monthlyPartitionSumChange;
+    }
+
+    /**
+     * Sets a new sum change check.
+     * @param monthlyPartitionSumChange Sum change check.
+     */
+    public void setMonthlyPartitionSumChange(ColumnSumChangeCheckSpec monthlyPartitionSumChange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionSumChange, monthlyPartitionSumChange));
+        this.monthlyPartitionSumChange = monthlyPartitionSumChange;
+        propagateHierarchyIdToField(monthlyPartitionSumChange, "monthly_partition_sum_change");
+    }
 
     /**
      * Returns the mean value change check.
@@ -93,24 +111,7 @@ public class ColumnAnomalyMonthlyPartitionedChecksSpec extends AbstractCheckCate
         propagateHierarchyIdToField(monthlyPartitionMedianChange, "monthly_partition_median_change");
     }
 
-    /**
-     * Returns the sum change check.
-     * @return Sum change check.
-     */
-    public ColumnSumChangeCheckSpec getMonthlyPartitionSumChange() {
-        return monthlyPartitionSumChange;
-    }
 
-    /**
-     * Sets a new sum change check.
-     * @param monthlyPartitionSumChange Sum change check.
-     */
-    public void setMonthlyPartitionSumChange(ColumnSumChangeCheckSpec monthlyPartitionSumChange) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionSumChange, monthlyPartitionSumChange));
-        this.monthlyPartitionSumChange = monthlyPartitionSumChange;
-        propagateHierarchyIdToField(monthlyPartitionSumChange, "monthly_partition_sum_change");
-    }
-    
     /**
      * Returns the child map on the spec class with all fields.
      *

@@ -20,7 +20,7 @@ import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.table.checkspecs.customsql.TableSqlAggregateExpressionCheckSpec;
-import com.dqops.checks.table.checkspecs.customsql.TableSqlConditionFailedCountCheckSpec;
+import com.dqops.checks.table.checkspecs.customsql.TableSqlConditionFailedCheckSpec;
 import com.dqops.checks.table.checkspecs.customsql.TableSqlConditionPassedPercentCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -42,27 +42,40 @@ import java.util.Objects;
 public class TableCustomSqlMonthlyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableCustomSqlMonthlyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
+            put("monthly_partition_sql_condition_failed_on_table", o -> o.monthlyPartitionSqlConditionFailedOnTable);
             put("monthly_partition_sql_condition_passed_percent_on_table", o -> o.monthlyPartitionSqlConditionPassedPercentOnTable);
-            put("monthly_partition_sql_condition_failed_count_on_table", o -> o.monthlyPartitionSqlConditionFailedCountOnTable);
             put("monthly_partition_sql_aggregate_expression_on_table", o -> o.monthlyPartitionSqlAggregateExpressionOnTable);
         }
     };
 
-    @JsonPropertyDescription("Verifies that a set percentage of rows passed a custom SQL condition (expression). Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that a custom SQL expression is met for each row. Counts the number of rows where the expression is not satisfied, and raises an issue if too many failures were detected. " +
+            "This check is used also to compare values between columns: `{alias}.col_price > {alias}.col_tax`. " +
+            "Creates a separate data quality check (and an alert) for each monthly partition.")
+    private TableSqlConditionFailedCheckSpec monthlyPartitionSqlConditionFailedOnTable;
+
+    @JsonPropertyDescription("Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Reference the current table by using tokens, for example: `{alias}.col_price > {alias}.col_tax`. " +
+            "Creates a separate data quality check (and an alert) for each monthly partition.")
     private TableSqlConditionPassedPercentCheckSpec monthlyPartitionSqlConditionPassedPercentOnTable;
 
-    @JsonPropertyDescription("Verifies that a set number of rows failed a custom SQL condition (expression). Creates a separate data quality check (and an alert) for each monthly partition.")
-    private TableSqlConditionFailedCountCheckSpec monthlyPartitionSqlConditionFailedCountOnTable;
-
-    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range. Creates a separate data quality check (and an alert) for each monthly partition.")
     private TableSqlAggregateExpressionCheckSpec monthlyPartitionSqlAggregateExpressionOnTable;
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableSqlConditionPassedPercentCheckSpec getMinSqlConditionPassedPercentOnTable() {
-        return monthlyPartitionSqlConditionPassedPercentOnTable;
+    public TableSqlConditionFailedCheckSpec getMonthlyPartitionSqlConditionFailedOnTable() {
+        return monthlyPartitionSqlConditionFailedOnTable;
+    }
+
+    /**
+     * Sets a new check specification.
+     * @param monthlyPartitionSqlConditionFailedOnTable Check specification.
+     */
+    public void setMonthlyPartitionSqlConditionFailedOnTable(TableSqlConditionFailedCheckSpec monthlyPartitionSqlConditionFailedOnTable) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionSqlConditionFailedOnTable, monthlyPartitionSqlConditionFailedOnTable));
+        this.monthlyPartitionSqlConditionFailedOnTable = monthlyPartitionSqlConditionFailedOnTable;
+        propagateHierarchyIdToField(monthlyPartitionSqlConditionFailedOnTable, "monthly_partition_sql_condition_failed_on_table");
     }
 
     /**
@@ -81,24 +94,6 @@ public class TableCustomSqlMonthlyPartitionedChecksSpec extends AbstractCheckCat
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionSqlConditionPassedPercentOnTable, monthlyPartitionSqlConditionPassedPercentOnTable));
         this.monthlyPartitionSqlConditionPassedPercentOnTable = monthlyPartitionSqlConditionPassedPercentOnTable;
         propagateHierarchyIdToField(monthlyPartitionSqlConditionPassedPercentOnTable, "monthly_partition_sql_condition_passed_percent_on_table");
-    }
-
-    /**
-     * Returns a check specification.
-     * @return New check specification.
-     */
-    public TableSqlConditionFailedCountCheckSpec getMonthlyPartitionSqlConditionFailedCountOnTable() {
-        return monthlyPartitionSqlConditionFailedCountOnTable;
-    }
-
-    /**
-     * Sets a new check specification.
-     * @param monthlyPartitionSqlConditionFailedCountOnTable Check specification.
-     */
-    public void setMonthlyPartitionSqlConditionFailedCountOnTable(TableSqlConditionFailedCountCheckSpec monthlyPartitionSqlConditionFailedCountOnTable) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionSqlConditionFailedCountOnTable, monthlyPartitionSqlConditionFailedCountOnTable));
-        this.monthlyPartitionSqlConditionFailedCountOnTable = monthlyPartitionSqlConditionFailedCountOnTable;
-        propagateHierarchyIdToField(monthlyPartitionSqlConditionFailedCountOnTable, "monthly_partition_sql_condition_failed_count_on_table");
     }
 
     /**

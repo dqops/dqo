@@ -17,7 +17,7 @@ package com.dqops.sensors.bigquery.column.customsql;
 
 import com.dqops.BaseTest;
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.column.checkspecs.customsql.ColumnSqlConditionFailedCountCheckSpec;
+import com.dqops.checks.column.checkspecs.customsql.ColumnSqlConditionFailedCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -43,7 +43,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class ColumnSqlConditionFailedCountSensorParametersSpecBigQueryTests extends BaseTest {
     private ColumnSqlConditionFailedCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnSqlConditionFailedCountCheckSpec checkSpec;
+    private ColumnSqlConditionFailedCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -54,7 +54,7 @@ public class ColumnSqlConditionFailedCountSensorParametersSpecBigQueryTests exte
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new ColumnSqlConditionFailedCountCheckSpec();
+        this.checkSpec = new ColumnSqlConditionFailedCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

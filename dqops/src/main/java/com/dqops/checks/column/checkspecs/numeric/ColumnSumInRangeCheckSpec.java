@@ -157,18 +157,6 @@ public class ColumnSumInRangeCheckSpec
     }
 
     /**
-     * Returns true if this is a standard data quality check that is always shown on the data quality checks editor screen.
-     * Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks.
-     *
-     * @return True when it is a standard check, false when it is an advanced check. The default value is 'false' (all checks are non-standard, advanced checks).
-     */
-    @Override
-    @JsonIgnore
-    public boolean isStandard() {
-        return true;
-    }
-
-    /**
      * Returns the default data quality dimension name used when an overwritten data quality dimension name was not assigned.
      *
      * @return Default data quality dimension name.

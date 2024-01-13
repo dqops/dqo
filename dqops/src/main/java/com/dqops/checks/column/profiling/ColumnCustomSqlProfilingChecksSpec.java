@@ -20,7 +20,7 @@ import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.column.checkspecs.customsql.ColumnSqlAggregateExpressionCheckSpec;
-import com.dqops.checks.column.checkspecs.customsql.ColumnSqlConditionFailedCountCheckSpec;
+import com.dqops.checks.column.checkspecs.customsql.ColumnSqlConditionFailedCheckSpec;
 import com.dqops.checks.column.checkspecs.customsql.ColumnSqlConditionPassedPercentCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -53,7 +53,7 @@ public class ColumnCustomSqlProfilingChecksSpec extends AbstractCheckCategorySpe
     private ColumnSqlConditionPassedPercentCheckSpec profileSqlConditionPassedPercentOnColumn;
 
     @JsonPropertyDescription("Verifies that a number of rows failed a custom SQL condition(expression) does not exceed the maximum accepted count.")
-    private ColumnSqlConditionFailedCountCheckSpec profileSqlConditionFailedCountOnColumn;
+    private ColumnSqlConditionFailedCheckSpec profileSqlConditionFailedCountOnColumn;
 
     @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range.")
     private ColumnSqlAggregateExpressionCheckSpec profileSqlAggregateExpressionOnColumn;
@@ -80,7 +80,7 @@ public class ColumnCustomSqlProfilingChecksSpec extends AbstractCheckCategorySpe
      * Returns a check specification.
      * @return New check specification.
      */
-    public ColumnSqlConditionFailedCountCheckSpec getProfileSqlConditionFailedCountOnColumn() {
+    public ColumnSqlConditionFailedCheckSpec getProfileSqlConditionFailedCountOnColumn() {
         return profileSqlConditionFailedCountOnColumn;
     }
 
@@ -88,7 +88,7 @@ public class ColumnCustomSqlProfilingChecksSpec extends AbstractCheckCategorySpe
      * Sets a new check specification.
      * @param profileSqlConditionFailedCountOnColumn Check specification.
      */
-    public void setProfileSqlConditionFailedCountOnColumn(ColumnSqlConditionFailedCountCheckSpec profileSqlConditionFailedCountOnColumn) {
+    public void setProfileSqlConditionFailedCountOnColumn(ColumnSqlConditionFailedCheckSpec profileSqlConditionFailedCountOnColumn) {
         this.setDirtyIf(!Objects.equals(this.profileSqlConditionFailedCountOnColumn, profileSqlConditionFailedCountOnColumn));
         this.profileSqlConditionFailedCountOnColumn = profileSqlConditionFailedCountOnColumn;
         propagateHierarchyIdToField(profileSqlConditionFailedCountOnColumn, "profile_sql_condition_failed_count_on_column");

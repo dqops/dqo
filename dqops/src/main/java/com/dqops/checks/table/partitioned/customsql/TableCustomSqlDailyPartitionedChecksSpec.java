@@ -20,7 +20,7 @@ import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.table.checkspecs.customsql.TableSqlAggregateExpressionCheckSpec;
-import com.dqops.checks.table.checkspecs.customsql.TableSqlConditionFailedCountCheckSpec;
+import com.dqops.checks.table.checkspecs.customsql.TableSqlConditionFailedCheckSpec;
 import com.dqops.checks.table.checkspecs.customsql.TableSqlConditionPassedPercentCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -42,27 +42,40 @@ import java.util.Objects;
 public class TableCustomSqlDailyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableCustomSqlDailyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
+            put("daily_partition_sql_condition_failed_on_table", o -> o.dailyPartitionSqlConditionFailedOnTable);
             put("daily_partition_sql_condition_passed_percent_on_table", o -> o.dailyPartitionSqlConditionPassedPercentOnTable);
-            put("daily_partition_sql_condition_failed_count_on_table", o -> o.dailyPartitionSqlConditionFailedCountOnTable);
             put("daily_partition_sql_aggregate_expression_on_table", o -> o.dailyPartitionSqlAggregateExpressionOnTable);
         }
     };
 
-    @JsonPropertyDescription("Verifies that a set percentage of rows passed a custom SQL condition (expression). Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that a custom SQL expression is met for each row. Counts the number of rows where the expression is not satisfied, and raises an issue if too many failures were detected. " +
+            "This check is used also to compare values between columns: `{alias}.col_price > {alias}.col_tax`. " +
+            "Creates a separate data quality check (and an alert) for each daily partition.")
+    private TableSqlConditionFailedCheckSpec dailyPartitionSqlConditionFailedOnTable;
+
+    @JsonPropertyDescription("Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Reference the current table by using tokens, for example: `{alias}.col_price > {alias}.col_tax`. " +
+            "Creates a separate data quality check (and an alert) for each daily partition.")
     private TableSqlConditionPassedPercentCheckSpec dailyPartitionSqlConditionPassedPercentOnTable;
 
-    @JsonPropertyDescription("Verifies that a set number of rows failed a custom SQL condition (expression). Creates a separate data quality check (and an alert) for each daily partition.")
-    private TableSqlConditionFailedCountCheckSpec dailyPartitionSqlConditionFailedCountOnTable;
-
-    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range. Creates a separate data quality check (and an alert) for each daily partition.")
     private TableSqlAggregateExpressionCheckSpec dailyPartitionSqlAggregateExpressionOnTable;
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableSqlConditionPassedPercentCheckSpec getMinSqlConditionPassedPercentOnTable() {
-        return dailyPartitionSqlConditionPassedPercentOnTable;
+    public TableSqlConditionFailedCheckSpec getDailyPartitionSqlConditionFailedOnTable() {
+        return dailyPartitionSqlConditionFailedOnTable;
+    }
+
+    /**
+     * Sets a new check specification.
+     * @param dailyPartitionSqlConditionFailedOnTable Check specification.
+     */
+    public void setDailyPartitionSqlConditionFailedOnTable(TableSqlConditionFailedCheckSpec dailyPartitionSqlConditionFailedOnTable) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionSqlConditionFailedOnTable, dailyPartitionSqlConditionFailedOnTable));
+        this.dailyPartitionSqlConditionFailedOnTable = dailyPartitionSqlConditionFailedOnTable;
+        propagateHierarchyIdToField(dailyPartitionSqlConditionFailedOnTable, "daily_partition_sql_condition_failed_on_table");
     }
 
     /**
@@ -81,24 +94,6 @@ public class TableCustomSqlDailyPartitionedChecksSpec extends AbstractCheckCateg
         this.setDirtyIf(!Objects.equals(this.dailyPartitionSqlConditionPassedPercentOnTable, dailyPartitionSqlConditionPassedPercentOnTable));
         this.dailyPartitionSqlConditionPassedPercentOnTable = dailyPartitionSqlConditionPassedPercentOnTable;
         propagateHierarchyIdToField(dailyPartitionSqlConditionPassedPercentOnTable, "daily_partition_sql_condition_passed_percent_on_table");
-    }
-
-    /**
-     * Returns a check specification.
-     * @return New check specification.
-     */
-    public TableSqlConditionFailedCountCheckSpec getDailyPartitionSqlConditionFailedCountOnTable() {
-        return dailyPartitionSqlConditionFailedCountOnTable;
-    }
-
-    /**
-     * Sets a new check specification.
-     * @param dailyPartitionSqlConditionFailedCountOnTable Check specification.
-     */
-    public void setDailyPartitionSqlConditionFailedCountOnTable(TableSqlConditionFailedCountCheckSpec dailyPartitionSqlConditionFailedCountOnTable) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionSqlConditionFailedCountOnTable, dailyPartitionSqlConditionFailedCountOnTable));
-        this.dailyPartitionSqlConditionFailedCountOnTable = dailyPartitionSqlConditionFailedCountOnTable;
-        propagateHierarchyIdToField(dailyPartitionSqlConditionFailedCountOnTable, "daily_partition_sql_condition_failed_count_on_table");
     }
 
     /**

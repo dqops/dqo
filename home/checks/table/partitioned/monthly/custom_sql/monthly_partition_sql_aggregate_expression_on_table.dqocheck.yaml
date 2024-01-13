@@ -5,5 +5,5 @@ spec:
   sensor_name: table/custom_sql/sql_aggregated_expression
   rule_name: comparison/between_floats
   help_text: "Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is\
-    \ not outside the set range. Creates a separate data quality check (and an alert)\
-    \ for each monthly partition."
+    \ not outside the expected range. Creates a separate data quality check (and an\
+    \ alert) for each monthly partition."

@@ -1,0 +1,12 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: table/custom_sql/sql_condition_failed_count
+  rule_name: comparison/max_count
+  help_text: "Verifies that a custom SQL expression is met for each row. Counts the\
+    \ number of rows where the expression is not satisfied, and raises an issue if\
+    \ too many failures were detected. This check is used also to compare values between\
+    \ columns: `{alias}.col_price > {alias}.col_tax`. Creates a separate data quality\
+    \ check (and an alert) for each monthly partition."
+  standard: true

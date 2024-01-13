@@ -35,14 +35,17 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that there are no more than a set number of rows fail a custom SQL condition (expression) evaluated for a given column.
+ * Column level check that uses a custom SQL expression on each column to verify (assert) that all rows pass a custom condition defined as an SQL expression.
+ * Use the {alias} token to reference the tested table, and the {column} to reference the column that is tested. This data quality check can be used to compare columns on the same table.
+ * For example, when this check is applied on a *col_price* column, the condition can verify that the *col_price* is higher than the *col_tax* using an SQL expression: `{alias}.{column} > {alias}.col_tax`
+ * Use an SQL expression that returns a *true* value for valid values and *false* for invalid values, because it is an assertion.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnSqlConditionFailedCountCheckSpec
+public class ColumnSqlConditionFailedCheckSpec
         extends AbstractCheckSpec<ColumnSqlConditionFailedCountSensorParametersSpec, MaxCountRule0WarningParametersSpec, MaxCountRule0ErrorParametersSpec, MaxCountRule100ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnSqlConditionFailedCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnSqlConditionFailedCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };

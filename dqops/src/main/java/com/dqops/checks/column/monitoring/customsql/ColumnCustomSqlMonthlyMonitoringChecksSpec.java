@@ -20,7 +20,7 @@ import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.column.checkspecs.customsql.ColumnSqlAggregateExpressionCheckSpec;
-import com.dqops.checks.column.checkspecs.customsql.ColumnSqlConditionFailedCountCheckSpec;
+import com.dqops.checks.column.checkspecs.customsql.ColumnSqlConditionFailedCheckSpec;
 import com.dqops.checks.column.checkspecs.customsql.ColumnSqlConditionPassedPercentCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -42,20 +42,40 @@ import java.util.Objects;
 public class ColumnCustomSqlMonthlyMonitoringChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnCustomSqlMonthlyMonitoringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
+            put("monthly_sql_condition_failed_on_column", o -> o.monthlySqlConditionFailedOnColumn);
             put("monthly_sql_condition_passed_percent_on_column", o -> o.monthlySqlConditionPassedPercentOnColumn);
-            put("monthly_sql_condition_failed_count_on_column", o -> o.monthlySqlConditionFailedCountOnColumn);
             put("monthly_sql_aggregate_expression_on_column", o -> o.monthlySqlAggregateExpressionOnColumn);
         }
     };
 
-    @JsonPropertyDescription("Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that a custom SQL expression is met for each row. Counts the number of rows where the expression is not satisfied, and raises an issue if too many failures were detected. " +
+            "This check is used also to compare values between the current column and another column: `{alias}.{column} > {alias}.col_tax`. " +
+            "Stores the most recent captured count of failed rows for each month when the data quality check was evaluated.")
+    private ColumnSqlConditionFailedCheckSpec monthlySqlConditionFailedOnColumn;
+
+    @JsonPropertyDescription("Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Reference the current column by using tokens, for example: `{alias}.{column} > {alias}.col_tax`.  Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnSqlConditionPassedPercentCheckSpec monthlySqlConditionPassedPercentOnColumn;
 
-    @JsonPropertyDescription("Verifies that a number of rows failed a custom SQL condition(expression) does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnSqlConditionFailedCountCheckSpec monthlySqlConditionFailedCountOnColumn;
-
-    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnSqlAggregateExpressionCheckSpec monthlySqlAggregateExpressionOnColumn;
+
+    /**
+     * Returns a check specification.
+     * @return New check specification.
+     */
+    public ColumnSqlConditionFailedCheckSpec getMonthlySqlConditionFailedOnColumn() {
+        return monthlySqlConditionFailedOnColumn;
+    }
+
+    /**
+     * Sets a new check specification.
+     * @param monthlySqlConditionFailedOnColumn Check specification.
+     */
+    public void setMonthlySqlConditionFailedOnColumn(ColumnSqlConditionFailedCheckSpec monthlySqlConditionFailedOnColumn) {
+        this.setDirtyIf(!Objects.equals(this.monthlySqlConditionFailedOnColumn, monthlySqlConditionFailedOnColumn));
+        this.monthlySqlConditionFailedOnColumn = monthlySqlConditionFailedOnColumn;
+        propagateHierarchyIdToField(monthlySqlConditionFailedOnColumn, "monthly_sql_condition_failed_on_column");
+    }
 
     /**
      * Returns a check specification.
@@ -73,24 +93,6 @@ public class ColumnCustomSqlMonthlyMonitoringChecksSpec extends AbstractCheckCat
         this.setDirtyIf(!Objects.equals(this.monthlySqlConditionPassedPercentOnColumn, monthlySqlConditionPassedPercentOnColumn));
         this.monthlySqlConditionPassedPercentOnColumn = monthlySqlConditionPassedPercentOnColumn;
         propagateHierarchyIdToField(monthlySqlConditionPassedPercentOnColumn, "monthly_sql_condition_passed_percent_on_column");
-    }
-
-    /**
-     * Returns a check specification.
-     * @return New check specification.
-     */
-    public ColumnSqlConditionFailedCountCheckSpec getMonthlySqlConditionFailedCountOnColumn() {
-        return monthlySqlConditionFailedCountOnColumn;
-    }
-
-    /**
-     * Sets a new check specification.
-     * @param monthlySqlConditionFailedCountOnColumn Check specification.
-     */
-    public void setMonthlySqlConditionFailedCountOnColumn(ColumnSqlConditionFailedCountCheckSpec monthlySqlConditionFailedCountOnColumn) {
-        this.setDirtyIf(!Objects.equals(this.monthlySqlConditionFailedCountOnColumn, monthlySqlConditionFailedCountOnColumn));
-        this.monthlySqlConditionFailedCountOnColumn = monthlySqlConditionFailedCountOnColumn;
-        propagateHierarchyIdToField(monthlySqlConditionFailedCountOnColumn, "monthly_sql_condition_failed_count_on_column");
     }
 
     /**

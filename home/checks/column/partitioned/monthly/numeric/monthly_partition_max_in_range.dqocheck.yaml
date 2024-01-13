@@ -6,4 +6,3 @@ spec:
   rule_name: comparison/between_floats
   help_text: Verifies that the maximal value in a column is not outside the set range.
     Creates a separate data quality check (and an alert) for each monthly partition.
-  standard: true
