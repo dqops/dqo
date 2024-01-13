@@ -2,36 +2,6 @@
 The definition of YAML files used by DQOps to configure the data sources, monitored tables, and the configuration of activated data quality checks.
 
 
-## TableVolumeMonthlyMonitoringChecksSpec
-Container of table level monthly monitoring for volume data quality checks
-
-
-
-
-
-
-
-
-
-The structure of this object is described below
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[monthly_row_count](../../../checks/table/volume/row-count.md)|Verifies that the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the table is not empty. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.Stores the most recent captured row count value for each month when the row count was evaluated.|[TableRowCountCheckSpec](../../../checks/table/volume/row-count.md)| | | |
-|[monthly_row_count_change](../../../checks/table/volume/row-count-change.md)|Verifies that the total row count of the tested table has changed by a fixed rate since the last month.|[TableRowCountChangeCheckSpec](../../../checks/table/volume/row-count-change.md)| | | |
-|[custom_checks](../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)| | | |
-
-
-
-
-
-
-
-
-
-___
-
-
 ## TableCustomSqlMonthlyMonitoringChecksSpec
 Container of built-in preconfigured data quality checks on a table level that are using custom SQL expressions (conditions).
 
@@ -92,6 +62,36 @@ The structure of this object is described below
 ___
 
 
+## TableComparisonMonthlyMonitoringChecksSpecMap
+Container of comparison checks for each defined data comparison. The name of the key in this dictionary
+ must match a name of a table comparison that is defined on the parent table.
+ Contains the monthly monitoring comparison checks for each configured reference table.
+
+
+
+
+
+
+
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|self||Dict[string, [TableComparisonMonthlyMonitoringChecksSpec](./table-monthly-monitoring-checks.md#TableComparisonMonthlyMonitoringChecksSpec)]| | | |
+
+
+
+
+
+
+
+
+
+___
+
+
 ## TableSchemaMonthlyMonitoringChecksSpec
 Container of built-in preconfigured volume data quality checks on a table level that are executed as a monthly monitoring (checkpoint) checks.
 
@@ -125,36 +125,6 @@ The structure of this object is described below
 ___
 
 
-## TableComparisonMonthlyMonitoringChecksSpecMap
-Container of comparison checks for each defined data comparison. The name of the key in this dictionary
- must match a name of a table comparison that is defined on the parent table.
- Contains the monthly monitoring comparison checks for each configured reference table.
-
-
-
-
-
-
-
-
-
-The structure of this object is described below
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|self||Dict[string, [TableComparisonMonthlyMonitoringChecksSpec](./table-monthly-monitoring-checks.md#TableComparisonMonthlyMonitoringChecksSpec)]| | | |
-
-
-
-
-
-
-
-
-
-___
-
-
 ## TableTimelinessMonthlyMonitoringChecksSpec
 Container of table level monthly monitoring for timeliness data quality checks
 
@@ -173,6 +143,35 @@ The structure of this object is described below
 |[monthly_data_freshness](../../../checks/table/timeliness/data-freshness.md)|Monthly monitoring calculating the number of days since the most recent event timestamp (freshness)|[TableDataFreshnessCheckSpec](../../../checks/table/timeliness/data-freshness.md)| | | |
 |[monthly_data_staleness](../../../checks/table/timeliness/data-staleness.md)|Monthly monitoring calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)|[TableDataStalenessCheckSpec](../../../checks/table/timeliness/data-staleness.md)| | | |
 |[monthly_data_ingestion_delay](../../../checks/table/timeliness/data-ingestion-delay.md)|Monthly monitoring calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp|[TableDataIngestionDelayCheckSpec](../../../checks/table/timeliness/data-ingestion-delay.md)| | | |
+|[custom_checks](../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)| | | |
+
+
+
+
+
+
+
+
+
+___
+
+
+## TableAvailabilityMonthlyMonitoringChecksSpec
+Container of built-in preconfigured data quality checks on a table level that are detecting the table availability.
+
+
+
+
+
+
+
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[monthly_table_availability](../../../checks/table/availability/table-availability.md)|Verifies availability of a table in a monitored database using a simple query. Stores the most recent table availability status for each month when the data quality check was evaluated.|[TableAvailabilityCheckSpec](../../../checks/table/availability/table-availability.md)| | | |
 |[custom_checks](../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)| | | |
 
 
@@ -221,6 +220,36 @@ The structure of this object is described below
 ___
 
 
+## TableVolumeMonthlyMonitoringChecksSpec
+Container of table level monthly monitoring for volume data quality checks
+
+
+
+
+
+
+
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[monthly_row_count](../../../checks/table/volume/row-count.md)|Verifies that the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the table is not empty. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.Stores the most recent captured row count value for each month when the row count was evaluated.|[TableRowCountCheckSpec](../../../checks/table/volume/row-count.md)| | | |
+|[monthly_row_count_change](../../../checks/table/volume/row-count-change.md)|Verifies that the total row count of the tested table has changed by a fixed rate since the last month.|[TableRowCountChangeCheckSpec](../../../checks/table/volume/row-count-change.md)| | | |
+|[custom_checks](../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)| | | |
+
+
+
+
+
+
+
+
+
+___
+
+
 ## TableComparisonMonthlyMonitoringChecksSpec
 Container of built-in comparison (accuracy) checks on a table level that are using a defined comparison to identify the reference table and the data grouping configuration.
  Contains the monthly monitoring comparison checks.
@@ -239,35 +268,6 @@ The structure of this object is described below
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[monthly_row_count_match](../../../checks/table/comparisons/row-count-match.md)|Verifies that the row count of the tested (parent) table matches the row count of the reference table. Compares each group of data with a GROUP BY clause. Stores the most recent captured value for each month when the data quality check was evaluated.|[TableComparisonRowCountMatchCheckSpec](../../../checks/table/comparisons/row-count-match.md)| | | |
 |[monthly_column_count_match](../../../checks/table/comparisons/column-count-match.md)|Verifies that the column count of the tested (parent) table matches the column count of the reference table. Only one comparison result is returned, without data grouping. Stores the most recent captured value for each month when the data quality check was evaluated.|[TableComparisonColumnCountMatchCheckSpec](../../../checks/table/comparisons/column-count-match.md)| | | |
-|[custom_checks](../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)| | | |
-
-
-
-
-
-
-
-
-
-___
-
-
-## TableAvailabilityMonthlyMonitoringChecksSpec
-Container of built-in preconfigured data quality checks on a table level that are detecting the table availability.
-
-
-
-
-
-
-
-
-
-The structure of this object is described below
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[monthly_table_availability](../../../checks/table/availability/table-availability.md)|Verifies availability of a table in a monitored database using a simple query. Stores the most recent table availability status for each month when the data quality check was evaluated.|[TableAvailabilityCheckSpec](../../../checks/table/availability/table-availability.md)| | | |
 |[custom_checks](../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)| | | |
 
 

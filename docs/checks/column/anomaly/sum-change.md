@@ -110,11 +110,11 @@ spec:
         anomaly:
           profile_sum_change:
             warning:
-              max_percent: 5.0
+              max_percent: 10.0
             error:
-              max_percent: 5.0
+              max_percent: 20.0
             fatal:
-              max_percent: 5.0
+              max_percent: 50.0
       labels:
       - This is the column that is analyzed for data quality issues
 
@@ -477,11 +477,11 @@ Expand the *Configure with data grouping* section to see additional examples for
             anomaly:
               profile_sum_change:
                 warning:
-                  max_percent: 5.0
+                  max_percent: 10.0
                 error:
-                  max_percent: 5.0
+                  max_percent: 20.0
                 fatal:
-                  max_percent: 5.0
+                  max_percent: 50.0
           labels:
           - This is the column that is analyzed for data quality issues
         country:
@@ -946,11 +946,11 @@ spec:
           anomaly:
             daily_sum_change:
               warning:
-                max_percent: 5.0
+                max_percent: 10.0
               error:
-                max_percent: 5.0
+                max_percent: 20.0
               fatal:
-                max_percent: 5.0
+                max_percent: 50.0
       labels:
       - This is the column that is analyzed for data quality issues
 
@@ -1314,11 +1314,11 @@ Expand the *Configure with data grouping* section to see additional examples for
               anomaly:
                 daily_sum_change:
                   warning:
-                    max_percent: 5.0
+                    max_percent: 10.0
                   error:
-                    max_percent: 5.0
+                    max_percent: 20.0
                   fatal:
-                    max_percent: 5.0
+                    max_percent: 50.0
           labels:
           - This is the column that is analyzed for data quality issues
         country:
@@ -1783,11 +1783,11 @@ spec:
           anomaly:
             monthly_sum_change:
               warning:
-                max_percent: 5.0
+                max_percent: 10.0
               error:
-                max_percent: 5.0
+                max_percent: 20.0
               fatal:
-                max_percent: 5.0
+                max_percent: 50.0
       labels:
       - This is the column that is analyzed for data quality issues
 
@@ -2151,11 +2151,11 @@ Expand the *Configure with data grouping* section to see additional examples for
               anomaly:
                 monthly_sum_change:
                   warning:
-                    max_percent: 5.0
+                    max_percent: 10.0
                   error:
-                    max_percent: 5.0
+                    max_percent: 20.0
                   fatal:
-                    max_percent: 5.0
+                    max_percent: 50.0
           labels:
           - This is the column that is analyzed for data quality issues
         country:
@@ -2625,11 +2625,11 @@ spec:
           anomaly:
             daily_partition_sum_change:
               warning:
-                max_percent: 5.0
+                max_percent: 10.0
               error:
-                max_percent: 5.0
+                max_percent: 20.0
               fatal:
-                max_percent: 5.0
+                max_percent: 50.0
       labels:
       - This is the column that is analyzed for data quality issues
     date_column:
@@ -3007,11 +3007,11 @@ Expand the *Configure with data grouping* section to see additional examples for
               anomaly:
                 daily_partition_sum_change:
                   warning:
-                    max_percent: 5.0
+                    max_percent: 10.0
                   error:
-                    max_percent: 5.0
+                    max_percent: 20.0
                   fatal:
-                    max_percent: 5.0
+                    max_percent: 50.0
           labels:
           - This is the column that is analyzed for data quality issues
         date_column:
@@ -3484,11 +3484,11 @@ spec:
           anomaly:
             monthly_partition_sum_change:
               warning:
-                max_percent: 5.0
+                max_percent: 10.0
               error:
-                max_percent: 5.0
+                max_percent: 20.0
               fatal:
-                max_percent: 5.0
+                max_percent: 50.0
       labels:
       - This is the column that is analyzed for data quality issues
     date_column:
@@ -3866,11 +3866,11 @@ Expand the *Configure with data grouping* section to see additional examples for
               anomaly:
                 monthly_partition_sum_change:
                   warning:
-                    max_percent: 5.0
+                    max_percent: 10.0
                   error:
-                    max_percent: 5.0
+                    max_percent: 20.0
                   fatal:
-                    max_percent: 5.0
+                    max_percent: 50.0
           labels:
           - This is the column that is analyzed for data quality issues
         date_column:

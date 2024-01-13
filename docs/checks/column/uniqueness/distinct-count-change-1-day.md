@@ -110,13 +110,13 @@ spec:
         uniqueness:
           profile_distinct_count_change_1_day:
             warning:
-              max_percent: 5.0
+              max_percent: 10.0
               exact_day: false
             error:
-              max_percent: 5.0
+              max_percent: 20.0
               exact_day: false
             fatal:
-              max_percent: 5.0
+              max_percent: 50.0
               exact_day: false
       labels:
       - This is the column that is analyzed for data quality issues
@@ -524,13 +524,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             uniqueness:
               profile_distinct_count_change_1_day:
                 warning:
-                  max_percent: 5.0
+                  max_percent: 10.0
                   exact_day: false
                 error:
-                  max_percent: 5.0
+                  max_percent: 20.0
                   exact_day: false
                 fatal:
-                  max_percent: 5.0
+                  max_percent: 50.0
                   exact_day: false
           labels:
           - This is the column that is analyzed for data quality issues
@@ -1040,13 +1040,13 @@ spec:
           uniqueness:
             daily_distinct_count_change_1_day:
               warning:
-                max_percent: 5.0
+                max_percent: 10.0
                 exact_day: false
               error:
-                max_percent: 5.0
+                max_percent: 20.0
                 exact_day: false
               fatal:
-                max_percent: 5.0
+                max_percent: 50.0
                 exact_day: false
       labels:
       - This is the column that is analyzed for data quality issues
@@ -1455,13 +1455,13 @@ Expand the *Configure with data grouping* section to see additional examples for
               uniqueness:
                 daily_distinct_count_change_1_day:
                   warning:
-                    max_percent: 5.0
+                    max_percent: 10.0
                     exact_day: false
                   error:
-                    max_percent: 5.0
+                    max_percent: 20.0
                     exact_day: false
                   fatal:
-                    max_percent: 5.0
+                    max_percent: 50.0
                     exact_day: false
           labels:
           - This is the column that is analyzed for data quality issues
@@ -1976,13 +1976,13 @@ spec:
           uniqueness:
             daily_partition_distinct_count_change_1_day:
               warning:
-                max_percent: 5.0
+                max_percent: 10.0
                 exact_day: false
               error:
-                max_percent: 5.0
+                max_percent: 20.0
                 exact_day: false
               fatal:
-                max_percent: 5.0
+                max_percent: 50.0
                 exact_day: false
       labels:
       - This is the column that is analyzed for data quality issues
@@ -2405,13 +2405,13 @@ Expand the *Configure with data grouping* section to see additional examples for
               uniqueness:
                 daily_partition_distinct_count_change_1_day:
                   warning:
-                    max_percent: 5.0
+                    max_percent: 10.0
                     exact_day: false
                   error:
-                    max_percent: 5.0
+                    max_percent: 20.0
                     exact_day: false
                   fatal:
-                    max_percent: 5.0
+                    max_percent: 50.0
                     exact_day: false
           labels:
           - This is the column that is analyzed for data quality issues

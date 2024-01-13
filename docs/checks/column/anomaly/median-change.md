@@ -112,11 +112,11 @@ spec:
             parameters:
               percentile_value: 0.5
             warning:
-              max_percent: 5.0
+              max_percent: 10.0
             error:
-              max_percent: 5.0
+              max_percent: 20.0
             fatal:
-              max_percent: 5.0
+              max_percent: 50.0
       labels:
       - This is the column that is analyzed for data quality issues
 
@@ -727,11 +727,11 @@ Expand the *Configure with data grouping* section to see additional examples for
                 parameters:
                   percentile_value: 0.5
                 warning:
-                  max_percent: 5.0
+                  max_percent: 10.0
                 error:
-                  max_percent: 5.0
+                  max_percent: 20.0
                 fatal:
-                  max_percent: 5.0
+                  max_percent: 50.0
           labels:
           - This is the column that is analyzed for data quality issues
         country:
@@ -1442,11 +1442,11 @@ spec:
               parameters:
                 percentile_value: 0.5
               warning:
-                max_percent: 5.0
+                max_percent: 10.0
               error:
-                max_percent: 5.0
+                max_percent: 20.0
               fatal:
-                max_percent: 5.0
+                max_percent: 50.0
       labels:
       - This is the column that is analyzed for data quality issues
 
@@ -2058,11 +2058,11 @@ Expand the *Configure with data grouping* section to see additional examples for
                   parameters:
                     percentile_value: 0.5
                   warning:
-                    max_percent: 5.0
+                    max_percent: 10.0
                   error:
-                    max_percent: 5.0
+                    max_percent: 20.0
                   fatal:
-                    max_percent: 5.0
+                    max_percent: 50.0
           labels:
           - This is the column that is analyzed for data quality issues
         country:
@@ -2773,11 +2773,11 @@ spec:
               parameters:
                 percentile_value: 0.5
               warning:
-                max_percent: 5.0
+                max_percent: 10.0
               error:
-                max_percent: 5.0
+                max_percent: 20.0
               fatal:
-                max_percent: 5.0
+                max_percent: 50.0
       labels:
       - This is the column that is analyzed for data quality issues
 
@@ -3389,11 +3389,11 @@ Expand the *Configure with data grouping* section to see additional examples for
                   parameters:
                     percentile_value: 0.5
                   warning:
-                    max_percent: 5.0
+                    max_percent: 10.0
                   error:
-                    max_percent: 5.0
+                    max_percent: 20.0
                   fatal:
-                    max_percent: 5.0
+                    max_percent: 50.0
           labels:
           - This is the column that is analyzed for data quality issues
         country:
@@ -4109,11 +4109,11 @@ spec:
               parameters:
                 percentile_value: 0.5
               warning:
-                max_percent: 5.0
+                max_percent: 10.0
               error:
-                max_percent: 5.0
+                max_percent: 20.0
               fatal:
-                max_percent: 5.0
+                max_percent: 50.0
       labels:
       - This is the column that is analyzed for data quality issues
     date_column:
@@ -4735,11 +4735,11 @@ Expand the *Configure with data grouping* section to see additional examples for
                   parameters:
                     percentile_value: 0.5
                   warning:
-                    max_percent: 5.0
+                    max_percent: 10.0
                   error:
-                    max_percent: 5.0
+                    max_percent: 20.0
                   fatal:
-                    max_percent: 5.0
+                    max_percent: 50.0
           labels:
           - This is the column that is analyzed for data quality issues
         date_column:
@@ -5460,11 +5460,11 @@ spec:
               parameters:
                 percentile_value: 0.5
               warning:
-                max_percent: 5.0
+                max_percent: 10.0
               error:
-                max_percent: 5.0
+                max_percent: 20.0
               fatal:
-                max_percent: 5.0
+                max_percent: 50.0
       labels:
       - This is the column that is analyzed for data quality issues
     date_column:
@@ -6086,11 +6086,11 @@ Expand the *Configure with data grouping* section to see additional examples for
                   parameters:
                     percentile_value: 0.5
                   warning:
-                    max_percent: 5.0
+                    max_percent: 10.0
                   error:
-                    max_percent: 5.0
+                    max_percent: 20.0
                   fatal:
-                    max_percent: 5.0
+                    max_percent: 50.0
           labels:
           - This is the column that is analyzed for data quality issues
         date_column:

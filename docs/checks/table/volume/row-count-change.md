@@ -108,11 +108,11 @@ spec:
     volume:
       profile_row_count_change:
         warning:
-          max_percent: 5.0
+          max_percent: 10.0
         error:
-          max_percent: 5.0
+          max_percent: 20.0
         fatal:
-          max_percent: 5.0
+          max_percent: 50.0
   columns: {}
 
 ```
@@ -461,11 +461,11 @@ Expand the *Configure with data grouping* section to see additional examples for
         volume:
           profile_row_count_change:
             warning:
-              max_percent: 5.0
+              max_percent: 10.0
             error:
-              max_percent: 5.0
+              max_percent: 20.0
             fatal:
-              max_percent: 5.0
+              max_percent: 50.0
       columns:
         country:
           labels:
@@ -916,11 +916,11 @@ spec:
       volume:
         daily_row_count_change:
           warning:
-            max_percent: 5.0
+            max_percent: 10.0
           error:
-            max_percent: 5.0
+            max_percent: 20.0
           fatal:
-            max_percent: 5.0
+            max_percent: 50.0
   columns: {}
 
 ```
@@ -1270,11 +1270,11 @@ Expand the *Configure with data grouping* section to see additional examples for
           volume:
             daily_row_count_change:
               warning:
-                max_percent: 5.0
+                max_percent: 10.0
               error:
-                max_percent: 5.0
+                max_percent: 20.0
               fatal:
-                max_percent: 5.0
+                max_percent: 50.0
       columns:
         country:
           labels:
@@ -1725,11 +1725,11 @@ spec:
       volume:
         monthly_row_count_change:
           warning:
-            max_percent: 5.0
+            max_percent: 10.0
           error:
-            max_percent: 5.0
+            max_percent: 20.0
           fatal:
-            max_percent: 5.0
+            max_percent: 50.0
   columns: {}
 
 ```
@@ -2079,11 +2079,11 @@ Expand the *Configure with data grouping* section to see additional examples for
           volume:
             monthly_row_count_change:
               warning:
-                max_percent: 5.0
+                max_percent: 10.0
               error:
-                max_percent: 5.0
+                max_percent: 20.0
               fatal:
-                max_percent: 5.0
+                max_percent: 50.0
       columns:
         country:
           labels:
@@ -2539,11 +2539,11 @@ spec:
       volume:
         daily_partition_row_count_change:
           warning:
-            max_percent: 5.0
+            max_percent: 10.0
           error:
-            max_percent: 5.0
+            max_percent: 20.0
           fatal:
-            max_percent: 5.0
+            max_percent: 50.0
   columns:
     date_column:
       labels:
@@ -2907,11 +2907,11 @@ Expand the *Configure with data grouping* section to see additional examples for
           volume:
             daily_partition_row_count_change:
               warning:
-                max_percent: 5.0
+                max_percent: 10.0
               error:
-                max_percent: 5.0
+                max_percent: 20.0
               fatal:
-                max_percent: 5.0
+                max_percent: 50.0
       columns:
         date_column:
           labels:
@@ -3370,11 +3370,11 @@ spec:
       volume:
         monthly_partition_row_count_change:
           warning:
-            max_percent: 5.0
+            max_percent: 10.0
           error:
-            max_percent: 5.0
+            max_percent: 20.0
           fatal:
-            max_percent: 5.0
+            max_percent: 50.0
   columns:
     date_column:
       labels:
@@ -3738,11 +3738,11 @@ Expand the *Configure with data grouping* section to see additional examples for
           volume:
             monthly_partition_row_count_change:
               warning:
-                max_percent: 5.0
+                max_percent: 10.0
               error:
-                max_percent: 5.0
+                max_percent: 20.0
               fatal:
-                max_percent: 5.0
+                max_percent: 50.0
       columns:
         date_column:
           labels:

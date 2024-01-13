@@ -110,11 +110,11 @@ spec:
         uniqueness:
           profile_distinct_count_change:
             warning:
-              max_percent: 5.0
+              max_percent: 10.0
             error:
-              max_percent: 5.0
+              max_percent: 20.0
             fatal:
-              max_percent: 5.0
+              max_percent: 50.0
       labels:
       - This is the column that is analyzed for data quality issues
 
@@ -521,11 +521,11 @@ Expand the *Configure with data grouping* section to see additional examples for
             uniqueness:
               profile_distinct_count_change:
                 warning:
-                  max_percent: 5.0
+                  max_percent: 10.0
                 error:
-                  max_percent: 5.0
+                  max_percent: 20.0
                 fatal:
-                  max_percent: 5.0
+                  max_percent: 50.0
           labels:
           - This is the column that is analyzed for data quality issues
         country:
@@ -1034,11 +1034,11 @@ spec:
           uniqueness:
             daily_distinct_count_change:
               warning:
-                max_percent: 5.0
+                max_percent: 10.0
               error:
-                max_percent: 5.0
+                max_percent: 20.0
               fatal:
-                max_percent: 5.0
+                max_percent: 50.0
       labels:
       - This is the column that is analyzed for data quality issues
 
@@ -1446,11 +1446,11 @@ Expand the *Configure with data grouping* section to see additional examples for
               uniqueness:
                 daily_distinct_count_change:
                   warning:
-                    max_percent: 5.0
+                    max_percent: 10.0
                   error:
-                    max_percent: 5.0
+                    max_percent: 20.0
                   fatal:
-                    max_percent: 5.0
+                    max_percent: 50.0
           labels:
           - This is the column that is analyzed for data quality issues
         country:
@@ -1959,11 +1959,11 @@ spec:
           uniqueness:
             monthly_distinct_count_change:
               warning:
-                max_percent: 5.0
+                max_percent: 10.0
               error:
-                max_percent: 5.0
+                max_percent: 20.0
               fatal:
-                max_percent: 5.0
+                max_percent: 50.0
       labels:
       - This is the column that is analyzed for data quality issues
 
@@ -2371,11 +2371,11 @@ Expand the *Configure with data grouping* section to see additional examples for
               uniqueness:
                 monthly_distinct_count_change:
                   warning:
-                    max_percent: 5.0
+                    max_percent: 10.0
                   error:
-                    max_percent: 5.0
+                    max_percent: 20.0
                   fatal:
-                    max_percent: 5.0
+                    max_percent: 50.0
           labels:
           - This is the column that is analyzed for data quality issues
         country:
@@ -2889,11 +2889,11 @@ spec:
           uniqueness:
             daily_partition_distinct_count_change:
               warning:
-                max_percent: 5.0
+                max_percent: 10.0
               error:
-                max_percent: 5.0
+                max_percent: 20.0
               fatal:
-                max_percent: 5.0
+                max_percent: 50.0
       labels:
       - This is the column that is analyzed for data quality issues
     date_column:
@@ -3315,11 +3315,11 @@ Expand the *Configure with data grouping* section to see additional examples for
               uniqueness:
                 daily_partition_distinct_count_change:
                   warning:
-                    max_percent: 5.0
+                    max_percent: 10.0
                   error:
-                    max_percent: 5.0
+                    max_percent: 20.0
                   fatal:
-                    max_percent: 5.0
+                    max_percent: 50.0
           labels:
           - This is the column that is analyzed for data quality issues
         date_column:
@@ -3836,11 +3836,11 @@ spec:
           uniqueness:
             monthly_partition_distinct_count_change:
               warning:
-                max_percent: 5.0
+                max_percent: 10.0
               error:
-                max_percent: 5.0
+                max_percent: 20.0
               fatal:
-                max_percent: 5.0
+                max_percent: 50.0
       labels:
       - This is the column that is analyzed for data quality issues
     date_column:
@@ -4262,11 +4262,11 @@ Expand the *Configure with data grouping* section to see additional examples for
               uniqueness:
                 monthly_partition_distinct_count_change:
                   warning:
-                    max_percent: 5.0
+                    max_percent: 10.0
                   error:
-                    max_percent: 5.0
+                    max_percent: 20.0
                   fatal:
-                    max_percent: 5.0
+                    max_percent: 50.0
           labels:
           - This is the column that is analyzed for data quality issues
         date_column:

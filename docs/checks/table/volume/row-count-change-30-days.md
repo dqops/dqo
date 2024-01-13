@@ -108,13 +108,13 @@ spec:
     volume:
       profile_row_count_change_30_days:
         warning:
-          max_percent: 5.0
+          max_percent: 10.0
           exact_day: false
         error:
-          max_percent: 5.0
+          max_percent: 20.0
           exact_day: false
         fatal:
-          max_percent: 5.0
+          max_percent: 50.0
           exact_day: false
   columns: {}
 
@@ -464,13 +464,13 @@ Expand the *Configure with data grouping* section to see additional examples for
         volume:
           profile_row_count_change_30_days:
             warning:
-              max_percent: 5.0
+              max_percent: 10.0
               exact_day: false
             error:
-              max_percent: 5.0
+              max_percent: 20.0
               exact_day: false
             fatal:
-              max_percent: 5.0
+              max_percent: 50.0
               exact_day: false
       columns:
         country:
@@ -922,13 +922,13 @@ spec:
       volume:
         daily_row_count_change_30_days:
           warning:
-            max_percent: 5.0
+            max_percent: 10.0
             exact_day: false
           error:
-            max_percent: 5.0
+            max_percent: 20.0
             exact_day: false
           fatal:
-            max_percent: 5.0
+            max_percent: 50.0
             exact_day: false
   columns: {}
 
@@ -1279,13 +1279,13 @@ Expand the *Configure with data grouping* section to see additional examples for
           volume:
             daily_row_count_change_30_days:
               warning:
-                max_percent: 5.0
+                max_percent: 10.0
                 exact_day: false
               error:
-                max_percent: 5.0
+                max_percent: 20.0
                 exact_day: false
               fatal:
-                max_percent: 5.0
+                max_percent: 50.0
                 exact_day: false
       columns:
         country:
@@ -1742,13 +1742,13 @@ spec:
       volume:
         daily_partition_row_count_change_30_days:
           warning:
-            max_percent: 5.0
+            max_percent: 10.0
             exact_day: false
           error:
-            max_percent: 5.0
+            max_percent: 20.0
             exact_day: false
           fatal:
-            max_percent: 5.0
+            max_percent: 50.0
             exact_day: false
   columns:
     date_column:
@@ -2113,13 +2113,13 @@ Expand the *Configure with data grouping* section to see additional examples for
           volume:
             daily_partition_row_count_change_30_days:
               warning:
-                max_percent: 5.0
+                max_percent: 10.0
                 exact_day: false
               error:
-                max_percent: 5.0
+                max_percent: 20.0
                 exact_day: false
               fatal:
-                max_percent: 5.0
+                max_percent: 50.0
                 exact_day: false
       columns:
         date_column:
