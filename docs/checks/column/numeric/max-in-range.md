@@ -1,6 +1,6 @@
 # max in range data quality checks
 
-Column level check that ensures that the maximal values are in an expected range in a monitored column.
+Column level check that ensures that the maximum values are in an expected range in a monitored column.
 
 
 ___
@@ -13,7 +13,7 @@ The **max in range** data quality check has the following variants for each
 
 **Check description**
 
-Verifies that the maximal value in a column is not outside the expected range.
+Verifies that the maximum value in a column is not outside the expected range.
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
@@ -842,7 +842,7 @@ ___
 
 **Check description**
 
-Verifies that the maximal value in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.
+Verifies that the maximum value in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
@@ -1673,7 +1673,7 @@ ___
 
 **Check description**
 
-Verifies that the maximal value in a column does not exceed the expected range. Stores the most recent value for each month when the data quality check was evaluated.
+Verifies that the maximum value in a column does not exceed the expected range. Stores the most recent value for each month when the data quality check was evaluated.
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
@@ -2504,7 +2504,7 @@ ___
 
 **Check description**
 
-Verifies that the maximal value in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.
+Verifies that the maximum value in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
@@ -3357,7 +3357,7 @@ ___
 
 **Check description**
 
-Verifies that the maximal value in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.
+Verifies that the maximum value in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
@@ -4205,3 +4205,7 @@ Expand the *Configure with data grouping* section to see additional examples for
 ___
 
 
+
+## What's next
+- Learn how to [configure data quality checks](../../../dqo-concepts/configuring-data-quality-checks-and-rules.md) in DQOps
+- Look at the examples of [running data quality checks](../../../dqo-concepts/running-data-quality-checks.md), targeting tables and columns

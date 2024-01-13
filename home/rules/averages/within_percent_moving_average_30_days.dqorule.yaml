@@ -18,3 +18,4 @@ spec:
       \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
       \ exist to run the calculation."
     data_type: double
+    required: true

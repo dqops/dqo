@@ -100,7 +100,7 @@ Please expand the section below to see the DQOps command-line examples to run or
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="5-11"
+```yaml hl_lines="5-9"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -110,8 +110,6 @@ spec:
       profile_row_count:
         error:
           min_count: 1
-        fatal:
-          min_count: 100
   columns: {}
 
 ```
@@ -442,7 +440,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-13 22-27"
+    ```yaml hl_lines="5-13 20-25"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -461,8 +459,6 @@ Expand the *Configure with data grouping* section to see additional examples for
           profile_row_count:
             error:
               min_count: 1
-            fatal:
-              min_count: 100
       columns:
         country:
           labels:
@@ -903,7 +899,7 @@ Please expand the section below to see the DQOps command-line examples to run or
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="5-12"
+```yaml hl_lines="5-10"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -914,8 +910,6 @@ spec:
         daily_row_count:
           error:
             min_count: 1
-          fatal:
-            min_count: 100
   columns: {}
 
 ```
@@ -1246,7 +1240,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-13 23-28"
+    ```yaml hl_lines="5-13 21-26"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -1266,8 +1260,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             daily_row_count:
               error:
                 min_count: 1
-              fatal:
-                min_count: 100
       columns:
         country:
           labels:
@@ -1708,7 +1700,7 @@ Please expand the section below to see the DQOps command-line examples to run or
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="5-12"
+```yaml hl_lines="5-10"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -1719,8 +1711,6 @@ spec:
         monthly_row_count:
           error:
             min_count: 1
-          fatal:
-            min_count: 100
   columns: {}
 
 ```
@@ -2051,7 +2041,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-13 23-28"
+    ```yaml hl_lines="5-13 21-26"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -2071,8 +2061,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             monthly_row_count:
               error:
                 min_count: 1
-              fatal:
-                min_count: 100
       columns:
         country:
           labels:
@@ -2513,7 +2501,7 @@ Please expand the section below to see the DQOps command-line examples to run or
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="10-17"
+```yaml hl_lines="10-15"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -2529,8 +2517,6 @@ spec:
         daily_partition_row_count:
           error:
             min_count: 1
-          fatal:
-            min_count: 100
   columns:
     date_column:
       labels:
@@ -2870,7 +2856,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-18 33-38"
+    ```yaml hl_lines="10-18 31-36"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -2895,8 +2881,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             daily_partition_row_count:
               error:
                 min_count: 1
-              fatal:
-                min_count: 100
       columns:
         date_column:
           labels:
@@ -3340,7 +3324,7 @@ Please expand the section below to see the DQOps command-line examples to run or
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="10-17"
+```yaml hl_lines="10-15"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -3356,8 +3340,6 @@ spec:
         monthly_partition_row_count:
           error:
             min_count: 1
-          fatal:
-            min_count: 100
   columns:
     date_column:
       labels:
@@ -3697,7 +3679,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-18 33-38"
+    ```yaml hl_lines="10-18 31-36"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -3722,8 +3704,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             monthly_partition_row_count:
               error:
                 min_count: 1
-              fatal:
-                min_count: 100
       columns:
         date_column:
           labels:
@@ -4076,3 +4056,7 @@ Expand the *Configure with data grouping* section to see additional examples for
 ___
 
 
+
+## What's next
+- Learn how to [configure data quality checks](../../../dqo-concepts/configuring-data-quality-checks-and-rules.md) in DQOps
+- Look at the examples of [running data quality checks](../../../dqo-concepts/running-data-quality-checks.md), targeting tables and columns

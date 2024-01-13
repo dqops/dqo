@@ -584,7 +584,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`multiply_stdev`|How many multiples of the estimated standard deviation within the moving average the current sensor readout could be, with regards to the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 30 time periods (days, etc.) time window, but at least 10 readouts must exist to run the calculation.|double| ||
+|`multiply_stdev`|How many multiples of the estimated standard deviation within the moving average the current sensor readout could be, with regards to the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 30 time periods (days, etc.) time window, but at least 10 readouts must exist to run the calculation.|double|:material-check-bold:||
 
 
 
@@ -616,6 +616,7 @@ The rule definition YAML file *stdev/change_multiply_moving_stdev_within_30_days
           \ (warning, error, fatal) at once. The default is a 30 time periods (days, etc.)\
           \ time window, but at least 10 readouts must exist to run the calculation."
         data_type: double
+        required: true
         sample_values:
         - 1.5
     ```
@@ -751,7 +752,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`multiply_stdev`|How many multiples of the estimated standard deviation within the moving average the current sensor readout could be, with regards to the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 60 time periods (days, etc.) time window, but at least 20 readouts must exist to run the calculation.|double| ||
+|`multiply_stdev`|How many multiples of the estimated standard deviation within the moving average the current sensor readout could be, with regards to the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 60 time periods (days, etc.) time window, but at least 20 readouts must exist to run the calculation.|double|:material-check-bold:||
 
 
 
@@ -783,6 +784,7 @@ The rule definition YAML file *stdev/change_multiply_moving_stdev_within_60_days
           \ (warning, error, fatal) at once. The default is a 60 time periods (days, etc.)\
           \ time window, but at least 20 readouts must exist to run the calculation."
         data_type: double
+        required: true
         sample_values:
         - 1.5
     ```
@@ -918,7 +920,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`multiply_stdev`|How many multiples of the estimated standard deviation within the moving average the current sensor readout could be, with regards to the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 7 time periods (days, etc.) time window, but at least 3 readouts must exist to run the calculation.|double| ||
+|`multiply_stdev`|How many multiples of the estimated standard deviation within the moving average the current sensor readout could be, with regards to the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 7 time periods (days, etc.) time window, but at least 3 readouts must exist to run the calculation.|double|:material-check-bold:||
 
 
 
@@ -944,12 +946,13 @@ The rule definition YAML file *stdev/change_multiply_moving_stdev_within_7_days.
       fields:
       - field_name: multiply_stdev
         display_name: multiply_stdev
-        help_text: "How many multiples of the estimated standard deviation within the moving average\
-          \ the current sensor readout could be, with regards to the time window. Set\
-          \ the time window at the threshold level for all severity levels (warning, error,\
-          \ fatal) at once. The default is a 7 time periods (days, etc.) time window,\
-          \ but at least 3 readouts must exist to run the calculation."
+        help_text: "How many multiples of the estimated standard deviation within the\
+          \ moving average the current sensor readout could be, with regards to the time\
+          \ window. Set the time window at the threshold level for all severity levels\
+          \ (warning, error, fatal) at once. The default is a 7 time periods (days, etc.)\
+          \ time window, but at least 3 readouts must exist to run the calculation."
         data_type: double
+        required: true
         sample_values:
         - 1.5
     ```
@@ -1634,7 +1637,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`multiply_stdev`|How many multiples of the estimated standard deviation within the moving average the current sensor readout could be, with regards to the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 30 time periods (days, etc.) time window, but at least 10 readouts must exist to run the calculation.|double| ||
+|`multiply_stdev`|How many multiples of the estimated standard deviation within the moving average the current sensor readout could be, with regards to the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 30 time periods (days, etc.) time window, but at least 10 readouts must exist to run the calculation.|double|:material-check-bold:||
 
 
 
@@ -1666,6 +1669,7 @@ The rule definition YAML file *stdev/multiply_moving_stdev_within_30_days.dqorul
           \ (warning, error, fatal) at once. The default is a 30 time periods (days, etc.)\
           \ time window, but at least 10 readouts must exist to run the calculation."
         data_type: double
+        required: true
         sample_values:
         - 1.5
     ```
@@ -1797,7 +1801,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`multiply_stdev`|How many multiples of the estimated standard deviation within the moving average the current sensor readout could be, with regards to the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 60 time periods (days, etc.) time window, but at least 20 readouts must exist to run the calculation.|double| ||
+|`multiply_stdev`|How many multiples of the estimated standard deviation within the moving average the current sensor readout could be, with regards to the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 60 time periods (days, etc.) time window, but at least 20 readouts must exist to run the calculation.|double|:material-check-bold:||
 
 
 
@@ -1829,6 +1833,7 @@ The rule definition YAML file *stdev/multiply_moving_stdev_within_60_days.dqorul
           \ (warning, error, fatal) at once. The default is a 60 time periods (days, etc.)\
           \ time window, but at least 20 readouts must exist to run the calculation."
         data_type: double
+        required: true
         sample_values:
         - 1.5
     ```
@@ -1960,7 +1965,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`multiply_stdev`|How many multiples of the estimated standard deviation within the moving average the current sensor readout could be, with regards to the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 7 time periods (days, etc.) time window, but at least 3 readouts must exist to run the calculation.|double| ||
+|`multiply_stdev`|How many multiples of the estimated standard deviation within the moving average the current sensor readout could be, with regards to the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 7 time periods (days, etc.) time window, but at least 3 readouts must exist to run the calculation.|double|:material-check-bold:||
 
 
 
@@ -1992,6 +1997,7 @@ The rule definition YAML file *stdev/multiply_moving_stdev_within_7_days.dqorule
           \ (warning, error, fatal) at once. The default is a 7 time periods (days, etc.)\
           \ time window, but at least 3 readouts must exist to run the calculation."
         data_type: double
+        required: true
         sample_values:
         - 1.5
     ```
@@ -2102,3 +2108,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 
 
+
+## What's next
+- Learn how the [data quality rules](../../dqo-concepts/definition-of-data-quality-rules.md) are defined in DQOps and what how to create custom rules
+- Understand how DQOps [runs data quality checks](../../dqo-concepts/architecture/data-quality-check-execution-flow.md), calling rules

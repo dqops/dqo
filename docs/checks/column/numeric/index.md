@@ -91,21 +91,21 @@ Validates that the data in a numeric column is in the expected format or within 
 
 | Data quality check name | Check type | Description | Class |
 |-------------------------|------------|-------------|-------|
-|[profile_min_in_range](./min-in-range.md#profile-min-in-range)|profiling|Verifies that the minimal value in a column is not outside the expected range.|advanced|
-|[daily_min_in_range](./min-in-range.md#daily-min-in-range)|monitoring|Verifies that the minimal value in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.|advanced|
-|[monthly_min_in_range](./min-in-range.md#monthly-min-in-range)|monitoring|Verifies that the minimal value in a column does not exceed the expected range. Stores the most recent value for each month when the data quality check was evaluated.|advanced|
-|[daily_partition_min_in_range](./min-in-range.md#daily-partition-min-in-range)|partitioned|Verifies that the minimal value in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.|advanced|
-|[monthly_partition_min_in_range](./min-in-range.md#monthly-partition-min-in-range)|partitioned|Verifies that the minimal value in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.|advanced|
+|[profile_min_in_range](./min-in-range.md#profile-min-in-range)|profiling|Verifies that the minimum value in a column is not outside the expected range.|advanced|
+|[daily_min_in_range](./min-in-range.md#daily-min-in-range)|monitoring|Verifies that the minimum value in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.|advanced|
+|[monthly_min_in_range](./min-in-range.md#monthly-min-in-range)|monitoring|Verifies that the minimum value in a column does not exceed the expected range. Stores the most recent value for each month when the data quality check was evaluated.|advanced|
+|[daily_partition_min_in_range](./min-in-range.md#daily-partition-min-in-range)|partitioned|Verifies that the minimum value in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.|advanced|
+|[monthly_partition_min_in_range](./min-in-range.md#monthly-partition-min-in-range)|partitioned|Verifies that the minimum value in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.|advanced|
 
 
 
 | Data quality check name | Check type | Description | Class |
 |-------------------------|------------|-------------|-------|
-|[profile_max_in_range](./max-in-range.md#profile-max-in-range)|profiling|Verifies that the maximal value in a column is not outside the expected range.|advanced|
-|[daily_max_in_range](./max-in-range.md#daily-max-in-range)|monitoring|Verifies that the maximal value in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.|advanced|
-|[monthly_max_in_range](./max-in-range.md#monthly-max-in-range)|monitoring|Verifies that the maximal value in a column does not exceed the expected range. Stores the most recent value for each month when the data quality check was evaluated.|advanced|
-|[daily_partition_max_in_range](./max-in-range.md#daily-partition-max-in-range)|partitioned|Verifies that the maximal value in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.|advanced|
-|[monthly_partition_max_in_range](./max-in-range.md#monthly-partition-max-in-range)|partitioned|Verifies that the maximal value in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.|advanced|
+|[profile_max_in_range](./max-in-range.md#profile-max-in-range)|profiling|Verifies that the maximum value in a column is not outside the expected range.|advanced|
+|[daily_max_in_range](./max-in-range.md#daily-max-in-range)|monitoring|Verifies that the maximum value in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.|advanced|
+|[monthly_max_in_range](./max-in-range.md#monthly-max-in-range)|monitoring|Verifies that the maximum value in a column does not exceed the expected range. Stores the most recent value for each month when the data quality check was evaluated.|advanced|
+|[daily_partition_max_in_range](./max-in-range.md#daily-partition-max-in-range)|partitioned|Verifies that the maximum value in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.|advanced|
+|[monthly_partition_max_in_range](./max-in-range.md#monthly-partition-max-in-range)|partitioned|Verifies that the maximum value in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.|advanced|
 
 
 

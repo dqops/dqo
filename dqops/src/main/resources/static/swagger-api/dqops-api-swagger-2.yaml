@@ -19156,7 +19156,7 @@ definitions:
           \ considered as a passed data quality check"
         $ref: "#/definitions/BetweenFloatsRuleParametersSpec"
       error:
-        description: "Default alerting threshold for a maximal values in range in\
+        description: "Default alerting threshold for a maximum values in range in\
           \ a column that raises a data quality error (alert)."
         $ref: "#/definitions/BetweenFloatsRuleParametersSpec"
       fatal:
@@ -19949,7 +19949,7 @@ definitions:
           \ considered as a passed data quality check"
         $ref: "#/definitions/BetweenFloatsRuleParametersSpec"
       error:
-        description: "Default alerting threshold for a minimal values in range in\
+        description: "Default alerting threshold for a minimum values in range in\
           \ a column that raises a data quality error (alert)."
         $ref: "#/definitions/BetweenFloatsRuleParametersSpec"
       fatal:
@@ -21657,12 +21657,12 @@ definitions:
           \ captured value for each day when the data quality check was evaluated."
         $ref: "#/definitions/ColumnIntegerInRangePercentCheckSpec"
       daily_min_in_range:
-        description: "Verifies that the minimal value in a column is not outside the\
+        description: "Verifies that the minimum value in a column is not outside the\
           \ expected range. Stores the most recent captured value for each day when\
           \ the data quality check was evaluated."
         $ref: "#/definitions/ColumnMinInRangeCheckSpec"
       daily_max_in_range:
-        description: "Verifies that the maximal value in a column is not outside the\
+        description: "Verifies that the maximum value in a column is not outside the\
           \ expected range. Stores the most recent captured value for each day when\
           \ the data quality check was evaluated."
         $ref: "#/definitions/ColumnMaxInRangeCheckSpec"
@@ -21809,12 +21809,12 @@ definitions:
           \ quality check result for each daily partition."
         $ref: "#/definitions/ColumnIntegerInRangePercentCheckSpec"
       daily_partition_min_in_range:
-        description: "Verifies that the minimal value in a column is not outside the\
+        description: "Verifies that the minimum value in a column is not outside the\
           \ expected range. Stores a separate data quality check result for each daily\
           \ partition."
         $ref: "#/definitions/ColumnMinInRangeCheckSpec"
       daily_partition_max_in_range:
-        description: "Verifies that the maximal value in a column is not outside the\
+        description: "Verifies that the maximum value in a column is not outside the\
           \ expected range. Stores a separate data quality check result for each daily\
           \ partition."
         $ref: "#/definitions/ColumnMaxInRangeCheckSpec"
@@ -21932,11 +21932,11 @@ definitions:
       min_value:
         type: "integer"
         format: "int64"
-        description: "Minimal value range variable."
+        description: "Minimum value range variable."
       max_value:
         type: "integer"
         format: "int64"
-        description: "Maximal value range variable."
+        description: "Maximum value range variable."
   ColumnNumericInvalidLatitudeCountSensorParametersSpec:
     type: "object"
     properties:
@@ -22035,12 +22035,12 @@ definitions:
           \ value for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnIntegerInRangePercentCheckSpec"
       monthly_min_in_range:
-        description: "Verifies that the minimal value in a column does not exceed\
+        description: "Verifies that the minimum value in a column does not exceed\
           \ the expected range. Stores the most recent value for each month when the\
           \ data quality check was evaluated."
         $ref: "#/definitions/ColumnMinInRangeCheckSpec"
       monthly_max_in_range:
-        description: "Verifies that the maximal value in a column does not exceed\
+        description: "Verifies that the maximum value in a column does not exceed\
           \ the expected range. Stores the most recent value for each month when the\
           \ data quality check was evaluated."
         $ref: "#/definitions/ColumnMaxInRangeCheckSpec"
@@ -22186,12 +22186,12 @@ definitions:
           \ quality check result for each monthly partition."
         $ref: "#/definitions/ColumnIntegerInRangePercentCheckSpec"
       monthly_partition_min_in_range:
-        description: "Verifies that the minimal value in a column is not outside the\
+        description: "Verifies that the minimum value in a column is not outside the\
           \ expected range. Stores a separate data quality check result for each monthly\
           \ partition."
         $ref: "#/definitions/ColumnMinInRangeCheckSpec"
       monthly_partition_max_in_range:
-        description: "Verifies that the maximal value in a column is not outside the\
+        description: "Verifies that the maximum value in a column is not outside the\
           \ expected range. Stores a separate data quality check result for each monthly\
           \ partition."
         $ref: "#/definitions/ColumnMaxInRangeCheckSpec"
@@ -22390,11 +22390,11 @@ definitions:
       min_value:
         type: "number"
         format: "double"
-        description: "Minimal value range variable."
+        description: "Minimum value for the range."
       max_value:
         type: "number"
         format: "double"
-        description: "Maximal value range variable."
+        description: "Maximum value for the range."
   ColumnNumericPercentile10SensorParametersSpec:
     type: "object"
     properties:
@@ -22508,11 +22508,11 @@ definitions:
           \ does not exceed the minimum accepted percentage."
         $ref: "#/definitions/ColumnIntegerInRangePercentCheckSpec"
       profile_min_in_range:
-        description: "Verifies that the minimal value in a column is not outside the\
+        description: "Verifies that the minimum value in a column is not outside the\
           \ expected range."
         $ref: "#/definitions/ColumnMinInRangeCheckSpec"
       profile_max_in_range:
-        description: "Verifies that the maximal value in a column is not outside the\
+        description: "Verifies that the maximum value in a column is not outside the\
           \ expected range."
         $ref: "#/definitions/ColumnMaxInRangeCheckSpec"
       profile_sum_in_range:
@@ -24143,7 +24143,7 @@ definitions:
           \ considered as a passed data quality check"
         $ref: "#/definitions/BetweenFloatsRuleParametersSpec"
       error:
-        description: "Default alerting threshold for a sample (unbiased) maximal values\
+        description: "Default alerting threshold for a sample (unbiased) maximum values\
           \ in range in a column that raises a data quality error (alert)."
         $ref: "#/definitions/BetweenFloatsRuleParametersSpec"
       fatal:
@@ -24204,7 +24204,7 @@ definitions:
           \ considered as a passed data quality check"
         $ref: "#/definitions/BetweenFloatsRuleParametersSpec"
       error:
-        description: "Default alerting threshold for a sample (unbiased) maximal values\
+        description: "Default alerting threshold for a sample (unbiased) maximum values\
           \ in range in a column that raises a data quality error (alert)."
         $ref: "#/definitions/BetweenFloatsRuleParametersSpec"
       fatal:

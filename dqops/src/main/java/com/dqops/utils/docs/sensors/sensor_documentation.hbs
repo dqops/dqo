@@ -20,7 +20,7 @@ The {{replace sensorName "_" " "}} sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-{{#each definition.spec.fields}}|`{{displayName}}`|{{helpText}}|{{replace dataType "_type" ""}}|{{#if required}}Yes{{else}} {{/if}}|{{#each allowedValues}}{{this}}<br/>{{/each}}|
+{{#each definition.spec.fields}}|`{{displayName}}`|{{helpText}}|{{replace dataType "_type" ""}}|{{checkmark required}}|{{#each allowedValues}}{{this}}<br/>{{/each}}|
 {{/each}}
 {{else}}
 {{/if}}
@@ -55,3 +55,7 @@ ___
 
 
 {{/each}}
+
+## What's next
+- Learn how the [data quality sensors](/docs/dqo-concepts/definition-of-data-quality-sensors.md) are defined in DQOps and what is the definition of all Jinja2 macros used in the templates
+- Understand how DQOps [runs data quality checks](/docs/dqo-concepts/architecture/data-quality-check-execution-flow.md), rendering templates to SQL queries

@@ -7,3 +7,4 @@ spec:
     display_name: percentile_value
     help_text: "Median (50th percentile), must equal 0.5"
     data_type: double
+    required: true

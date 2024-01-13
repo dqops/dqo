@@ -15,6 +15,7 @@ spec:
     help_text: Percentage of maximum accepted change compared to a readout 1 day ago
       (inclusive).
     data_type: double
+    required: true
   - field_name: exact_day
     display_name: exact_day
     help_text: "When the exact_day parameter is unchecked (exact_day: false), the\

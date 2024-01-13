@@ -15,3 +15,4 @@ spec:
     help_text: Percentage of maximum accepted change compared to previous readout
       (inclusive).
     data_type: double
+    required: true

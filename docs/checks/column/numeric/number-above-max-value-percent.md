@@ -5595,3 +5595,7 @@ Expand the *Configure with data grouping* section to see additional examples for
 ___
 
 
+
+## What's next
+- Learn how to [configure data quality checks](../../../dqo-concepts/configuring-data-quality-checks-and-rules.md) in DQOps
+- Look at the examples of [running data quality checks](../../../dqo-concepts/running-data-quality-checks.md), targeting tables and columns

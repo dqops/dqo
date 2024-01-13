@@ -10,5 +10,6 @@ spec:
       \ that are replaced with a full table name and the analyzed column name."
     data_type: string
     display_hint: textarea
+    required: true
     sample_values:
     - "{column} + col_tax = col_total_price_with_tax"

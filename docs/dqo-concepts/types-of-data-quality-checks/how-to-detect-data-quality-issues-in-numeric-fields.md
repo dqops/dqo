@@ -21,8 +21,8 @@ How to detect numeric data quality issues.
 |[number_above_max_value_percent](../../checks/column/numeric/number-above-max-value-percent.md)|Validity|Column-level check that ensures that the percentage of values in the monitored column with a value above the value defined by the user as a parameter does not fall below set thresholds.| |
 |[number_in_range_percent](../../checks/column/numeric/number-in-range-percent.md)|Reasonableness|Column level check that ensures that there are no more than a set percentage of values from range in a monitored column.| |
 |[integer_in_range_percent](../../checks/column/numeric/integer-in-range-percent.md)|Reasonableness|Column-level check that ensures that there are no more than a set number of values from range in a monitored column.| |
-|[min_in_range](../../checks/column/numeric/min-in-range.md)|Reasonableness|Column level check that ensures that the minimal values are in an expected range in a monitored column.| |
-|[max_in_range](../../checks/column/numeric/max-in-range.md)|Reasonableness|Column level check that ensures that the maximal values are in an expected range in a monitored column.| |
+|[min_in_range](../../checks/column/numeric/min-in-range.md)|Reasonableness|Column level check that ensures that the minimum values are in an expected range in a monitored column.| |
+|[max_in_range](../../checks/column/numeric/max-in-range.md)|Reasonableness|Column level check that ensures that the maximum values are in an expected range in a monitored column.| |
 |[sum_in_range](../../checks/column/numeric/sum-in-range.md)|Reasonableness|Column level check that ensures that the sum of values in a monitored column is in an expected range.| |
 |[mean_in_range](../../checks/column/numeric/mean-in-range.md)|Reasonableness|Column level check that ensures that the average (mean) of values in a monitored column is in an expected range.| |
 |[median_in_range](../../checks/column/numeric/median-in-range.md)|Reasonableness|Column level check that ensures that the median of values in a monitored column is in an expected range.| |

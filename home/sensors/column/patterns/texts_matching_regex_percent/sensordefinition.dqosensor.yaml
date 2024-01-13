@@ -9,5 +9,6 @@ spec:
       \ custom regex, user should write correct regex as a string. If regex is not\
       \ defined by user then default regex is null"
     data_type: string
+    required: true
     sample_values:
     - "^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$"

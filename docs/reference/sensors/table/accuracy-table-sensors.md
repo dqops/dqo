@@ -20,7 +20,7 @@ The total row count match percent sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`referenced_table`|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|string| ||
+|`referenced_table`|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|string|:material-check-bold:||
 
 
 
@@ -255,3 +255,7 @@ ___
 
 
 
+
+## What's next
+- Learn how the [data quality sensors](../../../dqo-concepts/definition-of-data-quality-sensors.md) are defined in DQOps and what is the definition of all Jinja2 macros used in the templates
+- Understand how DQOps [runs data quality checks](../../../dqo-concepts/architecture/data-quality-check-execution-flow.md), rendering templates to SQL queries

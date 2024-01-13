@@ -327,8 +327,8 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`min_count`|Minimum accepted count (inclusive), leave empty when the limit is not assigned.|long| ||
-|`max_count`|Maximum accepted count (inclusive), leave empty when the limit is not assigned.|long| ||
+|`min_count`|Minimum accepted count (inclusive), leave empty when the limit is not assigned.|long|:material-check-bold:||
+|`max_count`|Maximum accepted count (inclusive), leave empty when the limit is not assigned.|long|:material-check-bold:||
 
 
 
@@ -350,14 +350,18 @@ The rule definition YAML file *comparison/count_between.dqorule.yaml* with the t
       fields:
       - field_name: min_count
         display_name: min_count
-        help_text: Minimum accepted count (inclusive), leave empty when the limit is not assigned.
+        help_text: "Minimum accepted count (inclusive), leave empty when the limit is\
+          \ not assigned."
         data_type: long
+        required: true
         sample_values:
         - 10
       - field_name: max_count
         display_name: max_count
-        help_text: Maximum accepted count (inclusive), leave empty when the limit is not assigned.
+        help_text: "Maximum accepted count (inclusive), leave empty when the limit is\
+          \ not assigned."
         data_type: long
+        required: true
         sample_values:
         - 20
     ```
@@ -631,7 +635,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_diff_percent`|Maximum accepted value for the percentage of difference between expected_value and actual_value returned by the sensor (inclusive).|double| ||
+|`max_diff_percent`|Maximum accepted value for the percentage of difference between expected_value and actual_value returned by the sensor (inclusive).|double|:material-check-bold:||
 
 
 
@@ -656,6 +660,7 @@ The rule definition YAML file *comparison/diff_percent.dqorule.yaml* with the ti
         help_text: Maximum accepted value for the percentage of difference between expected_value
           and actual_value returned by the sensor (inclusive).
         data_type: double
+        required: true
     ```
 
 
@@ -776,7 +781,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`expected_value`|Expected value for the actual_value returned by the sensor. The sensor value should equal expected_value +/- the error_margin.|double| ||
+|`expected_value`|Expected value for the actual_value returned by the sensor. The sensor value should equal expected_value +/- the error_margin.|double|:material-check-bold:||
 |`error_margin`|Error margin for comparison.|double| ||
 
 
@@ -802,6 +807,7 @@ The rule definition YAML file *comparison/equals.dqorule.yaml* with the time win
         help_text: Expected value for the actual_value returned by the sensor. The sensor
           value should equal expected_value +/- the error_margin.
         data_type: double
+        required: true
         sample_values:
         - 10.0
       - field_name: error_margin
@@ -1168,7 +1174,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`expected_value`|Expected value for the actual_value returned by the sensor. It must be an integer value.|long| ||
+|`expected_value`|Expected value for the actual_value returned by the sensor. It must be an integer value.|long|:material-check-bold:||
 
 
 
@@ -1193,6 +1199,7 @@ The rule definition YAML file *comparison/equals_integer.dqorule.yaml* with the 
         help_text: Expected value for the actual_value returned by the sensor. It must
           be an integer value.
         data_type: long
+        required: true
         sample_values:
         - 1
     ```
@@ -1306,7 +1313,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_value`|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
+|`max_value`|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double|:material-check-bold:||
 
 
 
@@ -1331,6 +1338,7 @@ The rule definition YAML file *comparison/max.dqorule.yaml* with the time window
         help_text: Maximum accepted value for the actual_value returned by the sensor
           (inclusive).
         data_type: double
+        required: true
         sample_values:
         - 1.5
     ```
@@ -1445,7 +1453,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_count`|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
+|`max_count`|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long|:material-check-bold:||
 
 
 
@@ -1470,6 +1478,7 @@ The rule definition YAML file *comparison/max_count.dqorule.yaml* with the time 
         help_text: Maximum accepted value for the actual_value returned by the sensor
           (inclusive).
         data_type: long
+        required: true
         sample_values:
         - 10
     ```
@@ -1584,7 +1593,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_days`|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
+|`max_days`|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double|:material-check-bold:||
 
 
 
@@ -1609,6 +1618,7 @@ The rule definition YAML file *comparison/max_days.dqorule.yaml* with the time w
         help_text: Maximum accepted value for the actual_value returned by the sensor
           (inclusive).
         data_type: double
+        required: true
     ```
 
 
@@ -1721,7 +1731,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_failures`|Maximum number of consecutive days with check failures. A check is failed when a sensor query fails due to a connection error, missing or corrupted table.|long| ||
+|`max_failures`|Maximum number of consecutive days with check failures. A check is failed when a sensor query fails due to a connection error, missing or corrupted table.|long|:material-check-bold:||
 
 
 
@@ -1751,6 +1761,7 @@ The rule definition YAML file *comparison/max_failures.dqorule.yaml* with the ti
           \ failed when a sensor query fails due to a connection error, missing or corrupted\
           \ table."
         data_type: long
+        required: true
     ```
 
 
@@ -1884,7 +1895,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_missing`|The maximum number of values from the expected_values list that were not found in the column (inclusive).|long| ||
+|`max_missing`|The maximum number of values from the expected_values list that were not found in the column (inclusive).|long|:material-check-bold:||
 
 
 
@@ -1909,6 +1920,7 @@ The rule definition YAML file *comparison/max_missing.dqorule.yaml* with the tim
         help_text: The maximum number of values from the expected_values list that were
           not found in the column (inclusive).
         data_type: long
+        required: true
     ```
 
 
@@ -2025,7 +2037,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_percent`|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
+|`max_percent`|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double|:material-check-bold:||
 
 
 
@@ -2050,6 +2062,7 @@ The rule definition YAML file *comparison/max_percent.dqorule.yaml* with the tim
         help_text: Maximum accepted value for the actual_value returned by the sensor
           (inclusive).
         data_type: double
+        required: true
         sample_values:
         - 1.0
     ```
@@ -2164,7 +2177,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_value`|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
+|`max_value`|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double|:material-check-bold:||
 
 
 
@@ -2189,6 +2202,7 @@ The rule definition YAML file *comparison/max_value.dqorule.yaml* with the time 
         help_text: Maximum accepted value for the actual_value returned by the sensor
           (inclusive).
         data_type: double
+        required: true
         sample_values:
         - 1.5
     ```
@@ -2303,7 +2317,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`min_value`|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
+|`min_value`|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double|:material-check-bold:||
 
 
 
@@ -2328,6 +2342,7 @@ The rule definition YAML file *comparison/min.dqorule.yaml* with the time window
         help_text: Minimum accepted value for the actual_value returned by the sensor
           (inclusive).
         data_type: double
+        required: true
         sample_values:
         - 1.5
     ```
@@ -2442,7 +2457,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`min_count`|Minimum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
+|`min_count`|Minimum accepted value for the actual_value returned by the sensor (inclusive).|long|:material-check-bold:||
 
 
 
@@ -2467,6 +2482,7 @@ The rule definition YAML file *comparison/min_count.dqorule.yaml* with the time 
         help_text: Minimum accepted value for the actual_value returned by the sensor
           (inclusive).
         data_type: long
+        required: true
     ```
 
 
@@ -2579,7 +2595,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`min_percent`|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
+|`min_percent`|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double|:material-check-bold:||
 
 
 
@@ -2604,6 +2620,7 @@ The rule definition YAML file *comparison/min_percent.dqorule.yaml* with the tim
         help_text: Minimum accepted value for the actual_value returned by the sensor
           (inclusive).
         data_type: double
+        required: true
         sample_values:
         - 99.0
     ```
@@ -2718,7 +2735,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`min_value`|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
+|`min_value`|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double|:material-check-bold:||
 
 
 
@@ -2743,6 +2760,7 @@ The rule definition YAML file *comparison/min_value.dqorule.yaml* with the time 
         help_text: Minimum accepted value for the actual_value returned by the sensor
           (inclusive).
         data_type: double
+        required: true
         sample_values:
         - 1.5
     ```
@@ -2967,3 +2985,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 
 
+
+## What's next
+- Learn how the [data quality rules](../../dqo-concepts/definition-of-data-quality-rules.md) are defined in DQOps and what how to create custom rules
+- Understand how DQOps [runs data quality checks](../../dqo-concepts/architecture/data-quality-check-execution-flow.md), calling rules
