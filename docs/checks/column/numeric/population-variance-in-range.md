@@ -99,7 +99,7 @@ Please expand the section below to see the DQOps command-line examples to run or
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="7-18"
+```yaml hl_lines="7-12"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -109,13 +109,7 @@ spec:
       profiling_checks:
         numeric:
           profile_population_variance_in_range:
-            warning:
-              from: 10.0
-              to: 20.5
             error:
-              from: 10.0
-              to: 20.5
-            fatal:
               from: 10.0
               to: 20.5
       labels:
@@ -460,7 +454,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 30-35"
+    ```yaml hl_lines="5-15 24-29"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -479,13 +473,7 @@ Expand the *Configure with data grouping* section to see additional examples for
           profiling_checks:
             numeric:
               profile_population_variance_in_range:
-                warning:
-                  from: 10.0
-                  to: 20.5
                 error:
-                  from: 10.0
-                  to: 20.5
-                fatal:
                   from: 10.0
                   to: 20.5
           labels:
@@ -940,7 +928,7 @@ Please expand the section below to see the DQOps command-line examples to run or
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="7-19"
+```yaml hl_lines="7-13"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -951,13 +939,7 @@ spec:
         daily:
           numeric:
             daily_population_variance_in_range:
-              warning:
-                from: 10.0
-                to: 20.5
               error:
-                from: 10.0
-                to: 20.5
-              fatal:
                 from: 10.0
                 to: 20.5
       labels:
@@ -1302,7 +1284,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 31-36"
+    ```yaml hl_lines="5-15 25-30"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -1322,13 +1304,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             daily:
               numeric:
                 daily_population_variance_in_range:
-                  warning:
-                    from: 10.0
-                    to: 20.5
                   error:
-                    from: 10.0
-                    to: 20.5
-                  fatal:
                     from: 10.0
                     to: 20.5
           labels:
@@ -1783,7 +1759,7 @@ Please expand the section below to see the DQOps command-line examples to run or
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="7-19"
+```yaml hl_lines="7-13"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -1794,13 +1770,7 @@ spec:
         monthly:
           numeric:
             monthly_population_variance_in_range:
-              warning:
-                from: 10.0
-                to: 20.5
               error:
-                from: 10.0
-                to: 20.5
-              fatal:
                 from: 10.0
                 to: 20.5
       labels:
@@ -2145,7 +2115,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 31-36"
+    ```yaml hl_lines="5-15 25-30"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -2165,13 +2135,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             monthly:
               numeric:
                 monthly_population_variance_in_range:
-                  warning:
-                    from: 10.0
-                    to: 20.5
                   error:
-                    from: 10.0
-                    to: 20.5
-                  fatal:
                     from: 10.0
                     to: 20.5
           labels:
@@ -2626,7 +2590,7 @@ Please expand the section below to see the DQOps command-line examples to run or
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="12-24"
+```yaml hl_lines="12-18"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -2642,13 +2606,7 @@ spec:
         daily:
           numeric:
             daily_partition_population_variance_in_range:
-              warning:
-                from: 10.0
-                to: 20.5
               error:
-                from: 10.0
-                to: 20.5
-              fatal:
                 from: 10.0
                 to: 20.5
       labels:
@@ -3002,7 +2960,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-20 41-46"
+    ```yaml hl_lines="10-20 35-40"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -3027,13 +2985,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             daily:
               numeric:
                 daily_partition_population_variance_in_range:
-                  warning:
-                    from: 10.0
-                    to: 20.5
                   error:
-                    from: 10.0
-                    to: 20.5
-                  fatal:
                     from: 10.0
                     to: 20.5
           labels:
@@ -3491,7 +3443,7 @@ Please expand the section below to see the DQOps command-line examples to run or
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="12-24"
+```yaml hl_lines="12-18"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -3507,13 +3459,7 @@ spec:
         monthly:
           numeric:
             monthly_partition_population_variance_in_range:
-              warning:
-                from: 10.0
-                to: 20.5
               error:
-                from: 10.0
-                to: 20.5
-              fatal:
                 from: 10.0
                 to: 20.5
       labels:
@@ -3867,7 +3813,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-20 41-46"
+    ```yaml hl_lines="10-20 35-40"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -3892,13 +3838,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             monthly:
               numeric:
                 monthly_partition_population_variance_in_range:
-                  warning:
-                    from: 10.0
-                    to: 20.5
                   error:
-                    from: 10.0
-                    to: 20.5
-                  fatal:
                     from: 10.0
                     to: 20.5
           labels:

@@ -99,7 +99,7 @@ Please expand the section below to see the DQOps command-line examples to run or
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="7-20"
+```yaml hl_lines="7-14"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -111,13 +111,7 @@ spec:
           profile_sql_aggregate_expression_on_column:
             parameters:
               sql_expression: "MAX({column})"
-            warning:
-              from: 10.0
-              to: 20.5
             error:
-              from: 10.0
-              to: 20.5
-            fatal:
               from: 10.0
               to: 20.5
       labels:
@@ -434,7 +428,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 32-37"
+    ```yaml hl_lines="5-15 26-31"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -455,13 +449,7 @@ Expand the *Configure with data grouping* section to see additional examples for
               profile_sql_aggregate_expression_on_column:
                 parameters:
                   sql_expression: "MAX({column})"
-                warning:
-                  from: 10.0
-                  to: 20.5
                 error:
-                  from: 10.0
-                  to: 20.5
-                fatal:
                   from: 10.0
                   to: 20.5
           labels:
@@ -883,7 +871,7 @@ Please expand the section below to see the DQOps command-line examples to run or
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="7-21"
+```yaml hl_lines="7-15"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -896,13 +884,7 @@ spec:
             daily_sql_aggregate_expression_on_column:
               parameters:
                 sql_expression: "MAX({column})"
-              warning:
-                from: 10.0
-                to: 20.5
               error:
-                from: 10.0
-                to: 20.5
-              fatal:
                 from: 10.0
                 to: 20.5
       labels:
@@ -1219,7 +1201,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 33-38"
+    ```yaml hl_lines="5-15 27-32"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -1241,13 +1223,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 daily_sql_aggregate_expression_on_column:
                   parameters:
                     sql_expression: "MAX({column})"
-                  warning:
-                    from: 10.0
-                    to: 20.5
                   error:
-                    from: 10.0
-                    to: 20.5
-                  fatal:
                     from: 10.0
                     to: 20.5
           labels:
@@ -1669,7 +1645,7 @@ Please expand the section below to see the DQOps command-line examples to run or
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="7-21"
+```yaml hl_lines="7-15"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -1682,13 +1658,7 @@ spec:
             monthly_sql_aggregate_expression_on_column:
               parameters:
                 sql_expression: "MAX({column})"
-              warning:
-                from: 10.0
-                to: 20.5
               error:
-                from: 10.0
-                to: 20.5
-              fatal:
                 from: 10.0
                 to: 20.5
       labels:
@@ -2005,7 +1975,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 33-38"
+    ```yaml hl_lines="5-15 27-32"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -2027,13 +1997,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 monthly_sql_aggregate_expression_on_column:
                   parameters:
                     sql_expression: "MAX({column})"
-                  warning:
-                    from: 10.0
-                    to: 20.5
                   error:
-                    from: 10.0
-                    to: 20.5
-                  fatal:
                     from: 10.0
                     to: 20.5
           labels:
@@ -2455,7 +2419,7 @@ Please expand the section below to see the DQOps command-line examples to run or
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="12-26"
+```yaml hl_lines="12-20"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -2473,13 +2437,7 @@ spec:
             daily_partition_sql_aggregate_expression_on_column:
               parameters:
                 sql_expression: "MAX({column})"
-              warning:
-                from: 10.0
-                to: 20.5
               error:
-                from: 10.0
-                to: 20.5
-              fatal:
                 from: 10.0
                 to: 20.5
       labels:
@@ -2805,7 +2763,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-20 43-48"
+    ```yaml hl_lines="10-20 37-42"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -2832,13 +2790,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 daily_partition_sql_aggregate_expression_on_column:
                   parameters:
                     sql_expression: "MAX({column})"
-                  warning:
-                    from: 10.0
-                    to: 20.5
                   error:
-                    from: 10.0
-                    to: 20.5
-                  fatal:
                     from: 10.0
                     to: 20.5
           labels:
@@ -3263,7 +3215,7 @@ Please expand the section below to see the DQOps command-line examples to run or
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="12-26"
+```yaml hl_lines="12-20"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -3281,13 +3233,7 @@ spec:
             monthly_partition_sql_aggregate_expression_on_column:
               parameters:
                 sql_expression: "MAX({column})"
-              warning:
-                from: 10.0
-                to: 20.5
               error:
-                from: 10.0
-                to: 20.5
-              fatal:
                 from: 10.0
                 to: 20.5
       labels:
@@ -3613,7 +3559,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-20 43-48"
+    ```yaml hl_lines="10-20 37-42"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -3640,13 +3586,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 monthly_partition_sql_aggregate_expression_on_column:
                   parameters:
                     sql_expression: "MAX({column})"
-                  warning:
-                    from: 10.0
-                    to: 20.5
                   error:
-                    from: 10.0
-                    to: 20.5
-                  fatal:
                     from: 10.0
                     to: 20.5
           labels:

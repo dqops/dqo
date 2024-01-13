@@ -99,7 +99,7 @@ Please expand the section below to see the DQOps command-line examples to run or
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="5-18"
+```yaml hl_lines="5-12"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -109,13 +109,7 @@ spec:
       profile_sql_aggregate_expression_on_table:
         parameters:
           sql_expression: SUM(col_net_price) + SUM(col_tax)
-        warning:
-          from: 10.0
-          to: 20.5
         error:
-          from: 10.0
-          to: 20.5
-        fatal:
           from: 10.0
           to: 20.5
   columns: {}
@@ -468,7 +462,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-13 29-34"
+    ```yaml hl_lines="5-13 23-28"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -487,13 +481,7 @@ Expand the *Configure with data grouping* section to see additional examples for
           profile_sql_aggregate_expression_on_table:
             parameters:
               sql_expression: SUM(col_net_price) + SUM(col_tax)
-            warning:
-              from: 10.0
-              to: 20.5
             error:
-              from: 10.0
-              to: 20.5
-            fatal:
               from: 10.0
               to: 20.5
       columns:
@@ -951,7 +939,7 @@ Please expand the section below to see the DQOps command-line examples to run or
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="5-19"
+```yaml hl_lines="5-13"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -962,13 +950,7 @@ spec:
         daily_sql_aggregate_expression_on_table:
           parameters:
             sql_expression: SUM(col_net_price) + SUM(col_tax)
-          warning:
-            from: 10.0
-            to: 20.5
           error:
-            from: 10.0
-            to: 20.5
-          fatal:
             from: 10.0
             to: 20.5
   columns: {}
@@ -1321,7 +1303,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-13 30-35"
+    ```yaml hl_lines="5-13 24-29"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -1341,13 +1323,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             daily_sql_aggregate_expression_on_table:
               parameters:
                 sql_expression: SUM(col_net_price) + SUM(col_tax)
-              warning:
-                from: 10.0
-                to: 20.5
               error:
-                from: 10.0
-                to: 20.5
-              fatal:
                 from: 10.0
                 to: 20.5
       columns:
@@ -1805,7 +1781,7 @@ Please expand the section below to see the DQOps command-line examples to run or
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="5-19"
+```yaml hl_lines="5-13"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -1816,13 +1792,7 @@ spec:
         monthly_sql_aggregate_expression_on_table:
           parameters:
             sql_expression: SUM(col_net_price) + SUM(col_tax)
-          warning:
-            from: 10.0
-            to: 20.5
           error:
-            from: 10.0
-            to: 20.5
-          fatal:
             from: 10.0
             to: 20.5
   columns: {}
@@ -2175,7 +2145,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-13 30-35"
+    ```yaml hl_lines="5-13 24-29"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -2195,13 +2165,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             monthly_sql_aggregate_expression_on_table:
               parameters:
                 sql_expression: SUM(col_net_price) + SUM(col_tax)
-              warning:
-                from: 10.0
-                to: 20.5
               error:
-                from: 10.0
-                to: 20.5
-              fatal:
                 from: 10.0
                 to: 20.5
       columns:
@@ -2659,7 +2623,7 @@ Please expand the section below to see the DQOps command-line examples to run or
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="10-24"
+```yaml hl_lines="10-18"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -2675,13 +2639,7 @@ spec:
         daily_partition_sql_aggregate_expression_on_table:
           parameters:
             sql_expression: SUM(col_net_price) + SUM(col_tax)
-          warning:
-            from: 10.0
-            to: 20.5
           error:
-            from: 10.0
-            to: 20.5
-          fatal:
             from: 10.0
             to: 20.5
   columns:
@@ -3043,7 +3001,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-18 40-45"
+    ```yaml hl_lines="10-18 34-39"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -3068,13 +3026,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             daily_partition_sql_aggregate_expression_on_table:
               parameters:
                 sql_expression: SUM(col_net_price) + SUM(col_tax)
-              warning:
-                from: 10.0
-                to: 20.5
               error:
-                from: 10.0
-                to: 20.5
-              fatal:
                 from: 10.0
                 to: 20.5
       columns:
@@ -3535,7 +3487,7 @@ Please expand the section below to see the DQOps command-line examples to run or
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="10-24"
+```yaml hl_lines="10-18"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -3551,13 +3503,7 @@ spec:
         monthly_partition_sql_aggregate_expression_on_table:
           parameters:
             sql_expression: SUM(col_net_price) + SUM(col_tax)
-          warning:
-            from: 10.0
-            to: 20.5
           error:
-            from: 10.0
-            to: 20.5
-          fatal:
             from: 10.0
             to: 20.5
   columns:
@@ -3919,7 +3865,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-18 40-45"
+    ```yaml hl_lines="10-18 34-39"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -3944,13 +3890,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             monthly_partition_sql_aggregate_expression_on_table:
               parameters:
                 sql_expression: SUM(col_net_price) + SUM(col_tax)
-              warning:
-                from: 10.0
-                to: 20.5
               error:
-                from: 10.0
-                to: 20.5
-              fatal:
                 from: 10.0
                 to: 20.5
       columns:

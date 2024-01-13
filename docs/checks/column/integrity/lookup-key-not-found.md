@@ -99,7 +99,7 @@ Please expand the section below to see the DQOps command-line examples to run or
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="7-18"
+```yaml hl_lines="7-16"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -112,8 +112,6 @@ spec:
             parameters:
               foreign_table: dim_customer
               foreign_column: customer_id
-            warning:
-              max_count: 0
             error:
               max_count: 0
             fatal:
@@ -696,7 +694,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 30-35"
+    ```yaml hl_lines="5-15 28-33"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -718,8 +716,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                 parameters:
                   foreign_table: dim_customer
                   foreign_column: customer_id
-                warning:
-                  max_count: 0
                 error:
                   max_count: 0
                 fatal:
@@ -1412,7 +1408,7 @@ Please expand the section below to see the DQOps command-line examples to run or
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="7-19"
+```yaml hl_lines="7-17"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -1426,8 +1422,6 @@ spec:
               parameters:
                 foreign_table: dim_customer
                 foreign_column: customer_id
-              warning:
-                max_count: 0
               error:
                 max_count: 0
               fatal:
@@ -2010,7 +2004,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 31-36"
+    ```yaml hl_lines="5-15 29-34"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -2033,8 +2027,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                   parameters:
                     foreign_table: dim_customer
                     foreign_column: customer_id
-                  warning:
-                    max_count: 0
                   error:
                     max_count: 0
                   fatal:
@@ -2727,7 +2719,7 @@ Please expand the section below to see the DQOps command-line examples to run or
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="7-19"
+```yaml hl_lines="7-17"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -2741,8 +2733,6 @@ spec:
               parameters:
                 foreign_table: dim_customer
                 foreign_column: customer_id
-              warning:
-                max_count: 0
               error:
                 max_count: 0
               fatal:
@@ -3325,7 +3315,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 31-36"
+    ```yaml hl_lines="5-15 29-34"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -3348,8 +3338,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                   parameters:
                     foreign_table: dim_customer
                     foreign_column: customer_id
-                  warning:
-                    max_count: 0
                   error:
                     max_count: 0
                   fatal:
@@ -4042,7 +4030,7 @@ Please expand the section below to see the DQOps command-line examples to run or
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="12-24"
+```yaml hl_lines="12-22"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -4061,8 +4049,6 @@ spec:
               parameters:
                 foreign_table: dim_customer
                 foreign_column: customer_id
-              warning:
-                max_count: 0
               error:
                 max_count: 0
               fatal:
@@ -4654,7 +4640,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-20 41-46"
+    ```yaml hl_lines="10-20 39-44"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -4682,8 +4668,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                   parameters:
                     foreign_table: dim_customer
                     foreign_column: customer_id
-                  warning:
-                    max_count: 0
                   error:
                     max_count: 0
                   fatal:
@@ -5379,7 +5363,7 @@ Please expand the section below to see the DQOps command-line examples to run or
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="12-24"
+```yaml hl_lines="12-22"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -5398,8 +5382,6 @@ spec:
               parameters:
                 foreign_table: dim_customer
                 foreign_column: customer_id
-              warning:
-                max_count: 0
               error:
                 max_count: 0
               fatal:
@@ -5991,7 +5973,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-20 41-46"
+    ```yaml hl_lines="10-20 39-44"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -6019,8 +6001,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                   parameters:
                     foreign_table: dim_customer
                     foreign_column: customer_id
-                  warning:
-                    max_count: 0
                   error:
                     max_count: 0
                   fatal:

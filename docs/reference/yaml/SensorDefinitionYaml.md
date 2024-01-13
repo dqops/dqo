@@ -37,24 +37,8 @@ The structure of this object is described below
 ___
 
 
-## SensorDefinitionYaml
-Data quality sensor definition YAML schema for a data quality sensor specification.
-
-
-
-
-
-
-
-
-
-The structure of this object is described below
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|api_version||string| | | |
-|kind||enum|default_schedules<br/>settings<br/>default_notifications<br/>rule<br/>sensor<br/>source<br/>check<br/>dashboards<br/>default_checks<br/>table<br/>provider_sensor<br/>file_index<br/>| | |
-|[spec](./SensorDefinitionYaml.md#SensorDefinitionSpec)||[SensorDefinitionSpec](./SensorDefinitionYaml.md#SensorDefinitionSpec)| | | |
+## ParameterDefinitionsListSpec
+List of parameter definitions - the parameters for custom sensors or custom rules.
 
 
 
@@ -99,8 +83,24 @@ The structure of this object is described below
 ___
 
 
-## ParameterDefinitionsListSpec
-List of parameter definitions - the parameters for custom sensors or custom rules.
+## SensorDefinitionYaml
+Data quality sensor definition YAML schema for a data quality sensor specification.
+
+
+
+
+
+
+
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|api_version||string| | | |
+|kind||enum|default_schedules<br/>settings<br/>default_notifications<br/>rule<br/>sensor<br/>source<br/>check<br/>dashboards<br/>default_checks<br/>table<br/>provider_sensor<br/>file_index<br/>| | |
+|[spec](./SensorDefinitionYaml.md#SensorDefinitionSpec)||[SensorDefinitionSpec](./SensorDefinitionYaml.md#SensorDefinitionSpec)| | | |
 
 
 

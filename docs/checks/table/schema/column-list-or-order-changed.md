@@ -89,7 +89,7 @@ Please expand the section below to see the DQOps command-line examples to run or
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="5-10"
+```yaml hl_lines="5-8"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -97,9 +97,7 @@ spec:
   profiling_checks:
     schema:
       profile_column_list_or_order_changed:
-        warning: {}
         error: {}
-        fatal: {}
   columns: {}
 
 ```
@@ -193,7 +191,7 @@ Please expand the section below to see the DQOps command-line examples to run or
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="5-11"
+```yaml hl_lines="5-9"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -202,9 +200,7 @@ spec:
     daily:
       schema:
         daily_column_list_or_order_changed:
-          warning: {}
           error: {}
-          fatal: {}
   columns: {}
 
 ```
@@ -298,7 +294,7 @@ Please expand the section below to see the DQOps command-line examples to run or
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="5-11"
+```yaml hl_lines="5-9"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -307,9 +303,7 @@ spec:
     monthly:
       schema:
         monthly_column_list_or_order_changed:
-          warning: {}
           error: {}
-          fatal: {}
   columns: {}
 
 ```

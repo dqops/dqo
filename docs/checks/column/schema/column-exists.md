@@ -88,7 +88,7 @@ Please expand the section below to see the DQOps command-line examples to run or
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="7-12"
+```yaml hl_lines="7-10"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -98,9 +98,7 @@ spec:
       profiling_checks:
         schema:
           profile_column_exists:
-            warning: {}
             error: {}
-            fatal: {}
       labels:
       - This is the column that is analyzed for data quality issues
 
@@ -195,7 +193,7 @@ Please expand the section below to see the DQOps command-line examples to run or
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="7-13"
+```yaml hl_lines="7-11"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -206,9 +204,7 @@ spec:
         daily:
           schema:
             daily_column_exists:
-              warning: {}
               error: {}
-              fatal: {}
       labels:
       - This is the column that is analyzed for data quality issues
 
@@ -303,7 +299,7 @@ Please expand the section below to see the DQOps command-line examples to run or
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="7-13"
+```yaml hl_lines="7-11"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -314,9 +310,7 @@ spec:
         monthly:
           schema:
             monthly_column_exists:
-              warning: {}
               error: {}
-              fatal: {}
       labels:
       - This is the column that is analyzed for data quality issues
 

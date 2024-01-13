@@ -100,7 +100,7 @@ Please expand the section below to see the DQOps command-line examples to run or
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="7-12"
+```yaml hl_lines="7-10"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -110,9 +110,7 @@ spec:
       profiling_checks:
         datatype:
           profile_detected_datatype_in_text:
-            warning: {}
             error: {}
-            fatal: {}
       labels:
       - This is the column that is analyzed for data quality issues
 
@@ -1883,7 +1881,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 24-29"
+    ```yaml hl_lines="5-15 22-27"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -1902,9 +1900,7 @@ Expand the *Configure with data grouping* section to see additional examples for
           profiling_checks:
             datatype:
               profile_detected_datatype_in_text:
-                warning: {}
                 error: {}
-                fatal: {}
           labels:
           - This is the column that is analyzed for data quality issues
         country:
@@ -3779,7 +3775,7 @@ Please expand the section below to see the DQOps command-line examples to run or
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="7-13"
+```yaml hl_lines="7-11"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -3790,9 +3786,7 @@ spec:
         daily:
           datatype:
             daily_detected_datatype_in_text:
-              warning: {}
               error: {}
-              fatal: {}
       labels:
       - This is the column that is analyzed for data quality issues
 
@@ -5563,7 +5557,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 25-30"
+    ```yaml hl_lines="5-15 23-28"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -5583,9 +5577,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             daily:
               datatype:
                 daily_detected_datatype_in_text:
-                  warning: {}
                   error: {}
-                  fatal: {}
           labels:
           - This is the column that is analyzed for data quality issues
         country:
@@ -7460,7 +7452,7 @@ Please expand the section below to see the DQOps command-line examples to run or
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="7-13"
+```yaml hl_lines="7-11"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -7471,9 +7463,7 @@ spec:
         monthly:
           datatype:
             monthly_detected_datatype_in_text:
-              warning: {}
               error: {}
-              fatal: {}
       labels:
       - This is the column that is analyzed for data quality issues
 
@@ -9244,7 +9234,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 25-30"
+    ```yaml hl_lines="5-15 23-28"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -9264,9 +9254,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             monthly:
               datatype:
                 monthly_detected_datatype_in_text:
-                  warning: {}
                   error: {}
-                  fatal: {}
           labels:
           - This is the column that is analyzed for data quality issues
         country:
@@ -11141,7 +11129,7 @@ Please expand the section below to see the DQOps command-line examples to run or
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="12-18"
+```yaml hl_lines="12-16"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -11157,9 +11145,7 @@ spec:
         daily:
           datatype:
             daily_partition_detected_datatype_in_text:
-              warning: {}
               error: {}
-              fatal: {}
       labels:
       - This is the column that is analyzed for data quality issues
     date_column:
@@ -12935,7 +12921,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-20 35-40"
+    ```yaml hl_lines="10-20 33-38"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -12960,9 +12946,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             daily:
               datatype:
                 daily_partition_detected_datatype_in_text:
-                  warning: {}
                   error: {}
-                  fatal: {}
           labels:
           - This is the column that is analyzed for data quality issues
         date_column:
@@ -14842,7 +14826,7 @@ Please expand the section below to see the DQOps command-line examples to run or
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="12-18"
+```yaml hl_lines="12-16"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -14858,9 +14842,7 @@ spec:
         monthly:
           datatype:
             monthly_partition_detected_datatype_in_text:
-              warning: {}
               error: {}
-              fatal: {}
       labels:
       - This is the column that is analyzed for data quality issues
     date_column:
@@ -16636,7 +16618,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-20 35-40"
+    ```yaml hl_lines="10-20 33-38"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -16661,9 +16643,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             monthly:
               datatype:
                 monthly_partition_detected_datatype_in_text:
-                  warning: {}
                   error: {}
-                  fatal: {}
           labels:
           - This is the column that is analyzed for data quality issues
         date_column:

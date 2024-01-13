@@ -447,6 +447,14 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
             System.err.println("Sorry but check category container: " + checkCategoryContainer.getClass().getName() + " has no check named " + checkModel.getCheckName());
         }
 
+        if (Objects.equals(checkSpec.getWarning(), checkSpec.getError())) {
+            checkSpec.setWarning(null); // we don't need the sample of the warning, because the rule has the same parameters
+        }
+
+        if (Objects.equals(checkSpec.getFatal(), checkSpec.getError())) {
+            checkSpec.setFatal(null); // we don't need the sample of the fatal rule, because the rule has the same parameters
+        }
+
         TableYaml tableYaml = new TableYaml(trimmedTableSpec);
         String yamlSample = this.yamlSerializer.serialize(tableYaml);
         checkDocumentationModel.setSampleYaml(yamlSample);
