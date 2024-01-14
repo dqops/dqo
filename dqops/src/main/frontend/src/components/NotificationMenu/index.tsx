@@ -11,7 +11,7 @@ import { IRootState } from '../../redux/reducers';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { setCronScheduler, toggleMenu } from '../../redux/actions/job.actions';
 
-import { useError} from '../../contexts/errrorContext';
+import { IError, useError} from '../../contexts/errrorContext';
 import JobItem from './JobItem';
 import ErrorItem from './ErrorItem';
 import moment from 'moment';
@@ -45,13 +45,13 @@ const NotificationMenu = () => {
   useEffect(() => {
     getData();
   }, []);
-  const [data, jobs] = useMemo(() => {
+  const [data, errorsData, jobs] = useMemo(() => {
     const jobsData = Object.values(job_dictionary_state)
       .sort((a, b) => (b.jobId?.jobId || 0) - (a.jobId?.jobId || 0))
       .map((item) => ({ type: 'job', item }));
   
     const errorData = errors.map((item : any) => ({ type: 'error', item }));
-  
+    console.log(errorData)
     const newData = jobsData.concat(errorData);
   
     newData.sort((a, b) => {
@@ -62,7 +62,7 @@ const NotificationMenu = () => {
     });
   
     const data = newData;
-  
+
     const newJobArray = data
       .filter((z) => z.item.jobId?.parentJobId?.jobId === undefined)
       .map((x) => ({
@@ -81,6 +81,11 @@ const NotificationMenu = () => {
           )
           .map((y) => y.item)
       }));
+    const errorsData : IError[] = errorData.map((x: any) => ({
+      message: x.item.message,
+      name: x.item.name,
+      date: x.item.date
+    }));
   
     const updatedArray = newJobArray.map((x) => {
       if (x.jobType === undefined) {
@@ -116,7 +121,7 @@ const NotificationMenu = () => {
   
       return x;
     });
-    return [data, updatedChildArray] as const;
+    return [data, errorsData, updatedChildArray] as const;
   }, [isOpen]);
   
   const [showNewIcon, setShowNewIcon] = useState(false);
@@ -195,17 +200,18 @@ const NotificationMenu = () => {
           </div>
         </div>
         <div className="overflow-x-hidden max-h-100 py-4 px-4 relative">
+          {errorsData.map((error, index) => <ErrorItem error={error} key={index}/>)}
           {jobs.map((notification: any, index) =>
-            notification.type === 'error' ? (
-              <ErrorItem error={notification} key={index} />
-            ) : (
+            // notification.type === 'error' ? (
+            //   <ErrorItem error={notification} key={index} />
+            // ) : (
               <JobItem
                 job={notification}
                 key={index}
                 notifnumber={data.length}
                 canUserCancelJobs={userProfile.can_cancel_jobs}
               />
-            )
+            // )
           )}
         </div>
       </PopoverContent>
