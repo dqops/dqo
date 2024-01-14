@@ -22,7 +22,8 @@ import clsx from 'clsx';
 const NotificationMenu = () => {
   const { job_dictionary_state, isOpen, isCronScheduled, userProfile } = useSelector(
     (state: IRootState) => state.job || {}
-  );
+    );
+  const [showNewIcon, setShowNewIcon] = useState(false);
 
   const dispatch = useActionDispatch();
   const { errors } = useError();
@@ -45,25 +46,21 @@ const NotificationMenu = () => {
   useEffect(() => {
     getData();
   }, []);
-  const [data, errorsData, jobs] = useMemo(() => {
+  const [jobsData, errorsData, jobs] = useMemo(() => {
     const jobsData = Object.values(job_dictionary_state)
       .sort((a, b) => (b.jobId?.jobId || 0) - (a.jobId?.jobId || 0))
       .map((item) => ({ type: 'job', item }));
   
     const errorData = errors.map((item : any) => ({ type: 'error', item }));
-    console.log(errorData)
-    const newData = jobsData.concat(errorData);
   
-    newData.sort((a, b) => {
+    jobsData.sort((a, b) => {
       const date1 = getNotificationDate(a);
       const date2 = getNotificationDate(b);
   
       return moment(date1).isBefore(moment(date2)) ? 1 : -1;
     });
   
-    const data = newData;
-
-    const newJobArray = data
+    const newJobArray = jobsData
       .filter((z) => z.item.jobId?.parentJobId?.jobId === undefined)
       .map((x) => ({
         errorMessage: x.item.errorMessage,
@@ -75,7 +72,7 @@ const NotificationMenu = () => {
         parameters: x.item.parameters,
         status: x.item.status,
         statusChangedAt: x.item.statusChangedAt,
-        childs: data
+        childs: jobsData
           .filter(
             (y) => y.item.jobId?.parentJobId?.jobId === x.item.jobId?.jobId
           )
@@ -121,10 +118,9 @@ const NotificationMenu = () => {
   
       return x;
     });
-    return [data, errorsData, updatedChildArray] as const;
+    return [jobsData, errorsData, updatedChildArray] as const;
   }, [isOpen]);
   
-  const [showNewIcon, setShowNewIcon] = useState(false);
 
   const getData = async () => {
     const res = await JobApiClient.isCronSchedulerRunning();
@@ -166,12 +162,12 @@ const NotificationMenu = () => {
             <SvgIcon name="bell" className="w-5 h-5 text-gray-700" />
             <span
               className={
-                showNewIcon && data.length !== 0
+                showNewIcon && jobs.length !== 0
                   ? 'absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 rounded-full bg-teal-500 text-white px-1 py-0.5 text-xxs'
                   : ''
               }
             >
-              {showNewIcon && data.length !== 0 ? 'New' : ''}
+              {showNewIcon && jobsData.length !== 0 ? 'New' : ''}
             </span>
           </div>
         </IconButton>
@@ -202,13 +198,10 @@ const NotificationMenu = () => {
         <div className="overflow-x-hidden max-h-100 py-4 px-4 relative">
           {errorsData.map((error, index) => <ErrorItem error={error} key={index}/>)}
           {jobs.map((notification: any, index) =>
-            // notification.type === 'error' ? (
-            //   <ErrorItem error={notification} key={index} />
-            // ) : (
               <JobItem
                 job={notification}
                 key={index}
-                notifnumber={data.length}
+                notifnumber={jobsData.length}
                 canUserCancelJobs={userProfile.can_cancel_jobs}
               />
             // )
