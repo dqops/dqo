@@ -140,7 +140,7 @@ Synchronization ensures that the locally stored results are synced with your DQO
 
 ### **Review the results on the data quality dashboards**
 
-To review the results on the [data quality dashboards](../../working-with-dqo/reviewing-results-on-data-quality-dashboards.md)
+To review the results on the [data quality dashboards](../../working-with-dqo/review-the-data-quality-results-on-dashboards.md)
 go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
 
 Below you can see the results displayed on the **Current table status** dashboard located in the Current status group.     

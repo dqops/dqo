@@ -164,7 +164,7 @@ DQOps provides *Data Quality Dashboards* over most common data quality activitie
 developed with Google Looker Studio and are accessing the customer's data quality data warehouse using
 a Looker Studio Community Connector provided by DQOps. The links and configuration parameters to the built-in dashboards
 are defined in the [$DQO_HOME/settings/dashboardslist.dqodashboards.yaml](https://github.com/dqops/dqo/blob/develop/home/settings/dashboardslist.dqodashboards.yaml) file.
-Please check the [data quality dashboard customization](../../working-with-dqo/reviewing-results-on-data-quality-dashboards.md) manual
+Please check the [data quality dashboard customization](../../working-with-dqo/review-the-data-quality-results-on-dashboards.md) manual
 to learn how to change the built-in dashboards or add custom dashboards. 
 
 Please contact [DQOps sales](https://dqops.com/contact-us/) to discuss other deployment options, including an on-premise installation.

@@ -1,4 +1,4 @@
-# Review the results of data quality monitoring on dashboards
+# Review the dta quality results on dashboards
 Read this guide to learn how to use detailed data quality dashboards in DQOps for drilling-down to identify all tables and columns affected by issues.
 
 ## Overview
@@ -53,6 +53,26 @@ on the top part of the dashboard.
 Other dashboards have buttons to change the view between the current and previous month.
 
 ![Current/previous month switch](https://dqops.com/docs/images/concepts/data-quality-dashboards/dashboards-current-previous-month-switch.png)
+
+### **Export data presented in dashboard**
+
+You have the option to export data presented in dashboards for use in other tools.
+To export data from a table or chart, follow these steps:
+
+
+1. Hover over the table or chart you wish to export.
+   
+    ![Export data presented in dashboards](https://dqops.com/docs/images/working-with-dqo/data-quality-dashboards/export-results-from-dashboard.png)
+
+2. Right-click on the chart or click three dots icon and select Export.
+3. Enter a name for your export and select an Export As option:
+
+    - CSV creates a comma separated text file.
+    - CSV (Excel) creates a comma separated text file where non-ASCII characters are encoded properly for use in Excel.
+    - Google Sheets sends your data directly to Sheets.
+   
+4. Select the Keep value formatting option if you wish to retain the number and date formats applied in Looker Studio in the exported data.
+
 
 ## What's next
 

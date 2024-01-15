@@ -215,7 +215,7 @@ of the user interface.
 
 Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
-You can now [review the results on the data quality dashboards](../working-with-dqo/reviewing-results-on-data-quality-dashboards.md) as described in the Working with DQOps section.
+You can now [review the results on the data quality dashboards](../working-with-dqo/review-the-data-quality-results-on-dashboards.md) as described in the Working with DQOps section.
 
 
 ## Execute the checks using the DQOps Shell
@@ -237,5 +237,5 @@ You can also execute the checks that were prepared in the example, using the DQO
     cloud sync all
     ``` 
 
-3. You can now [review the results on the data quality dashboards](../working-with-dqo/reviewing-results-on-data-quality-dashboards.md)
+3. You can now [review the results on the data quality dashboards](../working-with-dqo/review-the-data-quality-results-on-dashboards.md)
     as described in the Working with DQOps section.

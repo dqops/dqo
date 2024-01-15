@@ -86,7 +86,7 @@ Synchronize locally stored results with your DQOps Cloud account to be able to v
 
 To synchronize all the data click on the **Synchronize** button in the upper right corner of the navigation menu.
 
-You can learn here how to [Review the results of data quality monitoring on dashboards.](reviewing-results-on-data-quality-dashboards.md)
+You can learn here how to [Review the results of data quality monitoring on dashboards.](review-the-data-quality-results-on-dashboards.md)
 
 
 ## Configure date or datetime column for partition checks
