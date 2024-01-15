@@ -72,7 +72,7 @@ public class CheckDocumentationGeneratorImpl implements CheckDocumentationGenera
         put("text", "Text values");
         put("nulls", "Null values");
         put("accuracy", "Data accuracy");
-        put("custom_sql", "Custom SQL and multi-column");
+        put("custom_sql", "Custom SQL and multi-column checks");
         put("volume", "Data volume");
         put("uniqueness", "Uniqueness and duplicates");
     }};
