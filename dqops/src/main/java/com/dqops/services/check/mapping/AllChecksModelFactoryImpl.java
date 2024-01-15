@@ -27,6 +27,7 @@ import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.search.ConnectionSearchFilters;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcher;
+import com.dqops.metadata.search.pattern.SearchPattern;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.userhome.UserHome;
@@ -37,6 +38,7 @@ import com.dqops.services.check.mapping.models.column.TableColumnChecksModel;
 import com.dqops.services.check.mapping.models.table.AllTableChecksModel;
 import com.dqops.services.check.mapping.models.table.SchemaTableChecksModel;
 import com.dqops.services.check.mapping.models.table.TableChecksModel;
+import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -299,11 +301,16 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
 
         // TODO: Add templates.
 
+        SearchPattern columnNameSearchPattern = checkSearchFilters.getColumnNameSearchPattern();
+        SearchPattern columnDataTypeSearchPattern = checkSearchFilters.getColumnDataTypeSearchPattern();
+
         List<ColumnChecksModel> columnChecksModels = tableSpec.getColumns().entrySet().stream()
                 .filter(colToSpec ->
-                        (checkSearchFilters.getColumn() == null || Objects.equals(colToSpec.getKey(), checkSearchFilters.getColumn()))
-                                && (checkSearchFilters.getColumnNullable() == null || colToSpec.getValue().getTypeSnapshot() != null && colToSpec.getValue().getTypeSnapshot().getNullable() == checkSearchFilters.getColumnNullable())
-                                && (checkSearchFilters.getColumnDataType() == null || colToSpec.getValue().getTypeSnapshot() != null && Objects.equals(colToSpec.getValue().getTypeSnapshot().getColumnType(), checkSearchFilters.getColumnDataType()))
+                        (columnNameSearchPattern == null || columnNameSearchPattern.match(colToSpec.getKey()))
+                                && (checkSearchFilters.getColumnNullable() == null || colToSpec.getValue().getTypeSnapshot() != null
+                                    && colToSpec.getValue().getTypeSnapshot().getNullable() == checkSearchFilters.getColumnNullable())
+                                && (columnDataTypeSearchPattern == null || colToSpec.getValue().getTypeSnapshot() != null
+                                   && columnDataTypeSearchPattern.match(colToSpec.getValue().getTypeSnapshot().getColumnType()))
                 ).map(columnNameToSpec -> getColumnChecksModelForColumn(
                         connectionSpec,
                         tableSpec,

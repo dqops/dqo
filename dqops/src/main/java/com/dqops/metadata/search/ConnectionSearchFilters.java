@@ -18,6 +18,7 @@ package com.dqops.metadata.search;
 import com.dqops.metadata.search.pattern.SearchPattern;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import org.apache.parquet.Strings;
 
 /**
  * Connection search filters used to find a connection.
@@ -126,7 +127,7 @@ public class ConnectionSearchFilters {
      */
     @JsonIgnore
     public SearchPattern getConnectionNameSearchPattern() {
-        if (connectionNameSearchPattern == null && connectionName != null) {
+        if (connectionNameSearchPattern == null && !Strings.isNullOrEmpty(connectionName)) {
             connectionNameSearchPattern = SearchPattern.create(false, connectionName);
         }
 

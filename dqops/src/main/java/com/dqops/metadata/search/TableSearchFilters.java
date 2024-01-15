@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
+import org.apache.parquet.Strings;
 
 /**
  * Target table search filters used to find tables in the DQOps metadata.
@@ -161,7 +162,7 @@ public class TableSearchFilters {
      */
     @JsonIgnore
     public SearchPattern getConnectionNameSearchPattern() {
-        if (connectionNameSearchPattern == null && connection != null) {
+        if (connectionNameSearchPattern == null && !Strings.isNullOrEmpty(connection)) {
             connectionNameSearchPattern = SearchPattern.create(false, connection);
         }
 
@@ -181,7 +182,7 @@ public class TableSearchFilters {
      */
     @JsonIgnore
     public SearchPattern getSchemaNameSearchPattern() {
-        if (schemaNameSearchPattern == null && fullTableName != null) {
+        if (schemaNameSearchPattern == null && !Strings.isNullOrEmpty(fullTableName)) {
             recreateSchemaTableNameSearchPatterns();
         }
 
@@ -195,7 +196,7 @@ public class TableSearchFilters {
      */
     @JsonIgnore
     public SearchPattern getTableNameSearchPattern() {
-        if (tableNameSearchPattern == null && fullTableName != null) {
+        if (tableNameSearchPattern == null && !Strings.isNullOrEmpty(fullTableName)) {
             recreateSchemaTableNameSearchPatterns();
         }
 

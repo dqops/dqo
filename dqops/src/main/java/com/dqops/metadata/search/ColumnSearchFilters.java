@@ -18,6 +18,7 @@ package com.dqops.metadata.search;
 import com.dqops.metadata.search.pattern.SearchPattern;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import org.apache.parquet.Strings;
 
 /**
  * Connection search filters used to provide search parameters to find target columns.
@@ -210,7 +211,7 @@ public class ColumnSearchFilters {
      */
     @JsonIgnore
     public SearchPattern getConnectionNameSearchPattern() {
-        if (connectionNameSearchPattern == null && connectionName != null) {
+        if (connectionNameSearchPattern == null && !Strings.isNullOrEmpty(connectionName)) {
             connectionNameSearchPattern = SearchPattern.create(false, connectionName);
         }
 
@@ -224,7 +225,7 @@ public class ColumnSearchFilters {
      */
     @JsonIgnore
     public SearchPattern getSchemaTableNameSearchPattern() {
-        if (schemaTableNameSearchPattern == null && schemaTableName != null) {
+        if (schemaTableNameSearchPattern == null && !Strings.isNullOrEmpty(schemaTableName)) {
             schemaTableNameSearchPattern = SearchPattern.create(false, schemaTableName);
         }
 
@@ -238,7 +239,7 @@ public class ColumnSearchFilters {
      */
     @JsonIgnore
     public SearchPattern getColumnNameSearchPattern() {
-        if (columnNameSearchPattern == null && columnName != null) {
+        if (columnNameSearchPattern == null && !Strings.isNullOrEmpty(columnName)) {
             columnNameSearchPattern = SearchPattern.create(false, columnName);
         }
 

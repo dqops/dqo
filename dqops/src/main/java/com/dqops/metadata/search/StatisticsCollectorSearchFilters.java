@@ -27,6 +27,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
+import org.apache.parquet.Strings;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -222,7 +223,7 @@ public class StatisticsCollectorSearchFilters extends TableSearchFilters impleme
      */
     @JsonIgnore
     public SearchPattern getCollectorNameSearchPattern() {
-        if (collectorNameSearchPattern == null && collectorName != null) {
+        if (collectorNameSearchPattern == null && !Strings.isNullOrEmpty(collectorName)) {
             collectorNameSearchPattern = SearchPattern.create(false, collectorName);
         }
 
@@ -236,7 +237,7 @@ public class StatisticsCollectorSearchFilters extends TableSearchFilters impleme
      */
     @JsonIgnore
     public SearchPattern getSensorNameSearchPattern() {
-        if (sensorNameSearchPattern == null && sensorName != null) {
+        if (sensorNameSearchPattern == null && !Strings.isNullOrEmpty(sensorName)) {
             sensorNameSearchPattern = SearchPattern.create(false, sensorName);
         }
 

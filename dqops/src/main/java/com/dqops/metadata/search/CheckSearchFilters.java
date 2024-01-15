@@ -31,6 +31,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.EqualsAndHashCode;
+import org.apache.parquet.Strings;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -96,6 +97,8 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
     private SearchPattern sensorNameSearchPattern;
     @JsonIgnore
     private SearchPattern checkNameSearchPattern;
+    @JsonIgnore
+    private SearchPattern columnDataTypeSearchPattern;
 
     /**
      * Create a hierarchy tree node traversal visitor that will search for nodes matching the current filter.
@@ -334,7 +337,7 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
      */
     @JsonIgnore
     public SearchPattern getColumnNameSearchPattern() {
-        if (columnNameSearchPattern == null && column != null) {
+        if (columnNameSearchPattern == null && !Strings.isNullOrEmpty(column)) {
             columnNameSearchPattern = SearchPattern.create(false, column);
         }
         
@@ -348,7 +351,7 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
      */
     @JsonIgnore
     public SearchPattern getSensorNameSearchPattern() {
-        if (sensorNameSearchPattern == null && sensorName != null) {
+        if (sensorNameSearchPattern == null && !Strings.isNullOrEmpty(sensorName)) {
             sensorNameSearchPattern = SearchPattern.create(false, sensorName);
         }
 
@@ -362,11 +365,25 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
      */
     @JsonIgnore
     public SearchPattern getCheckNameSearchPattern() {
-        if (checkNameSearchPattern == null && checkName != null) {
+        if (checkNameSearchPattern == null && !Strings.isNullOrEmpty(checkName)) {
             checkNameSearchPattern = SearchPattern.create(false, checkName);
         }
 
         return checkNameSearchPattern;
+    }
+
+    /**
+     * Returns the {@link SearchPattern} related to <code>columnDataType</code>.
+     * Lazy getter, parses <code>columnDataType</code> as a search pattern and returns parsed object.
+     * @return {@link SearchPattern} related to <code>columnDataType</code>.
+     */
+    @JsonIgnore
+    public SearchPattern getColumnDataTypeSearchPattern() {
+        if (columnDataTypeSearchPattern == null && !Strings.isNullOrEmpty(columnDataType)) {
+            columnDataTypeSearchPattern = SearchPattern.create(false, columnDataType);
+        }
+
+        return columnDataTypeSearchPattern;
     }
 
     /**

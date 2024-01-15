@@ -364,7 +364,7 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
             }
         }
 
-        CheckTarget checkTarget = this.filters.getColumn() == null ? null : CheckTarget.column;
+        CheckTarget checkTarget = Strings.isNullOrEmpty(this.filters.getColumn()) ? null : CheckTarget.column;
         if (checkTarget != null && checkTarget != checksContainerSpec.getCheckTarget()) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
