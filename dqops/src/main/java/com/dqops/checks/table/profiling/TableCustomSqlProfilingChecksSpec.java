@@ -48,12 +48,12 @@ public class TableCustomSqlProfilingChecksSpec extends AbstractCheckCategorySpec
         }
     };
 
+    @JsonPropertyDescription("Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Reference the current table by using tokens, for example: `{alias}.col_price > {alias}.col_tax`.")
+    private TableSqlConditionFailedCheckSpec profileSqlConditionFailedOnTable;
+
     @JsonPropertyDescription("Verifies that a custom SQL expression is met for each row. Counts the number of rows where the expression is not satisfied, and raises an issue if too many failures were detected. " +
             "This check is used also to compare values between columns: `{alias}.col_price > {alias}.col_tax`.")
     private TableSqlConditionPassedPercentCheckSpec profileSqlConditionPassedPercentOnTable;
-
-    @JsonPropertyDescription("Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Reference the current table by using tokens, for example: `{alias}.col_price > {alias}.col_tax`.")
-    private TableSqlConditionFailedCheckSpec profileSqlConditionFailedOnTable;
 
     @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range.")
     private TableSqlAggregateExpressionCheckSpec profileSqlAggregateExpressionOnTable;
