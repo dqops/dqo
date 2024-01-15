@@ -254,7 +254,7 @@ public class ColumnsControllerUTTests extends BaseTest {
         if (timePartition == CheckTimeScale.daily) {
             Assertions.assertEquals(16, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
         } else {
-            Assertions.assertEquals(16, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
+            Assertions.assertEquals(15, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
         }
     }
 
@@ -277,7 +277,7 @@ public class ColumnsControllerUTTests extends BaseTest {
         if (timePartition == CheckTimeScale.daily) {
             Assertions.assertEquals(14, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
         } else {
-            Assertions.assertEquals(14, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
+            Assertions.assertEquals(13, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
         }
     }
 

@@ -194,6 +194,7 @@ public class ReflectionServiceImpl implements ReflectionService {
 
         try {
             Method getterMethod = declaringClass.getMethod(getterMethodName);
+            getterMethod.setAccessible(true);
             fieldInfo.setGetterMethod(getterMethod);
         }
         catch (NoSuchMethodException nex) {
@@ -202,6 +203,7 @@ public class ReflectionServiceImpl implements ReflectionService {
 
         try {
             Method setterMethod = declaringClass.getMethod(setterMethodName, fieldType);
+            setterMethod.setAccessible(true);
             fieldInfo.setSetterMethod(setterMethod);
         }
         catch (NoSuchMethodException nex) {

@@ -64,8 +64,8 @@ public class MinCountRule1ParametersSpecTests extends BaseTest {
 
     @Test
     void isDirty_whenMinValueSet_thenIsDirtyIsTrue() {
-        this.sut.setMinCount(1L);
-        Assertions.assertEquals(1, this.sut.getMinCount());
+        this.sut.setMinCount(10L);
+        Assertions.assertEquals(10L, this.sut.getMinCount());
         Assertions.assertTrue(this.sut.isDirty());
         this.sut.clearDirty(true);
         Assertions.assertFalse(this.sut.isDirty());
@@ -73,11 +73,11 @@ public class MinCountRule1ParametersSpecTests extends BaseTest {
 
     @Test
     void isDirty_whenMinValueNumberSameAsCurrentSet_thenIsDirtyIsFalse() {
-        this.sut.setMinCount(1L);
+        this.sut.setMinCount(10L);
         Assertions.assertTrue(this.sut.isDirty());
         this.sut.clearDirty(true);
         Assertions.assertFalse(this.sut.isDirty());
-        this.sut.setMinCount(1L);
+        this.sut.setMinCount(10L);
         Assertions.assertFalse(this.sut.isDirty());
     }
 

@@ -233,7 +233,7 @@ public class ColumnUniquenessProfilingChecksSpec extends AbstractCheckCategorySp
     public void setProfileDistinctCountChange(ColumnDistinctCountChangeCheckSpec profileDistinctCountChange) {
         this.setDirtyIf(!Objects.equals(this.profileDistinctCountChange, profileDistinctCountChange));
         this.profileDistinctCountChange = profileDistinctCountChange;
-        propagateHierarchyIdToField(profileDistinctCountChange, "profile_change_distinct_count");
+        propagateHierarchyIdToField(profileDistinctCountChange, "profile_distinct_count_change");
     }
 
     /**
@@ -251,7 +251,7 @@ public class ColumnUniquenessProfilingChecksSpec extends AbstractCheckCategorySp
     public void setProfileDistinctCountChange1Day(ColumnDistinctCountChange1DayCheckSpec profileDistinctCountChange1Day) {
         this.setDirtyIf(!Objects.equals(this.profileDistinctCountChange1Day, profileDistinctCountChange1Day));
         this.profileDistinctCountChange1Day = profileDistinctCountChange1Day;
-        propagateHierarchyIdToField(profileDistinctCountChange1Day, "profile_change_distinct_count_1_day");
+        propagateHierarchyIdToField(profileDistinctCountChange1Day, "profile_distinct_count_change_1_day");
     }
 
     /**
@@ -269,7 +269,7 @@ public class ColumnUniquenessProfilingChecksSpec extends AbstractCheckCategorySp
     public void setProfileDistinctCountChange7Days(ColumnDistinctCountChange7DaysCheckSpec profileDistinctCountChange7Days) {
         this.setDirtyIf(!Objects.equals(this.profileDistinctCountChange7Days, profileDistinctCountChange7Days));
         this.profileDistinctCountChange7Days = profileDistinctCountChange7Days;
-        propagateHierarchyIdToField(profileDistinctCountChange7Days, "profile_change_distinct_count_7_days");
+        propagateHierarchyIdToField(profileDistinctCountChange7Days, "profile_distinct_count_change_7_days");
     }
 
     /**
@@ -287,7 +287,7 @@ public class ColumnUniquenessProfilingChecksSpec extends AbstractCheckCategorySp
     public void setProfileDistinctCountChange30Days(ColumnDistinctCountChange30DaysCheckSpec profileDistinctCountChange30Days) {
         this.setDirtyIf(!Objects.equals(this.profileDistinctCountChange30Days, profileDistinctCountChange30Days));
         this.profileDistinctCountChange30Days = profileDistinctCountChange30Days;
-        propagateHierarchyIdToField(profileDistinctCountChange30Days, "profile_change_distinct_count_30_days");
+        propagateHierarchyIdToField(profileDistinctCountChange30Days, "profile_distinct_count_change_30_days");
     }
 
     /**
