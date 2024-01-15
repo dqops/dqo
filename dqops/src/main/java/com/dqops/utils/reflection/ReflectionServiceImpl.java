@@ -315,6 +315,10 @@ public class ReflectionServiceImpl implements ReflectionService {
         Object[] enumConstants = targetEnum.getEnumConstants();
         return Arrays.stream(enumConstants)
                 .map(e -> createEnumValue((Enum<?>) e))
-                .collect(Collectors.toMap(EnumValueInfo::getYamlName, Function.identity()));
+                .collect(Collectors.toMap(
+                        EnumValueInfo::getYamlName,
+                        Function.identity(),
+                        (key, value) -> value,
+                        LinkedHashMap::new));
     }
 }

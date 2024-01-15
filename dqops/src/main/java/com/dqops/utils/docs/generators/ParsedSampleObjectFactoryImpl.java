@@ -26,6 +26,7 @@ import org.springframework.stereotype.Component;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -68,7 +69,11 @@ public class ParsedSampleObjectFactoryImpl implements ParsedSampleObjectFactory 
                     Map<String, ?> keyMap = (Map<String, ?>) sampleObject;
                     Map<String, ParsedSampleObject> parsedSampleObjectMap = keyMap.entrySet().stream()
                             .map(entry -> Map.entry(entry.getKey(), parseSampleObject(entry.getValue())))
-                            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                            .collect(Collectors.toMap(
+                                    Map.Entry::getKey,
+                                    Map.Entry::getValue,
+                                    (key, value) -> value,
+                                    LinkedHashMap::new));
                     parsedSampleObject.setMapElements(parsedSampleObjectMap);
                     break;
             }

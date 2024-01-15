@@ -146,7 +146,9 @@ public class SwaggerFileUpgradeUtility {
                     .filter(c -> c.isAnnotationPresent(Api.class))
                     .collect(Collectors.toMap(
                             controller -> controller.getAnnotation(Api.class).value(),
-                            Function.identity()
+                            Function.identity(),
+                            (key, value) -> value,
+                            LinkedHashMap::new
                     ));
 
             List<Operation> apiOperations = openApi.getPaths().values().stream()

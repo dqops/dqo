@@ -16,8 +16,8 @@ How to detect custom sql data quality issues.
 ## List of custom sql checks at a table level
 | Data quality check name | Data quality dimension | Description | Standard check |
 |-------------------------|------------------------|-------------|-------|
-|[sql_condition_passed_percent_on_table](../../checks/table/custom_sql/sql-condition-passed-percent-on-table.md)|Validity|Table-level check that ensures that a minimum percentage of rows passed a custom SQL condition (expression).| |
 |[sql_condition_failed_on_table](../../checks/table/custom_sql/sql-condition-failed-on-table.md)|Validity|Table level check that uses a custom SQL expression on each row to verify (assert) that all rows pass a custom condition defined as an SQL condition. Use the {alias} token to reference the tested table. This data quality check can be used to compare columns on the same table. For example, the condition can verify that the value in the *col_price* column is higher than the *col_tax* column using an SQL expression: &#x60;{alias}.col_price &gt; {alias}.col_tax&#x60;. Use an SQL expression that returns a *true* value for valid values and *false* for invalid values, because it is an assertion.|:material-check-bold:|
+|[sql_condition_passed_percent_on_table](../../checks/table/custom_sql/sql-condition-passed-percent-on-table.md)|Validity|Table-level check that ensures that a minimum percentage of rows passed a custom SQL condition (expression).| |
 |[sql_aggregate_expression_on_table](../../checks/table/custom_sql/sql-aggregate-expression-on-table.md)|Reasonableness|Table-level check that calculates a given SQL aggregate expression and compares it with a maximum accepted value.| |
 
 

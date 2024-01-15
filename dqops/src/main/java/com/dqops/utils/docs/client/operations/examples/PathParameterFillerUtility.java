@@ -25,10 +25,7 @@ import com.dqops.utils.docs.generators.TypeModel;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Strings;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -75,7 +72,9 @@ public final class PathParameterFillerUtility {
                 .filter(p -> p.getOperationParameterType() == OperationParameterType.pathParameter)
                 .collect(Collectors.toMap(
                         p -> CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, p.getYamlFieldName()),
-                        OperationParameterDocumentationModel::getTypeModel
+                        OperationParameterDocumentationModel::getTypeModel,
+                        (key, value) -> value,
+                        LinkedHashMap::new
                 ));
 
         String[] pathSplit = pathUrl.split("/");

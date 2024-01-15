@@ -225,7 +225,11 @@ public class TableDataSnapshot {
 
                 Table newTableWithLimitedColumns = Table.create(partitionData.name());
                 Map<String, ? extends Column<?>> existingColumnsByName = partitionData.columns().stream()
-                        .collect(Collectors.toMap(c -> c.name(), c -> c));
+                        .collect(Collectors.toMap(
+                                c -> c.name(),
+                                c -> c,
+                                (key, value) -> value,
+                                LinkedHashMap::new));
 
                 for (String expectedColumnName : this.columnNames) {
                     if (!existingColumnsByName.containsKey(expectedColumnName)) {

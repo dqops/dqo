@@ -25,7 +25,7 @@ nav:
         - Data accuracy: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-accuracy-data-quality-issues.md'
         - Table availability: 'dqo-concepts/types-of-data-quality-checks/how-to-table-availability-issues-and-downtimes.md'
         - Compare tables: 'dqo-concepts/types-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md'
-        - Custom SQL and multi column: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-with-custom-sql.md'
+        - Custom SQL and multi column checks: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-with-custom-sql.md'
         - Table schema changes: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-table-schema-changes.md'
         - Timeliness and freshness: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md'
         - Data volume: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md'
@@ -237,8 +237,8 @@ nav:
         - column count match: 'checks/table/comparisons/column-count-match.md'
       - custom_sql:
         - 'checks/table/custom_sql/index.md'
-        - sql condition passed percent on table: 'checks/table/custom_sql/sql-condition-passed-percent-on-table.md'
         - sql condition failed on table: 'checks/table/custom_sql/sql-condition-failed-on-table.md'
+        - sql condition passed percent on table: 'checks/table/custom_sql/sql-condition-passed-percent-on-table.md'
         - sql aggregate expression on table: 'checks/table/custom_sql/sql-aggregate-expression-on-table.md'
       - schema:
         - 'checks/table/schema/index.md'

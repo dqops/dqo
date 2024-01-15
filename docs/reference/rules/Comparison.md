@@ -478,7 +478,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`expected_datatype`|Expected data type code, the values for the sensor&#x27;s actual values are: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - texts, 7 - mixed data types.|enum| |floats<br/>texts<br/>timestamps<br/>booleans<br/>dates<br/>mixed<br/>integers<br/>|
+|`expected_datatype`|Expected data type code, the values for the sensor&#x27;s actual values are: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - texts, 7 - mixed data types.|enum| |integers<br/>floats<br/>dates<br/>timestamps<br/>booleans<br/>texts<br/>mixed<br/>|
 
 
 

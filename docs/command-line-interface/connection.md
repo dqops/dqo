@@ -246,7 +246,7 @@ All parameters supported by the command are listed below.
 |<p id="connection add--presto-password">`--presto-password`</p><br/>|Presto database password. The value can be in the null format to use dynamic substitution.| ||
 |<p id="connection add--presto-port">`--presto-port`</p><br/>|Presto port number| ||
 |<p id="connection add--presto-user">`--presto-user`</p><br/>|Presto user name. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection add-t">`-t`</p><br/><p id="connection add--provider">`--provider`</p><br/>|Connection provider type| |bigquery<br/>snowflake<br/>postgresql<br/>redshift<br/>sqlserver<br/>presto<br/>trino<br/>mysql<br/>oracle<br/>spark<br/>databricks<br/>|
+|<p id="connection add-t">`-t`</p><br/><p id="connection add--provider">`--provider`</p><br/>|Connection provider type| |bigquery<br/>databricks<br/>mysql<br/>oracle<br/>postgresql<br/>presto<br/>redshift<br/>snowflake<br/>spark<br/>sqlserver<br/>trino<br/>|
 |<p id="connection add--redshift-database">`--redshift-database`</p><br/>|Redshift database name. The value can be in the null format to use dynamic substitution.| ||
 |<p id="connection add--redshift-host">`--redshift-host`</p><br/>|Redshift host name| ||
 |<p id="connection add--redshift-options">`--redshift-options`</p><br/>|Redshift connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
@@ -278,7 +278,7 @@ All parameters supported by the command are listed below.
 |<p id="connection add--trino-port">`--trino-port`</p><br/>|Trino port number.| ||
 |<p id="connection add--trino-user">`--trino-user`</p><br/>|Trino user name. The value can be in the null format to use dynamic substitution.| ||
 |<p id="connection add-D">`-D`</p><br/>|Databricks additional properties that are added to the JDBC connection string| ||
-|<p id="connection add-E">`-E`</p><br/>|Presto additional properties that are added to the JDBC connection string| ||
+|<p id="connection add-E">`-E`</p><br/>|Presto additional properties that are added to the JDBC connection string.| ||
 |<p id="connection add-F">`-F`</p><br/>|Snowflake additional properties that are added to the JDBC connection string| ||
 |<p id="connection add-K">`-K`</p><br/>|Spark additional properties that are added to the JDBC connection string| ||
 |<p id="connection add-M">`-M`</p><br/>|MySQL additional properties that are added to the JDBC connection string| ||
@@ -567,7 +567,7 @@ All parameters supported by the command are listed below.
 |<p id="connection update--trino-port">`--trino-port`</p><br/>|Trino port number.| ||
 |<p id="connection update--trino-user">`--trino-user`</p><br/>|Trino user name. The value can be in the null format to use dynamic substitution.| ||
 |<p id="connection update-D">`-D`</p><br/>|Databricks additional properties that are added to the JDBC connection string| ||
-|<p id="connection update-E">`-E`</p><br/>|Presto additional properties that are added to the JDBC connection string| ||
+|<p id="connection update-E">`-E`</p><br/>|Presto additional properties that are added to the JDBC connection string.| ||
 |<p id="connection update-F">`-F`</p><br/>|Snowflake additional properties that are added to the JDBC connection string| ||
 |<p id="connection update-K">`-K`</p><br/>|Spark additional properties that are added to the JDBC connection string| ||
 |<p id="connection update-M">`-M`</p><br/>|MySQL additional properties that are added to the JDBC connection string| ||

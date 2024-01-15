@@ -1041,7 +1041,7 @@ The text matching date patterns percent sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`date_formats`|Desired date format. Sensor will try to parse the column records and cast the data using this format.|enum|:material-check-bold:|YYYY-MM-DD<br/>Month D, YYYY<br/>MM/DD/YYYY<br/>YYYY/MM/DD<br/>DD/MM/YYYY<br/>|
+|`date_formats`|Desired date format. Sensor will try to parse the column records and cast the data using this format.|enum|:material-check-bold:|YYYY-MM-DD<br/>MM/DD/YYYY<br/>DD/MM/YYYY<br/>YYYY/MM/DD<br/>Month D, YYYY<br/>|
 
 
 
@@ -1784,7 +1784,7 @@ The text not matching date pattern count sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`date_formats`|Desired date format. Sensor will try to parse the column records and cast the data using this format.|enum|:material-check-bold:|YYYY-MM-DD<br/>Month D, YYYY<br/>MM/DD/YYYY<br/>YYYY/MM/DD<br/>DD/MM/YYYY<br/>|
+|`date_formats`|Desired date format. Sensor will try to parse the column records and cast the data using this format.|enum|:material-check-bold:|YYYY-MM-DD<br/>MM/DD/YYYY<br/>DD/MM/YYYY<br/>YYYY/MM/DD<br/>Month D, YYYY<br/>|
 
 
 

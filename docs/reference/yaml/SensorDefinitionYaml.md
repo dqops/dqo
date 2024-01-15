@@ -18,43 +18,8 @@ The structure of this object is described below
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |api_version||string| | | |
-|kind||enum|default_schedules<br/>settings<br/>default_notifications<br/>rule<br/>sensor<br/>source<br/>check<br/>dashboards<br/>default_checks<br/>table<br/>provider_sensor<br/>file_index<br/>| | |
+|kind||enum|source<br/>table<br/>sensor<br/>provider_sensor<br/>rule<br/>check<br/>settings<br/>file_index<br/>dashboards<br/>default_schedules<br/>default_checks<br/>default_notifications<br/>| | |
 |[spec](./SensorDefinitionYaml.md#SensorDefinitionSpec)||[SensorDefinitionSpec](./SensorDefinitionYaml.md#SensorDefinitionSpec)| | | |
-
-
-
-
-
-
-
-
-
-___
-
-
-## ParameterDefinitionSpec
-Defines a single field that is a sensor parameter or a rule parameter.
-
-
-
-
-
-
-
-
-
-The structure of this object is described below
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|field_name|Field name that matches the field name (snake_case) used in the YAML specification.|string| | | |
-|display_name|Field display name that should be shown as a label for the control.|string| | | |
-|help_text|Help text (full description) that will be shown to the user as a hint when the cursor is moved over the control.|string| | | |
-|data_type|Parameter data type.|enum|date<br/>datetime<br/>boolean<br/>integer_list<br/>string<br/>double<br/>column_name<br/>string_list<br/>integer<br/>long<br/>enum<br/>object<br/>| | |
-|display_hint|UI control display hint.|enum|textarea<br/>| | |
-|required|True when the value for the parameter must be provided.|boolean| | | |
-|allowed_values|List of allowed values for a field that is of an enum type.|List[string]| | | |
-|sample_values|List of sample values. The sample values are used in the documentation or help messages.|List[string]| | | |
 
 
 
@@ -101,6 +66,41 @@ ___
 
 ## ParameterDefinitionsListSpec
 List of parameter definitions - the parameters for custom sensors or custom rules.
+
+
+
+
+
+
+
+
+
+___
+
+
+## ParameterDefinitionSpec
+Defines a single field that is a sensor parameter or a rule parameter.
+
+
+
+
+
+
+
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|field_name|Field name that matches the field name (snake_case) used in the YAML specification.|string| | | |
+|display_name|Field display name that should be shown as a label for the control.|string| | | |
+|help_text|Help text (full description) that will be shown to the user as a hint when the cursor is moved over the control.|string| | | |
+|data_type|Parameter data type.|enum|string<br/>boolean<br/>integer<br/>long<br/>double<br/>date<br/>datetime<br/>column_name<br/>enum<br/>string_list<br/>integer_list<br/>object<br/>| | |
+|display_hint|UI control display hint.|enum|textarea<br/>| | |
+|required|True when the value for the parameter must be provided.|boolean| | | |
+|allowed_values|List of allowed values for a field that is of an enum type.|List[string]| | | |
+|sample_values|List of sample values. The sample values are used in the documentation or help messages.|List[string]| | | |
 
 
 

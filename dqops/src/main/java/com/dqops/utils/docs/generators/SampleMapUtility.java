@@ -22,6 +22,7 @@ import com.dqops.utils.reflection.ReflectionServiceImpl;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.AbstractMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -41,6 +42,8 @@ public class SampleMapUtility {
                 .mapToObj(i -> new AbstractMap.SimpleEntry<>(keys.get(i), values.get(i)))
                 .collect(Collectors.toMap(
                         AbstractMap.SimpleEntry::getKey,
-                        AbstractMap.SimpleEntry::getValue));
+                        AbstractMap.SimpleEntry::getValue,
+                        (key, value) -> value,
+                        LinkedHashMap::new));
     }
 }

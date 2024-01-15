@@ -21,7 +21,7 @@ Run data quality checks on your dataset that match a given condition. The comman
 **Command-line synopsis**
 
 ```
-$ dqo [dqo options...] check run [-deh] [--daily-partitioning-include-today] [-fw] [-hl]
+$ dqo [dqo options...] check run [-deh] [--daily-partitioning-include-today] [-fe] [-fw] [-hl]
            [--monthly-partitioning-include-current-month] [-c=<connection>]
            [-cat=<checkCategory>] [-ch=<check>] [-col=<column>]
            [-ct=<checkType>]
@@ -40,7 +40,7 @@ $ dqo [dqo options...] check run [-deh] [--daily-partitioning-include-today] [-f
 **DQOps shell synopsis**
 
 ```
-dqo> check run [-deh] [--daily-partitioning-include-today] [-fw] [-hl]
+dqo> check run [-deh] [--daily-partitioning-include-today] [-fe] [-fw] [-hl]
            [--monthly-partitioning-include-current-month] [-c=<connection>]
            [-cat=<checkCategory>] [-ch=<check>] [-col=<column>]
            [-ct=<checkType>]
@@ -75,6 +75,7 @@ All parameters supported by the command are listed below.
 |<p id="check run-d">`-d`</p><br/><p id="check run--dummy">`--dummy`</p><br/>|Runs data quality check in a dummy mode, sensors are not executed on the target database, but the rest of the process is performed| ||
 |<p id="check run-e">`-e`</p><br/><p id="check run--enabled">`--enabled`</p><br/>|Runs only enabled or only disabled sensors, by default only enabled sensors are executed| ||
 |<p id="check run-f">`-f`</p><br/><p id="check run--fail-at">`--fail-at`</p><br/>|Lowest data quality issue severity level (warning, error, fatal) that will cause the command to return with an error code. Use &#x27;none&#x27; to return always a success error code.| |warning<br/>error<br/>fatal<br/>none<br/>|
+|<p id="check run-fe">`-fe`</p><br/><p id="check run--fail-on-execution-errors">`--fail-on-execution-errors`</p><br/>|Returns a command status code 4 (when called from the command line) if any execution errors were raised during the execution, the default value is true.| ||
 |<p id="check run-fw">`-fw`</p><br/><p id="check run--file-write">`--file-write`</p><br/>|Write command response to a file| ||
 |<p id="check run--from-date">`--from-date`</p><br/>|Analyze the data since the given date (inclusive). The date should be an ISO 8601 date (yyyy-MM-dd). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the beginning date overrides recent days and recent months.| ||
 |<p id="check run--from-date-time">`--from-date-time`</p><br/>|Analyze the data since the given date and time (inclusive). The date and time should be an ISO 8601 local date and time without the time zone (yyyy-MM-dd HH\:mm:ss). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the beginning date and time overrides recent days and recent months.| ||

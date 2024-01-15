@@ -164,11 +164,11 @@ public class GeneratePythonDocumentationPostProcessor {
         List<Parameter> operationParameters = Objects.requireNonNullElseGet(operation.getParameters(), ArrayList::new);
 
         // Parameters (path and query)
-        Set<String> variables$refs = operationParameters.stream()
+        Set<String> variables$refs = new LinkedHashSet<>(operationParameters.stream()
                 .map(Parameter::getSchema)
                 .map(OpenApiUtils::getEffective$refFromSchema)
                 .filter(Objects::nonNull)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList()));
 
         // Request body
         RequestBody requestBody = operation.getRequestBody();
@@ -186,9 +186,9 @@ public class GeneratePythonDocumentationPostProcessor {
             variables$refs.add(return$ref);
         }
 
-        Set<String> variablesTypes = variables$refs.stream()
+        Set<String> variablesTypes = new LinkedHashSet<>(variables$refs.stream()
                 .map(GeneratePythonDocumentationPostProcessor::getModelNameFrom$ref)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList()));
 
         for (String typeRef : variablesTypes) {
             if (!modelMethodMapping.containsKey(typeRef)) {

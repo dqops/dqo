@@ -53,7 +53,12 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
                 .sorted(Comparator.comparing(ComponentModel::getClassName))
                 .collect(Collectors.toList());
 
-        Map<String, ComponentModel> componentModelMap = componentModels.stream().collect(Collectors.toMap(ComponentModel::getClassName, Function.identity()));
+        Map<String, ComponentModel> componentModelMap = componentModels.stream()
+                .collect(Collectors.toMap(
+                        ComponentModel::getClassName,
+                        Function.identity(),
+                        (key, value) -> value,
+                        LinkedHashMap::new));
 
         ModelsSuperiorObjectDocumentationModel modelsSuperiorObjectDocumentationModel =
                 generateModelsSuperiorObjectDocumentationModel(SHARED_MODELS_IDENTIFIER + ".md",
@@ -65,7 +70,12 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
 
     @Override
     public List<ModelsSuperiorObjectDocumentationModel> createDocumentationForModels(Collection<ComponentModel> componentModels) {
-        Map<String, ComponentModel> componentModelMap = componentModels.stream().collect(Collectors.toMap(ComponentModel::getClassName, Function.identity()));
+        Map<String, ComponentModel> componentModelMap = componentModels.stream()
+                .collect(Collectors.toMap(
+                        ComponentModel::getClassName,
+                        Function.identity(),
+                        (key, value) -> value,
+                        LinkedHashMap::new));
 
         List<ComponentModel> exclusiveModels = componentModels.stream()
                 .filter(this::isComponentModelExclusive)
