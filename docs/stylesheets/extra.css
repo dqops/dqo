@@ -21,3 +21,19 @@
   padding-left: 0.6rem;
   padding-right: 0.2rem;
 }
+
+.four-divs-row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.four-divs-element {
+  flex: 1 0 21%; /* it will put max 4 elements (+ space for all margins) in a row */
+  margin: 5px;
+  height: 140px;
+}
+
+.image-center {
+    margin-left: auto;
+    margin-right: auto;
+}
