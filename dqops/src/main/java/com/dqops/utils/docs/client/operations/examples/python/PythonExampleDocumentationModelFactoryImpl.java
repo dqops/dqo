@@ -80,7 +80,7 @@ public class PythonExampleDocumentationModelFactoryImpl implements PythonExample
                 operationModel.getPath(), operationParameters);
         pythonExampleDocumentationModel.setPathParameters(pathParameterValues);
 
-        Set<String> additionalModelsToImport = new HashSet<>();
+        Set<String> additionalModelsToImport = new LinkedHashSet<>();
         for (OperationParameterDocumentationModel parameter : operationParameters) {
             searchForModelsToImport(additionalModelsToImport, parameter.getTypeModel());
         }

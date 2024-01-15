@@ -69,7 +69,7 @@ public class DocumentationFolderPostCorrectorServiceImpl implements Documentatio
     }
 
     protected Map<Path, Path> createPathRemappingForFolder(DocumentationFolder documentationFolder) {
-        Map<Path, Path> pathRemapping = new HashMap<>();
+        Map<Path, Path> pathRemapping = new LinkedHashMap<>();
         createPathRemappingForFolderInternal(pathRemapping, documentationFolder, projectRootDirectory.relativize(documentationFolder.getDirectPath()));
         return pathRemapping;
     }

@@ -102,7 +102,7 @@ public class SensorDocumentationModelFactoryImpl implements SensorDocumentationM
      * @return Sql templates.
      */
     private Map<ProviderTypeModel, List<String>> createSqlTemplates(SensorDefinitionWrapper sensorDefinition) {
-        Map<ProviderTypeModel, List<String>> sqlTemplates = new HashMap<>();
+        Map<ProviderTypeModel, List<String>> sqlTemplates = new LinkedHashMap<>();
         for (ProviderSensorDefinitionWrapper providerSensor : sensorDefinition.getProviderSensors()) {
             ProviderType provider = providerSensor.getProvider();
             String sqlTemplate = providerSensor.getSqlTemplate();

@@ -208,7 +208,7 @@ public class SparkSourceConnection extends AbstractJdbcSourceConnection {
                     column.setName(column.name().toLowerCase(Locale.ROOT));
                 }
 
-                HashMap<String, TableSpec> tablesByTableName = new HashMap<>();
+                HashMap<String, TableSpec> tablesByTableName = new LinkedHashMap<>();
                 TableSpec tableSpec = tablesByTableName.get(tableName);
                 if (tableSpec == null) {
                     tableSpec = new TableSpec();

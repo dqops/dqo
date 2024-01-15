@@ -181,7 +181,7 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
                 .sorted(Comparator.comparing(ComponentModel::getClassName))
                 .collect(Collectors.toList());
 
-        Map<Class<?>, ModelsObjectDocumentationModel> renderedModelObjects = new HashMap<>();
+        Map<Class<?>, ModelsObjectDocumentationModel> renderedModelObjects = new LinkedHashMap<>();
         List<ModelsObjectDocumentationModel> renderedObjectsList = new LinkedList<>();
 
         for (ComponentModel model : topLevelModels) {

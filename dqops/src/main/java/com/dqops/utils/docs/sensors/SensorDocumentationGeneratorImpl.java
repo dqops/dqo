@@ -119,7 +119,7 @@ public class SensorDocumentationGeneratorImpl implements SensorDocumentationGene
         List<? extends Class<? extends AbstractSensorParametersSpec>> classes = TargetClassSearchUtility.findClasses(
                 "com.dqops.sensors", projectRootPath, AbstractSensorParametersSpec.class);
 
-        Set<String> documentedSensorNames = new HashSet<>();
+        Set<String> documentedSensorNames = new LinkedHashSet<>();
 
         for (Class<? extends AbstractSensorParametersSpec> sensorParametersClass : classes) {
             AbstractSensorParametersSpec abstractSensorParametersSpec = createSensorParameterInstance(sensorParametersClass);
@@ -152,7 +152,7 @@ public class SensorDocumentationGeneratorImpl implements SensorDocumentationGene
         sensorDocumentationModels.sort(Comparator.comparing(SensorDocumentationModel::getFullSensorName));
 
         List<SensorGroupedDocumentationModel> sensorGroupedDocumentationModels = new ArrayList<>();
-        Map<String, Map<String, List<SensorDocumentationModel>>> groupedSensors = new HashMap<>();
+        Map<String, Map<String, List<SensorDocumentationModel>>> groupedSensors = new LinkedHashMap<>();
 
         for (SensorDocumentationModel sensor : sensorDocumentationModels) {
             Map<String, List<SensorDocumentationModel>> categoryLevelSensorsGroup;
@@ -167,7 +167,7 @@ public class SensorDocumentationGeneratorImpl implements SensorDocumentationGene
                     categoryLevelSensorsGroup.put(sensor.getCategory(), sensorDocumentationModelsInCategory);
                 }
             } else {
-                categoryLevelSensorsGroup = new HashMap<>();
+                categoryLevelSensorsGroup = new LinkedHashMap<>();
                 sensorDocumentationModelsInCategory = new ArrayList<>();
                 categoryLevelSensorsGroup.put(sensor.getCategory(), sensorDocumentationModelsInCategory);
                 groupedSensors.put(sensor.getTarget(), categoryLevelSensorsGroup);

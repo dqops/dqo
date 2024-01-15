@@ -65,7 +65,7 @@ public class YamlDocumentationModelFactoryImpl implements YamlDocumentationModel
             yamlSuperiorObjectDocumentationModel.setSuperiorClassFilePath(yamlDocumentationNode.getPathToFile().toString());
             yamlSuperiorObjectDocumentationModel.setSuperiorClassSimpleName(yamlDocumentationNode.getPathToFile().getFileName().toString());
 
-            Map<Class<?>, YamlObjectDocumentationModel> yamlObjectDocumentationModels = new HashMap<>();
+            Map<Class<?>, YamlObjectDocumentationModel> yamlObjectDocumentationModels = new LinkedHashMap<>();
 
             generateYamlObjectDocumentationModelRecursive(
                     Path.of("docs", "reference", "yaml",

@@ -131,7 +131,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                     return cachedParquetFile;
                 }
 
-                HashSet<String> columnNamesHashSet = new HashSet<>(cachedParquetFile.getData().columnNames());
+                Set<String> columnNamesHashSet = new LinkedHashSet<>(cachedParquetFile.getData().columnNames());
                 if (Arrays.stream(columnNames).allMatch(columnNamesHashSet::contains)) {
                     return cachedParquetFile;
                 }

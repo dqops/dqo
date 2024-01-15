@@ -31,6 +31,8 @@ import org.springframework.beans.factory.BeanFactory;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * Command line completer that will complete the list of tables as entry when the connection name was already provided in the command line.
@@ -85,7 +87,7 @@ public class TableNameCompleter extends AbstractCommandAwareCompleter<IConnectio
 						return createEmptyCompletionIterator();
 					}
 
-					HashSet<String> uniqueTableNames = new HashSet<>();
+					Set<String> uniqueTableNames = new LinkedHashSet<>();
 
 					for (TableWrapper tableWrapper : connectionWrapper.getTables()) {
 						String fullTableName = tableWrapper.getPhysicalTableName().toString();

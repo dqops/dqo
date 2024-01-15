@@ -53,7 +53,7 @@ public class CheckDefinitionDefaultSpecUpdateServiceImpl implements CheckDefinit
         DqoHome dqoHome = dqoHomeContext.getDqoHome();
         CheckDefinitionList dqoHomeChecksList = dqoHome.getChecks();
 
-        HashSet<String> foundChecks = new HashSet<>();
+        Set<String> foundChecks = new LinkedHashSet<>();
         ArrayList<SimilarChecksGroup> allCheckGroups = new ArrayList<>();
         SimilarChecksContainer similarTableChecks = this.similarCheckMatchingService.findSimilarTableChecks();
         allCheckGroups.addAll(similarTableChecks.getSimilarCheckGroups());

@@ -30,7 +30,7 @@ public abstract class AbstractIndexingList<K, V extends ObjectName<K> & Flushabl
     @JsonIgnore
     private List<V> list = new ArrayList<>();
     @JsonIgnore
-    private Map<K, V> index = new HashMap<>();
+    private Map<K, V> index = new LinkedHashMap<>();
     @JsonIgnore
     private List<V> deleted = new ArrayList<>();
     @JsonIgnore
@@ -377,7 +377,7 @@ public abstract class AbstractIndexingList<K, V extends ObjectName<K> & Flushabl
         try {
             AbstractIndexingList<K,V> cloned = (AbstractIndexingList<K,V>) super.clone();
             cloned.list = new ArrayList<>();
-            cloned.index = new HashMap<>();
+            cloned.index = new LinkedHashMap<>();
             cloned.deleted = new ArrayList<>();
             cloned.dirty = false;
 

@@ -133,7 +133,7 @@ public class SwaggerFileUpgradeUtility {
         }
 
         public OpenAPIBuilder mutateUseReferentiableEnums() {
-            Map<Class<? extends Enum<?>>, String> enumComponentRefMapping = new HashMap<>();
+            Map<Class<? extends Enum<?>>, String> enumComponentRefMapping = new LinkedHashMap<>();
             useReferentiableEnumsForControllers(enumComponentRefMapping);
             useReferentiableEnumsForModels(enumComponentRefMapping);
             return this;
@@ -186,7 +186,7 @@ public class SwaggerFileUpgradeUtility {
         }
 
         private void useReferentiableEnumsForModels(Map<Class<? extends Enum<?>>, String> enumRefMapping) {
-            Map<String, Class<?>> projectModels = new HashMap<>();
+            Map<String, Class<?>> projectModels = new LinkedHashMap<>();
             for (Class<?> clazz : TargetClassSearchUtility.findClasses("com.dqops", Path.of("dqops"), Object.class)) {
                 projectModels.put(clazz.getSimpleName(), clazz);
             }

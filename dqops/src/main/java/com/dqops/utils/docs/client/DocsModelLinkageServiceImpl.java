@@ -109,7 +109,7 @@ public class DocsModelLinkageServiceImpl implements DocsModelLinkageService {
         ));
 
         this.tableYamlClasses = generateTableYamlClasses(projectDir);
-        this.tableProfilingChecksClasses = new HashMap<>() {{
+        this.tableProfilingChecksClasses = new LinkedHashMap<>() {{
             put(CustomCheckSpec.class.getSimpleName(), CustomCheckSpec.class);
             put(CustomRuleParametersSpec.class.getSimpleName(), CustomRuleParametersSpec.class);
             put(CustomSensorParametersSpec.class.getSimpleName(), CustomSensorParametersSpec.class);
@@ -119,7 +119,7 @@ public class DocsModelLinkageServiceImpl implements DocsModelLinkageService {
     }
 
     protected Map<String, Class<?>> generateTableYamlClasses(Path projectDir) {
-        Map<String, Class<?>> tableYaml = new HashMap<>();
+        Map<String, Class<?>> tableYaml = new LinkedHashMap<>();
         tableYaml.putAll(
                 TargetClassSearchUtility.findClasses(
                         "com.dqops.metadata.sources", projectDir, AbstractSpec.class
@@ -172,7 +172,7 @@ public class DocsModelLinkageServiceImpl implements DocsModelLinkageService {
     }
 
     protected Map<String, Class<?>> generateConnectionYamlClasses(Path projectDir) {
-        Map<String, Class<?>> connectionYaml = new HashMap<>();
+        Map<String, Class<?>> connectionYaml = new LinkedHashMap<>();
         connectionYaml.putAll(
                 TargetClassSearchUtility.findClasses(
                                 "com.dqops.metadata.groupings", projectDir, AbstractSpec.class
@@ -212,7 +212,7 @@ public class DocsModelLinkageServiceImpl implements DocsModelLinkageService {
     }
 
     protected Map<String, Path> generateExtraLinkageMappings() {
-        Map<String, Path> extraLinkage = new HashMap<>();
+        Map<String, Path> extraLinkage = new LinkedHashMap<>();
 
         extraLinkage.put(ProviderSensorDefinitionSpec.class.getSimpleName(),
                 Path.of("/docs/reference/yaml/ProviderSensorYaml/#providersensordefinitionspec"));

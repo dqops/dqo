@@ -102,12 +102,12 @@ public class RuleDocumentationGeneratorImpl implements RuleDocumentationGenerato
      * @return Rules documentation model list.
      */
     public Set<RuleDocumentationModel> createRuleDocumentationModels(Path projectRootPath) {
-        Set<RuleDocumentationModel> ruleDocumentationModels = new HashSet<>();
+        Set<RuleDocumentationModel> ruleDocumentationModels = new LinkedHashSet<>();
 
         List<? extends Class<? extends AbstractRuleParametersSpec>> classes = TargetClassSearchUtility.findClasses(
                 "com.dqops.rules", projectRootPath, AbstractRuleParametersSpec.class);
 
-        Set<String> documentedRuleNames = new HashSet<>();
+        Set<String> documentedRuleNames = new LinkedHashSet<>();
 
         for (Class<? extends AbstractRuleParametersSpec> ruleParametersClass : classes) {
             AbstractRuleParametersSpec abstractRuleParametersSpec = createRuleParameterInstance(ruleParametersClass);
@@ -138,7 +138,7 @@ public class RuleDocumentationGeneratorImpl implements RuleDocumentationGenerato
      */
     public List<RuleGroupedDocumentationModel> groupRulesByCategory(List<RuleDocumentationModel> ruleDocumentationModels) {
         List<RuleGroupedDocumentationModel> ruleGroupedDocumentationModels = new ArrayList<>();
-        Map<String, List<RuleDocumentationModel>> groupedRules = new HashMap<>();
+        Map<String, List<RuleDocumentationModel>> groupedRules = new LinkedHashMap<>();
 
         for (RuleDocumentationModel model : ruleDocumentationModels) {
             groupedRules.computeIfAbsent(model.getCategory(), k -> new ArrayList<>()).add(model);

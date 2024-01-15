@@ -94,10 +94,10 @@ public class ColumnServiceImpl implements ColumnService {
         List<String> columnNameList = new LinkedList<>();
         columnNameList.add(columnName);
 
-        Map<PhysicalTableName, Iterable<String>> tableToColumnMapping = new HashMap<>();
+        Map<PhysicalTableName, Iterable<String>> tableToColumnMapping = new LinkedHashMap<>();
         tableToColumnMapping.put(tableName, columnNameList);
 
-        Map<String, Map<PhysicalTableName, Iterable<String>>> connToTabToColMapping = new HashMap<>();
+        Map<String, Map<PhysicalTableName, Iterable<String>>> connToTabToColMapping = new LinkedHashMap<>();
         connToTabToColMapping.put(connectionName, tableToColumnMapping);
 
         List<PushJobResult<DeleteStoredDataResult>> jobResultList = this.deleteColumns(connToTabToColMapping, principal);

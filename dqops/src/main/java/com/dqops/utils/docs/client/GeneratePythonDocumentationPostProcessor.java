@@ -123,7 +123,7 @@ public class GeneratePythonDocumentationPostProcessor {
     protected static LinkageStore<String> getPopulatedLinkageStore(OpenAPI openAPI) {
         LinkageStore<String> linkageStore = new LinkageStore<>();
 
-        Map<String, Set<String>> modelToOccurrence = new HashMap<>();
+        Map<String, Set<String>> modelToOccurrence = new LinkedHashMap<>();
         openAPI.getPaths().values().stream()
                 .flatMap(pathItem -> pathItem.readOperations().stream())
                 .forEach(operation -> populateModelMappingByOperation(operation, modelToOccurrence));
@@ -192,7 +192,7 @@ public class GeneratePythonDocumentationPostProcessor {
 
         for (String typeRef : variablesTypes) {
             if (!modelMethodMapping.containsKey(typeRef)) {
-                modelMethodMapping.put(typeRef, new HashSet<>());
+                modelMethodMapping.put(typeRef, new LinkedHashSet<>());
             }
 
             for (String controller : operation.getTags()) {

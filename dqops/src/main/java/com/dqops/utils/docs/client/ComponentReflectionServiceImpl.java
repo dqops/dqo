@@ -21,6 +21,7 @@ import joptsimple.internal.Strings;
 
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -44,7 +45,7 @@ public class ComponentReflectionServiceImpl implements ComponentReflectionServic
 
     private Map<String, Class<?>> initReflectedClasses() {
         List<Class<?>> classList = TargetClassSearchUtility.findClasses("com.dqops", projectDir, Object.class);
-        Map<String, Class<?>> result = new HashMap<>();
+        Map<String, Class<?>> result = new LinkedHashMap<>();
 
         for (Class<?> clazz : classList) {
             String className = clazz.getSimpleName();

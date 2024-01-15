@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.*;
@@ -272,7 +273,7 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
             this.executor.setStreamHandler(streamHandler);
 
             Map<String, String> systemEnvVariables = System.getenv();
-            HashMap<String, String> processEnvVariables = new HashMap<>(systemEnvVariables);
+            HashMap<String, String> processEnvVariables = new LinkedHashMap<>(systemEnvVariables);
             processEnvVariables.put("PYTHONUNBUFFERED", "1");
             processEnvVariables.put("PYTHONIOENCODING", "UTF-8");
             if (pythonVirtualEnv.isEnableDebugging()) {

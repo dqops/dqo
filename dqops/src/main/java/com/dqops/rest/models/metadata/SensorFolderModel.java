@@ -51,7 +51,7 @@ public class SensorFolderModel {
      */
     public SensorFolderModel() {
         sensors = new ArrayList<>();
-        folders = new HashMap<>();
+        folders = new LinkedHashMap<>();
     }
 
     /**

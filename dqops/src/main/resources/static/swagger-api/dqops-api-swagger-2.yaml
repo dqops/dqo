@@ -32391,17 +32391,17 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
+      profile_sql_condition_failed_on_table:
+        description: "Verifies that a minimum percentage of rows passed a custom SQL\
+          \ condition (expression). Reference the current table by using tokens, for\
+          \ example: `{alias}.col_price > {alias}.col_tax`."
+        $ref: "#/definitions/TableSqlConditionFailedCheckSpec"
       profile_sql_condition_passed_percent_on_table:
         description: "Verifies that a custom SQL expression is met for each row. Counts\
           \ the number of rows where the expression is not satisfied, and raises an\
           \ issue if too many failures were detected. This check is used also to compare\
           \ values between columns: `{alias}.col_price > {alias}.col_tax`."
         $ref: "#/definitions/TableSqlConditionPassedPercentCheckSpec"
-      profile_sql_condition_failed_on_table:
-        description: "Verifies that a minimum percentage of rows passed a custom SQL\
-          \ condition (expression). Reference the current table by using tokens, for\
-          \ example: `{alias}.col_price > {alias}.col_tax`."
-        $ref: "#/definitions/TableSqlConditionFailedCheckSpec"
       profile_sql_aggregate_expression_on_table:
         description: "Verifies that a custom aggregated SQL expression (MIN, MAX,\
           \ etc.) is not outside the expected range."

@@ -31,6 +31,8 @@ import org.springframework.beans.factory.BeanFactory;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * Command line completer that will complete the list of tables as a "schema.table" entry when the connection name was already provided in the command line.
@@ -85,7 +87,7 @@ public class FullTableNameCompleter extends AbstractCommandAwareCompleter<IConne
                         return createEmptyCompletionIterator();
                     }
 
-                    HashSet<String> uniqueSchemaTableNames = new HashSet<>();
+                    Set<String> uniqueSchemaTableNames = new LinkedHashSet<>();
 
                     for (TableWrapper tableWrapper : connectionWrapper.getTables()) {
                         String schemaDotTable = tableWrapper.getPhysicalTableName().toString();

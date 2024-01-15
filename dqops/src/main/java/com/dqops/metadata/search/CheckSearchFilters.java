@@ -33,6 +33,7 @@ import io.swagger.annotations.ApiModel;
 import lombok.EqualsAndHashCode;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -377,7 +378,7 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
         try {
             CheckSearchFilters cloned = (CheckSearchFilters) super.clone();
             if (this.checkHierarchyIds != null) {
-                cloned.checkHierarchyIds = new HashSet<>(this.checkHierarchyIds);
+                cloned.checkHierarchyIds = new LinkedHashSet<>(this.checkHierarchyIds);
             }
             return cloned;
         }

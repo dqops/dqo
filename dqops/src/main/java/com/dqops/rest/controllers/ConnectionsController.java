@@ -402,7 +402,7 @@ public class ConnectionsController {
         }
 
         List<TableWrapper> tableWrapperList = connectionWrapper.getTables().toList();
-        Map<String, CommonColumnModel> foundColumns = new HashMap<>();
+        Map<String, CommonColumnModel> foundColumns = new LinkedHashMap<>();
         for (TableWrapper tableWrapper : tableWrapperList) {
             ColumnSpecMap columns = tableWrapper.getSpec().getColumns();
             for (String columnName : columns.keySet()) {

@@ -37,7 +37,7 @@ public class TableCompressUtility {
             return;
         }
 
-        HashMap<String, String> uniqueStrings = new HashMap<>();
+        HashMap<String, String> uniqueStrings = new HashMap<>(); // we can use a regular has map here (not a linked hash map)
         List<Column<?>> columns = table.columns();
         int rowCount = table.rowCount();
 

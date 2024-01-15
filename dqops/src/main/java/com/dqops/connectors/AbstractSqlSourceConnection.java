@@ -197,7 +197,7 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
                 column.setName(column.name().toLowerCase(Locale.ROOT));
             }
 
-            HashMap<String, TableSpec> tablesByTableName = new HashMap<>();
+            HashMap<String, TableSpec> tablesByTableName = new LinkedHashMap<>();
 
             for (Row colRow : tableResult) {
                 String physicalTableName = colRow.getString("table_name");

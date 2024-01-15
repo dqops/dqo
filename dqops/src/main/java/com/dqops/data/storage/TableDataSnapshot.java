@@ -216,7 +216,7 @@ public class TableDataSnapshot {
                     continue;
                 }
 
-                HashSet<String> columnNamesInPartitionData = new HashSet<>(partitionData.columnNames());
+                Set<String> columnNamesInPartitionData = new LinkedHashSet<>(partitionData.columnNames());
 
                 if (this.columnNames.length == columnNamesInPartitionData.size() &&
                         columnNamesInPartitionData.containsAll(Lists.newArrayList(this.columnNames))) {
@@ -251,7 +251,7 @@ public class TableDataSnapshot {
                     continue;
                 }
 
-                HashSet<String> columnNamesInPartitionData = new HashSet<>(partitionData.columnNames());
+                Set<String> columnNamesInPartitionData = new LinkedHashSet<>(partitionData.columnNames());
                 Table updatedPartitionData = null;
 
                 Table emptyTableSample = this.getTableDataChanges().getNewOrChangedRows();
@@ -268,7 +268,7 @@ public class TableDataSnapshot {
                 if ((updatedPartitionData == null && partitionData.columnCount() != emptyTableSample.columnCount()) ||
                         (updatedPartitionData != null && updatedPartitionData.columnCount() != emptyTableSample.columnCount())) {
                     // remove old columns
-                    HashSet<String> expectedColumnNames = new HashSet<>(emptyTableSample.columnNames());
+                    Set<String> expectedColumnNames = new LinkedHashSet<>(emptyTableSample.columnNames());
 
                     for (Column<?> existingColumn : new ArrayList<>(partitionData.columns())) {
                         if (!expectedColumnNames.contains(existingColumn.name())) {
@@ -643,7 +643,7 @@ public class TableDataSnapshot {
         TextColumn idColumn = this.getTableDataChanges()
                 .getNewOrChangedRows()
                 .textColumn(this.storageSettings.getIdStringColumnName());
-        Set<String> foundIds = new HashSet<>();
+        Set<String> foundIds = new LinkedHashSet<>();
         IntArrayList duplicateRowIndexesToDrop = null;
 
         for (int i = 0; i < idColumn.size(); i++) {

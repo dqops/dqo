@@ -142,7 +142,7 @@ public class TableServiceImpl implements TableService {
                 .flatMap(model -> model.getCategories().stream())
                 // For each category get check templates
                 .map(categoryModel -> {
-                    Map<String, CheckModel> checkNameToExampleCheck = new HashMap<>();
+                    Map<String, CheckModel> checkNameToExampleCheck = new LinkedHashMap<>();
                     for (CheckModel checkModel: categoryModel.getChecks()) {
                         if (!checkNameToExampleCheck.containsKey(checkModel.getCheckName())) {
                             checkNameToExampleCheck.put(checkModel.getCheckName(), checkModel);
@@ -200,7 +200,7 @@ public class TableServiceImpl implements TableService {
         List<PhysicalTableName> tableNameList = new LinkedList<>();
         tableNameList.add(tableName);
 
-        Map<String, Iterable<PhysicalTableName>> connectionToTableMapping = new HashMap<>();
+        Map<String, Iterable<PhysicalTableName>> connectionToTableMapping = new LinkedHashMap<>();
         connectionToTableMapping.put(connectionName, tableNameList);
         List<PushJobResult<DeleteStoredDataResult>> jobResultList = this.deleteTables(connectionToTableMapping, principal);
 

@@ -252,7 +252,7 @@ public class StatisticsCollectorSearchFilters extends TableSearchFilters impleme
         try {
             StatisticsCollectorSearchFilters cloned = (StatisticsCollectorSearchFilters) super.clone();
             if (this.collectorsHierarchyIds != null) {
-                cloned.collectorsHierarchyIds = new HashSet<>(this.collectorsHierarchyIds);
+                cloned.collectorsHierarchyIds = new LinkedHashSet<>(this.collectorsHierarchyIds);
             }
             return cloned;
         }

@@ -47,7 +47,7 @@ public class PythonCallerServiceImpl implements PythonCallerService, DisposableB
     private final DqoPythonConfigurationProperties pythonConfigurationProperties;
     private final JsonSerializer jsonSerializer;
     private final PythonVirtualEnvService pythonVirtualEnvService;
-    private Map<String, Stack<StreamingPythonProcess>> pythonModuleProcesses = new HashMap<>();
+    private Map<String, Stack<StreamingPythonProcess>> pythonModuleProcesses = new LinkedHashMap<>();
     private final Object processDictionaryLock = new Object();
 
     /**

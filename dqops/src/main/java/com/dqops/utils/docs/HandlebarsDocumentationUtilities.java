@@ -27,10 +27,7 @@ import io.swagger.models.auth.In;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Handlebars template helper used to render documentation markdown files using Handlebars.
@@ -263,7 +260,7 @@ public class HandlebarsDocumentationUtilities {
     };
 
     private static final Helper<String> variableHelper = new Helper<>() {
-        final Map<Long, Map<String, String>> state = new HashMap<>();
+        final Map<Long, Map<String, String>> state = new LinkedHashMap<>();
 
         @Override
         public CharSequence apply(String variableName, Options options) {
@@ -286,13 +283,13 @@ public class HandlebarsDocumentationUtilities {
         }
 
         private String getValue(Long scope, String variableName) {
-            Map<String, String> scopedState = state.computeIfAbsent(scope, _i -> new HashMap<>());
+            Map<String, String> scopedState = state.computeIfAbsent(scope, _i -> new LinkedHashMap<>());
             return scopedState.getOrDefault(variableName, null);
         }
 
         private void setValue(Long scope, String variableName, String value) {
             if (!state.containsKey(scope)) {
-                state.put(scope, new HashMap<>());
+                state.put(scope, new LinkedHashMap<>());
             }
 
             Map<String, String> scopedState = state.get(scope);

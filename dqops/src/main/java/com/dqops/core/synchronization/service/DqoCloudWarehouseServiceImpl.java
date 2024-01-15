@@ -27,6 +27,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -34,7 +35,7 @@ import java.util.Map;
  */
 @Component
 public class DqoCloudWarehouseServiceImpl implements DqoCloudWarehouseService {
-    private static final Map<DqoRoot, RefreshTableRequest.TableEnum> ROOT_TABLE_REQUEST_MAPPING = new HashMap<>() {{
+    private static final Map<DqoRoot, RefreshTableRequest.TableEnum> ROOT_TABLE_REQUEST_MAPPING = new LinkedHashMap<>() {{
         put(DqoRoot.data_sensor_readouts, RefreshTableRequest.TableEnum.SENSOR_READOUTS);
         put(DqoRoot.data_check_results, RefreshTableRequest.TableEnum.CHECK_RESULTS);
         put(DqoRoot.data_errors, RefreshTableRequest.TableEnum.ERRORS);

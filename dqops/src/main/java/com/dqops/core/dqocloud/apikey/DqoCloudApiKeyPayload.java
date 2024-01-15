@@ -64,7 +64,7 @@ public class DqoCloudApiKeyPayload {
     private DqoCloudLicenseType licenseType;
 
     @JsonProperty("lm")
-    private Map<DqoCloudLimit, Integer> limits = new HashMap<>();
+    private Map<DqoCloudLimit, Integer> limits = new LinkedHashMap<>();
 
     @JsonProperty("dp")
     private CloudDqoApiKeyDisposition disposition;

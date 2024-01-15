@@ -328,7 +328,7 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
                                         long columnHash,
                                         int rowCount) {
         TextColumn idColumn = TextColumn.create(CommonColumnNames.ID_COLUMN_NAME, rowCount);
-        Map<UUID, Integer> idsGenerated = new HashMap<>();
+        Map<UUID, Integer> idsGenerated = new LinkedHashMap<>();
 
         for (int i = 0; i < rowCount ; i++) {
             Long dataGroupingHash = sortedDataGroupingHashColumn.get(i);

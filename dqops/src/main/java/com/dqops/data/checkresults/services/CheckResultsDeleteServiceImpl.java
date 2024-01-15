@@ -53,16 +53,16 @@ public class CheckResultsDeleteServiceImpl implements CheckResultsDeleteService 
     @Override
     public DeleteStoredDataResult deleteSelectedCheckResultsFragment(CheckResultsFragmentFilter filter, UserDomainIdentity userIdentity) {
         Map<String, String> simpleConditions = filter.getColumnConditions();
-        Map<String, Set<String>> conditions = new HashMap<>();
+        Map<String, Set<String>> conditions = new LinkedHashMap<>();
         for (Map.Entry<String, String> kv: simpleConditions.entrySet()) {
             String columnName = kv.getKey();
             String columnValue = kv.getValue();
-            Set<String> wrappedValue = new HashSet<>(){{add(columnValue);}};
+            Set<String> wrappedValue = new LinkedHashSet<>(){{add(columnValue);}};
             conditions.put(columnName, wrappedValue);
         }
 
         if (filter.getColumnNames() != null && !filter.getColumnNames().isEmpty()) {
-            conditions.put(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME, new HashSet<>(filter.getColumnNames()));
+            conditions.put(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME, new LinkedHashSet<>(filter.getColumnNames()));
         }
 
         DeleteStoredDataResult deleteStoredDataResult = new DeleteStoredDataResult();

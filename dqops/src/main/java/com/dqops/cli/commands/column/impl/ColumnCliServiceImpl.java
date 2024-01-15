@@ -261,13 +261,13 @@ public class ColumnCliServiceImpl implements ColumnCliService {
 	 */
 	protected Map<String, Map<PhysicalTableName, Iterable<String>>> convertColumnSpecsToHierarchyMapping(
 			UserHome userHome, Iterable<ColumnSpec> columnSpecs) {
-		Map<String, Map<PhysicalTableName, List<String>>> connectionToTableToColumnsMapping = new HashMap<>();
+		Map<String, Map<PhysicalTableName, List<String>>> connectionToTableToColumnsMapping = new LinkedHashMap<>();
 		for (ColumnSpec columnSpec: columnSpecs) {
 			TableWrapper tableWrapper = userHome.findTableFor(columnSpec.getHierarchyId());
 
 			String connectionName = userHome.findConnectionFor(tableWrapper.getHierarchyId()).getName();
 			if (!connectionToTableToColumnsMapping.containsKey(connectionName)) {
-				connectionToTableToColumnsMapping.put(connectionName, new HashMap<>());
+				connectionToTableToColumnsMapping.put(connectionName, new LinkedHashMap<>());
 			}
 
 			Map<PhysicalTableName, List<String>> tableToColumnsMapping = connectionToTableToColumnsMapping.get(connectionName);
@@ -278,10 +278,10 @@ public class ColumnCliServiceImpl implements ColumnCliService {
 			tableToColumnsMapping.get(tableName).add(columnSpec.getColumnName());
 		}
 
-		Map<String, Map<PhysicalTableName, Iterable<String>>> result = new HashMap<>();
+		Map<String, Map<PhysicalTableName, Iterable<String>>> result = new LinkedHashMap<>();
 		for (Map.Entry<String, Map<PhysicalTableName, List<String>>> connectionMapping: connectionToTableToColumnsMapping.entrySet()) {
 			// Convert Map<PhysicalTableName, List<String>> to Map<PhysicalTableName, Iterable<String>>.
-			result.put(connectionMapping.getKey(), new HashMap<>(connectionMapping.getValue()));
+			result.put(connectionMapping.getKey(), new LinkedHashMap<>(connectionMapping.getValue()));
 		}
 
 		return result;

@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
  */
 @Component
 public class ReflectionServiceImpl implements ReflectionService {
-    private static final Map<Class<?>, ParameterDataType> KNOWN_DATA_TYPES = new HashMap<>() {{
+    private static final Map<Class<?>, ParameterDataType> KNOWN_DATA_TYPES = new LinkedHashMap<>() {{
         put(String.class, ParameterDataType.string_type);
         put(Integer.class, ParameterDataType.integer_type);
         put(int.class, ParameterDataType.integer_type);
@@ -48,14 +48,14 @@ public class ReflectionServiceImpl implements ReflectionService {
         put(LocalDateTime.class, ParameterDataType.datetime_type);
     }};
 
-    private static final Map<Class<?>, Object> DEFAULT_VALUES = new HashMap<>() {{
+    private static final Map<Class<?>, Object> DEFAULT_VALUES = new LinkedHashMap<>() {{
         put(int.class, 0);
         put(long.class, 0L);
         put(boolean.class, false);
         put(double.class, 0.0);
     }};
 
-    private Map<Class<?>, ClassInfo> reflectedClasses = new HashMap<>(); // accessed in a synchronized scope
+    private Map<Class<?>, ClassInfo> reflectedClasses = new LinkedHashMap<>(); // accessed in a synchronized scope
 
     /**
      * Returns a cached reflection info for a given class type.

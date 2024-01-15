@@ -197,7 +197,7 @@ public class CheckCliServiceImpl implements CheckCliService {
 
     protected void patchSensorParametersInModel(CheckModel model,
                                                 List<FieldModel> sensorPatches) {
-        Map<String, FieldModel> modelSensorParamsByName = new HashMap<>();
+        Map<String, FieldModel> modelSensorParamsByName = new LinkedHashMap<>();
         for (FieldModel fieldModel: model.getSensorParameters()) {
             modelSensorParamsByName.put(fieldModel.getDefinition().getDisplayName(), fieldModel);
         }

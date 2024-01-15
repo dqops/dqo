@@ -109,7 +109,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
         FolderMetadata currentLocalFolderIndex;
 
         Collection<FileDifference> unsyncedTargetChanges;
-        Set<Path> synchronizedLocalChanges = new HashSet<>();
+        Set<Path> synchronizedLocalChanges = new LinkedHashSet<>();
         FolderMetadata newLocalFolderIndex = null;
 
         this.synchronizationStatusTracker.changeFolderSynchronizationStatus(dqoRoot, userIdentity.getDataDomainFolder(), FolderSynchronizationStatus.synchronizing);
@@ -232,7 +232,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
                                                     FileSystemSynchronizationOperations localFileSystemSynchronizationOperations,
                                                     FileSystemSynchronizationRoot localFileSystemRoot,
                                                     Collection<FileDifference> localChanges) {
-        Set<Path> synchronizedSourceChanges = Collections.synchronizedSet(new HashSet<>());
+        Set<Path> synchronizedSourceChanges = Collections.synchronizedSet(new LinkedHashSet<>());
 
         Mono<Set<Path>> monoResult = Flux.fromIterable(localChanges)
                 .flatMap((FileDifference localChange) -> {

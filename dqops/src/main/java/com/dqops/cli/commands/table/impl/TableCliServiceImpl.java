@@ -329,7 +329,7 @@ public class TableCliServiceImpl implements TableCliService {
             return cliOperationStatus;
         }
 
-        Map<String, Iterable<PhysicalTableName>> connToTablesMap = new HashMap<>();
+        Map<String, Iterable<PhysicalTableName>> connToTablesMap = new LinkedHashMap<>();
         List<PhysicalTableName> tableNames = tableWrappers.stream()
                 .map(TableWrapper::getPhysicalTableName)
                 .collect(Collectors.toList());

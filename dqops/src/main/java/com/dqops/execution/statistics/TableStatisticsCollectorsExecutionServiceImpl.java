@@ -151,7 +151,7 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
         StatisticsSnapshot statisticsSnapshot = this.statisticsSnapshotFactory.createSnapshot(connectionName, physicalTableName, userDomainIdentity);
         Table allNormalizedStatisticsTable = statisticsSnapshot.getTableDataChanges().getNewOrChangedRows();
 
-        Map<String, Integer> successfulCollectorsPerColumn = new HashMap<>();
+        Map<String, Integer> successfulCollectorsPerColumn = new LinkedHashMap<>();
 
         List<SensorPrepareResult> allPreparedSensors = this.prepareSensors(collectors, executionContext, userHome, progressListener,
                 executionStatistics, statisticsDataScope, jobCancellationToken);

@@ -29,7 +29,7 @@ import java.util.Set;
  */
 public class ScheduledTableChecksCollection {
     private TableWrapper targetTable;
-    private HashSet<HierarchyId> checks = new LinkedHashSet<>();
+    private Set<HierarchyId> checks = new LinkedHashSet<>();
 
     /**
      * Creates an object for a given target table.

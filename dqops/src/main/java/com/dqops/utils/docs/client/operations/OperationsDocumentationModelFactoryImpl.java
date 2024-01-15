@@ -44,7 +44,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class OperationsDocumentationModelFactoryImpl implements OperationsDocumentationModelFactory {
-    private static final Map<String, ParameterDataType> KNOWN_DATA_TYPES = new HashMap<>() {{
+    private static final Map<String, ParameterDataType> KNOWN_DATA_TYPES = new LinkedHashMap<>() {{
         put("string", ParameterDataType.string_type);
         put("integer", ParameterDataType.long_type);
         put("number", ParameterDataType.double_type);
@@ -52,7 +52,7 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
         put("array", ParameterDataType.string_list_type);
     }};
 
-    private static final Map<String, Class<?>> KNOWN_CLASSES = new HashMap<>() {{
+    private static final Map<String, Class<?>> KNOWN_CLASSES = new LinkedHashMap<>() {{
         put("string", String.class);
         put("integer", Long.class);
         put("number", Double.class);

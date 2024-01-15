@@ -215,8 +215,8 @@ public class CheckServiceImpl implements CheckService {
         Map<String, Set<String>> searchableMap = new LinkedHashMap<>();
         for (Map.Entry<String, List<String>> tableToColumns: tableToColumnsMapping.entrySet()) {
             Set<String> columnsSet = tableToColumns.getValue() != null
-                    ? new HashSet<>(tableToColumns.getValue())
-                    : new HashSet<>();
+                    ? new LinkedHashSet<>(tableToColumns.getValue())
+                    : new LinkedHashSet<>();
             searchableMap.put(tableToColumns.getKey(), columnsSet);
         }
         return searchableMap;

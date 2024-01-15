@@ -89,7 +89,7 @@ public class GeneratorUtility {
                 ObjectDataType objectDataType = Objects.requireNonNullElse(typeModel.getObjectDataType(), ObjectDataType.object_type);
                 switch (objectDataType) {
                     case map_type:
-                        return new HashMap<String, String>();
+                        return new LinkedHashMap<String, String>();
                     case list_type:
                         TypeModel genericTypeModel = typeModel.getGenericKeyType();
                         assert genericTypeModel.getObjectDataType() == ObjectDataType.object_type;
