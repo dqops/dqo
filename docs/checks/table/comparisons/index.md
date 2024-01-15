@@ -1,6 +1,6 @@
-# Checks/table/comparisons
+# table level comparisons data quality checks
 
-This is a list of comparisons table data quality checks supported by DQOps and a brief description of what they do.
+This is a list of comparisons table data quality checks supported by DQOps and a brief description of what data quality issued they detect.
 
 
 
@@ -9,8 +9,8 @@ This is a list of comparisons table data quality checks supported by DQOps and a
 ## **comparisons**
 
 
-| Check name | Check type | Description | Class |
-|------------|------------|-------------|-------|
+| Data quality check name | Check type | Description | Class |
+|-------------------------|------------|-------------|-------|
 |[profile_row_count_match](./row-count-match.md#profile-row-count-match)|profiling|Verifies that the row count of the tested (parent) table matches the row count of the reference table. Compares each group of data with a GROUP BY clause.|standard|
 |[daily_row_count_match](./row-count-match.md#daily-row-count-match)|monitoring|Verifies that the row count of the tested (parent) table matches the row count of the reference table. Compares each group of data with a GROUP BY clause. Stores the most recent captured value for each day when the data quality check was evaluated.|standard|
 |[monthly_row_count_match](./row-count-match.md#monthly-row-count-match)|monitoring|Verifies that the row count of the tested (parent) table matches the row count of the reference table. Compares each group of data with a GROUP BY clause. Stores the most recent captured value for each month when the data quality check was evaluated.|standard|
@@ -19,8 +19,8 @@ This is a list of comparisons table data quality checks supported by DQOps and a
 
 
 
-| Check name | Check type | Description | Class |
-|------------|------------|-------------|-------|
+| Data quality check name | Check type | Description | Class |
+|-------------------------|------------|-------------|-------|
 |[profile_column_count_match](./column-count-match.md#profile-column-count-match)|profiling|Verifies that the column count of the tested (parent) table matches the column count of the reference table. Only one comparison result is returned, without data grouping.|standard|
 |[daily_column_count_match](./column-count-match.md#daily-column-count-match)|monitoring|Verifies that the column count of the tested (parent) table matches the column count of the reference table. Only one comparison result is returned, without data grouping. Stores the most recent captured value for each day when the data quality check was evaluated.|standard|
 |[monthly_column_count_match](./column-count-match.md#monthly-column-count-match)|monitoring|Verifies that the column count of the tested (parent) table matches the column count of the reference table. Only one comparison result is returned, without data grouping. Stores the most recent captured value for each month when the data quality check was evaluated.|standard|

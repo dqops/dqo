@@ -109,7 +109,7 @@ public class GeneratePythonDocumentationPostProcessor {
             modifiedClientFolder.sortByNameRecursive(cherryPickComparator.thenComparing(Comparator.naturalOrder()));
 
             List<String> renderedIndexYaml = modifiedClientFolder.generateMkDocsNavigation(2);
-            MkDocsIndexReplaceUtility.replaceContentLines(projectDir.resolve("../mkdocs.yml"),
+            FileContentIndexReplaceUtility.replaceContentLines(projectDir.resolve("../mkdocs.yml"),
                     renderedIndexYaml,
                     "########## INCLUDE PYTHON CLIENT REFERENCE - DO NOT MODIFY MANUALLY",
                     "########## END INCLUDE PYTHON CLIENT REFERENCE");

@@ -4,6 +4,6 @@ kind: check
 spec:
   sensor_name: column/range/max_value
   rule_name: comparison/between_floats
-  help_text: Verifies that the maximal value in a column does not exceed the set range.
-    Stores the most recent value for each month when the data quality check was evaluated.
-  standard: true
+  help_text: Verifies that the maximum value in a column does not exceed the expected
+    range. Stores the most recent value for each month when the data quality check
+    was evaluated.

@@ -41,9 +41,9 @@ import java.util.Objects;
 public class ColumnAnomalyProfilingChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAnomalyProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
+            put("profile_sum_anomaly", o -> o.profileSumAnomaly);
             put("profile_mean_anomaly", o -> o.profileMeanAnomaly);
             put("profile_median_anomaly", o -> o.profileMedianAnomaly);
-            put("profile_sum_anomaly", o -> o.profileSumAnomaly);
 
             put("profile_mean_change", o -> o.profileMeanChange);
             put("profile_mean_change_1_day", o -> o.profileMeanChange1Day);
@@ -62,15 +62,15 @@ public class ColumnAnomalyProfilingChecksSpec extends AbstractCheckCategorySpec 
         }
     };
 
+    @JsonPropertyDescription("Verifies that the sum in a column changes in a rate within a percentile boundary during the last 90 days.")
+    private ColumnSumAnomalyDifferencingCheckSpec profileSumAnomaly;
+
     @JsonPropertyDescription("Verifies that the mean value in a column changes in a rate within a percentile boundary during the last 90 days.")
     private ColumnMeanAnomalyStationaryCheckSpec profileMeanAnomaly;
 
     @JsonPropertyDescription("Verifies that the median in a column changes in a rate within a percentile boundary during the last 90 days.")
     private ColumnMedianAnomalyStationaryCheckSpec profileMedianAnomaly;
 
-    @JsonPropertyDescription("Verifies that the sum in a column changes in a rate within a percentile boundary during the last 90 days.")
-    private ColumnSumAnomalyDifferencingCheckSpec profileSumAnomaly;
-    
     @JsonPropertyDescription("Verifies that the mean value in a column changed in a fixed rate since the last readout.")
     private ColumnMeanChangeCheckSpec profileMeanChange;
 
@@ -117,6 +117,24 @@ public class ColumnAnomalyProfilingChecksSpec extends AbstractCheckCategorySpec 
     private ColumnSumChange30DaysCheckSpec profileSumChange30Days;
 
     /**
+     * Returns a sum anomaly 90 days check specification.
+     * @return Sum anomaly 90 days check specification.
+     */
+    public ColumnSumAnomalyDifferencingCheckSpec getProfileSumAnomaly() {
+        return profileSumAnomaly;
+    }
+
+    /**
+     * Sets a new specification of a sum anomaly 90 days check.
+     * @param profileSumAnomaly Sum anomaly 90 days check specification.
+     */
+    public void setProfileSumAnomaly(ColumnSumAnomalyDifferencingCheckSpec profileSumAnomaly) {
+        this.setDirtyIf(!Objects.equals(this.profileSumAnomaly, profileSumAnomaly));
+        this.profileSumAnomaly = profileSumAnomaly;
+        propagateHierarchyIdToField(profileSumAnomaly, "profile_sum_anomaly");
+    }
+
+    /**
      * Returns a mean value anomaly 90 days check specification.
      * @return Mean value anomaly 90 days check specification.
      */
@@ -150,24 +168,6 @@ public class ColumnAnomalyProfilingChecksSpec extends AbstractCheckCategorySpec 
         this.setDirtyIf(!Objects.equals(this.profileMedianAnomaly, profileMedianAnomaly));
         this.profileMedianAnomaly = profileMedianAnomaly;
         propagateHierarchyIdToField(profileMedianAnomaly, "profile_median_anomaly");
-    }
-
-    /**
-     * Returns a sum anomaly 90 days check specification.
-     * @return Sum anomaly 90 days check specification.
-     */
-    public ColumnSumAnomalyDifferencingCheckSpec getProfileSumAnomaly() {
-        return profileSumAnomaly;
-    }
-
-    /**
-     * Sets a new specification of a sum anomaly 90 days check.
-     * @param profileSumAnomaly Sum anomaly 90 days check specification.
-     */
-    public void setProfileSumAnomaly(ColumnSumAnomalyDifferencingCheckSpec profileSumAnomaly) {
-        this.setDirtyIf(!Objects.equals(this.profileSumAnomaly, profileSumAnomaly));
-        this.profileSumAnomaly = profileSumAnomaly;
-        propagateHierarchyIdToField(profileSumAnomaly, "profile_sum_anomaly");
     }
 
     /**

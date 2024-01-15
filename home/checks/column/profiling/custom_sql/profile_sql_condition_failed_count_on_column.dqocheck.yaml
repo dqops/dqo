@@ -1,9 +1,0 @@
-# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
-apiVersion: dqo/v1
-kind: check
-spec:
-  sensor_name: column/custom_sql/sql_condition_failed_count
-  rule_name: comparison/max_count
-  help_text: Verifies that a number of rows failed a custom SQL condition(expression)
-    does not exceed the maximum accepted count.
-  standard: true

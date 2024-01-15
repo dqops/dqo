@@ -15,7 +15,7 @@ The **distinct count** data quality check has the following variants for each
 
 Verifies that the number of distinct values in a column does not fall below the minimum accepted count.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_distinct_count|profiling| |Uniqueness|[distinct_count](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[count_between](../../../reference/rules/Comparison.md#count-between)|
 
@@ -25,36 +25,81 @@ Please expand the section below to see the DQOps command-line examples to run or
 
 ??? example "Managing profile distinct count check from DQOps shell"
 
-    === "Activate check"
+    === "Activate the check with a warning rule"
 
-        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -ch=profile_distinct_count
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=profile_distinct_count --enable-warning
         ```
 
-    === "Run check on connection"
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=profile_distinct_count --enable-warning
+        ```
+        
+        Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=profile_distinct_count --enable-warning
+                            -Wmin_count=value
+        ```
+
+
+    === "Activate the check with an error rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=profile_distinct_count --enable-error
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=profile_distinct_count --enable-error
+        ```
+        
+        Additional rule parameters are passed using the *-Erule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=profile_distinct_count --enable-error
+                            -Emin_count=value
+        ```
+
+
+    === "Run all configured checks"
 
         Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+        The following example shows how to run the *profile_distinct_count* check on all tables and columns on a single data source.
 
         ```
-        dqo> check run -c=connection_name -ch=profile_distinct_count
+        dqo> check run -c=data_source_name -ch=profile_distinct_count
         ```
 
-    === "Run check on table"
-
-        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters.
 
         ```
         dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_distinct_count
         ```
+
+        You can also run this check on all tables (and columns)  on which the *profile_distinct_count* check is enabled
+        using patterns to find tables.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_*  -col=column_name_*-ch=profile_distinct_count
+        ```
+
 
 **YAML configuration**
 
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="7-18"
+```yaml hl_lines="7-12"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -64,13 +109,7 @@ spec:
       profiling_checks:
         uniqueness:
           profile_distinct_count:
-            warning:
-              min_count: 10
-              max_count: 20
             error:
-              min_count: 10
-              max_count: 20
-            fatal:
               min_count: 10
               max_count: 20
       labels:
@@ -459,7 +498,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 30-35"
+    ```yaml hl_lines="5-15 24-29"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -478,13 +517,7 @@ Expand the *Configure with data grouping* section to see additional examples for
           profiling_checks:
             uniqueness:
               profile_distinct_count:
-                warning:
-                  min_count: 10
-                  max_count: 20
                 error:
-                  min_count: 10
-                  max_count: 20
-                fatal:
                   min_count: 10
                   max_count: 20
           labels:
@@ -889,12 +922,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
-
-
-
-
-
-
 ___
 
 
@@ -905,7 +932,7 @@ ___
 
 Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_distinct_count|monitoring|daily|Uniqueness|[distinct_count](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[count_between](../../../reference/rules/Comparison.md#count-between)|
 
@@ -915,36 +942,81 @@ Please expand the section below to see the DQOps command-line examples to run or
 
 ??? example "Managing daily distinct count check from DQOps shell"
 
-    === "Activate check"
+    === "Activate the check with a warning rule"
 
-        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -ch=daily_distinct_count
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=daily_distinct_count --enable-warning
         ```
 
-    === "Run check on connection"
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_distinct_count --enable-warning
+        ```
+        
+        Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_distinct_count --enable-warning
+                            -Wmin_count=value
+        ```
+
+
+    === "Activate the check with an error rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=daily_distinct_count --enable-error
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_distinct_count --enable-error
+        ```
+        
+        Additional rule parameters are passed using the *-Erule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_distinct_count --enable-error
+                            -Emin_count=value
+        ```
+
+
+    === "Run all configured checks"
 
         Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+        The following example shows how to run the *daily_distinct_count* check on all tables and columns on a single data source.
 
         ```
-        dqo> check run -c=connection_name -ch=daily_distinct_count
+        dqo> check run -c=data_source_name -ch=daily_distinct_count
         ```
 
-    === "Run check on table"
-
-        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters.
 
         ```
         dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_distinct_count
         ```
+
+        You can also run this check on all tables (and columns)  on which the *daily_distinct_count* check is enabled
+        using patterns to find tables.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_*  -col=column_name_*-ch=daily_distinct_count
+        ```
+
 
 **YAML configuration**
 
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="7-19"
+```yaml hl_lines="7-13"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -955,13 +1027,7 @@ spec:
         daily:
           uniqueness:
             daily_distinct_count:
-              warning:
-                min_count: 10
-                max_count: 20
               error:
-                min_count: 10
-                max_count: 20
-              fatal:
                 min_count: 10
                 max_count: 20
       labels:
@@ -1350,7 +1416,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 31-36"
+    ```yaml hl_lines="5-15 25-30"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -1370,13 +1436,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             daily:
               uniqueness:
                 daily_distinct_count:
-                  warning:
-                    min_count: 10
-                    max_count: 20
                   error:
-                    min_count: 10
-                    max_count: 20
-                  fatal:
                     min_count: 10
                     max_count: 20
           labels:
@@ -1781,12 +1841,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
-
-
-
-
-
-
 ___
 
 
@@ -1795,9 +1849,9 @@ ___
 
 **Check description**
 
-Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.
+Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores the most recent check result for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_distinct_count|monitoring|monthly|Uniqueness|[distinct_count](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[count_between](../../../reference/rules/Comparison.md#count-between)|
 
@@ -1807,36 +1861,81 @@ Please expand the section below to see the DQOps command-line examples to run or
 
 ??? example "Managing monthly distinct count check from DQOps shell"
 
-    === "Activate check"
+    === "Activate the check with a warning rule"
 
-        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -ch=monthly_distinct_count
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=monthly_distinct_count --enable-warning
         ```
 
-    === "Run check on connection"
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_distinct_count --enable-warning
+        ```
+        
+        Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_distinct_count --enable-warning
+                            -Wmin_count=value
+        ```
+
+
+    === "Activate the check with an error rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=monthly_distinct_count --enable-error
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_distinct_count --enable-error
+        ```
+        
+        Additional rule parameters are passed using the *-Erule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_distinct_count --enable-error
+                            -Emin_count=value
+        ```
+
+
+    === "Run all configured checks"
 
         Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+        The following example shows how to run the *monthly_distinct_count* check on all tables and columns on a single data source.
 
         ```
-        dqo> check run -c=connection_name -ch=monthly_distinct_count
+        dqo> check run -c=data_source_name -ch=monthly_distinct_count
         ```
 
-    === "Run check on table"
-
-        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters.
 
         ```
         dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_distinct_count
         ```
+
+        You can also run this check on all tables (and columns)  on which the *monthly_distinct_count* check is enabled
+        using patterns to find tables.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_*  -col=column_name_*-ch=monthly_distinct_count
+        ```
+
 
 **YAML configuration**
 
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="7-19"
+```yaml hl_lines="7-13"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -1847,13 +1946,7 @@ spec:
         monthly:
           uniqueness:
             monthly_distinct_count:
-              warning:
-                min_count: 10
-                max_count: 20
               error:
-                min_count: 10
-                max_count: 20
-              fatal:
                 min_count: 10
                 max_count: 20
       labels:
@@ -2242,7 +2335,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 31-36"
+    ```yaml hl_lines="5-15 25-30"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -2262,13 +2355,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             monthly:
               uniqueness:
                 monthly_distinct_count:
-                  warning:
-                    min_count: 10
-                    max_count: 20
                   error:
-                    min_count: 10
-                    max_count: 20
-                  fatal:
                     min_count: 10
                     max_count: 20
           labels:
@@ -2673,12 +2760,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
-
-
-
-
-
-
 ___
 
 
@@ -2687,9 +2768,9 @@ ___
 
 **Check description**
 
-Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.
+Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores a separate data quality check result for each daily partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_distinct_count|partitioned|daily|Uniqueness|[distinct_count](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[count_between](../../../reference/rules/Comparison.md#count-between)|
 
@@ -2699,36 +2780,81 @@ Please expand the section below to see the DQOps command-line examples to run or
 
 ??? example "Managing daily partition distinct count check from DQOps shell"
 
-    === "Activate check"
+    === "Activate the check with a warning rule"
 
-        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -ch=daily_partition_distinct_count
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=daily_partition_distinct_count --enable-warning
         ```
 
-    === "Run check on connection"
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_partition_distinct_count --enable-warning
+        ```
+        
+        Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_partition_distinct_count --enable-warning
+                            -Wmin_count=value
+        ```
+
+
+    === "Activate the check with an error rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=daily_partition_distinct_count --enable-error
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_partition_distinct_count --enable-error
+        ```
+        
+        Additional rule parameters are passed using the *-Erule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_partition_distinct_count --enable-error
+                            -Emin_count=value
+        ```
+
+
+    === "Run all configured checks"
 
         Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+        The following example shows how to run the *daily_partition_distinct_count* check on all tables and columns on a single data source.
 
         ```
-        dqo> check run -c=connection_name -ch=daily_partition_distinct_count
+        dqo> check run -c=data_source_name -ch=daily_partition_distinct_count
         ```
 
-    === "Run check on table"
-
-        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters.
 
         ```
         dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_distinct_count
         ```
+
+        You can also run this check on all tables (and columns)  on which the *daily_partition_distinct_count* check is enabled
+        using patterns to find tables.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_*  -col=column_name_*-ch=daily_partition_distinct_count
+        ```
+
 
 **YAML configuration**
 
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="12-24"
+```yaml hl_lines="12-18"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -2744,13 +2870,7 @@ spec:
         daily:
           uniqueness:
             daily_partition_distinct_count:
-              warning:
-                min_count: 10
-                max_count: 20
               error:
-                min_count: 10
-                max_count: 20
-              fatal:
                 min_count: 10
                 max_count: 20
       labels:
@@ -3148,7 +3268,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-20 41-46"
+    ```yaml hl_lines="10-20 35-40"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -3173,13 +3293,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             daily:
               uniqueness:
                 daily_partition_distinct_count:
-                  warning:
-                    min_count: 10
-                    max_count: 20
                   error:
-                    min_count: 10
-                    max_count: 20
-                  fatal:
                     min_count: 10
                     max_count: 20
           labels:
@@ -3587,12 +3701,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
-
-
-
-
-
-
 ___
 
 
@@ -3601,9 +3709,9 @@ ___
 
 **Check description**
 
-Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.
+Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores a separate data quality check result for each monthly partition.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_distinct_count|partitioned|monthly|Uniqueness|[distinct_count](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[count_between](../../../reference/rules/Comparison.md#count-between)|
 
@@ -3613,36 +3721,81 @@ Please expand the section below to see the DQOps command-line examples to run or
 
 ??? example "Managing monthly partition distinct count check from DQOps shell"
 
-    === "Activate check"
+    === "Activate the check with a warning rule"
 
-        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -ch=monthly_partition_distinct_count
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=monthly_partition_distinct_count --enable-warning
         ```
 
-    === "Run check on connection"
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_partition_distinct_count --enable-warning
+        ```
+        
+        Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_partition_distinct_count --enable-warning
+                            -Wmin_count=value
+        ```
+
+
+    === "Activate the check with an error rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=monthly_partition_distinct_count --enable-error
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_partition_distinct_count --enable-error
+        ```
+        
+        Additional rule parameters are passed using the *-Erule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_partition_distinct_count --enable-error
+                            -Emin_count=value
+        ```
+
+
+    === "Run all configured checks"
 
         Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+        The following example shows how to run the *monthly_partition_distinct_count* check on all tables and columns on a single data source.
 
         ```
-        dqo> check run -c=connection_name -ch=monthly_partition_distinct_count
+        dqo> check run -c=data_source_name -ch=monthly_partition_distinct_count
         ```
 
-    === "Run check on table"
-
-        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters.
 
         ```
         dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_partition_distinct_count
         ```
+
+        You can also run this check on all tables (and columns)  on which the *monthly_partition_distinct_count* check is enabled
+        using patterns to find tables.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_*  -col=column_name_*-ch=monthly_partition_distinct_count
+        ```
+
 
 **YAML configuration**
 
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="12-24"
+```yaml hl_lines="12-18"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -3658,13 +3811,7 @@ spec:
         monthly:
           uniqueness:
             monthly_partition_distinct_count:
-              warning:
-                min_count: 10
-                max_count: 20
               error:
-                min_count: 10
-                max_count: 20
-              fatal:
                 min_count: 10
                 max_count: 20
       labels:
@@ -4062,7 +4209,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-20 41-46"
+    ```yaml hl_lines="10-20 35-40"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -4087,13 +4234,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             monthly:
               uniqueness:
                 monthly_partition_distinct_count:
-                  warning:
-                    min_count: 10
-                    max_count: 20
                   error:
-                    min_count: 10
-                    max_count: 20
-                  fatal:
                     min_count: 10
                     max_count: 20
           labels:
@@ -4501,12 +4642,10 @@ Expand the *Configure with data grouping* section to see additional examples for
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
-
-
-
-
-
-
 ___
 
 
+
+## What's next
+- Learn how to [configure data quality checks](../../../dqo-concepts/configuring-data-quality-checks-and-rules.md) in DQOps
+- Look at the examples of [running data quality checks](../../../dqo-concepts/running-data-quality-checks.md), targeting tables and columns

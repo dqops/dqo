@@ -212,7 +212,7 @@ public class CheckServiceImpl implements CheckService {
     }
 
     protected Map<String, Set<String>> getSearchableTableToColumnsMapping(Map<String, List<String>> tableToColumnsMapping) {
-        Map<String, Set<String>> searchableMap = new HashMap<>();
+        Map<String, Set<String>> searchableMap = new LinkedHashMap<>();
         for (Map.Entry<String, List<String>> tableToColumns: tableToColumnsMapping.entrySet()) {
             Set<String> columnsSet = tableToColumns.getValue() != null
                     ? new HashSet<>(tableToColumns.getValue())
@@ -351,7 +351,7 @@ public class CheckServiceImpl implements CheckService {
     protected List<FieldModel> getPatchedFields(List<FieldModel> sourceFields,
                                                 List<FieldModel> patches,
                                                 boolean overrideConflicts) {
-        Map<String, FieldModel> paramsByName = new HashMap<>();
+        Map<String, FieldModel> paramsByName = new LinkedHashMap<>();
         for (FieldModel fieldModel: sourceFields) {
             paramsByName.put(fieldModel.getDefinition().getDisplayName(), fieldModel);
         }

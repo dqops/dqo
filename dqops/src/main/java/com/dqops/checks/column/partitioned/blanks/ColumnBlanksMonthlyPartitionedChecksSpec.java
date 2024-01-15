@@ -49,22 +49,22 @@ public class ColumnBlanksMonthlyPartitionedChecksSpec extends AbstractCheckCateg
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.")
     private ColumnBlanksEmptyTextFoundCheckSpec monthlyPartitionEmptyTextFound;
 
-    @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.")
     private ColumnBlanksWhitespaceTextFoundCheckSpec monthlyPartitionWhitespaceTextFound;
 
-    @JsonPropertyDescription("Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.")
     private ColumnBlanksNullPlaceholderTextFoundCheckSpec monthlyPartitionNullPlaceholderTextFound;
 
-    @JsonPropertyDescription("Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.")
     private ColumnBlanksEmptyTextPercentCheckSpec monthlyPartitionEmptyTextPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores a separate data quality check result for each monthly partition.")
     private ColumnBlanksWhitespaceTextPercentCheckSpec monthlyPartitionWhitespaceTextPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.")
     private ColumnBlanksNullPlaceholderTextPercentCheckSpec monthlyPartitionNullPlaceholderTextPercent;
 
 

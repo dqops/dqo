@@ -24,12 +24,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class MinCountRule100FatalParametersSpecTests extends BaseTest {
-    private MinCountRule0ParametersSpec sut;
+public class MinCountRule1ParametersSpecTests extends BaseTest {
+    private MinCountRule1ParametersSpec sut;
 
     @BeforeEach
     void setUp() {
-        this.sut = new MinCountRule0ParametersSpec();
+        this.sut = new MinCountRule1ParametersSpec();
     }
 
     @Test

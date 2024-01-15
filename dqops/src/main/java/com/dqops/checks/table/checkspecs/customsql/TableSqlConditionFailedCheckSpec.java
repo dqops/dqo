@@ -35,19 +35,22 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Table-level check that ensures that there are no more than a maximum number of rows fail a custom SQL condition (expression).
+ * Table level check that uses a custom SQL expression on each row to verify (assert) that all rows pass a custom condition defined as an SQL condition.
+ * Use the {alias} token to reference the tested table. This data quality check can be used to compare columns on the same table.
+ * For example, the condition can verify that the value in the *col_price* column is higher than the *col_tax* column using an SQL expression: `{alias}.col_price > {alias}.col_tax`.
+ * Use an SQL expression that returns a *true* value for valid values and *false* for invalid values, because it is an assertion.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableSqlConditionFailedCountCheckSpec
+public class TableSqlConditionFailedCheckSpec
         extends AbstractCheckSpec<TableSqlConditionFailedCountSensorParametersSpec, MaxCountRule0WarningParametersSpec, MaxCountRule0ErrorParametersSpec, MaxCountRule100ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<TableSqlConditionFailedCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+    public static final ChildHierarchyNodeFieldMapImpl<TableSqlConditionFailedCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("Sensor parameters with the custom SQL condition (an expression that returns true/false) which is evaluated on a each row")
+    @JsonPropertyDescription("Sensor parameters with the custom SQL condition (an expression that returns true/false) which is evaluated on a each row.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableSqlConditionFailedCountSensorParametersSpec parameters = new TableSqlConditionFailedCountSensorParametersSpec();

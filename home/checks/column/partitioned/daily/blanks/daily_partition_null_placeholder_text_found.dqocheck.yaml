@@ -5,6 +5,6 @@ spec:
   sensor_name: column/blanks/null_placeholder_text_count
   rule_name: comparison/max_count
   help_text: Verifies that the number of null placeholders in a column does not exceed
-    the maximum accepted count. Creates a separate data quality check (and an alert)
-    for each daily partition.
+    the maximum accepted count. Stores a separate data quality check result for each
+    daily partition.
   standard: true

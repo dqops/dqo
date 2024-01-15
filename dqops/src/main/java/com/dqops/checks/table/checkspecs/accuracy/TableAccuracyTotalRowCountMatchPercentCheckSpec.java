@@ -35,7 +35,8 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Table-level check that ensures that there are no more than a maximum percentage of difference of row count of a tested table and of an row count of another (reference) table.
+ * Table level check compares the row count of the current (tested) table and the row count of another table that is referenced. This check ensures that difference between the row counts is below a maximum accepted percentage of difference.
+ * This check runs an SQL query with an INNER JOIN clause to join to the other (referenced) table that must be defined in the same database.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -47,7 +48,7 @@ public class TableAccuracyTotalRowCountMatchPercentCheckSpec
         }
     };
 
-    @JsonPropertyDescription("Data quality check parameters")
+    @JsonPropertyDescription("Data quality check parameters. Fill the parameters to provide the name of the referenced table.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableAccuracyTotalRowCountMatchPercentSensorParametersSpec parameters = new TableAccuracyTotalRowCountMatchPercentSensorParametersSpec();

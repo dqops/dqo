@@ -47,10 +47,10 @@ public class ColumnBoolDailyPartitionedChecksSpec extends AbstractCheckCategoryS
         }
     };
 
-    @JsonPropertyDescription("Verifies that the percentage of true values in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the percentage of true values in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each daily partition.")
     private ColumnTruePercentCheckSpec dailyPartitionTruePercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of false values in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the percentage of false values in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each daily partition.")
     private ColumnFalsePercentCheckSpec dailyPartitionFalsePercent;
 
     /**

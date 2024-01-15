@@ -11,3 +11,4 @@ spec:
     help_text: The maximum number of values from the expected_values list that were
       not found in the column (inclusive).
     data_type: long
+    required: true

@@ -413,7 +413,7 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
 
     @CommandLine.Option(names = {"--dqo.sensor.limit.fail-on-sensor-readout-limit-exceeded"},
             description = "Configures the behavior when the number of rows returned from a data quality sensor exceeds the limit configured in the 'sensor-readout-limit' parameter. " +
-                    "When true, the whole check execution is failed. When false, only results up to the limit are analyzed.", defaultValue = "false")
+                    "When true, the whole check execution is failed. When false, only results up to the limit are analyzed. The default value is true.", defaultValue = "true")
     private boolean dqoSensorLimitFailOnSensorReadoutLimitExceeded;
 
     @CommandLine.Option(names = {"--dqo.sensor.limit.max-merged-queries"},

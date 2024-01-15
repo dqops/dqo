@@ -15,7 +15,7 @@ The **text not matching regex found** data quality check has the following varia
 
 Verifies that the number of text values not matching the custom regular expression pattern does not exceed the maximum accepted count.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_text_not_matching_regex_found|profiling| |Validity|[text_not_matching_regex_count](../../../reference/sensors/column/patterns-column-sensors.md#text-not-matching-regex-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -25,29 +25,74 @@ Please expand the section below to see the DQOps command-line examples to run or
 
 ??? example "Managing profile text not matching regex found check from DQOps shell"
 
-    === "Activate check"
+    === "Activate the check with a warning rule"
 
-        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -ch=profile_text_not_matching_regex_found
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=profile_text_not_matching_regex_found --enable-warning
         ```
 
-    === "Run check on connection"
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=profile_text_not_matching_regex_found --enable-warning
+        ```
+        
+        Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=profile_text_not_matching_regex_found --enable-warning
+                            -Wmax_count=value
+        ```
+
+
+    === "Activate the check with an error rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=profile_text_not_matching_regex_found --enable-error
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=profile_text_not_matching_regex_found --enable-error
+        ```
+        
+        Additional rule parameters are passed using the *-Erule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=profile_text_not_matching_regex_found --enable-error
+                            -Emax_count=value
+        ```
+
+
+    === "Run all configured checks"
 
         Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+        The following example shows how to run the *profile_text_not_matching_regex_found* check on all tables and columns on a single data source.
 
         ```
-        dqo> check run -c=connection_name -ch=profile_text_not_matching_regex_found
+        dqo> check run -c=data_source_name -ch=profile_text_not_matching_regex_found
         ```
 
-    === "Run check on table"
-
-        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters.
 
         ```
         dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_text_not_matching_regex_found
         ```
+
+        You can also run this check on all tables (and columns)  on which the *profile_text_not_matching_regex_found* check is enabled
+        using patterns to find tables.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_*  -col=column_name_*-ch=profile_text_not_matching_regex_found
+        ```
+
 
 **YAML configuration**
 
@@ -1387,12 +1432,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
-
-
-
-
-
-
 ___
 
 
@@ -1403,7 +1442,7 @@ ___
 
 Verifies that the number of text values not matching the custom regular expression pattern does not exceed the maximum accepted count.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_text_not_matching_regex_found|monitoring|daily|Validity|[text_not_matching_regex_count](../../../reference/sensors/column/patterns-column-sensors.md#text-not-matching-regex-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -1413,29 +1452,74 @@ Please expand the section below to see the DQOps command-line examples to run or
 
 ??? example "Managing daily text not matching regex found check from DQOps shell"
 
-    === "Activate check"
+    === "Activate the check with a warning rule"
 
-        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -ch=daily_text_not_matching_regex_found
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=daily_text_not_matching_regex_found --enable-warning
         ```
 
-    === "Run check on connection"
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_text_not_matching_regex_found --enable-warning
+        ```
+        
+        Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_text_not_matching_regex_found --enable-warning
+                            -Wmax_count=value
+        ```
+
+
+    === "Activate the check with an error rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=daily_text_not_matching_regex_found --enable-error
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_text_not_matching_regex_found --enable-error
+        ```
+        
+        Additional rule parameters are passed using the *-Erule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_text_not_matching_regex_found --enable-error
+                            -Emax_count=value
+        ```
+
+
+    === "Run all configured checks"
 
         Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+        The following example shows how to run the *daily_text_not_matching_regex_found* check on all tables and columns on a single data source.
 
         ```
-        dqo> check run -c=connection_name -ch=daily_text_not_matching_regex_found
+        dqo> check run -c=data_source_name -ch=daily_text_not_matching_regex_found
         ```
 
-    === "Run check on table"
-
-        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters.
 
         ```
         dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_text_not_matching_regex_found
         ```
+
+        You can also run this check on all tables (and columns)  on which the *daily_text_not_matching_regex_found* check is enabled
+        using patterns to find tables.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_*  -col=column_name_*-ch=daily_text_not_matching_regex_found
+        ```
+
 
 **YAML configuration**
 
@@ -2777,12 +2861,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
-
-
-
-
-
-
 ___
 
 
@@ -2793,7 +2871,7 @@ ___
 
 Verifies that the number of text values not matching the custom regular expression pattern does not exceed the maximum accepted count.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_text_not_matching_regex_found|monitoring|monthly|Validity|[text_not_matching_regex_count](../../../reference/sensors/column/patterns-column-sensors.md#text-not-matching-regex-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -2803,29 +2881,74 @@ Please expand the section below to see the DQOps command-line examples to run or
 
 ??? example "Managing monthly text not matching regex found check from DQOps shell"
 
-    === "Activate check"
+    === "Activate the check with a warning rule"
 
-        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -ch=monthly_text_not_matching_regex_found
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=monthly_text_not_matching_regex_found --enable-warning
         ```
 
-    === "Run check on connection"
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_text_not_matching_regex_found --enable-warning
+        ```
+        
+        Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_text_not_matching_regex_found --enable-warning
+                            -Wmax_count=value
+        ```
+
+
+    === "Activate the check with an error rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=monthly_text_not_matching_regex_found --enable-error
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_text_not_matching_regex_found --enable-error
+        ```
+        
+        Additional rule parameters are passed using the *-Erule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_text_not_matching_regex_found --enable-error
+                            -Emax_count=value
+        ```
+
+
+    === "Run all configured checks"
 
         Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+        The following example shows how to run the *monthly_text_not_matching_regex_found* check on all tables and columns on a single data source.
 
         ```
-        dqo> check run -c=connection_name -ch=monthly_text_not_matching_regex_found
+        dqo> check run -c=data_source_name -ch=monthly_text_not_matching_regex_found
         ```
 
-    === "Run check on table"
-
-        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters.
 
         ```
         dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_text_not_matching_regex_found
         ```
+
+        You can also run this check on all tables (and columns)  on which the *monthly_text_not_matching_regex_found* check is enabled
+        using patterns to find tables.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_*  -col=column_name_*-ch=monthly_text_not_matching_regex_found
+        ```
+
 
 **YAML configuration**
 
@@ -4167,12 +4290,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
-
-
-
-
-
-
 ___
 
 
@@ -4183,7 +4300,7 @@ ___
 
 Verifies that the number of text values not matching the custom regular expression pattern does not exceed the maximum accepted count.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_text_not_matching_regex_found|partitioned|daily|Validity|[text_not_matching_regex_count](../../../reference/sensors/column/patterns-column-sensors.md#text-not-matching-regex-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -4193,29 +4310,74 @@ Please expand the section below to see the DQOps command-line examples to run or
 
 ??? example "Managing daily partition text not matching regex found check from DQOps shell"
 
-    === "Activate check"
+    === "Activate the check with a warning rule"
 
-        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -ch=daily_partition_text_not_matching_regex_found
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=daily_partition_text_not_matching_regex_found --enable-warning
         ```
 
-    === "Run check on connection"
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_partition_text_not_matching_regex_found --enable-warning
+        ```
+        
+        Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_partition_text_not_matching_regex_found --enable-warning
+                            -Wmax_count=value
+        ```
+
+
+    === "Activate the check with an error rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=daily_partition_text_not_matching_regex_found --enable-error
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_partition_text_not_matching_regex_found --enable-error
+        ```
+        
+        Additional rule parameters are passed using the *-Erule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_partition_text_not_matching_regex_found --enable-error
+                            -Emax_count=value
+        ```
+
+
+    === "Run all configured checks"
 
         Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+        The following example shows how to run the *daily_partition_text_not_matching_regex_found* check on all tables and columns on a single data source.
 
         ```
-        dqo> check run -c=connection_name -ch=daily_partition_text_not_matching_regex_found
+        dqo> check run -c=data_source_name -ch=daily_partition_text_not_matching_regex_found
         ```
 
-    === "Run check on table"
-
-        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters.
 
         ```
         dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_text_not_matching_regex_found
         ```
+
+        You can also run this check on all tables (and columns)  on which the *daily_partition_text_not_matching_regex_found* check is enabled
+        using patterns to find tables.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_*  -col=column_name_*-ch=daily_partition_text_not_matching_regex_found
+        ```
+
 
 **YAML configuration**
 
@@ -5579,12 +5741,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
-
-
-
-
-
-
 ___
 
 
@@ -5595,7 +5751,7 @@ ___
 
 Verifies that the number of text values not matching the custom regular expression pattern does not exceed the maximum accepted count.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_text_not_matching_regex_found|partitioned|monthly|Validity|[text_not_matching_regex_count](../../../reference/sensors/column/patterns-column-sensors.md#text-not-matching-regex-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
 
@@ -5605,29 +5761,74 @@ Please expand the section below to see the DQOps command-line examples to run or
 
 ??? example "Managing monthly partition text not matching regex found check from DQOps shell"
 
-    === "Activate check"
+    === "Activate the check with a warning rule"
 
-        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -ch=monthly_partition_text_not_matching_regex_found
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=monthly_partition_text_not_matching_regex_found --enable-warning
         ```
 
-    === "Run check on connection"
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_partition_text_not_matching_regex_found --enable-warning
+        ```
+        
+        Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_partition_text_not_matching_regex_found --enable-warning
+                            -Wmax_count=value
+        ```
+
+
+    === "Activate the check with an error rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=monthly_partition_text_not_matching_regex_found --enable-error
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_partition_text_not_matching_regex_found --enable-error
+        ```
+        
+        Additional rule parameters are passed using the *-Erule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_partition_text_not_matching_regex_found --enable-error
+                            -Emax_count=value
+        ```
+
+
+    === "Run all configured checks"
 
         Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+        The following example shows how to run the *monthly_partition_text_not_matching_regex_found* check on all tables and columns on a single data source.
 
         ```
-        dqo> check run -c=connection_name -ch=monthly_partition_text_not_matching_regex_found
+        dqo> check run -c=data_source_name -ch=monthly_partition_text_not_matching_regex_found
         ```
 
-    === "Run check on table"
-
-        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters.
 
         ```
         dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_partition_text_not_matching_regex_found
         ```
+
+        You can also run this check on all tables (and columns)  on which the *monthly_partition_text_not_matching_regex_found* check is enabled
+        using patterns to find tables.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_*  -col=column_name_*-ch=monthly_partition_text_not_matching_regex_found
+        ```
+
 
 **YAML configuration**
 
@@ -6991,12 +7192,10 @@ Expand the *Configure with data grouping* section to see additional examples for
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
-
-
-
-
-
-
 ___
 
 
+
+## What's next
+- Learn how to [configure data quality checks](../../../dqo-concepts/configuring-data-quality-checks-and-rules.md) in DQOps
+- Look at the examples of [running data quality checks](../../../dqo-concepts/running-data-quality-checks.md), targeting tables and columns

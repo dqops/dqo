@@ -1,6 +1,9 @@
 import {
   CheckTemplate,
   ConnectionModelProviderTypeEnum,
+  DqoJobChangeModelStatusEnum,
+  DqoJobEntryParametersModel,
+  DqoJobHistoryEntryModel,
   TableComparisonGroupingColumnPairModel,
   TimeWindowFilterParameters
 } from '../api';
@@ -34,6 +37,19 @@ export interface IFilterTemplate {
   checkName?: string | undefined;
   activeOffCheck?: boolean;
   selectedCheck?: CheckTemplate
+}
+export interface IJob {
+  errorMessage?: string | undefined;
+  jobId: {
+    parentJobId: any;
+    jobId: number | undefined;
+    createdAt: number | undefined;
+  };
+  jobType: string;
+  parameters: DqoJobEntryParametersModel | undefined;
+  status: DqoJobChangeModelStatusEnum | undefined;
+  statusChangedAt?: number | undefined;
+  childs: DqoJobHistoryEntryModel[];
 }
 
 enum CheckTypes {

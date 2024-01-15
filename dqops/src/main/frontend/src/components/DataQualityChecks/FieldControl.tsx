@@ -74,7 +74,7 @@ const FieldControl = ({
     });
   };
 
-  const isInvalid = !field.optional && !value && value !== 0 && !disabled;
+  const isInvalid = !field.optional && !disabled && (value === undefined || value === '' || (Array.isArray(value) && value.length === 0));
   return (
     <div>
       {type === 'boolean' && (

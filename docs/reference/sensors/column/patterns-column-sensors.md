@@ -1041,7 +1041,7 @@ The text matching date patterns percent sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`date_formats`|Desired date format. Sensor will try to parse the column records and cast the data using this format.|enum| |YYYY-MM-DD<br/>Month D, YYYY<br/>MM/DD/YYYY<br/>YYYY/MM/DD<br/>DD/MM/YYYY<br/>|
+|`date_formats`|Desired date format. Sensor will try to parse the column records and cast the data using this format.|enum|:material-check-bold:|YYYY-MM-DD<br/>Month D, YYYY<br/>MM/DD/YYYY<br/>YYYY/MM/DD<br/>DD/MM/YYYY<br/>|
 
 
 
@@ -1784,7 +1784,7 @@ The text not matching date pattern count sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`date_formats`|Desired date format. Sensor will try to parse the column records and cast the data using this format.|enum| |YYYY-MM-DD<br/>Month D, YYYY<br/>MM/DD/YYYY<br/>YYYY/MM/DD<br/>DD/MM/YYYY<br/>|
+|`date_formats`|Desired date format. Sensor will try to parse the column records and cast the data using this format.|enum|:material-check-bold:|YYYY-MM-DD<br/>Month D, YYYY<br/>MM/DD/YYYY<br/>YYYY/MM/DD<br/>DD/MM/YYYY<br/>|
 
 
 
@@ -2233,7 +2233,7 @@ The text not matching regex count sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`regex`|This field can be used to define custom regex. In order to define custom regex, user should write correct regex as a string. If regex is not defined by user then default regex is null|string| ||
+|`regex`|This field can be used to define custom regex. In order to define custom regex, user should write correct regex as a string. If regex is not defined by user then default regex is null|string|:material-check-bold:||
 
 
 
@@ -2622,7 +2622,7 @@ The texts matching regex percent sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`regex`|This field can be used to define custom regex. In order to define custom regex, user should write correct regex as a string. If regex is not defined by user then default regex is null|string| ||
+|`regex`|This field can be used to define custom regex. In order to define custom regex, user should write correct regex as a string. If regex is not defined by user then default regex is null|string|:material-check-bold:||
 
 
 
@@ -3279,3 +3279,7 @@ ___
 
 
 
+
+## What's next
+- Learn how the [data quality sensors](../../../dqo-concepts/definition-of-data-quality-sensors.md) are defined in DQOps and what is the definition of all Jinja2 macros used in the templates
+- Understand how DQOps [runs data quality checks](../../../dqo-concepts/architecture/data-quality-check-execution-flow.md), rendering templates to SQL queries

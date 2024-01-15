@@ -42,39 +42,20 @@ import java.util.Objects;
 public class ColumnDatetimeMonthlyMonitoringChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDatetimeMonthlyMonitoringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("monthly_date_match_format_percent", o -> o.monthlyDateMatchFormatPercent);
             put("monthly_date_values_in_future_percent", o -> o.monthlyDateValuesInFuturePercent);
             put("monthly_datetime_value_in_range_date_percent", o -> o.monthlyDatetimeValueInRangeDatePercent);
-
+            put("monthly_date_match_format_percent", o -> o.monthlyDateMatchFormatPercent);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the percentage of date values matching the given format in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly monitoring.")
-    private ColumnDatetimeDateMatchFormatPercentCheckSpec monthlyDateMatchFormatPercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of date values in future in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of date values in future in a column does not exceed the maximum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.")
     private ColumnDateValuesInFuturePercentCheckSpec monthlyDateValuesInFuturePercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.")
     private ColumnDatetimeValueInRangeDatePercentCheckSpec monthlyDatetimeValueInRangeDatePercent;
 
-    /**
-     * Returns a date match format percentage check.
-     * @return Maximum date match format percentage check.
-     */
-    public ColumnDatetimeDateMatchFormatPercentCheckSpec getMonthlyDateMatchFormatPercent() {
-        return monthlyDateMatchFormatPercent;
-    }
-
-    /**
-     * Sets a new definition of a date match format percentage check.
-     * @param monthlyDateMatchFormatPercent Date match format percentage check.
-     */
-    public void setMonthlyDateMatchFormatPercent(ColumnDatetimeDateMatchFormatPercentCheckSpec monthlyDateMatchFormatPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyDateMatchFormatPercent, monthlyDateMatchFormatPercent));
-        this.monthlyDateMatchFormatPercent = monthlyDateMatchFormatPercent;
-        propagateHierarchyIdToField(monthlyDateMatchFormatPercent, "monthly_date_match_format_percent");
-    }
+    @JsonPropertyDescription("Verifies that the percentage of date values matching the given format in a text column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly monitoring.")
+    private ColumnDatetimeDateMatchFormatPercentCheckSpec monthlyDateMatchFormatPercent;
 
     /**
      * Returns a date values in future percent check specification.
@@ -110,6 +91,24 @@ public class ColumnDatetimeMonthlyMonitoringChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyDatetimeValueInRangeDatePercent, monthlyDatetimeValueInRangeDatePercent));
         this.monthlyDatetimeValueInRangeDatePercent = monthlyDatetimeValueInRangeDatePercent;
         propagateHierarchyIdToField(monthlyDatetimeValueInRangeDatePercent, "monthly_datetime_value_in_range_date_percent");
+    }
+
+    /**
+     * Returns a date match format percentage check.
+     * @return Maximum date match format percentage check.
+     */
+    public ColumnDatetimeDateMatchFormatPercentCheckSpec getMonthlyDateMatchFormatPercent() {
+        return monthlyDateMatchFormatPercent;
+    }
+
+    /**
+     * Sets a new definition of a date match format percentage check.
+     * @param monthlyDateMatchFormatPercent Date match format percentage check.
+     */
+    public void setMonthlyDateMatchFormatPercent(ColumnDatetimeDateMatchFormatPercentCheckSpec monthlyDateMatchFormatPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyDateMatchFormatPercent, monthlyDateMatchFormatPercent));
+        this.monthlyDateMatchFormatPercent = monthlyDateMatchFormatPercent;
+        propagateHierarchyIdToField(monthlyDateMatchFormatPercent, "monthly_date_match_format_percent");
     }
 
     /**

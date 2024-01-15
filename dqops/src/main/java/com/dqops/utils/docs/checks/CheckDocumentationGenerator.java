@@ -24,10 +24,16 @@ import java.nio.file.Path;
  */
 public interface CheckDocumentationGenerator {
     /**
+     * The name of the folder where the reference of the data quality checks is stored.
+     */
+    String CHECKS_FOLDER_NAME = "checks";
+
+    /**
      * Generates documentation of all checks.
      *
      * @param projectRootPath Project root path, used to identify the target file paths for generated documentation articles.
+     * @param currentRootFolder Current documentation that was read from files.
      * @return Documentation folder tree with generated documentation as markdown files.
      */
-    DocumentationFolder renderCheckDocumentation(Path projectRootPath);
+    DocumentationFolder renderCheckDocumentation(Path projectRootPath, DocumentationFolder currentRootFolder);
 }

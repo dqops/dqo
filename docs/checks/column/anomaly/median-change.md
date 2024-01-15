@@ -15,7 +15,7 @@ The **median change** data quality check has the following variants for each
 
 Verifies that the median in a column changed in a fixed rate since the last readout.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_median_change|profiling| |Consistency|[percentile](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[change_percent](../../../reference/rules/Change.md#change-percent)|
 
@@ -25,29 +25,74 @@ Please expand the section below to see the DQOps command-line examples to run or
 
 ??? example "Managing profile median change check from DQOps shell"
 
-    === "Activate check"
+    === "Activate the check with a warning rule"
 
-        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -ch=profile_median_change
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=profile_median_change --enable-warning
         ```
 
-    === "Run check on connection"
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=profile_median_change --enable-warning
+        ```
+        
+        Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=profile_median_change --enable-warning
+                            -Wmax_percent=value
+        ```
+
+
+    === "Activate the check with an error rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=profile_median_change --enable-error
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=profile_median_change --enable-error
+        ```
+        
+        Additional rule parameters are passed using the *-Erule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=profile_median_change --enable-error
+                            -Emax_percent=value
+        ```
+
+
+    === "Run all configured checks"
 
         Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+        The following example shows how to run the *profile_median_change* check on all tables and columns on a single data source.
 
         ```
-        dqo> check run -c=connection_name -ch=profile_median_change
+        dqo> check run -c=data_source_name -ch=profile_median_change
         ```
 
-    === "Run check on table"
-
-        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters.
 
         ```
         dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_median_change
         ```
+
+        You can also run this check on all tables (and columns)  on which the *profile_median_change* check is enabled
+        using patterns to find tables.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_*  -col=column_name_*-ch=profile_median_change
+        ```
+
 
 **YAML configuration**
 
@@ -67,11 +112,11 @@ spec:
             parameters:
               percentile_value: 0.5
             warning:
-              max_percent: 5.0
+              max_percent: 10.0
             error:
-              max_percent: 5.0
+              max_percent: 20.0
             fatal:
-              max_percent: 5.0
+              max_percent: 50.0
       labels:
       - This is the column that is analyzed for data quality issues
 
@@ -682,11 +727,11 @@ Expand the *Configure with data grouping* section to see additional examples for
                 parameters:
                   percentile_value: 0.5
                 warning:
-                  max_percent: 5.0
+                  max_percent: 10.0
                 error:
-                  max_percent: 5.0
+                  max_percent: 20.0
                 fatal:
-                  max_percent: 5.0
+                  max_percent: 50.0
           labels:
           - This is the column that is analyzed for data quality issues
         country:
@@ -1289,12 +1334,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
-
-
-
-
-
-
 ___
 
 
@@ -1305,7 +1344,7 @@ ___
 
 Verifies that the median in a column changed in a fixed rate since the last readout.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_median_change|monitoring|daily|Consistency|[percentile](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[change_percent](../../../reference/rules/Change.md#change-percent)|
 
@@ -1315,29 +1354,74 @@ Please expand the section below to see the DQOps command-line examples to run or
 
 ??? example "Managing daily median change check from DQOps shell"
 
-    === "Activate check"
+    === "Activate the check with a warning rule"
 
-        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -ch=daily_median_change
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=daily_median_change --enable-warning
         ```
 
-    === "Run check on connection"
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_median_change --enable-warning
+        ```
+        
+        Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_median_change --enable-warning
+                            -Wmax_percent=value
+        ```
+
+
+    === "Activate the check with an error rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=daily_median_change --enable-error
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_median_change --enable-error
+        ```
+        
+        Additional rule parameters are passed using the *-Erule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_median_change --enable-error
+                            -Emax_percent=value
+        ```
+
+
+    === "Run all configured checks"
 
         Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+        The following example shows how to run the *daily_median_change* check on all tables and columns on a single data source.
 
         ```
-        dqo> check run -c=connection_name -ch=daily_median_change
+        dqo> check run -c=data_source_name -ch=daily_median_change
         ```
 
-    === "Run check on table"
-
-        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters.
 
         ```
         dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_median_change
         ```
+
+        You can also run this check on all tables (and columns)  on which the *daily_median_change* check is enabled
+        using patterns to find tables.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_*  -col=column_name_*-ch=daily_median_change
+        ```
+
 
 **YAML configuration**
 
@@ -1358,11 +1442,11 @@ spec:
               parameters:
                 percentile_value: 0.5
               warning:
-                max_percent: 5.0
+                max_percent: 10.0
               error:
-                max_percent: 5.0
+                max_percent: 20.0
               fatal:
-                max_percent: 5.0
+                max_percent: 50.0
       labels:
       - This is the column that is analyzed for data quality issues
 
@@ -1974,11 +2058,11 @@ Expand the *Configure with data grouping* section to see additional examples for
                   parameters:
                     percentile_value: 0.5
                   warning:
-                    max_percent: 5.0
+                    max_percent: 10.0
                   error:
-                    max_percent: 5.0
+                    max_percent: 20.0
                   fatal:
-                    max_percent: 5.0
+                    max_percent: 50.0
           labels:
           - This is the column that is analyzed for data quality issues
         country:
@@ -2581,12 +2665,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
-
-
-
-
-
-
 ___
 
 
@@ -2597,7 +2675,7 @@ ___
 
 Verifies that the median in a column changed in a fixed rate since the last readout.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_median_change|monitoring|monthly|Consistency|[percentile](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[change_percent](../../../reference/rules/Change.md#change-percent)|
 
@@ -2607,29 +2685,74 @@ Please expand the section below to see the DQOps command-line examples to run or
 
 ??? example "Managing monthly median change check from DQOps shell"
 
-    === "Activate check"
+    === "Activate the check with a warning rule"
 
-        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -ch=monthly_median_change
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=monthly_median_change --enable-warning
         ```
 
-    === "Run check on connection"
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_median_change --enable-warning
+        ```
+        
+        Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_median_change --enable-warning
+                            -Wmax_percent=value
+        ```
+
+
+    === "Activate the check with an error rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=monthly_median_change --enable-error
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_median_change --enable-error
+        ```
+        
+        Additional rule parameters are passed using the *-Erule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_median_change --enable-error
+                            -Emax_percent=value
+        ```
+
+
+    === "Run all configured checks"
 
         Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+        The following example shows how to run the *monthly_median_change* check on all tables and columns on a single data source.
 
         ```
-        dqo> check run -c=connection_name -ch=monthly_median_change
+        dqo> check run -c=data_source_name -ch=monthly_median_change
         ```
 
-    === "Run check on table"
-
-        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters.
 
         ```
         dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_median_change
         ```
+
+        You can also run this check on all tables (and columns)  on which the *monthly_median_change* check is enabled
+        using patterns to find tables.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_*  -col=column_name_*-ch=monthly_median_change
+        ```
+
 
 **YAML configuration**
 
@@ -2650,11 +2773,11 @@ spec:
               parameters:
                 percentile_value: 0.5
               warning:
-                max_percent: 5.0
+                max_percent: 10.0
               error:
-                max_percent: 5.0
+                max_percent: 20.0
               fatal:
-                max_percent: 5.0
+                max_percent: 50.0
       labels:
       - This is the column that is analyzed for data quality issues
 
@@ -3266,11 +3389,11 @@ Expand the *Configure with data grouping* section to see additional examples for
                   parameters:
                     percentile_value: 0.5
                   warning:
-                    max_percent: 5.0
+                    max_percent: 10.0
                   error:
-                    max_percent: 5.0
+                    max_percent: 20.0
                   fatal:
-                    max_percent: 5.0
+                    max_percent: 50.0
           labels:
           - This is the column that is analyzed for data quality issues
         country:
@@ -3873,12 +3996,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
-
-
-
-
-
-
 ___
 
 
@@ -3889,7 +4006,7 @@ ___
 
 Verifies that the median in a column changed in a fixed rate since the last readout.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_median_change|partitioned|daily|Consistency|[percentile](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[change_percent](../../../reference/rules/Change.md#change-percent)|
 
@@ -3899,29 +4016,74 @@ Please expand the section below to see the DQOps command-line examples to run or
 
 ??? example "Managing daily partition median change check from DQOps shell"
 
-    === "Activate check"
+    === "Activate the check with a warning rule"
 
-        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -ch=daily_partition_median_change
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=daily_partition_median_change --enable-warning
         ```
 
-    === "Run check on connection"
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_partition_median_change --enable-warning
+        ```
+        
+        Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_partition_median_change --enable-warning
+                            -Wmax_percent=value
+        ```
+
+
+    === "Activate the check with an error rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=daily_partition_median_change --enable-error
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_partition_median_change --enable-error
+        ```
+        
+        Additional rule parameters are passed using the *-Erule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_partition_median_change --enable-error
+                            -Emax_percent=value
+        ```
+
+
+    === "Run all configured checks"
 
         Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+        The following example shows how to run the *daily_partition_median_change* check on all tables and columns on a single data source.
 
         ```
-        dqo> check run -c=connection_name -ch=daily_partition_median_change
+        dqo> check run -c=data_source_name -ch=daily_partition_median_change
         ```
 
-    === "Run check on table"
-
-        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters.
 
         ```
         dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_median_change
         ```
+
+        You can also run this check on all tables (and columns)  on which the *daily_partition_median_change* check is enabled
+        using patterns to find tables.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_*  -col=column_name_*-ch=daily_partition_median_change
+        ```
+
 
 **YAML configuration**
 
@@ -3947,11 +4109,11 @@ spec:
               parameters:
                 percentile_value: 0.5
               warning:
-                max_percent: 5.0
+                max_percent: 10.0
               error:
-                max_percent: 5.0
+                max_percent: 20.0
               fatal:
-                max_percent: 5.0
+                max_percent: 50.0
       labels:
       - This is the column that is analyzed for data quality issues
     date_column:
@@ -4573,11 +4735,11 @@ Expand the *Configure with data grouping* section to see additional examples for
                   parameters:
                     percentile_value: 0.5
                   warning:
-                    max_percent: 5.0
+                    max_percent: 10.0
                   error:
-                    max_percent: 5.0
+                    max_percent: 20.0
                   fatal:
-                    max_percent: 5.0
+                    max_percent: 50.0
           labels:
           - This is the column that is analyzed for data quality issues
         date_column:
@@ -5185,12 +5347,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
-
-
-
-
-
-
 ___
 
 
@@ -5201,7 +5357,7 @@ ___
 
 Verifies that the median in a column changed in a fixed rate since the last readout.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_median_change|partitioned|monthly|Consistency|[percentile](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[change_percent](../../../reference/rules/Change.md#change-percent)|
 
@@ -5211,29 +5367,74 @@ Please expand the section below to see the DQOps command-line examples to run or
 
 ??? example "Managing monthly partition median change check from DQOps shell"
 
-    === "Activate check"
+    === "Activate the check with a warning rule"
 
-        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -ch=monthly_partition_median_change
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=monthly_partition_median_change --enable-warning
         ```
 
-    === "Run check on connection"
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_partition_median_change --enable-warning
+        ```
+        
+        Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_partition_median_change --enable-warning
+                            -Wmax_percent=value
+        ```
+
+
+    === "Activate the check with an error rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=monthly_partition_median_change --enable-error
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_partition_median_change --enable-error
+        ```
+        
+        Additional rule parameters are passed using the *-Erule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_partition_median_change --enable-error
+                            -Emax_percent=value
+        ```
+
+
+    === "Run all configured checks"
 
         Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+        The following example shows how to run the *monthly_partition_median_change* check on all tables and columns on a single data source.
 
         ```
-        dqo> check run -c=connection_name -ch=monthly_partition_median_change
+        dqo> check run -c=data_source_name -ch=monthly_partition_median_change
         ```
 
-    === "Run check on table"
-
-        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters.
 
         ```
         dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_partition_median_change
         ```
+
+        You can also run this check on all tables (and columns)  on which the *monthly_partition_median_change* check is enabled
+        using patterns to find tables.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_*  -col=column_name_*-ch=monthly_partition_median_change
+        ```
+
 
 **YAML configuration**
 
@@ -5259,11 +5460,11 @@ spec:
               parameters:
                 percentile_value: 0.5
               warning:
-                max_percent: 5.0
+                max_percent: 10.0
               error:
-                max_percent: 5.0
+                max_percent: 20.0
               fatal:
-                max_percent: 5.0
+                max_percent: 50.0
       labels:
       - This is the column that is analyzed for data quality issues
     date_column:
@@ -5885,11 +6086,11 @@ Expand the *Configure with data grouping* section to see additional examples for
                   parameters:
                     percentile_value: 0.5
                   warning:
-                    max_percent: 5.0
+                    max_percent: 10.0
                   error:
-                    max_percent: 5.0
+                    max_percent: 20.0
                   fatal:
-                    max_percent: 5.0
+                    max_percent: 50.0
           labels:
           - This is the column that is analyzed for data quality issues
         date_column:
@@ -6497,12 +6698,10 @@ Expand the *Configure with data grouping* section to see additional examples for
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
-
-
-
-
-
-
 ___
 
 
+
+## What's next
+- Learn how to [configure data quality checks](../../../dqo-concepts/configuring-data-quality-checks-and-rules.md) in DQOps
+- Look at the examples of [running data quality checks](../../../dqo-concepts/running-data-quality-checks.md), targeting tables and columns

@@ -22,8 +22,8 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`from`|Minimal accepted change with regards to the previous readout (inclusive).|double| ||
-|`to`|Maximal accepted change with regards to the previous readout (inclusive).|double| ||
+|`from`|Minimum accepted change with regards to the previous readout (inclusive).|double| ||
+|`to`|Maximum accepted change with regards to the previous readout (inclusive).|double| ||
 
 
 
@@ -49,13 +49,13 @@ The rule definition YAML file *change/between_change.dqorule.yaml* with the time
       fields:
       - field_name: from
         display_name: from
-        help_text: Minimal accepted change with regards to the previous readout (inclusive).
+        help_text: Minimum accepted change with regards to the previous readout (inclusive).
         data_type: double
         sample_values:
         - 10
       - field_name: to
         display_name: to
-        help_text: Maximal accepted change with regards to the previous readout (inclusive).
+        help_text: Maximum accepted change with regards to the previous readout (inclusive).
         data_type: double
         sample_values:
         - 20
@@ -184,8 +184,8 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`from`|Minimal accepted change with regards to the previous readout (inclusive).|double| ||
-|`to`|Maximal accepted change with regards to the previous readout (inclusive).|double| ||
+|`from`|Minimum accepted change with regards to the previous readout (inclusive).|double| ||
+|`to`|Maximum accepted change with regards to the previous readout (inclusive).|double| ||
 |`exact_day`|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 1 day. If no results are found from that time, no results or errors will be generated.|boolean| ||
 
 
@@ -212,13 +212,13 @@ The rule definition YAML file *change/between_change_1_day.dqorule.yaml* with th
       fields:
       - field_name: from
         display_name: from
-        help_text: Minimal accepted change with regards to the previous readout (inclusive).
+        help_text: Minimum accepted change with regards to the previous readout (inclusive).
         data_type: double
         sample_values:
         - 10
       - field_name: to
         display_name: to
-        help_text: Maximal accepted change with regards to the previous readout (inclusive).
+        help_text: Maximum accepted change with regards to the previous readout (inclusive).
         data_type: double
         sample_values:
         - 20
@@ -230,8 +230,6 @@ The rule definition YAML file *change/between_change_1_day.dqorule.yaml* with th
           \ with the results from the past 1 day. If no results are found from that time,\
           \ no results or errors will be generated."
         data_type: boolean
-        sample_values:
-        - "false"
     ```
 
 
@@ -366,8 +364,8 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`from`|Minimal accepted change with regards to the previous readout (inclusive).|double| ||
-|`to`|Maximal accepted change with regards to the previous readout (inclusive).|double| ||
+|`from`|Minimum accepted change with regards to the previous readout (inclusive).|double| ||
+|`to`|Maximum accepted change with regards to the previous readout (inclusive).|double| ||
 |`exact_day`|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 30 days. If no results are found from that time, no results or errors will be generated.|boolean| ||
 
 
@@ -394,13 +392,13 @@ The rule definition YAML file *change/between_change_30_days.dqorule.yaml* with 
       fields:
       - field_name: from
         display_name: from
-        help_text: Minimal accepted change with regards to the previous readout (inclusive).
+        help_text: Minimum accepted change with regards to the previous readout (inclusive).
         data_type: double
         sample_values:
         - 10
       - field_name: to
         display_name: to
-        help_text: Maximal accepted change with regards to the previous readout (inclusive).
+        help_text: Maximum accepted change with regards to the previous readout (inclusive).
         data_type: double
         sample_values:
         - 20
@@ -412,8 +410,6 @@ The rule definition YAML file *change/between_change_30_days.dqorule.yaml* with 
           \ with the results from the past 30 days. If no results are found from that\
           \ time, no results or errors will be generated."
         data_type: boolean
-        sample_values:
-        - "false"
     ```
 
 
@@ -548,8 +544,8 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`from`|Minimal accepted change with regards to the previous readout (inclusive).|double| ||
-|`to`|Maximal accepted change with regards to the previous readout (inclusive).|double| ||
+|`from`|Minimum accepted change with regards to the previous readout (inclusive).|double| ||
+|`to`|Maximum accepted change with regards to the previous readout (inclusive).|double| ||
 |`exact_day`|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 7 days. If no results are found from that time, no results or errors will be generated.|boolean| ||
 
 
@@ -576,13 +572,13 @@ The rule definition YAML file *change/between_change_7_days.dqorule.yaml* with t
       fields:
       - field_name: from
         display_name: from
-        help_text: Minimal accepted change with regards to the previous readout (inclusive).
+        help_text: Minimum accepted change with regards to the previous readout (inclusive).
         data_type: double
         sample_values:
         - 10
       - field_name: to
         display_name: to
-        help_text: Maximal accepted change with regards to the previous readout (inclusive).
+        help_text: Maximum accepted change with regards to the previous readout (inclusive).
         data_type: double
         sample_values:
         - 20
@@ -594,8 +590,6 @@ The rule definition YAML file *change/between_change_7_days.dqorule.yaml* with t
           \ with the results from the past 7 days. If no results are found from that time,\
           \ no results or errors will be generated."
         data_type: boolean
-        sample_values:
-        - "false"
     ```
 
 
@@ -730,8 +724,8 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`from_percent`|Minimal accepted change relative to the previous readout (inclusive).|double| ||
-|`to_percent`|Maximal accepted change relative to the previous readout (inclusive).|double| ||
+|`from_percent`|Minimum accepted change relative to the previous readout (inclusive).|double| ||
+|`to_percent`|Maximum accepted change relative to the previous readout (inclusive).|double| ||
 
 
 
@@ -757,13 +751,13 @@ The rule definition YAML file *change/between_percent_change.dqorule.yaml* with 
       fields:
       - field_name: from_percent
         display_name: from_percent
-        help_text: Minimal accepted change relative to the previous readout (inclusive).
+        help_text: Minimum accepted change relative to the previous readout (inclusive).
         data_type: double
         sample_values:
         - 10
       - field_name: to_percent
         display_name: to_percent
-        help_text: Maximal accepted change relative to the previous readout (inclusive).
+        help_text: Maximum accepted change relative to the previous readout (inclusive).
         data_type: double
         sample_values:
         - 20
@@ -887,8 +881,8 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`from_percent`|Minimal accepted change relative to the previous readout (inclusive).|double| ||
-|`to_percent`|Maximal accepted change relative to the previous readout (inclusive).|double| ||
+|`from_percent`|Minimum accepted change relative to the previous readout (inclusive).|double| ||
+|`to_percent`|Maximum accepted change relative to the previous readout (inclusive).|double| ||
 |`exact_day`|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 1 day. If no results are found from that time, no results or errors will be generated.|boolean| ||
 
 
@@ -915,13 +909,13 @@ The rule definition YAML file *change/between_percent_change_1_day.dqorule.yaml*
       fields:
       - field_name: from_percent
         display_name: from_percent
-        help_text: Minimal accepted change relative to the previous readout (inclusive).
+        help_text: Minimum accepted change relative to the previous readout (inclusive).
         data_type: double
         sample_values:
         - 10
       - field_name: to_percent
         display_name: to_percent
-        help_text: Maximal accepted change relative to the previous readout (inclusive).
+        help_text: Maximum accepted change relative to the previous readout (inclusive).
         data_type: double
         sample_values:
         - 20
@@ -933,8 +927,6 @@ The rule definition YAML file *change/between_percent_change_1_day.dqorule.yaml*
           \ with the results from the past 1 day. If no results are found from that time,\
           \ no results or errors will be generated."
         data_type: boolean
-        sample_values:
-        - "false"
     ```
 
 
@@ -1063,8 +1055,8 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`from_percent`|Minimal accepted change relative to the previous readout (inclusive).|double| ||
-|`to_percent`|Maximal accepted change relative to the previous readout (inclusive).|double| ||
+|`from_percent`|Minimum accepted change relative to the previous readout (inclusive).|double| ||
+|`to_percent`|Maximum accepted change relative to the previous readout (inclusive).|double| ||
 |`exact_day`|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 30 days. If no results are found from that time, no results or errors will be generated.|boolean| ||
 
 
@@ -1091,13 +1083,13 @@ The rule definition YAML file *change/between_percent_change_30_days.dqorule.yam
       fields:
       - field_name: from_percent
         display_name: from_percent
-        help_text: Minimal accepted change relative to the previous readout (inclusive).
+        help_text: Minimum accepted change relative to the previous readout (inclusive).
         data_type: double
         sample_values:
         - 10
       - field_name: to_percent
         display_name: to_percent
-        help_text: Maximal accepted change relative to the previous readout (inclusive).
+        help_text: Maximum accepted change relative to the previous readout (inclusive).
         data_type: double
         sample_values:
         - 20
@@ -1239,8 +1231,8 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`from_percent`|Minimal accepted change relative to the previous readout (inclusive).|double| ||
-|`to_percent`|Maximal accepted change relative to the previous readout (inclusive).|double| ||
+|`from_percent`|Minimum accepted change relative to the previous readout (inclusive).|double| ||
+|`to_percent`|Maximum accepted change relative to the previous readout (inclusive).|double| ||
 |`exact_day`|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 7 days. If no results are found from that time, no results or errors will be generated.|boolean| ||
 
 
@@ -1267,13 +1259,13 @@ The rule definition YAML file *change/between_percent_change_7_days.dqorule.yaml
       fields:
       - field_name: from_percent
         display_name: from_percent
-        help_text: Minimal accepted change relative to the previous readout (inclusive).
+        help_text: Minimum accepted change relative to the previous readout (inclusive).
         data_type: double
         sample_values:
         - 10
       - field_name: to_percent
         display_name: to_percent
-        help_text: Maximal accepted change relative to the previous readout (inclusive).
+        help_text: Maximum accepted change relative to the previous readout (inclusive).
         data_type: double
         sample_values:
         - 20
@@ -1285,8 +1277,6 @@ The rule definition YAML file *change/between_percent_change_7_days.dqorule.yaml
           \ with the results from the past 7 days. If no results are found from that time,\
           \ no results or errors will be generated."
         data_type: boolean
-        sample_values:
-        - "false"
     ```
 
 
@@ -1415,7 +1405,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_difference`|Maximum accepted absolute difference compared to previous readout (inclusive).|double| ||
+|`max_difference`|Maximum accepted absolute difference compared to previous readout (inclusive).|double|:material-check-bold:||
 
 
 
@@ -1443,6 +1433,7 @@ The rule definition YAML file *change/change_difference.dqorule.yaml* with the t
         display_name: max_difference
         help_text: Maximum accepted absolute difference compared to previous readout (inclusive).
         data_type: double
+        required: true
         sample_values:
         - 10
     ```
@@ -1564,7 +1555,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_difference`|Maximum accepted absolute difference compared to a readout 1 day ago (inclusive).|double| ||
+|`max_difference`|Maximum accepted absolute difference compared to a readout 1 day ago (inclusive).|double|:material-check-bold:||
 |`exact_day`|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 1 day. If no results are found from that time, no results or errors will be generated.|boolean| ||
 
 
@@ -1591,8 +1582,10 @@ The rule definition YAML file *change/change_difference_1_day.dqorule.yaml* with
       fields:
       - field_name: max_difference
         display_name: max_difference
-        help_text: Maximum accepted absolute difference compared to a readout 1 day ago (inclusive).
+        help_text: Maximum accepted absolute difference compared to a readout 1 day ago
+          (inclusive).
         data_type: double
+        required: true
         sample_values:
         - 10
       - field_name: exact_day
@@ -1603,8 +1596,6 @@ The rule definition YAML file *change/change_difference_1_day.dqorule.yaml* with
           \ with the results from the past 1 day. If no results are found from that time,\
           \ no results or errors will be generated."
         data_type: boolean
-        sample_values:
-        - "false"
     ```
 
 
@@ -1732,7 +1723,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_difference`|Maximum accepted absolute difference compared to a readout 30 days ago (inclusive).|double| ||
+|`max_difference`|Maximum accepted absolute difference compared to a readout 30 days ago (inclusive).|double|:material-check-bold:||
 |`exact_day`|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 30 days. If no results are found from that time, no results or errors will be generated.|boolean| ||
 
 
@@ -1759,8 +1750,10 @@ The rule definition YAML file *change/change_difference_30_days.dqorule.yaml* wi
       fields:
       - field_name: max_difference
         display_name: max_difference
-        help_text: Maximum accepted absolute difference compared to a readout 30 days ago (inclusive).
+        help_text: Maximum accepted absolute difference compared to a readout 30 days
+          ago (inclusive).
         data_type: double
+        required: true
         sample_values:
         - 10
       - field_name: exact_day
@@ -1771,8 +1764,6 @@ The rule definition YAML file *change/change_difference_30_days.dqorule.yaml* wi
           \ with the results from the past 30 days. If no results are found from that\
           \ time, no results or errors will be generated."
         data_type: boolean
-        sample_values:
-        - "false"
     ```
 
 
@@ -1900,7 +1891,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_difference`|Maximum accepted absolute difference compared to a readout 7 days ago (inclusive).|double| ||
+|`max_difference`|Maximum accepted absolute difference compared to a readout 7 days ago (inclusive).|double|:material-check-bold:||
 |`exact_day`|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 7 days. If no results are found from that time, no results or errors will be generated.|boolean| ||
 
 
@@ -1927,8 +1918,10 @@ The rule definition YAML file *change/change_difference_7_days.dqorule.yaml* wit
       fields:
       - field_name: max_difference
         display_name: max_difference
-        help_text: Maximum accepted absolute difference compared to a readout 7 days ago (inclusive).
+        help_text: Maximum accepted absolute difference compared to a readout 7 days ago
+          (inclusive).
         data_type: double
+        required: true
         sample_values:
         - 10
       - field_name: exact_day
@@ -1939,8 +1932,6 @@ The rule definition YAML file *change/change_difference_7_days.dqorule.yaml* wit
           \ with the results from the past 7 days. If no results are found from that time,\
           \ no results or errors will be generated."
         data_type: boolean
-        sample_values:
-        - "false"
     ```
 
 
@@ -2068,7 +2059,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_percent`|Percentage of maximum accepted change compared to previous readout (inclusive).|double| ||
+|`max_percent`|Percentage of maximum accepted change compared to previous readout (inclusive).|double|:material-check-bold:||
 
 
 
@@ -2097,8 +2088,7 @@ The rule definition YAML file *change/change_percent.dqorule.yaml* with the time
         help_text: Percentage of maximum accepted change compared to previous readout
           (inclusive).
         data_type: double
-        sample_values:
-        - 5
+        required: true
     ```
 
 
@@ -2218,7 +2208,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_percent`|Percentage of maximum accepted change compared to a readout 1 day ago (inclusive).|double| ||
+|`max_percent`|Percentage of maximum accepted change compared to a readout 1 day ago (inclusive).|double|:material-check-bold:||
 |`exact_day`|When the exact_day parameter is unchecked (exact_day: false), the rule search for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 1 day. If no results are found from that time, no results or errors will be generated.|boolean| ||
 
 
@@ -2245,10 +2235,10 @@ The rule definition YAML file *change/change_percent_1_day.dqorule.yaml* with th
       fields:
       - field_name: max_percent
         display_name: max_percent
-        help_text: Percentage of maximum accepted change compared to a readout 1 day ago (inclusive).
+        help_text: Percentage of maximum accepted change compared to a readout 1 day ago
+          (inclusive).
         data_type: double
-        sample_values:
-        - 5
+        required: true
       - field_name: exact_day
         display_name: exact_day
         help_text: "When the exact_day parameter is unchecked (exact_day: false), the\
@@ -2257,8 +2247,6 @@ The rule definition YAML file *change/change_percent_1_day.dqorule.yaml* with th
           \ only with the results from the past 1 day. If no results are found from that\
           \ time, no results or errors will be generated."
         data_type: boolean
-        sample_values:
-        - "false"
     ```
 
 
@@ -2386,7 +2374,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_percent`|Percentage of maximum accepted change compared to a readout 30 days ago (inclusive).|double| ||
+|`max_percent`|Percentage of maximum accepted change compared to a readout 30 days ago (inclusive).|double|:material-check-bold:||
 |`exact_day`|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 30 days. If no results are found from that time, no results or errors will be generated.|boolean| ||
 
 
@@ -2413,10 +2401,10 @@ The rule definition YAML file *change/change_percent_30_days.dqorule.yaml* with 
       fields:
       - field_name: max_percent
         display_name: max_percent
-        help_text: Percentage of maximum accepted change compared to a readout 30 days ago (inclusive).
+        help_text: Percentage of maximum accepted change compared to a readout 30 days
+          ago (inclusive).
         data_type: double
-        sample_values:
-        - 5
+        required: true
       - field_name: exact_day
         display_name: exact_day
         help_text: "When the exact_day parameter is unchecked (exact_day: false), rule\
@@ -2425,8 +2413,6 @@ The rule definition YAML file *change/change_percent_30_days.dqorule.yaml* with 
           \ with the results from the past 30 days. If no results are found from that\
           \ time, no results or errors will be generated."
         data_type: boolean
-        sample_values:
-        - "false"
     ```
 
 
@@ -2554,7 +2540,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_percent`|Percentage of maximum accepted change compared to a readout 7 days ago (inclusive).|double| ||
+|`max_percent`|Percentage of maximum accepted change compared to a readout 7 days ago (inclusive).|double|:material-check-bold:||
 |`exact_day`|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 7 days. If no results are found from that time, no results or errors will be generated.|boolean| ||
 
 
@@ -2581,10 +2567,10 @@ The rule definition YAML file *change/change_percent_7_days.dqorule.yaml* with t
       fields:
       - field_name: max_percent
         display_name: max_percent
-        help_text: Percentage of maximum accepted change compared to a readout 7 days ago (inclusive).
+        help_text: Percentage of maximum accepted change compared to a readout 7 days
+          ago (inclusive).
         data_type: double
-        sample_values:
-        - 5
+        required: true
       - field_name: exact_day
         display_name: exact_day
         help_text: "When the exact_day parameter is unchecked (exact_day: false), rule\
@@ -2593,8 +2579,6 @@ The rule definition YAML file *change/change_percent_7_days.dqorule.yaml* with t
           \ with the results from the past 7 days. If no results are found from that time,\
           \ no results or errors will be generated."
         data_type: boolean
-        sample_values:
-        - "false"
     ```
 
 
@@ -2702,3 +2686,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 
 
+
+## What's next
+- Learn how the [data quality rules](../../dqo-concepts/definition-of-data-quality-rules.md) are defined in DQOps and what how to create custom rules
+- Understand how DQOps [runs data quality checks](../../dqo-concepts/architecture/data-quality-check-execution-flow.md), calling rules

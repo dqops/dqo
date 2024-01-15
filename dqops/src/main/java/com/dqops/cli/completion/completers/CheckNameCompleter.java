@@ -25,6 +25,7 @@ import com.dqops.metadata.userhome.UserHome;
 import com.dqops.services.check.matching.SimilarCheckMatchingService;
 import com.dqops.services.check.matching.SimilarChecksContainer;
 import com.dqops.utils.StaticBeanFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.BeanFactory;
 
@@ -36,6 +37,7 @@ import java.util.List;
 /**
  * Check name completer. Returns a list of all known checks.
  */
+@Slf4j
 public class CheckNameCompleter implements Iterable<String> {
     private static List<String> builtInCheckNames;
 
@@ -49,26 +51,40 @@ public class CheckNameCompleter implements Iterable<String> {
     public Iterator<String> iterator() {
         BeanFactory beanFactory = StaticBeanFactory.getBeanFactory();
         if (builtInCheckNames == null && beanFactory != null) {
-            SimilarCheckMatchingService similarCheckMatchingService = beanFactory.getBean(SimilarCheckMatchingService.class);
-            SimilarChecksContainer similarTableChecks = similarCheckMatchingService.findSimilarTableChecks();
-            SimilarChecksContainer similarColumnChecks = similarCheckMatchingService.findSimilarColumnChecks();
+            try {
+                SimilarCheckMatchingService similarCheckMatchingService = beanFactory.getBean(SimilarCheckMatchingService.class);
+                SimilarChecksContainer similarTableChecks = similarCheckMatchingService.findSimilarTableChecks();
+                SimilarChecksContainer similarColumnChecks = similarCheckMatchingService.findSimilarColumnChecks();
 
-            builtInCheckNames = new ArrayList<>();
-            similarTableChecks.getSimilarCheckGroups()
-                    .stream()
-                    .flatMap(group -> group.getSimilarChecks().stream())
-                    .forEach(similarCheckModel -> builtInCheckNames.add(similarCheckModel.getCheckModel().getCheckName()));
+                builtInCheckNames = new ArrayList<>();
+                similarTableChecks.getSimilarCheckGroups()
+                        .stream()
+                        .flatMap(group -> group.getSimilarChecks().stream())
+                        .forEach(similarCheckModel -> builtInCheckNames.add(similarCheckModel.getCheckModel().getCheckName()));
 
-            similarColumnChecks.getSimilarCheckGroups()
-                    .stream()
-                    .flatMap(group -> group.getSimilarChecks().stream())
-                    .forEach(similarCheckModel -> builtInCheckNames.add(similarCheckModel.getCheckModel().getCheckName()));
+                similarColumnChecks.getSimilarCheckGroups()
+                        .stream()
+                        .flatMap(group -> group.getSimilarChecks().stream())
+                        .forEach(similarCheckModel -> builtInCheckNames.add(similarCheckModel.getCheckModel().getCheckName()));
+
+                if (builtInCheckNames.isEmpty()) {
+                    log.warn("No build-in checks found for auto completion");
+                }
+            }
+            catch (Exception ex) {
+                log.error("Cannot get the list of built-in checks for command completion, error: " + ex.getMessage(), ex);
+                return Collections.emptyIterator();
+            }
         }
 
         Iterator<String> cachedCompletionCandidates = CliCompletionCache.getCachedCompletionCandidates(
                 new CliCompleterCacheKey(this.getClass()),
                 () -> {
                     try {
+                        if (builtInCheckNames == null) {
+                            return Collections.emptyIterator();
+                        }
+
                         List<String> allCheckNames = new ArrayList<>(builtInCheckNames);
 
                         UserHomeContextCache userHomeContextCache = beanFactory.getBean(UserHomeContextCache.class);
@@ -83,6 +99,7 @@ public class CheckNameCompleter implements Iterable<String> {
 
                         return allCheckNames.iterator();
                     } catch (Exception ex) {
+                        log.error("Error while extracting a list of available data quality checks for command completion, error: " + ex.getMessage(), ex);
                         return Collections.emptyIterator();
                     }
                 });

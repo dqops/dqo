@@ -56,7 +56,7 @@ public class ColumnDetectedDatatypeInTextCheckSpec extends
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private DetectedDatatypeEqualsRuleParametersSpec warning;
 
-    @JsonPropertyDescription("Default alerting threshold for a row count that raises a data quality error (alert), detects that the data type of values stored in a column matches an expected data type code (1..7).")
+    @JsonPropertyDescription("Default alerting thresholdthat raises a data quality issue at an error severity level, detects that the data type of values stored in a column matches an expected data type code (1..7).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private DetectedDatatypeEqualsRuleParametersSpec error;

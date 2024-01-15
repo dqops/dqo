@@ -17,7 +17,7 @@ package com.dqops.bigquery.sensors.column.customsql;
 
 import com.dqops.bigquery.BaseBigQueryIntegrationTest;
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.column.checkspecs.customsql.ColumnSqlConditionFailedCountCheckSpec;
+import com.dqops.checks.column.checkspecs.customsql.ColumnSqlConditionFailedCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
@@ -41,7 +41,7 @@ import tech.tablesaw.api.Table;
 public class BigQueryColumnSqlConditionFailedCountSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
     private ColumnSqlConditionFailedCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnSqlConditionFailedCountCheckSpec checkSpec;
+    private ColumnSqlConditionFailedCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -50,7 +50,7 @@ public class BigQueryColumnSqlConditionFailedCountSensorParametersSpecIntegratio
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnSqlConditionFailedCountSensorParametersSpec();
-		this.checkSpec = new ColumnSqlConditionFailedCountCheckSpec();
+		this.checkSpec = new ColumnSqlConditionFailedCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

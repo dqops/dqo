@@ -20,7 +20,7 @@ import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.table.checkspecs.customsql.TableSqlAggregateExpressionCheckSpec;
-import com.dqops.checks.table.checkspecs.customsql.TableSqlConditionFailedCountCheckSpec;
+import com.dqops.checks.table.checkspecs.customsql.TableSqlConditionFailedCheckSpec;
 import com.dqops.checks.table.checkspecs.customsql.TableSqlConditionPassedPercentCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -42,27 +42,40 @@ import java.util.Objects;
 public class TableCustomSqlDailyMonitoringChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableCustomSqlDailyMonitoringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
+            put("daily_sql_condition_failed_on_table", o -> o.dailySqlConditionFailedOnTable);
             put("daily_sql_condition_passed_percent_on_table", o -> o.dailySqlConditionPassedPercentOnTable);
-            put("daily_sql_condition_failed_count_on_table", o -> o.dailySqlConditionFailedCountOnTable);
             put("daily_sql_aggregate_expression_on_table", o -> o.dailySqlAggregateExpressionOnTable);
         }
     };
 
-    @JsonPropertyDescription("Verifies that a set percentage of rows passed a custom SQL condition (expression). Stores the most recent captured value for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that a custom SQL expression is met for each row. Counts the number of rows where the expression is not satisfied, and raises an issue if too many failures were detected. " +
+            "This check is used also to compare values between columns: `{alias}.col_price > {alias}.col_tax`. " +
+            "Stores the most recent count of failed rows for each day when the data quality check was evaluated.")
+    private TableSqlConditionFailedCheckSpec dailySqlConditionFailedOnTable;
+
+    @JsonPropertyDescription("Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Reference the current table by using tokens, for example: `{alias}.col_price > {alias}.col_tax`. " +
+            "Stores the most recent captured percentage for each day when the data quality check was evaluated.")
     private TableSqlConditionPassedPercentCheckSpec dailySqlConditionPassedPercentOnTable;
 
-    @JsonPropertyDescription("Verifies that a set number of rows failed a custom SQL condition (expression). Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private TableSqlConditionFailedCountCheckSpec dailySqlConditionFailedCountOnTable;
-
-    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private TableSqlAggregateExpressionCheckSpec dailySqlAggregateExpressionOnTable;
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableSqlConditionPassedPercentCheckSpec getMinSqlConditionPassedPercentOnTable() {
-        return dailySqlConditionPassedPercentOnTable;
+    public TableSqlConditionFailedCheckSpec getDailySqlConditionFailedOnTable() {
+        return dailySqlConditionFailedOnTable;
+    }
+
+    /**
+     * Sets a new check specification.
+     * @param dailySqlConditionFailedOnTable Check specification.
+     */
+    public void setDailySqlConditionFailedOnTable(TableSqlConditionFailedCheckSpec dailySqlConditionFailedOnTable) {
+        this.setDirtyIf(!Objects.equals(this.dailySqlConditionFailedOnTable, dailySqlConditionFailedOnTable));
+        this.dailySqlConditionFailedOnTable = dailySqlConditionFailedOnTable;
+        propagateHierarchyIdToField(dailySqlConditionFailedOnTable, "daily_sql_condition_failed_on_table");
     }
 
     /**
@@ -81,24 +94,6 @@ public class TableCustomSqlDailyMonitoringChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailySqlConditionPassedPercentOnTable, dailySqlConditionPassedPercentOnTable));
         this.dailySqlConditionPassedPercentOnTable = dailySqlConditionPassedPercentOnTable;
         propagateHierarchyIdToField(dailySqlConditionPassedPercentOnTable, "daily_sql_condition_passed_percent_on_table");
-    }
-
-    /**
-     * Returns a check specification.
-     * @return New check specification.
-     */
-    public TableSqlConditionFailedCountCheckSpec getDailySqlConditionFailedCountOnTable() {
-        return dailySqlConditionFailedCountOnTable;
-    }
-
-    /**
-     * Sets a new check specification.
-     * @param dailySqlConditionFailedCountOnTable Check specification.
-     */
-    public void setDailySqlConditionFailedCountOnTable(TableSqlConditionFailedCountCheckSpec dailySqlConditionFailedCountOnTable) {
-        this.setDirtyIf(!Objects.equals(this.dailySqlConditionFailedCountOnTable, dailySqlConditionFailedCountOnTable));
-        this.dailySqlConditionFailedCountOnTable = dailySqlConditionFailedCountOnTable;
-        propagateHierarchyIdToField(dailySqlConditionFailedCountOnTable, "daily_sql_condition_failed_count_on_table");
     }
 
     /**

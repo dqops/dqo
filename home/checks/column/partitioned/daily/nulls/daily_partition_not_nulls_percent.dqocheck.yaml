@@ -6,5 +6,5 @@ spec:
   rule_name: comparison/min_percent
   help_text: Measures the percent of not null values in a column. Raises a data quality
     exception when the percentage of not null values is below a minimum accepted percentage.
-    Creates a separate data quality check (and an alert) for each daily partition.
+    Stores a separate data quality check result for each daily partition.
   standard: true

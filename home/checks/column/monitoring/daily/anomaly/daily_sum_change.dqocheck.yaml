@@ -6,4 +6,3 @@ spec:
   rule_name: change/change_percent
   help_text: Verifies that the sum in a column changed in a fixed rate since the last
     readout.
-  standard: true

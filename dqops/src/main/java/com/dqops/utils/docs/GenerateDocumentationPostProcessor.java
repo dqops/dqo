@@ -149,7 +149,7 @@ public class GenerateDocumentationPostProcessor {
         renderedDocumentation.writeModifiedFiles(currentSensorDocFiles);
 
         List<String> renderedIndexYaml = renderedDocumentation.generateMkDocsNavigation(4);
-        MkDocsIndexReplaceUtility.replaceContentLines(projectRoot.resolve("../mkdocs.yml"),
+        FileContentIndexReplaceUtility.replaceContentLines(projectRoot.resolve("../mkdocs.yml"),
                 renderedIndexYaml,
                 "########## INCLUDE SENSOR REFERENCE - DO NOT MODIFY MANUALLY",
                 "########## END INCLUDE SENSOR REFERENCE");
@@ -184,7 +184,7 @@ public class GenerateDocumentationPostProcessor {
         renderedDocumentation.writeModifiedFiles(currentRuleDocFiles);
 
         List<String> renderedIndexYaml = renderedDocumentation.generateMkDocsNavigation(4);
-        MkDocsIndexReplaceUtility.replaceContentLines(projectRoot.resolve("../mkdocs.yml"),
+        FileContentIndexReplaceUtility.replaceContentLines(projectRoot.resolve("../mkdocs.yml"),
                 renderedIndexYaml,
                 "########## INCLUDE RULE REFERENCE - DO NOT MODIFY MANUALLY",
                 "########## END INCLUDE RULE REFERENCE");
@@ -217,7 +217,7 @@ public class GenerateDocumentationPostProcessor {
         renderedDocumentation.writeModifiedFiles(currentCliDocFiles);
 
         List<String> renderedIndexYaml = renderedDocumentation.generateMkDocsNavigation(2);
-        MkDocsIndexReplaceUtility.replaceContentLines(projectRoot.resolve("../mkdocs.yml"),
+        FileContentIndexReplaceUtility.replaceContentLines(projectRoot.resolve("../mkdocs.yml"),
                 renderedIndexYaml,
                 "########## INCLUDE CLI COMMANDS - DO NOT MODIFY MANUALLY",
                 "########## END INCLUDE CLI COMMANDS");
@@ -227,19 +227,42 @@ public class GenerateDocumentationPostProcessor {
                                                       LinkageStore<Class<?>> linkageStore,
                                                       DqoHomeContext dqoHomeContext,
                                                       PythonCallerServiceImpl pythonCallerService) {
-        Path checksDocPath = projectRoot.resolve("../docs/checks").toAbsolutePath().normalize();
-        DocumentationFolder currentCheckDocFiles = DocumentationFolderFactory.loadCurrentFiles(checksDocPath);
         CheckDocumentationModelFactory checkDocumentationModelFactory = createCheckDocumentationModelFactory(projectRoot, linkageStore, dqoHomeContext, pythonCallerService);
         CheckDocumentationGenerator checkDocumentationGenerator = new CheckDocumentationGeneratorImpl(checkDocumentationModelFactory);
 
-        DocumentationFolder renderedDocumentation = checkDocumentationGenerator.renderCheckDocumentation(projectRoot);
-        renderedDocumentation.writeModifiedFiles(currentCheckDocFiles);
+        Path docsRootFolderPath = projectRoot.resolve("../docs").toAbsolutePath().normalize();
+        Path checksDocPath = docsRootFolderPath.resolve("checks").toAbsolutePath().normalize();
+        DocumentationFolder currentCheckDocFiles = DocumentationFolderFactory.loadCurrentFiles(checksDocPath);
+        currentCheckDocFiles.setFolderName("checks");
 
-        List<String> renderedIndexYaml = renderedDocumentation.generateMkDocsNavigation(2);
-        MkDocsIndexReplaceUtility.replaceContentLines(projectRoot.resolve("../mkdocs.yml"),
-                renderedIndexYaml,
+        Path dqoConceptsDocPath = docsRootFolderPath.resolve("dqo-concepts").toAbsolutePath().normalize();
+        Path categoriesConceptDocPath = dqoConceptsDocPath.resolve("types-of-data-quality-checks").toAbsolutePath().normalize();
+        DocumentationFolder currentCheckCategoriesConceptDocFiles = DocumentationFolderFactory.loadCurrentFiles(categoriesConceptDocPath);
+
+        currentCheckCategoriesConceptDocFiles.setFolderName("types-of-data-quality-checks");
+        DocumentationFolder currentDqoConceptsFolder = new DocumentationFolder("dqo-concepts", dqoConceptsDocPath);
+        currentDqoConceptsFolder.getSubFolders().add(currentCheckCategoriesConceptDocFiles);
+
+        DocumentationFolder currentRootFolder = new DocumentationFolder("", docsRootFolderPath);
+        currentRootFolder.getSubFolders().add(currentCheckDocFiles);
+        currentRootFolder.getSubFolders().add(currentDqoConceptsFolder);
+
+        DocumentationFolder renderedDocumentation = checkDocumentationGenerator.renderCheckDocumentation(projectRoot, currentRootFolder);
+        renderedDocumentation.writeModifiedFiles(currentRootFolder);
+
+        DocumentationFolder newChecksFolder = renderedDocumentation.getFolderByName(CheckDocumentationGenerator.CHECKS_FOLDER_NAME);
+        List<String> renderedChecksReferenceIndexYaml = newChecksFolder.generateMkDocsNavigation(2);
+        FileContentIndexReplaceUtility.replaceContentLines(projectRoot.resolve("../mkdocs.yml"),
+                renderedChecksReferenceIndexYaml,
                 "########## INCLUDE CHECK REFERENCE - DO NOT MODIFY MANUALLY",
                 "########## END INCLUDE CHECK REFERENCE");
+
+        DocumentationFolder newTypesOfChecksFolder = renderedDocumentation.getFolderByName("dqo-concepts/types-of-data-quality-checks");
+        List<String> renderedCheckTypesIndexYaml = newTypesOfChecksFolder.generateMkDocsNavigation(6);
+        FileContentIndexReplaceUtility.replaceContentLines(projectRoot.resolve("../mkdocs.yml"),
+                renderedCheckTypesIndexYaml,
+                "########## INCLUDE TYPES OF CHECKS REFERENCE - DO NOT MODIFY MANUALLY",
+                "########## END INCLUDE TYPES OF CHECKS REFERENCE");
     }
 
     /**
@@ -300,6 +323,7 @@ public class GenerateDocumentationPostProcessor {
                 createRuleDocumentationModelFactory(projectRoot, dqoHomeContext),
                 new ModelToSpecCheckMappingServiceImpl(reflectionService),
                 new YamlSerializerImpl(configurationProperties, null),
+                new JsonSerializerImpl(),
                 new JinjaTemplateRenderServiceImpl(pythonCallerService, pythonConfigurationProperties),
                 linkageStore);
         return checkDocumentationModelFactory;
@@ -332,7 +356,7 @@ public class GenerateDocumentationPostProcessor {
         renderedDocumentation.writeModifiedFiles(currentYamlDocFiles);
 
         List<String> renderedIndexYaml = renderedDocumentation.generateMkDocsNavigation(4);
-        MkDocsIndexReplaceUtility.replaceContentLines(projectRoot.resolve("../mkdocs.yml"),
+        FileContentIndexReplaceUtility.replaceContentLines(projectRoot.resolve("../mkdocs.yml"),
                 renderedIndexYaml,
                 "########## INCLUDE YAML REFERENCE - DO NOT MODIFY MANUALLY",
                 "########## END INCLUDE YAML REFERENCE");
@@ -433,7 +457,7 @@ public class GenerateDocumentationPostProcessor {
         renderedDocumentation.writeModifiedFiles(currentParquetsDocFiles);
 
         List<String> renderedIndexParquets = renderedDocumentation.generateMkDocsNavigation(4);
-        MkDocsIndexReplaceUtility.replaceContentLines(projectRoot.resolve("../mkdocs.yml"),
+        FileContentIndexReplaceUtility.replaceContentLines(projectRoot.resolve("../mkdocs.yml"),
                 renderedIndexParquets,
                 "########## INCLUDE PARQUET FILES REFERENCE - DO NOT MODIFY MANUALLY",
                 "########## END INCLUDE PARQUET FILES REFERENCE");

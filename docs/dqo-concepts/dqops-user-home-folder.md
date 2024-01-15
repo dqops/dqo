@@ -158,9 +158,12 @@ $DQO_USER_HOME
     │   ├───crypto_dogecoin.blocks.dqotable.yaml
     │   ├───crypto_dogecoin.inputs.dqotable.yaml
     │   ├───crypto_dogecoin.outputs.dqotable.yaml
-    │   └───<schema_name>.<table_name>.dqotable.yaml(1)
+    │   └───<schema_name>.<table_name>.dqotable.yaml (1)!
     └─...   
 ```
+
+1. A table configuration file. The [.dqotable.yaml](../reference/yaml/TableYaml.md) files are named as the *&lt;schema_name&gt;.&lt;table_name&gt;.dqotable.yaml*.
+
 
 The [.dqotable.yaml](../reference/yaml/TableYaml.md) files are named as the *&lt;schema_name&gt;.&lt;table_name&gt;.dqotable.yaml*.
 

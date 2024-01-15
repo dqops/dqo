@@ -19,9 +19,7 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.rules.comparison.MinCountRule1ParametersSpec;
-import com.dqops.rules.comparison.MinCountRule100FatalParametersSpec;
-import com.dqops.rules.comparison.MinCountRule0WarningParametersSpec;
+import com.dqops.rules.comparison.*;
 import com.dqops.sensors.table.volume.TableVolumeRowCountSensorParametersSpec;
 import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -42,7 +40,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableRowCountCheckSpec extends AbstractCheckSpec<TableVolumeRowCountSensorParametersSpec, MinCountRule0WarningParametersSpec, MinCountRule1ParametersSpec, MinCountRule100FatalParametersSpec> {
+public class TableRowCountCheckSpec
+        extends AbstractCheckSpec<TableVolumeRowCountSensorParametersSpec, MinCountRule1ParametersSpec, MinCountRule1ParametersSpec, MinCountRule1ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<TableRowCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -56,9 +55,9 @@ public class TableRowCountCheckSpec extends AbstractCheckSpec<TableVolumeRowCoun
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinCountRule0WarningParametersSpec warning;
+    private MinCountRule1ParametersSpec warning;
 
-    @JsonPropertyDescription("Default alerting threshold for a row count that raises a data quality error (alert)")
+    @JsonPropertyDescription("Default alerting threshold that raises a data quality issue at an error severity level")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MinCountRule1ParametersSpec error;
@@ -66,7 +65,7 @@ public class TableRowCountCheckSpec extends AbstractCheckSpec<TableVolumeRowCoun
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinCountRule100FatalParametersSpec fatal;
+    private MinCountRule1ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -93,7 +92,7 @@ public class TableRowCountCheckSpec extends AbstractCheckSpec<TableVolumeRowCoun
      * @return Warning severity rule parameters.
      */
     @Override
-    public MinCountRule0WarningParametersSpec getWarning() {
+    public MinCountRule1ParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -101,7 +100,7 @@ public class TableRowCountCheckSpec extends AbstractCheckSpec<TableVolumeRowCoun
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MinCountRule0WarningParametersSpec warning) {
+    public void setWarning(MinCountRule1ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -133,7 +132,7 @@ public class TableRowCountCheckSpec extends AbstractCheckSpec<TableVolumeRowCoun
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MinCountRule100FatalParametersSpec getFatal() {
+    public MinCountRule1ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -141,7 +140,7 @@ public class TableRowCountCheckSpec extends AbstractCheckSpec<TableVolumeRowCoun
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MinCountRule100FatalParametersSpec fatal) {
+    public void setFatal(MinCountRule1ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");
@@ -184,7 +183,7 @@ public class TableRowCountCheckSpec extends AbstractCheckSpec<TableVolumeRowCoun
         public TableRowCountCheckSpec createSample() {
             return new TableRowCountCheckSpec() {{
                 setParameters(new TableVolumeRowCountSensorParametersSpec.TableVolumeRowCountSensorParametersSpecSampleFactory().createSample());
-                setError(new MinCountRule1ParametersSpec.MinCountRule1ParametersSpecSampleFactory().createSample());
+                setError(new MinCountRule1ParametersSpec());
             }};
         }
     }

@@ -15,6 +15,7 @@ export interface IError {
 function ErrorProvider({ children }: any) {
   const [errors, setErrors] = useState<IError[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string>()
 
   useEffect(() => {
     axios.interceptors.response.use(undefined, async (error) => {
@@ -34,8 +35,11 @@ function ErrorProvider({ children }: any) {
       if (newError.name) {
         setErrors([...errors, newError]);
       }
-
-      if (response.status >= 500) {
+      if (response.status === 500) {
+        setIsOpen(true);
+        setErrorMessage(response?.data?.trace);
+      }
+      if (response.status > 500) {
         setIsOpen(true);
       }
       if (response.status < 500) {
@@ -66,7 +70,7 @@ function ErrorProvider({ children }: any) {
       }}
     >
       {children}
-      <ErrorModal open={isOpen} onClose={() => setIsOpen(false)} />
+      <ErrorModal open={isOpen} onClose={() => setIsOpen(false)} message = {errorMessage}/>
     </ErrorContext.Provider>
   );
 }

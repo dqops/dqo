@@ -40,23 +40,23 @@ public class ColumnNumericIntegerInRangePercentSensorParametersSpec extends Abst
         }
     };
 
-    @JsonPropertyDescription("Minimal value range variable.")
+    @JsonPropertyDescription("Minimum value range variable.")
     private Long minValue;
 
-    @JsonPropertyDescription("Maximal value range variable.")
+    @JsonPropertyDescription("Maximum value range variable.")
     private Long maxValue;
 
     /**
-     * Returns the minimal value of the range.
-     * @return Minimal value of the range.
+     * Returns the minimum value of the range.
+     * @return Minimum value of the range.
      */
     public Long getMinValue() {
         return minValue;
     }
 
     /**
-     * Sets the minimal value of the range.
-     * @param minValue Minimal value of the range.
+     * Sets the minimum value of the range.
+     * @param minValue Minimum value of the range.
      */
     public void setMinValue(Long minValue) {
         this.setDirtyIf(!Objects.equals(this.minValue, minValue));
@@ -64,16 +64,16 @@ public class ColumnNumericIntegerInRangePercentSensorParametersSpec extends Abst
     }
 
     /**
-     * Returns the maximal value of the range.
-     * @return Maximal value of the range.
+     * Returns the maximum value of the range.
+     * @return Maximum value of the range.
      */
     public Long getMaxValue() {
         return maxValue;
     }
 
     /**
-     * Sets the maximal value of the range.
-     * @param maxValue Maximal value of the range.
+     * Sets the maximum value of the range.
+     * @param maxValue Maximum value of the range.
      */
     public void setMaxValue(Long maxValue) {
         this.setDirtyIf(!Objects.equals(this.maxValue, maxValue));

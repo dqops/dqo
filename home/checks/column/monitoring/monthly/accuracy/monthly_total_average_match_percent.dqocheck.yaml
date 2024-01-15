@@ -6,6 +6,6 @@ spec:
   rule_name: comparison/diff_percent
   help_text: Verifies that the percentage of difference in total average of a column
     in a table and total average of a column of another table does not exceed the
-    set number. Stores the most recent row count for each month when the data quality
+    set number. Stores the most recent check result for each month when the data quality
     check was evaluated.
   standard: true

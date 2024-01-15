@@ -29,7 +29,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
 import com.dqops.rules.RuleTimeWindowSettingsSpec;
 import com.dqops.rules.averages.PercentMovingAverageRuleParametersSpec;
-import com.dqops.rules.comparison.MinCountRule0ParametersSpec;
+import com.dqops.rules.comparison.MinCountRule1ParametersSpec;
 import com.dqops.sensors.column.acceptedvalues.ColumnNumericExpectedNumbersInUseCountSensorParametersSpec;
 import com.dqops.sensors.column.text.ColumnTextTextLengthInRangePercentSensorParametersSpec;
 import com.dqops.sensors.column.text.TextBuiltInDateFormats;
@@ -116,7 +116,7 @@ public class ReflectionServiceImplTests extends BaseTest {
     }
     @Test
     void reflectClass_whenReflectingRuleParametersClass_thenReturnsAllRequestedFields() {
-        ClassInfo classInfo = this.sut.reflectClass(MinCountRule0ParametersSpec.class);
+        ClassInfo classInfo = this.sut.reflectClass(MinCountRule1ParametersSpec.class);
         Assertions.assertNotNull(classInfo);
         Assertions.assertEquals(1, classInfo.getFields().size());
         Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "minCount")));

@@ -5,9 +5,9 @@ spec:
   fields:
   - field_name: min_value
     display_name: min_value
-    help_text: Minimal value range variable.
+    help_text: Minimum value range variable.
     data_type: long
   - field_name: max_value
     display_name: max_value
-    help_text: Maximal value range variable.
+    help_text: Maximum value range variable.
     data_type: long

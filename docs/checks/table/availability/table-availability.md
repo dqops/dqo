@@ -17,7 +17,7 @@ The **table availability** data quality check has the following variants for eac
 
 Verifies availability of a table in a monitored database using a simple query.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_table_availability|profiling| |Availability|[table_availability](../../../reference/sensors/table/availability-table-sensors.md#table-availability)|[max_failures](../../../reference/rules/Comparison.md#max-failures)|
 
@@ -27,29 +27,74 @@ Please expand the section below to see the DQOps command-line examples to run or
 
 ??? example "Managing profile table availability check from DQOps shell"
 
-    === "Activate check"
+    === "Activate the check with a warning rule"
 
-        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -ch=profile_table_availability
+        dqo> check activate -c=connection_name -t=schema_name.table_name -ch=profile_table_availability --enable-warning
         ```
 
-    === "Run check on connection"
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -ch=profile_table_availability --enable-warning
+        ```
+        
+        Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -ch=profile_table_availability --enable-warning
+                            -Wmax_failures=value
+        ```
+
+
+    === "Activate the check with an error rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name -ch=profile_table_availability --enable-error
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -ch=profile_table_availability --enable-error
+        ```
+        
+        Additional rule parameters are passed using the *-Erule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -ch=profile_table_availability --enable-error
+                            -Emax_failures=value
+        ```
+
+
+    === "Run all configured checks"
 
         Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+        The following example shows how to run the *profile_table_availability* check on all tables on a single data source.
 
         ```
-        dqo> check run -c=connection_name -ch=profile_table_availability
+        dqo> check run -c=data_source_name -ch=profile_table_availability
         ```
 
-    === "Run check on table"
-
-        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters.
 
         ```
         dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_table_availability
         ```
+
+        You can also run this check on all tables  on which the *profile_table_availability* check is enabled
+        using patterns to find tables.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_* -ch=profile_table_availability
+        ```
+
 
 **YAML configuration**
 
@@ -479,12 +524,6 @@ spec:
             ORDER BY time_period
             ```
     
-
-
-
-
-
-
 ___
 
 
@@ -495,7 +534,7 @@ ___
 
 Verifies availability of a table in a monitored database using a simple query. Stores the most recent table availability status for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_table_availability|monitoring|daily|Availability|[table_availability](../../../reference/sensors/table/availability-table-sensors.md#table-availability)|[max_failures](../../../reference/rules/Comparison.md#max-failures)|
 
@@ -505,29 +544,74 @@ Please expand the section below to see the DQOps command-line examples to run or
 
 ??? example "Managing daily table availability check from DQOps shell"
 
-    === "Activate check"
+    === "Activate the check with a warning rule"
 
-        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -ch=daily_table_availability
+        dqo> check activate -c=connection_name -t=schema_name.table_name -ch=daily_table_availability --enable-warning
         ```
 
-    === "Run check on connection"
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -ch=daily_table_availability --enable-warning
+        ```
+        
+        Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -ch=daily_table_availability --enable-warning
+                            -Wmax_failures=value
+        ```
+
+
+    === "Activate the check with an error rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name -ch=daily_table_availability --enable-error
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -ch=daily_table_availability --enable-error
+        ```
+        
+        Additional rule parameters are passed using the *-Erule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -ch=daily_table_availability --enable-error
+                            -Emax_failures=value
+        ```
+
+
+    === "Run all configured checks"
 
         Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+        The following example shows how to run the *daily_table_availability* check on all tables on a single data source.
 
         ```
-        dqo> check run -c=connection_name -ch=daily_table_availability
+        dqo> check run -c=data_source_name -ch=daily_table_availability
         ```
 
-    === "Run check on table"
-
-        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters.
 
         ```
         dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_table_availability
         ```
+
+        You can also run this check on all tables  on which the *daily_table_availability* check is enabled
+        using patterns to find tables.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_* -ch=daily_table_availability
+        ```
+
 
 **YAML configuration**
 
@@ -958,12 +1042,6 @@ spec:
             ORDER BY time_period
             ```
     
-
-
-
-
-
-
 ___
 
 
@@ -974,7 +1052,7 @@ ___
 
 Verifies availability of a table in a monitored database using a simple query. Stores the most recent table availability status for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_table_availability|monitoring|monthly|Availability|[table_availability](../../../reference/sensors/table/availability-table-sensors.md#table-availability)|[max_failures](../../../reference/rules/Comparison.md#max-failures)|
 
@@ -984,29 +1062,74 @@ Please expand the section below to see the DQOps command-line examples to run or
 
 ??? example "Managing monthly table availability check from DQOps shell"
 
-    === "Activate check"
+    === "Activate the check with a warning rule"
 
-        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -ch=monthly_table_availability
+        dqo> check activate -c=connection_name -t=schema_name.table_name -ch=monthly_table_availability --enable-warning
         ```
 
-    === "Run check on connection"
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -ch=monthly_table_availability --enable-warning
+        ```
+        
+        Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -ch=monthly_table_availability --enable-warning
+                            -Wmax_failures=value
+        ```
+
+
+    === "Activate the check with an error rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name -ch=monthly_table_availability --enable-error
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -ch=monthly_table_availability --enable-error
+        ```
+        
+        Additional rule parameters are passed using the *-Erule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -ch=monthly_table_availability --enable-error
+                            -Emax_failures=value
+        ```
+
+
+    === "Run all configured checks"
 
         Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+        The following example shows how to run the *monthly_table_availability* check on all tables on a single data source.
 
         ```
-        dqo> check run -c=connection_name -ch=monthly_table_availability
+        dqo> check run -c=data_source_name -ch=monthly_table_availability
         ```
 
-    === "Run check on table"
-
-        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters.
 
         ```
         dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_table_availability
         ```
+
+        You can also run this check on all tables  on which the *monthly_table_availability* check is enabled
+        using patterns to find tables.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_* -ch=monthly_table_availability
+        ```
+
 
 **YAML configuration**
 
@@ -1437,12 +1560,10 @@ spec:
             ORDER BY time_period
             ```
     
-
-
-
-
-
-
 ___
 
 
+
+## What's next
+- Learn how to [configure data quality checks](../../../dqo-concepts/configuring-data-quality-checks-and-rules.md) in DQOps
+- Look at the examples of [running data quality checks](../../../dqo-concepts/running-data-quality-checks.md), targeting tables and columns

@@ -21,8 +21,8 @@ The integer in range percent sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`min_value`|Minimal value range variable.|long| ||
-|`max_value`|Maximal value range variable.|long| ||
+|`min_value`|Minimum value range variable.|long| ||
+|`max_value`|Maximum value range variable.|long| ||
 
 
 
@@ -1959,7 +1959,7 @@ The number above max value count sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_value`|This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0|integer| ||
+|`max_value`|This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0|integer|:material-check-bold:||
 
 
 
@@ -2210,7 +2210,7 @@ The number above max value percent sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_value`|This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0|integer| ||
+|`max_value`|This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0|integer|:material-check-bold:||
 
 
 
@@ -2472,7 +2472,7 @@ The number below min value count sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`min_value`|This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0|integer| ||
+|`min_value`|This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0|integer|:material-check-bold:||
 
 
 
@@ -2723,7 +2723,7 @@ The number below min value percent sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`min_value`|This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0|integer| ||
+|`min_value`|This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0|integer|:material-check-bold:||
 
 
 
@@ -2977,8 +2977,8 @@ The number in range percent sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`min_value`|Minimal value range variable.|double| ||
-|`max_value`|Maximal value range variable.|double| ||
+|`min_value`|Minimum value for the range.|double| ||
+|`max_value`|Maximum value for the range.|double| ||
 
 
 
@@ -3229,7 +3229,7 @@ The percentile sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`percentile_value`|Median (50th percentile), must equal 0.5|double| ||
+|`percentile_value`|Median (50th percentile), must equal 0.5|double|:material-check-bold:||
 
 
 
@@ -5023,3 +5023,7 @@ ___
 
 
 
+
+## What's next
+- Learn how the [data quality sensors](../../../dqo-concepts/definition-of-data-quality-sensors.md) are defined in DQOps and what is the definition of all Jinja2 macros used in the templates
+- Understand how DQOps [runs data quality checks](../../../dqo-concepts/architecture/data-quality-check-execution-flow.md), rendering templates to SQL queries

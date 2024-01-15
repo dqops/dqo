@@ -12,5 +12,6 @@ spec:
       \ column name."
     data_type: string
     display_hint: textarea
+    required: true
     sample_values:
     - "MAX({column})"

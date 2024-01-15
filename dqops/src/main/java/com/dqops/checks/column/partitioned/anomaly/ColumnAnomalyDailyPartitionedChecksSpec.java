@@ -41,9 +41,9 @@ import java.util.Objects;
 public class ColumnAnomalyDailyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAnomalyDailyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
+            put("daily_partition_sum_anomaly", o -> o.dailyPartitionSumAnomaly);
             put("daily_partition_mean_anomaly", o -> o.dailyPartitionMeanAnomaly);
             put("daily_partition_median_anomaly", o -> o.dailyPartitionMedianAnomaly);
-            put("daily_partition_sum_anomaly", o -> o.dailyPartitionSumAnomaly);
 
             put("daily_partition_mean_change", o -> o.dailyPartitionMeanChange);
             put("daily_partition_mean_change_1_day", o -> o.dailyPartitionMeanChange1Day);
@@ -62,14 +62,14 @@ public class ColumnAnomalyDailyPartitionedChecksSpec extends AbstractCheckCatego
         }
     };
 
+    @JsonPropertyDescription("Verifies that the sum in a column is within a percentile from measurements made during the last 90 days.")
+    private ColumnSumAnomalyStationaryPartitionCheckSpec dailyPartitionSumAnomaly;
+
     @JsonPropertyDescription("Verifies that the mean value in a column is within a percentile from measurements made during the last 90 days.")
     private ColumnMeanAnomalyStationaryCheckSpec dailyPartitionMeanAnomaly;
 
     @JsonPropertyDescription("Verifies that the median in a column is within a percentile from measurements made during the last 90 days.")
     private ColumnMedianAnomalyStationaryCheckSpec dailyPartitionMedianAnomaly;
-
-    @JsonPropertyDescription("Verifies that the sum in a column is within a percentile from measurements made during the last 90 days.")
-    private ColumnSumAnomalyStationaryPartitionCheckSpec dailyPartitionSumAnomaly;
 
     @JsonPropertyDescription("Verifies that the mean value in a column changed in a fixed rate since last readout.")
     private ColumnMeanChangeCheckSpec dailyPartitionMeanChange;
@@ -117,6 +117,24 @@ public class ColumnAnomalyDailyPartitionedChecksSpec extends AbstractCheckCatego
     private ColumnSumChange30DaysCheckSpec dailyPartitionSumChange30Days;
 
     /**
+     * Returns a sum anomaly 90 days check specification.
+     * @return Sum anomaly 90 days check specification.
+     */
+    public ColumnSumAnomalyStationaryPartitionCheckSpec getDailyPartitionSumAnomaly() {
+        return dailyPartitionSumAnomaly;
+    }
+
+    /**
+     * Sets a new specification of a sum anomaly 90 days check.
+     * @param dailyPartitionSumAnomaly Sum anomaly 90 days check specification.
+     */
+    public void setDailyPartitionSumAnomaly(ColumnSumAnomalyStationaryPartitionCheckSpec dailyPartitionSumAnomaly) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionSumAnomaly, dailyPartitionSumAnomaly));
+        this.dailyPartitionSumAnomaly = dailyPartitionSumAnomaly;
+        propagateHierarchyIdToField(dailyPartitionSumAnomaly, "daily_partition_sum_anomaly");
+    }
+
+    /**
      * Returns a mean value anomaly 90 days check specification.
      * @return Mean value anomaly 90 days check specification.
      */
@@ -150,24 +168,6 @@ public class ColumnAnomalyDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionMedianAnomaly, dailyPartitionMedianAnomaly));
         this.dailyPartitionMedianAnomaly = dailyPartitionMedianAnomaly;
         propagateHierarchyIdToField(dailyPartitionMedianAnomaly, "daily_partition_median_anomaly");
-    }
-
-    /**
-     * Returns a sum anomaly 90 days check specification.
-     * @return Sum anomaly 90 days check specification.
-     */
-    public ColumnSumAnomalyStationaryPartitionCheckSpec getDailyPartitionSumAnomaly() {
-        return dailyPartitionSumAnomaly;
-    }
-
-    /**
-     * Sets a new specification of a sum anomaly 90 days check.
-     * @param dailyPartitionSumAnomaly Sum anomaly 90 days check specification.
-     */
-    public void setDailyPartitionSumAnomaly(ColumnSumAnomalyStationaryPartitionCheckSpec dailyPartitionSumAnomaly) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionSumAnomaly, dailyPartitionSumAnomaly));
-        this.dailyPartitionSumAnomaly = dailyPartitionSumAnomaly;
-        propagateHierarchyIdToField(dailyPartitionSumAnomaly, "daily_partition_sum_anomaly");
     }
 
     /**

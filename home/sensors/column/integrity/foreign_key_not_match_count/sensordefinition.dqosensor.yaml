@@ -9,6 +9,7 @@ spec:
       \ to. In order to define the name of the table, user should write correct name\
       \ as a String."
     data_type: string
+    required: true
     sample_values:
     - dim_customer
   - field_name: foreign_column
@@ -17,5 +18,6 @@ spec:
       \ to. In order to define the name of the column, user should write correct name\
       \ as a String."
     data_type: string
+    required: true
     sample_values:
     - customer_id

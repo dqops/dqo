@@ -56,7 +56,7 @@ public class TableSchemaColumnCountChangedCheckSpec extends AbstractCheckSpec<Ta
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ValueChangedRuleParametersSpec warning;
 
-    @JsonPropertyDescription("Default alerting threshold for a row count that raises a data quality error (alert)")
+    @JsonPropertyDescription("Default alerting thresholdthat raises a data quality issue at an error severity level")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ValueChangedRuleParametersSpec error;

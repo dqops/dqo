@@ -46,22 +46,21 @@ public class BetweenPercentChange1DayRuleParametersSpec extends AbstractRulePara
     public BetweenPercentChange1DayRuleParametersSpec() {
     }
 
-    @JsonPropertyDescription("Minimal accepted change relative to the previous readout (inclusive).")
+    @JsonPropertyDescription("Minimum accepted change relative to the previous readout (inclusive).")
     @SampleValues(values = "10")
     private Double fromPercent;
 
-    @JsonPropertyDescription("Maximal accepted change relative to the previous readout (inclusive).")
+    @JsonPropertyDescription("Maximum accepted change relative to the previous readout (inclusive).")
     @SampleValues(values = "20")
     private Double toPercent;
 
     @JsonPropertyDescription("When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. " +
             "If the parameter is selected (exact_day: true), the rule compares only with the results from the past 1 day. If no results are found from that time, no results or errors will be generated.")
-    @SampleValues(values = "false")
     private Boolean exactDay = false;
 
     /**
      * Gets the lower bound for the accepted change for a data quality check readout, relative to the previous readout.
-     * @return Minimal accepted relative change for a data quality check readout.
+     * @return Minimum accepted relative change for a data quality check readout.
      */
     public Double getFromPercent() {
         return fromPercent;
@@ -78,7 +77,7 @@ public class BetweenPercentChange1DayRuleParametersSpec extends AbstractRulePara
 
     /**
      * Gets the upper bound for the accepted change for a data quality check readout, relative to the previous readout.
-     * @return Maximal accepted relative change for a data quality check readout.
+     * @return Maximum accepted relative change for a data quality check readout.
      */
     public Double getToPercent() {
         return toPercent;

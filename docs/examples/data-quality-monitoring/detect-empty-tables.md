@@ -186,7 +186,7 @@ spec:
     volume:
       profile_row_count:
         warning:
-          min_count: 0
+          min_count: 1
     schema:
       profile_column_count: {}
   monitoring_checks:
@@ -194,7 +194,7 @@ spec:
       volume:
         daily_row_count:
           warning:
-            min_count: 0
+            min_count: 1
         daily_row_count_anomaly:
           warning:
             anomaly_percent: 1.0

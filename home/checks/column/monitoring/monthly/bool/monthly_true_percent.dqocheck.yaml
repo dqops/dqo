@@ -5,6 +5,6 @@ spec:
   sensor_name: column/bool/true_percent
   rule_name: comparison/min_percent
   help_text: Verifies that the percentage of true values in a column does not exceed
-    the minimum accepted percentage. Stores the most recent row count for each month
-    when the data quality check was evaluated.
+    the minimum accepted percentage. Stores the most recent check result for each
+    month when the data quality check was evaluated.
   standard: true

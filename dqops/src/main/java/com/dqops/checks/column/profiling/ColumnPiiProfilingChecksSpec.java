@@ -41,8 +41,8 @@ public class ColumnPiiProfilingChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnPiiProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("profile_contains_usa_phone_percent", o -> o.profileContainsUsaPhonePercent);
-            put("profile_contains_usa_zipcode_percent", o -> o.profileContainsUsaZipcodePercent);
             put("profile_contains_email_percent", o -> o.profileContainsEmailPercent);
+            put("profile_contains_usa_zipcode_percent", o -> o.profileContainsUsaZipcodePercent);
             put("profile_contains_ip4_percent", o -> o.profileContainsIp4Percent);
             put("profile_contains_ip6_percent", o -> o.profileContainsIp6Percent);
         }
@@ -51,11 +51,11 @@ public class ColumnPiiProfilingChecksSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that the percentage of rows that contains USA phone number in a column does not exceed the maximum accepted percentage.")
     private ColumnPiiContainsUsaPhonePercentCheckSpec profileContainsUsaPhonePercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of rows that contains USA zip code in a column does not exceed the maximum accepted percentage.")
-    private ColumnPiiContainsUsaZipcodePercentCheckSpec profileContainsUsaZipcodePercent;
-
     @JsonPropertyDescription("Verifies that the percentage of rows that contains valid emails in a column does not exceed the minimum accepted percentage.")
     private ColumnPiiContainsEmailPercentCheckSpec profileContainsEmailPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of rows that contains USA zip code in a column does not exceed the maximum accepted percentage.")
+    private ColumnPiiContainsUsaZipcodePercentCheckSpec profileContainsUsaZipcodePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of rows that contains valid IP4 address values in a column does not fall below the minimum accepted percentage.")
     private ColumnPiiContainsIp4PercentCheckSpec profileContainsIp4Percent;
@@ -83,24 +83,6 @@ public class ColumnPiiProfilingChecksSpec extends AbstractCheckCategorySpec {
     }
 
     /**
-     * Returns contains USA zip code percent check specification.
-     * @return Contains USA zip code percent check specification.
-     */
-    public ColumnPiiContainsUsaZipcodePercentCheckSpec getProfileContainsUsaZipcodePercent() {
-        return profileContainsUsaZipcodePercent;
-    }
-
-    /**
-     * Sets contains USA zip code percent check specification.
-     * @param profileContainsUsaZipcodePercent Contains USA zip code percent check specification.
-     */
-    public void setProfileContainsUsaZipcodePercent(ColumnPiiContainsUsaZipcodePercentCheckSpec profileContainsUsaZipcodePercent) {
-        this.setDirtyIf(!Objects.equals(this.profileContainsUsaZipcodePercent, profileContainsUsaZipcodePercent));
-        this.profileContainsUsaZipcodePercent = profileContainsUsaZipcodePercent;
-        propagateHierarchyIdToField(profileContainsUsaZipcodePercent, "profile_contains_usa_zipcode_percent");
-    }
-
-    /**
      * Returns a contains email percent check.
      * @return Contains email percent check.
      */
@@ -116,6 +98,24 @@ public class ColumnPiiProfilingChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.profileContainsEmailPercent, profileContainsEmailPercent));
         this.profileContainsEmailPercent = profileContainsEmailPercent;
         propagateHierarchyIdToField(profileContainsEmailPercent, "profile_contains_email_percent");
+    }
+
+    /**
+     * Returns contains USA zip code percent check specification.
+     * @return Contains USA zip code percent check specification.
+     */
+    public ColumnPiiContainsUsaZipcodePercentCheckSpec getProfileContainsUsaZipcodePercent() {
+        return profileContainsUsaZipcodePercent;
+    }
+
+    /**
+     * Sets contains USA zip code percent check specification.
+     * @param profileContainsUsaZipcodePercent Contains USA zip code percent check specification.
+     */
+    public void setProfileContainsUsaZipcodePercent(ColumnPiiContainsUsaZipcodePercentCheckSpec profileContainsUsaZipcodePercent) {
+        this.setDirtyIf(!Objects.equals(this.profileContainsUsaZipcodePercent, profileContainsUsaZipcodePercent));
+        this.profileContainsUsaZipcodePercent = profileContainsUsaZipcodePercent;
+        propagateHierarchyIdToField(profileContainsUsaZipcodePercent, "profile_contains_usa_zipcode_percent");
     }
 
     /**

@@ -31,6 +31,7 @@ import com.dqops.utils.docs.LinkageStore;
 import com.dqops.utils.docs.rules.RuleDocumentationModelFactoryImpl;
 import com.dqops.utils.docs.sensors.SensorDocumentationModelFactoryImpl;
 import com.dqops.utils.reflection.ReflectionServiceImpl;
+import com.dqops.utils.serialization.JsonSerializerObjectMother;
 import com.dqops.utils.serialization.YamlSerializerObjectMother;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -64,6 +65,7 @@ public class CheckDocumentationModelFactoryImplTests extends BaseTest {
                 new RuleDocumentationModelFactoryImpl(projectRoot, dqoHomeContext, specToModelCheckMappingService),
                 uiToSpecCheckMappingService,
                 YamlSerializerObjectMother.getDefault(),
+                JsonSerializerObjectMother.getDefault(),
                 JinjaTemplateRenderServiceObjectMother.getDefault(),
                 new LinkageStore<>());
 
