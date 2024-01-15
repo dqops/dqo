@@ -24,6 +24,7 @@ import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
+import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
@@ -46,6 +47,7 @@ public class SqlServerTableSqlAggregatedExpressionSensorParametersSpecIntegratio
     @BeforeEach
     void setUp() {
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_average_delay, ProviderType.sqlserver);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new TableSqlAggregatedExpressionSensorParametersSpec();
         this.checkSpec = new TableSqlAggregateExpressionCheckSpec();

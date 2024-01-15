@@ -70,7 +70,7 @@ public class SqlServerColumnNumericExpectedNumbersInUseCountSensorParametersSpec
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(null, ValueConverter.toInteger(resultTable.column(0).get(0)));
+        Assertions.assertEquals(0, ValueConverter.toInteger(resultTable.column(0).get(0)));
     }
 
     @Test

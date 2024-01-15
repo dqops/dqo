@@ -77,8 +77,8 @@ This will activate all the checks with the selected threshold level, as shown on
 
 ### **Deactivate multiple checks**
 
-To deactivate multiple checks that match the filter, you can use the button on the left. Additionally, you can also 
-select the checks that you want to deactivate using the checkboxes.
+To deactivate multiple checks that match the filter, you can use the button on the right **Deactivate for all matching filter**.
+Additionally, you can also select the checks that you want to deactivate using the checkboxes.
 
 
 ## What's next

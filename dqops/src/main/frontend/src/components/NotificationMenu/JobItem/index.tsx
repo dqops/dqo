@@ -1,8 +1,5 @@
 import {
   CheckResultsOverviewDataModelStatusesEnum,
-  DqoJobChangeModelStatusEnum,
-  DqoJobEntryParametersModel,
-  DqoJobHistoryEntryModel,
   DqoJobHistoryEntryModelJobTypeEnum,
   DqoJobHistoryEntryModelStatusEnum
 } from '../../../api';
@@ -19,26 +16,14 @@ import { reduceCounter } from '../../../redux/actions/job.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { JobApiClient } from '../../../services/apiClient';
 import clsx from 'clsx';
-
-interface jobInterface {
-  errorMessage?: string | undefined;
-  jobId: {
-    jobId: number | undefined;
-    createdAt: number | undefined;
-  };
-  jobType: string;
-  parameters: DqoJobEntryParametersModel | undefined;
-  status: DqoJobChangeModelStatusEnum | undefined;
-  statusChangedAt?: number | undefined;
-  childs: DqoJobHistoryEntryModel[];
-}
+import { IJob } from '../../../shared/constants';
 
 const JobItem = ({
   job,
   notifnumber,
   canUserCancelJobs
 }: {
-  job: jobInterface;
+  job: IJob;
   notifnumber?: number;
   canUserCancelJobs?: boolean
 }) => {
