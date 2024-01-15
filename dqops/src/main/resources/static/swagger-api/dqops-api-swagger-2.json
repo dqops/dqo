@@ -29342,7 +29342,7 @@
         "provider_type" : {
           "type" : "string",
           "description" : "Database provider type (required). Accepts: bigquery, snowflake, etc.",
-          "enum" : [ "bigquery", "snowflake", "postgresql", "redshift", "sqlserver", "presto", "trino", "mysql", "oracle", "spark", "databricks" ]
+          "enum" : [ "bigquery", "databricks", "mysql", "oracle", "postgresql", "presto", "redshift", "snowflake", "spark", "sqlserver", "trino" ]
         },
         "bigquery" : {
           "description" : "BigQuery connection parameters. Specify parameters in the bigquery section.",
@@ -29441,7 +29441,7 @@
         "provider_type" : {
           "type" : "string",
           "description" : "Database provider type (required).",
-          "enum" : [ "bigquery", "snowflake", "postgresql", "redshift", "sqlserver", "presto", "trino", "mysql", "oracle", "spark", "databricks" ]
+          "enum" : [ "bigquery", "databricks", "mysql", "oracle", "postgresql", "presto", "redshift", "snowflake", "spark", "sqlserver", "trino" ]
         },
         "bigquery" : {
           "description" : "BigQuery connection parameters. Specify parameters in the bigquery section.",
@@ -31502,7 +31502,7 @@
         "provider_type" : {
           "type" : "string",
           "description" : "Provider type.",
-          "enum" : [ "bigquery", "snowflake", "postgresql", "redshift", "sqlserver", "presto", "trino", "mysql", "oracle", "spark", "databricks" ]
+          "enum" : [ "bigquery", "databricks", "mysql", "oracle", "postgresql", "presto", "redshift", "snowflake", "spark", "sqlserver", "trino" ]
         },
         "custom" : {
           "type" : "boolean",
@@ -31525,7 +31525,7 @@
         "providerType" : {
           "type" : "string",
           "description" : "Provider type.",
-          "enum" : [ "bigquery", "snowflake", "postgresql", "redshift", "sqlserver", "presto", "trino", "mysql", "oracle", "spark", "databricks" ]
+          "enum" : [ "bigquery", "databricks", "mysql", "oracle", "postgresql", "presto", "redshift", "snowflake", "spark", "sqlserver", "trino" ]
         },
         "providerSensorDefinitionSpec" : {
           "description" : "Provider specific sensor definition specification",

@@ -102,17 +102,17 @@ Fill in the data you will be asked for.
 Connection name (--name): connection1
 Database provider type (--provider): 
  [ 1] bigquery
- [ 2] snowflake
- [ 3] postgresql
- [ 4] redshift
- [ 5] sqlserver
+ [ 2] databricks
+ [ 3] mysql
+ [ 4] oracle
+ [ 5] postgresql
  [ 6] presto
- [ 7] trino
- [ 8] mysql
- [ 9] oracle
- [10] spark
- [11] databricks
-Please enter one of the [] values: 5
+ [ 7] redshift
+ [ 8] snowflake
+ [ 9] spark
+ [10] sqlserver
+ [11] trino
+Please enter one of the [] values: 10
 SQL Server host (--sqlserver-host)[${SQLSERVER_HOST}]: localhost
 SQL Server port (--sqlserver-port) [${SQLSERVER_PORT}]: 1433
 SQL Server database name (--sqlserver-database) [${SQLSERVER_DATABASE}]: TESTING

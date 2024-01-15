@@ -26,34 +26,45 @@ Using Table comparison you can monitor tables using the following comparison che
 
 ## Create a new table comparison
 
-Table comparisons can be categorized into three types: profiling, monitoring, and partition. You can read learn more about
+Table comparisons can be categorized into three types: profiling, monitoring, and partition. You can read more about
 these [types of checks in the DQOps concept section](../dqo-concepts/definition-of-data-quality-checks/index.md).
 
-To create a new table comparison, follow these steps:
+
+### ***Navigate to table comparison screen***
+
+To navigate to table comparison screen, follow these steps:
 
 ![Create a table comparison](https://dqops.com/docs/images/working-with-dqo/comparisons/create-table-comparison2.png)
 
 1. Select the **Profiling**, **Monitoring checks**, or **Partition checks** section and select the table of interest from the tree view on the left. This will be your source table.
 
-2. Select **Table Comparisons/Daily Comparisons/Monthly Comparisons** tab and click the **New table comparison configuration** button.
+2. Select **Table Comparisons/Daily Comparisons/Monthly Comparisons** tab
+3. Click the **New table comparison configuration** button.
 
-3. Enter a unique name for your comparison and select the reference table by filtering the connection, schema, and table name from the dropdown menu.
+### **Select the reference table**
 
-    ![Select column for comparison](https://dqops.com/docs/images/working-with-dqo/comparisons/select-column-for-comparison.png)
+On the table comparison screen, enter a unique name for your comparison and select the reference table by filtering the
+connection, schema, and table name from the dropdown menu.
 
-4. You can group your data before comparison by using a discriminator column containing data such as location, business units, vendor, etc.
-    If you want to use data grouping, select columns on compared (source) and reference tables. DQOps compares up to 1000 distinct data group rows by default.
-    You can modify this limit by changing the `--dqo.sensors.limit.sensor-readout-limit` parameter.
-    [Learn more about data groupings](../dqo-concepts/measuring-data-quality-with-data-grouping.md).
-   
-    ![Optional data grouping on comparison](https://dqops.com/docs/images/working-with-dqo/comparisons/optional-data-grouping-on-comparison.png)
+![Select column for comparison](https://dqops.com/docs/images/working-with-dqo/comparisons/select-column-for-comparison.png)
 
-5. To save a new table comparison, simply click the **Save** button located in the upper right corner.
+### **Optional data grouping in comparisons**
 
-    This will show a comparison screen where you can match the reference columns to the source columns. DQOps will automatically map the 
-    columns between the tables based on the column names, but you can make adjustments if necessary.
+You can group your data before comparison by using a discriminator column containing data such as location, business units, vendor, etc.
+If you want to use data grouping, select columns on compared (source) and reference tables. DQOps compares up to 1000 distinct data group rows by default.
+You can modify this limit by changing the `--dqo.sensors.limit.sensor-readout-limit` parameter.
+[Learn more about data groupings](../dqo-concepts/measuring-data-quality-with-data-grouping.md).
 
-    ![Select columns checks](https://dqops.com/docs/images/working-with-dqo/comparisons/selecting-columns-checks2.png)
+![Optional data grouping on comparison](https://dqops.com/docs/images/working-with-dqo/comparisons/optional-data-grouping-on-comparison.png)
+
+### **Save a new table comparison**
+
+To save a new table comparison, simply click the **Save** button located in the upper right corner.
+
+This will show a comparison screen where you can match the reference columns to the source columns. DQOps will automatically map the 
+columns between the tables based on the column names, but you can make adjustments if necessary.
+
+![Select columns checks](https://dqops.com/docs/images/working-with-dqo/comparisons/selecting-columns-checks2.png)
 
 ## Run table comparison
 
@@ -98,3 +109,10 @@ the old results by clicking the **Delete results** button.
 To remove an entire table comparison configuration, go to the list of table comparisons and click the **Delete** button. 
 
 ![Deleting comparison](https://dqops.com/docs/images/working-with-dqo/comparisons/deleting-comparison2.png)
+
+
+## Next steps
+
+- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../dqops-installation/install-dqops-using-pip.md) or [run DQOps as a Docker container](../dqops-installation/run-dqops-as-docker-container.md).
+- DQOps provide you with summary statistics about your table and column. This information can be valuable in deciding which data quality checks and threshold levels should be set to monitor data quality. For more details about [Basic data statistics, click here](collecting-basic-data-statistics.md).
+- DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](managing-data-quality-incidents-with-dqops.md) and [Slack notifications](../integrations/slack/configuring-slack-notifications.md). 
