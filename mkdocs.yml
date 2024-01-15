@@ -53,7 +53,7 @@ nav:
       - Data quality KPIs: "dqo-concepts/definition-of-data-quality-kpis.md"
       - Incremental data quality monitoring: "dqo-concepts/incremental-data-quality-monitoring.md"
       - Incident management: "dqo-concepts/grouping-data-quality-issues-to-incidents.md"
-      - User interface overview: "dqo-concepts/user-interface-overview.md"
+      - User interface overview: "dqo-concepts/dqops-user-interface-overview.md"
       - Command-line interface: "dqo-concepts/command-line-interface.md"
       - Data storage: "dqo-concepts/data-storage-of-data-quality-results.md"
       - Deployment architecture: "dqo-concepts/architecture/dqops-architecture.md"
@@ -86,7 +86,7 @@ nav:
           - Detect table availability issues: "examples/data-availability/detect-table-availability-issues.md"
       - Data completeness:
           - Detect null values: "examples/data-completeness/detect-null-values.md"
-          - Detect columns with null values: "examples/data-completeness/detect-empty-tables.md"
+          - Detect empty or incomplete tables: "examples/data-completeness/detect-empty-or-incomplete-tables.md"
       - Data consistency:
           - Percentage of rows having a text in from a set: "examples/data-consistency/percentage-of-rows-with-a-text-found-in-set.md"
       - Data reasonability:
@@ -142,7 +142,7 @@ nav:
           - Dbt cloud with run checks use case: "integrations/dbt/dbt-cloud-run-checks-use-case.md"
           - Dbt cloud with table status use case: "integrations/dbt/dbt-cloud-table-status-use-case.md"
           - Dbt core with run checks case: "integrations/dbt/dbt-core-use-case.md"
-      - Looker Studio: "integrations/looker-studio/creating-custom-dashboards.md"
+      - Looker Studio: "integrations/looker-studio/creating-custom-data-quality-dashboards.md"
       - Slack: "integrations/slack/configuring-slack-notifications.md"
       - Visual Studio Code: "integrations/visual-studio-code/index.md"
       - Webhooks: "integrations/webhooks/index.md"

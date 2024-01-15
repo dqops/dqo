@@ -79,7 +79,7 @@ A detailed explanation of [how to start DQOps platform and run the example is de
 
 ### **Navigate to a list of checks**
 
-To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview.md):
+To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/dqops-user-interface-overview.md):
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-foreign-key-match-percent-checks1.png)
 
@@ -97,7 +97,7 @@ To navigate to a list of checks prepared in the example using the [user interfac
 
     This tab displays a list of data quality checks in the check editor.
 
-    Learn more about [navigating the check editor](../../dqo-concepts/user-interface-overview.md#check-editor).
+    Learn more about [navigating the check editor](../../dqo-concepts/dqops-user-interface-overview.md#check-editor).
 
     The daily_lookup_key_found_percent check has additional parameters foreign_table and foreign_column which should be used
     to define the name of the table and column, to be compared to. The name of the table and column should be written as a STRING.

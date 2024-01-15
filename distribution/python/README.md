@@ -60,14 +60,51 @@ DQOps is available on [PyPi repository](https://pypi.org/project/dqops/).
 5. Open the DQOps User Interface Console in your browser by CTRL-clicking on the link displayed on the command line (for example http://localhost:8888)
    or by copying the link.
 
-## Documentation
 
-For full documentation with guides and use cases, visit https://dqops.com/docs/
+## What you can do with DQOps
+DQOps is designed as the primary platform for data quality teams, and for all data engineering or data science
+teams who want to apply data quality for their data platforms.
 
-The [getting started](https://dqops.com/docs/getting-started/) guide shows how to start using DQOps.
+The following list shows selected use cases, with examples and best practices.
 
-Also, read the [DQOps concept](https://dqops.com/docs/dqo-concepts/) guide to know how DQOps operates,
-and how to configure data quality checks.
+- The [definition of data quality KPIs](https://dqops.com/docs/dqo-concepts/definition-of-data-quality-kpis/)
+  describes the formulas used by DQOps to calculate a data quality score, used to measure the quality of data sources
+
+- You will learn how to [create custom data quality dashboards](https://dqops.com/docs/integrations/looker-studio/creating-custom-data-quality-dashboards/)
+  using custom connector for Looker Studio provided by DQOps. Your data quality dashboards will show the data quality
+  results organized in a format that is easy to understand by your business sponsors.
+
+- Look at the [categories of data quality checks](https://dqops.com/docs/dqo-concepts/types-of-data-quality-checks/)
+  that are supported by DQOps.
+
+- Learn how to [detect timeliness and freshness](https://dqops.com/docs/dqo-concepts/types-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues/)
+  with DQOps.
+
+- Learn how to [measure data quality incrementally](https://dqops.com/docs/dqo-concepts/types-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues/)
+  using time partitioned checks that are a unique feature of DQOps, allowing to analyze financial data, append-only data,
+  or very big tables at a terabyte or petabyte scales.
+
+- Similar data quality issues are grouped into data quality incidents,
+  learn how [grouping data quality issues to incidents](https://dqops.com/docs/dqo-concepts/grouping-data-quality-issues-to-incidents/),
+  and how to receive notifications using Slack or passed to a webhook.
+
+
+The following examples also show the whole process of configuring data quality checks, both using YAML files,
+or using the [DQOps user interface](https://dqops.com/docs/dqo-concepts/dqops-user-interface-overview/).
+
+- Learn how to [detect database and table availability issues](https://dqops.com/docs/examples/data-availability/detect-table-availability-issues/).
+
+- Learn how configure data volume checks to [detect empty tables](https://dqops.com/docs/examples/data-completeness/detect-empty-tables/).
+
+- Detect if [columns contain only accepted values](https://dqops.com/docs/examples/data-consistency/percentage-of-rows-with-a-text-found-in-set/).
+
+- Detect duplicate values in columns by [measuring percentage of duplicates](https://dqops.com/docs/examples/data-uniqueness/percentage-of-duplicates/).
+
+- Validate values in text columns using a regular expression to [detect values that are invalid emails](https://dqops.com/docs/examples/data-validity/detect-invalid-emails/).
+
+- Use schema drift data quality checks to [detect table schema changes](https://dqops.com/docs/examples/schema/detect-table-schema-changes/),
+  such as: missing columns, column order changed, column data type changed, or just that new columns were added or removed from a table.
+
 
 ## DQOps client
 The package contains also a remote DQO client that can connect to a DQOps instance and perform all operations supported by the user interface.
@@ -140,9 +177,18 @@ data quality issue severity level. In the following example, the most severe iss
 }
 ```
 
-
 Learn more about the DQOps Python client in the [DQOps REST API client](https://dqops.com/docs/client/) reference
 documentation that shows Python code examples for every operation supported by the client.
+
+
+## Documentation
+
+For full documentation with guides and use cases, visit https://dqops.com/docs/
+
+The [getting started](https://dqops.com/docs/getting-started/) guide shows how to start using DQOps.
+
+Also, read the [DQOps concept](https://dqops.com/docs/dqo-concepts/) guide to know how DQOps operates,
+and how to configure data quality checks.
 
 
 ## Contact and issues

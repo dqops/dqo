@@ -139,7 +139,7 @@ These topics introduce the basic concepts of DQOps.
     different data pipelines, or received from different vendors or departments.
 
 
- - **[User interface overview](user-interface-overview.md)**
+ - **[User interface overview](dqops-user-interface-overview.md)**
 
     The user interface in DQOps is using a tabbed application that resembles many popular database management tools.
     Configuring data quality checks on multiple tables at the same time is supported in separate tabs.  

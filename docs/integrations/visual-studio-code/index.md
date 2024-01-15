@@ -33,7 +33,7 @@ spec:
 ```
 
 Because DQOps validates the `apiVersion` and the `kind` fields, the best way to create a new DQOps compliant
-YAML file is by using the [DQOps user inteface](../../dqo-concepts/user-interface-overview.md)
+YAML file is by using the [DQOps user inteface](../../dqo-concepts/dqops-user-interface-overview.md)
 to create a new file, and edit it in Visual Studio Code later.
 
 

@@ -1,4 +1,4 @@
-# Creating a custom dashboard
+# Creating a custom data quality dashboard
 Read this guide to learn how to create custom data quality dashboards with DQOps using Looker Studio, and how to grant access to your team and stakeholders.
 
 ## Overview

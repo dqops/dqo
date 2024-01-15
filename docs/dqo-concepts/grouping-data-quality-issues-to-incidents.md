@@ -112,7 +112,7 @@ but the support team decided that they will not be resolved.
 
 
 ## Incident management
-The list of incidents is shown in the *Incidents* section of the [user interface](user-interface-overview.md).
+The list of incidents is shown in the *Incidents* section of the [DQOps user interface](dqops-user-interface-overview.md).
 The incident review begins on the incident list screen shown below.
 
 ![Data quality incident list screen](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/incidents-screen.png)

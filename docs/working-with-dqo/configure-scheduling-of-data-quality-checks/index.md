@@ -41,7 +41,7 @@ so by checking the "Disable schedule" checkbox.
 
 Please note that any changes made to the schedule on the table level will override the schedule set for the entire connection.
 
-On the [Check editor screen](../../dqo-concepts/user-interface-overview.md#check-editor), you can
+On the [Check editor screen](../../dqo-concepts/dqops-user-interface-overview.md#check-editor), you can
 check if the schedule is enabled, where it is configured, what the effective cron expression is, and when the next check
 execution will take place.
 
@@ -72,7 +72,7 @@ connection or table.
 In DQOps, the scheduler is started as a default. 
 
 To start or stop the scheduler use the user interface. Simply switch on or off the **Jobs scheduler** using the button in the Notifications window
-on the [right upper right corner of the navigation bar](../../dqo-concepts/user-interface-overview.md).
+on the [right upper right corner of the navigation bar](../../dqo-concepts/dqops-user-interface-overview.md).
 
 ![Notifications - Scheduler](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/notification-panel.png)
 

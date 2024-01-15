@@ -24,7 +24,7 @@ To navigate to the Check editor:
    
 2. On the tree view on the left, select a table or column of interest by expanding the connection.
 
-    This will open a [**Check editor**](../dqo-concepts/user-interface-overview.md#check-editor) screen when you can work with checks.
+    This will open a [**Check editor**](../dqo-concepts/dqops-user-interface-overview.md#check-editor) screen when you can work with checks.
 
     ![Select a table or column of interest](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/select-a-table-or-colum-of-interest2.png)
    

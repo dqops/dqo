@@ -353,5 +353,5 @@ This dashboard allows filtering data by:
 ## What's next
 
 - Check the [Data quality KPIs concept guide](./definition-of-data-quality-kpis.md), to learn how to measure the data quality KPI score with DQOps, what is the formula used to calculate the score, and how to improve data quality KPIs.
-- DQOps allows you to [create custom data quality dashboards using Looker Studio](../integrations/looker-studio/creating-custom-dashboards.md). Check the guide to learn more.
+- DQOps allows you to [create custom data quality dashboards using Looker Studio](../integrations/looker-studio/creating-custom-data-quality-dashboards.md). Check the guide to learn more.
 - You might also be interested in learning [how to use data quality dashboards](../working-with-dqo/review-the-data-quality-results-on-dashboards.md).

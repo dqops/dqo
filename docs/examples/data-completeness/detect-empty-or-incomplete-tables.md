@@ -54,7 +54,7 @@ The following is a fragment of the `bigquery-public-data.america_health_rankings
 
 ### **Navigate to a list of checks**
 
-To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview.md):
+To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/dqops-user-interface-overview.md):
 
 1. Go to the **Monitoring** section. 
     The **Monitoring Checks** section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
@@ -68,7 +68,7 @@ To navigate to a list of checks prepared in the example using the [user interfac
 
 3. Select the **Daily checks** tab.
 
-    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../dqo-concepts/user-interface-overview.md#check-editor).
+    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../dqo-concepts/dqops-user-interface-overview.md#check-editor).
 
 
 ### **Run checks**

@@ -20,7 +20,7 @@ DQOps integrates with multiple tools, using both the REST API interface and by u
     Data quality checks can be executed on source tables before loading the data and after the data was loaded.
 
 
-- **[Looker Studio](./looker-studio/creating-custom-dashboards.md)**
+- **[Looker Studio](./looker-studio/creating-custom-data-quality-dashboards.md)**
     
     Data Quality Dashboards are a fundamental way to communicate the current state of data quality
     to stakeholders. 

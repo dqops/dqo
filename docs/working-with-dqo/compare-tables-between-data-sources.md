@@ -66,7 +66,7 @@ Once you have activated the checks, you can set the severity level for each one.
 ![Table comparisons severity levels](https://dqops.com/docs/images/working-with-dqo/comparisons/table-comparisions-severity-levels2.png)
     
 When you create a new table comparison a new category of checks named Comparisons/[name of the comparison] is also 
-created on the [Check editor](../dqo-concepts/user-interface-overview.md#check-editor) with a list of table and column checks.
+created on the [Check editor](../dqo-concepts/dqops-user-interface-overview.md#check-editor) with a list of table and column checks.
 On the Editor screen you can activate and deactivate comparison checks, set severity levels, run checks and view the results.
 
 ![List of checks](https://dqops.com/docs/images/working-with-dqo/comparisons/comparison-check-editor.png)

@@ -84,7 +84,7 @@ A detailed explanation of [how to start DQOps platform and run the example is de
 
 ### **Navigate to a list of checks**
 
-To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview.md):
+To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/dqops-user-interface-overview.md):
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/detect-empty-tables-navigating-to-a-list-of-checks.png)
 
@@ -104,7 +104,7 @@ To navigate to a list of checks prepared in the example using the [user interfac
     Here you can view the list of all table monitoring checks. Noticed the checks that have been activated upon importing new tables have switched on the toggle button.
     The icons located before the name of each check allow you to: activate and deactivate it, configure settings, run a check, review results, and get more information about it.
 
-Learn more about [navigating the check editor](../../dqo-concepts/user-interface-overview.md#check-editor).
+Learn more about [navigating the check editor](../../dqo-concepts/dqops-user-interface-overview.md#check-editor).
 
 ### **Run checks**
 

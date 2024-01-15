@@ -60,7 +60,7 @@ A detailed explanation of [how to start DQOps platform and run the example is de
 
 ### **Navigate to a list of checks**
 
-To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview.md):
+To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/dqops-user-interface-overview.md):
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-string-invalid-ip4-address-count-checks1.png)
 
@@ -76,7 +76,7 @@ To navigate to a list of checks prepared in the example using the [user interfac
 
 3. Select the **Daily checks** tab.
 
-    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../dqo-concepts/user-interface-overview.md#check-editor).
+    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../dqo-concepts/dqops-user-interface-overview.md#check-editor).
 
 
 ### **Run checks**

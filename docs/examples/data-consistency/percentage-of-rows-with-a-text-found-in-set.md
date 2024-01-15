@@ -78,7 +78,7 @@ A detailed explanation of [how to start DQOps platform and run the example is de
 
 ### **Navigate to a list of checks**
 
-To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview.md):
+To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/dqops-user-interface-overview.md):
 
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-string-in-set-percent-checks1.png)
@@ -95,7 +95,7 @@ To navigate to a list of checks prepared in the example using the [user interfac
 
 3. Select the **Daily checks** tab.
 
-    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../dqo-concepts/user-interface-overview.md#check-editor).
+    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../dqo-concepts/dqops-user-interface-overview.md#check-editor).
 
     The **daily_text_found_in_set_percent** check has an additional parameter to select the **expected_values** that must
     be present in a string column. In our example, these values are `services`, `at_home` and `teacher`.

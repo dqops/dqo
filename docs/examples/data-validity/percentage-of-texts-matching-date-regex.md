@@ -58,7 +58,7 @@ A detailed explanation of [how to start DQOps platform and run the example is de
 
 ### **Navigate to a list of checks**
 
-To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview.md):
+To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/dqops-user-interface-overview.md):
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-string-match-date-regex-percent-checks1.png)
 
@@ -78,7 +78,7 @@ To navigate to a list of checks prepared in the example using the [user interfac
     has additional parameter that allows you to select different date format which will be tested. Let's leave the default date format 
     YYYY-MM-DD.
     
-Learn more about [navigating the check editor](../../dqo-concepts/user-interface-overview.md#check-editor).
+Learn more about [navigating the check editor](../../dqo-concepts/dqops-user-interface-overview.md#check-editor).
 
 
 ### **Run checks**

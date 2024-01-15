@@ -71,7 +71,7 @@ issues with the data quality or operational processes.
 
 ### **Evaluate and change the default schedule settings**
 
-To evaluate schedule settings open the [user interface](../../dqo-concepts/user-interface-overview.md)
+To evaluate schedule settings open the [user interface](../../dqo-concepts/dqops-user-interface-overview.md)
 
 To view the connection-level schedule:
 
@@ -109,7 +109,7 @@ To view and modify individual check-level schedules:
 
 3. Select the **Daily checks** tab on the check editor.
 
-    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../dqo-concepts/user-interface-overview.md#check-editor).
+    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../dqo-concepts/dqops-user-interface-overview.md#check-editor).
 
 4. Find the [daily_table_availability](../../checks/table/availability/table-availability.md) check in the Availability group, and click on the **Settings** icon.
 
@@ -147,7 +147,7 @@ To disable the check scheduling:
 In DQOps, the scheduler is started as a default. Data synchronization take place every 10 minutes.
 
 To start or stop the scheduler use the user interface. Simply switch on or off the **Jobs scheduler** using the button in the Notifications window
-on the [right upper right corner of the navigation bar](../../dqo-concepts/user-interface-overview.md).
+on the [right upper right corner of the navigation bar](../../dqo-concepts/dqops-user-interface-overview.md).
 
 ![Start and stop a scheduler](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/notification-panel.png)
 

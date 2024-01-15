@@ -8,7 +8,7 @@ using the user interface.
 
 For a full description of how to add a data source connection to other providers or add connection using the command-line shell,
 see [Working with DQOps section](../data-sources/index.md).
-You can find more information about [navigating the DQOps user interface here](../dqo-concepts/user-interface-overview.md). 
+You can find more information about [navigating the DQOps user interface here](../dqo-concepts/dqops-user-interface-overview.md). 
 
 ## Prerequisite credentials
 

@@ -20,15 +20,15 @@ These examples use openly available datasets from [Google Cloud](https://cloud.g
 
 ### **Data completeness**
 
-| **Name of the example**                                           | **Description**                                                                                                                                                                         | **Link to the dataset description**                                          |
-|:------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------|
-| [Detect null values](./data-completeness/detect-null-values.md)   | This example shows how to detect that the number of null values in a column does not exceed the maximum accepted count using [nulls_cont](../checks/column/nulls/nulls-count.md) check. | [Link](https://www.americashealthrankings.org/about/methodology/our-reports) |
-| [Detect empty tables](./data-completeness/detect-empty-tables.md) | This example shows how to check that the number of rows in a table does not exceed the minimum accepted count using [row_count](../checks/table/volume/row-count.md) check.             | [Link](https://www.americashealthrankings.org/about/methodology/our-reports) |
+| **Name of the example**                                                         | **Description**                                                                                                                                                                         | **Link to the dataset description**                                          |
+|:--------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------|
+| [Detect null values](./data-completeness/detect-null-values.md)                 | This example shows how to detect that the number of null values in a column does not exceed the maximum accepted count using [nulls_cont](../checks/column/nulls/nulls-count.md) check. | [Link](https://www.americashealthrankings.org/about/methodology/our-reports) |
+| [Detect empty tables](./data-completeness/detect-empty-or-incomplete-tables.md) | This example shows how to check that the number of rows in a table does not exceed the minimum accepted count using [row_count](../checks/table/volume/row-count.md) check.             | [Link](https://www.americashealthrankings.org/about/methodology/our-reports) |
 
 ### **Data consistency**
 
-| **Name of the example**                                                                                       | **Description**                                                                                                                                                                                                                    | **Link to the dataset description**                                       |
-|:--------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------|
+| **Name of the example**                                                                                             | **Description**                                                                                                                                                                                                                    | **Link to the dataset description**                                       |
+|:--------------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------|
 | [Percentage of rows having a text in from a set](./data-consistency/percentage-of-rows-with-a-text-found-in-set.md) | This example shows how to verify that the percentage of strings from a set in a column does not fall below a set threshold using [text_found_in_set_percent](../checks/column/accepted_values/text-found-in-set-percent.md) check. | [Link](https://www.kaggle.com/datasets/whenamancodes/student-performance) |
 
 ### **Data reasonability**
@@ -144,7 +144,7 @@ To start the DQOps application with the example, follow the steps below.
 
 ## Execute the checks using the user interface
 
-You can execute the checks using the [user interface](../dqo-concepts/user-interface-overview.md).
+You can execute the checks using the [user interface](../dqo-concepts/dqops-user-interface-overview.md).
 Simply, open the DQOps User Interface Console (http://localhost:8888).
 
 
@@ -174,7 +174,7 @@ To navigate to a list of checks:
 
     The right side of the table allows setting different threshold levels (severity levels). [Learn more about threshold levels.](../dqo-concepts/definition-of-data-quality-checks/index.md#issue-severity-levels)
     
-Learn more about [navigating the check editor](../dqo-concepts/user-interface-overview.md#check-editor).
+Learn more about [navigating the check editor](../dqo-concepts/dqops-user-interface-overview.md#check-editor).
 
 
 ### **Run checks**
