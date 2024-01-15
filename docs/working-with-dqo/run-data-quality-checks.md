@@ -89,28 +89,6 @@ To synchronize all the data click on the **Synchronize** button in the upper rig
 You can learn here how to [Review the results of data quality monitoring on dashboards.](review-the-data-quality-results-on-dashboards.md)
 
 
-## Configure date or datetime column for partition checks
-
-Partition checks measure data quality for each daily or monthly partition by creating a separate data quality score.
-
-To learn more about partition checks, go to [DQOps concepts section](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)
-
-To run partition checks you need to configure a date or datetime columns which will be used as the time partitioning key for the table.
-
-To configure the date or datetime column:
-
-1. Go to the **Data Sources** section.
-
-2. Select the table of interest from the tree view.
-
-3. Select the **Data and Time Columns** tab and select a column from the drop-down list in the "Date or datetime 
-    column name for partition checks" input field.
-
-    ![Partitioning column configuration](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/date-or-datetime-column-configuration-for-partion-checks.png)
-
-4. Click the Save button in the upper right corner.
-
-
 ## Run data quality checks using the DQOps Shell
 
 Data quality checks are stored in YAML configuration files. YAMl configuration files are located in the `./sources` folder.
@@ -223,42 +201,6 @@ To add and run data quality checks using the DQOps Shell, follow the steps below
     +------------+------------------------+------------------------+
     **************************************************
     ```
-
-### **Configuring date or datetime column for partition checks
-
-Partition checks measure data quality for each daily or monthly partition by creating a separate data quality score.
-To run partition checks you need to configure Date or datetime colum which will be used as the time partitioning key for the table.
-
-The date or datetime column for partition checks can by configured by adding 
-the appropriate parameters to the YAML configuration file.
-
-Below is an example of the YAML file showing sample configuration with set datetime column for partition 
-checks `partition_by_column`. 
-
-``` yaml hl_lines="7-10"
-apiVersion: dqo/v1
-kind: table
-spec:
-  target:
-    schema_name: target_schema
-    table_name: target_table
-  timestamp_columns:
-    event_timestamp_column: 
-    ingestion_timestamp_column: 
-    partition_by_column: event_timestamp
-  columns:
-    target_column:
-      partition_checks:
-        daily:
-          nulls:
-            daily_partition_checks_nulls_percent:
-              warning:
-                max_percent: 1.0
-              error:
-                max_percent: 5.0
-              fatal:
-                max_percent: 30.0
-```
 
 ## What's next
 

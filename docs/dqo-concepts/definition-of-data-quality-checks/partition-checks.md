@@ -65,31 +65,7 @@ For monthly partition checks, the original time_period of the result e.g. 2023-0
 
 To run a partition check, you need to select a column that serves as the time partitioning key for the data.
 
-## Setting up date partitioning column
-
-When you navigate to the "Partition checks" section and choose a table or column that has not been configured with a date
-partitioning column, a red warning message will appear above the Check editor saying **Partition checks will not be run, please configure the date or
-datetime column**. Furthermore, this column will be highlighted in orange in the tree view on the left side of the screen.
-
-![Not configured data partitioning column warning](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/not-configured-date-partitioning-column-warning.png)
-
-In order to enable time partition check, set a column that contains date, datetime or timestamp. 
-
-1.  Go to the **Data Sources** section.
-
-2.  Select the table of interest from the tree view.
-
-3.  Select the **Data and time columns** tab and select a column from the drop-down list in the "Date or datetime column
-    name used for date/time partitioning used in partition checks" input field.
-
-    ![Partitioning column configuration](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/date-or-datetime-column-configuration-for-partion-checks.png)
-    
-    You can also get to this screen by clicking the **Configure the date partitioning column** button located at the screen with a list of partition checks.  
-
-4.  Click the Save button in the upper right corner.
-
-
-## Checks configuration in the YAML file
+## Partition checks configuration in the YAML file
 Partition data quality checks, like other data quality checks in DQOps, are defined as YAML files.
 
 Below is an example of the YAML file showing sample configuration of a daily and monthly partition column data quality check
@@ -146,6 +122,48 @@ nulls_percent.
           - This is the column that is analyzed for data quality issues
     ```
 
+## Setting up date partitioning column
+To run partition checks you need to configure a date or datetime columns which will be used as the time partitioning key for the table.
+
+When you navigate to the **Partition checks** section and choose a table or column that has not been configured with a date
+partitioning column, a red warning message will appear above the Check editor saying **Partition checks will not be run, please configure the date or
+datetime column**. Furthermore, this column will be highlighted in orange in the tree view on the left side of the screen.
+
+![Not configured data partitioning column warning](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/not-configured-date-partitioning-column-warning.png)
+
+In order to enable time partition check, set a column that contains date, datetime or timestamp.
+
+1.  Go to the **Data Sources** section.
+
+2.  Select the table of interest from the tree view.
+
+3.  Select the **Data and time columns** tab and select a column from the drop-down list in the "Date or datetime column
+    name used for date/time partitioning used in partition checks" input field.
+
+    ![Partitioning column configuration](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/date-or-datetime-column-configuration-for-partion-checks.png)
+
+    You can also get to this screen by clicking the **Configure the date partitioning column** button located at the screen with a list of partition checks.
+
+4.  Click the Save button in the upper right corner.
+
+The date or datetime column for partition checks can be also configured by adding
+the appropriate parameters to the YAML configuration file.
+
+Below is an example of the YAML file showing sample configuration with set datetime column `event_timestamp` for partition
+checks `partition_by_column`.
+
+``` yaml hl_lines="10"
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: 
+    ingestion_timestamp_column: 
+    partition_by_column: event_timestamp
+```
 
 ## What's next
 - Learn how partition checks are used for [incremental data quality monitoring](../incremental-data-quality-monitoring.md)
