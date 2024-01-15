@@ -324,9 +324,14 @@ spec:
 
 1. The table filter using a token `{alias}` that is replaced with the real table alias that is used in the SQL query.
 
-DQOps also supports setting the filter at a check level. The filter will affect only a single check, while all other
+
+### **Applying table filters at a data quality check level**
+
+DQOps also supports setting the filter at a data quality check level. The filter will affect only a single check, while all other
 checks defined on the table will analyze the whole table or use the table-level filter. The filter predicate
 is specified in the `parameters.filter` node inside the check's configuration as shown on the following example.
+
+For further guidance of configuring checks, read the [configuring data quality checks](configuring-data-quality-checks-and-rules.md) article.
 
 ``` { .yaml .annotate linenums="1" hl_lines="15-16" }
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -425,6 +430,12 @@ spec:
 DQOps team has written a free eBook [Best practices for effective data quality improvement](https://dqops.com/best-practices-for-effective-data-quality-improvement/)
 that describes the iterative data quality process based on table priorities in details.
 Please download the eBook to learn more about the concept.
+
+!!! info "Iterative data quality cleansing projects"
+
+    The application of table prioritization for improving the data quality in iterations is described in the
+    [data quality improvement process](definition-of-data-quality-kpis.md#data-quality-improvement-process) section
+    of the data quality KPIs article. Using priorities enables a quick return of investment for data quality projects.
 
 
 ### **Labels**
