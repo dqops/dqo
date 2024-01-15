@@ -1,45 +1,45 @@
-# Spark
-Read this guide to learn how to connect DQOps to Apache Spark from the UI, command-line, or directly in YAML files. All parameters are documented.
+# Presto
+Read this guide to learn how to connect DQOps to Presto from the UI, command-line, or directly in YAML files. All parameters are documented.
 
 ## Overview
 
-Apache Spark is an open-source unified analytics engine for large-scale data processing.
+Presto is an open source SQL query engine that’s fast, reliable, and efficient at scale.
 
 ## Prerequisite credentials
 
-You need a Spark Thrift Server to be running that provides a connection through JDBC to data in Spark.
+You need a Presto.
 
-## Add Spark connection using the user interface
+## Add Presto connection using the user interface
 
 ### **Navigate to the connection settings**
 
-To navigate to the Spark connection settings:
+To navigate to the Presto connection settings:
 
 1. Go to Data Sources section and click **+ Add connection** button in the upper left corner.
 
     ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.png)
 
-2. Select Spark database type.
+2. Select Presto database type.
 
-    ![Selecting Spark database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-spark.png)
+    ![Selecting Presto database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-presto.png)
 
 
 ### **Fill in the connection settings**
 
-After navigating to the Spark connection settings, you will need to fill in the connection details.
+After navigating to the Presto connection settings, you will need to fill in the connection details.
 
-![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-spark1.png)
+![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-presto.png)
 
-| Spark connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                                             | 
-|---------------------------|------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Connection name           |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters.               |
-| Parallel jobs limit       |                                          | New limit. Null value will disable limit.                                                                                                                                                                                                               |
-| Host                      | host                                     | Spark host name. Supports also a ${SPARK_HOST} configuration with a custom environment variable.                                                                                                                                                        |
-| Port                      | port                                     | Spark port name. The default port is 10000. Supports also a ${SPARK_PORT} configuration with a custom environment variable.                                                                                                                             |
-| User name                 | user                                     | Spark user name. The value can be in the ${SPARK_USER} format to use dynamic substitution.                                                                                                                                                              |
-| Password                  | password                                 | Spark database password. The value can be in the ${SPARK_PASSWORD} format to use dynamic substitution.                                                                                                                                                  |
-| Options                   | options                                  | Spark connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.                                                                     |
-| JDBC connection property  |                                          | Optional setting. DQOps supports using JDBC driver to access Spark. [JDBC Concepts.](https://docs.oracle.com/en/database/oracle/oracle-database/23/jjdbc/introducing-JDBC.html).                                                                        |
+| Presto connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                               | 
+|----------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Connection name            |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters. |
+| Parallel jobs limit        |                                          | New limit. Null value will disable limit.                                                                                                                                                                                                 |
+| Host                       | host                                     | Presto host name. Supports also a ${PRESTO_HOST} configuration with a custom environment variable.                                                                                                                                        |
+| Port                       | port                                     | Presto port number. The default port is 8080. Supports also a ${PRESTO_PORT} configuration with a custom environment variable.                                                                                                            |
+| Database                   | database                                 | Presto database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                            |
+| User name                  | user                                     | Presto user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                                |
+| Password                   | password                                 | Presto database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                        |
+| JDBC connection property   |                                          | Optional setting. DQOps supports using JDBC driver to access Presto. [JDBC Concepts.](https://docs.oracle.com/en/database/oracle/oracle-database/23/jjdbc/introducing-JDBC.html).                                                         |
     
 DQOps allows you to dynamically replace properties in connection settings with environment variables. To use it, simply
 change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
@@ -84,7 +84,7 @@ or modify the schedule for newly imported tables.
 ![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables-advisor.png)
 
 
-## Add Spark connection using DQOps Shell
+## Add Presto connection using DQOps Shell
 
 To add a connection run the following command in DQOps Shell.
 
@@ -108,11 +108,12 @@ Database provider type (--provider):
  [ 9] oracle
  [10] spark
  [11] databricks
-Please enter one of the [] values: 10
-Spark host name (--spark-host) [${SPARK_HOST}]: localhost
-Spark port number (--spark-port) [${SPARK_PORT}]: 10000
-Spark user name (--spark-user) [${SPARK_USER}]: 
-Spark user password (--spark-password) [${SPARK_PASSWORD}]: 
+Please enter one of the [] values: 6
+Presto host name (--presto-host) [${PRESTO_HOST}]: localhost
+Presto port number (--presto-port) [${PRESTO_PORT}]: 8080
+Presto database name (--presto-database) [${PRESTO_DATABASE}]: default
+Presto user name (--presto-user) [${PRESTO_USER}]: test
+Presto user password (--presto-password) [${PRESTO_PASSWORD}]: xxx
 Connection connection1 was successfully added.
 Run 'table import -c=connection1' to import tables.
 ```
@@ -121,11 +122,12 @@ You can also run the command with parameters to add a connection in just a singl
 
 ```
 dqo> connection add --name=connection1
---provider=spark
---spark-host=localhost
---spark-port=10000
---spark-user=test
---spark-password=xxx
+--provider=presto
+--presto-host=localhost
+--presto-port=8080
+--presto-database=default
+--presto-user=test
+--presto-password=xxx
 ```
 
 After adding connection run `table import -c=connection1` to select schemas and import tables.
@@ -149,16 +151,17 @@ character can be used at the beginning, in the middle or at the end of the name.
 Connection configurations are stored in the YAML files in the `./sources` folder. The name of the connection is also
 the name of the folder where the configuration file is stored.
 
-Below is a sample YAML file showing an example configuration of the Spark data source connection.
+Below is a sample YAML file showing an example configuration of the Presto data source connection.
 
 ``` yaml
 apiVersion: dqo/v1
 kind: source
 spec:
-  provider_type: spark
-  spark:
+  provider_type: presto
+  presto:
     host: localhost
-    port: 10000
+    port: 8080
+    database: default
     user: testing
     password: xxx
   incident_grouping:
