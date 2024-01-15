@@ -19,28 +19,27 @@ To navigate to the Presto connection settings:
 
     ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.png)
 
-2. Select Spark database type.
+2. Select Presto database type.
 
-todo - screen
-    ![Selecting Presto database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-spark.png)
+    ![Selecting Presto database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-presto.png)
 
 
 ### **Fill in the connection settings**
 
 After navigating to the Presto connection settings, you will need to fill in the connection details.
-todo - screen
-![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-spark1.png)
 
-| Spark connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                               | 
-|---------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Connection name           |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters. |
-| Parallel jobs limit       |                                          | New limit. Null value will disable limit.                                                                                                                                                                                                 |
-| Host                      | host                                     | Presto host name. Supports also a ${PRESTO_HOST} configuration with a custom environment variable.                                                                                                                                        |
-| Port                      | port                                     | Presto port number. The default port is 8080. Supports also a ${PRESTO_PORT} configuration with a custom environment variable.                                                                                                            |
-| Database                  | database                                 | Presto database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                            |
-| User name                 | user                                     | Presto user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                                |
-| Password                  | password                                 | Presto database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                        |
-| JDBC connection property  |                                          | Optional setting. DQOps supports using JDBC driver to access Presto. [JDBC Concepts.](https://docs.oracle.com/en/database/oracle/oracle-database/23/jjdbc/introducing-JDBC.html).                                                         |
+![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-presto.png)
+
+| Presto connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                               | 
+|----------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Connection name            |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters. |
+| Parallel jobs limit        |                                          | New limit. Null value will disable limit.                                                                                                                                                                                                 |
+| Host                       | host                                     | Presto host name. Supports also a ${PRESTO_HOST} configuration with a custom environment variable.                                                                                                                                        |
+| Port                       | port                                     | Presto port number. The default port is 8080. Supports also a ${PRESTO_PORT} configuration with a custom environment variable.                                                                                                            |
+| Database                   | database                                 | Presto database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                            |
+| User name                  | user                                     | Presto user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                                |
+| Password                   | password                                 | Presto database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                        |
+| JDBC connection property   |                                          | Optional setting. DQOps supports using JDBC driver to access Presto. [JDBC Concepts.](https://docs.oracle.com/en/database/oracle/oracle-database/23/jjdbc/introducing-JDBC.html).                                                         |
     
 DQOps allows you to dynamically replace properties in connection settings with environment variables. To use it, simply
 change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
@@ -96,7 +95,6 @@ dqo> connection add
 Fill in the data you will be asked for.
 
 ```
-todo - commands
 Connection name (--name): connection1
 Database provider type (--provider):
  [ 1] bigquery
@@ -110,11 +108,12 @@ Database provider type (--provider):
  [ 9] oracle
  [10] spark
  [11] databricks
-Please enter one of the [] values: 10
-Spark host name (--spark-host) [${SPARK_HOST}]: localhost
-Spark port number (--spark-port) [${SPARK_PORT}]: 10000
-Spark user name (--spark-user) [${SPARK_USER}]: 
-Spark user password (--spark-password) [${SPARK_PASSWORD}]: 
+Please enter one of the [] values: 6
+Presto host name (--presto-host) [${PRESTO_HOST}]: localhost
+Presto port number (--presto-port) [${PRESTO_PORT}]: 10000
+Presto database name (--presto-database) [${PRESTO_DATABASE}]: default
+Presto user name (--presto-user) [${PRESTO_USER}]: test
+Presto user password (--presto-password) [${PRESTO_PASSWORD}]: xxx
 Connection connection1 was successfully added.
 Run 'table import -c=connection1' to import tables.
 ```
@@ -122,13 +121,13 @@ Run 'table import -c=connection1' to import tables.
 You can also run the command with parameters to add a connection in just a single step.
 
 ```
-todo - command
 dqo> connection add --name=connection1
---provider=spark
---spark-host=localhost
---spark-port=10000
---spark-user=test
---spark-password=xxx
+--provider=presto
+--presto-host=localhost
+--presto-port=10000
+--presto-database=default
+--presto-user=test
+--presto-password=xxx
 ```
 
 After adding connection run `table import -c=connection1` to select schemas and import tables.
