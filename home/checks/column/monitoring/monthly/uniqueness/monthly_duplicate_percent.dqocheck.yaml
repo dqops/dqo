@@ -5,5 +5,5 @@ spec:
   sensor_name: column/uniqueness/duplicate_percent
   rule_name: comparison/max_percent
   help_text: Verifies that the percentage of duplicate values in a column does not
-    exceed the maximum accepted percentage. Stores the most recent row count for each
-    month when the data quality check was evaluated.
+    exceed the maximum accepted percentage. Stores the most recent check result for
+    each month when the data quality check was evaluated.

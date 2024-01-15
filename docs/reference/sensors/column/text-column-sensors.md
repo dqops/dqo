@@ -20,7 +20,7 @@ The text length above max length count sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_length`|This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0|integer| ||
+|`max_length`|This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0|integer|:material-check-bold:||
 
 
 
@@ -413,7 +413,7 @@ The text length above max length percent sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_length`|This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0|integer| ||
+|`max_length`|This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0|integer|:material-check-bold:||
 
 
 
@@ -839,7 +839,7 @@ The text length below min length count sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`min_length`|This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0|integer| ||
+|`min_length`|This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0|integer|:material-check-bold:||
 
 
 
@@ -1190,7 +1190,7 @@ The text length below min length percent sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`min_length`|This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0|integer| ||
+|`min_length`|This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0|integer|:material-check-bold:||
 
 
 
@@ -1573,8 +1573,8 @@ The text length in range percent sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`min_length`|Sets a minimum text length|integer| ||
-|`max_length`|Sets a maximum text length|integer| ||
+|`min_length`|Sets a minimum text length|integer|:material-check-bold:||
+|`max_length`|Sets a maximum text length|integer|:material-check-bold:||
 
 
 
@@ -5417,3 +5417,7 @@ ___
 
 
 
+
+## What's next
+- Learn how the [data quality sensors](../../../dqo-concepts/definition-of-data-quality-sensors.md) are defined in DQOps and what is the definition of all Jinja2 macros used in the templates
+- Understand how DQOps [runs data quality checks](../../../dqo-concepts/architecture/data-quality-check-execution-flow.md), rendering templates to SQL queries

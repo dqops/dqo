@@ -19,6 +19,7 @@ import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
+import com.dqops.utils.reflection.RequiredField;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -44,6 +45,7 @@ public class MaxMissingRule2ParametersSpec extends AbstractRuleParametersSpec {
     };
 
     @JsonPropertyDescription("The maximum number of values from the expected_values list that were not found in the column (inclusive).")
+    @RequiredField
     private Long maxMissing = 2L;
 
     /**

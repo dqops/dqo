@@ -49,22 +49,22 @@ public class ColumnBlanksDailyPartitionedChecksSpec extends AbstractCheckCategor
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.")
     private ColumnBlanksEmptyTextFoundCheckSpec dailyPartitionEmptyTextFound;
 
-    @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.")
     private ColumnBlanksWhitespaceTextFoundCheckSpec dailyPartitionWhitespaceTextFound;
 
-    @JsonPropertyDescription("Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.")
     private ColumnBlanksNullPlaceholderTextFoundCheckSpec dailyPartitionNullPlaceholderTextFound;
 
-    @JsonPropertyDescription("Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.")
     private ColumnBlanksEmptyTextPercentCheckSpec dailyPartitionEmptyTextPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores a separate data quality check result for each daily partition.")
     private ColumnBlanksWhitespaceTextPercentCheckSpec dailyPartitionWhitespaceTextPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.")
     private ColumnBlanksNullPlaceholderTextPercentCheckSpec dailyPartitionNullPlaceholderTextPercent;
 
 

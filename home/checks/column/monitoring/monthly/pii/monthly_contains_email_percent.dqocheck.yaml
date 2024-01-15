@@ -5,6 +5,6 @@ spec:
   sensor_name: column/pii/contains_email_percent
   rule_name: comparison/max_percent
   help_text: Verifies that the percentage of rows that contains emails in a column
-    does not exceed the minimum accepted percentage. Stores the most recent row count
-    for each month when the data quality check was evaluated.
+    does not exceed the minimum accepted percentage. Stores the most recent check
+    result for each month when the data quality check was evaluated.
   standard: true

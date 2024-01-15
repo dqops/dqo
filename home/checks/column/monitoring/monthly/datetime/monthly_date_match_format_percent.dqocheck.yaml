@@ -5,5 +5,6 @@ spec:
   sensor_name: column/datetime/date_match_format_percent
   rule_name: comparison/min_percent
   help_text: Verifies that the percentage of date values matching the given format
-    in a column does not exceed the maximum accepted percentage. Creates a separate
+    in a text column does not exceed the maximum accepted percentage. Creates a separate
     data quality check (and an alert) for each monthly monitoring.
+  standard: true

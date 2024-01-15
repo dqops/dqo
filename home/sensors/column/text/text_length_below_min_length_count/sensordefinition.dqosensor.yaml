@@ -9,3 +9,4 @@ spec:
       \ custom length, user should write correct length as a integer. If length is\
       \ not defined by user then default length is 0"
     data_type: integer
+    required: true

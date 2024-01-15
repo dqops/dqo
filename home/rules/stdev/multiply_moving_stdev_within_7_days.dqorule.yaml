@@ -18,5 +18,6 @@ spec:
       \ (warning, error, fatal) at once. The default is a 7 time periods (days, etc.)\
       \ time window, but at least 3 readouts must exist to run the calculation."
     data_type: double
+    required: true
     sample_values:
     - 1.5

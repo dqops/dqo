@@ -10,5 +10,6 @@ spec:
       \ is replaced with a full table name."
     data_type: string
     display_hint: textarea
+    required: true
     sample_values:
     - SUM(col_total_impressions) > SUM(col_total_clicks)

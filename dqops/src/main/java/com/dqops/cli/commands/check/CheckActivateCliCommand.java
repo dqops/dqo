@@ -38,6 +38,7 @@ import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -113,17 +114,35 @@ public class CheckActivateCliCommand extends BaseCommand implements ICommand, IT
     @CommandLine.Option(names = {"-o", "--override"}, description = "Override existing configuration of selected checks.")
     private Boolean override = false;
 
-    @CommandLine.Option(names = {"-S", "--sensor-param"}, description = "Configuration parameters for the sensor. Usage: -S<param_name>=<param_value>, --sensor-param=<param_name>=<param_value>")
+    @CommandLine.Option(names = {"-S"}, description = "Configuration parameters for the sensor. Usage: -S<param_name>=<param_value>, --sensor-param=<param_name>=<param_value>")
     private Map<String, String> sensorParams;
 
-    @CommandLine.Option(names = {"-W", "--warning-rule"}, description = "Warning level rule options. Usage: -W<rule_name>=<rule_value>, --warning-rule=<rule_name>=<rule_value>")
+    @CommandLine.Option(names = {"-W"}, description = "Warning level rule options. Usage: -W<rule_name>=<rule_value>, --warning-rule=<rule_name>=<rule_value>")
     private Map<String, String> warningLevelOptions;
 
-    @CommandLine.Option(names = {"-E", "--error-rule"}, description = "Error level rule options. Usage: -E<rule_name>=<rule_value>, --error-rule=<rule_name>=<rule_value>")
+    @CommandLine.Option(names = {"-E"}, description = "Error level rule options. Usage: -E<rule_name>=<rule_value>, --error-rule=<rule_name>=<rule_value>")
     private Map<String, String> errorLevelOptions;
 
-    @CommandLine.Option(names = {"-F", "--fatal-rule"}, description = "Fatal level rule options. Usage: -F<rule_name>=<rule_value>, --fatal-rule=<rule_name>=<rule_value>")
+    @CommandLine.Option(names = {"-F"}, description = "Fatal level rule options. Usage: -F<rule_name>=<rule_value>, --fatal-rule=<rule_name>=<rule_value>")
     private Map<String, String> fatalLevelOptions;
+
+    @CommandLine.Option(names = {"-w", "--enable-warning"}, description = "Enables a warning severity rule. A warning severity rule is also enabled when any warning rule parameters are passed using the -Wparam_nam=value parameters")
+    private boolean enableWarning;
+
+    @CommandLine.Option(names = {"-e", "--enable-error"}, description = "Enables an error severity rule. An error severity rule is also enabled when any warning rule parameters are passed using the -Eparam_nam=value parameters")
+    private boolean enableError;
+
+    @CommandLine.Option(names = {"-f", "--enable-fatal"}, description = "Enables a fatal severity rule. A fatal severity rule is also enabled when any fatal rule parameters are passed using the -Fparam_nam=value parameters")
+    private boolean enableFatal;
+
+    @CommandLine.Option(names = {"-dw", "--disable-warning"}, description = "Disables a warning severity rule. Use this option to update already activated data quality checks, together with the --override option.")
+    private boolean disableWarning;
+
+    @CommandLine.Option(names = {"-de", "--disable-error"}, description = "Disables an error severity rule. Use this option to update already activated data quality checks, together with the --override option.")
+    private boolean disableError;
+
+    @CommandLine.Option(names = {"-df", "--disable-fatal"}, description = "Disables a fatal severity rule. Use this option to update already activated data quality checks, together with the --override option.")
+    private boolean disableFatal;
 
     /**
      * Gets the connection name.
@@ -338,13 +357,29 @@ public class CheckActivateCliCommand extends BaseCommand implements ICommand, IT
         filters.setColumnDataType(this.datatypeFilter);
         filters.setColumnNullable(this.columnNullable);
 
-        if (this.warningLevelOptions == null
-                && this.errorLevelOptions == null
-                && this.fatalLevelOptions == null) {
-            // By default, enable on every alert level
-            this.warningLevelOptions = new HashMap<>();
-            this.errorLevelOptions = new HashMap<>();
-            this.fatalLevelOptions = new HashMap<>();
+        if (this.warningLevelOptions == null || this.warningLevelOptions.isEmpty()) {
+            this.warningLevelOptions = null;
+        }
+
+        if (this.errorLevelOptions == null || this.errorLevelOptions.isEmpty()) {
+            this.errorLevelOptions = null;
+        }
+
+        if (this.fatalLevelOptions == null || this.fatalLevelOptions.isEmpty()) {
+            this.fatalLevelOptions = null;
+        }
+
+        // now enable them with default options if the "enable" is on
+        if (this.warningLevelOptions == null && this.enableWarning) {
+            this.warningLevelOptions = new LinkedHashMap<>();
+        }
+
+        if (this.errorLevelOptions == null && this.enableError) {
+            this.errorLevelOptions = new LinkedHashMap<>();
+        }
+
+        if (this.fatalLevelOptions == null && this.enableFatal) {
+            this.fatalLevelOptions = new LinkedHashMap<>();
         }
 
         AllChecksModelCliPatchParameters patchParameters = new AllChecksModelCliPatchParameters() {{
@@ -356,9 +391,9 @@ public class CheckActivateCliCommand extends BaseCommand implements ICommand, IT
             setErrorLevelOptions(errorLevelOptions);
             setFatalLevelOptions(fatalLevelOptions);
 
-            setDisableWarningLevel(false);
-            setDisableErrorLevel(false);
-            setDisableFatalLevel(false);
+            setDisableWarningLevel(disableWarning);
+            setDisableErrorLevel(disableError);
+            setDisableFatalLevel(disableFatal);
         }};
 
         this.checkService.updateAllChecksPatch(patchParameters);

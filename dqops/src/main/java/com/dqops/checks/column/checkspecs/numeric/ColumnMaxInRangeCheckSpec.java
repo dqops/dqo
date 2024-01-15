@@ -33,7 +33,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that the maximal values are in a set range in a monitored column.
+ * Column level check that ensures that the maximum values are in an expected range in a monitored column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -55,7 +55,7 @@ public class ColumnMaxInRangeCheckSpec
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private BetweenFloatsRuleParametersSpec warning;
 
-    @JsonPropertyDescription("Default alerting threshold for a maximal values in range in a column that raises a data quality error (alert).")
+    @JsonPropertyDescription("Default alerting threshold for a maximum values in range in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private BetweenFloatsRuleParametersSpec error;
@@ -153,18 +153,6 @@ public class ColumnMaxInRangeCheckSpec
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
-    }
-
-    /**
-     * Returns true if this is a standard data quality check that is always shown on the data quality checks editor screen.
-     * Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks.
-     *
-     * @return True when it is a standard check, false when it is an advanced check. The default value is 'false' (all checks are non-standard, advanced checks).
-     */
-    @Override
-    @JsonIgnore
-    public boolean isStandard() {
-        return true;
     }
 
     /**

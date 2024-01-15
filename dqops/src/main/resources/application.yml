@@ -142,7 +142,7 @@ dqo:
     limits:
       sensor-readout-limit: 1000
       sensor-readout-limit-partitioned: 7000
-      fail-on-sensor-readout-limit-exceeded: false
+      fail-on-sensor-readout-limit-exceeded: true
       max-merged-queries: 100
   statistics:
     truncated-strings-length: 50

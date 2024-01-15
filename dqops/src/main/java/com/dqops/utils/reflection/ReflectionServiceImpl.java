@@ -44,7 +44,7 @@ public class ReflectionServiceImpl implements ReflectionService {
         put(boolean.class, ParameterDataType.boolean_type);
         put(Double.class, ParameterDataType.double_type);
         put(double.class, ParameterDataType.double_type);
-         put(LocalDate.class, ParameterDataType.date_type);
+        put(LocalDate.class, ParameterDataType.date_type);
         put(LocalDateTime.class, ParameterDataType.datetime_type);
     }};
 
@@ -148,6 +148,8 @@ public class ReflectionServiceImpl implements ReflectionService {
                 field.getAnnotation(ControlDisplayHint.class).value() : null;
         String[] sampleValues = field.isAnnotationPresent(SampleValues.class) ?
                 field.getAnnotation(SampleValues.class).values() : null;
+        boolean requiredAnnotationPresent = field.isAnnotationPresent(RequiredField.class);
+        boolean notNullableField = fieldType == boolean.class || fieldType == int.class || fieldType == double.class;
 
         String yamlFieldName;
         if (field.isAnnotationPresent(JsonProperty.class)) {
@@ -166,6 +168,7 @@ public class ReflectionServiceImpl implements ReflectionService {
             setDefaultValue(DEFAULT_VALUES.getOrDefault(fieldType, null));
             setDisplayHint(displayHint);
             setSampleValues(sampleValues);
+            setRequiredOrNotNullable(requiredAnnotationPresent || notNullableField);
         }};
 
         ParameterDataType parameterDataType = field.isAnnotationPresent(ControlType.class) ?

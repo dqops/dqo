@@ -71,88 +71,88 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
         }
     };
 
-    @JsonPropertyDescription("The check counts the number of values in the column that is below the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("The check counts the number of values in the column that is below the value defined by the user as a parameter. Stores a separate data quality check result for each daily partition.")
     private ColumnNumberBelowMinValueCheckSpec dailyPartitionNumberBelowMinValue;
 
-    @JsonPropertyDescription("The check counts the number of values in the column that is above the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("The check counts the number of values in the column that is above the value defined by the user as a parameter. Stores a separate data quality check result for each daily partition.")
     private ColumnNumberAboveMaxValueCheckSpec dailyPartitionNumberAboveMaxValue;
 
-    @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.")
     private ColumnNegativeCountCheckSpec dailyPartitionNegativeValues;
 
-    @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.")
     private ColumnNegativePercentCheckSpec dailyPartitionNegativeValuesPercent;
 
-    @JsonPropertyDescription("The check counts the percentage of values in the column that is below the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("The check counts the percentage of values in the column that is below the value defined by the user as a parameter. Stores a separate data quality check result for each daily partition.")
     private ColumnNumberBelowMinValuePercentCheckSpec dailyPartitionNumberBelowMinValuePercent;
 
-    @JsonPropertyDescription("The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Stores a separate data quality check result for each daily partition.")
     private ColumnNumberAboveMaxValuePercentCheckSpec dailyPartitionNumberAboveMaxValuePercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each daily partition.")
     private ColumnNumberInRangePercentCheckSpec dailyPartitionNumberInRangePercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each daily partition.")
     private ColumnIntegerInRangePercentCheckSpec dailyPartitionIntegerInRangePercent;
 
-    @JsonPropertyDescription("Verifies that the minimal value in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the minimum value in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.")
     private ColumnMinInRangeCheckSpec dailyPartitionMinInRange;
 
-    @JsonPropertyDescription("Verifies that the maximal value in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the maximum value in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.")
     private ColumnMaxInRangeCheckSpec dailyPartitionMaxInRange;
 
-    @JsonPropertyDescription("Verifies that the sum of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the sum of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.")
     private ColumnSumInRangeCheckSpec dailyPartitionSumInRange;
 
-    @JsonPropertyDescription("Verifies that the average (mean) of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the average (mean) of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.")
     private ColumnMeanInRangeCheckSpec dailyPartitionMeanInRange;
 
-    @JsonPropertyDescription("Verifies that the median of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the median of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.")
     private ColumnMedianInRangeCheckSpec dailyPartitionMedianInRange;
 
-    @JsonPropertyDescription("Verifies that the percentile of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the percentile of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.")
     private ColumnPercentileInRangeCheckSpec dailyPartitionPercentileInRange;
 
-    @JsonPropertyDescription("Verifies that the percentile 10 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the percentile 10 of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.")
     private ColumnPercentile10InRangeCheckSpec dailyPartitionPercentile_10InRange;
 
-    @JsonPropertyDescription("Verifies that the percentile 25 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the percentile 25 of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.")
     private ColumnPercentile25InRangeCheckSpec dailyPartitionPercentile_25InRange;
 
-    @JsonPropertyDescription("Verifies that the percentile 75 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the percentile 75 of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.")
     private ColumnPercentile75InRangeCheckSpec dailyPartitionPercentile_75InRange;
 
-    @JsonPropertyDescription("Verifies that the percentile 90 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the percentile 90 of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.")
     private ColumnPercentile90InRangeCheckSpec dailyPartitionPercentile_90InRange;
 
-    @JsonPropertyDescription("Verifies that the sample standard deviation of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the sample standard deviation of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.")
     private ColumnSampleStddevInRangeCheckSpec dailyPartitionSampleStddevInRange;
 
-    @JsonPropertyDescription("Verifies that the population standard deviation of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the population standard deviation of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.")
     private ColumnPopulationStddevInRangeCheckSpec dailyPartitionPopulationStddevInRange;
 
-    @JsonPropertyDescription("Verifies that the sample variance of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the sample variance of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.")
     private ColumnSampleVarianceInRangeCheckSpec dailyPartitionSampleVarianceInRange;
 
-    @JsonPropertyDescription("Verifies that the population variance of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the population variance of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.")
     private ColumnPopulationVarianceInRangeCheckSpec dailyPartitionPopulationVarianceInRange;
 
-    @JsonPropertyDescription("Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.")
     private ColumnInvalidLatitudeCountCheckSpec dailyPartitionInvalidLatitude;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid latitude values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the percentage of valid latitude values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each daily partition.")
     private ColumnValidLatitudePercentCheckSpec dailyPartitionValidLatitudePercent;
 
-    @JsonPropertyDescription("Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.")
     private ColumnInvalidLongitudeCountCheckSpec dailyPartitionInvalidLongitude;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each daily partition.")
     private ColumnValidLongitudePercentCheckSpec dailyPartitionValidLongitudePercent;
 
-    @JsonPropertyDescription("Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.")
     private ColumnNonNegativeCountCheckSpec dailyPartitionNonNegativeValues;
 
-    @JsonPropertyDescription("Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.")
     private ColumnNonNegativePercentCheckSpec dailyPartitionNonNegativeValuesPercent;
 
 

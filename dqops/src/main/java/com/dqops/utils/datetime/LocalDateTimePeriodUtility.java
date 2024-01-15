@@ -78,7 +78,7 @@ public class LocalDateTimePeriodUtility {
     }
 
     /**
-     * Finds the minimal (earliest) date time.
+     * Finds the minimum (earliest) date time.
      * @param first First date time (to ensure that there is at least one).
      * @param other The other time periods.
      * @return Earliest date time.

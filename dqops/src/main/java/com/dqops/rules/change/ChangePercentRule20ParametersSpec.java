@@ -19,6 +19,7 @@ import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
+import com.dqops.utils.reflection.RequiredField;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -47,12 +48,12 @@ public class ChangePercentRule20ParametersSpec extends AbstractRuleParametersSpe
     }
 
     @JsonPropertyDescription("Percentage of maximum accepted change compared to previous readout (inclusive).")
-    @SampleValues(values = "5")
+    @RequiredField
     private Double maxPercent = 20.0;
 
     /**
-     * Gets the maximal accepted absolute value of the change of data quality check readout, relative to the previous readout.
-     * @return Maximal accepted absolute value of data quality check readout's change, relative to the previous readout.
+     * Gets the maximum accepted absolute value of the change of data quality check readout, relative to the previous readout.
+     * @return Maximum accepted absolute value of data quality check readout's change, relative to the previous readout.
      */
     public Double getMaxPercent() {
         return maxPercent;

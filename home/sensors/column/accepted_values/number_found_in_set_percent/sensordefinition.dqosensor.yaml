@@ -9,6 +9,7 @@ spec:
       \ only values from this list are accepted and rows having these values in the\
       \ tested column are counted as valid rows."
     data_type: integer_list
+    required: true
     sample_values:
     - 2
     - 3

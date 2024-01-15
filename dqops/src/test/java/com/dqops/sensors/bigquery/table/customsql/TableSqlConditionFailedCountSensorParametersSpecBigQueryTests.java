@@ -17,7 +17,7 @@ package com.dqops.sensors.bigquery.table.customsql;
 
 import com.dqops.BaseTest;
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.table.checkspecs.customsql.TableSqlConditionFailedCountCheckSpec;
+import com.dqops.checks.table.checkspecs.customsql.TableSqlConditionFailedCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -43,18 +43,18 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class TableSqlConditionFailedCountSensorParametersSpecBigQueryTests extends BaseTest {
     private TableSqlConditionFailedCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private TableSqlConditionFailedCountCheckSpec checkSpec;
+    private TableSqlConditionFailedCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
 		this.sut = new TableSqlConditionFailedCountSensorParametersSpec();
-        this.sut.setSqlCondition("{alias}.`length_int` > 10000 AND {alias}.`correct` = 1");
+        this.sut.setSqlCondition("{alias}.`length_int` <= 10000 AND {alias}.`correct` = 1");
         this.sut.setFilter("{alias}.date > DATE(2022, 2, 4)");
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new TableSqlConditionFailedCountCheckSpec();
+        this.checkSpec = new TableSqlConditionFailedCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

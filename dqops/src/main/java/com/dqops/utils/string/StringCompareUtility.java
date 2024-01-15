@@ -22,7 +22,7 @@ package com.dqops.utils.string;
 public class StringCompareUtility {
     /**
      * Compares two strings like <code>s1.compareTo(s2)</code>, with permission of null parameters.
-     * If one of the strings is null, it's considered as lesser than the non-null string (null is the minimal item in this ordering).
+     * If one of the strings is null, it's considered as lesser than the non-null string (null is the minimum item in this ordering).
      * @param s1 First string.
      * @param s2 Second string.
      * @return A negative, zero, or positive value if <code>s1</code> is lesser than, equal to, or greater than <code>s2</code>.

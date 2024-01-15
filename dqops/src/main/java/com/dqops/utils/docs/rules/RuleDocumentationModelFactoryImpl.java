@@ -91,6 +91,9 @@ public class RuleDocumentationModelFactoryImpl implements RuleDocumentationModel
 
         documentationModel.setDefinition(ruleDefinitionWrapper);
         documentationModel.setPythonSourceCode(ruleDefinitionWrapper.getRulePythonModuleContent().getTextContent().replace("\n", "\n    "));
+        if (ruleDefinitionWrapper.getSpec().getFields() != null && !ruleDefinitionWrapper.getSpec().getFields().isEmpty()) {
+            documentationModel.setFirstRuleParameterName(ruleDefinitionWrapper.getSpec().getFields().get(0).getFieldName());
+        }
 
         List<FieldModel> fieldsForRuleParameters = this.specToModelCheckMappingService.createFieldsForRuleParameters(ruleParametersSpec);
         ParameterDefinitionsListSpec fieldDefinitionsList = new ParameterDefinitionsListSpec();

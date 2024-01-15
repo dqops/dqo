@@ -120,6 +120,9 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     @CommandLine.Option(names = {"-d", "--dummy"}, description = "Runs data quality check in a dummy mode, sensors are not executed on the target database, but the rest of the process is performed", defaultValue = "false")
     private boolean dummyRun;
 
+    @CommandLine.Option(names = {"-fe", "--fail-on-execution-errors"}, description = "Returns a command status code 4 (when called from the command line) if any execution errors were raised during the execution, the default value is true.", defaultValue = "true")
+    private boolean failOnExecutionErrors = true;
+
     @CommandLine.Option(names = {"-m", "--mode"}, description = "Reporting mode (silent, summary, info, debug)", defaultValue = "summary")
     private CheckRunReportingMode mode = CheckRunReportingMode.summary;
 
@@ -439,6 +442,11 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
                     this.terminalWriter.writeLine(checkExecutionErrorSummary.getSummaryMessage());
                 }
             }
+        }
+
+        int executionErrorsCount = checkExecutionSummary.getTotalExecutionErrorsCount();
+        if (this.failOnExecutionErrors && executionErrorsCount > 0) {
+            return 4;
         }
 
         int fatalIssuesCount = checkExecutionSummary.getFatalSeverityIssuesCount();

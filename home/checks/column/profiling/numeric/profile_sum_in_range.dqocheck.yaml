@@ -4,6 +4,5 @@ kind: check
 spec:
   sensor_name: column/numeric/sum
   rule_name: comparison/between_floats
-  help_text: Verifies that the sum of all values in a column is not outside the set
+  help_text: Verifies that the sum of all values in a column is not outside the expected
     range.
-  standard: true

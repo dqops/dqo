@@ -5,5 +5,5 @@ spec:
   sensor_name: column/pii/contains_ip4_percent
   rule_name: comparison/max_percent
   help_text: Verifies that the percentage of rows that contains IP4 address values
-    in a column does not fall below the minimum accepted percentage. Creates a separate
-    data quality check (and an alert) for each daily partition.
+    in a column does not fall below the minimum accepted percentage. Stores a separate
+    data quality check result for each daily partition.

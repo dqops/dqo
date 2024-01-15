@@ -5,5 +5,5 @@ spec:
   sensor_name: column/accepted_values/expected_texts_in_top_values_count
   rule_name: comparison/max_missing
   help_text: Verifies that the top X most popular column values contain all values
-    from a list of expected values. Creates a separate data quality check (and an
-    alert) for each daily partition.
+    from a list of expected values. Stores a separate data quality check result for
+    each daily partition.

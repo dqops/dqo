@@ -16,7 +16,7 @@
 package com.dqops.redshift.sensors.table.customsql;
 
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.table.checkspecs.customsql.TableSqlConditionFailedCountCheckSpec;
+import com.dqops.checks.table.checkspecs.customsql.TableSqlConditionFailedCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
@@ -41,7 +41,7 @@ import tech.tablesaw.api.Table;
 public class TableSqlConditionFailedCountSensorParametersSpecIntegrationTest extends BaseRedshiftIntegrationTest {
     private TableSqlConditionFailedCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private TableSqlConditionFailedCountCheckSpec checkSpec;
+    private TableSqlConditionFailedCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -50,7 +50,7 @@ public class TableSqlConditionFailedCountSensorParametersSpecIntegrationTest ext
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new TableSqlConditionFailedCountSensorParametersSpec();
-        this.checkSpec = new TableSqlConditionFailedCountCheckSpec();
+        this.checkSpec = new TableSqlConditionFailedCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

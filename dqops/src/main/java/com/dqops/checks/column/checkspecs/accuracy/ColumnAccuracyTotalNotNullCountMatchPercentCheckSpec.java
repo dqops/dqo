@@ -35,7 +35,8 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that there are no more than a maximum percentage of difference of the row count of a tested table's column (counting the not null values) and of an row count of another (reference) table, also counting all rows with not null values.
+ * Column level check that ensures that difference between the count of null values in the tested column and the count of null values in another column in a referenced table is below a maximum accepted percentage of difference.
+ * This check runs an SQL query with an INNER JOIN clause to join to the other (referenced) table that must be defined in the same database.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -47,7 +48,7 @@ public class ColumnAccuracyTotalNotNullCountMatchPercentCheckSpec
         }
     };
 
-    @JsonPropertyDescription("Data quality check parameters")
+    @JsonPropertyDescription("Data quality check parameters. Fill the parameters to provide the name of the referenced table and the referenced column.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnAccuracyTotalNotNullCountMatchPercentSensorParametersSpec parameters = new ColumnAccuracyTotalNotNullCountMatchPercentSensorParametersSpec();

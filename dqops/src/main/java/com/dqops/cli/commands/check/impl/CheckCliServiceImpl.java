@@ -211,21 +211,33 @@ public class CheckCliServiceImpl implements CheckCliService {
     }
 
     protected void patchRuleThresholdsModel(RuleThresholdsModel ruleThresholdsModel, AllChecksModelCliPatchParameters parameters) {
-        if (parameters.getWarningLevelOptions() != null) {
+        if (parameters.isDisableWarningLevel()) {
+            RuleParametersModel ruleParametersModel = ruleThresholdsModel.getWarning();
+            ruleParametersModel.setConfigured(false);
+        } else if (parameters.getWarningLevelOptions() != null) {
             Map<String, String> options = parameters.getWarningLevelOptions();
             List<FieldModel> newParameterFields = this.optionMapToFields(options);
 
             RuleParametersModel ruleParametersModel = ruleThresholdsModel.getWarning();
             this.patchRuleParameters(ruleParametersModel, newParameterFields);
         }
-        if (parameters.getErrorLevelOptions() != null) {
+
+        if (parameters.isDisableErrorLevel()) {
+            RuleParametersModel ruleParametersModel = ruleThresholdsModel.getError();
+            ruleParametersModel.setConfigured(false);
+        } else if (parameters.getErrorLevelOptions() != null) {
             Map<String, String> options = parameters.getErrorLevelOptions();
             List<FieldModel> newParameterFields = this.optionMapToFields(options);
 
             RuleParametersModel ruleParametersModel = ruleThresholdsModel.getError();
             this.patchRuleParameters(ruleParametersModel, newParameterFields);
         }
-        if (parameters.getFatalLevelOptions() != null) {
+
+        if (parameters.isDisableFatalLevel()) {
+            RuleParametersModel ruleParametersModel = ruleThresholdsModel.getFatal();
+            ruleParametersModel.setConfigured(false);
+        }
+        else if (parameters.getFatalLevelOptions() != null) {
             Map<String, String> options = parameters.getFatalLevelOptions();
             List<FieldModel> newParameterFields = this.optionMapToFields(options);
 
@@ -252,7 +264,7 @@ public class CheckCliServiceImpl implements CheckCliService {
             }
         }
 
-        ruleParametersModel.setConfigured(!ruleParameterFields.isEmpty());
+        ruleParametersModel.setConfigured(true);
     }
 
     protected List<FieldModel> optionMapToFields(Map<String, String> options) {

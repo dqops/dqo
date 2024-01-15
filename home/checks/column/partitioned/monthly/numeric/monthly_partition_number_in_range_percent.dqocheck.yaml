@@ -5,5 +5,5 @@ spec:
   sensor_name: column/numeric/number_in_range_percent
   rule_name: comparison/min_percent
   help_text: Verifies that the percentage of values from range in a column does not
-    exceed the minimum accepted percentage. Creates a separate data quality check
-    (and an alert) for each monthly partition.
+    exceed the minimum accepted percentage. Stores a separate data quality check result
+    for each monthly partition.

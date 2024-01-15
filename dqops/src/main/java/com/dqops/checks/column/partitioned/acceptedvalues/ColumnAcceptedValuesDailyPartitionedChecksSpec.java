@@ -48,19 +48,19 @@ public class ColumnAcceptedValuesDailyPartitionedChecksSpec extends AbstractChec
         }
     };
 
-    @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores a separate data quality check result for each daily partition.")
     private ColumnTextFoundInSetPercentCheckSpec dailyPartitionTextFoundInSetPercent;
 
-    @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores a separate data quality check result for each daily partition.")
     private ColumnNumberFoundInSetPercentCheckSpec dailyPartitionNumberFoundInSetPercent;
 
-    @JsonPropertyDescription("Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores a separate data quality check result for each daily partition.")
     private ColumnExpectedTextValuesInUseCountCheckSpec dailyPartitionExpectedTextValuesInUseCount;
 
-    @JsonPropertyDescription("Verifies that the top X most popular column values contain all values from a list of expected values. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the top X most popular column values contain all values from a list of expected values. Stores a separate data quality check result for each daily partition.")
     private ColumnExpectedTextsInTopValuesCountCheckSpec dailyPartitionExpectedTextsInTopValuesCount;
 
-    @JsonPropertyDescription("Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores a separate data quality check result for each daily partition.")
     private ColumnExpectedNumbersInUseCountCheckSpec dailyPartitionExpectedNumbersInUseCount;
 
 

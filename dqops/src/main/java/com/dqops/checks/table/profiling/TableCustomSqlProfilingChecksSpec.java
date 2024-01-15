@@ -20,7 +20,7 @@ import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.table.checkspecs.customsql.TableSqlAggregateExpressionCheckSpec;
-import com.dqops.checks.table.checkspecs.customsql.TableSqlConditionFailedCountCheckSpec;
+import com.dqops.checks.table.checkspecs.customsql.TableSqlConditionFailedCheckSpec;
 import com.dqops.checks.table.checkspecs.customsql.TableSqlConditionPassedPercentCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -42,20 +42,39 @@ import java.util.Objects;
 public class TableCustomSqlProfilingChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableCustomSqlProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
+            put("profile_sql_condition_failed_on_table", o -> o.profileSqlConditionFailedOnTable);
             put("profile_sql_condition_passed_percent_on_table", o -> o.profileSqlConditionPassedPercentOnTable);
-            put("profile_sql_condition_failed_count_on_table", o -> o.profileSqlConditionFailedCountOnTable);
             put("profile_sql_aggregate_expression_on_table", o -> o.profileSqlAggregateExpressionOnTable);
         }
     };
 
-    @JsonPropertyDescription("Verifies that a set percentage of rows passed a custom SQL condition (expression).")
+    @JsonPropertyDescription("Verifies that a custom SQL expression is met for each row. Counts the number of rows where the expression is not satisfied, and raises an issue if too many failures were detected. " +
+            "This check is used also to compare values between columns: `{alias}.col_price > {alias}.col_tax`.")
     private TableSqlConditionPassedPercentCheckSpec profileSqlConditionPassedPercentOnTable;
 
-    @JsonPropertyDescription("Verifies that a set number of rows failed a custom SQL condition (expression).")
-    private TableSqlConditionFailedCountCheckSpec profileSqlConditionFailedCountOnTable;
+    @JsonPropertyDescription("Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Reference the current table by using tokens, for example: `{alias}.col_price > {alias}.col_tax`.")
+    private TableSqlConditionFailedCheckSpec profileSqlConditionFailedOnTable;
 
-    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range.")
+    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range.")
     private TableSqlAggregateExpressionCheckSpec profileSqlAggregateExpressionOnTable;
+
+    /**
+     * Returns a check specification.
+     * @return New check specification.
+     */
+    public TableSqlConditionFailedCheckSpec getProfileSqlConditionFailedOnTable() {
+        return profileSqlConditionFailedOnTable;
+    }
+
+    /**
+     * Sets a new check specification.
+     * @param profileSqlConditionFailedOnTable Check specification.
+     */
+    public void setProfileSqlConditionFailedOnTable(TableSqlConditionFailedCheckSpec profileSqlConditionFailedOnTable) {
+        this.setDirtyIf(!Objects.equals(this.profileSqlConditionFailedOnTable, profileSqlConditionFailedOnTable));
+        this.profileSqlConditionFailedOnTable = profileSqlConditionFailedOnTable;
+        propagateHierarchyIdToField(profileSqlConditionFailedOnTable, "profile_sql_condition_failed_on_table");
+    }
 
     /**
      * Returns a check specification.
@@ -73,24 +92,6 @@ public class TableCustomSqlProfilingChecksSpec extends AbstractCheckCategorySpec
         this.setDirtyIf(!Objects.equals(this.profileSqlConditionPassedPercentOnTable, profileSqlConditionPassedPercentOnTable));
         this.profileSqlConditionPassedPercentOnTable = profileSqlConditionPassedPercentOnTable;
         propagateHierarchyIdToField(profileSqlConditionPassedPercentOnTable, "profile_sql_condition_passed_percent_on_table");
-    }
-
-    /**
-     * Returns a check specification.
-     * @return New check specification.
-     */
-    public TableSqlConditionFailedCountCheckSpec getProfileSqlConditionFailedCountOnTable() {
-        return profileSqlConditionFailedCountOnTable;
-    }
-
-    /**
-     * Sets a new check specification.
-     * @param profileSqlConditionFailedCountOnTable Check specification.
-     */
-    public void setProfileSqlConditionFailedCountOnTable(TableSqlConditionFailedCountCheckSpec profileSqlConditionFailedCountOnTable) {
-        this.setDirtyIf(!Objects.equals(this.profileSqlConditionFailedCountOnTable, profileSqlConditionFailedCountOnTable));
-        this.profileSqlConditionFailedCountOnTable = profileSqlConditionFailedCountOnTable;
-        propagateHierarchyIdToField(profileSqlConditionFailedCountOnTable, "profile_sql_condition_failed_count_on_table");
     }
 
     /**

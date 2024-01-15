@@ -31,7 +31,7 @@ import java.util.*;
  */
 public class SimilarChecksContainer {
     private final Map<SimilarCheckGroupingKey, SimilarChecksGroup> checkGroups = new LinkedHashMap<>();
-    private final Map<String, SimilarChecksGroup> similarChecksByCheckName = new HashMap<>();
+    private final Map<String, SimilarChecksGroup> similarChecksByCheckName = new LinkedHashMap<>();
 
     /**
      * Returns a similar check group for a given key.

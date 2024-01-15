@@ -5,5 +5,5 @@ spec:
   sensor_name: column/blanks/null_placeholder_text_percent
   rule_name: comparison/max_percent
   help_text: Verifies that the percentage of null placeholders in a column does not
-    exceed the maximum accepted percentage. Creates a separate data quality check
-    (and an alert) for each monthly partition.
+    exceed the maximum accepted percentage. Stores a separate data quality check result
+    for each monthly partition.

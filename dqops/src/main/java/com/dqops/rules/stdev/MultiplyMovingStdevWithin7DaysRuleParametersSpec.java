@@ -19,6 +19,7 @@ import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
+import com.dqops.utils.reflection.RequiredField;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -47,6 +48,7 @@ public class MultiplyMovingStdevWithin7DaysRuleParametersSpec extends AbstractRu
             " fatal) at once. The default is a 7 time periods (days, etc.) time window," +
             " but at least 3 readouts must exist to run the calculation.")
     @SampleValues(values = "1.5")
+    @RequiredField
     private Double multiplyStdev;
 
     /**

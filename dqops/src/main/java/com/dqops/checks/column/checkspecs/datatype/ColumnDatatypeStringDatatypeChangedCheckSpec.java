@@ -56,7 +56,7 @@ public class ColumnDatatypeStringDatatypeChangedCheckSpec extends AbstractCheckS
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ValueChangedRuleParametersSpec warning;
 
-    @JsonPropertyDescription("Default alerting threshold for a row count that raises a data quality error (alert), detects that the data type of values stored in a column has changed since the last time it was evaluated or the data type in the current daily/monthly partition differs from the data type in the previous partition.")
+    @JsonPropertyDescription("Default alerting thresholdthat raises a data quality issue at an error severity level, detects that the data type of values stored in a column has changed since the last time it was evaluated or the data type in the current daily/monthly partition differs from the data type in the previous partition.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ValueChangedRuleParametersSpec error;

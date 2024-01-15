@@ -50,16 +50,16 @@ public class ColumnUniquenessMonthlyPartitionedChecksSpec extends AbstractCheckC
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores a separate data quality check result for each monthly partition.")
     private ColumnDistinctCountCheckSpec monthlyPartitionDistinctCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Stores a separate data quality check result for each monthly partition.")
     private ColumnDistinctPercentCheckSpec monthlyPartitionDistinctPercent;
 
-    @JsonPropertyDescription("Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.")
     private ColumnDuplicateCountCheckSpec monthlyPartitionDuplicateCount;
 
-    @JsonPropertyDescription("Verifies that the percent of duplicate values in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the percent of duplicate values in a column does not exceed the maximum accepted percent. Stores a separate data quality check result for each monthly partition.")
     private ColumnDuplicatePercentCheckSpec monthlyPartitionDuplicatePercent;
 
     @JsonPropertyDescription("Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.")

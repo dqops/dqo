@@ -1,6 +1,7 @@
 # total max match percent data quality checks
 
-Column level check that ensures that there are no more than a maximum percentage of difference of max of a table column and of a max of another table column.
+Column level check that ensures that difference between the maximum value in the tested column and the maximum value in another column in a referenced table is below a maximum accepted percentage of difference.
+ This check runs an SQL query with an INNER JOIN clause to join to the other (referenced) table that must be defined in the same database.
 
 
 ___
@@ -15,7 +16,7 @@ The **total max match percent** data quality check has the following variants fo
 
 Verifies that the percentage of difference in total max of a column in a table and total max of a column of another table does not exceed the set number.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_total_max_match_percent|profiling| |Accuracy|[total_max_match_percent](../../../reference/sensors/column/accuracy-column-sensors.md#total-max-match-percent)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
 
@@ -25,29 +26,74 @@ Please expand the section below to see the DQOps command-line examples to run or
 
 ??? example "Managing profile total max match percent check from DQOps shell"
 
-    === "Activate check"
+    === "Activate the check with a warning rule"
 
-        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -ch=profile_total_max_match_percent
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=profile_total_max_match_percent --enable-warning
         ```
 
-    === "Run check on connection"
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=profile_total_max_match_percent --enable-warning
+        ```
+        
+        Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=profile_total_max_match_percent --enable-warning
+                            -Wmax_diff_percent=value
+        ```
+
+
+    === "Activate the check with an error rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=profile_total_max_match_percent --enable-error
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=profile_total_max_match_percent --enable-error
+        ```
+        
+        Additional rule parameters are passed using the *-Erule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=profile_total_max_match_percent --enable-error
+                            -Emax_diff_percent=value
+        ```
+
+
+    === "Run all configured checks"
 
         Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+        The following example shows how to run the *profile_total_max_match_percent* check on all tables and columns on a single data source.
 
         ```
-        dqo> check run -c=connection_name -ch=profile_total_max_match_percent
+        dqo> check run -c=data_source_name -ch=profile_total_max_match_percent
         ```
 
-    === "Run check on table"
-
-        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters.
 
         ```
         dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_total_max_match_percent
         ```
+
+        You can also run this check on all tables (and columns)  on which the *profile_total_max_match_percent* check is enabled
+        using patterns to find tables.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_*  -col=column_name_*-ch=profile_total_max_match_percent
+        ```
+
 
 **YAML configuration**
 
@@ -474,12 +520,6 @@ spec:
             FROM ""."<target_schema>"."<target_table>" AS analyzed_table
             ```
     
-
-
-
-
-
-
 ___
 
 
@@ -490,7 +530,7 @@ ___
 
 Verifies that the percentage of difference in total max of a column in a table and total max of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_total_max_match_percent|monitoring|daily|Accuracy|[total_max_match_percent](../../../reference/sensors/column/accuracy-column-sensors.md#total-max-match-percent)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
 
@@ -500,29 +540,74 @@ Please expand the section below to see the DQOps command-line examples to run or
 
 ??? example "Managing daily total max match percent check from DQOps shell"
 
-    === "Activate check"
+    === "Activate the check with a warning rule"
 
-        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -ch=daily_total_max_match_percent
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=daily_total_max_match_percent --enable-warning
         ```
 
-    === "Run check on connection"
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_total_max_match_percent --enable-warning
+        ```
+        
+        Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_total_max_match_percent --enable-warning
+                            -Wmax_diff_percent=value
+        ```
+
+
+    === "Activate the check with an error rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=daily_total_max_match_percent --enable-error
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_total_max_match_percent --enable-error
+        ```
+        
+        Additional rule parameters are passed using the *-Erule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_total_max_match_percent --enable-error
+                            -Emax_diff_percent=value
+        ```
+
+
+    === "Run all configured checks"
 
         Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+        The following example shows how to run the *daily_total_max_match_percent* check on all tables and columns on a single data source.
 
         ```
-        dqo> check run -c=connection_name -ch=daily_total_max_match_percent
+        dqo> check run -c=data_source_name -ch=daily_total_max_match_percent
         ```
 
-    === "Run check on table"
-
-        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters.
 
         ```
         dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_total_max_match_percent
         ```
+
+        You can also run this check on all tables (and columns)  on which the *daily_total_max_match_percent* check is enabled
+        using patterns to find tables.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_*  -col=column_name_*-ch=daily_total_max_match_percent
+        ```
+
 
 **YAML configuration**
 
@@ -950,12 +1035,6 @@ spec:
             FROM ""."<target_schema>"."<target_table>" AS analyzed_table
             ```
     
-
-
-
-
-
-
 ___
 
 
@@ -964,9 +1043,9 @@ ___
 
 **Check description**
 
-Verifies that the percentage of difference in total max of a column in a table and total max of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.
+Verifies that the percentage of difference in total max of a column in a table and total max of a column of another table does not exceed the set number. Stores the most recent check result for each month when the data quality check was evaluated.
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_total_max_match_percent|monitoring|monthly|Accuracy|[total_max_match_percent](../../../reference/sensors/column/accuracy-column-sensors.md#total-max-match-percent)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
 
@@ -976,29 +1055,74 @@ Please expand the section below to see the DQOps command-line examples to run or
 
 ??? example "Managing monthly total max match percent check from DQOps shell"
 
-    === "Activate check"
+    === "Activate the check with a warning rule"
 
-        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -ch=monthly_total_max_match_percent
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=monthly_total_max_match_percent --enable-warning
         ```
 
-    === "Run check on connection"
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_total_max_match_percent --enable-warning
+        ```
+        
+        Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_total_max_match_percent --enable-warning
+                            -Wmax_diff_percent=value
+        ```
+
+
+    === "Activate the check with an error rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=monthly_total_max_match_percent --enable-error
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_total_max_match_percent --enable-error
+        ```
+        
+        Additional rule parameters are passed using the *-Erule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_total_max_match_percent --enable-error
+                            -Emax_diff_percent=value
+        ```
+
+
+    === "Run all configured checks"
 
         Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+        The following example shows how to run the *monthly_total_max_match_percent* check on all tables and columns on a single data source.
 
         ```
-        dqo> check run -c=connection_name -ch=monthly_total_max_match_percent
+        dqo> check run -c=data_source_name -ch=monthly_total_max_match_percent
         ```
 
-    === "Run check on table"
-
-        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters.
 
         ```
         dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_total_max_match_percent
         ```
+
+        You can also run this check on all tables (and columns)  on which the *monthly_total_max_match_percent* check is enabled
+        using patterns to find tables.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_*  -col=column_name_*-ch=monthly_total_max_match_percent
+        ```
+
 
 **YAML configuration**
 
@@ -1426,12 +1550,10 @@ spec:
             FROM ""."<target_schema>"."<target_table>" AS analyzed_table
             ```
     
-
-
-
-
-
-
 ___
 
 
+
+## What's next
+- Learn how to [configure data quality checks](../../../dqo-concepts/configuring-data-quality-checks-and-rules.md) in DQOps
+- Look at the examples of [running data quality checks](../../../dqo-concepts/running-data-quality-checks.md), targeting tables and columns

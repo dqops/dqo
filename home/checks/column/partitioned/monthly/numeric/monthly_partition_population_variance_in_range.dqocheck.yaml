@@ -5,5 +5,5 @@ spec:
   sensor_name: column/numeric/population_variance
   rule_name: comparison/between_floats
   help_text: Verifies that the population variance of all values in a column is not
-    outside the set range. Creates a separate data quality check (and an alert) for
-    each monthly partition.
+    outside the expected range. Stores a separate data quality check result for each
+    monthly partition.

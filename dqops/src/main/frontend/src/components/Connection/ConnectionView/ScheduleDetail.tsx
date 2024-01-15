@@ -1,33 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import {
-  getConnectionSchedulingGroup,
-  resetConnectionSchedulingGroup,
-  setIsUpdatedSchedulingGroup,
-  setUpdatedSchedulingGroup,
+  getConnectionSchedulingGroup, resetConnectionSchedulingGroup, setIsUpdatedSchedulingGroup, setUpdatedSchedulingGroup,
   updateConnectionSchedulingGroup
+
 } from '../../../redux/actions/connection.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { useSelector } from 'react-redux';
 import ConnectionActionGroup from './ConnectionActionGroup';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
-import ScheduleView from '../../ScheduleView';
-import Tabs from '../../Tabs';
-import { CheckRunMonitoringScheduleGroup } from '../../../shared/enums/scheduling.enum';
-import {
-  getFirstLevelActiveTab,
-  getFirstLevelState
-} from '../../../redux/selectors';
-import { CheckTypes } from '../../../shared/routes';
-import qs from 'query-string';
-import { SettingsApi } from '../../../services/apiClient';
-import { MonitoringScheduleSpec } from '../../../api';
+import { useHistory, useLocation, useParams } from "react-router-dom";
+import ScheduleView from "../../ScheduleView";
+import Tabs from "../../Tabs";
+import { CheckRunMonitoringScheduleGroup } from "../../../shared/enums/scheduling.enum";
+import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
+import { CheckTypes } from "../../../shared/routes";
+import qs from "query-string";
 
-const ScheduleDetail = ({ isDefault }: { isDefault?: boolean }) => {
-  const {
-    connection,
-    checkTypes
-  }: { checkTypes: CheckTypes; connection: string } = useParams();
 
+
+const ScheduleDetail = () => {
+  const { connection, checkTypes }: { checkTypes: CheckTypes, connection: string } = useParams();
+  
   const getPageTabs = () => {
     switch (checkTypes) {
       case CheckTypes.PROFILING: {
@@ -88,70 +80,29 @@ const ScheduleDetail = ({ isDefault }: { isDefault?: boolean }) => {
       }
     }
   };
+
   const [tabs, setTabs] = useState(getPageTabs());
-  const [updatedSchedule, setUpdatedSchedule] = useState<
-    MonitoringScheduleSpec | undefined
-  >();
-  const [isDefaultUpdated, setIsDefaultUpdated] = useState(false);
   const dispatch = useActionDispatch();
   const location = useLocation() as any;
-  const { activeTab } = qs.parse(location.search) as any;
+  const { activeTab = CheckRunMonitoringScheduleGroup.profiling } = qs.parse(location.search) as any;
   const history = useHistory();
 
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
-  const {
-    scheduleGroups,
-    isUpdating
-  }: {
+  const { scheduleGroups, isUpdating }: {
     scheduleGroups?: any;
     isUpdating?: boolean;
   } = useSelector(getFirstLevelState(checkTypes));
 
+  const updatedSchedule = scheduleGroups?.[activeTab]?.updatedSchedule;
   const isUpdatedSchedule = scheduleGroups?.[activeTab]?.isUpdatedSchedule;
-  const fetchDefaultSchedule = async () => {
-    try {
-      await SettingsApi.getDefaultSchedule(
-        activeTab && activeTab?.length > 0 ? activeTab : getPageTabs()[0].value
-      ).then((res) => setUpdatedSchedule(res.data));
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  useEffect(() => {
-    fetchDefaultSchedule();
-  }, [activeTab]);
 
   const onChangeTab = (tab: CheckRunMonitoringScheduleGroup) => {
-    history.push(`${location.pathname}?activeTab=${tab}`);
-  };
-  const updateDefaultSchedules = async (
-    obj: MonitoringScheduleSpec | undefined
-  ) => {
-    await SettingsApi.updateDefaultSchedules(
-      activeTab && activeTab?.length > 0 ? activeTab : getPageTabs()[0].value,
-      obj
-    )
-      .then(() => setIsDefaultUpdated(false))
-      .catch((err) => console.error(err));
-  };
+    history.push(`${location.pathname}?activeTab=${tab}`)
+  }
 
-  const handleChange = (obj: MonitoringScheduleSpec) => {
-    setUpdatedSchedule((prevState) => ({
-      ...prevState,
-      cron_expression: obj.cron_expression,
-      disabled: obj.disabled
-    }));
-    setIsDefaultUpdated(true);
-
-    dispatch(
-      setIsUpdatedSchedulingGroup(
-        checkTypes,
-        firstLevelActiveTab,
-        activeTab,
-        true
-      )
-    );
+  const handleChange = (obj: any) => {
+    dispatch(setIsUpdatedSchedulingGroup(checkTypes, firstLevelActiveTab, activeTab, true));
     dispatch(
       setUpdatedSchedulingGroup(checkTypes, firstLevelActiveTab, activeTab, {
         ...updatedSchedule,
@@ -162,14 +113,7 @@ const ScheduleDetail = ({ isDefault }: { isDefault?: boolean }) => {
 
   useEffect(() => {
     if (updatedSchedule === null || updatedSchedule === undefined) {
-      dispatch(
-        getConnectionSchedulingGroup(
-          checkTypes,
-          firstLevelActiveTab,
-          connection,
-          activeTab
-        )
-      );
+      dispatch(getConnectionSchedulingGroup(checkTypes, firstLevelActiveTab, connection, activeTab));
     }
   }, [connection, activeTab, updatedSchedule]);
 
@@ -177,76 +121,31 @@ const ScheduleDetail = ({ isDefault }: { isDefault?: boolean }) => {
     if (updatedSchedule === null || updatedSchedule === undefined) {
       return;
     }
-
-    updateDefaultSchedules(updatedSchedule);
-
-    await dispatch(
-      updateConnectionSchedulingGroup(
-        checkTypes,
-        firstLevelActiveTab,
-        connection,
-        activeTab,
-        updatedSchedule
-      )
-    );
-    await dispatch(
-      getConnectionSchedulingGroup(
-        checkTypes,
-        firstLevelActiveTab,
-        connection,
-        activeTab
-      )
-    );
-    dispatch(
-      setIsUpdatedSchedulingGroup(
-        checkTypes,
-        firstLevelActiveTab,
-        activeTab,
-        false
-      )
-    );
+    await dispatch(updateConnectionSchedulingGroup(checkTypes, firstLevelActiveTab, connection, activeTab, updatedSchedule));
+    await dispatch(getConnectionSchedulingGroup(checkTypes, firstLevelActiveTab, connection, activeTab));
+    dispatch(setIsUpdatedSchedulingGroup(checkTypes, firstLevelActiveTab, activeTab, false));
   };
 
   useEffect(() => {
-    setTabs((prev) =>
-      prev.map((tab) =>
-        tab.value === activeTab ? { ...tab, isUpdated: isUpdatedSchedule } : tab
-      )
-    );
+    setTabs(prev => prev.map(tab => tab.value === activeTab ? ({ ...tab, isUpdated: isUpdatedSchedule }) : tab))
   }, [isUpdatedSchedule, activeTab]);
 
   useEffect(() => {
-    setTabs((prev) => prev.map((tab) => ({ ...tab, isUpdate: false })));
+    setTabs(prev => prev.map(tab => ({ ...tab, isUpdate: false })))
     dispatch(resetConnectionSchedulingGroup(checkTypes, firstLevelActiveTab));
   }, [connection]);
-
-  useEffect(() => {
-    setTabs(getPageTabs());
-  }, [checkTypes]);
 
   return (
     <div className="py-4 px-8">
       <ConnectionActionGroup
         onUpdate={onUpdate}
-        isUpdated={isUpdatedSchedule || isDefaultUpdated}
+        isUpdated={isUpdatedSchedule}
         isUpdating={isUpdating}
       />
       <div className="border-b border-gray-300">
-        <Tabs
-          tabs={tabs}
-          activeTab={
-            activeTab && activeTab?.length > 0
-              ? activeTab
-              : getPageTabs()[0].value
-          }
-          onChange={onChangeTab}
-        />
+        <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
       </div>
-      <ScheduleView
-        handleChange={handleChange}
-        schedule={updatedSchedule}
-        isDefault={isDefault}
-      />
+      <ScheduleView handleChange={handleChange} schedule={updatedSchedule} />
     </div>
   );
 };

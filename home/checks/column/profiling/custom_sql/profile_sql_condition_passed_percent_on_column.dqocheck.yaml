@@ -4,5 +4,6 @@ kind: check
 spec:
   sensor_name: column/custom_sql/sql_condition_passed_percent
   rule_name: comparison/min_percent
-  help_text: Verifies that a minimum percentage of rows passed a custom SQL condition
-    (expression).
+  help_text: "Verifies that a minimum percentage of rows passed a custom SQL condition\
+    \ (expression). Reference the current column by using tokens, for example: `{alias}.{column}\
+    \ > {alias}.col_tax`."

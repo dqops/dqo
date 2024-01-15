@@ -51,16 +51,16 @@ public class ColumnNullsMonthlyPartitionedChecksSpec extends AbstractCheckCatego
         }
     };
 
-    @JsonPropertyDescription("Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.")
     private ColumnNullsCountCheckSpec monthlyPartitionNullsCount;
 
-    @JsonPropertyDescription("Measures the percent of null values in a column. Raises a data quality exception when the percentage of null values is above the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Measures the percent of null values in a column. Raises a data quality exception when the percentage of null values is above the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.")
     private ColumnNullsPercentCheckSpec monthlyPartitionNullsPercent;
 
-    @JsonPropertyDescription("Detects empty columns. The default rule min_count=1 verifies that the column has any values. Verifies that the number of not null values in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Detects empty columns. The default rule min_count=1 verifies that the column has any values. Verifies that the number of not null values in a column does not exceed the minimum accepted count. Stores a separate data quality check result for each monthly partition.")
     private ColumnNotNullsCountCheckSpec monthlyPartitionNotNullsCount;
 
-    @JsonPropertyDescription("Measures the percent of not null values in a column. Raises a data quality exception when the percentage of not null values is below a minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Measures the percent of not null values in a column. Raises a data quality exception when the percentage of not null values is below a minimum accepted percentage. Stores a separate data quality check result for each monthly partition.")
     private ColumnNotNullsPercentCheckSpec monthlyPartitionNotNullsPercent;
 
     /**

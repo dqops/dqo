@@ -829,7 +829,7 @@ public class JobsController {
     public ResponseEntity<Mono<Void>> stopCronScheduler(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
         if (this.jobSchedulerService.isStarted()) {
-            this.jobSchedulerService.shutdown();
+            this.jobSchedulerService.stop();
         }
         return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
     }

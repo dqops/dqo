@@ -6,6 +6,6 @@ spec:
   rule_name: comparison/min_percent
   help_text: Measures the percent of not null values in a column. Raises a data quality
     exception when the percentage of not null values is below a minimum accepted percentage.
-    Stores the most recent row count for each month when the data quality check was
-    evaluated.
+    Stores the most recent check result for each month when the data quality check
+    was evaluated.
   standard: true

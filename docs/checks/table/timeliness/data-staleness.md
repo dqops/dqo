@@ -18,7 +18,7 @@ The **data staleness** data quality check has the following variants for each
 
 Calculates the time difference in days between the current date and the most recent data ingestion timestamp (staleness)
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_data_staleness|profiling| |Timeliness|[data_staleness](../../../reference/sensors/table/timeliness-table-sensors.md#data-staleness)|[max_days](../../../reference/rules/Comparison.md#max-days)|
 
@@ -28,29 +28,74 @@ Please expand the section below to see the DQOps command-line examples to run or
 
 ??? example "Managing profile data staleness check from DQOps shell"
 
-    === "Activate check"
+    === "Activate the check with a warning rule"
 
-        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -ch=profile_data_staleness
+        dqo> check activate -c=connection_name -t=schema_name.table_name -ch=profile_data_staleness --enable-warning
         ```
 
-    === "Run check on connection"
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -ch=profile_data_staleness --enable-warning
+        ```
+        
+        Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -ch=profile_data_staleness --enable-warning
+                            -Wmax_days=value
+        ```
+
+
+    === "Activate the check with an error rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name -ch=profile_data_staleness --enable-error
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -ch=profile_data_staleness --enable-error
+        ```
+        
+        Additional rule parameters are passed using the *-Erule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -ch=profile_data_staleness --enable-error
+                            -Emax_days=value
+        ```
+
+
+    === "Run all configured checks"
 
         Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+        The following example shows how to run the *profile_data_staleness* check on all tables on a single data source.
 
         ```
-        dqo> check run -c=connection_name -ch=profile_data_staleness
+        dqo> check run -c=data_source_name -ch=profile_data_staleness
         ```
 
-    === "Run check on table"
-
-        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters.
 
         ```
         dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_data_staleness
         ```
+
+        You can also run this check on all tables  on which the *profile_data_staleness* check is enabled
+        using patterns to find tables.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_* -ch=profile_data_staleness
+        ```
+
 
 **YAML configuration**
 
@@ -1482,12 +1527,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
-
-
-
-
-
-
 ___
 
 
@@ -1498,7 +1537,7 @@ ___
 
 Daily  calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_data_staleness|monitoring|daily|Timeliness|[data_staleness](../../../reference/sensors/table/timeliness-table-sensors.md#data-staleness)|[max_days](../../../reference/rules/Comparison.md#max-days)|
 
@@ -1508,29 +1547,74 @@ Please expand the section below to see the DQOps command-line examples to run or
 
 ??? example "Managing daily data staleness check from DQOps shell"
 
-    === "Activate check"
+    === "Activate the check with a warning rule"
 
-        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -ch=daily_data_staleness
+        dqo> check activate -c=connection_name -t=schema_name.table_name -ch=daily_data_staleness --enable-warning
         ```
 
-    === "Run check on connection"
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -ch=daily_data_staleness --enable-warning
+        ```
+        
+        Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -ch=daily_data_staleness --enable-warning
+                            -Wmax_days=value
+        ```
+
+
+    === "Activate the check with an error rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name -ch=daily_data_staleness --enable-error
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -ch=daily_data_staleness --enable-error
+        ```
+        
+        Additional rule parameters are passed using the *-Erule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -ch=daily_data_staleness --enable-error
+                            -Emax_days=value
+        ```
+
+
+    === "Run all configured checks"
 
         Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+        The following example shows how to run the *daily_data_staleness* check on all tables on a single data source.
 
         ```
-        dqo> check run -c=connection_name -ch=daily_data_staleness
+        dqo> check run -c=data_source_name -ch=daily_data_staleness
         ```
 
-    === "Run check on table"
-
-        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters.
 
         ```
         dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_data_staleness
         ```
+
+        You can also run this check on all tables  on which the *daily_data_staleness* check is enabled
+        using patterns to find tables.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_* -ch=daily_data_staleness
+        ```
+
 
 **YAML configuration**
 
@@ -2964,12 +3048,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
-
-
-
-
-
-
 ___
 
 
@@ -2980,7 +3058,7 @@ ___
 
 Monthly monitoring calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_data_staleness|monitoring|monthly|Timeliness|[data_staleness](../../../reference/sensors/table/timeliness-table-sensors.md#data-staleness)|[max_days](../../../reference/rules/Comparison.md#max-days)|
 
@@ -2990,29 +3068,74 @@ Please expand the section below to see the DQOps command-line examples to run or
 
 ??? example "Managing monthly data staleness check from DQOps shell"
 
-    === "Activate check"
+    === "Activate the check with a warning rule"
 
-        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -ch=monthly_data_staleness
+        dqo> check activate -c=connection_name -t=schema_name.table_name -ch=monthly_data_staleness --enable-warning
         ```
 
-    === "Run check on connection"
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -ch=monthly_data_staleness --enable-warning
+        ```
+        
+        Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -ch=monthly_data_staleness --enable-warning
+                            -Wmax_days=value
+        ```
+
+
+    === "Activate the check with an error rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name -ch=monthly_data_staleness --enable-error
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -ch=monthly_data_staleness --enable-error
+        ```
+        
+        Additional rule parameters are passed using the *-Erule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -ch=monthly_data_staleness --enable-error
+                            -Emax_days=value
+        ```
+
+
+    === "Run all configured checks"
 
         Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+        The following example shows how to run the *monthly_data_staleness* check on all tables on a single data source.
 
         ```
-        dqo> check run -c=connection_name -ch=monthly_data_staleness
+        dqo> check run -c=data_source_name -ch=monthly_data_staleness
         ```
 
-    === "Run check on table"
-
-        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters.
 
         ```
         dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_data_staleness
         ```
+
+        You can also run this check on all tables  on which the *monthly_data_staleness* check is enabled
+        using patterns to find tables.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_* -ch=monthly_data_staleness
+        ```
+
 
 **YAML configuration**
 
@@ -4446,12 +4569,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
-
-
-
-
-
-
 ___
 
 
@@ -4462,7 +4579,7 @@ ___
 
 Daily partitioned check calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_data_staleness|partitioned|daily|Timeliness|[data_staleness](../../../reference/sensors/table/timeliness-table-sensors.md#data-staleness)|[max_days](../../../reference/rules/Comparison.md#max-days)|
 
@@ -4472,29 +4589,74 @@ Please expand the section below to see the DQOps command-line examples to run or
 
 ??? example "Managing daily partition data staleness check from DQOps shell"
 
-    === "Activate check"
+    === "Activate the check with a warning rule"
 
-        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -ch=daily_partition_data_staleness
+        dqo> check activate -c=connection_name -t=schema_name.table_name -ch=daily_partition_data_staleness --enable-warning
         ```
 
-    === "Run check on connection"
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -ch=daily_partition_data_staleness --enable-warning
+        ```
+        
+        Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -ch=daily_partition_data_staleness --enable-warning
+                            -Wmax_days=value
+        ```
+
+
+    === "Activate the check with an error rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name -ch=daily_partition_data_staleness --enable-error
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -ch=daily_partition_data_staleness --enable-error
+        ```
+        
+        Additional rule parameters are passed using the *-Erule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -ch=daily_partition_data_staleness --enable-error
+                            -Emax_days=value
+        ```
+
+
+    === "Run all configured checks"
 
         Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+        The following example shows how to run the *daily_partition_data_staleness* check on all tables on a single data source.
 
         ```
-        dqo> check run -c=connection_name -ch=daily_partition_data_staleness
+        dqo> check run -c=data_source_name -ch=daily_partition_data_staleness
         ```
 
-    === "Run check on table"
-
-        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters.
 
         ```
         dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_data_staleness
         ```
+
+        You can also run this check on all tables  on which the *daily_partition_data_staleness* check is enabled
+        using patterns to find tables.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_* -ch=daily_partition_data_staleness
+        ```
+
 
 **YAML configuration**
 
@@ -5948,12 +6110,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
-
-
-
-
-
-
 ___
 
 
@@ -5964,7 +6120,7 @@ ___
 
 Monthly partitioned check calculating the time difference in days between the current date and the most recent data data ingestion timestamp (staleness)
 
-|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_data_staleness|partitioned|monthly|Timeliness|[data_staleness](../../../reference/sensors/table/timeliness-table-sensors.md#data-staleness)|[max_days](../../../reference/rules/Comparison.md#max-days)|
 
@@ -5974,29 +6130,74 @@ Please expand the section below to see the DQOps command-line examples to run or
 
 ??? example "Managing monthly partition data staleness check from DQOps shell"
 
-    === "Activate check"
+    === "Activate the check with a warning rule"
 
-        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -ch=monthly_partition_data_staleness
+        dqo> check activate -c=connection_name -t=schema_name.table_name -ch=monthly_partition_data_staleness --enable-warning
         ```
 
-    === "Run check on connection"
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -ch=monthly_partition_data_staleness --enable-warning
+        ```
+        
+        Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -ch=monthly_partition_data_staleness --enable-warning
+                            -Wmax_days=value
+        ```
+
+
+    === "Activate the check with an error rule"
+
+        Activate this data quality using the [check activate](../../../command-line-interface/check.md#dqo-check-activate) CLI command,
+        providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_name.table_name -ch=monthly_partition_data_staleness --enable-error
+        ```
+
+        You can also use patterns to activate the check on all matching tables and columns.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -ch=monthly_partition_data_staleness --enable-error
+        ```
+        
+        Additional rule parameters are passed using the *-Erule_parameter_name=value*.
+
+        ```
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -ch=monthly_partition_data_staleness --enable-error
+                            -Emax_days=value
+        ```
+
+
+    === "Run all configured checks"
 
         Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+        The following example shows how to run the *monthly_partition_data_staleness* check on all tables on a single data source.
 
         ```
-        dqo> check run -c=connection_name -ch=monthly_partition_data_staleness
+        dqo> check run -c=data_source_name -ch=monthly_partition_data_staleness
         ```
 
-    === "Run check on table"
-
-        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters
+        It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters.
 
         ```
         dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_partition_data_staleness
         ```
+
+        You can also run this check on all tables  on which the *monthly_partition_data_staleness* check is enabled
+        using patterns to find tables.
+
+        ```
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_* -ch=monthly_partition_data_staleness
+        ```
+
 
 **YAML configuration**
 
@@ -7450,12 +7651,10 @@ Expand the *Configure with data grouping* section to see additional examples for
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
-
-
-
-
-
-
 ___
 
 
+
+## What's next
+- Learn how to [configure data quality checks](../../../dqo-concepts/configuring-data-quality-checks-and-rules.md) in DQOps
+- Look at the examples of [running data quality checks](../../../dqo-concepts/running-data-quality-checks.md), targeting tables and columns

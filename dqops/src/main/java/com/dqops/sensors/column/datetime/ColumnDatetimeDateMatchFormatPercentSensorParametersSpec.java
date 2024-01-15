@@ -18,6 +18,7 @@ package com.dqops.sensors.column.datetime;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.sensors.AbstractSensorParametersSpec;
+import com.dqops.utils.reflection.RequiredField;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -38,6 +39,7 @@ public class ColumnDatetimeDateMatchFormatPercentSensorParametersSpec extends Ab
     };
 
     @JsonPropertyDescription("Desired date format. Sensor will try to parse the column records and cast the data using this format.")
+    @RequiredField
     private DatetimeBuiltInDateFormats dateFormats = DatetimeBuiltInDateFormats.DaySlashMonthSlashYear;
 
     /**

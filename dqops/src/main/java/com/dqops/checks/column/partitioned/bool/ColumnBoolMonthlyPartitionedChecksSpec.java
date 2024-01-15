@@ -47,10 +47,10 @@ public class ColumnBoolMonthlyPartitionedChecksSpec extends AbstractCheckCategor
         }
     };
 
-    @JsonPropertyDescription("Verifies that the percentage of true values in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the percentage of true values in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.")
     private ColumnTruePercentCheckSpec monthlyPartitionTruePercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of false values in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the percentage of false values in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.")
     private ColumnFalsePercentCheckSpec monthlyPartitionFalsePercent;
 
     /**

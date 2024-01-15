@@ -20,6 +20,7 @@ import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.sensors.AbstractSensorParametersSpec;
+import com.dqops.utils.reflection.RequiredField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -44,10 +45,12 @@ public class ColumnAccuracyTotalAverageMatchPercentSensorParametersSpec extends 
 
     @JsonPropertyDescription("This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.")
     @SampleValues(values = { "dim_customer" })
+    @RequiredField
     private String referencedTable;
 
     @JsonPropertyDescription("This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.")
     @SampleValues(values = { "customer_id" })
+    @RequiredField
     private String referencedColumn;
 
     /**

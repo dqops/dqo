@@ -26,11 +26,6 @@ import java.util.List;
 @Data
 public class SimilarChecksDocumentationModel {
     /**
-     * Similar check root name (e.g. daily_partition_row_count -> row_count).
-     */
-    private String checkRootName;
-
-    /**
      * Check description extracted from the JavaDoc comment for the whole check definition class.
      */
     private String checkSpecClassJavaDoc;
@@ -46,9 +41,24 @@ public class SimilarChecksDocumentationModel {
     private String category;
 
     /**
-     * Check name inside the category. It is usually the name of the experiment check.
+     * Similar check root name (e.g. daily_partition_row_count -> row_count).
      */
     private String primaryCheckName;
+
+    /**
+     * The class of check, it is either "standard" or "advanced".
+     */
+    private String checkClass;
+
+    /**
+     * True for standard data quality checks, false for advanced.
+     */
+    private boolean standard;
+
+    /**
+     * The name of the data quality dimension from the primary check class.
+     */
+    private String qualityDimension;
 
     /**
      * List of all similar checks.

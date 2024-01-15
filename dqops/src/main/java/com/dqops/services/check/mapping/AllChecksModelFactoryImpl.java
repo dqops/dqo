@@ -219,7 +219,7 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
         List<CheckTimeScale> timeScales = this.getPossibleCheckTimeScales(checkSearchFilters.getTimeScale());
         boolean findAlsoNotConfiguredChecks = checkSearchFilters.getCheckConfigured() == null || !checkSearchFilters.getCheckConfigured();
 
-        Map<CheckContainerTypeModel, AbstractRootChecksContainerSpec> checkContainers = new HashMap<>();
+        Map<CheckContainerTypeModel, AbstractRootChecksContainerSpec> checkContainers = new LinkedHashMap<>();
         for (CheckType checkType : checkTypes) {
             if (checkType == CheckType.profiling) {
                 AbstractRootChecksContainerSpec checkContainer = tableSpec.getTableCheckRootContainer(checkType, null, false, findAlsoNotConfiguredChecks);

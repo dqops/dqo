@@ -95,46 +95,46 @@ public class ColumnNumericProfilingChecksSpec extends AbstractCheckCategorySpec 
     @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage.")
     private ColumnIntegerInRangePercentCheckSpec profileIntegerInRangePercent;
 
-    @JsonPropertyDescription("Verifies that the minimal value in a column is not outside the set range.")
+    @JsonPropertyDescription("Verifies that the minimum value in a column is not outside the expected range.")
     private ColumnMinInRangeCheckSpec profileMinInRange;
 
-    @JsonPropertyDescription("Verifies that the maximal value in a column is not outside the set range.")
+    @JsonPropertyDescription("Verifies that the maximum value in a column is not outside the expected range.")
     private ColumnMaxInRangeCheckSpec profileMaxInRange;
 
-    @JsonPropertyDescription("Verifies that the sum of all values in a column is not outside the set range.")
+    @JsonPropertyDescription("Verifies that the sum of all values in a column is not outside the expected range.")
     private ColumnSumInRangeCheckSpec profileSumInRange;
 
-    @JsonPropertyDescription("Verifies that the average (mean) of all values in a column is not outside the set range.")
+    @JsonPropertyDescription("Verifies that the average (mean) of all values in a column is not outside the expected range.")
     private ColumnMeanInRangeCheckSpec profileMeanInRange;
 
-    @JsonPropertyDescription("Verifies that the median of all values in a column is not outside the set range.")
+    @JsonPropertyDescription("Verifies that the median of all values in a column is not outside the expected range.")
     private ColumnMedianInRangeCheckSpec profileMedianInRange;
 
-    @JsonPropertyDescription("Verifies that the percentile of all values in a column is not outside the set range.")
+    @JsonPropertyDescription("Verifies that the percentile of all values in a column is not outside the expected range.")
     private ColumnPercentileInRangeCheckSpec profilePercentileInRange;
 
-    @JsonPropertyDescription("Verifies that the percentile 10 of all values in a column is not outside the set range.")
+    @JsonPropertyDescription("Verifies that the percentile 10 of all values in a column is not outside the expected range.")
     private ColumnPercentile10InRangeCheckSpec profilePercentile_10InRange;
 
-    @JsonPropertyDescription("Verifies that the percentile 25 of all values in a column is not outside the set range.")
+    @JsonPropertyDescription("Verifies that the percentile 25 of all values in a column is not outside the expected range.")
     private ColumnPercentile25InRangeCheckSpec profilePercentile_25InRange;
 
-    @JsonPropertyDescription("Verifies that the percentile 75 of all values in a column is not outside the set range.")
+    @JsonPropertyDescription("Verifies that the percentile 75 of all values in a column is not outside the expected range.")
     private ColumnPercentile75InRangeCheckSpec profilePercentile_75InRange;
 
-    @JsonPropertyDescription("Verifies that the percentile 90 of all values in a column is not outside the set range.")
+    @JsonPropertyDescription("Verifies that the percentile 90 of all values in a column is not outside the expected range.")
     private ColumnPercentile90InRangeCheckSpec profilePercentile_90InRange;
 
-    @JsonPropertyDescription("Verifies that the sample standard deviation of all values in a column is not outside the set range.")
+    @JsonPropertyDescription("Verifies that the sample standard deviation of all values in a column is not outside the expected range.")
     private ColumnSampleStddevInRangeCheckSpec profileSampleStddevInRange;
 
-    @JsonPropertyDescription("Verifies that the population standard deviation of all values in a column is not outside the set range.")
+    @JsonPropertyDescription("Verifies that the population standard deviation of all values in a column is not outside the expected range.")
     private ColumnPopulationStddevInRangeCheckSpec profilePopulationStddevInRange;
 
-    @JsonPropertyDescription("Verifies that the sample variance of all values in a column is not outside the set range.")
+    @JsonPropertyDescription("Verifies that the sample variance of all values in a column is not outside the expected range.")
     private ColumnSampleVarianceInRangeCheckSpec profileSampleVarianceInRange;
 
-    @JsonPropertyDescription("Verifies that the population variance of all values in a column is not outside the set range.")
+    @JsonPropertyDescription("Verifies that the population variance of all values in a column is not outside the expected range.")
     private ColumnPopulationVarianceInRangeCheckSpec profilePopulationVarianceInRange;
 
     @JsonPropertyDescription("Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count.")

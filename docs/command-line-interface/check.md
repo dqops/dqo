@@ -114,24 +114,24 @@ Activates data quality checks matching specified filters
 **Command-line synopsis**
 
 ```
-$ dqo [dqo options...] check activate [-hno] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
-                [-ch=<check>] [-col=<column>] [-ct=<checkType>]
-                [-dt=<datatypeFilter>] [-of=<outputFormat>] [-sn=<sensor>]
-                [-t=<table>] [-ts=<timeScale>] [-E=<String=String>]...
-                [-F=<String=String>]... [-S=<String=String>]...
-                [-W=<String=String>]...
+$ dqo [dqo options...] check activate [-efhnow] [-de] [-df] [-dw] [-fw] [-hl] [-c=<connection>]
+                [-cat=<checkCategory>] [-ch=<check>] [-col=<column>]
+                [-ct=<checkType>] [-dt=<datatypeFilter>] [-of=<outputFormat>]
+                [-sn=<sensor>] [-t=<table>] [-ts=<timeScale>]
+                [-E=<String=String>]... [-F=<String=String>]...
+                [-S=<String=String>]... [-W=<String=String>]...
 
 ```
 
 **DQOps shell synopsis**
 
 ```
-dqo> check activate [-hno] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
-                [-ch=<check>] [-col=<column>] [-ct=<checkType>]
-                [-dt=<datatypeFilter>] [-of=<outputFormat>] [-sn=<sensor>]
-                [-t=<table>] [-ts=<timeScale>] [-E=<String=String>]...
-                [-F=<String=String>]... [-S=<String=String>]...
-                [-W=<String=String>]...
+dqo> check activate [-efhnow] [-de] [-df] [-dw] [-fw] [-hl] [-c=<connection>]
+                [-cat=<checkCategory>] [-ch=<check>] [-col=<column>]
+                [-ct=<checkType>] [-dt=<datatypeFilter>] [-of=<outputFormat>]
+                [-sn=<sensor>] [-t=<table>] [-ts=<timeScale>]
+                [-E=<String=String>]... [-F=<String=String>]...
+                [-S=<String=String>]... [-W=<String=String>]...
 
 ```
 
@@ -149,8 +149,12 @@ All parameters supported by the command are listed below.
 |<p id="check activate-col">`-col`</p><br/><p id="check activate--column">`--column`</p><br/>|Column name, supports patterns like &#x27;*_id&#x27;| ||
 |<p id="check activate-c">`-c`</p><br/><p id="check activate--connection">`--connection`</p><br/>|Connection name, supports patterns like &#x27;conn*&#x27;| ||
 |<p id="check activate-dt">`-dt`</p><br/><p id="check activate--data-type">`--data-type`</p><br/>|Datatype of columns on which to enable checks.| ||
-|<p id="check activate-E">`-E`</p><br/><p id="check activate--error-rule">`--error-rule`</p><br/>|Error level rule options. Usage: -E&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;, --error-rule&#x3D;&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;| ||
-|<p id="check activate-F">`-F`</p><br/><p id="check activate--fatal-rule">`--fatal-rule`</p><br/>|Fatal level rule options. Usage: -F&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;, --fatal-rule&#x3D;&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;| ||
+|<p id="check activate-de">`-de`</p><br/><p id="check activate--disable-error">`--disable-error`</p><br/>|Disables an error severity rule. Use this option to update already activated data quality checks, together with the --override option.| ||
+|<p id="check activate-df">`-df`</p><br/><p id="check activate--disable-fatal">`--disable-fatal`</p><br/>|Disables a fatal severity rule. Use this option to update already activated data quality checks, together with the --override option.| ||
+|<p id="check activate-dw">`-dw`</p><br/><p id="check activate--disable-warning">`--disable-warning`</p><br/>|Disables a warning severity rule. Use this option to update already activated data quality checks, together with the --override option.| ||
+|<p id="check activate-e">`-e`</p><br/><p id="check activate--enable-error">`--enable-error`</p><br/>|Enables an error severity rule. An error severity rule is also enabled when any warning rule parameters are passed using the -Eparam_nam&#x3D;value parameters| ||
+|<p id="check activate-f">`-f`</p><br/><p id="check activate--enable-fatal">`--enable-fatal`</p><br/>|Enables a fatal severity rule. A fatal severity rule is also enabled when any fatal rule parameters are passed using the -Fparam_nam&#x3D;value parameters| ||
+|<p id="check activate-w">`-w`</p><br/><p id="check activate--enable-warning">`--enable-warning`</p><br/>|Enables a warning severity rule. A warning severity rule is also enabled when any warning rule parameters are passed using the -Wparam_nam&#x3D;value parameters| ||
 |<p id="check activate-fw">`-fw`</p><br/><p id="check activate--file-write">`--file-write`</p><br/>|Write command response to a file| ||
 |<p id="check activate-t">`-t`</p><br/><p id="check activate--table">`--table`</p><br/><p id="check activate--full-table-name">`--full-table-name`</p><br/>|Full table name (schema.table), supports patterns like &#x27;sch*.tab*&#x27;| ||
 |<p id="check activate--headless">`--headless`</p><br/><p id="check activate-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
@@ -159,9 +163,11 @@ All parameters supported by the command are listed below.
 |<p id="check activate-of">`-of`</p><br/><p id="check activate--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 |<p id="check activate-o">`-o`</p><br/><p id="check activate--override">`--override`</p><br/>|Override existing configuration of selected checks.| ||
 |<p id="check activate-sn">`-sn`</p><br/><p id="check activate--sensor">`--sensor`</p><br/>|Data quality sensor name (sensor definition or sensor name), supports patterns like &#x27;table/validity/*&#x27;| ||
-|<p id="check activate-S">`-S`</p><br/><p id="check activate--sensor-param">`--sensor-param`</p><br/>|Configuration parameters for the sensor. Usage: -S&lt;param_name&gt;&#x3D;&lt;param_value&gt;, --sensor-param&#x3D;&lt;param_name&gt;&#x3D;&lt;param_value&gt;| ||
 |<p id="check activate-ts">`-ts`</p><br/><p id="check activate--time-scale">`--time-scale`</p><br/>|Time scale for monitoring and partitioned checks (daily, monthly, etc.)| |daily<br/>monthly<br/>|
-|<p id="check activate-W">`-W`</p><br/><p id="check activate--warning-rule">`--warning-rule`</p><br/>|Warning level rule options. Usage: -W&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;, --warning-rule&#x3D;&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;| ||
+|<p id="check activate-E">`-E`</p><br/>|Error level rule options. Usage: -E&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;, --error-rule&#x3D;&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;| ||
+|<p id="check activate-F">`-F`</p><br/>|Fatal level rule options. Usage: -F&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;, --fatal-rule&#x3D;&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;| ||
+|<p id="check activate-S">`-S`</p><br/>|Configuration parameters for the sensor. Usage: -S&lt;param_name&gt;&#x3D;&lt;param_value&gt;, --sensor-param&#x3D;&lt;param_name&gt;&#x3D;&lt;param_value&gt;| ||
+|<p id="check activate-W">`-W`</p><br/>|Warning level rule options. Usage: -W&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;, --warning-rule&#x3D;&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;| ||
 
 
 

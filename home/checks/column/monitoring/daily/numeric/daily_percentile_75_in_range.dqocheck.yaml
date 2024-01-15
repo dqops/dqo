@@ -5,5 +5,5 @@ spec:
   sensor_name: column/numeric/percentile
   rule_name: comparison/between_floats
   help_text: Verifies that the percentile 75 of all values in a column is not outside
-    the set range. Stores the most recent captured value for each day when the data
-    quality check was evaluated.
+    the expected range. Stores the most recent captured value for each day when the
+    data quality check was evaluated.

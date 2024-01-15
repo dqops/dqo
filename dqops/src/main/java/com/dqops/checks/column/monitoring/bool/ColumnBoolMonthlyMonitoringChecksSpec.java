@@ -47,10 +47,10 @@ public class ColumnBoolMonthlyMonitoringChecksSpec extends AbstractCheckCategory
         }
     };
 
-    @JsonPropertyDescription("Verifies that the percentage of true values in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of true values in a column does not exceed the minimum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.")
     private ColumnTruePercentCheckSpec monthlyTruePercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of false values in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of false values in a column does not exceed the minimum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.")
     private ColumnFalsePercentCheckSpec monthlyFalsePercent;
 
     /**

@@ -20,7 +20,7 @@ The column samples sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`limit`|The limit of results that are returned. The default value is 10 sample values with the highest count (the most popular).|integer| ||
+|`limit`|The limit of results that are returned. The default value is 10 sample values with the highest count (the most popular).|integer|:material-check-bold:||
 
 
 
@@ -343,3 +343,7 @@ ___
 
 
 
+
+## What's next
+- Learn how the [data quality sensors](../../../dqo-concepts/definition-of-data-quality-sensors.md) are defined in DQOps and what is the definition of all Jinja2 macros used in the templates
+- Understand how DQOps [runs data quality checks](../../../dqo-concepts/architecture/data-quality-check-execution-flow.md), rendering templates to SQL queries

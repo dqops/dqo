@@ -22,7 +22,7 @@ The expected numbers in use count sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`expected_values`|List of expected numeric values that should be found in the tested column.|integer_list| ||
+|`expected_values`|List of expected numeric values that should be found in the tested column.|integer_list|:material-check-bold:||
 
 
 
@@ -453,7 +453,7 @@ The expected text values in use count sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`expected_values`|List of expected string values that should be found in the tested column.|string_list| ||
+|`expected_values`|List of expected string values that should be found in the tested column.|string_list|:material-check-bold:||
 
 
 
@@ -960,8 +960,8 @@ The expected texts in top values count sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`expected_values`|List of expected string values that should be found in the tested column among the TOP most popular (highest distinct count) column values.|string_list| ||
-|`top`|The number of the most popular values (with the highest distinct count) that are analyzed to find the expected values.|long| ||
+|`expected_values`|List of expected string values that should be found in the tested column among the TOP most popular (highest distinct count) column values.|string_list|:material-check-bold:||
+|`top`|The number of the most popular values (with the highest distinct count) that are analyzed to find the expected values.|long|:material-check-bold:||
 
 
 
@@ -1898,7 +1898,7 @@ The number found in set percent sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`expected_values`|A list of expected values that must be present in a numeric column, only values from this list are accepted and rows having these values in the tested column are counted as valid rows.|integer_list| ||
+|`expected_values`|A list of expected values that must be present in a numeric column, only values from this list are accepted and rows having these values in the tested column are counted as valid rows.|integer_list|:material-check-bold:||
 
 
 
@@ -2342,7 +2342,7 @@ The text found in set percent sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`expected_values`|A list of expected values that must be present in a string column, only values from this list are accepted and rows having these values in the tested column are counted as valid rows.|string_list| ||
+|`expected_values`|A list of expected values that must be present in a string column, only values from this list are accepted and rows having these values in the tested column are counted as valid rows.|string_list|:material-check-bold:||
 
 
 
@@ -2825,3 +2825,7 @@ ___
 
 
 
+
+## What's next
+- Learn how the [data quality sensors](../../../dqo-concepts/definition-of-data-quality-sensors.md) are defined in DQOps and what is the definition of all Jinja2 macros used in the templates
+- Understand how DQOps [runs data quality checks](../../../dqo-concepts/architecture/data-quality-check-execution-flow.md), rendering templates to SQL queries
