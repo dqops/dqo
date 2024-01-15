@@ -2,13 +2,11 @@
 Read this guide to learn what types of data quality checks are supported in DQOps to detect issues related to blanks.
 The data quality checks are configured in the `blanks` category in DQOps.
 
-## blanks category
+## Blanks category
 Data quality checks that are detecting issues related to blanks are listed below.
 
 ## Detecting blanks issues
 How to detect blanks data quality issues.
-
-## List of blanks checks at a table level
 
 ## List of blanks checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |

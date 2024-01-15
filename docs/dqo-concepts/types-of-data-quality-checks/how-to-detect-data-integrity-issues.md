@@ -2,13 +2,16 @@
 Read this guide to learn what types of data quality checks are supported in DQOps to detect issues related to integrity.
 The data quality checks are configured in the `integrity` category in DQOps.
 
-## integrity category
+## Integrity category
 Data quality checks that are detecting issues related to integrity are listed below.
 
 ## Detecting integrity issues
 How to detect integrity data quality issues.
 
-## List of integrity checks at a table level
+## Use cases
+| **Name of the example**                                                                                                                    | **Description**                                                                                                                                                                                            |
+|:-------------------------------------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [Integrity check between columns in different tables](../../examples/data-accuracy/integrity-check-between-columns-in-different-tables.md) | This example shows how to check the referential integrity of a column against a column in another table using [lookup_key_found_percent](../../checks/column/integrity/lookup-key-found-percent.md) check. |
 
 ## List of integrity checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |

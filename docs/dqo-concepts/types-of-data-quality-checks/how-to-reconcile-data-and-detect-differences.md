@@ -2,7 +2,7 @@
 Read this guide to learn what types of data quality checks are supported in DQOps to detect issues related to comparisons.
 The data quality checks are configured in the `comparisons` category in DQOps.
 
-## comparisons category
+## Comparisons category
 Data quality checks that are detecting issues related to comparisons are listed below.
 
 ## Detecting comparisons issues

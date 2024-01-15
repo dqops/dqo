@@ -2,11 +2,17 @@
 Read this guide to learn what types of data quality checks are supported in DQOps to detect issues related to schema.
 The data quality checks are configured in the `schema` category in DQOps.
 
-## schema category
+## Schema category
 Data quality checks that are detecting issues related to schema are listed below.
 
 ## Detecting schema issues
 How to detect schema data quality issues.
+
+## Use cases
+| **Name of the example**                                                             | **Description**                                                                                     |
+|:------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------|
+| [Detect table schema changes](../../examples/schema/detect-table-schema-changes.md) | This example shows how to detect schema changes on the table using several schema detection checks. |
+
 
 ## List of schema checks at a table level
 | Data quality check name | Data quality dimension | Description | Standard check |

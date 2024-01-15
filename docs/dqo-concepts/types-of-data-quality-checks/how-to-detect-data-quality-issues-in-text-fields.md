@@ -2,13 +2,17 @@
 Read this guide to learn what types of data quality checks are supported in DQOps to detect issues related to text.
 The data quality checks are configured in the `text` category in DQOps.
 
-## text category
+## Text category
 Data quality checks that are detecting issues related to text are listed below.
 
 ## Detecting text issues
 How to detect text data quality issues.
 
-## List of text checks at a table level
+## Use cases
+| **Name of the example**                                                                                           | **Description**                                                                                                                                                                                                                            |
+|:------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [A text not exceeding a maximum length](../../examples/data-reasonability/text-not-exceeding-a-maximum-length.md) | This example shows how to check that the length of the text does not exceed the maximum value using [text_max_length](../../checks/column/text/text-length-above-max-length-percent.md) check.                                             |
+| [Percentage of valid currency codes](../../examples/data-validity/percentage-of-valid-currency-codes.md)          | This example shows how to detect that the percentage of valid currency codes in a column does not fall below a set threshold using [text_valid_currency_code_percent](../../checks/column/text/text-valid-currency-code-percent.md) check. |
 
 ## List of text checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |

@@ -2,13 +2,11 @@
 Read this guide to learn what types of data quality checks are supported in DQOps to detect issues related to anomaly.
 The data quality checks are configured in the `anomaly` category in DQOps.
 
-## anomaly category
+## Anomaly category
 Data quality checks that are detecting issues related to anomaly are listed below.
 
 ## Detecting anomaly issues
 How to detect anomaly data quality issues.
-
-## List of anomaly checks at a table level
 
 ## List of anomaly checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |

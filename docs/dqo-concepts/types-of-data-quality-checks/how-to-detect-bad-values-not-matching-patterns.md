@@ -2,13 +2,19 @@
 Read this guide to learn what types of data quality checks are supported in DQOps to detect issues related to patterns.
 The data quality checks are configured in the `patterns` category in DQOps.
 
-## patterns category
+## Patterns category
 Data quality checks that are detecting issues related to patterns are listed below.
 
 ## Detecting patterns issues
 How to detect patterns data quality issues.
 
-## List of patterns checks at a table level
+## Use cases
+| **Name of the example**                                                                                                | **Description**                                                                                                                                                                                                                                                |
+|:-----------------------------------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [Percentage of texts matching a date pattern](../../examples/data-validity/percentage-of-texts-matching-date-regex.md) | This example shows how to detect that the percentage of texts matching the date format regex in a column does not exceed a set threshold using [text_matching_date_pattern_percent](../../checks/column/patterns/text-matching-date-pattern-percent.md) check. |
+| [Detect invalid emails](../../examples/data-validity/detect-invalid-emails.md)                                         | This example shows how to detect that the number of invalid emails in a column does not exceed the maximum accepted count using [invalid_email_format_found](../../checks/column/patterns/invalid-email-format-found.md) check.                                |
+| [Percentage of valid UUID](../../examples/data-validity/percentage-of-valid-uuid.md)                                   | This example shows how to detect that th percentage of valid UUID values in a column does not fall below a set threshold using [valid_uuid_format_percent](../../checks/column/patterns/valid-uuid-format-percent.md) check.                                   |
+| [Detect invalid IP4 address](../../examples/data-validity/detect-invalid-ip4-addresses.md)                             | This example shows how to detect that the number of invalid IP4 address in a column does not exceed a set threshold using [invalid_ip4_address_format_found](../../checks/column/patterns/invalid-ip4-address-format-found.md) check.                          |
 
 ## List of patterns checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |

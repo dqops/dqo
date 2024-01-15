@@ -2,13 +2,18 @@
 Read this guide to learn what types of data quality checks are supported in DQOps to detect issues related to numeric.
 The data quality checks are configured in the `numeric` category in DQOps.
 
-## numeric category
+## Numeric category
 Data quality checks that are detecting issues related to numeric are listed below.
 
 ## Detecting numeric issues
 How to detect numeric data quality issues.
 
-## List of numeric checks at a table level
+## Use cases
+| **Name of the example**                                                                                                  | **Description**                                                                                                                                                                                                                                                                                             |
+|:-------------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [Percentage of negative values](../../examples/data-validity/percentage-of-negative-values.md)                           | This example shows how to detect that the percentage of negative values in a column does not exceed a set threshold using [negative_values_percent](../../checks/column/numeric/negative-values-percent.md) check.                                                                                          |
+| [Percentage of values in range](../../examples/data-reasonability/percentage-of-integer-values-in-range.md)              | This example shows how to detect that the percentage of values within a set range in a column does not exceed a set threshold using [integer_in_range_percent](../../checks/column/numeric/integer-in-range-percent.md) check.                                                                              |
+| [Percentage of valid latitude and longitude](../../examples/data-validity/percentage-of-valid-latitude-and-longitude.md) | This example shows how to detect that the percentage of valid latitude and longitude values remain above a set threshold using [valid_latitude_percent](../../checks/column/numeric/valid-latitude-percent.md) and [valid_longitude_percent](../../checks/column/numeric/valid-longitude-percent.md)checks. |
 
 ## List of numeric checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |

@@ -2,13 +2,17 @@
 Read this guide to learn what types of data quality checks are supported in DQOps to detect issues related to accepted values.
 The data quality checks are configured in the `accepted_values` category in DQOps.
 
-## accepted values category
+## Accepted values category
 Data quality checks that are detecting issues related to accepted values are listed below.
 
 ## Detecting accepted values issues
 How to detect accepted values data quality issues.
 
-## List of accepted values checks at a table level
+## Use cases
+| **Name of the example**                                                                                                         | **Description**                                                                                                                                                                                                                     |
+|:--------------------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [Percentage of rows with a text found in a set](../../examples/data-consistency/percentage-of-rows-with-a-text-found-in-set.md) | This example shows how to verify that the percentage of texts from a set in a column does not fall below a set threshold using [text_found_in_set_percent](../../checks/column/accepted_values/text-found-in-set-percent.md) check. |
+
 
 ## List of accepted values checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |
