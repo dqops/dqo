@@ -59,7 +59,6 @@ Other dashboards have buttons to change the view between the current and previou
 You have the option to export data presented in dashboards for use in other tools.
 To export data from a table or chart, follow these steps:
 
-
 1. Hover over the table or chart you wish to export.
 
 2. Right-click on the chart or click three dots icon and select Export.
