@@ -31,13 +31,16 @@ You can use DQOps with the most popular databases. [Learn here how to connect a 
 
 ![Google BigQuery](https://dqops.com/docs/images/connections/google-bigquery.png)
 &nbsp; &nbsp; &nbsp; ![Snowflake](https://dqops.com/docs/images/connections/snowflake.png)
-&nbsp; &nbsp; &nbsp; ![Amazon Redshift](https://dqops.com/docs/images/connections/amazon-redshift.png)
+&nbsp; &nbsp; &nbsp; ![Amazon Redshift](https://dqops.com/docs/images/connections/amazon-redshift1.png)
 &nbsp; &nbsp; &nbsp; ![PostgreSQL](https://dqops.com/docs/images/connections/postgresql.png)
 &nbsp; &nbsp; &nbsp; ![Microsoft SQL Server](https://dqops.com/docs/images/connections/microsoft-sql-server.png)
 &nbsp; &nbsp; &nbsp; ![MySQL](https://dqops.com/docs/images/connections/mysql.png)
 &nbsp; &nbsp; &nbsp; ![Oracle](https://dqops.com/docs/images/connections/oracle2.png)
 &nbsp; &nbsp; &nbsp; ![Spark](https://dqops.com/docs/images/connections/spark.png)
 &nbsp; &nbsp; &nbsp; ![Databricks](https://dqops.com/docs/images/connections/databricks.png)
+&nbsp; &nbsp; &nbsp; ![Presto](https://dqops.com/docs/images/connections/presto1.png)
+&nbsp; &nbsp; &nbsp; ![Trino](https://dqops.com/docs/images/connections/trino1.png)
+&nbsp; &nbsp; &nbsp; ![Athena](https://dqops.com/docs/images/connections/athena2.png)
 
 
 ## DQOps user interface

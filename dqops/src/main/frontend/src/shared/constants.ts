@@ -299,9 +299,9 @@ export const databaseOptions: IDatabaseOption[] = [
   },
   {
     type: ConnectionModelProviderTypeEnum.mysql,
-    name: 'Amazon RDS for mySQL',
+    name: 'Amazon RDS for MySQL',
     iconName: 'amazonrds',
-    displayName: 'Amazon RDS for mySQL'
+    displayName: 'Amazon RDS for MySQL'
   },
   {
     type: ConnectionModelProviderTypeEnum.postgresql,
