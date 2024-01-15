@@ -9,9 +9,9 @@ Data quality checks that are detecting issues related to volume are listed below
 How to detect volume data quality issues.
 
 ## Use cases
-| **Name of the example**                                                        | **Description**                                                                                                                                                                |
-|:-------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [Detect empty tables](../../examples/data-completeness/detect-empty-tables.md) | This example shows how to check that the number of rows in a table does not exceed the minimum accepted count using [row_count](../../checks/table/volume/row-count.md) check. |
+| **Name of the example**                                                                                    | **Description**                                                                                                                                                                |
+|:-----------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [Detect empty or incomplete tables](../../examples/data-completeness/detect-empty-or-incomplete-tables.md) | This example shows how to check that the number of rows in a table does not exceed the minimum accepted count using [row_count](../../checks/table/volume/row-count.md) check. |
 
 ## List of volume checks at a table level
 | Data quality check name | Data quality dimension | Description | Standard check |
