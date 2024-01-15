@@ -1,9 +1,9 @@
-# Install DQOps from Git
+# Install DQOps from GitHub
 This guide shows all the steps to check out DQOps source code from GitHub, and compile the code locally. If you know SQL, Python, or Java - you can contribute.
 
 ## Prerequisites
 
-To pull **[dqops/dqo](https://github.com/dqops/dqo.git)** project from Git and compile it locally, you need:
+To pull **[dqops/dqo](https://github.com/dqops/dqo.git)** project from GitHub and compile it locally, you need:
 
  -  Python version 3.8 or greater (for details see [Python's documentation](https://www.python.org/doc/) and [download sites](https://www.python.org/downloads/)).
 

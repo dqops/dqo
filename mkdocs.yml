@@ -62,7 +62,7 @@ nav:
       - "dqops-installation/index.md"
       - Download DQOps using PIP: "dqops-installation/install-dqops-using-pip.md"
       - Run DQOps in Docker: "dqops-installation/run-dqops-as-docker-container.md"
-      - Install DQOps from Git: "dqops-installation/install-dqops-from-git.md"
+      - Install DQOps from GitHub: "dqops-installation/install-dqops-from-github.md"
       - Install DQOps from release package: "dqops-installation/install-dqops-from-release-package.md"
   - Data sources:
       - "data-sources/index.md"

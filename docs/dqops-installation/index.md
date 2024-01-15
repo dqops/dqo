@@ -34,7 +34,7 @@ This guide lists all options of installing DQOps Data Quality Operations Center,
     You will need Python >=3.8 and Java >= 17 installed to start DQOps.
 
 
--  **[Compile DQOps from GitHub](./install-dqops-from-git.md)**
+-  **[Compile DQOps from GitHub](./install-dqops-from-github.md)**
 
     If you wish to contribute to DQOps, check out the GitHub repository and compile the code.
 
@@ -42,6 +42,6 @@ This guide lists all options of installing DQOps Data Quality Operations Center,
     git clone https://github.com/dqops/dqo.git
     ```
    
-    Follow the [install from Git](install-dqops-from-git.md) manual to compile and start DQOps. If you have Java JDK 17
+    Follow the [install from GitHub](install-dqops-from-github.md) manual to compile and start DQOps. If you have Java JDK 17
     or newer on the PATH, you can just start the `dqo.cmd` or `./dqo` script after check out. DQOps will compile itself
     before the first start.

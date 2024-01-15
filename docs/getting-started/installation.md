@@ -5,7 +5,7 @@ This guide will tell you how to quickly install DQOps from PyPI and create a DQO
 
 DQOps is available in the  [PyPi repository](https://pypi.org/project/dqops/).
 
-If you want to [install DQOps directly from Git go to this section](../dqops-installation/install-dqops-from-git.md).
+If you want to [install DQOps directly from GitHub go to this section](../dqops-installation/install-dqops-from-github.md).
 
 You can also [run DQOps as a Docker container](../dqops-installation/run-dqops-as-docker-container.md) for the production use.
 
