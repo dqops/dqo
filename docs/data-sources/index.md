@@ -6,14 +6,14 @@ DQOps supports integration with different types of data sources for measure the 
 To monitor data quality in DQOps, you must first add a data
 source connection. A data source connection specifies the parameters needed to connect to a database, such as a database
 location and authentication information. The data source connection information for each data source type may be different.
-Some data sources use existing database connection APIs (such as ODBC/JDBC), and others have proprietary APIs.
+Some data sources use existing database connection APIs (such as JDBC drivers), and others have proprietary APIs.
 
 In DQOps, you can add a new data source connection through the user interface, command line or DQOps shell. For information on the 
 parameters you need to specify, see the document dedicated to each data source.
 
 ## Supported data sources
 
-DQOps supports the following types of data sources.
+DQOps supports the following data sources.
 
 <div markdown="1" class="four-divs-row">
 

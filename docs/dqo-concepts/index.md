@@ -38,6 +38,26 @@ These topics introduce the basic concepts of DQOps.
     are shown by Visual Studio Code and many other editors when editing DQOps YAML files.
     
 
+ - **[Categories of checks](types-of-data-quality-checks/index.md)** 
+
+    The most common data quality issues that are detected by DQOps are divided into **categories**.
+    Read this section to learn what type of data quality problems are detected by DQOps out-of-the-box.
+    For any other type of data quality issue, you can define custom data quality checks.
+
+
+ - **[Running data quality checks](running-data-quality-checks.md)**
+
+    Data quality checks configured for each table and column are executed by targeting the data source, table, column,
+    check name, check type, check category or even labels assigned to tables or columns.
+
+
+ - **[Data observability](data-observability.md)**
+
+    When a new data source is imported into DQOps, a default set of data quality checks is activated.
+    The main purpose of data observability is to detect anomalies in the data, database downtimes, schema changes,
+    uniqueness issues, and an inconsistent growth of the table volume.
+
+
  - **[DQOps user home](dqops-user-home-folder.md)**
 
     `DQOps user home` is the most important folder, it is the place where DQOps stores all configuration and data quality results.
@@ -45,12 +65,6 @@ These topics introduce the basic concepts of DQOps.
 
     On the first run, DQOps will set up a folder tree to store the list of monitored data sources and the configuration of data quality
     checks for all imported tables. The configuration is stored in YAML files for simplicity of editing in Visual Studio Code.
-
-
- - **[Running data quality checks](running-data-quality-checks.md)**
-
-    Data quality checks configured for each table and column are executed by targeting the data source, table, column,
-    check name, check type, check category or even labels assigned to tables or columns. 
 
 
  - **[Data quality sensors](definition-of-data-quality-sensors.md)**

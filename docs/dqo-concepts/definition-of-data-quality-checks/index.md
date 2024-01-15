@@ -327,49 +327,6 @@ Please read the [monitoring data quality incrementally](../incremental-data-qual
 and additional use cases.
 
 
-## Categories of checks
-Each type of checks is divided into two main targets: table-level checks and column-level checks. Table-level data quality checks are used to
-evaluate the table at a high-level without reference to individual columns, while column-level checks are run on
-specific column. Built-in checks available in DQOps are divided into the following categories.
-
-You can access the full lists of available checks with detailed descriptions by clicking on the category name.
-
-### **Table-level checks**
-Data quality checks that are measured for a whole table are listed below.
-
-| Category                                                 | Description                                                                                                                                                                                                                                 |
-|----------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [Volume](../../checks/table/volume/index.md)             | Evaluates the overall quality of the table by verifying the number of rows.                                                                                                                                                                 |
-| [Timeliness](../../checks/table/timeliness/index.md)     | Assesses the freshness and staleness of data, as well as data ingestion delay and reload lag for partitioned data.                                                                                                                          |
-| [Accuracy](../../checks/table/accuracy/index.md)         | Compares the tested table with another (reference) table.                                                                                                                                                                                   |
-| [Custom SQL](../../checks/table/custom_sql/index.md)     | Validate data against user-defined SQL queries at the table level. Checks in this group allow for validation that the set percentage of rows passed a custom SQL expression or that the custom SQL expression is not outside the set range. |
-| [Availability](../../checks/table/availability/index.md) | Checks whether the table is accessible and available for use.                                                                                                                                                                               |                                                                                                                                                                                                                                            |
-| [Schema](../../checks/table/schema/index.md)             | Detects changes in the schema (schema drifts).                                                                                                                                                                                              |                                                                                                                                                                                                                                            |
-
-
-### **Column-level checks**
-Data quality checks that are measuring quality of data stored in columns are listed below.
-
-| Category                                                        | Description                                                                                                                                                                                                                                |
-|-----------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [Nulls](../../checks/column/nulls/index.md)                     | Checks for the presence of null or missing values in a column.                                                                                                                                                                             |
-| [Numeric](../../checks/column/numeric/index.md)                 | Validates that the data in a numeric column is in the expected format or within predefined ranges.                                                                                                                                         |
-| [Text](../../checks/column/text/index.md)                       | Validates that the data in a text column match the expected format.                                                                                                                                                                        |
-| [Accepted values](../../checks/column/accepted_values/index.md) |                                                                                                                                                                                                                                            |
-| [Patterns](../../checks/column/patterns/index.md)               |                                                                                                                                                                                                                                            |
-| [Blanks](../../checks/column/blanks/index.md)                   |                                                                                                                                                                                                                                            |
-| [Uniqueness](../../checks/column/uniqueness/index.md)           | Counts the number or percent of duplicate or unique values in a column.                                                                                                                                                                    |
-| [DateTime](../../checks/column/datetime/index.md)               | Validates that the data in a date or time column is in the expected format and within predefined ranges.                                                                                                                                   |
-| [PII](../../checks/column/pii/index.md)                         | Checks for the presence of sensitive or personally identifiable information (PII) in a column such as email, phone, zip code, IP4 and IP6 addresses.                                                                                       |
-| [Custom SQL](../../checks/column/custom_sql/index.md)           | Validate data against user-defined SQL queries at the column level. Checks in this group allows to validate that the set percentage of rows passed a custom SQL expression or that the custom SQL expression is not outside the set range. |
-| [Bool](../../checks/column/bool/index.md)                       | Calculates the percentage of data in a Boolean format.                                                                                                                                                                                     |
-| [Integrity](../../checks/column/integrity/index.md)             | Checks the referential integrity of a column against a column in another table.                                                                                                                                                            |
-| [Accuracy](../../checks/column/accuracy/index.md)               | Verifies that percentage of the difference in sum of a column with a reference column.                                                                                                                                                     |
-| [Datatype](../../checks/column/datatype/index.md)               | Detects changes in the datatype.                                                                                                                                                                                                           |
-| [Anomaly](../../checks/column/anomaly/index.md)                 | Detects anomalous (unexpected) changes and outliers in the time series of data quality results collected over a period of time.                                                                                                            |
-| [Schema](../../checks/column/schema/index.md)                   | Detects changes in the schema.                                                                                                                                                                                                             |
-
-
 ## What's next
 
 - Learn how to [configure data quality checks](../configuring-data-quality-checks-and-rules.md)
@@ -377,3 +334,5 @@ Data quality checks that are measuring quality of data stored in columns are lis
 - [Learn more about profiling checks](data-profiling-checks.md)
 - [Learn more about monitoring checks](data-observability-monitoring-checks.md)
 - [Learn more about partition checks](partition-checks.md)
+- Review the list of common data quality problems detected by DQOps, 
+  divided into [categories of data quality checks](../types-of-data-quality-checks/index.md)

@@ -19,9 +19,6 @@ nav:
           - Data observability monitoring checks: "dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md"
           - Partition checks: "dqo-concepts/definition-of-data-quality-checks/partition-checks.md"
       - Configuring checks: "dqo-concepts/configuring-data-quality-checks-and-rules.md"
-      - Data observability: "dqo-concepts/data-observability.md"
-      - DQOps user home: "dqo-concepts/dqops-user-home-folder.md"
-      - Running checks: "dqo-concepts/running-data-quality-checks.md"
 ########## INCLUDE TYPES OF CHECKS REFERENCE - DO NOT MODIFY MANUALLY
       - Categories of checks:
         - 'dqo-concepts/types-of-data-quality-checks/index.md'
@@ -46,6 +43,9 @@ nav:
         - Text values: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md'
         - Uniqueness and duplicates: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md'
 ########## END INCLUDE TYPES OF CHECKS REFERENCE
+      - Running checks: "dqo-concepts/running-data-quality-checks.md"
+      - Data observability: "dqo-concepts/data-observability.md"
+      - DQOps user home: "dqo-concepts/dqops-user-home-folder.md"
       - Data quality sensors: "dqo-concepts/definition-of-data-quality-sensors.md"
       - Data quality rules: "dqo-concepts/definition-of-data-quality-rules.md"
       - Data quality dashboards: "dqo-concepts/types-of-data-quality-dashboards.md"
