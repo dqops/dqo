@@ -2,13 +2,11 @@
 Read this guide to learn what types of data quality checks are supported in DQOps to detect issues related to datatype.
 The data quality checks are configured in the `datatype` category in DQOps.
 
-## datatype category
+## Datatype category
 Data quality checks that are detecting issues related to datatype are listed below.
 
 ## Detecting datatype issues
 How to detect datatype data quality issues.
-
-## List of datatype checks at a table level
 
 ## List of datatype checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |

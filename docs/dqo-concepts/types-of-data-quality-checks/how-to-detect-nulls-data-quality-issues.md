@@ -2,13 +2,16 @@
 Read this guide to learn what types of data quality checks are supported in DQOps to detect issues related to nulls.
 The data quality checks are configured in the `nulls` category in DQOps.
 
-## nulls category
+## Nulls category
 Data quality checks that are detecting issues related to nulls are listed below.
 
 ## Detecting nulls issues
 How to detect nulls data quality issues.
 
-## List of nulls checks at a table level
+## Use cases
+| **Name of the example**                                                      | **Description**                                                                                                                                                                             |
+|:-----------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [Detect null values](../../examples/data-completeness/detect-null-values.md) | This example shows how to detect that the number of null values in a column does not exceed the maximum accepted count using [nulls_count](../../checks/column/nulls/nulls-count.md) check. |
 
 ## List of nulls checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |

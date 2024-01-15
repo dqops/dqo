@@ -2,11 +2,12 @@
 Read this guide to learn what types of data quality checks are supported in DQOps to detect issues related to accuracy.
 The data quality checks are configured in the `accuracy` category in DQOps.
 
-## accuracy category
+## Accuracy category
 Data quality checks that are detecting issues related to accuracy are listed below.
 
 ## Detecting accuracy issues
 How to detect accuracy data quality issues.
+
 
 ## List of accuracy checks at a table level
 | Data quality check name | Data quality dimension | Description | Standard check |

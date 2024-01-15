@@ -8,7 +8,10 @@ Data quality checks that are detecting issues related to pii are listed below.
 ## Detecting pii issues
 How to detect pii data quality issues.
 
-## List of pii checks at a table level
+## Use cases
+| **Name of the example**                                                                                                      | **Description**                                                                                                                                                                                                                                |
+|:-----------------------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [Percentage of rows containing USA zipcodes](../../examples/data-validity/percentage-of-values-that-contains-usa-zipcode.md) | This example shows how to detect that the percentage of rows that contains USA zipcode values in a column does not exceed a set threshold using [contains_usa_zipcode_percent](../../checks/column/pii/contains-usa-zipcode-percent.md) check. |
 
 ## List of pii checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |

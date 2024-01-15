@@ -2,13 +2,16 @@
 Read this guide to learn what types of data quality checks are supported in DQOps to detect issues related to bool.
 The data quality checks are configured in the `bool` category in DQOps.
 
-## bool category
+## Bool category
 Data quality checks that are detecting issues related to bool are listed below.
 
 ## Detecting bool issues
 How to detect bool data quality issues.
 
-## List of bool checks at a table level
+## Use case
+| **Name of the example**                                                                               | **Description**                                                                                                                                                            |
+|:------------------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [Percentage of false boolean values](../../examples/data-reasonability/percentage-of-false-values.md) | This example shows how to detect that the percentage of false values remains above a set threshold using [false_percent](../../checks/column/bool/false-percent.md) check. |
 
 ## List of bool checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |

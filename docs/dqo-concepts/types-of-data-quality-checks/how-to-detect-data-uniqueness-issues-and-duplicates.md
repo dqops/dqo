@@ -2,13 +2,16 @@
 Read this guide to learn what types of data quality checks are supported in DQOps to detect issues related to uniqueness.
 The data quality checks are configured in the `uniqueness` category in DQOps.
 
-## uniqueness category
+## Uniqueness category
 Data quality checks that are detecting issues related to uniqueness are listed below.
 
 ## Detecting uniqueness issues
 How to detect uniqueness data quality issues.
 
-## List of uniqueness checks at a table level
+## Use cases
+| **Name of the example**                                                                | **Description**                                                                                                                                                                                                            |
+|:---------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [Percentage of duplicates](../../examples/data-uniqueness/percentage-of-duplicates.md) | This example shows how to detect that the percentage of duplicate values in a column does not exceed the maximum accepted percentage using [duplicate_percent](../../checks/column/uniqueness/duplicate-percent.md) check. |
 
 ## List of uniqueness checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |

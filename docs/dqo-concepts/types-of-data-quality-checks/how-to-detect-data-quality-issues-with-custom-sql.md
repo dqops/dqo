@@ -2,11 +2,16 @@
 Read this guide to learn what types of data quality checks are supported in DQOps to detect issues related to custom sql.
 The data quality checks are configured in the `custom_sql` category in DQOps.
 
-## custom sql category
+## Custom sql category
 Data quality checks that are detecting issues related to custom sql are listed below.
 
 ## Detecting custom sql issues
 How to detect custom sql data quality issues.
+
+## Use cases
+| **Name of the example**                                                                                               | **Description**                                                                                                                                                                                                                                   |
+|:----------------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [Percentage of rows passing SQL condition](../../examples/data-validity/percentage-of-rows-passing-sql-condition.md)  | This example shows how to detect that the percentage of passed sql condition in a column does not fall below a set threshold using [sql_condition_passed_percent](../../checks/table/custom_sql/sql-condition-passed-percent-on-table.md)  check. |
 
 ## List of custom sql checks at a table level
 | Data quality check name | Data quality dimension | Description | Standard check |

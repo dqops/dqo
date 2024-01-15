@@ -2,13 +2,11 @@
 Read this guide to learn what types of data quality checks are supported in DQOps to detect issues related to datetime.
 The data quality checks are configured in the `datetime` category in DQOps.
 
-## datetime category
+## Datetime category
 Data quality checks that are detecting issues related to datetime are listed below.
 
 ## Detecting datetime issues
 How to detect datetime data quality issues.
-
-## List of datetime checks at a table level
 
 ## List of datetime checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |
