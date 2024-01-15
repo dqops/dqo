@@ -30,7 +30,6 @@ Table comparisons can be categorized into three types: profiling, monitoring, an
 these [types of checks in the DQOps concept section](../dqo-concepts/definition-of-data-quality-checks/index.md).
 
 
-
 ### ***Navigate to table comparison screen***
 
 To navigate to table comparison screen, follow these steps:

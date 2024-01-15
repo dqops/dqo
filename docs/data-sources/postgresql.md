@@ -95,17 +95,17 @@ Fill in the data you will be asked for.
 Connection name (--name): connection1
 Database provider type (--provider):
  [ 1] bigquery
- [ 2] snowflake
- [ 3] postgresql
- [ 4] redshift
- [ 5] sqlserver
+ [ 2] databricks
+ [ 3] mysql
+ [ 4] oracle
+ [ 5] postgresql
  [ 6] presto
- [ 7] trino
- [ 8] mysql
- [ 9] oracle
- [10] spark
- [11] databricks
-Please enter one of the [] values: 3
+ [ 7] redshift
+ [ 8] snowflake
+ [ 9] spark
+ [10] sqlserver
+ [11] trino
+Please enter one of the [] values: 5
 PostgreSQL host (--postgresql-host)[${POSTGRESQL_HOST}]: localhost
 PostgreSQL port (--postgresql-port) [${POSTGRESQL_PORT}]: 65234
 PostgreSQL user (--postgresql-user) [${POSTGRESQL_USER}]: testing
