@@ -25,6 +25,17 @@ These topics introduce the basic concepts of DQOps.
        incrementally any table that has a date column.
 
 
+ - **[Configuring data sources](configuring-data-sources.md)**
+ 
+    DQOps stores the data source configuration and the metadata of imported tables in YAML files.
+    The files are stored in the current folder, called the [`DQOps user home`](dqops-user-home-folder.md). 
+
+    The connection parameters to data sources and metadata of imported tables can be edited in two ways,
+    by using the [DQOps user interface](dqops-user-interface-overview.md), or by changing the YAML configuration files directly.
+    Other methods of managing data sources include also using the [command-line interface](command-line-interface.md),
+    or using the [DQOps Python client](../client/index.md).
+
+
  - **[Configuring data quality checks](configuring-data-quality-checks-and-rules.md)**
 
     Data quality checks are configured by setting the incident alerting thresholds

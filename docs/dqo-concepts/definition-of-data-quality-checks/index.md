@@ -329,6 +329,7 @@ and additional use cases.
 
 ## What's next
 
+- Learn how to [configure data sources](../configuring-data-sources.md)
 - Learn how to [configure data quality checks](../configuring-data-quality-checks-and-rules.md)
 - Learn how to [run data quality checks](../running-data-quality-checks.md)
 - [Learn more about profiling checks](data-profiling-checks.md)

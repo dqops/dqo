@@ -18,6 +18,7 @@ nav:
           - Data profiling checks: "dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md"
           - Data observability monitoring checks: "dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md"
           - Partition checks: "dqo-concepts/definition-of-data-quality-checks/partition-checks.md"
+      - Configuring data sources: "dqo-concepts/configuring-data-sources.md"
       - Configuring checks: "dqo-concepts/configuring-data-quality-checks-and-rules.md"
 ########## INCLUDE TYPES OF CHECKS REFERENCE - DO NOT MODIFY MANUALLY
       - Categories of checks:
