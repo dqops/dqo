@@ -66,6 +66,7 @@ nav:
       - Install DQOps from release package: "dqops-installation/install-dqops-from-release-package.md"
   - Data sources:
       - "data-sources/index.md"
+      - Athena: "data-sources/athena.md"
       - BigQuery: "data-sources/bigquery.md"
       - Databricks: "data-sources/databricks.md"
       - MySQL: "data-sources/mysql.md"

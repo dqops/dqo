@@ -169,13 +169,13 @@ public class TrinoConnectionProvider extends AbstractSqlConnectionProvider {
                     if (isHeadless) {
                         throw new CliRequiredParameterMissingException("--trino-user");
                     }
-                    trinoSpec.setUser(terminalReader.prompt(" (--trino-region)", "${TRINO_USER}", false));
+                    trinoSpec.setUser(terminalReader.prompt(" AWS AccessKeyId (--trino-user)", "${TRINO_USER}", false));
                 }
                 if (Strings.isNullOrEmpty(trinoSpec.getPassword())) {
                     if (isHeadless) {
                         throw new CliRequiredParameterMissingException("--trino-password");
                     }
-                    trinoSpec.setPassword(terminalReader.prompt(" (--trino-password)", "${TRINO_PASSWORD}", false));
+                    trinoSpec.setPassword(terminalReader.prompt(" AWS SecretAccessKey (--trino-password)", "${TRINO_PASSWORD}", false));
                 }
                 break;
 
@@ -195,9 +195,9 @@ public class TrinoConnectionProvider extends AbstractSqlConnectionProvider {
 
         if (Strings.isNullOrEmpty(trinoSpec.getCatalog())) {
             if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--athena-catalog");
+                throw new CliRequiredParameterMissingException("--trino-catalog");
             }
-            trinoSpec.setCatalog(terminalReader.prompt(" (--athena-catalog)", "${ATHENA_CATALOG}", false));
+            trinoSpec.setCatalog(terminalReader.prompt(" (--trino-catalog)", "${TRINO_CATALOG}", false));
         }
 
         if (Strings.isNullOrEmpty(trinoSpec.getAthenaWorkGroup())) {

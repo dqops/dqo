@@ -34,7 +34,7 @@ After navigating to the Trino connection settings, you will need to fill in the 
 |---------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Connection name           |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters. |
 | Parallel jobs limit       |                                          | New limit. Null value will disable limit.                                                                                                                                                                                                 |
-| Trino engine type         | trinoEngineType                          | Trino engine type. Supports also a ${TRINO_ENGINE} configuration with a custom environment variable.                                                                                                                                      |
+| Trino engine type         | trino_engine_type                        | Trino engine type. Supports also a ${TRINO_ENGINE} configuration with a custom environment variable.                                                                                                                                      |
 | Host                      | host                                     | Trino host name. Supports also a ${TRINO_HOST} configuration with a custom environment variable.                                                                                                                                          |
 | Port                      | port                                     | Trino port number. The default port is 8080. Supports also a ${TRINO_PORT} configuration with a custom environment variable.                                                                                                              |
 | User name                 | user                                     | Trino user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                                 |
@@ -131,7 +131,6 @@ dqo> connection add --name=connection1
 --trino-engine=trino
 --trino-host=localhost
 --trino-port=8080
---trino-database=default
 --trino-user=test
 --trino-password=xxx
 --trino-catalog=memory
@@ -166,12 +165,12 @@ kind: source
 spec:
   provider_type: trino
     trino:
-    trino_engine_type: trino
-    host: localhost
-    port: 8080
-    user: test
-    password: xxx
-    catalog: memory
+      trino_engine_type: trino
+      host: localhost
+      port: 8080
+      user: test
+      password: xxx
+      catalog: memory
   incident_grouping:
     grouping_level: table_dimension_category
     minimum_severity: warning
