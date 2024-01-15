@@ -17,11 +17,15 @@ interface IScheduleViewProps {
   schedule?: MonitoringScheduleSpec;
   handleChange: (obj: any) => void;
   isDefault?: boolean;
+  activeTab?: string
 }
 type TMinutes = {'minutes' : number, 'day' : number, 'hour' : number }
-const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps) => {
+
+const defaultMinutes = {'minutes' : 15, 'day' : 15, 'hour' : 15 }
+
+const ScheduleView = ({ schedule, handleChange, isDefault, activeTab }: IScheduleViewProps) => {
   const [mode, setMode] = useState('');
-  const [minutes, setMinutes] = useState<TMinutes>({'minutes' : 15, 'day' : 15, 'hour' : 15 });
+  const [minutes, setMinutes] = useState<TMinutes>(defaultMinutes);
   const [hour, setHour] = useState(15);
   const { table, column }: { table: string; column: string } = useParams();
 
@@ -32,11 +36,6 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
 
   const scheduleCron = (bool: boolean) => {
     dispatch(setCronScheduler(bool));
-  };
-
-  const getData = async () => {
-    const res = await JobApiClient.isCronSchedulerRunning();
-    scheduleCron(res.data);
   };
 
   const startCroner = async () => {
@@ -91,86 +90,92 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
     setHour(val);
   };
 
-   const checkCronExpresion = () => {
-    const cron_expression = schedule?.cron_expression ?? '';
-    if (cron_expression?.length === 0) {
-      setMode('');
-      return;
+  useEffect(() => {
+    const checkCronExpresion = () => {
+      const cron_expression = schedule?.cron_expression ?? '';
+      if (cron_expression?.length === 0) {
+        setMode('');
+        return;
+      }
+      if (/^\*\/\d\d? \* \* \* \*$/.test(cron_expression)) {
+          setMode('minutes');
+          const matches = cron_expression.match(/^\*\/(\d\d?) \* \* \* \*$/);
+  
+          if (!matches) return;
+          if (Number(matches[1]) < 0) {
+            onChangeMinutes(0);
+        } else if (Number(matches[1]) > 59) {
+          onChangeMinutes(59);
+        } else {
+          setMinutes((prevState) => ({
+            ...prevState,
+            'minutes': Number(matches[1]),
+          }));
+        }
+        return;
     }
-    if (/^\*\/\d\d? \* \* \* \*$/.test(cron_expression)) {
-        setMode('minutes');
-        const matches = cron_expression.match(/^\*\/(\d\d?) \* \* \* \*$/);
-
+      else if (/^\d\d? \* \* \* \*$/.test(cron_expression)) {
+        setMode('hour');
+        const matches = cron_expression.match(/^(\d\d?) \* \* \* \*$/);
+  
         if (!matches) return;
         if (Number(matches[1]) < 0) {
           onChangeMinutes(0);
-      } else if (Number(matches[1]) > 59) {
-        onChangeMinutes(59);
-      } else {
-        setMinutes((prevState) => ({
-          ...prevState,
-          'minutes': Number(matches[1]),
-        }));
+        } else if (Number(matches[1]) > 59) {
+          onChangeMinutes(59);
+        } else {
+          setMinutes((prevState) => ({
+            ...prevState,
+            'hour': Number(matches[1]),
+          }));
+        }
+        return;
       }
-      return;
-  }
-    else if (/^\d\d? \* \* \* \*$/.test(cron_expression)) {
-      setMode('hour');
-      const matches = cron_expression.match(/^(\d\d?) \* \* \* \*$/);
+      else if (/^\d\d? \d\d? \* \* \*$/.test(cron_expression)) {
+        setMode('day');
+        const matches = cron_expression.match(/^(\d\d?) (\d\d?) \* \* \*$/);
+  
+        if (!matches) return;
+        
+        if (Number(matches[2]) < 0) {
+          onChangeHour(0);
+        } else if (Number(matches[2]) > 23) {
+          onChangeHour(23);
+        } else {
+          setHour(Number(matches[2]));
+        }
+        if (Number(matches[1]) < 0) {
+          onChangeMinutes(0);
+        } else if (Number(matches[1]) > 59) {
+          onChangeMinutes(59);
+        } else {
+          setMinutes((prevState) => ({
+            ...prevState,
+            'day': Number(matches[1]),
+          }));
+        }
+        return;
+      }
+      else {
+        setMode("custom")
+        return;
+      }
+     }
 
-      if (!matches) return;
-      if (Number(matches[1]) < 0) {
-        onChangeMinutes(0);
-      } else if (Number(matches[1]) > 59) {
-        onChangeMinutes(59);
-      } else {
-        setMinutes((prevState) => ({
-          ...prevState,
-          'hour': Number(matches[1]),
-        }));
-      }
-      return;
-    }
-    else if (/^\d\d? \d\d? \* \* \*$/.test(cron_expression)) {
-      setMode('day');
-      const matches = cron_expression.match(/^(\d\d?) (\d\d?) \* \* \*$/);
-
-      if (!matches) return;
-      
-      if (Number(matches[2]) < 0) {
-        onChangeHour(0);
-      } else if (Number(matches[2]) > 23) {
-        onChangeHour(23);
-      } else {
-        setHour(Number(matches[2]));
-      }
-      if (Number(matches[1]) < 0) {
-        onChangeMinutes(0);
-      } else if (Number(matches[1]) > 59) {
-        onChangeMinutes(59);
-      } else {
-        setMinutes((prevState) => ({
-          ...prevState,
-          'day': Number(matches[1]),
-        }));
-      }
-      return;
-    }
-    else {
-      setMode("custom")
-      return;
-    }
-   }
-
-  useEffect(() => {
+    setMinutes(defaultMinutes);
+    setHour(15);
     if (mode !== 'custom') {
       checkCronExpresion()
-    } 
-  }, [schedule]);
+    }
+  }, [activeTab, schedule?.cron_expression]);
 
   useEffect(() => {
-    checkCronExpresion()
-    getData();
+    const getIsSchedulerRunning = async () => {
+      const res = await JobApiClient.isCronSchedulerRunning();
+      scheduleCron(res.data);
+    };
+
+    getIsSchedulerRunning();
   }, []);
 
   const onChangeCronExpression = (e: ChangeEvent<HTMLInputElement>) => {

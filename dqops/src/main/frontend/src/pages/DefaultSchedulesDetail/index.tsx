@@ -41,6 +41,7 @@ const DefaultSchedulesDetail = () => {
   const location = useLocation() as any;
   const [activeTab, setActiveTab] = useState(tab ?? tabs[0].value);
   const history = useHistory();
+  console.log(activeTab)
 
   const fetchDefaultSchedule = async () => {
     try {
@@ -108,6 +109,7 @@ const DefaultSchedulesDetail = () => {
         handleChange={handleChange}
         schedule={updatedSchedule}
         isDefault={true}
+        activeTab = {activeTab}
         />
     </div>
     </DefinitionLayout>
