@@ -66,15 +66,18 @@ nav:
       - Install DQOps from release package: "dqops-installation/install-dqops-from-release-package.md"
   - Data sources:
       - "data-sources/index.md"
+      - Athena: "data-sources/athena.md"
       - BigQuery: "data-sources/bigquery.md"
+      - Databricks: "data-sources/databricks.md"
       - MySQL: "data-sources/mysql.md"
       - Oracle: "data-sources/oracle.md"
       - PostgreSQL: "data-sources/postgresql.md"
+      - Presto: "data-sources/presto.md"
       - Redshift: "data-sources/redshift.md"
-      - SQL Server: "data-sources/sql-server.md"
       - Snowflake: "data-sources/snowflake.md"
       - Spark: "data-sources/spark.md"
-      - Databricks: "data-sources/databricks.md"
+      - SQL Server: "data-sources/sql-server.md"
+      - Trino: "data-sources/trino.md"
   - Use cases:
       - "examples/index.md"
       - Data accuracy:

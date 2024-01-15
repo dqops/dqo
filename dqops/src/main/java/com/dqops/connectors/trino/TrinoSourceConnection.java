@@ -116,8 +116,8 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
         String userName = this.getSecretValueProvider().expandValue(trinoSpec.getUser(), secretValueLookupContext);
         hikariConfig.setUsername(userName);
 
-        //String password = this.getSecretValueProvider().expandValue(trinoSpec.getPassword(), secretValueLookupContext);
-        //hikariConfig.setPassword(password);
+        String password = this.getSecretValueProvider().expandValue(trinoSpec.getPassword(), secretValueLookupContext);
+        hikariConfig.setPassword(password);
 
         Properties dataSourceProperties = new Properties();
         if (trinoSpec.getProperties() != null) {

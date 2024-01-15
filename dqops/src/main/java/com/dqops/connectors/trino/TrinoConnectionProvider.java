@@ -125,7 +125,6 @@ public class TrinoConnectionProvider extends AbstractSqlConnectionProvider {
             if (isHeadless) {
                 throw new CliRequiredParameterMissingException("--trino-host");
             }
-
             trinoSpec.setHost(terminalReader.prompt("Trino host name (--trino-host)", "${TRINO_HOST}", false));
         }
 
@@ -133,7 +132,6 @@ public class TrinoConnectionProvider extends AbstractSqlConnectionProvider {
             if (isHeadless) {
                 throw new CliRequiredParameterMissingException("--trino-port");
             }
-
             trinoSpec.setPort(terminalReader.prompt("Trino port number (--trino-port)", "${TRINO_PORT}", false));
         }
 
@@ -141,8 +139,21 @@ public class TrinoConnectionProvider extends AbstractSqlConnectionProvider {
             if (isHeadless) {
                 throw new CliRequiredParameterMissingException("--trino-user");
             }
-
             trinoSpec.setUser(terminalReader.prompt("Trino user name (--trino-user)", "${TRINO_USER}", false));
+        }
+
+        if (Strings.isNullOrEmpty(trinoSpec.getPassword())) {
+            if (isHeadless) {
+                throw new CliRequiredParameterMissingException("--trino-password");
+            }
+            trinoSpec.setPassword(terminalReader.prompt(" (--trino-password)", "${TRINO_PASSWORD}", false));
+        }
+
+        if (Strings.isNullOrEmpty(trinoSpec.getCatalog())) {
+            if (isHeadless) {
+                throw new CliRequiredParameterMissingException("--trino-catalog");
+            }
+            trinoSpec.setCatalog(terminalReader.prompt(" (--trino-catalog)", "${TRINO_CATALOG}", false));
         }
 
     }
@@ -158,13 +169,13 @@ public class TrinoConnectionProvider extends AbstractSqlConnectionProvider {
                     if (isHeadless) {
                         throw new CliRequiredParameterMissingException("--trino-user");
                     }
-                    trinoSpec.setUser(terminalReader.prompt(" (--trino-region)", "${TRINO_USER}", false));
+                    trinoSpec.setUser(terminalReader.prompt(" AWS AccessKeyId (--trino-user)", "${TRINO_USER}", false));
                 }
                 if (Strings.isNullOrEmpty(trinoSpec.getPassword())) {
                     if (isHeadless) {
                         throw new CliRequiredParameterMissingException("--trino-password");
                     }
-                    trinoSpec.setPassword(terminalReader.prompt(" (--trino-password)", "${TRINO_PASSWORD}", false));
+                    trinoSpec.setPassword(terminalReader.prompt(" AWS SecretAccessKey (--trino-password)", "${TRINO_PASSWORD}", false));
                 }
                 break;
 
@@ -184,9 +195,9 @@ public class TrinoConnectionProvider extends AbstractSqlConnectionProvider {
 
         if (Strings.isNullOrEmpty(trinoSpec.getCatalog())) {
             if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--athena-catalog");
+                throw new CliRequiredParameterMissingException("--trino-catalog");
             }
-            trinoSpec.setCatalog(terminalReader.prompt(" (--athena-catalog)", "${ATHENA_CATALOG}", false));
+            trinoSpec.setCatalog(terminalReader.prompt(" (--trino-catalog)", "${TRINO_CATALOG}", false));
         }
 
         if (Strings.isNullOrEmpty(trinoSpec.getAthenaWorkGroup())) {

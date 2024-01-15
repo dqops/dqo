@@ -1,45 +1,46 @@
-# Spark
-Read this guide to learn how to connect DQOps to Apache Spark from the UI, command-line, or directly in YAML files. All parameters are documented.
+# Trino
+Read this guide to learn how to connect DQOps to Trino from the UI, command-line, or directly in YAML files. All parameters are documented.
 
 ## Overview
 
-Apache Spark is an open-source unified analytics engine for large-scale data processing.
+Trino is a fast distributed SQL query engine for big data analytics that helps you explore your data universe.
 
 ## Prerequisite credentials
 
-You need a Spark Thrift Server to be running that provides a connection through JDBC to data in Spark.
+You need a Trino.
 
-## Add Spark connection using the user interface
+## Add Trino connection using the user interface
 
 ### **Navigate to the connection settings**
 
-To navigate to the Spark connection settings:
+To navigate to the Trino connection settings:
 
 1. Go to Data Sources section and click **+ Add connection** button in the upper left corner.
 
     ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.png)
 
-2. Select Spark database type.
+2. Select Trino database type.
 
-    ![Selecting Spark database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-spark.png)
+    ![Selecting Trino database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-trino.png)
 
 
 ### **Fill in the connection settings**
 
-After navigating to the Spark connection settings, you will need to fill in the connection details.
+After navigating to the Trino connection settings, you will need to fill in the connection details.
 
-![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-spark1.png)
+![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-trino.png)
 
-| Spark connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                                             | 
-|---------------------------|------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Connection name           |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters.               |
-| Parallel jobs limit       |                                          | New limit. Null value will disable limit.                                                                                                                                                                                                               |
-| Host                      | host                                     | Spark host name. Supports also a ${SPARK_HOST} configuration with a custom environment variable.                                                                                                                                                        |
-| Port                      | port                                     | Spark port name. The default port is 10000. Supports also a ${SPARK_PORT} configuration with a custom environment variable.                                                                                                                             |
-| User name                 | user                                     | Spark user name. The value can be in the ${SPARK_USER} format to use dynamic substitution.                                                                                                                                                              |
-| Password                  | password                                 | Spark database password. The value can be in the ${SPARK_PASSWORD} format to use dynamic substitution.                                                                                                                                                  |
-| Options                   | options                                  | Spark connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.                                                                     |
-| JDBC connection property  |                                          | Optional setting. DQOps supports using JDBC driver to access Spark. [JDBC Concepts.](https://docs.oracle.com/en/database/oracle/oracle-database/23/jjdbc/introducing-JDBC.html).                                                                        |
+| Trino connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                               | 
+|---------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Connection name           |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters. |
+| Parallel jobs limit       |                                          | New limit. Null value will disable limit.                                                                                                                                                                                                 |
+| Trino engine type         | trino_engine_type                        | Trino engine type. Supports also a ${TRINO_ENGINE} configuration with a custom environment variable.                                                                                                                                      |
+| Host                      | host                                     | Trino host name. Supports also a ${TRINO_HOST} configuration with a custom environment variable.                                                                                                                                          |
+| Port                      | port                                     | Trino port number. The default port is 8080. Supports also a ${TRINO_PORT} configuration with a custom environment variable.                                                                                                              |
+| User name                 | user                                     | Trino user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                                 |
+| Password                  | password                                 | Trino database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                         |
+| Catalog                   | catalog                                  | The catalog that contains the databases and the tables that will be accessed with the driver. Supports also a ${TRINO_CATALOG} configuration with a custom environment variable.                                                          |
+| JDBC connection property  |                                          | Optional setting. DQOps supports using JDBC driver to access Trino. [JDBC Concepts.](https://docs.oracle.com/en/database/oracle/oracle-database/23/jjdbc/introducing-JDBC.html).                                                          |
     
 DQOps allows you to dynamically replace properties in connection settings with environment variables. To use it, simply
 change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
@@ -84,7 +85,7 @@ or modify the schedule for newly imported tables.
 ![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables-advisor.png)
 
 
-## Add Spark connection using DQOps Shell
+## Add Trino connection using DQOps Shell
 
 To add a connection run the following command in DQOps Shell.
 
@@ -108,11 +109,16 @@ Database provider type (--provider):
  [ 9] oracle
  [10] spark
  [11] databricks
-Please enter one of the [] values: 10
-Spark host name (--spark-host) [${SPARK_HOST}]: localhost
-Spark port number (--spark-port) [${SPARK_PORT}]: 10000
-Spark user name (--spark-user) [${SPARK_USER}]: 
-Spark user password (--spark-password) [${SPARK_PASSWORD}]: 
+Please enter one of the [] values: 7
+Trino engine type (--trino-engine):
+ [ 1] trino
+ [ 2] athena
+Please enter one of the [] values: 1
+Trino host name (--trino-host) [${TRINO_HOST}]: localhost
+Trino port number (--trino-port) [${TRINO_PORT}]: 8080
+Trino user name (--trino-user) [${TRINO_USER}]: test
+Trino user password (--trino-password) [${TRINO_PASSWORD}]: xxx
+Trino catalog (--trino-catalog) [${TRINO_CATAOG}]: memory
 Connection connection1 was successfully added.
 Run 'table import -c=connection1' to import tables.
 ```
@@ -121,11 +127,13 @@ You can also run the command with parameters to add a connection in just a singl
 
 ```
 dqo> connection add --name=connection1
---provider=spark
---spark-host=localhost
---spark-port=10000
---spark-user=test
---spark-password=xxx
+--provider=trino
+--trino-engine=trino
+--trino-host=localhost
+--trino-port=8080
+--trino-user=test
+--trino-password=xxx
+--trino-catalog=memory
 ```
 
 After adding connection run `table import -c=connection1` to select schemas and import tables.
@@ -149,18 +157,20 @@ character can be used at the beginning, in the middle or at the end of the name.
 Connection configurations are stored in the YAML files in the `./sources` folder. The name of the connection is also
 the name of the folder where the configuration file is stored.
 
-Below is a sample YAML file showing an example configuration of the Spark data source connection.
+Below is a sample YAML file showing an example configuration of the Trino data source connection.
 
 ``` yaml
 apiVersion: dqo/v1
 kind: source
 spec:
-  provider_type: spark
-  spark:
-    host: localhost
-    port: 10000
-    user: testing
-    password: xxx
+  provider_type: trino
+    trino:
+      trino_engine_type: trino
+      host: localhost
+      port: 8080
+      user: test
+      password: xxx
+      catalog: memory
   incident_grouping:
     grouping_level: table_dimension_category
     minimum_severity: warning
