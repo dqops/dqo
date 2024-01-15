@@ -76,6 +76,7 @@ nav:
       - Snowflake: "data-sources/snowflake.md"
       - Spark: "data-sources/spark.md"
       - SQL Server: "data-sources/sql-server.md"
+      - Trino: "data-sources/trino.md"
   - Use cases:
       - "examples/index.md"
       - Data accuracy:
