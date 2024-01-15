@@ -219,7 +219,7 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
               />
             </td>
             <td className='text-xs underline text-teal-500'>
-              <a href='https://man.openbsd.org/crontab.5' target='_blank' rel="noreferrer">Unix cron expression documentation</a>
+              <a href='https://dqops.com/docs/working-with-dqo/configure-scheduling-of-data-quality-checks/cron-formatting/' target='_blank' rel="noreferrer">Unix cron expression documentation</a>
             </td>
           </tr>
           <tr>
