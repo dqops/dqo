@@ -19,6 +19,7 @@ nav:
           - Data observability monitoring checks: "dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md"
           - Partition checks: "dqo-concepts/definition-of-data-quality-checks/partition-checks.md"
       - Configuring checks: "dqo-concepts/configuring-data-quality-checks-and-rules.md"
+      - Data observability: "dqo-concepts/data-observability.md"
       - DQOps user home: "dqo-concepts/dqops-user-home-folder.md"
       - Running checks: "dqo-concepts/running-data-quality-checks.md"
 ########## INCLUDE TYPES OF CHECKS REFERENCE - DO NOT MODIFY MANUALLY

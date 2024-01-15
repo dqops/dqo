@@ -1,9 +1,9 @@
 # Detect empty tables
-This sample shows how to use the default DQOps data quality checks to detect empty tables and view the results on data quality dashboards.
+This sample shows how to use the default DQOps data observability checks to detect empty tables and view the results on data quality dashboards.
 
 ## Overview
 
-The following example shows how to detect empty tables using the default data quality checks which are activated in DQOps 
+The following example shows how to detect empty tables using the default data observability checks which are activated in DQOps 
 once new tables are imported.
 
 **PROBLEM**
@@ -30,52 +30,11 @@ If the newly imported column is empty a warning alert will be triggered.
 
 ## Default checks configuration 
 
-Once new tables are imported, DQOps automatically activates the following profiling and monitoring checks.
-To learn more about each check, click on the links below.
+Once new tables are imported, DQOps will automatically activate the default profiling and monitoring checks. 
+If you want to [learn more about the default observability checks and view a list of them](../../dqo-concepts/data-observability.md),
+click on the link provided.
 
-**Profiling checks type**
-
-| Target | Check name                                                              | Description                                                                                                                                        |
-|--------|-------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
-| table  | [profile row count](../../checks/table/volume/row-count.md)             | Counts the number of rows in a table.                                                                                                              |
-| table  | [profile column count](../../checks/table/schema/column-count.md)       | Retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to an expected number of columns. |
-| column | [profile nulls count](../../checks/column/nulls/nulls-count.md)         | Ensures that there are no more than a set number of null values in the monitored column.                                                           |
-| column | [profile nulls percent](../../checks/column/nulls/nulls-percent.md)     | Ensures that there are no more than a set percentage of null values in the monitored column.                                                       |
-| column | [profile_not_nulls_count](../../checks/column/nulls/not-nulls-count.md) | Ensures that there are no more than a set number of null values in the monitored column.                                                           |
-
-**Daily monitoring checks type**
-
-| Target | Check name                                                                                                   | Description                                                                                                                                        |
-|--------|--------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
-| table  | [daily row count](../../checks/table/volume/row-count.md)                                                    | Counts the number of rows in a table.                                                                                                              |
-| table  | [daily row count anomaly](../../checks/table/volume/row-count-anomaly.md)                                    | Ensures that the row count is within a two-tailed percentile from measurements made during the last 90 days.                                       |
-| table  | [daily row count change](../../checks/table/volume/row-count-change.md)                                      | Ensures that the row count changed by a fixed rate since the last readout.                                                                         |
-| table  | [daily table availability](../../checks/table/availability/table-availability.md)                            | Verifies that a table exists, can be accessed, and queried without errors.                                                                         |
-| table  | [daily column count](../../checks/table/schema/column-count.md)                                              | Retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to an expected number of columns. |
-| table  | [daily column count changed](../../checks/table/schema/column-count-changed.md)                              | Detects whether the number of columns in a table has changed since the last time the check (checkpoint) was run.                                   |
-| table  | [daily column list changed](../../checks/table/schema/column-list-changed.md)                                | Detects if the list of columns has changed since the last time the check was run.                                                                  |
-| table  | [daily column list or order changed](../../checks/table/schema/column-list-or-order-changed.md)              | Detects whether the list of columns and the order of columns have changed since the last time the check was run.                                   |
-| table  | [daily column types changed](../../checks/table/schema/column-types-changed.md)                              | Detects if the column names or column types have changed since the last time the check was run.                                                    |
-| column | [daily nulls count](../../checks/column/nulls/nulls-count.md)                                                | Ensures that there are no more than a set number of null values in the monitored column.                                                           |
-| column | [daily nulls percent](../../checks/column/nulls/nulls-percent.md)                                            | Ensures that there are no more than a set percentage of null values in the monitored column.                                                       |
-| column | [daily not nulls count](../../checks/column/nulls/not-nulls-count.md)                                        | Ensures that there are no more than a set number of null values in the monitored column.                                                           |
-| column | [daily not nulls percent](../../checks/column/nulls/not-nulls-percent.md)                                    | Ensures that there are no more than a set percentage of not null values in the monitored column.                                                   |
-| column | [daily nulls percent anomaly](../../checks/column/nulls/nulls-percent-anomaly.md)                            | Ensures that the null percent value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.        |
-| column | [daily nulls percent change 1 day](../../checks/column/nulls/nulls-percent-change-1-day.md)                  | Ensures that the null percent in a monitored column has changed by a fixed rate since the last readout from yesterday.                             |
-| column | [daily_distinct_count_anomaly](../../checks/column/uniqueness/distinct-count-anomaly.md)                     | Ensures that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days             |
-| column | [daily detected datatype in text changed](../../checks/column/datatype/detected-datatype-in-text-changed.md) | Scans all values in a string column and detects the data type of all values in a column.                                                           |
-| column | [daily column exists](../../checks/column/schema/column-exists.md)                                           | Reads the metadata of the monitored table and verifies that the column still exists in the data source.                                            |
-| column | [daily column type changed](../../checks/column/schema/column-type-changed.md)                               | Detects if the data type of the column has changed since the last time it was retrieved.                                                           |
-
-All checks are scheduled to run daily at 12:00 a.m.
-
-You can check and modify the default configuration of checks. 
-Simply select the **Configuration** section and then click on **Default checks configuration** on the tree view on the left.
-You can then modify the **Profiling checks**, **Monitoring daily**, and **Monitoring monthly** default check configuration in the workspace on the right.
-
-![Check default check configuration](https://dqops.com/docs/images/examples/detect-empty-tables-check-default-check-configuration.png)
-
-For more [general information about checks, see the DQOps concepts](../../dqo-concepts/definition-of-data-quality-checks/index.md) section.
+By default, all the checks are scheduled to run daily at 12:00 a.m.
 
 
 ## Run the example using the user interface
