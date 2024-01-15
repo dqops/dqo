@@ -17,13 +17,12 @@ interface IScheduleViewProps {
   schedule?: MonitoringScheduleSpec;
   handleChange: (obj: any) => void;
   isDefault?: boolean;
-  activeTab?: string
 }
 type TMinutes = {'minutes' : number, 'day' : number, 'hour' : number }
 
 const defaultMinutes = {'minutes' : 15, 'day' : 15, 'hour' : 15 }
 
-const ScheduleView = ({ schedule, handleChange, isDefault, activeTab }: IScheduleViewProps) => {
+const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps) => {
   const [mode, setMode] = useState('');
   const [minutes, setMinutes] = useState<TMinutes>(defaultMinutes);
   const [hour, setHour] = useState(15);
@@ -164,10 +163,8 @@ const ScheduleView = ({ schedule, handleChange, isDefault, activeTab }: ISchedul
 
     setMinutes(defaultMinutes);
     setHour(15);
-    if (mode !== 'custom') {
-      checkCronExpresion()
-    }
-  }, [activeTab, schedule?.cron_expression]);
+    checkCronExpresion()
+  }, [schedule]);
 
   useEffect(() => {
     const getIsSchedulerRunning = async () => {
