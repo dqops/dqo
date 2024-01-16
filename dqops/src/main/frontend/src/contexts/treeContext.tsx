@@ -1125,7 +1125,7 @@ function TreeProvider(props: any) {
 
     setSelectedTreeNode(node);
     const defaultConnectionTab =
-      checkType === CheckTypes.SOURCES ? 'detail' : 'schedule';
+      checkType === CheckTypes.SOURCES ? 'detail' : 'schemas';
     if (node.level === TREE_LEVEL.DATABASE) {
       const url = ROUTES.CONNECTION_DETAIL(
         checkType,
