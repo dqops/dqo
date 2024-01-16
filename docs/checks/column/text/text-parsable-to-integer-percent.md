@@ -31,19 +31,19 @@ Please expand the section below to see the DQOps command-line examples to run or
         providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=profile_text_parsable_to_integer_percent --enable-warning
+        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=profile_text_parsable_to_integer_percent --enable-warning
         ```
 
         You can also use patterns to activate the check on all matching tables and columns.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=profile_text_parsable_to_integer_percent --enable-warning
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=profile_text_parsable_to_integer_percent --enable-warning
         ```
         
         Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=profile_text_parsable_to_integer_percent --enable-warning
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=profile_text_parsable_to_integer_percent --enable-warning
                             -Wmin_percent=value
         ```
 
@@ -54,19 +54,19 @@ Please expand the section below to see the DQOps command-line examples to run or
         providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=profile_text_parsable_to_integer_percent --enable-error
+        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=profile_text_parsable_to_integer_percent --enable-error
         ```
 
         You can also use patterns to activate the check on all matching tables and columns.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=profile_text_parsable_to_integer_percent --enable-error
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=profile_text_parsable_to_integer_percent --enable-error
         ```
         
         Additional rule parameters are passed using the *-Erule_parameter_name=value*.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=profile_text_parsable_to_integer_percent --enable-error
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=profile_text_parsable_to_integer_percent --enable-error
                             -Emin_percent=value
         ```
 
@@ -90,7 +90,7 @@ Please expand the section below to see the DQOps command-line examples to run or
         using patterns to find tables.
 
         ```
-        dqo> check run -c=connection_name -t=schema_prefix*.fact_*  -col=column_name_*-ch=profile_text_parsable_to_integer_percent
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_* -col=column_name_* -ch=profile_text_parsable_to_integer_percent
         ```
 
 
@@ -1106,19 +1106,19 @@ Please expand the section below to see the DQOps command-line examples to run or
         providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=daily_text_parsable_to_integer_percent --enable-warning
+        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=daily_text_parsable_to_integer_percent --enable-warning
         ```
 
         You can also use patterns to activate the check on all matching tables and columns.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_text_parsable_to_integer_percent --enable-warning
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_text_parsable_to_integer_percent --enable-warning
         ```
         
         Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_text_parsable_to_integer_percent --enable-warning
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_text_parsable_to_integer_percent --enable-warning
                             -Wmin_percent=value
         ```
 
@@ -1129,19 +1129,19 @@ Please expand the section below to see the DQOps command-line examples to run or
         providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=daily_text_parsable_to_integer_percent --enable-error
+        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=daily_text_parsable_to_integer_percent --enable-error
         ```
 
         You can also use patterns to activate the check on all matching tables and columns.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_text_parsable_to_integer_percent --enable-error
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_text_parsable_to_integer_percent --enable-error
         ```
         
         Additional rule parameters are passed using the *-Erule_parameter_name=value*.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_text_parsable_to_integer_percent --enable-error
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_text_parsable_to_integer_percent --enable-error
                             -Emin_percent=value
         ```
 
@@ -1165,7 +1165,7 @@ Please expand the section below to see the DQOps command-line examples to run or
         using patterns to find tables.
 
         ```
-        dqo> check run -c=connection_name -t=schema_prefix*.fact_*  -col=column_name_*-ch=daily_text_parsable_to_integer_percent
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_* -col=column_name_* -ch=daily_text_parsable_to_integer_percent
         ```
 
 
@@ -2183,19 +2183,19 @@ Please expand the section below to see the DQOps command-line examples to run or
         providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=monthly_text_parsable_to_integer_percent --enable-warning
+        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=monthly_text_parsable_to_integer_percent --enable-warning
         ```
 
         You can also use patterns to activate the check on all matching tables and columns.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_text_parsable_to_integer_percent --enable-warning
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=monthly_text_parsable_to_integer_percent --enable-warning
         ```
         
         Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_text_parsable_to_integer_percent --enable-warning
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=monthly_text_parsable_to_integer_percent --enable-warning
                             -Wmin_percent=value
         ```
 
@@ -2206,19 +2206,19 @@ Please expand the section below to see the DQOps command-line examples to run or
         providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=monthly_text_parsable_to_integer_percent --enable-error
+        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=monthly_text_parsable_to_integer_percent --enable-error
         ```
 
         You can also use patterns to activate the check on all matching tables and columns.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_text_parsable_to_integer_percent --enable-error
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=monthly_text_parsable_to_integer_percent --enable-error
         ```
         
         Additional rule parameters are passed using the *-Erule_parameter_name=value*.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_text_parsable_to_integer_percent --enable-error
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=monthly_text_parsable_to_integer_percent --enable-error
                             -Emin_percent=value
         ```
 
@@ -2242,7 +2242,7 @@ Please expand the section below to see the DQOps command-line examples to run or
         using patterns to find tables.
 
         ```
-        dqo> check run -c=connection_name -t=schema_prefix*.fact_*  -col=column_name_*-ch=monthly_text_parsable_to_integer_percent
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_* -col=column_name_* -ch=monthly_text_parsable_to_integer_percent
         ```
 
 
@@ -3260,19 +3260,19 @@ Please expand the section below to see the DQOps command-line examples to run or
         providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=daily_partition_text_parsable_to_integer_percent --enable-warning
+        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=daily_partition_text_parsable_to_integer_percent --enable-warning
         ```
 
         You can also use patterns to activate the check on all matching tables and columns.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_partition_text_parsable_to_integer_percent --enable-warning
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_partition_text_parsable_to_integer_percent --enable-warning
         ```
         
         Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_partition_text_parsable_to_integer_percent --enable-warning
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_partition_text_parsable_to_integer_percent --enable-warning
                             -Wmin_percent=value
         ```
 
@@ -3283,19 +3283,19 @@ Please expand the section below to see the DQOps command-line examples to run or
         providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=daily_partition_text_parsable_to_integer_percent --enable-error
+        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=daily_partition_text_parsable_to_integer_percent --enable-error
         ```
 
         You can also use patterns to activate the check on all matching tables and columns.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_partition_text_parsable_to_integer_percent --enable-error
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_partition_text_parsable_to_integer_percent --enable-error
         ```
         
         Additional rule parameters are passed using the *-Erule_parameter_name=value*.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_partition_text_parsable_to_integer_percent --enable-error
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_partition_text_parsable_to_integer_percent --enable-error
                             -Emin_percent=value
         ```
 
@@ -3319,7 +3319,7 @@ Please expand the section below to see the DQOps command-line examples to run or
         using patterns to find tables.
 
         ```
-        dqo> check run -c=connection_name -t=schema_prefix*.fact_*  -col=column_name_*-ch=daily_partition_text_parsable_to_integer_percent
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_* -col=column_name_* -ch=daily_partition_text_parsable_to_integer_percent
         ```
 
 
@@ -4359,19 +4359,19 @@ Please expand the section below to see the DQOps command-line examples to run or
         providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=monthly_partition_text_parsable_to_integer_percent --enable-warning
+        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=monthly_partition_text_parsable_to_integer_percent --enable-warning
         ```
 
         You can also use patterns to activate the check on all matching tables and columns.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_partition_text_parsable_to_integer_percent --enable-warning
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=monthly_partition_text_parsable_to_integer_percent --enable-warning
         ```
         
         Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_partition_text_parsable_to_integer_percent --enable-warning
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=monthly_partition_text_parsable_to_integer_percent --enable-warning
                             -Wmin_percent=value
         ```
 
@@ -4382,19 +4382,19 @@ Please expand the section below to see the DQOps command-line examples to run or
         providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=monthly_partition_text_parsable_to_integer_percent --enable-error
+        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=monthly_partition_text_parsable_to_integer_percent --enable-error
         ```
 
         You can also use patterns to activate the check on all matching tables and columns.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_partition_text_parsable_to_integer_percent --enable-error
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=monthly_partition_text_parsable_to_integer_percent --enable-error
         ```
         
         Additional rule parameters are passed using the *-Erule_parameter_name=value*.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_partition_text_parsable_to_integer_percent --enable-error
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=monthly_partition_text_parsable_to_integer_percent --enable-error
                             -Emin_percent=value
         ```
 
@@ -4418,7 +4418,7 @@ Please expand the section below to see the DQOps command-line examples to run or
         using patterns to find tables.
 
         ```
-        dqo> check run -c=connection_name -t=schema_prefix*.fact_*  -col=column_name_*-ch=monthly_partition_text_parsable_to_integer_percent
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_* -col=column_name_* -ch=monthly_partition_text_parsable_to_integer_percent
         ```
 
 

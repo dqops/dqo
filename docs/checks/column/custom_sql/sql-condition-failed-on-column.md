@@ -34,19 +34,19 @@ Please expand the section below to see the DQOps command-line examples to run or
         providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=profile_sql_condition_failed_on_column --enable-warning
+        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=profile_sql_condition_failed_on_column --enable-warning
         ```
 
         You can also use patterns to activate the check on all matching tables and columns.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=profile_sql_condition_failed_on_column --enable-warning
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=profile_sql_condition_failed_on_column --enable-warning
         ```
         
         Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=profile_sql_condition_failed_on_column --enable-warning
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=profile_sql_condition_failed_on_column --enable-warning
                             -Wmax_count=value
         ```
 
@@ -57,19 +57,19 @@ Please expand the section below to see the DQOps command-line examples to run or
         providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=profile_sql_condition_failed_on_column --enable-error
+        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=profile_sql_condition_failed_on_column --enable-error
         ```
 
         You can also use patterns to activate the check on all matching tables and columns.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=profile_sql_condition_failed_on_column --enable-error
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=profile_sql_condition_failed_on_column --enable-error
         ```
         
         Additional rule parameters are passed using the *-Erule_parameter_name=value*.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=profile_sql_condition_failed_on_column --enable-error
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=profile_sql_condition_failed_on_column --enable-error
                             -Emax_count=value
         ```
 
@@ -93,7 +93,7 @@ Please expand the section below to see the DQOps command-line examples to run or
         using patterns to find tables.
 
         ```
-        dqo> check run -c=connection_name -t=schema_prefix*.fact_*  -col=column_name_*-ch=profile_sql_condition_failed_on_column
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_* -col=column_name_* -ch=profile_sql_condition_failed_on_column
         ```
 
 
@@ -1092,19 +1092,19 @@ Please expand the section below to see the DQOps command-line examples to run or
         providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=daily_sql_condition_failed_on_column --enable-warning
+        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=daily_sql_condition_failed_on_column --enable-warning
         ```
 
         You can also use patterns to activate the check on all matching tables and columns.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_sql_condition_failed_on_column --enable-warning
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_sql_condition_failed_on_column --enable-warning
         ```
         
         Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_sql_condition_failed_on_column --enable-warning
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_sql_condition_failed_on_column --enable-warning
                             -Wmax_count=value
         ```
 
@@ -1115,19 +1115,19 @@ Please expand the section below to see the DQOps command-line examples to run or
         providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=daily_sql_condition_failed_on_column --enable-error
+        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=daily_sql_condition_failed_on_column --enable-error
         ```
 
         You can also use patterns to activate the check on all matching tables and columns.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_sql_condition_failed_on_column --enable-error
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_sql_condition_failed_on_column --enable-error
         ```
         
         Additional rule parameters are passed using the *-Erule_parameter_name=value*.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_sql_condition_failed_on_column --enable-error
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_sql_condition_failed_on_column --enable-error
                             -Emax_count=value
         ```
 
@@ -1151,7 +1151,7 @@ Please expand the section below to see the DQOps command-line examples to run or
         using patterns to find tables.
 
         ```
-        dqo> check run -c=connection_name -t=schema_prefix*.fact_*  -col=column_name_*-ch=daily_sql_condition_failed_on_column
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_* -col=column_name_* -ch=daily_sql_condition_failed_on_column
         ```
 
 
@@ -2152,19 +2152,19 @@ Please expand the section below to see the DQOps command-line examples to run or
         providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=monthly_sql_condition_failed_on_column --enable-warning
+        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=monthly_sql_condition_failed_on_column --enable-warning
         ```
 
         You can also use patterns to activate the check on all matching tables and columns.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_sql_condition_failed_on_column --enable-warning
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=monthly_sql_condition_failed_on_column --enable-warning
         ```
         
         Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_sql_condition_failed_on_column --enable-warning
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=monthly_sql_condition_failed_on_column --enable-warning
                             -Wmax_count=value
         ```
 
@@ -2175,19 +2175,19 @@ Please expand the section below to see the DQOps command-line examples to run or
         providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=monthly_sql_condition_failed_on_column --enable-error
+        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=monthly_sql_condition_failed_on_column --enable-error
         ```
 
         You can also use patterns to activate the check on all matching tables and columns.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_sql_condition_failed_on_column --enable-error
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=monthly_sql_condition_failed_on_column --enable-error
         ```
         
         Additional rule parameters are passed using the *-Erule_parameter_name=value*.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_sql_condition_failed_on_column --enable-error
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=monthly_sql_condition_failed_on_column --enable-error
                             -Emax_count=value
         ```
 
@@ -2211,7 +2211,7 @@ Please expand the section below to see the DQOps command-line examples to run or
         using patterns to find tables.
 
         ```
-        dqo> check run -c=connection_name -t=schema_prefix*.fact_*  -col=column_name_*-ch=monthly_sql_condition_failed_on_column
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_* -col=column_name_* -ch=monthly_sql_condition_failed_on_column
         ```
 
 
@@ -3212,19 +3212,19 @@ Please expand the section below to see the DQOps command-line examples to run or
         providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=daily_partition_sql_condition_failed_on_column --enable-warning
+        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=daily_partition_sql_condition_failed_on_column --enable-warning
         ```
 
         You can also use patterns to activate the check on all matching tables and columns.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_partition_sql_condition_failed_on_column --enable-warning
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_partition_sql_condition_failed_on_column --enable-warning
         ```
         
         Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_partition_sql_condition_failed_on_column --enable-warning
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_partition_sql_condition_failed_on_column --enable-warning
                             -Wmax_count=value
         ```
 
@@ -3235,19 +3235,19 @@ Please expand the section below to see the DQOps command-line examples to run or
         providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=daily_partition_sql_condition_failed_on_column --enable-error
+        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=daily_partition_sql_condition_failed_on_column --enable-error
         ```
 
         You can also use patterns to activate the check on all matching tables and columns.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_partition_sql_condition_failed_on_column --enable-error
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_partition_sql_condition_failed_on_column --enable-error
         ```
         
         Additional rule parameters are passed using the *-Erule_parameter_name=value*.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=daily_partition_sql_condition_failed_on_column --enable-error
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_partition_sql_condition_failed_on_column --enable-error
                             -Emax_count=value
         ```
 
@@ -3271,7 +3271,7 @@ Please expand the section below to see the DQOps command-line examples to run or
         using patterns to find tables.
 
         ```
-        dqo> check run -c=connection_name -t=schema_prefix*.fact_*  -col=column_name_*-ch=daily_partition_sql_condition_failed_on_column
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_* -col=column_name_* -ch=daily_partition_sql_condition_failed_on_column
         ```
 
 
@@ -4294,19 +4294,19 @@ Please expand the section below to see the DQOps command-line examples to run or
         providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=monthly_partition_sql_condition_failed_on_column --enable-warning
+        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=monthly_partition_sql_condition_failed_on_column --enable-warning
         ```
 
         You can also use patterns to activate the check on all matching tables and columns.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_partition_sql_condition_failed_on_column --enable-warning
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=monthly_partition_sql_condition_failed_on_column --enable-warning
         ```
         
         Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_partition_sql_condition_failed_on_column --enable-warning
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=monthly_partition_sql_condition_failed_on_column --enable-warning
                             -Wmax_count=value
         ```
 
@@ -4317,19 +4317,19 @@ Please expand the section below to see the DQOps command-line examples to run or
         providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_name.table_name  -col=column_name-ch=monthly_partition_sql_condition_failed_on_column --enable-error
+        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=monthly_partition_sql_condition_failed_on_column --enable-error
         ```
 
         You can also use patterns to activate the check on all matching tables and columns.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_partition_sql_condition_failed_on_column --enable-error
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=monthly_partition_sql_condition_failed_on_column --enable-error
         ```
         
         Additional rule parameters are passed using the *-Erule_parameter_name=value*.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_*  -col=column_name-ch=monthly_partition_sql_condition_failed_on_column --enable-error
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=monthly_partition_sql_condition_failed_on_column --enable-error
                             -Emax_count=value
         ```
 
@@ -4353,7 +4353,7 @@ Please expand the section below to see the DQOps command-line examples to run or
         using patterns to find tables.
 
         ```
-        dqo> check run -c=connection_name -t=schema_prefix*.fact_*  -col=column_name_*-ch=monthly_partition_sql_condition_failed_on_column
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_* -col=column_name_* -ch=monthly_partition_sql_condition_failed_on_column
         ```
 
 

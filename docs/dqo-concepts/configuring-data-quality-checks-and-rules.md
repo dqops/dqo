@@ -2,12 +2,62 @@
 Read this guide to learn now to configure data quality checks in DQOps in YAML files, and how to set up the validation rules.
 
 ## Where are the data quality checks configured?
-
 Data quality checks are configured on monitored tables and columns in
-[&lt;schema_name&gt;.&lt;table_name&gt;.dqotable.yaml](../reference/yaml/TableYaml.md) YAML files.
+the [&lt;schema_name&gt;.&lt;table_name&gt;.dqotable.yaml](../reference/yaml/TableYaml.md) YAML files.
 These files are placed in the *[$DQO_USER_HOME/sources/&lt;connection_name&gt;/](dqops-user-home-folder.md#monitored-tables)* folders
 in the `DQOps user home`.
 The role and layout of the `DQOps user home` folder is described on the [DQOps user home](dqops-user-home-folder.md) page.
+The configuration of data sources and adding table metadata is described in the previous [configuring data sources](configuring-data-sources.md) article.
+
+``` { .yaml .annotate linenums="1" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  timestamp_columns:
+    event_timestamp_column: date
+    partition_by_column: date
+  incremental_time_window:
+    daily_partitioning_recent_days: 7
+    monthly_partitioning_recent_months: 1
+  profiling_checks: # (1)!
+    ...
+  monitoring_checks: # (2)!
+    daily: # (3)!
+      ...
+    monthly: # (4)!
+      ...
+  partitioned_checks: # (5)!
+    daily: # (6)!
+      ...
+    monthly: # (7)!
+      ...
+```
+
+1.  The node where [profiling checks](definition-of-data-quality-checks/data-profiling-checks.md) are configured at a table level.
+2.  The node where [monitoring checks](definition-of-data-quality-checks/data-observability-monitoring-checks.md) are configured at a table level.
+3.  The node where daily [monitoring checks](definition-of-data-quality-checks/data-observability-monitoring-checks.md) are configured at a table level.
+4.  The node where monthly [monitoring checks](definition-of-data-quality-checks/data-observability-monitoring-checks.md) are configured at a table level.
+5.  The node where [partitioned checks](definition-of-data-quality-checks/partition-checks.md) are configured at a table level.
+6.  The node where daily [partitioned checks](definition-of-data-quality-checks/partition-checks.md) are configured at a table level.
+7.  The node where monthly [partitioned checks](definition-of-data-quality-checks/partition-checks.md) are configured at a table level.
+
+
+### **Table-level configuration elements**
+The nodes where the table-level data quality checks are configured in the *.dqotable.yaml* file are described in the table below.
+
+??? note "Please expand this section to see the description of all *.dqotable.yaml* file nodes"
+
+    | Line | Element&nbsp;path&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  | Description                                                                                                                                                                                                                         | Default value |
+    |------|--------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------|
+    | 11   | `spec.profiling_checks`                                                                                | The node where [profiling checks](definition-of-data-quality-checks/data-profiling-checks.md) are configured on a table level.                                                                                                                          |               |
+    | 13   | `spec.monitoring_checks`                                                                               | The node where [monitoring checks](definition-of-data-quality-checks/data-observability-monitoring-checks.md) are configured at a table level.                                                                                                                       |               |
+    | 14   | `spec.monitoring_checks.daily`                                                                         | The node daily [monitoring checks](definition-of-data-quality-checks/data-observability-monitoring-checks.md) are configured at a table level.                                                                                                                       |               |
+    | 16   | `spec.monitoring_checks.monthly`                                                                       | The node monthly [monitoring checks](definition-of-data-quality-checks/data-observability-monitoring-checks.md) are configured at a table level.                                                                                                                     |               |
+    | 18   | `spec.partitioned_checks`                                                                              | The node where [partitioned checks](definition-of-data-quality-checks/partition-checks.md) are configured at a table level.                                                                                                                        |               |
+    | 19   | `spec.partitioned_checks.daily`                                                                        | The node where daily [partitioned checks](definition-of-data-quality-checks/partition-checks.md) are configured at a table level.                                                                                                                  |               |
+    | 21   | `spec.partitioned_checks.monthly`                                                                      | The node where monthly [partitioned checks](definition-of-data-quality-checks/partition-checks.md) are configured at a table level.                                                                                                                |               |
+
 
 ## Configuring table-level checks
 The data quality checks can be configured both at a table level and at a column level, depending on the type of the check.
@@ -308,48 +358,8 @@ when no parameters are specified.
 
 ## Configuring columns
 The list of columns is stored in the `spec.columns` node in the *.dqotable.yaml* file.
-The `spec.columns` node is a dictionary of [column specifications](../reference/yaml/TableYaml.md#columnspec),
-the keys are the column names.
-
-Columns are added to the *.dqotable.yaml* when a table's metadata is imported into DQOps.
-
-### **Column schema** 
-The following example shows a *.dqotable.yaml* file with two columns.
-
-``` { .yaml .annotate linenums="1" hl_lines="6 10" }
-# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
-apiVersion: dqo/v1
-kind: table
-spec:
-  columns: # (1)!
-    cumulative_confirmed: # (2)!
-      type_snapshot: # (3)!
-        column_type: INT64 # (4)!
-        nullable: true
-    date:
-      type_snapshot:
-        column_type: DATE
-        nullable: true
-```
-
-1.  The column dictionary node. The nodes below it are the column names.
-2.  The configuration and captured metadata of the first column *cumulative_confirmed*.
-3.  Data type snapshot contains the last imported physical data type of the column. DQOps uses these data types
-    to decide if some data type specific data quality checks could be activated on the column.
-4.  The data type of the column, it is a physical data type introspected from the monitored table.
-
-The node for each column contains a [type snapshot](../reference/yaml/TableYaml.md#columntypesnapshotspec) object
-that is used by DQOps in the following cases:
-
-- The default [data quality checks](#default-data-quality-checks) are activated depending on the column's data type.
-  Numeric anomaly checks are activated only on numeric columns such as the *cumulative_confirmed* column in the example above.
-
-- The data quality [sensors](definition-of-data-quality-sensors.md) may use the column's data type to decide if an additional type casting
-  must be generated in the SQL query that will capture the metrics for the data quality check.
-
-DQOps does not require that each column has the `type_snapshot` node defined. All the data quality checks will work
-without knowing the column's data type.
-
+The [configuration of the column metadata](configuring-data-sources.md#configuring-columns) is described 
+in the configuration of the data sources.
 
 ### **Column profiling checks**
 [Profiling checks](definition-of-data-quality-checks/data-profiling-checks.md) are configured on columns the same way as on tables.
@@ -474,114 +484,41 @@ spec:
 1.  The selection of the column that will be used for date partitioning in the **GROUP BY** SQL clause.
 2.  The container of the column-level [partitioned checks](definition-of-data-quality-checks/partition-checks.md).
 
+## Activating multiple checks at once
+DQOps supports also alternative methods of activating data quality checks, designed to configure thousands of checks at once,
+by turning on data quality checks using filters for target tables, columns, and the column's data type.
 
-### **Calculated columns**
-DQOps goes beyond monitoring columns that are already present in the table.
-Quite often, the values that will be monitored must be first extracted from complex text columns.
+### **Activating multiple checks with DQOps shell**
+The [`dqo check activate`](../command-line-interface/check.md#dqo-check-activate) command supports activating multiple checks
+from the [DQOps shell](command-line-interface.md). 
+Ready-to-use command examples for activating data quality checks are provided in the [documentation of data quality checks](../checks/index.md).
 
-Let's take an example of a table that contains just one column, named *message*.
-Each *message* column stores a single line of a HL7 message.
+The following example activates the [daily_row_count](../checks/table/volume/row-count.md#daily-row-count) check on
+all fact table, raising a *warning* severity issue when the table has less than 10000 rows.
+The `-Wrule_parameter_name=` parameters support passing parameters to the [data quality rules](definition-of-data-quality-rules.md).
 
-``` asc
-EVN|A01|198808181123
+``` { .asc }
+dqo> check activate -c=connection_name -t=public.fact_* -ch=daily_row_count --enable-warning -Wmin_count=10000
 ```
 
-We want to analyze a table that contains HL7 messages, verifying that the trigger event type is
-one of accepted values, 'A01' and 'A02' in this example.
+The next example activates the [daily_nulls_percent](../checks/column/nulls/nulls-percent.md#daily-nulls-percent) check
+to measure that the columns that match the *\*_id* name pattern contain only non-null values, counting the percentage of null values,
+and raising a data quality issue when the percentage is above 0%.
 
-Calculated columns are defined in the *.dqotable.yaml* file also in the `spec.columns` section.
-The column name becomes a virtual column name. Data quality checks may be applied to this virtual column.
-The following example shows a *event_type_code* virtual column that extracts the second element from
-the message lines that are the 'EVN' event messages.
-
-``` { .yaml .annotate linenums="1" hl_lines="10 14" }
-# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
-apiVersion: dqo/v1
-kind: table
-spec:
-  columns:
-    message: # (1)!
-      type_snapshot:
-        column_type: STRING
-        nullable: true
-    event_type_code: # (2)!
-      type_snapshot:
-        column_type: STRING # (3)!
-        nullable: true
-      sql_expression: "CASE WHEN SPLIT({alias}.message, '|')[0] = 'EVN' THEN SPLIT({alias}.message, '|')[1] ELSE NULL END" # (4)!
-      monitoring_checks:
-        daily:
-          strings:
-            daily_text_found_in_set_percent:
-              parameters:
-                expected_values:
-                  - "A01" # (5)!
-                  - "A02"
-              error:
-                min_percent: 100
+``` { .asc }
+dqo> check activate -c=connection_name -t=public.fact_* -ch=daily_nulls_percent -col=*_id --enable-warning -Wmax_percent=0
 ```
 
-1.  The *message* column that contains one line of a HL7 message.
-2.  The name of the virtual (calculated) column that was created.
-3.  The data type of the calculated column. It is not required to configure it, but the data quality checks may use it as a hint
-    to avoid additional type casting.
-4.  The SQL expression using the SQL grammar of the monitored data source that extracts the value of a calculated column.
-    The `{alias}.message` expression references the *message* column from the monitored source. DQOps will replace the `{alias}`
-    token with the table alias used in the SQL query that is generated from the sensor's template.
-5.  We are validating that the column contains a 'A01' value.
+Configuring data quality checks to raise *error* severity issues requires slightly different parameters, shown in the example below.
 
-The calculated column is defined using the SQL grammar of the monitored data source
-The `sql_expression` field must contain an SQL extracts the value of a calculated column.
-
-The `{alias}.message` expression references the *message* column from the monitored source. DQOps will replace the `{alias}`
-token with the table alias used in the SQL query that is generated from the sensor's template.
-
-This example also shows that the `type_snapshot.column_type` value is set to a result data type of the expression.
-Setting the data type is not required to run checks, but DQOps may use it as a hint to avoid additional type casting.
-
-
-### **Transforming column values**
-The tables found in the data landing zones are often CSV files with all columns defined as a character data type.
-These columns must be cast to a correct data type before they could be used to perform some kind of data transformations.
-
-Let's assume that the monitored table is an external table, backed by the following CSV file.
-
-```
-date,message
-2023-11-06,Hello world
+``` { .asc }
+dqo> check activate -c=connection_name -t=public.fact_* -ch=daily_nulls_percent -col=*_id --enable-error -Emax_percent=0
 ```
 
-The *date* column contains a text value that is a valid ISO 8601 date.
-We want to replace all usages of the column reference with an SQL expression that will cast the column's value to a DATE.
-
-When the *date* column is cast to a *DATE* type, we can use it as a partitioning column for partitioned checks
-or run date specific data quality checks such as 
-the [daily-date-values-in-future-percent](../checks/column/datetime/date-values-in-future-percent.md#daily-date-values-in-future-percent)
-check that detects if any dates are in the future.
-
-The next example shows how to apply additional transformations such as type casting on a column that is present in the table.
-
-``` { .yaml .annotate linenums="1" hl_lines="6 8 10" }
-# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
-apiVersion: dqo/v1
-kind: table
-spec:
-  columns:
-    date: # (1)!
-      type_snapshot:
-        column_type: DATE # (2)!
-        nullable: true
-      sql_expression: "CAST({alias}.{column} AS DATE)" # (3)!
-```
-
-1.  A column that is already present in the table, but we want to apply a transformation.
-2.  The new data type that is the result of the SQL expression.
-3.  An SQL expression that is applied on the column. DQOps will use this expression to access the column
-    instead of using the raw column value. The SQL expression uses a token `{alias}.{column}` to reference the
-    raw value of the overwritten column.
-
-The `sql_expression` parameter is an SQL expression that uses a token `{alias}.{column}` to reference the
-raw value of the overwritten column.
+### **Configuring multiple checks from UI**
+DQOps supports also using the user interface to search for target tables and columns to activate data quality checks,
+or review the configuration of rules. Follow the [managing multiple data quality checks](../working-with-dqo/activate-and-deactivate-multiple-checks.md)
+manual to see the screens.
 
 
 ## What's next
