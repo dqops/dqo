@@ -94,7 +94,7 @@ You can also run all the checks for an entire subcategory of checks using the **
 
 Access the detailed results by clicking the **Results** button. The results should be similar to the one below.
 
-![String-match-date-regex-percent check results](https://dqops.com/docs/images/examples/daily-string-match-date-regex-percent-checks-results1.png)
+![text_matching_date_pattern_percent check results](https://dqops.com/docs/images/examples/daily-string-match-date-regex-percent-checks-results1.png)
 
 Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
 The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
@@ -137,7 +137,7 @@ This dashboard allows filtering data by:
 * check name,
 * column and day of the month.
 
-![String-match-date-regex-percent results on Current column status per data quality dimension dashboard](https://dqops.com/docs/images/examples/daily-string-match-date-regex-percent-checks-results-on-kpis-dashboard.png)
+![text_matching_date_pattern_percent results on Current column status per data quality dimension dashboard](https://dqops.com/docs/images/examples/daily-string-match-date-regex-percent-checks-results-on-kpis-dashboard.png)
 
 ## Change a schedule at the connection level
 

@@ -9,11 +9,6 @@ spec:
     daily:
       availability:
         daily_table_availability:
-          comments:
-          - date: 2023-09-04T11:56:57.753
-            comment_by: user
-            comment: "In this example, we verify availability on table in database\
-              \ using simple row count."
           warning:
             max_failures: 0
           error:

@@ -4,7 +4,7 @@ This sample shows how to use data quality checks to detect the percentage of pas
 ## Overview
 
 The following example shows how you can verify that a minimum percentage of rows passed a custom SQL condition (expression)
-using DQOps platform. By using the [sql_condition_passed_percent](../../checks/table/custom_sql/sql-condition-passed-percent-on-table.md) table check, we can monitor that
+using DQOps platform. By using the [sql_condition_passed_percent_on_table](../../checks/table/custom_sql/sql-condition-passed-percent-on-table.md) check, we can monitor that
 the percentage of rows passed a custom SQL condition does not fall below the set thresholds. If it does, you will get a warning, error or fatal result.
 
 **PROBLEM**
@@ -39,7 +39,7 @@ We want to verify that the percent of rows passed a custom SQL condition (expres
 **SOLUTION**
 
 We will verify the data of `bigquery-public-data.america_health_rankings.ahr` using monitoring
-[sql_condition_passed_percent](../../checks/table/custom_sql/sql-condition-passed-percent-on-table.md) table check.
+[sql_condition_passed_percent_on_table](../../checks/table/custom_sql/sql-condition-passed-percent-on-table.md) check.
 Our goal is to verify if the percentage of rows passed a custom SQL condition does not fall below the set thresholds.
 
 In this example, we will set three minimum percentage thresholds levels for the check:
@@ -116,7 +116,7 @@ You can also run all the checks for an entire subcategory of checks using the **
 
 To access the results, click on the **Results** button.
 
-![SQL-condition-passed-percent check results](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-checks-results1.png)
+![sql_condition_passed_percent_on_table check results](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-checks-results1.png)
 
 Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
 The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
@@ -155,7 +155,7 @@ This dashboard allows filtering data by:
 * column,
 * issue severity.
     
-![SQL-condition-passed-percent results on Current validity issues on columns dashboard](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-checks-results-on-current-validity-issues-dashboard.png)
+![sql_condition_passed_percent_on_table results on Current validity issues on columns dashboard](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-checks-results-on-current-validity-issues-dashboard.png)
 
 ## Change a schedule at the connection level
 
@@ -224,7 +224,7 @@ In this example, we have set three minimum percentage thresholds levels for the 
 - error: 99.0%
 - fatal: 95.0%
 
-The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_sql_condition_passed_percent` check is configured.
+The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_sql_condition_passed_percent_on_table` check is configured.
 
 If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
@@ -314,7 +314,7 @@ threshold level set in the Fatal error (95.0%).
 
 ```
 **************************************************
-Finished executing a sensor for a check sql_condition_passed_percent_on_table on the table america_health_rankings.ahr using a sensor definition table/custom_sql/sql_condition_passed_percent, sensor result count: 1
+Finished executing a sensor for a check sql_condition_passed_percent_on_table on the table america_health_rankings.ahr using a sensor definition table/custom_sql/sql_condition_passed_percent_on_table, sensor result count: 1
 
 Results returned by the sensor:
 +----------------+------------------------+------------------------+
@@ -367,13 +367,13 @@ spec:
 ```
 
 In this example, we have demonstrated how to use DQOps to verify the validity of data in a table.
-By using the [sql_condition_passed_percent](../../checks/table/custom_sql/sql-condition-passed-percent-on-table.md) table check, we can monitor that
+By using the [sql_condition_passed_percent_on_table](../../checks/table/custom_sql/sql-condition-passed-percent-on-table.md) check, we can monitor that
 the percentage of rows passed a custom SQL condition does not fall below the set thresholds. If it does, you will get a warning, error or fatal result.
 
 ## Next steps
 
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../dqops-installation/install-dqops-using-pip.md) or [run DQOps as a Docker container](../../dqops-installation/run-dqops-as-docker-container.md).
-- For details on the [sql_condition_passed_percent check used in this example, go to the check details section](../../checks/table/custom_sql/sql-condition-passed-percent-on-table.md).
+- For details on the [sql_condition_passed_percent_on_table check used in this example, go to the check details section](../../checks/table/custom_sql/sql-condition-passed-percent-on-table.md).
 - You might be interested in another validity check that [evaluates that the percentage of strings matching the date format regex in a column does not exceed the maximum accepted percentage](./percentage-of-texts-matching-date-regex.md).
 - Would you like to add your own connection? Here you can find [information about supported databases and how to add new connection](../../data-sources/index.md).
 - The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md) can help you to calculate separate data quality KPI scores for different groups of rows.

@@ -93,7 +93,7 @@ You can also run all the checks for an entire subcategory of checks using the **
 
 Access the detailed results by clicking the **Results** button. The results should be similar to the one below.
 
-![String-valid-uuid-percent check results](https://dqops.com/docs/images/examples/daily-string-valid-uuid-percent-checks-result1.png)
+![valid_uuid_format_percent check results](https://dqops.com/docs/images/examples/daily-string-valid-uuid-percent-checks-result1.png)
 
 Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
 The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
@@ -134,7 +134,7 @@ This dashboard allows filtering data by:
 * check name,
 * issue severity.
 
-![String-valid-uuid-percent check results on Current data quality checks results dashboard](https://dqops.com/docs/images/examples/daily-string-valid-uuid-percent-checks-result-on-current-results-dashboard.png)
+![valid_uuid_format_percent check results on Current data quality checks results dashboard](https://dqops.com/docs/images/examples/daily-string-valid-uuid-percent-checks-result-on-current-results-dashboard.png)
 
 ## YAML configuration file
 

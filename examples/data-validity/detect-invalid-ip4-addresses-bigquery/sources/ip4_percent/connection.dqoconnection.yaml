@@ -9,7 +9,7 @@ spec:
     authentication_mode: google_application_credentials
   schedules:
     monitoring_daily:
-      cron_expression: 0 12 * * *
+      cron_expression: 0 12 1 * *
     monitoring_monthly:
       cron_expression: 0 12 * * *
     partitioned_daily:

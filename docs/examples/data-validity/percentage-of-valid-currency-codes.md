@@ -98,7 +98,7 @@ You can also run all the checks for an entire subcategory of checks using the **
 
 Access the detailed results by clicking the **Results** button. The results should be similar to the one below.
 
-![String-valid-currency-code-percent check results](https://dqops.com/docs/images/examples/daily-string-valid-currency-code-percent-checks-results1.png)
+![text_valid_currency_code_percent check results](https://dqops.com/docs/images/examples/daily-string-valid-currency-code-percent-checks-results1.png)
 
 Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
 The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
@@ -139,7 +139,7 @@ This dashboard allows filtering data by:
 * column,
 * issue severity.
    
-![String-valid-currency-code-percent results on History of validity issues dashboard](https://dqops.com/docs/images/examples/daily-string-valid-currency-code-percent-checks-results-on-history-of-validity-dashboard.png)
+![text_valid_currency_code_percent results on History of validity issues dashboard](https://dqops.com/docs/images/examples/daily-string-valid-currency-code-percent-checks-results-on-history-of-validity-dashboard.png)
 
 ## Change a schedule at the connection level
 

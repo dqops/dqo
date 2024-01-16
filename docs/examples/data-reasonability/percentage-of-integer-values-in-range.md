@@ -14,7 +14,7 @@ The platform analyzes more than 340 measures of behaviors, social and economic f
 Data is based on public-use data sets, such as the U.S. Census and the Centers for Disease Control and Prevention’s Behavioral Risk Factor Surveillance System (BRFSS),
 the world’s largest, annual population-based telephone survey of over 400,000 people.
 
-We want to verify the percent of values between 0 ad 100,000 in `values` column.
+We want to verify the percent of values between 0 ad 1,000,000 in `values` column.
 
 **SOLUTION**
 
@@ -37,7 +37,7 @@ If the percentage of valid values falls below 5.0%, an error alert will be trigg
 ## Data structure
 
 The following is a fragment of the `bigquery-public-data.america_health_rankings.ahr` dataset. Some columns were omitted for clarity.  
-The `value` column of interest contains values in range between 0 and 100,000.
+The `value` column of interest contains values in range between 0 and 1,000,000.
 
 | edition | report_type             | measure_name | state_name    | subpopulation | value  |
 |:--------|:------------------------|:-------------|:--------------|:--------------|:-------|
@@ -224,7 +224,7 @@ check run
 ```
 
 Review the results which should be similar to the one below.
-The percentage of values between 1 and 100,000 in the `value` column is less than 95% and more than 90% and the check raised an error.
+The percentage of values between 1 and 1,000,000 in the `value` column is less than 95% and more than 90% and the check raised an error.
 
 ```
 Check evaluation summary per table:
@@ -251,7 +251,7 @@ SQL to be executed on the connection:
 SELECT
     100.0 * SUM(
         CASE
-            WHEN analyzed_table.`value` >= 0.0 AND analyzed_table.`value` <= 100000.0 THEN 1
+            WHEN analyzed_table.`value` >= 0.0 AND analyzed_table.`value` <= 1000000.0 THEN 1
             ELSE 0
         END
     ) / COUNT(*) AS actual_value,

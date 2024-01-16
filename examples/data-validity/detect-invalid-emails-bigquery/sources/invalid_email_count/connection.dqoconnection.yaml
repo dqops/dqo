@@ -10,7 +10,7 @@ spec:
     quota_project_id: ""
   schedules:
     profiling:
-      cron_expression: 0 12 * * *
+      cron_expression: 0 12 1 * *
     monitoring_daily:
       cron_expression: 0 12 * * *
     monitoring_monthly:
