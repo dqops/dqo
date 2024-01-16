@@ -411,3 +411,11 @@ The default configuration files are listed below.
 | *[defaultchecks.dqochecks.yaml](../reference/yaml/DefaultObservabilityChecksYaml.md)*         | The configuration of the default checks that are activated on imported tables and columns to detect common issues and observe the data source.                                                                                                                                                                                                                       |
 | *[defaultnotifications.dqonotifications.yaml](../reference/yaml/DefaultNotificationsYaml.md)* | The configuration of the webhooks where the [notification of incidents](../integrations/webhooks/index.md) are POST'ed when data quality incidents are created or reassigned.                                                                                                                                                                                        |                                   
 | *[defaultschedules.dqoschedules.yaml](../reference/yaml/DefaultSchedulesYaml.md)*             | The default configuration of CRON schedules for running data quality checks in regular intervals. <br/> **NOTE: The CRON schedules defined in this file are copied to the *connection.dqoconnection.yaml* file when a new connection is imported in DQOps. Changes to this file will not change the schedules of running checks for already imported data sources.** |
+
+
+## What's next
+- Learn [how the data quality results are stored](data-storage-of-data-quality-results.md) as Parquet files in the *.data* folder.
+- Look at the architecture diagrams showing [how DQOps runs data quality checks](architecture/data-quality-check-execution-flow.md)
+  to understand how DQOps uses all its configuration files.
+- Review the [DQOps architecture diagrams](architecture/dqops-architecture.md) to understand also deployment options,
+  and how a local DQOps instance synchronizes the files with the DQOps Cloud.
