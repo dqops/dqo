@@ -123,7 +123,7 @@ to see the full list of supported targeting filters.
 | `--category`   | The name of the category of checks to run.                                                                         | --category=nulls                                                                              |
 
 
-## Running table and column checks
+## Targeting columns
 The following *.dqotable.yaml* example shows a column on which we want to run all the data quality checks.
 
 ``` { .yaml .annotate linenums="1" hl_lines="12-28" }
@@ -515,6 +515,90 @@ dqo> check run --connection=sales-dwh --full-table-name=public.fact_sales --chec
 ```
 
 1.  The check category filter.
+
+
+## Running checks from external code
+Data quality checks can be also executed from external tools, data pipelines or Python scripts.
+
+### **DQOps Python client**
+The [**dqops** PyPi package](../dqops-installation/install-dqops-using-pip.md) contains a [DQOps REST API Python client](../client/index.md)
+for running data quality checks, and for performing all operations that available in the [DQOps user interface](dqops-user-interface-overview.md).
+The DQOps client could be used inside data pipelines or data preparation code to verify the quality of tables.
+
+If you want to connect to a local DQOps instance from your data pipeline code, you can use
+the unauthenticated client. First, create the client object.
+
+``` { .python linenums="1" }
+from dqops import client
+
+dqops_client = client.Client(base_url="http://localhost:8888")
+```
+
+Alternatively, if you are connecting to production instance of DQOps that has authentication
+enabled, you have to open the user's profile screen in DQOps and generate your DQOps API Key.
+Then take the key and use it as the token, when creating an `AuthenticatedClient` instead.
+
+``` { .python linenums="1" }
+from dqops import client
+
+dqops_client = client.AuthenticatedClient(base_url="http://localhost:8888", token="Your DQO API Key")
+```
+
+Now you can call operations on DQOps. The following code shows how to execute data quality checks
+on data sources that are already registered in DQOps.
+
+``` { .python linenums="1" }
+from dqops.client.api.jobs import run_checks
+from dqops.client.models import CheckSearchFilters, \
+                              RunChecksParameters
+
+
+request_body = RunChecksParameters(
+  check_search_filters=CheckSearchFilters(
+      column='sample_column',
+      column_data_type='string',
+      connection='sample_connection',
+      full_table_name='sample_schema.sample_table',
+      enabled=True
+  )
+)
+
+check_results = run_checks.sync(
+  client=dqops_client,
+  json_body=request_body
+)
+
+```
+
+The [`run_checks`](../client/operations/jobs.md#run_checks) operation returns a summary of executed data quality checks, and the highest
+data quality issue severity level. In the following example, the most severe issue was at an **error** severity level.
+
+``` { .json linenums="1" }
+{
+  "jobId" : {
+    "jobId" : 123456789,
+    "createdAt" : "2023-10-11T13:42:00Z"
+  },
+  "result" : {
+    "highest_severity" : "error",
+    "executed_checks" : 10,
+    "valid_results" : 7,
+    "warnings" : 1,
+    "errors" : 2,
+    "fatals" : 0,
+    "execution_errors" : 0
+  },
+  "status" : "succeeded"
+}
+```
+
+Learn more about the DQOps Python client in the [DQOps REST API client](../client/index.md) reference
+documentation that shows Python code examples for every operation supported by the client.
+
+### **Running checks from bash**
+Look at the example of [running data quality checks from bash](command-line-interface.md#integrating-dqops-into-shell-scripts)
+to learn how to run the [`dqo check run`](../command-line-interface/check.md#dqo-check-run) command-line command
+to run data quality checks, and validate the highest severity level of detected data quality issues.
 
 
 ## What's next
