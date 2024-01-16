@@ -18,7 +18,7 @@ Checks the metadata of the monitored table and verifies if the column exists.
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_column_exists|profiling| |Completeness|[column_exists](../../../reference/sensors/column/schema-column-sensors.md#column-exists)|[equals_1](../../../reference/rules/Comparison.md#equals-1)|
+|<span class="no-wrap-code">`profile_column_exists`</span>|profiling| |Completeness|[*column_exists*](../../../reference/sensors/column/schema-column-sensors.md#column-exists)|[*equals_1*](../../../reference/rules/Comparison.md#equals-1)|
 
 **Command-line examples**
 
@@ -123,7 +123,7 @@ Checks the metadata of the monitored table and verifies if the column exists. St
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_column_exists|monitoring|daily|Completeness|[column_exists](../../../reference/sensors/column/schema-column-sensors.md#column-exists)|[equals_1](../../../reference/rules/Comparison.md#equals-1)|
+|<span class="no-wrap-code">`daily_column_exists`</span>|monitoring|daily|Completeness|[*column_exists*](../../../reference/sensors/column/schema-column-sensors.md#column-exists)|[*equals_1*](../../../reference/rules/Comparison.md#equals-1)|
 
 **Command-line examples**
 
@@ -229,7 +229,7 @@ Checks the metadata of the monitored table and verifies if the column exists. St
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_column_exists|monitoring|monthly|Completeness|[column_exists](../../../reference/sensors/column/schema-column-sensors.md#column-exists)|[equals_1](../../../reference/rules/Comparison.md#equals-1)|
+|<span class="no-wrap-code">`monthly_column_exists`</span>|monitoring|monthly|Completeness|[*column_exists*](../../../reference/sensors/column/schema-column-sensors.md#column-exists)|[*equals_1*](../../../reference/rules/Comparison.md#equals-1)|
 
 **Command-line examples**
 

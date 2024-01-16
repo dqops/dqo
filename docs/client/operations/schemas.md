@@ -17,7 +17,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_configuration_model||List[[CheckConfigurationModel](../models/common.md#checkconfigurationmodel)]|
+|<span class="no-wrap-code">`check_configuration_model`</span>||*List[[CheckConfigurationModel](../models/common.md#checkconfigurationmodel)]*|
 
 
 
@@ -26,18 +26,18 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|:material-check-bold:|
-|schema_name|Schema name|string|:material-check-bold:|
-|[time_scale](../models/common.md#checktimescale)|Check time-scale|[CheckTimeScale](../models/common.md#checktimescale)|:material-check-bold:|
-|table_name_pattern|Table name pattern|string| |
-|column_name_pattern|Column name pattern|string| |
-|column_data_type|Column data-type|string| |
-|[check_target](../models/schemas.md#checktarget)|Check target|[CheckTarget](../models/schemas.md#checktarget)| |
-|check_category|Check category|string| |
-|check_name|Check name|string| |
-|check_enabled|Check enabled|boolean| |
-|check_configured|Check configured|boolean| |
-|limit|Limit of results, the default value is 1000|long| |
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">[`time_scale`](../models/common.md#checktimescale)</span>|Check time-scale|*[CheckTimeScale](../models/common.md#checktimescale)*|:material-check-bold:|
+|<span class="no-wrap-code">`table_name_pattern`</span>|Table name pattern|*string*| |
+|<span class="no-wrap-code">`column_name_pattern`</span>|Column name pattern|*string*| |
+|<span class="no-wrap-code">`column_data_type`</span>|Column data-type|*string*| |
+|<span class="no-wrap-code">[`check_target`](../models/schemas.md#checktarget)</span>|Check target|*[CheckTarget](../models/schemas.md#checktarget)*| |
+|<span class="no-wrap-code">`check_category`</span>|Check category|*string*| |
+|<span class="no-wrap-code">`check_name`</span>|Check name|*string*| |
+|<span class="no-wrap-code">`check_enabled`</span>|Check enabled|*boolean*| |
+|<span class="no-wrap-code">`check_configured`</span>|Check configured|*boolean*| |
+|<span class="no-wrap-code">`limit`</span>|Limit of results, the default value is 1000|*long*| |
 
 
 
@@ -184,7 +184,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_template||List[[CheckTemplate](../models/common.md#checktemplate)]|
+|<span class="no-wrap-code">`check_template`</span>||*List[[CheckTemplate](../models/common.md#checktemplate)]*|
 
 
 
@@ -193,12 +193,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|:material-check-bold:|
-|schema_name|Schema name|string|:material-check-bold:|
-|[time_scale](../models/common.md#checktimescale)|Time scale|[CheckTimeScale](../models/common.md#checktimescale)|:material-check-bold:|
-|[check_target](../models/schemas.md#checktarget)|Check target|[CheckTarget](../models/schemas.md#checktarget)| |
-|check_category|Check category|string| |
-|check_name|Check name|string| |
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">[`time_scale`](../models/common.md#checktimescale)</span>|Time scale|*[CheckTimeScale](../models/common.md#checktimescale)*|:material-check-bold:|
+|<span class="no-wrap-code">[`check_target`](../models/schemas.md#checktarget)</span>|Check target|*[CheckTarget](../models/schemas.md#checktarget)*| |
+|<span class="no-wrap-code">`check_category`</span>|Check category|*string*| |
+|<span class="no-wrap-code">`check_name`</span>|Check name|*string*| |
 
 
 
@@ -339,7 +339,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_configuration_model||List[[CheckConfigurationModel](../models/common.md#checkconfigurationmodel)]|
+|<span class="no-wrap-code">`check_configuration_model`</span>||*List[[CheckConfigurationModel](../models/common.md#checkconfigurationmodel)]*|
 
 
 
@@ -348,18 +348,18 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|:material-check-bold:|
-|schema_name|Schema name|string|:material-check-bold:|
-|[time_scale](../models/common.md#checktimescale)|Check time-scale|[CheckTimeScale](../models/common.md#checktimescale)|:material-check-bold:|
-|table_name_pattern|Table name pattern|string| |
-|column_name_pattern|Column name pattern|string| |
-|column_data_type|Column data-type|string| |
-|[check_target](../models/schemas.md#checktarget)|Check target|[CheckTarget](../models/schemas.md#checktarget)| |
-|check_category|Check category|string| |
-|check_name|Check name|string| |
-|check_enabled|Check enabled|boolean| |
-|check_configured|Check configured|boolean| |
-|limit|Limit of results, the default value is 1000|long| |
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">[`time_scale`](../models/common.md#checktimescale)</span>|Check time-scale|*[CheckTimeScale](../models/common.md#checktimescale)*|:material-check-bold:|
+|<span class="no-wrap-code">`table_name_pattern`</span>|Table name pattern|*string*| |
+|<span class="no-wrap-code">`column_name_pattern`</span>|Column name pattern|*string*| |
+|<span class="no-wrap-code">`column_data_type`</span>|Column data-type|*string*| |
+|<span class="no-wrap-code">[`check_target`](../models/schemas.md#checktarget)</span>|Check target|*[CheckTarget](../models/schemas.md#checktarget)*| |
+|<span class="no-wrap-code">`check_category`</span>|Check category|*string*| |
+|<span class="no-wrap-code">`check_name`</span>|Check name|*string*| |
+|<span class="no-wrap-code">`check_enabled`</span>|Check enabled|*boolean*| |
+|<span class="no-wrap-code">`check_configured`</span>|Check configured|*boolean*| |
+|<span class="no-wrap-code">`limit`</span>|Limit of results, the default value is 1000|*long*| |
 
 
 
@@ -506,7 +506,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_template||List[[CheckTemplate](../models/common.md#checktemplate)]|
+|<span class="no-wrap-code">`check_template`</span>||*List[[CheckTemplate](../models/common.md#checktemplate)]*|
 
 
 
@@ -515,12 +515,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|:material-check-bold:|
-|schema_name|Schema name|string|:material-check-bold:|
-|[time_scale](../models/common.md#checktimescale)|Time scale|[CheckTimeScale](../models/common.md#checktimescale)|:material-check-bold:|
-|[check_target](../models/schemas.md#checktarget)|Check target|[CheckTarget](../models/schemas.md#checktarget)| |
-|check_category|Check category|string| |
-|check_name|Check name|string| |
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">[`time_scale`](../models/common.md#checktimescale)</span>|Time scale|*[CheckTimeScale](../models/common.md#checktimescale)*|:material-check-bold:|
+|<span class="no-wrap-code">[`check_target`](../models/schemas.md#checktarget)</span>|Check target|*[CheckTarget](../models/schemas.md#checktarget)*| |
+|<span class="no-wrap-code">`check_category`</span>|Check category|*string*| |
+|<span class="no-wrap-code">`check_name`</span>|Check name|*string*| |
 
 
 
@@ -661,7 +661,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_configuration_model||List[[CheckConfigurationModel](../models/common.md#checkconfigurationmodel)]|
+|<span class="no-wrap-code">`check_configuration_model`</span>||*List[[CheckConfigurationModel](../models/common.md#checkconfigurationmodel)]*|
 
 
 
@@ -670,17 +670,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|:material-check-bold:|
-|schema_name|Schema name|string|:material-check-bold:|
-|table_name_pattern|Table name pattern|string| |
-|column_name_pattern|Column name pattern|string| |
-|column_data_type|Column data-type|string| |
-|[check_target](../models/schemas.md#checktarget)|Check target|[CheckTarget](../models/schemas.md#checktarget)| |
-|check_category|Check category|string| |
-|check_name|Check name|string| |
-|check_enabled|Check enabled|boolean| |
-|check_configured|Check configured|boolean| |
-|limit|Limit of results, the default value is 1000|long| |
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`table_name_pattern`</span>|Table name pattern|*string*| |
+|<span class="no-wrap-code">`column_name_pattern`</span>|Column name pattern|*string*| |
+|<span class="no-wrap-code">`column_data_type`</span>|Column data-type|*string*| |
+|<span class="no-wrap-code">[`check_target`](../models/schemas.md#checktarget)</span>|Check target|*[CheckTarget](../models/schemas.md#checktarget)*| |
+|<span class="no-wrap-code">`check_category`</span>|Check category|*string*| |
+|<span class="no-wrap-code">`check_name`</span>|Check name|*string*| |
+|<span class="no-wrap-code">`check_enabled`</span>|Check enabled|*boolean*| |
+|<span class="no-wrap-code">`check_configured`</span>|Check configured|*boolean*| |
+|<span class="no-wrap-code">`limit`</span>|Limit of results, the default value is 1000|*long*| |
 
 
 
@@ -819,7 +819,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_template||List[[CheckTemplate](../models/common.md#checktemplate)]|
+|<span class="no-wrap-code">`check_template`</span>||*List[[CheckTemplate](../models/common.md#checktemplate)]*|
 
 
 
@@ -828,11 +828,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|:material-check-bold:|
-|schema_name|Schema name|string|:material-check-bold:|
-|[check_target](../models/schemas.md#checktarget)|Check target|[CheckTarget](../models/schemas.md#checktarget)| |
-|check_category|Check category|string| |
-|check_name|Check name|string| |
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">[`check_target`](../models/schemas.md#checktarget)</span>|Check target|*[CheckTarget](../models/schemas.md#checktarget)*| |
+|<span class="no-wrap-code">`check_category`</span>|Check category|*string*| |
+|<span class="no-wrap-code">`check_name`</span>|Check name|*string*| |
 
 
 
@@ -965,7 +965,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|schema_model||List[[SchemaModel](../models/schemas.md#schemamodel)]|
+|<span class="no-wrap-code">`schema_model`</span>||*List[[SchemaModel](../models/schemas.md#schemamodel)]*|
 
 
 
@@ -974,7 +974,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|:material-check-bold:|
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
 
 
 

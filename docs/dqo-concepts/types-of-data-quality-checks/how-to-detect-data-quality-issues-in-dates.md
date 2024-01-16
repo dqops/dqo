@@ -11,9 +11,9 @@ How to detect datetime data quality issues.
 ## List of datetime checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |
 |-------------------------|------------------------|-------------|-------|
-|[date_values_in_future_percent](../../checks/column/datetime/date-values-in-future-percent.md)|Validity|Column-level check that ensures that there are no more than a set percentage of date values in future in a monitored column.|:material-check-bold:|
-|[datetime_value_in_range_date_percent](../../checks/column/datetime/datetime-value-in-range-date-percent.md)|Validity|Column-level check that ensures that there are no more than a set percentage of date values in given range in a monitored column.|:material-check-bold:|
-|[date_match_format_percent](../../checks/column/datetime/date-match-format-percent.md)|Validity|Column level check that validates values in text columns if they are valid dates, matching one of predefined date formats. Measures the percentage of rows that match the expected date format in a column and raises an issue if not enough rows match the format. Use the default value 100.0 (percent) to verify that all values match a given date format.|:material-check-bold:|
+|[*date_values_in_future_percent*](../../checks/column/datetime/date-values-in-future-percent.md)|Validity|Column-level check that ensures that there are no more than a set percentage of date values in future in a monitored column.|:material-check-bold:|
+|[*datetime_value_in_range_date_percent*](../../checks/column/datetime/datetime-value-in-range-date-percent.md)|Validity|Column-level check that ensures that there are no more than a set percentage of date values in given range in a monitored column.|:material-check-bold:|
+|[*date_match_format_percent*](../../checks/column/datetime/date-match-format-percent.md)|Validity|Column level check that validates values in text columns if they are valid dates, matching one of predefined date formats. Measures the percentage of rows that match the expected date format in a column and raises an issue if not enough rows match the format. Use the default value 100.0 (percent) to verify that all values match a given date format.|:material-check-bold:|
 
 
 **Reference and samples**

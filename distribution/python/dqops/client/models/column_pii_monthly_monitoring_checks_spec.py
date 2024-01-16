@@ -37,8 +37,8 @@ class ColumnPiiMonthlyMonitoringChecksSpec:
             checks within this category. The keys are check names defined in the definition section. The sensor parameters
             and rules should match the type of the configured sensor and rule for the custom check.
         monthly_contains_usa_phone_percent (Union[Unset, ColumnPiiContainsUsaPhonePercentCheckSpec]):
-        monthly_contains_usa_zipcode_percent (Union[Unset, ColumnPiiContainsUsaZipcodePercentCheckSpec]):
         monthly_contains_email_percent (Union[Unset, ColumnPiiContainsEmailPercentCheckSpec]):
+        monthly_contains_usa_zipcode_percent (Union[Unset, ColumnPiiContainsUsaZipcodePercentCheckSpec]):
         monthly_contains_ip4_percent (Union[Unset, ColumnPiiContainsIp4PercentCheckSpec]):
         monthly_contains_ip6_percent (Union[Unset, ColumnPiiContainsIp6PercentCheckSpec]):
     """
@@ -49,11 +49,11 @@ class ColumnPiiMonthlyMonitoringChecksSpec:
     monthly_contains_usa_phone_percent: Union[
         Unset, "ColumnPiiContainsUsaPhonePercentCheckSpec"
     ] = UNSET
-    monthly_contains_usa_zipcode_percent: Union[
-        Unset, "ColumnPiiContainsUsaZipcodePercentCheckSpec"
-    ] = UNSET
     monthly_contains_email_percent: Union[
         Unset, "ColumnPiiContainsEmailPercentCheckSpec"
+    ] = UNSET
+    monthly_contains_usa_zipcode_percent: Union[
+        Unset, "ColumnPiiContainsUsaZipcodePercentCheckSpec"
     ] = UNSET
     monthly_contains_ip4_percent: Union[
         Unset, "ColumnPiiContainsIp4PercentCheckSpec"
@@ -74,16 +74,16 @@ class ColumnPiiMonthlyMonitoringChecksSpec:
                 self.monthly_contains_usa_phone_percent.to_dict()
             )
 
-        monthly_contains_usa_zipcode_percent: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.monthly_contains_usa_zipcode_percent, Unset):
-            monthly_contains_usa_zipcode_percent = (
-                self.monthly_contains_usa_zipcode_percent.to_dict()
-            )
-
         monthly_contains_email_percent: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.monthly_contains_email_percent, Unset):
             monthly_contains_email_percent = (
                 self.monthly_contains_email_percent.to_dict()
+            )
+
+        monthly_contains_usa_zipcode_percent: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.monthly_contains_usa_zipcode_percent, Unset):
+            monthly_contains_usa_zipcode_percent = (
+                self.monthly_contains_usa_zipcode_percent.to_dict()
             )
 
         monthly_contains_ip4_percent: Union[Unset, Dict[str, Any]] = UNSET
@@ -103,14 +103,14 @@ class ColumnPiiMonthlyMonitoringChecksSpec:
             field_dict[
                 "monthly_contains_usa_phone_percent"
             ] = monthly_contains_usa_phone_percent
-        if monthly_contains_usa_zipcode_percent is not UNSET:
-            field_dict[
-                "monthly_contains_usa_zipcode_percent"
-            ] = monthly_contains_usa_zipcode_percent
         if monthly_contains_email_percent is not UNSET:
             field_dict[
                 "monthly_contains_email_percent"
             ] = monthly_contains_email_percent
+        if monthly_contains_usa_zipcode_percent is not UNSET:
+            field_dict[
+                "monthly_contains_usa_zipcode_percent"
+            ] = monthly_contains_usa_zipcode_percent
         if monthly_contains_ip4_percent is not UNSET:
             field_dict["monthly_contains_ip4_percent"] = monthly_contains_ip4_percent
         if monthly_contains_ip6_percent is not UNSET:
@@ -164,6 +164,19 @@ class ColumnPiiMonthlyMonitoringChecksSpec:
                 )
             )
 
+        _monthly_contains_email_percent = d.pop("monthly_contains_email_percent", UNSET)
+        monthly_contains_email_percent: Union[
+            Unset, ColumnPiiContainsEmailPercentCheckSpec
+        ]
+        if isinstance(_monthly_contains_email_percent, Unset):
+            monthly_contains_email_percent = UNSET
+        else:
+            monthly_contains_email_percent = (
+                ColumnPiiContainsEmailPercentCheckSpec.from_dict(
+                    _monthly_contains_email_percent
+                )
+            )
+
         _monthly_contains_usa_zipcode_percent = d.pop(
             "monthly_contains_usa_zipcode_percent", UNSET
         )
@@ -176,19 +189,6 @@ class ColumnPiiMonthlyMonitoringChecksSpec:
             monthly_contains_usa_zipcode_percent = (
                 ColumnPiiContainsUsaZipcodePercentCheckSpec.from_dict(
                     _monthly_contains_usa_zipcode_percent
-                )
-            )
-
-        _monthly_contains_email_percent = d.pop("monthly_contains_email_percent", UNSET)
-        monthly_contains_email_percent: Union[
-            Unset, ColumnPiiContainsEmailPercentCheckSpec
-        ]
-        if isinstance(_monthly_contains_email_percent, Unset):
-            monthly_contains_email_percent = UNSET
-        else:
-            monthly_contains_email_percent = (
-                ColumnPiiContainsEmailPercentCheckSpec.from_dict(
-                    _monthly_contains_email_percent
                 )
             )
 
@@ -217,8 +217,8 @@ class ColumnPiiMonthlyMonitoringChecksSpec:
         column_pii_monthly_monitoring_checks_spec = cls(
             custom_checks=custom_checks,
             monthly_contains_usa_phone_percent=monthly_contains_usa_phone_percent,
-            monthly_contains_usa_zipcode_percent=monthly_contains_usa_zipcode_percent,
             monthly_contains_email_percent=monthly_contains_email_percent,
+            monthly_contains_usa_zipcode_percent=monthly_contains_usa_zipcode_percent,
             monthly_contains_ip4_percent=monthly_contains_ip4_percent,
             monthly_contains_ip6_percent=monthly_contains_ip6_percent,
         )

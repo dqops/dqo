@@ -360,7 +360,7 @@ public class DocsModelLinkageServiceImpl implements DocsModelLinkageService {
         String fileName = splitName[splitName.length - 1];
 
         splitName[1] = String.join("-", category, target, "sensors");
-        splitName[splitName.length - 1] = "#" + fileName.replace("_", "-");
+        splitName[splitName.length - 1] = "#" + fileName.replace("_", "-").toLowerCase();
         return Path.of(String.join("/", splitName));
     }
 
@@ -368,7 +368,7 @@ public class DocsModelLinkageServiceImpl implements DocsModelLinkageService {
         String[] splitName = definitionName.split("/");
 
         String fileName = splitName[splitName.length - 1];
-        splitName[splitName.length - 1] = "#" + fileName.replace("_", "-");
+        splitName[splitName.length - 1] = "#" + fileName.replace("_", "-").toLowerCase();
         return Path.of(String.join("/", splitName));
     }
 }

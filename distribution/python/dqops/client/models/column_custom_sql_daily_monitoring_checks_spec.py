@@ -12,8 +12,8 @@ if TYPE_CHECKING:
     from ..models.column_sql_aggregate_expression_check_spec import (
         ColumnSqlAggregateExpressionCheckSpec,
     )
-    from ..models.column_sql_condition_failed_count_check_spec import (
-        ColumnSqlConditionFailedCountCheckSpec,
+    from ..models.column_sql_condition_failed_check_spec import (
+        ColumnSqlConditionFailedCheckSpec,
     )
     from ..models.column_sql_condition_passed_percent_check_spec import (
         ColumnSqlConditionPassedPercentCheckSpec,
@@ -30,19 +30,19 @@ class ColumnCustomSqlDailyMonitoringChecksSpec:
         custom_checks (Union[Unset, ColumnCustomSqlDailyMonitoringChecksSpecCustomChecks]): Dictionary of additional
             custom checks within this category. The keys are check names defined in the definition section. The sensor
             parameters and rules should match the type of the configured sensor and rule for the custom check.
+        daily_sql_condition_failed_on_column (Union[Unset, ColumnSqlConditionFailedCheckSpec]):
         daily_sql_condition_passed_percent_on_column (Union[Unset, ColumnSqlConditionPassedPercentCheckSpec]):
-        daily_sql_condition_failed_count_on_column (Union[Unset, ColumnSqlConditionFailedCountCheckSpec]):
         daily_sql_aggregate_expression_on_column (Union[Unset, ColumnSqlAggregateExpressionCheckSpec]):
     """
 
     custom_checks: Union[
         Unset, "ColumnCustomSqlDailyMonitoringChecksSpecCustomChecks"
     ] = UNSET
+    daily_sql_condition_failed_on_column: Union[
+        Unset, "ColumnSqlConditionFailedCheckSpec"
+    ] = UNSET
     daily_sql_condition_passed_percent_on_column: Union[
         Unset, "ColumnSqlConditionPassedPercentCheckSpec"
-    ] = UNSET
-    daily_sql_condition_failed_count_on_column: Union[
-        Unset, "ColumnSqlConditionFailedCountCheckSpec"
     ] = UNSET
     daily_sql_aggregate_expression_on_column: Union[
         Unset, "ColumnSqlAggregateExpressionCheckSpec"
@@ -54,18 +54,18 @@ class ColumnCustomSqlDailyMonitoringChecksSpec:
         if not isinstance(self.custom_checks, Unset):
             custom_checks = self.custom_checks.to_dict()
 
+        daily_sql_condition_failed_on_column: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_sql_condition_failed_on_column, Unset):
+            daily_sql_condition_failed_on_column = (
+                self.daily_sql_condition_failed_on_column.to_dict()
+            )
+
         daily_sql_condition_passed_percent_on_column: Union[
             Unset, Dict[str, Any]
         ] = UNSET
         if not isinstance(self.daily_sql_condition_passed_percent_on_column, Unset):
             daily_sql_condition_passed_percent_on_column = (
                 self.daily_sql_condition_passed_percent_on_column.to_dict()
-            )
-
-        daily_sql_condition_failed_count_on_column: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_sql_condition_failed_count_on_column, Unset):
-            daily_sql_condition_failed_count_on_column = (
-                self.daily_sql_condition_failed_count_on_column.to_dict()
             )
 
         daily_sql_aggregate_expression_on_column: Union[Unset, Dict[str, Any]] = UNSET
@@ -79,14 +79,14 @@ class ColumnCustomSqlDailyMonitoringChecksSpec:
         field_dict.update({})
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
+        if daily_sql_condition_failed_on_column is not UNSET:
+            field_dict[
+                "daily_sql_condition_failed_on_column"
+            ] = daily_sql_condition_failed_on_column
         if daily_sql_condition_passed_percent_on_column is not UNSET:
             field_dict[
                 "daily_sql_condition_passed_percent_on_column"
             ] = daily_sql_condition_passed_percent_on_column
-        if daily_sql_condition_failed_count_on_column is not UNSET:
-            field_dict[
-                "daily_sql_condition_failed_count_on_column"
-            ] = daily_sql_condition_failed_count_on_column
         if daily_sql_aggregate_expression_on_column is not UNSET:
             field_dict[
                 "daily_sql_aggregate_expression_on_column"
@@ -102,8 +102,8 @@ class ColumnCustomSqlDailyMonitoringChecksSpec:
         from ..models.column_sql_aggregate_expression_check_spec import (
             ColumnSqlAggregateExpressionCheckSpec,
         )
-        from ..models.column_sql_condition_failed_count_check_spec import (
-            ColumnSqlConditionFailedCountCheckSpec,
+        from ..models.column_sql_condition_failed_check_spec import (
+            ColumnSqlConditionFailedCheckSpec,
         )
         from ..models.column_sql_condition_passed_percent_check_spec import (
             ColumnSqlConditionPassedPercentCheckSpec,
@@ -123,6 +123,21 @@ class ColumnCustomSqlDailyMonitoringChecksSpec:
                 )
             )
 
+        _daily_sql_condition_failed_on_column = d.pop(
+            "daily_sql_condition_failed_on_column", UNSET
+        )
+        daily_sql_condition_failed_on_column: Union[
+            Unset, ColumnSqlConditionFailedCheckSpec
+        ]
+        if isinstance(_daily_sql_condition_failed_on_column, Unset):
+            daily_sql_condition_failed_on_column = UNSET
+        else:
+            daily_sql_condition_failed_on_column = (
+                ColumnSqlConditionFailedCheckSpec.from_dict(
+                    _daily_sql_condition_failed_on_column
+                )
+            )
+
         _daily_sql_condition_passed_percent_on_column = d.pop(
             "daily_sql_condition_passed_percent_on_column", UNSET
         )
@@ -135,21 +150,6 @@ class ColumnCustomSqlDailyMonitoringChecksSpec:
             daily_sql_condition_passed_percent_on_column = (
                 ColumnSqlConditionPassedPercentCheckSpec.from_dict(
                     _daily_sql_condition_passed_percent_on_column
-                )
-            )
-
-        _daily_sql_condition_failed_count_on_column = d.pop(
-            "daily_sql_condition_failed_count_on_column", UNSET
-        )
-        daily_sql_condition_failed_count_on_column: Union[
-            Unset, ColumnSqlConditionFailedCountCheckSpec
-        ]
-        if isinstance(_daily_sql_condition_failed_count_on_column, Unset):
-            daily_sql_condition_failed_count_on_column = UNSET
-        else:
-            daily_sql_condition_failed_count_on_column = (
-                ColumnSqlConditionFailedCountCheckSpec.from_dict(
-                    _daily_sql_condition_failed_count_on_column
                 )
             )
 
@@ -170,8 +170,8 @@ class ColumnCustomSqlDailyMonitoringChecksSpec:
 
         column_custom_sql_daily_monitoring_checks_spec = cls(
             custom_checks=custom_checks,
+            daily_sql_condition_failed_on_column=daily_sql_condition_failed_on_column,
             daily_sql_condition_passed_percent_on_column=daily_sql_condition_passed_percent_on_column,
-            daily_sql_condition_failed_count_on_column=daily_sql_condition_failed_count_on_column,
             daily_sql_aggregate_expression_on_column=daily_sql_aggregate_expression_on_column,
         )
 

@@ -17,7 +17,7 @@ The check counts the number of text values in the column that is above the lengt
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_text_length_above_max_length|profiling| |Reasonableness|[text_length_above_max_length_count](../../../reference/sensors/column/text-column-sensors.md#text-length-above-max-length-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`profile_text_length_above_max_length`</span>|profiling| |Reasonableness|[*text_length_above_max_length_count*](../../../reference/sensors/column/text-column-sensors.md#text-length-above-max-length-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -1384,7 +1384,7 @@ The check counts the number of text values in the column that is above the lengt
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_text_length_above_max_length|monitoring|daily|Reasonableness|[text_length_above_max_length_count](../../../reference/sensors/column/text-column-sensors.md#text-length-above-max-length-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`daily_text_length_above_max_length`</span>|monitoring|daily|Reasonableness|[*text_length_above_max_length_count*](../../../reference/sensors/column/text-column-sensors.md#text-length-above-max-length-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -2753,7 +2753,7 @@ The check counts the number of text values in the column that is above the lengt
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_text_length_above_max_length|monitoring|monthly|Reasonableness|[text_length_above_max_length_count](../../../reference/sensors/column/text-column-sensors.md#text-length-above-max-length-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`monthly_text_length_above_max_length`</span>|monitoring|monthly|Reasonableness|[*text_length_above_max_length_count*](../../../reference/sensors/column/text-column-sensors.md#text-length-above-max-length-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -4122,7 +4122,7 @@ The check counts the number of text values in the column that is above the lengt
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_text_length_above_max_length|partitioned|daily|Reasonableness|[text_length_above_max_length_count](../../../reference/sensors/column/text-column-sensors.md#text-length-above-max-length-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`daily_partition_text_length_above_max_length`</span>|partitioned|daily|Reasonableness|[*text_length_above_max_length_count*](../../../reference/sensors/column/text-column-sensors.md#text-length-above-max-length-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -5513,7 +5513,7 @@ The check counts the number of text values in the column that is above the lengt
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_text_length_above_max_length|partitioned|monthly|Reasonableness|[text_length_above_max_length_count](../../../reference/sensors/column/text-column-sensors.md#text-length-above-max-length-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`monthly_partition_text_length_above_max_length`</span>|partitioned|monthly|Reasonableness|[*text_length_above_max_length_count*](../../../reference/sensors/column/text-column-sensors.md#text-length-above-max-length-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 

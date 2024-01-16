@@ -17,7 +17,7 @@ Measures the percent of null values in a column. Raises a data quality exception
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_nulls_percent|profiling| |Completeness|[null_percent](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`profile_nulls_percent`</span>|profiling| |Completeness|[*null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -1204,7 +1204,7 @@ Measures the percent of null values in a column. Raises a data quality exception
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_nulls_percent|monitoring|daily|Completeness|[null_percent](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`daily_nulls_percent`</span>|monitoring|daily|Completeness|[*null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -2393,7 +2393,7 @@ Measures the percent of null values in a column. Raises a data quality exception
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_nulls_percent|monitoring|monthly|Completeness|[null_percent](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`monthly_nulls_percent`</span>|monitoring|monthly|Completeness|[*null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -3582,7 +3582,7 @@ Measures the percent of null values in a column. Raises a data quality exception
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_nulls_percent|partitioned|daily|Completeness|[null_percent](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`daily_partition_nulls_percent`</span>|partitioned|daily|Completeness|[*null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -4793,7 +4793,7 @@ Measures the percent of null values in a column. Raises a data quality exception
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_nulls_percent|partitioned|monthly|Completeness|[null_percent](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`monthly_partition_nulls_percent`</span>|partitioned|monthly|Completeness|[*null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 

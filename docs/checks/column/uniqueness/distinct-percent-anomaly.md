@@ -17,7 +17,7 @@ Verifies that the distinct percent in a monitored column is within a two-tailed 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_distinct_percent_anomaly|profiling| |Consistency|[distinct_percent](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[anomaly_stationary_percentile_moving_average](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|
+|<span class="no-wrap-code">`profile_distinct_percent_anomaly`</span>|profiling| |Consistency|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*anomaly_stationary_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|
 
 **Command-line examples**
 
@@ -1028,7 +1028,7 @@ Verifies that the distinct percent in a monitored column is within a two-tailed 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_distinct_percent_anomaly|monitoring|daily|Consistency|[distinct_percent](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[anomaly_stationary_percentile_moving_average](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|
+|<span class="no-wrap-code">`daily_distinct_percent_anomaly`</span>|monitoring|daily|Consistency|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*anomaly_stationary_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|
 
 **Command-line examples**
 
@@ -2041,7 +2041,7 @@ Verifies that the distinct percent in a monitored column is within a two-tailed 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_distinct_percent_anomaly|partitioned|daily|Consistency|[distinct_percent](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[anomaly_stationary_percentile_moving_average](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|
+|<span class="no-wrap-code">`daily_partition_distinct_percent_anomaly`</span>|partitioned|daily|Consistency|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*anomaly_stationary_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|
 
 **Command-line examples**
 

@@ -141,12 +141,12 @@ public class GeneratePythonDocumentationPostProcessor {
                 String modelOccurrence = modelOccurrences.stream().findFirst().get();
                 modelDestination = baseModelDestination
                         .resolve(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, modelOccurrence)
-                                + ".md" + "#" + modelName);
+                                + ".md" + "#" + modelName.toLowerCase());
             } else {
                 // Model is used in several places.
                 modelDestination = baseModelDestination
                         .resolve(ModelsDocumentationModelFactoryImpl.SHARED_MODELS_IDENTIFIER
-                                + ".md" + "#" + modelName);
+                                + ".md" + "#" + modelName.toLowerCase());
             }
 
             linkageStore.put(modelName, modelDestination);

@@ -24,23 +24,27 @@ class ColumnAnomalyMonthlyMonitoringChecksSpec:
         custom_checks (Union[Unset, ColumnAnomalyMonthlyMonitoringChecksSpecCustomChecks]): Dictionary of additional
             custom checks within this category. The keys are check names defined in the definition section. The sensor
             parameters and rules should match the type of the configured sensor and rule for the custom check.
+        monthly_sum_change (Union[Unset, ColumnSumChangeCheckSpec]):
         monthly_mean_change (Union[Unset, ColumnMeanChangeCheckSpec]):
         monthly_median_change (Union[Unset, ColumnMedianChangeCheckSpec]):
-        monthly_sum_change (Union[Unset, ColumnSumChangeCheckSpec]):
     """
 
     custom_checks: Union[
         Unset, "ColumnAnomalyMonthlyMonitoringChecksSpecCustomChecks"
     ] = UNSET
+    monthly_sum_change: Union[Unset, "ColumnSumChangeCheckSpec"] = UNSET
     monthly_mean_change: Union[Unset, "ColumnMeanChangeCheckSpec"] = UNSET
     monthly_median_change: Union[Unset, "ColumnMedianChangeCheckSpec"] = UNSET
-    monthly_sum_change: Union[Unset, "ColumnSumChangeCheckSpec"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         custom_checks: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.custom_checks, Unset):
             custom_checks = self.custom_checks.to_dict()
+
+        monthly_sum_change: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.monthly_sum_change, Unset):
+            monthly_sum_change = self.monthly_sum_change.to_dict()
 
         monthly_mean_change: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.monthly_mean_change, Unset):
@@ -50,21 +54,17 @@ class ColumnAnomalyMonthlyMonitoringChecksSpec:
         if not isinstance(self.monthly_median_change, Unset):
             monthly_median_change = self.monthly_median_change.to_dict()
 
-        monthly_sum_change: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.monthly_sum_change, Unset):
-            monthly_sum_change = self.monthly_sum_change.to_dict()
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
+        if monthly_sum_change is not UNSET:
+            field_dict["monthly_sum_change"] = monthly_sum_change
         if monthly_mean_change is not UNSET:
             field_dict["monthly_mean_change"] = monthly_mean_change
         if monthly_median_change is not UNSET:
             field_dict["monthly_median_change"] = monthly_median_change
-        if monthly_sum_change is not UNSET:
-            field_dict["monthly_sum_change"] = monthly_sum_change
 
         return field_dict
 
@@ -91,6 +91,13 @@ class ColumnAnomalyMonthlyMonitoringChecksSpec:
                 )
             )
 
+        _monthly_sum_change = d.pop("monthly_sum_change", UNSET)
+        monthly_sum_change: Union[Unset, ColumnSumChangeCheckSpec]
+        if isinstance(_monthly_sum_change, Unset):
+            monthly_sum_change = UNSET
+        else:
+            monthly_sum_change = ColumnSumChangeCheckSpec.from_dict(_monthly_sum_change)
+
         _monthly_mean_change = d.pop("monthly_mean_change", UNSET)
         monthly_mean_change: Union[Unset, ColumnMeanChangeCheckSpec]
         if isinstance(_monthly_mean_change, Unset):
@@ -109,18 +116,11 @@ class ColumnAnomalyMonthlyMonitoringChecksSpec:
                 _monthly_median_change
             )
 
-        _monthly_sum_change = d.pop("monthly_sum_change", UNSET)
-        monthly_sum_change: Union[Unset, ColumnSumChangeCheckSpec]
-        if isinstance(_monthly_sum_change, Unset):
-            monthly_sum_change = UNSET
-        else:
-            monthly_sum_change = ColumnSumChangeCheckSpec.from_dict(_monthly_sum_change)
-
         column_anomaly_monthly_monitoring_checks_spec = cls(
             custom_checks=custom_checks,
+            monthly_sum_change=monthly_sum_change,
             monthly_mean_change=monthly_mean_change,
             monthly_median_change=monthly_median_change,
-            monthly_sum_change=monthly_sum_change,
         )
 
         column_anomaly_monthly_monitoring_checks_spec.additional_properties = d

@@ -17,7 +17,7 @@ Verifies that the number of values in a column that does not match values in ano
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_lookup_key_not_found|profiling| |Integrity|[foreign_key_not_match_count](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`profile_lookup_key_not_found`</span>|profiling| |Integrity|[*foreign_key_not_match_count*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -1326,7 +1326,7 @@ Verifies that the number of values in a column that does not match values in ano
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_lookup_key_not_found|monitoring|daily|Integrity|[foreign_key_not_match_count](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`daily_lookup_key_not_found`</span>|monitoring|daily|Integrity|[*foreign_key_not_match_count*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -2637,7 +2637,7 @@ Verifies that the number of values in a column that does not match values in ano
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_lookup_key_not_found|monitoring|monthly|Integrity|[foreign_key_not_match_count](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`monthly_lookup_key_not_found`</span>|monitoring|monthly|Integrity|[*foreign_key_not_match_count*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -3948,7 +3948,7 @@ Verifies that the number of values in a column that does not match values in ano
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_lookup_key_not_found|partitioned|daily|Integrity|[foreign_key_not_match_count](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`daily_partition_lookup_key_not_found`</span>|partitioned|daily|Integrity|[*foreign_key_not_match_count*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -5281,7 +5281,7 @@ Verifies that the number of values in a column that does not match values in ano
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_lookup_key_not_found|partitioned|monthly|Integrity|[foreign_key_not_match_count](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`monthly_partition_lookup_key_not_found`</span>|partitioned|monthly|Integrity|[*foreign_key_not_match_count*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 

@@ -17,7 +17,7 @@ Verifies that the column count of the tested (parent) table matches the column c
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_column_count_match|profiling| |Accuracy|[column_count](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
+|<span class="no-wrap-code">`profile_column_count_match`</span>|profiling| |Accuracy|[*column_count*](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
 
 **Command-line examples**
 
@@ -156,7 +156,7 @@ Verifies that the column count of the tested (parent) table matches the column c
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_column_count_match|monitoring|daily|Accuracy|[column_count](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
+|<span class="no-wrap-code">`daily_column_count_match`</span>|monitoring|daily|Accuracy|[*column_count*](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
 
 **Command-line examples**
 
@@ -296,7 +296,7 @@ Verifies that the column count of the tested (parent) table matches the column c
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_column_count_match|monitoring|monthly|Accuracy|[column_count](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
+|<span class="no-wrap-code">`monthly_column_count_match`</span>|monitoring|monthly|Accuracy|[*column_count*](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
 
 **Command-line examples**
 

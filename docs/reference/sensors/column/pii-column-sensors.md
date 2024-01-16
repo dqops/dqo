@@ -13,7 +13,7 @@ The contains email percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | pii | `column/pii/contains_email_percent` | [sensors/column/pii](https://github.com/dqops/dqo/tree/develop/home/sensors/column/pii/) |
+| column | pii | <span class="no-wrap-code">`column/pii/contains_email_percent`</span> | [*sensors/column/pii*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/pii/) |
 
 
 
@@ -302,7 +302,7 @@ The contains ip4 percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | pii | `column/pii/contains_ip4_percent` | [sensors/column/pii](https://github.com/dqops/dqo/tree/develop/home/sensors/column/pii/) |
+| column | pii | <span class="no-wrap-code">`column/pii/contains_ip4_percent`</span> | [*sensors/column/pii*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/pii/) |
 
 
 
@@ -593,7 +593,7 @@ The contains ip6 percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | pii | `column/pii/contains_ip6_percent` | [sensors/column/pii](https://github.com/dqops/dqo/tree/develop/home/sensors/column/pii/) |
+| column | pii | <span class="no-wrap-code">`column/pii/contains_ip6_percent`</span> | [*sensors/column/pii*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/pii/) |
 
 
 
@@ -949,7 +949,7 @@ The contains usa phone percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | pii | `column/pii/contains_usa_phone_percent` | [sensors/column/pii](https://github.com/dqops/dqo/tree/develop/home/sensors/column/pii/) |
+| column | pii | <span class="no-wrap-code">`column/pii/contains_usa_phone_percent`</span> | [*sensors/column/pii*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/pii/) |
 
 
 
@@ -1265,7 +1265,7 @@ The contains usa zipcode percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | pii | `column/pii/contains_usa_zipcode_percent` | [sensors/column/pii](https://github.com/dqops/dqo/tree/develop/home/sensors/column/pii/) |
+| column | pii | <span class="no-wrap-code">`column/pii/contains_usa_zipcode_percent`</span> | [*sensors/column/pii*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/pii/) |
 
 
 

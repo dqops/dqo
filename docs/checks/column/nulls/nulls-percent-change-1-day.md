@@ -17,7 +17,7 @@ Verifies that the null percent value in a column changed in a fixed rate since l
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_nulls_percent_change_1_day|profiling| |Consistency|[null_percent](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[change_percent_1_day](../../../reference/rules/Change.md#change-percent-1-day)|
+|<span class="no-wrap-code">`profile_nulls_percent_change_1_day`</span>|profiling| |Consistency|[*null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[*change_percent_1_day*](../../../reference/rules/Change.md#change-percent-1-day)|
 
 **Command-line examples**
 
@@ -1210,7 +1210,7 @@ Verifies that the null percent value in a column changed in a fixed rate since t
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_nulls_percent_change_1_day|monitoring|daily|Consistency|[null_percent](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[change_percent_1_day](../../../reference/rules/Change.md#change-percent-1-day)|
+|<span class="no-wrap-code">`daily_nulls_percent_change_1_day`</span>|monitoring|daily|Consistency|[*null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[*change_percent_1_day*](../../../reference/rules/Change.md#change-percent-1-day)|
 
 **Command-line examples**
 
@@ -2405,7 +2405,7 @@ Verifies that the null percent value in a column changed in a fixed rate since t
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_nulls_percent_change_1_day|partitioned|daily|Consistency|[null_percent](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[change_percent_1_day](../../../reference/rules/Change.md#change-percent-1-day)|
+|<span class="no-wrap-code">`daily_partition_nulls_percent_change_1_day`</span>|partitioned|daily|Consistency|[*null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[*change_percent_1_day*](../../../reference/rules/Change.md#change-percent-1-day)|
 
 **Command-line examples**
 

@@ -17,7 +17,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_results_overview_data_model||List[[CheckResultsOverviewDataModel](../models/check_results_overview.md#checkresultsoverviewdatamodel)]|
+|<span class="no-wrap-code">`check_results_overview_data_model`</span>||*List[[CheckResultsOverviewDataModel](../models/check_results_overview.md#checkresultsoverviewdatamodel)]*|
 
 
 
@@ -26,13 +26,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|:material-check-bold:|
-|schema_name|Schema name|string|:material-check-bold:|
-|table_name|Table name|string|:material-check-bold:|
-|column_name|Column name|string|:material-check-bold:|
-|[time_scale](../models/common.md#checktimescale)|Time scale|[CheckTimeScale](../models/common.md#checktimescale)|:material-check-bold:|
-|category|Optional check category|string| |
-|check_name|Optional check name|string| |
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`table_name`</span>|Table name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`column_name`</span>|Column name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">[`time_scale`](../models/common.md#checktimescale)</span>|Time scale|*[CheckTimeScale](../models/common.md#checktimescale)*|:material-check-bold:|
+|<span class="no-wrap-code">`category`</span>|Optional check category|*string*| |
+|<span class="no-wrap-code">`check_name`</span>|Optional check name|*string*| |
 
 
 
@@ -198,7 +198,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_results_overview_data_model||List[[CheckResultsOverviewDataModel](../models/check_results_overview.md#checkresultsoverviewdatamodel)]|
+|<span class="no-wrap-code">`check_results_overview_data_model`</span>||*List[[CheckResultsOverviewDataModel](../models/check_results_overview.md#checkresultsoverviewdatamodel)]*|
 
 
 
@@ -207,13 +207,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|:material-check-bold:|
-|schema_name|Schema name|string|:material-check-bold:|
-|table_name|Table name|string|:material-check-bold:|
-|column_name|Column name|string|:material-check-bold:|
-|[time_scale](../models/common.md#checktimescale)|Time scale|[CheckTimeScale](../models/common.md#checktimescale)|:material-check-bold:|
-|category|Optional check category|string| |
-|check_name|Optional check name|string| |
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`table_name`</span>|Table name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`column_name`</span>|Column name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">[`time_scale`](../models/common.md#checktimescale)</span>|Time scale|*[CheckTimeScale](../models/common.md#checktimescale)*|:material-check-bold:|
+|<span class="no-wrap-code">`category`</span>|Optional check category|*string*| |
+|<span class="no-wrap-code">`check_name`</span>|Optional check name|*string*| |
 
 
 
@@ -379,7 +379,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_results_overview_data_model||List[[CheckResultsOverviewDataModel](../models/check_results_overview.md#checkresultsoverviewdatamodel)]|
+|<span class="no-wrap-code">`check_results_overview_data_model`</span>||*List[[CheckResultsOverviewDataModel](../models/check_results_overview.md#checkresultsoverviewdatamodel)]*|
 
 
 
@@ -388,12 +388,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|:material-check-bold:|
-|schema_name|Schema name|string|:material-check-bold:|
-|table_name|Table name|string|:material-check-bold:|
-|column_name|Column name|string|:material-check-bold:|
-|category|Optional check category|string| |
-|check_name|Optional check name|string| |
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`table_name`</span>|Table name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`column_name`</span>|Column name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`category`</span>|Optional check category|*string*| |
+|<span class="no-wrap-code">`check_name`</span>|Optional check name|*string*| |
 
 
 
@@ -555,7 +555,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_results_overview_data_model||List[[CheckResultsOverviewDataModel](../models/check_results_overview.md#checkresultsoverviewdatamodel)]|
+|<span class="no-wrap-code">`check_results_overview_data_model`</span>||*List[[CheckResultsOverviewDataModel](../models/check_results_overview.md#checkresultsoverviewdatamodel)]*|
 
 
 
@@ -564,12 +564,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|:material-check-bold:|
-|schema_name|Schema name|string|:material-check-bold:|
-|table_name|Table name|string|:material-check-bold:|
-|[time_scale](../models/common.md#checktimescale)|Time scale|[CheckTimeScale](../models/common.md#checktimescale)|:material-check-bold:|
-|category|Optional check category|string| |
-|check_name|Optional check name|string| |
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`table_name`</span>|Table name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">[`time_scale`](../models/common.md#checktimescale)</span>|Time scale|*[CheckTimeScale](../models/common.md#checktimescale)*|:material-check-bold:|
+|<span class="no-wrap-code">`category`</span>|Optional check category|*string*| |
+|<span class="no-wrap-code">`check_name`</span>|Optional check name|*string*| |
 
 
 
@@ -731,7 +731,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_results_overview_data_model||List[[CheckResultsOverviewDataModel](../models/check_results_overview.md#checkresultsoverviewdatamodel)]|
+|<span class="no-wrap-code">`check_results_overview_data_model`</span>||*List[[CheckResultsOverviewDataModel](../models/check_results_overview.md#checkresultsoverviewdatamodel)]*|
 
 
 
@@ -740,12 +740,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|:material-check-bold:|
-|schema_name|Schema name|string|:material-check-bold:|
-|table_name|Table name|string|:material-check-bold:|
-|[time_scale](../models/common.md#checktimescale)|Time scale|[CheckTimeScale](../models/common.md#checktimescale)|:material-check-bold:|
-|category|Optional check category|string| |
-|check_name|Optional check name|string| |
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`table_name`</span>|Table name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">[`time_scale`](../models/common.md#checktimescale)</span>|Time scale|*[CheckTimeScale](../models/common.md#checktimescale)*|:material-check-bold:|
+|<span class="no-wrap-code">`category`</span>|Optional check category|*string*| |
+|<span class="no-wrap-code">`check_name`</span>|Optional check name|*string*| |
 
 
 
@@ -907,7 +907,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_results_overview_data_model||List[[CheckResultsOverviewDataModel](../models/check_results_overview.md#checkresultsoverviewdatamodel)]|
+|<span class="no-wrap-code">`check_results_overview_data_model`</span>||*List[[CheckResultsOverviewDataModel](../models/check_results_overview.md#checkresultsoverviewdatamodel)]*|
 
 
 
@@ -916,11 +916,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|:material-check-bold:|
-|schema_name|Schema name|string|:material-check-bold:|
-|table_name|Table name|string|:material-check-bold:|
-|category|Optional check category|string| |
-|check_name|Optional check name|string| |
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`table_name`</span>|Table name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`category`</span>|Optional check category|*string*| |
+|<span class="no-wrap-code">`check_name`</span>|Optional check name|*string*| |
 
 
 

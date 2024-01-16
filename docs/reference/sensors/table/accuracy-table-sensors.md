@@ -13,14 +13,14 @@ The total row count match percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| table | accuracy | `table/accuracy/total_row_count_match_percent` | [sensors/table/accuracy](https://github.com/dqops/dqo/tree/develop/home/sensors/table/accuracy/) |
+| table | accuracy | <span class="no-wrap-code">`table/accuracy/total_row_count_match_percent`</span> | [*sensors/table/accuracy*](https://github.com/dqops/dqo/tree/develop/home/sensors/table/accuracy/) |
 
 
 **Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`referenced_table`|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|string|:material-check-bold:||
+|<span class="no-wrap-code">`referenced_table`</span>|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|*string*|:material-check-bold:||
 
 
 

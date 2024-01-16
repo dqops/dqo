@@ -14,8 +14,8 @@ class ColumnNumericNumberInRangePercentSensorParametersSpec:
     Attributes:
         filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor query. Both the table level filter and a
             sensor query filter are added, separated by an AND operator.
-        min_value (Union[Unset, float]): Minimal value range variable.
-        max_value (Union[Unset, float]): Maximal value range variable.
+        min_value (Union[Unset, float]): Minimum value for the range.
+        max_value (Union[Unset, float]): Maximum value for the range.
     """
 
     filter_: Union[Unset, str] = UNSET

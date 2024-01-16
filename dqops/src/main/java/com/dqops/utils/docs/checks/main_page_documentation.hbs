@@ -11,7 +11,7 @@
 {{#each checkGroups}}
 | Data quality check name | Check type | Description | Class |
 |-------------------------|------------|-------------|-------|
-{{#each allChecks}}|[{{checkName}}](/docs/checks/{{target}}/{{categoryName}}/{{replace primaryCheckName " " "-"}}.md#{{replace checkName "_" "-"}})|{{checkType}}|{{checkHelp}}|{{checkClass}}|
+{{#each allChecks}}|[<span class="no-wrap-code">`{{checkName}}`</span>](/docs/checks/{{target}}/{{categoryName}}/{{replace primaryCheckName " " "-"}}.md#{{replace checkName "_" "-"}})|{{checkType}}|{{checkHelp}}|*{{checkClass}}*|
 {{/each}}
 
 {{/each}}

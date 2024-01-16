@@ -17,7 +17,7 @@ Verifies that the length of a text in a column does not exceed the mean accepted
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_text_mean_length|profiling| |Reasonableness|[text_mean_length](../../../reference/sensors/column/text-column-sensors.md#text-mean-length)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`profile_text_mean_length`</span>|profiling| |Reasonableness|[*text_mean_length*](../../../reference/sensors/column/text-column-sensors.md#text-mean-length)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 
@@ -1192,7 +1192,7 @@ Verifies that the length of a text in a column does not exceed the mean accepted
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_text_mean_length|monitoring|daily|Reasonableness|[text_mean_length](../../../reference/sensors/column/text-column-sensors.md#text-mean-length)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`daily_text_mean_length`</span>|monitoring|daily|Reasonableness|[*text_mean_length*](../../../reference/sensors/column/text-column-sensors.md#text-mean-length)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 
@@ -2369,7 +2369,7 @@ Verifies that the length of a text in a column does not exceed the mean accepted
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_text_mean_length|monitoring|monthly|Reasonableness|[text_mean_length](../../../reference/sensors/column/text-column-sensors.md#text-mean-length)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`monthly_text_mean_length`</span>|monitoring|monthly|Reasonableness|[*text_mean_length*](../../../reference/sensors/column/text-column-sensors.md#text-mean-length)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 
@@ -3546,7 +3546,7 @@ Verifies that the length of a text in a column does not exceed the mean accepted
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_text_mean_length|partitioned|daily|Reasonableness|[text_mean_length](../../../reference/sensors/column/text-column-sensors.md#text-mean-length)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`daily_partition_text_mean_length`</span>|partitioned|daily|Reasonableness|[*text_mean_length*](../../../reference/sensors/column/text-column-sensors.md#text-mean-length)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 
@@ -4745,7 +4745,7 @@ Verifies that the length of a text in a column does not exceed the mean accepted
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_text_mean_length|partitioned|monthly|Reasonableness|[text_mean_length](../../../reference/sensors/column/text-column-sensors.md#text-mean-length)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`monthly_partition_text_mean_length`</span>|partitioned|monthly|Reasonableness|[*text_mean_length*](../../../reference/sensors/column/text-column-sensors.md#text-mean-length)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 

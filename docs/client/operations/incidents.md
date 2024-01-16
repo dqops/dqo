@@ -17,7 +17,7 @@ http://localhost:8888/api/incidentstat
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|incidents_per_connection_model||List[[IncidentsPerConnectionModel](../models/incidents.md#incidentsperconnectionmodel)]|
+|<span class="no-wrap-code">`incidents_per_connection_model`</span>||*List[[IncidentsPerConnectionModel](../models/incidents.md#incidentsperconnectionmodel)]*|
 
 
 
@@ -144,7 +144,7 @@ http://localhost:8888/api/incidents/{connectionName}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|incident_model||List[[IncidentModel](../models/incidents.md#incidentmodel)]|
+|<span class="no-wrap-code">`incident_model`</span>||*List[[IncidentModel](../models/incidents.md#incidentmodel)]*|
 
 
 
@@ -153,17 +153,17 @@ http://localhost:8888/api/incidents/{connectionName}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|:material-check-bold:|
-|months|Number of recent months to load, the default is 3 months|long| |
-|open|Returns open incidents, when the parameter is missing, the default value is true|boolean| |
-|acknowledged|Returns acknowledged incidents, when the parameter is missing, the default value is true|boolean| |
-|resolved|Returns resolved incidents, when the parameter is missing, the default value is false|boolean| |
-|muted|Returns muted incidents, when the parameter is missing, the default value is false|boolean| |
-|page|Page number, the first page is 1|long| |
-|limit|Page size, the default is 50 rows|long| |
-|filter|Optional full text search filter that supports *prefix, suffix* and nest*ed filter expressions|string| |
-|[order](../models/incidents.md#incidentsortorder)|Optional sort order, the default sort order is by the number of failed data quality checks|[IncidentSortOrder](../models/incidents.md#incidentsortorder)| |
-|[direction](../models/incidents.md#sortdirection)|Optional sort direction, the default sort direction is ascending|[SortDirection](../models/incidents.md#sortdirection)| |
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`months`</span>|Number of recent months to load, the default is 3 months|*long*| |
+|<span class="no-wrap-code">`open`</span>|Returns open incidents, when the parameter is missing, the default value is true|*boolean*| |
+|<span class="no-wrap-code">`acknowledged`</span>|Returns acknowledged incidents, when the parameter is missing, the default value is true|*boolean*| |
+|<span class="no-wrap-code">`resolved`</span>|Returns resolved incidents, when the parameter is missing, the default value is false|*boolean*| |
+|<span class="no-wrap-code">`muted`</span>|Returns muted incidents, when the parameter is missing, the default value is false|*boolean*| |
+|<span class="no-wrap-code">`page`</span>|Page number, the first page is 1|*long*| |
+|<span class="no-wrap-code">`limit`</span>|Page size, the default is 50 rows|*long*| |
+|<span class="no-wrap-code">`filter`</span>|Optional full text search filter that supports *prefix, suffix* and nest*ed filter expressions|*string*| |
+|<span class="no-wrap-code">[`order`](../models/incidents.md#incidentsortorder)</span>|Optional sort order, the default sort order is by the number of failed data quality checks|*[IncidentSortOrder](../models/incidents.md#incidentsortorder)*| |
+|<span class="no-wrap-code">[`direction`](../models/incidents.md#sortdirection)</span>|Optional sort direction, the default sort direction is ascending|*[SortDirection](../models/incidents.md#sortdirection)*| |
 
 
 
@@ -308,7 +308,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[incident_model](../models/incidents.md#incidentmodel)||[IncidentModel](../models/incidents.md#incidentmodel)|
+|<span class="no-wrap-code">[`incident_model`](../models/incidents.md#incidentmodel)</span>||*[IncidentModel](../models/incidents.md#incidentmodel)*|
 
 
 
@@ -317,10 +317,10 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|:material-check-bold:|
-|year|Year when the incident was first seen|long|:material-check-bold:|
-|month|Month when the incident was first seen|long|:material-check-bold:|
-|incident_id|Incident id|string|:material-check-bold:|
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`year`</span>|Year when the incident was first seen|*long*|:material-check-bold:|
+|<span class="no-wrap-code">`month`</span>|Month when the incident was first seen|*long*|:material-check-bold:|
+|<span class="no-wrap-code">`incident_id`</span>|Incident id|*string*|:material-check-bold:|
 
 
 
@@ -461,7 +461,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[incident_issue_histogram_model](../models/incidents.md#incidentissuehistogrammodel)||[IncidentIssueHistogramModel](../models/incidents.md#incidentissuehistogrammodel)|
+|<span class="no-wrap-code">[`incident_issue_histogram_model`](../models/incidents.md#incidentissuehistogrammodel)</span>||*[IncidentIssueHistogramModel](../models/incidents.md#incidentissuehistogrammodel)*|
 
 
 
@@ -470,15 +470,15 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|:material-check-bold:|
-|year|Year when the incident was first seen|long|:material-check-bold:|
-|month|Month when the incident was first seen|long|:material-check-bold:|
-|incident_id|Incident id|string|:material-check-bold:|
-|filter|Optional full text search filter that supports *prefix, suffix* and nest*ed filter expressions|string| |
-|days|Optional filter for a number of recent days to read the related issues|long| |
-|date|Optional date filter|string| |
-|column|Optional column name filter|string| |
-|check|Optional check name filter|string| |
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`year`</span>|Year when the incident was first seen|*long*|:material-check-bold:|
+|<span class="no-wrap-code">`month`</span>|Month when the incident was first seen|*long*|:material-check-bold:|
+|<span class="no-wrap-code">`incident_id`</span>|Incident id|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`filter`</span>|Optional full text search filter that supports *prefix, suffix* and nest*ed filter expressions|*string*| |
+|<span class="no-wrap-code">`days`</span>|Optional filter for a number of recent days to read the related issues|*long*| |
+|<span class="no-wrap-code">`date`</span>|Optional date filter|*string*| |
+|<span class="no-wrap-code">`column`</span>|Optional column name filter|*string*| |
+|<span class="no-wrap-code">`check`</span>|Optional check name filter|*string*| |
 
 
 
@@ -620,7 +620,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_result_entry_model||List[[CheckResultEntryModel](../models/incidents.md#checkresultentrymodel)]|
+|<span class="no-wrap-code">`check_result_entry_model`</span>||*List[[CheckResultEntryModel](../models/incidents.md#checkresultentrymodel)]*|
 
 
 
@@ -629,19 +629,19 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|:material-check-bold:|
-|year|Year when the incident was first seen|long|:material-check-bold:|
-|month|Month when the incident was first seen|long|:material-check-bold:|
-|incident_id|Incident id|string|:material-check-bold:|
-|page|Page number, the first page is 1|long| |
-|limit|Page size, the default is 50 rows|long| |
-|filter|Optional filter|string| |
-|days|Optional filter for a number of recent days to read the related issues|long| |
-|date|Optional filter to return data quality issues only for a given date. The date should be an ISO8601 formatted date, it is treated as the timezone of the DQOps server.|string| |
-|column|Optional column name filter|string| |
-|check|Optional check name filter|string| |
-|[order](../models/incidents.md#checkresultsortorder)|Optional sort order, the default sort order is by the execution date|[CheckResultSortOrder](../models/incidents.md#checkresultsortorder)| |
-|[direction](../models/incidents.md#sortdirection)|Optional sort direction, the default sort direction is ascending|[SortDirection](../models/incidents.md#sortdirection)| |
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`year`</span>|Year when the incident was first seen|*long*|:material-check-bold:|
+|<span class="no-wrap-code">`month`</span>|Month when the incident was first seen|*long*|:material-check-bold:|
+|<span class="no-wrap-code">`incident_id`</span>|Incident id|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`page`</span>|Page number, the first page is 1|*long*| |
+|<span class="no-wrap-code">`limit`</span>|Page size, the default is 50 rows|*long*| |
+|<span class="no-wrap-code">`filter`</span>|Optional filter|*string*| |
+|<span class="no-wrap-code">`days`</span>|Optional filter for a number of recent days to read the related issues|*long*| |
+|<span class="no-wrap-code">`date`</span>|Optional filter to return data quality issues only for a given date. The date should be an ISO8601 formatted date, it is treated as the timezone of the DQOps server.|*string*| |
+|<span class="no-wrap-code">`column`</span>|Optional column name filter|*string*| |
+|<span class="no-wrap-code">`check`</span>|Optional check name filter|*string*| |
+|<span class="no-wrap-code">[`order`](../models/incidents.md#checkresultsortorder)</span>|Optional sort order, the default sort order is by the execution date|*[CheckResultSortOrder](../models/incidents.md#checkresultsortorder)*| |
+|<span class="no-wrap-code">[`direction`](../models/incidents.md#sortdirection)</span>|Optional sort direction, the default sort direction is ascending|*[SortDirection](../models/incidents.md#sortdirection)*| |
 
 
 
@@ -863,11 +863,11 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|:material-check-bold:|
-|year|Year when the incident was first seen|long|:material-check-bold:|
-|month|Month when the incident was first seen|long|:material-check-bold:|
-|incident_id|Incident id|string|:material-check-bold:|
-|issue_url|New incident&#x27;s issueUrl|string|:material-check-bold:|
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`year`</span>|Year when the incident was first seen|*long*|:material-check-bold:|
+|<span class="no-wrap-code">`month`</span>|Month when the incident was first seen|*long*|:material-check-bold:|
+|<span class="no-wrap-code">`incident_id`</span>|Incident id|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`issue_url`</span>|New incident&#x27;s issueUrl|*string*|:material-check-bold:|
 
 
 
@@ -995,11 +995,11 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|:material-check-bold:|
-|year|Year when the incident was first seen|long|:material-check-bold:|
-|month|Month when the incident was first seen|long|:material-check-bold:|
-|incident_id|Incident id|string|:material-check-bold:|
-|[status](../models/incidents.md#incidentstatus)|New incident status, supported values: open, acknowledged, resolved, muted|[IncidentStatus](../models/incidents.md#incidentstatus)|:material-check-bold:|
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`year`</span>|Year when the incident was first seen|*long*|:material-check-bold:|
+|<span class="no-wrap-code">`month`</span>|Month when the incident was first seen|*long*|:material-check-bold:|
+|<span class="no-wrap-code">`incident_id`</span>|Incident id|*string*|:material-check-bold:|
+|<span class="no-wrap-code">[`status`](../models/incidents.md#incidentstatus)</span>|New incident status, supported values: open, acknowledged, resolved, muted|*[IncidentStatus](../models/incidents.md#incidentstatus)*|:material-check-bold:|
 
 
 

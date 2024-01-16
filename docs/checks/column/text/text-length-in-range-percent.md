@@ -17,7 +17,7 @@ The check measures the percentage of those text values with length in the range 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_text_length_in_range_percent|profiling| |Reasonableness|[text_length_in_range_percent](../../../reference/sensors/column/text-column-sensors.md#text-length-in-range-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`profile_text_length_in_range_percent`</span>|profiling| |Reasonableness|[*text_length_in_range_percent*](../../../reference/sensors/column/text-column-sensors.md#text-length-in-range-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -1320,7 +1320,7 @@ The check measures the percentage of those text values with length in the range 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_text_length_in_range_percent|monitoring|daily|Reasonableness|[text_length_in_range_percent](../../../reference/sensors/column/text-column-sensors.md#text-length-in-range-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`daily_text_length_in_range_percent`</span>|monitoring|daily|Reasonableness|[*text_length_in_range_percent*](../../../reference/sensors/column/text-column-sensors.md#text-length-in-range-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -2625,7 +2625,7 @@ The check measures the percentage of those text values with length in the range 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_text_length_in_range_percent|monitoring|monthly|Reasonableness|[text_length_in_range_percent](../../../reference/sensors/column/text-column-sensors.md#text-length-in-range-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`monthly_text_length_in_range_percent`</span>|monitoring|monthly|Reasonableness|[*text_length_in_range_percent*](../../../reference/sensors/column/text-column-sensors.md#text-length-in-range-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -3930,7 +3930,7 @@ The check measures the percentage of those text values with length in the range 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_text_length_in_range_percent|partitioned|daily|Reasonableness|[text_length_in_range_percent](../../../reference/sensors/column/text-column-sensors.md#text-length-in-range-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`daily_partition_text_length_in_range_percent`</span>|partitioned|daily|Reasonableness|[*text_length_in_range_percent*](../../../reference/sensors/column/text-column-sensors.md#text-length-in-range-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -5257,7 +5257,7 @@ The check measures the percentage of those text values with length in the range 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_text_length_in_range_percent|partitioned|monthly|Reasonableness|[text_length_in_range_percent](../../../reference/sensors/column/text-column-sensors.md#text-length-in-range-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`monthly_partition_text_length_in_range_percent`</span>|partitioned|monthly|Reasonableness|[*text_length_in_range_percent*](../../../reference/sensors/column/text-column-sensors.md#text-length-in-range-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 

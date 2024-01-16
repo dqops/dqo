@@ -52,30 +52,30 @@ All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|<p id="data delete-b">`-b`</p><br/><p id="data delete--begin">`--begin`</p><br/>|Beginning of the period for deletion. Date in format YYYY.MM or YYYY.MM.DD| ||
-|<p id="data delete-cat">`-cat`</p><br/><p id="data delete--category">`--category`</p><br/>|Check category name (volume, nulls, numeric, etc.)| ||
-|<p id="data delete-ch">`-ch`</p><br/><p id="data delete--check">`--check`</p><br/>|Data quality check name| ||
-|<p id="data delete-cr">`-cr`</p><br/><p id="data delete--check-results">`--check-results`</p><br/>|Delete the check results| ||
-|<p id="data delete-ct">`-ct`</p><br/><p id="data delete--check-type">`--check-type`</p><br/>|Data quality check type (profiling, monitoring, partitioned)| |profiling<br/>monitoring<br/>partitioned<br/>|
-|<p id="data delete-col">`-col`</p><br/><p id="data delete--column">`--column`</p><br/>|Column name| ||
-|<p id="data delete-c">`-c`</p><br/><p id="data delete--connection">`--connection`</p><br/>|Connection name| ||
-|<p id="data delete-ds">`-ds`</p><br/><p id="data delete--data-group-tag">`--data-group-tag`</p><br/>|Data group dimension level filter, that filters by tags.| ||
-|<p id="data delete-e">`-e`</p><br/><p id="data delete--end">`--end`</p><br/>|End of the period for deletion. Date in format YYYY.MM or YYYY.MM.DD| ||
-|<p id="data delete-er">`-er`</p><br/><p id="data delete--errors">`--errors`</p><br/>|Delete the execution errors| ||
-|<p id="data delete-fw">`-fw`</p><br/><p id="data delete--file-write">`--file-write`</p><br/>|Write command response to a file| ||
-|<p id="data delete-t">`-t`</p><br/><p id="data delete--table">`--table`</p><br/><p id="data delete--full-table-name">`--full-table-name`</p><br/>|Full table name (schema.table), supports wildcard patterns &#x27;sch*.tab*&#x27;| ||
-|<p id="data delete--headless">`--headless`</p><br/><p id="data delete-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|<p id="data delete-h">`-h`</p><br/><p id="data delete--help">`--help`</p><br/>|Show the help for the command and parameters| ||
-|<p id="data delete-of">`-of`</p><br/><p id="data delete--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
-|<p id="data delete-qd">`-qd`</p><br/><p id="data delete--quality-dimension">`--quality-dimension`</p><br/>|Data quality dimension| ||
-|<p id="data delete-s">`-s`</p><br/><p id="data delete--sensor">`--sensor`</p><br/>|Data quality sensor name (sensor definition or sensor name)| ||
-|<p id="data delete-sr">`-sr`</p><br/><p id="data delete--sensor-readouts">`--sensor-readouts`</p><br/>|Delete the sensor readouts| ||
-|<p id="data delete-st">`-st`</p><br/><p id="data delete--statistics">`--statistics`</p><br/>|Delete the statistics| ||
-|<p id="data delete-stc">`-stc`</p><br/><p id="data delete--statistics-category">`--statistics-category`</p><br/>|Statistics category name (volume, nulls, numeric, etc.)| ||
-|<p id="data delete-sc">`-sc`</p><br/><p id="data delete--statistics-collector">`--statistics-collector`</p><br/>|Data quality statistics collector name| ||
-|<p id="data delete-stt">`-stt`</p><br/><p id="data delete--statistics-target">`--statistics-target`</p><br/>|Data quality statistics target (table, column)| |table<br/>column<br/>|
-|<p id="data delete-tc">`-tc`</p><br/><p id="data delete--table-comparison">`--table-comparison`</p><br/>|Table comparison name.| ||
-|<p id="data delete-tg">`-tg`</p><br/><p id="data delete--time-gradient">`--time-gradient`</p><br/>|Time gradient of the sensor| ||
+|<div id="data delete-b" class="no-wrap-code">`-b`</div><div id="data delete--begin" class="no-wrap-code">`--begin`</div>|Beginning of the period for deletion. Date in format YYYY.MM or YYYY.MM.DD| ||
+|<div id="data delete-cat" class="no-wrap-code">`-cat`</div><div id="data delete--category" class="no-wrap-code">`--category`</div>|Check category name (volume, nulls, numeric, etc.)| ||
+|<div id="data delete-ch" class="no-wrap-code">`-ch`</div><div id="data delete--check" class="no-wrap-code">`--check`</div>|Data quality check name| ||
+|<div id="data delete-cr" class="no-wrap-code">`-cr`</div><div id="data delete--check-results" class="no-wrap-code">`--check-results`</div>|Delete the check results| ||
+|<div id="data delete-ct" class="no-wrap-code">`-ct`</div><div id="data delete--check-type" class="no-wrap-code">`--check-type`</div>|Data quality check type (profiling, monitoring, partitioned)| |*profiling*<br/>*monitoring*<br/>*partitioned*<br/>|
+|<div id="data delete-col" class="no-wrap-code">`-col`</div><div id="data delete--column" class="no-wrap-code">`--column`</div>|Column name| ||
+|<div id="data delete-c" class="no-wrap-code">`-c`</div><div id="data delete--connection" class="no-wrap-code">`--connection`</div>|Connection name| ||
+|<div id="data delete-ds" class="no-wrap-code">`-ds`</div><div id="data delete--data-group-tag" class="no-wrap-code">`--data-group-tag`</div>|Data group dimension level filter, that filters by tags.| ||
+|<div id="data delete-e" class="no-wrap-code">`-e`</div><div id="data delete--end" class="no-wrap-code">`--end`</div>|End of the period for deletion. Date in format YYYY.MM or YYYY.MM.DD| ||
+|<div id="data delete-er" class="no-wrap-code">`-er`</div><div id="data delete--errors" class="no-wrap-code">`--errors`</div>|Delete the execution errors| ||
+|<div id="data delete-fw" class="no-wrap-code">`-fw`</div><div id="data delete--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="data delete-t" class="no-wrap-code">`-t`</div><div id="data delete--table" class="no-wrap-code">`--table`</div><div id="data delete--full-table-name" class="no-wrap-code">`--full-table-name`</div>|Full table name (schema.table), supports wildcard patterns &#x27;sch*.tab*&#x27;| ||
+|<div id="data delete--headless" class="no-wrap-code">`--headless`</div><div id="data delete-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="data delete-h" class="no-wrap-code">`-h`</div><div id="data delete--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="data delete-of" class="no-wrap-code">`-of`</div><div id="data delete--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
+|<div id="data delete-qd" class="no-wrap-code">`-qd`</div><div id="data delete--quality-dimension" class="no-wrap-code">`--quality-dimension`</div>|Data quality dimension| ||
+|<div id="data delete-s" class="no-wrap-code">`-s`</div><div id="data delete--sensor" class="no-wrap-code">`--sensor`</div>|Data quality sensor name (sensor definition or sensor name)| ||
+|<div id="data delete-sr" class="no-wrap-code">`-sr`</div><div id="data delete--sensor-readouts" class="no-wrap-code">`--sensor-readouts`</div>|Delete the sensor readouts| ||
+|<div id="data delete-st" class="no-wrap-code">`-st`</div><div id="data delete--statistics" class="no-wrap-code">`--statistics`</div>|Delete the statistics| ||
+|<div id="data delete-stc" class="no-wrap-code">`-stc`</div><div id="data delete--statistics-category" class="no-wrap-code">`--statistics-category`</div>|Statistics category name (volume, nulls, numeric, etc.)| ||
+|<div id="data delete-sc" class="no-wrap-code">`-sc`</div><div id="data delete--statistics-collector" class="no-wrap-code">`--statistics-collector`</div>|Data quality statistics collector name| ||
+|<div id="data delete-stt" class="no-wrap-code">`-stt`</div><div id="data delete--statistics-target" class="no-wrap-code">`--statistics-target`</div>|Data quality statistics target (table, column)| |*table*<br/>*column*<br/>|
+|<div id="data delete-tc" class="no-wrap-code">`-tc`</div><div id="data delete--table-comparison" class="no-wrap-code">`--table-comparison`</div>|Table comparison name.| ||
+|<div id="data delete-tg" class="no-wrap-code">`-tg`</div><div id="data delete--time-gradient" class="no-wrap-code">`--time-gradient`</div>|Time gradient of the sensor| ||
 
 
 
@@ -121,16 +121,16 @@ All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|<p id="data repair-cr">`-cr`</p><br/><p id="data repair--check-results">`--check-results`</p><br/>|Repair the check results| ||
-|<p id="data repair-c">`-c`</p><br/><p id="data repair--connection">`--connection`</p><br/>|Connection name|:material-check-bold:||
-|<p id="data repair-er">`-er`</p><br/><p id="data repair--errors">`--errors`</p><br/>|Repair the execution errors| ||
-|<p id="data repair-fw">`-fw`</p><br/><p id="data repair--file-write">`--file-write`</p><br/>|Write command response to a file| ||
-|<p id="data repair-t">`-t`</p><br/><p id="data repair--table">`--table`</p><br/><p id="data repair--full-table-name">`--full-table-name`</p><br/>|Full table name (schema.table), supports wildcard patterns &#x27;sch*.tab*&#x27;| ||
-|<p id="data repair--headless">`--headless`</p><br/><p id="data repair-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|<p id="data repair-h">`-h`</p><br/><p id="data repair--help">`--help`</p><br/>|Show the help for the command and parameters| ||
-|<p id="data repair-of">`-of`</p><br/><p id="data repair--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
-|<p id="data repair-sr">`-sr`</p><br/><p id="data repair--sensor-readouts">`--sensor-readouts`</p><br/>|Repair the sensor readouts| ||
-|<p id="data repair-st">`-st`</p><br/><p id="data repair--statistics">`--statistics`</p><br/>|Repair the statistics| ||
+|<div id="data repair-cr" class="no-wrap-code">`-cr`</div><div id="data repair--check-results" class="no-wrap-code">`--check-results`</div>|Repair the check results| ||
+|<div id="data repair-c" class="no-wrap-code">`-c`</div><div id="data repair--connection" class="no-wrap-code">`--connection`</div>|Connection name|:material-check-bold:||
+|<div id="data repair-er" class="no-wrap-code">`-er`</div><div id="data repair--errors" class="no-wrap-code">`--errors`</div>|Repair the execution errors| ||
+|<div id="data repair-fw" class="no-wrap-code">`-fw`</div><div id="data repair--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="data repair-t" class="no-wrap-code">`-t`</div><div id="data repair--table" class="no-wrap-code">`--table`</div><div id="data repair--full-table-name" class="no-wrap-code">`--full-table-name`</div>|Full table name (schema.table), supports wildcard patterns &#x27;sch*.tab*&#x27;| ||
+|<div id="data repair--headless" class="no-wrap-code">`--headless`</div><div id="data repair-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="data repair-h" class="no-wrap-code">`-h`</div><div id="data repair--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="data repair-of" class="no-wrap-code">`-of`</div><div id="data repair--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
+|<div id="data repair-sr" class="no-wrap-code">`-sr`</div><div id="data repair--sensor-readouts" class="no-wrap-code">`--sensor-readouts`</div>|Repair the sensor readouts| ||
+|<div id="data repair-st" class="no-wrap-code">`-st`</div><div id="data repair--statistics" class="no-wrap-code">`--statistics`</div>|Repair the statistics| ||
 
 
 

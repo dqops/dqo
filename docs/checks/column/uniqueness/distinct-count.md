@@ -17,7 +17,7 @@ Verifies that the number of distinct values in a column does not fall below the 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_distinct_count|profiling| |Uniqueness|[distinct_count](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[count_between](../../../reference/rules/Comparison.md#count-between)|
+|<span class="no-wrap-code">`profile_distinct_count`</span>|profiling| |Uniqueness|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*count_between*](../../../reference/rules/Comparison.md#count-between)|
 
 **Command-line examples**
 
@@ -934,7 +934,7 @@ Verifies that the number of distinct values in a column does not fall below the 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_distinct_count|monitoring|daily|Uniqueness|[distinct_count](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[count_between](../../../reference/rules/Comparison.md#count-between)|
+|<span class="no-wrap-code">`daily_distinct_count`</span>|monitoring|daily|Uniqueness|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*count_between*](../../../reference/rules/Comparison.md#count-between)|
 
 **Command-line examples**
 
@@ -1853,7 +1853,7 @@ Verifies that the number of distinct values in a column does not fall below the 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_distinct_count|monitoring|monthly|Uniqueness|[distinct_count](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[count_between](../../../reference/rules/Comparison.md#count-between)|
+|<span class="no-wrap-code">`monthly_distinct_count`</span>|monitoring|monthly|Uniqueness|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*count_between*](../../../reference/rules/Comparison.md#count-between)|
 
 **Command-line examples**
 
@@ -2772,7 +2772,7 @@ Verifies that the number of distinct values in a column does not fall below the 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_distinct_count|partitioned|daily|Uniqueness|[distinct_count](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[count_between](../../../reference/rules/Comparison.md#count-between)|
+|<span class="no-wrap-code">`daily_partition_distinct_count`</span>|partitioned|daily|Uniqueness|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*count_between*](../../../reference/rules/Comparison.md#count-between)|
 
 **Command-line examples**
 
@@ -3713,7 +3713,7 @@ Verifies that the number of distinct values in a column does not fall below the 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_distinct_count|partitioned|monthly|Uniqueness|[distinct_count](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[count_between](../../../reference/rules/Comparison.md#count-between)|
+|<span class="no-wrap-code">`monthly_partition_distinct_count`</span>|partitioned|monthly|Uniqueness|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*count_between*](../../../reference/rules/Comparison.md#count-between)|
 
 **Command-line examples**
 

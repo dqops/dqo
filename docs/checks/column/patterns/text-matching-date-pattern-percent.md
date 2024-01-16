@@ -17,7 +17,7 @@ Verifies that the percentage of texts matching the date format regular expressio
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_text_matching_date_pattern_percent|profiling| |Validity|[text_matching_date_patterns_percent](../../../reference/sensors/column/patterns-column-sensors.md#text-matching-date-patterns-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`profile_text_matching_date_pattern_percent`</span>|profiling| |Validity|[*text_matching_date_patterns_percent*](../../../reference/sensors/column/patterns-column-sensors.md#text-matching-date-patterns-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -1578,7 +1578,7 @@ Verifies that the percentage of texts matching the date format regular expressio
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_text_matching_date_pattern_percent|monitoring|daily|Validity|[text_matching_date_patterns_percent](../../../reference/sensors/column/patterns-column-sensors.md#text-matching-date-patterns-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`daily_text_matching_date_pattern_percent`</span>|monitoring|daily|Validity|[*text_matching_date_patterns_percent*](../../../reference/sensors/column/patterns-column-sensors.md#text-matching-date-patterns-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -3141,7 +3141,7 @@ Verifies that the percentage of texts matching the date format regular expressio
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_text_matching_date_pattern_percent|monitoring|monthly|Validity|[text_matching_date_patterns_percent](../../../reference/sensors/column/patterns-column-sensors.md#text-matching-date-patterns-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`monthly_text_matching_date_pattern_percent`</span>|monitoring|monthly|Validity|[*text_matching_date_patterns_percent*](../../../reference/sensors/column/patterns-column-sensors.md#text-matching-date-patterns-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -4704,7 +4704,7 @@ Verifies that the percentage of texts matching the date format regular expressio
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_text_matching_date_pattern_percent|partitioned|daily|Validity|[text_matching_date_patterns_percent](../../../reference/sensors/column/patterns-column-sensors.md#text-matching-date-patterns-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`daily_partition_text_matching_date_pattern_percent`</span>|partitioned|daily|Validity|[*text_matching_date_patterns_percent*](../../../reference/sensors/column/patterns-column-sensors.md#text-matching-date-patterns-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -6289,7 +6289,7 @@ Verifies that the percentage of texts matching the date format regular expressio
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_text_matching_date_pattern_percent|partitioned|monthly|Validity|[text_matching_date_patterns_percent](../../../reference/sensors/column/patterns-column-sensors.md#text-matching-date-patterns-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`monthly_partition_text_matching_date_pattern_percent`</span>|partitioned|monthly|Validity|[*text_matching_date_patterns_percent*](../../../reference/sensors/column/patterns-column-sensors.md#text-matching-date-patterns-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 

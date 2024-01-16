@@ -20,7 +20,7 @@ Verifies that a custom SQL expression is met for each row. Counts the number of 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_sql_condition_failed_on_column|profiling| |Validity|[sql_condition_failed_count](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-condition-failed-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`profile_sql_condition_failed_on_column`</span>|profiling| |Validity|[*sql_condition_failed_count*](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-condition-failed-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -1078,7 +1078,7 @@ Verifies that a custom SQL expression is met for each row. Counts the number of 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_sql_condition_failed_on_column|monitoring|daily|Validity|[sql_condition_failed_count](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-condition-failed-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`daily_sql_condition_failed_on_column`</span>|monitoring|daily|Validity|[*sql_condition_failed_count*](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-condition-failed-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -2138,7 +2138,7 @@ Verifies that a custom SQL expression is met for each row. Counts the number of 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_sql_condition_failed_on_column|monitoring|monthly|Validity|[sql_condition_failed_count](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-condition-failed-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`monthly_sql_condition_failed_on_column`</span>|monitoring|monthly|Validity|[*sql_condition_failed_count*](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-condition-failed-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -3198,7 +3198,7 @@ Verifies that a custom SQL expression is met for each row. Counts the number of 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_sql_condition_failed_on_column|partitioned|daily|Validity|[sql_condition_failed_count](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-condition-failed-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`daily_partition_sql_condition_failed_on_column`</span>|partitioned|daily|Validity|[*sql_condition_failed_count*](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-condition-failed-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -4280,7 +4280,7 @@ Verifies that a custom SQL expression is met for each row. Counts the number of 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_sql_condition_failed_on_column|partitioned|monthly|Validity|[sql_condition_failed_count](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-condition-failed-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`monthly_partition_sql_condition_failed_on_column`</span>|partitioned|monthly|Validity|[*sql_condition_failed_count*](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-condition-failed-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 

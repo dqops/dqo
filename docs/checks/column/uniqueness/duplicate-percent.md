@@ -17,7 +17,7 @@ Verifies that the percentage of duplicate values in a column does not exceed the
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_duplicate_percent|profiling| |Uniqueness|[duplicate_percent](../../../reference/sensors/column/uniqueness-column-sensors.md#duplicate-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`profile_duplicate_percent`</span>|profiling| |Uniqueness|[*duplicate_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#duplicate-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -1072,7 +1072,7 @@ Verifies that the percentage of duplicate values in a column does not exceed the
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_duplicate_percent|monitoring|daily|Uniqueness|[duplicate_percent](../../../reference/sensors/column/uniqueness-column-sensors.md#duplicate-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`daily_duplicate_percent`</span>|monitoring|daily|Uniqueness|[*duplicate_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#duplicate-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -2129,7 +2129,7 @@ Verifies that the percentage of duplicate values in a column does not exceed the
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_duplicate_percent|monitoring|monthly|Uniqueness|[duplicate_percent](../../../reference/sensors/column/uniqueness-column-sensors.md#duplicate-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`monthly_duplicate_percent`</span>|monitoring|monthly|Uniqueness|[*duplicate_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#duplicate-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -3186,7 +3186,7 @@ Verifies that the percent of duplicate values in a column does not exceed the ma
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_duplicate_percent|partitioned|daily|Uniqueness|[duplicate_percent](../../../reference/sensors/column/uniqueness-column-sensors.md#duplicate-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`daily_partition_duplicate_percent`</span>|partitioned|daily|Uniqueness|[*duplicate_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#duplicate-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -4265,7 +4265,7 @@ Verifies that the percent of duplicate values in a column does not exceed the ma
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_duplicate_percent|partitioned|monthly|Uniqueness|[duplicate_percent](../../../reference/sensors/column/uniqueness-column-sensors.md#duplicate-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`monthly_partition_duplicate_percent`</span>|partitioned|monthly|Uniqueness|[*duplicate_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#duplicate-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 

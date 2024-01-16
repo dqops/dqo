@@ -17,7 +17,7 @@ Verifies that the percentage of whitespace strings in a column does not exceed t
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_whitespace_text_percent|profiling| |Completeness|[whitespace_text_percent](../../../reference/sensors/column/blanks-column-sensors.md#whitespace-text-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`profile_whitespace_text_percent`</span>|profiling| |Completeness|[*whitespace_text_percent*](../../../reference/sensors/column/blanks-column-sensors.md#whitespace-text-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -1428,7 +1428,7 @@ Verifies that the percentage of whitespace strings in a column does not exceed t
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_whitespace_text_percent|monitoring|daily|Completeness|[whitespace_text_percent](../../../reference/sensors/column/blanks-column-sensors.md#whitespace-text-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`daily_whitespace_text_percent`</span>|monitoring|daily|Completeness|[*whitespace_text_percent*](../../../reference/sensors/column/blanks-column-sensors.md#whitespace-text-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -2841,7 +2841,7 @@ Verifies that the percentage of whitespace strings in a column does not exceed t
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_whitespace_text_percent|monitoring|monthly|Completeness|[whitespace_text_percent](../../../reference/sensors/column/blanks-column-sensors.md#whitespace-text-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`monthly_whitespace_text_percent`</span>|monitoring|monthly|Completeness|[*whitespace_text_percent*](../../../reference/sensors/column/blanks-column-sensors.md#whitespace-text-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -4254,7 +4254,7 @@ Verifies that the percentage of whitespace strings in a column does not exceed t
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_whitespace_text_percent|partitioned|daily|Completeness|[whitespace_text_percent](../../../reference/sensors/column/blanks-column-sensors.md#whitespace-text-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`daily_partition_whitespace_text_percent`</span>|partitioned|daily|Completeness|[*whitespace_text_percent*](../../../reference/sensors/column/blanks-column-sensors.md#whitespace-text-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -5689,7 +5689,7 @@ Verifies that the percentage of whitespace strings in a column does not exceed t
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_whitespace_text_percent|partitioned|monthly|Completeness|[whitespace_text_percent](../../../reference/sensors/column/blanks-column-sensors.md#whitespace-text-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`monthly_partition_whitespace_text_percent`</span>|partitioned|monthly|Completeness|[*whitespace_text_percent*](../../../reference/sensors/column/blanks-column-sensors.md#whitespace-text-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 

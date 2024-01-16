@@ -13,7 +13,7 @@ class DqoRoot(str, Enum):
     SENSORS = "sensors"
     SETTINGS = "settings"
     SOURCES = "sources"
-    VALUE_1 = "_indexes"
+    VALUE_11 = "_indexes"
     VALUE_12 = "_local_settings"
 
     def __str__(self) -> str:

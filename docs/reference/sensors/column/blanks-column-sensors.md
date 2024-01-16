@@ -13,7 +13,7 @@ The empty text count sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | blanks | `column/blanks/empty_text_count` | [sensors/column/blanks](https://github.com/dqops/dqo/tree/develop/home/sensors/column/blanks/) |
+| column | blanks | <span class="no-wrap-code">`column/blanks/empty_text_count`</span> | [*sensors/column/blanks*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/blanks/) |
 
 
 
@@ -324,7 +324,7 @@ The empty text percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | blanks | `column/blanks/empty_text_percent` | [sensors/column/blanks](https://github.com/dqops/dqo/tree/develop/home/sensors/column/blanks/) |
+| column | blanks | <span class="no-wrap-code">`column/blanks/empty_text_percent`</span> | [*sensors/column/blanks*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/blanks/) |
 
 
 
@@ -666,7 +666,7 @@ The null placeholder text count sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | blanks | `column/blanks/null_placeholder_text_count` | [sensors/column/blanks](https://github.com/dqops/dqo/tree/develop/home/sensors/column/blanks/) |
+| column | blanks | <span class="no-wrap-code">`column/blanks/null_placeholder_text_count`</span> | [*sensors/column/blanks*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/blanks/) |
 
 
 
@@ -971,7 +971,7 @@ The null placeholder text percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | blanks | `column/blanks/null_placeholder_text_percent` | [sensors/column/blanks](https://github.com/dqops/dqo/tree/develop/home/sensors/column/blanks/) |
+| column | blanks | <span class="no-wrap-code">`column/blanks/null_placeholder_text_percent`</span> | [*sensors/column/blanks*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/blanks/) |
 
 
 
@@ -1308,7 +1308,7 @@ The whitespace text count sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | blanks | `column/blanks/whitespace_text_count` | [sensors/column/blanks](https://github.com/dqops/dqo/tree/develop/home/sensors/column/blanks/) |
+| column | blanks | <span class="no-wrap-code">`column/blanks/whitespace_text_count`</span> | [*sensors/column/blanks*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/blanks/) |
 
 
 
@@ -1630,7 +1630,7 @@ The whitespace text percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | blanks | `column/blanks/whitespace_text_percent` | [sensors/column/blanks](https://github.com/dqops/dqo/tree/develop/home/sensors/column/blanks/) |
+| column | blanks | <span class="no-wrap-code">`column/blanks/whitespace_text_percent`</span> | [*sensors/column/blanks*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/blanks/) |
 
 
 

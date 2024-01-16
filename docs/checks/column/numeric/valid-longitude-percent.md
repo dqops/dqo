@@ -17,7 +17,7 @@ Verifies that the percentage of valid longitude values in a column does not fall
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_valid_longitude_percent|profiling| |Validity|[valid_longitude_percent](../../../reference/sensors/column/numeric-column-sensors.md#valid-longitude-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`profile_valid_longitude_percent`</span>|profiling| |Validity|[*valid_longitude_percent*](../../../reference/sensors/column/numeric-column-sensors.md#valid-longitude-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -1080,7 +1080,7 @@ Verifies that the percentage of valid longitude values in a column does not fall
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_valid_longitude_percent|monitoring|daily|Validity|[valid_longitude_percent](../../../reference/sensors/column/numeric-column-sensors.md#valid-longitude-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`daily_valid_longitude_percent`</span>|monitoring|daily|Validity|[*valid_longitude_percent*](../../../reference/sensors/column/numeric-column-sensors.md#valid-longitude-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -2145,7 +2145,7 @@ Verifies that the percentage of valid longitude values in a column does not fall
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_valid_longitude_percent|monitoring|monthly|Validity|[valid_longitude_percent](../../../reference/sensors/column/numeric-column-sensors.md#valid-longitude-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`monthly_valid_longitude_percent`</span>|monitoring|monthly|Validity|[*valid_longitude_percent*](../../../reference/sensors/column/numeric-column-sensors.md#valid-longitude-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -3210,7 +3210,7 @@ Verifies that the percentage of valid longitude values in a column does not fall
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_valid_longitude_percent|partitioned|daily|Validity|[valid_longitude_percent](../../../reference/sensors/column/numeric-column-sensors.md#valid-longitude-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`daily_partition_valid_longitude_percent`</span>|partitioned|daily|Validity|[*valid_longitude_percent*](../../../reference/sensors/column/numeric-column-sensors.md#valid-longitude-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -4297,7 +4297,7 @@ Verifies that the percentage of valid longitude values in a column does not fall
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_valid_longitude_percent|partitioned|monthly|Validity|[valid_longitude_percent](../../../reference/sensors/column/numeric-column-sensors.md#valid-longitude-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`monthly_partition_valid_longitude_percent`</span>|partitioned|monthly|Validity|[*valid_longitude_percent*](../../../reference/sensors/column/numeric-column-sensors.md#valid-longitude-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 

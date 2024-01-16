@@ -17,7 +17,7 @@ Verifies that the mean value in a column changed in a fixed rate since the last 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_mean_change_30_days|profiling| |Consistency|[mean](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[change_percent_30_days](../../../reference/rules/Change.md#change-percent-30-days)|
+|<span class="no-wrap-code">`profile_mean_change_30_days`</span>|profiling| |Consistency|[*mean*](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[*change_percent_30_days*](../../../reference/rules/Change.md#change-percent-30-days)|
 
 **Command-line examples**
 
@@ -858,7 +858,7 @@ Verifies that the mean value in a column changed in a fixed rate since last read
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_mean_change_30_days|monitoring|daily|Consistency|[mean](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[change_percent_30_days](../../../reference/rules/Change.md#change-percent-30-days)|
+|<span class="no-wrap-code">`daily_mean_change_30_days`</span>|monitoring|daily|Consistency|[*mean*](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[*change_percent_30_days*](../../../reference/rules/Change.md#change-percent-30-days)|
 
 **Command-line examples**
 
@@ -1701,7 +1701,7 @@ Verifies that the mean value in a column changed in a fixed rate since the last 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_mean_change_30_days|partitioned|daily|Consistency|[mean](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[change_percent_30_days](../../../reference/rules/Change.md#change-percent-30-days)|
+|<span class="no-wrap-code">`daily_partition_mean_change_30_days`</span>|partitioned|daily|Consistency|[*mean*](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[*change_percent_30_days*](../../../reference/rules/Change.md#change-percent-30-days)|
 
 **Command-line examples**
 

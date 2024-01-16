@@ -17,7 +17,7 @@ Detects null values in a column. Verifies that the number of null values in a co
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_nulls_count|profiling| |Completeness|[null_count](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`profile_nulls_count`</span>|profiling| |Completeness|[*null_count*](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -1072,7 +1072,7 @@ Detects null values in a column. Verifies that the number of null values in a co
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_nulls_count|monitoring|daily|Completeness|[null_count](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`daily_nulls_count`</span>|monitoring|daily|Completeness|[*null_count*](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -2129,7 +2129,7 @@ Detects null values in a column. Verifies that the number of null values in a co
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_nulls_count|monitoring|monthly|Completeness|[null_count](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`monthly_nulls_count`</span>|monitoring|monthly|Completeness|[*null_count*](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -3186,7 +3186,7 @@ Detects null values in a column. Verifies that the number of null values in a co
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_nulls_count|partitioned|daily|Completeness|[null_count](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`daily_partition_nulls_count`</span>|partitioned|daily|Completeness|[*null_count*](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -4265,7 +4265,7 @@ Detects null values in a column. Verifies that the number of null values in a co
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_nulls_count|partitioned|monthly|Completeness|[null_count](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`monthly_partition_nulls_count`</span>|partitioned|monthly|Completeness|[*null_count*](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 

@@ -19,7 +19,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|full_check_name|Full check name|string|:material-check-bold:|
+|<span class="no-wrap-code">`full_check_name`</span>|Full check name|*string*|:material-check-bold:|
 
 
 
@@ -28,7 +28,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Check model|[CheckDefinitionModel](../models/checks.md#checkdefinitionmodel)| |
+|Check model|*[CheckDefinitionModel](../models/checks.md#checkdefinitionmodel)*| |
 
 
 
@@ -193,7 +193,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|full_check_name|Full check name|string|:material-check-bold:|
+|<span class="no-wrap-code">`full_check_name`</span>|Full check name|*string*|:material-check-bold:|
 
 
 
@@ -307,7 +307,7 @@ http://localhost:8888/api/checks
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_definition_list_model||List[[CheckDefinitionListModel](../models/checks.md#checkdefinitionlistmodel)]|
+|<span class="no-wrap-code">`check_definition_list_model`</span>||*List[[CheckDefinitionListModel](../models/checks.md#checkdefinitionlistmodel)]*|
 
 
 
@@ -446,7 +446,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_definition_model](../models/checks.md#checkdefinitionmodel)||[CheckDefinitionModel](../models/checks.md#checkdefinitionmodel)|
+|<span class="no-wrap-code">[`check_definition_model`](../models/checks.md#checkdefinitionmodel)</span>||*[CheckDefinitionModel](../models/checks.md#checkdefinitionmodel)*|
 
 
 
@@ -455,7 +455,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|full_check_name|Full check name|string|:material-check-bold:|
+|<span class="no-wrap-code">`full_check_name`</span>|Full check name|*string*|:material-check-bold:|
 
 
 
@@ -587,7 +587,7 @@ http://localhost:8888/api/definitions/checks
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_definition_folder_model](../models/checks.md#checkdefinitionfoldermodel)||[CheckDefinitionFolderModel](../models/checks.md#checkdefinitionfoldermodel)|
+|<span class="no-wrap-code">[`check_definition_folder_model`](../models/checks.md#checkdefinitionfoldermodel)</span>||*[CheckDefinitionFolderModel](../models/checks.md#checkdefinitionfoldermodel)*|
 
 
 
@@ -710,7 +710,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|full_check_name|Full check name|string|:material-check-bold:|
+|<span class="no-wrap-code">`full_check_name`</span>|Full check name|*string*|:material-check-bold:|
 
 
 
@@ -719,7 +719,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|List of check definitions|[CheckDefinitionModel](../models/checks.md#checkdefinitionmodel)| |
+|List of check definitions|*[CheckDefinitionModel](../models/checks.md#checkdefinitionmodel)*| |
 
 
 

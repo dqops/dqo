@@ -14,7 +14,7 @@ The column exists sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | schema | `column/schema/column_exists` | [sensors/column/schema](https://github.com/dqops/dqo/tree/develop/home/sensors/column/schema/) |
+| column | schema | <span class="no-wrap-code">`column/schema/column_exists`</span> | [*sensors/column/schema*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/schema/) |
 
 
 
@@ -41,7 +41,7 @@ The column type hash sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | schema | `column/schema/column_type_hash` | [sensors/column/schema](https://github.com/dqops/dqo/tree/develop/home/sensors/column/schema/) |
+| column | schema | <span class="no-wrap-code">`column/schema/column_type_hash`</span> | [*sensors/column/schema*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/schema/) |
 
 
 

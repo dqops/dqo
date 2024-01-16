@@ -17,7 +17,7 @@ The check counts the number of values in the column that is below the value defi
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_number_below_min_value|profiling| |Validity|[number_below_min_value_count](../../../reference/sensors/column/numeric-column-sensors.md#number-below-min-value-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`profile_number_below_min_value`</span>|profiling| |Validity|[*number_below_min_value_count*](../../../reference/sensors/column/numeric-column-sensors.md#number-below-min-value-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -1080,7 +1080,7 @@ The check counts the number of values in the column that is below the value defi
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_number_below_min_value|monitoring|daily|Validity|[number_below_min_value_count](../../../reference/sensors/column/numeric-column-sensors.md#number-below-min-value-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`daily_number_below_min_value`</span>|monitoring|daily|Validity|[*number_below_min_value_count*](../../../reference/sensors/column/numeric-column-sensors.md#number-below-min-value-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -2145,7 +2145,7 @@ The check counts the number of values in the column that is below the value defi
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_number_below_min_value|monitoring|monthly|Validity|[number_below_min_value_count](../../../reference/sensors/column/numeric-column-sensors.md#number-below-min-value-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`monthly_number_below_min_value`</span>|monitoring|monthly|Validity|[*number_below_min_value_count*](../../../reference/sensors/column/numeric-column-sensors.md#number-below-min-value-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -3210,7 +3210,7 @@ The check counts the number of values in the column that is below the value defi
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_number_below_min_value|partitioned|daily|Validity|[number_below_min_value_count](../../../reference/sensors/column/numeric-column-sensors.md#number-below-min-value-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`daily_partition_number_below_min_value`</span>|partitioned|daily|Validity|[*number_below_min_value_count*](../../../reference/sensors/column/numeric-column-sensors.md#number-below-min-value-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -4297,7 +4297,7 @@ The check counts the number of values in the column that is below the value defi
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_number_below_min_value|partitioned|monthly|Validity|[number_below_min_value_count](../../../reference/sensors/column/numeric-column-sensors.md#number-below-min-value-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`monthly_partition_number_below_min_value`</span>|partitioned|monthly|Validity|[*number_below_min_value_count*](../../../reference/sensors/column/numeric-column-sensors.md#number-below-min-value-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 

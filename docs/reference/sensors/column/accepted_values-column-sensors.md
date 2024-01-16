@@ -15,14 +15,14 @@ The expected numbers in use count sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | accepted_values | `column/accepted_values/expected_numbers_in_use_count` | [sensors/column/accepted_values](https://github.com/dqops/dqo/tree/develop/home/sensors/column/accepted_values/) |
+| column | accepted_values | <span class="no-wrap-code">`column/accepted_values/expected_numbers_in_use_count`</span> | [*sensors/column/accepted_values*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/accepted_values/) |
 
 
 **Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`expected_values`|List of expected numeric values that should be found in the tested column.|integer_list|:material-check-bold:||
+|<span class="no-wrap-code">`expected_values`</span>|List of expected numeric values that should be found in the tested column.|*integer_list*|:material-check-bold:||
 
 
 
@@ -446,14 +446,14 @@ The expected text values in use count sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | accepted_values | `column/accepted_values/expected_text_values_in_use_count` | [sensors/column/accepted_values](https://github.com/dqops/dqo/tree/develop/home/sensors/column/accepted_values/) |
+| column | accepted_values | <span class="no-wrap-code">`column/accepted_values/expected_text_values_in_use_count`</span> | [*sensors/column/accepted_values*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/accepted_values/) |
 
 
 **Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`expected_values`|List of expected string values that should be found in the tested column.|string_list|:material-check-bold:||
+|<span class="no-wrap-code">`expected_values`</span>|List of expected string values that should be found in the tested column.|*string_list*|:material-check-bold:||
 
 
 
@@ -953,15 +953,15 @@ The expected texts in top values count sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | accepted_values | `column/accepted_values/expected_texts_in_top_values_count` | [sensors/column/accepted_values](https://github.com/dqops/dqo/tree/develop/home/sensors/column/accepted_values/) |
+| column | accepted_values | <span class="no-wrap-code">`column/accepted_values/expected_texts_in_top_values_count`</span> | [*sensors/column/accepted_values*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/accepted_values/) |
 
 
 **Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`expected_values`|List of expected string values that should be found in the tested column among the TOP most popular (highest distinct count) column values.|string_list|:material-check-bold:||
-|`top`|The number of the most popular values (with the highest distinct count) that are analyzed to find the expected values.|long|:material-check-bold:||
+|<span class="no-wrap-code">`expected_values`</span>|List of expected string values that should be found in the tested column among the TOP most popular (highest distinct count) column values.|*string_list*|:material-check-bold:||
+|<span class="no-wrap-code">`top`</span>|The number of the most popular values (with the highest distinct count) that are analyzed to find the expected values.|*long*|:material-check-bold:||
 
 
 
@@ -1891,14 +1891,14 @@ The number found in set percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | accepted_values | `column/accepted_values/number_found_in_set_percent` | [sensors/column/accepted_values](https://github.com/dqops/dqo/tree/develop/home/sensors/column/accepted_values/) |
+| column | accepted_values | <span class="no-wrap-code">`column/accepted_values/number_found_in_set_percent`</span> | [*sensors/column/accepted_values*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/accepted_values/) |
 
 
 **Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`expected_values`|A list of expected values that must be present in a numeric column, only values from this list are accepted and rows having these values in the tested column are counted as valid rows.|integer_list|:material-check-bold:||
+|<span class="no-wrap-code">`expected_values`</span>|A list of expected values that must be present in a numeric column, only values from this list are accepted and rows having these values in the tested column are counted as valid rows.|*integer_list*|:material-check-bold:||
 
 
 
@@ -2335,14 +2335,14 @@ The text found in set percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | accepted_values | `column/accepted_values/text_found_in_set_percent` | [sensors/column/accepted_values](https://github.com/dqops/dqo/tree/develop/home/sensors/column/accepted_values/) |
+| column | accepted_values | <span class="no-wrap-code">`column/accepted_values/text_found_in_set_percent`</span> | [*sensors/column/accepted_values*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/accepted_values/) |
 
 
 **Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`expected_values`|A list of expected values that must be present in a string column, only values from this list are accepted and rows having these values in the tested column are counted as valid rows.|string_list|:material-check-bold:||
+|<span class="no-wrap-code">`expected_values`</span>|A list of expected values that must be present in a string column, only values from this list are accepted and rows having these values in the tested column are counted as valid rows.|*string_list*|:material-check-bold:||
 
 
 

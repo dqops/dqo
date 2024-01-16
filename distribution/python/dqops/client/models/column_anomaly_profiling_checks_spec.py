@@ -58,9 +58,9 @@ class ColumnAnomalyProfilingChecksSpec:
         custom_checks (Union[Unset, ColumnAnomalyProfilingChecksSpecCustomChecks]): Dictionary of additional custom
             checks within this category. The keys are check names defined in the definition section. The sensor parameters
             and rules should match the type of the configured sensor and rule for the custom check.
+        profile_sum_anomaly (Union[Unset, ColumnSumAnomalyDifferencingCheckSpec]):
         profile_mean_anomaly (Union[Unset, ColumnMeanAnomalyStationaryCheckSpec]):
         profile_median_anomaly (Union[Unset, ColumnMedianAnomalyStationaryCheckSpec]):
-        profile_sum_anomaly (Union[Unset, ColumnSumAnomalyDifferencingCheckSpec]):
         profile_mean_change (Union[Unset, ColumnMeanChangeCheckSpec]):
         profile_median_change (Union[Unset, ColumnMedianChangeCheckSpec]):
         profile_sum_change (Union[Unset, ColumnSumChangeCheckSpec]):
@@ -76,11 +76,11 @@ class ColumnAnomalyProfilingChecksSpec:
     """
 
     custom_checks: Union[Unset, "ColumnAnomalyProfilingChecksSpecCustomChecks"] = UNSET
+    profile_sum_anomaly: Union[Unset, "ColumnSumAnomalyDifferencingCheckSpec"] = UNSET
     profile_mean_anomaly: Union[Unset, "ColumnMeanAnomalyStationaryCheckSpec"] = UNSET
     profile_median_anomaly: Union[
         Unset, "ColumnMedianAnomalyStationaryCheckSpec"
     ] = UNSET
-    profile_sum_anomaly: Union[Unset, "ColumnSumAnomalyDifferencingCheckSpec"] = UNSET
     profile_mean_change: Union[Unset, "ColumnMeanChangeCheckSpec"] = UNSET
     profile_median_change: Union[Unset, "ColumnMedianChangeCheckSpec"] = UNSET
     profile_sum_change: Union[Unset, "ColumnSumChangeCheckSpec"] = UNSET
@@ -104,6 +104,10 @@ class ColumnAnomalyProfilingChecksSpec:
         if not isinstance(self.custom_checks, Unset):
             custom_checks = self.custom_checks.to_dict()
 
+        profile_sum_anomaly: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_sum_anomaly, Unset):
+            profile_sum_anomaly = self.profile_sum_anomaly.to_dict()
+
         profile_mean_anomaly: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.profile_mean_anomaly, Unset):
             profile_mean_anomaly = self.profile_mean_anomaly.to_dict()
@@ -111,10 +115,6 @@ class ColumnAnomalyProfilingChecksSpec:
         profile_median_anomaly: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.profile_median_anomaly, Unset):
             profile_median_anomaly = self.profile_median_anomaly.to_dict()
-
-        profile_sum_anomaly: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.profile_sum_anomaly, Unset):
-            profile_sum_anomaly = self.profile_sum_anomaly.to_dict()
 
         profile_mean_change: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.profile_mean_change, Unset):
@@ -169,12 +169,12 @@ class ColumnAnomalyProfilingChecksSpec:
         field_dict.update({})
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
+        if profile_sum_anomaly is not UNSET:
+            field_dict["profile_sum_anomaly"] = profile_sum_anomaly
         if profile_mean_anomaly is not UNSET:
             field_dict["profile_mean_anomaly"] = profile_mean_anomaly
         if profile_median_anomaly is not UNSET:
             field_dict["profile_median_anomaly"] = profile_median_anomaly
-        if profile_sum_anomaly is not UNSET:
-            field_dict["profile_sum_anomaly"] = profile_sum_anomaly
         if profile_mean_change is not UNSET:
             field_dict["profile_mean_change"] = profile_mean_change
         if profile_median_change is not UNSET:
@@ -257,6 +257,15 @@ class ColumnAnomalyProfilingChecksSpec:
                 _custom_checks
             )
 
+        _profile_sum_anomaly = d.pop("profile_sum_anomaly", UNSET)
+        profile_sum_anomaly: Union[Unset, ColumnSumAnomalyDifferencingCheckSpec]
+        if isinstance(_profile_sum_anomaly, Unset):
+            profile_sum_anomaly = UNSET
+        else:
+            profile_sum_anomaly = ColumnSumAnomalyDifferencingCheckSpec.from_dict(
+                _profile_sum_anomaly
+            )
+
         _profile_mean_anomaly = d.pop("profile_mean_anomaly", UNSET)
         profile_mean_anomaly: Union[Unset, ColumnMeanAnomalyStationaryCheckSpec]
         if isinstance(_profile_mean_anomaly, Unset):
@@ -273,15 +282,6 @@ class ColumnAnomalyProfilingChecksSpec:
         else:
             profile_median_anomaly = ColumnMedianAnomalyStationaryCheckSpec.from_dict(
                 _profile_median_anomaly
-            )
-
-        _profile_sum_anomaly = d.pop("profile_sum_anomaly", UNSET)
-        profile_sum_anomaly: Union[Unset, ColumnSumAnomalyDifferencingCheckSpec]
-        if isinstance(_profile_sum_anomaly, Unset):
-            profile_sum_anomaly = UNSET
-        else:
-            profile_sum_anomaly = ColumnSumAnomalyDifferencingCheckSpec.from_dict(
-                _profile_sum_anomaly
             )
 
         _profile_mean_change = d.pop("profile_mean_change", UNSET)
@@ -392,9 +392,9 @@ class ColumnAnomalyProfilingChecksSpec:
 
         column_anomaly_profiling_checks_spec = cls(
             custom_checks=custom_checks,
+            profile_sum_anomaly=profile_sum_anomaly,
             profile_mean_anomaly=profile_mean_anomaly,
             profile_median_anomaly=profile_median_anomaly,
-            profile_sum_anomaly=profile_sum_anomaly,
             profile_mean_change=profile_mean_change,
             profile_median_change=profile_median_change,
             profile_sum_change=profile_sum_change,

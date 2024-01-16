@@ -13,14 +13,14 @@ The sql aggregated expression sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | custom_sql | `column/custom_sql/sql_aggregated_expression` | [sensors/column/custom_sql](https://github.com/dqops/dqo/tree/develop/home/sensors/column/custom_sql/) |
+| column | custom_sql | <span class="no-wrap-code">`column/custom_sql/sql_aggregated_expression`</span> | [*sensors/column/custom_sql*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/custom_sql/) |
 
 
 **Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`sql_expression`|SQL aggregate expression that returns a numeric value calculated from rows. The expression is evaluated on a whole table or withing a GROUP BY clause for daily partitions and/or data groups. The expression can use {table} and {column} placeholder that are replaced with a full table name and the analyzed column name.|string|:material-check-bold:||
+|<span class="no-wrap-code">`sql_expression`</span>|SQL aggregate expression that returns a numeric value calculated from rows. The expression is evaluated on a whole table or withing a GROUP BY clause for daily partitions and/or data groups. The expression can use {table} and {column} placeholder that are replaced with a full table name and the analyzed column name.|*string*|:material-check-bold:||
 
 
 
@@ -198,14 +198,14 @@ The sql condition failed count sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | custom_sql | `column/custom_sql/sql_condition_failed_count` | [sensors/column/custom_sql](https://github.com/dqops/dqo/tree/develop/home/sensors/column/custom_sql/) |
+| column | custom_sql | <span class="no-wrap-code">`column/custom_sql/sql_condition_failed_count`</span> | [*sensors/column/custom_sql*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/custom_sql/) |
 
 
 **Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`sql_condition`|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} and {column} placeholder that are replaced with a full table name and the analyzed column name.|string|:material-check-bold:||
+|<span class="no-wrap-code">`sql_condition`</span>|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} and {column} placeholder that are replaced with a full table name and the analyzed column name.|*string*|:material-check-bold:||
 
 
 
@@ -453,14 +453,14 @@ The sql condition failed percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | custom_sql | `column/custom_sql/sql_condition_failed_percent` | [sensors/column/custom_sql](https://github.com/dqops/dqo/tree/develop/home/sensors/column/custom_sql/) |
+| column | custom_sql | <span class="no-wrap-code">`column/custom_sql/sql_condition_failed_percent`</span> | [*sensors/column/custom_sql*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/custom_sql/) |
 
 
 **Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`sql_condition`|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} and {column} placeholder that are replaced with a full table name and the analyzed column name.|string|:material-check-bold:||
+|<span class="no-wrap-code">`sql_condition`</span>|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} and {column} placeholder that are replaced with a full table name and the analyzed column name.|*string*|:material-check-bold:||
 
 
 
@@ -739,14 +739,14 @@ The sql condition passed count sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | custom_sql | `column/custom_sql/sql_condition_passed_count` | [sensors/column/custom_sql](https://github.com/dqops/dqo/tree/develop/home/sensors/column/custom_sql/) |
+| column | custom_sql | <span class="no-wrap-code">`column/custom_sql/sql_condition_passed_count`</span> | [*sensors/column/custom_sql*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/custom_sql/) |
 
 
 **Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`sql_condition`|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} and {column} placeholder that are replaced with a full table name and the analyzed column name.|string|:material-check-bold:||
+|<span class="no-wrap-code">`sql_condition`</span>|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} and {column} placeholder that are replaced with a full table name and the analyzed column name.|*string*|:material-check-bold:||
 
 
 
@@ -994,14 +994,14 @@ The sql condition passed percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | custom_sql | `column/custom_sql/sql_condition_passed_percent` | [sensors/column/custom_sql](https://github.com/dqops/dqo/tree/develop/home/sensors/column/custom_sql/) |
+| column | custom_sql | <span class="no-wrap-code">`column/custom_sql/sql_condition_passed_percent`</span> | [*sensors/column/custom_sql*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/custom_sql/) |
 
 
 **Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`sql_condition`|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} and {column} placeholder that are replaced with a full table name and the analyzed column name.|string|:material-check-bold:||
+|<span class="no-wrap-code">`sql_condition`</span>|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} and {column} placeholder that are replaced with a full table name and the analyzed column name.|*string*|:material-check-bold:||
 
 
 

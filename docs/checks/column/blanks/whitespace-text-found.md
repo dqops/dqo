@@ -17,7 +17,7 @@ Verifies that the number of whitespace strings in a column does not exceed the m
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_whitespace_text_found|profiling| |Completeness|[whitespace_text_count](../../../reference/sensors/column/blanks-column-sensors.md#whitespace-text-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`profile_whitespace_text_found`</span>|profiling| |Completeness|[*whitespace_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#whitespace-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -1294,7 +1294,7 @@ Verifies that the number of whitespace strings in a column does not exceed the m
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_whitespace_text_found|monitoring|daily|Completeness|[whitespace_text_count](../../../reference/sensors/column/blanks-column-sensors.md#whitespace-text-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`daily_whitespace_text_found`</span>|monitoring|daily|Completeness|[*whitespace_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#whitespace-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -2573,7 +2573,7 @@ Verifies that the number of whitespace strings in a column does not exceed the m
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_whitespace_text_found|monitoring|monthly|Completeness|[whitespace_text_count](../../../reference/sensors/column/blanks-column-sensors.md#whitespace-text-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`monthly_whitespace_text_found`</span>|monitoring|monthly|Completeness|[*whitespace_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#whitespace-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -3852,7 +3852,7 @@ Verifies that the number of whitespace strings in a column does not exceed the m
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_whitespace_text_found|partitioned|daily|Completeness|[whitespace_text_count](../../../reference/sensors/column/blanks-column-sensors.md#whitespace-text-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`daily_partition_whitespace_text_found`</span>|partitioned|daily|Completeness|[*whitespace_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#whitespace-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -5153,7 +5153,7 @@ Verifies that the number of whitespace strings in a column does not exceed the m
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_whitespace_text_found|partitioned|monthly|Completeness|[whitespace_text_count](../../../reference/sensors/column/blanks-column-sensors.md#whitespace-text-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`monthly_partition_whitespace_text_found`</span>|partitioned|monthly|Completeness|[*whitespace_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#whitespace-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 

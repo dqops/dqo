@@ -17,7 +17,7 @@ Verifies that the percentage of rows that contains valid emails in a column does
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_contains_email_percent|profiling| |Validity|[contains_email_percent](../../../reference/sensors/column/pii-column-sensors.md#contains-email-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`profile_contains_email_percent`</span>|profiling| |Validity|[*contains_email_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-email-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -1256,7 +1256,7 @@ Verifies that the percentage of rows that contains emails in a column does not e
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_contains_email_percent|monitoring|daily|Validity|[contains_email_percent](../../../reference/sensors/column/pii-column-sensors.md#contains-email-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`daily_contains_email_percent`</span>|monitoring|daily|Validity|[*contains_email_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-email-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -2497,7 +2497,7 @@ Verifies that the percentage of rows that contains emails in a column does not e
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_contains_email_percent|monitoring|monthly|Validity|[contains_email_percent](../../../reference/sensors/column/pii-column-sensors.md#contains-email-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`monthly_contains_email_percent`</span>|monitoring|monthly|Validity|[*contains_email_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-email-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -3738,7 +3738,7 @@ Verifies that the percentage of rows that contains emails in a column does not e
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_contains_email_percent|partitioned|daily|Validity|[contains_email_percent](../../../reference/sensors/column/pii-column-sensors.md#contains-email-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`daily_partition_contains_email_percent`</span>|partitioned|daily|Validity|[*contains_email_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-email-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -5001,7 +5001,7 @@ Verifies that the percentage of rows that contains emails in a column does not e
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_contains_email_percent|partitioned|monthly|Validity|[contains_email_percent](../../../reference/sensors/column/pii-column-sensors.md#contains-email-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`monthly_partition_contains_email_percent`</span>|partitioned|monthly|Validity|[*contains_email_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-email-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 

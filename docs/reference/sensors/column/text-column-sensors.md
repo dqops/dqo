@@ -13,14 +13,14 @@ The text length above max length count sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | text | `column/text/text_length_above_max_length_count` | [sensors/column/text](https://github.com/dqops/dqo/tree/develop/home/sensors/column/text/) |
+| column | text | <span class="no-wrap-code">`column/text/text_length_above_max_length_count`</span> | [*sensors/column/text*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/text/) |
 
 
 **Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_length`|This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0|integer|:material-check-bold:||
+|<span class="no-wrap-code">`max_length`</span>|This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0|*integer*|:material-check-bold:||
 
 
 
@@ -406,14 +406,14 @@ The text length above max length percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | text | `column/text/text_length_above_max_length_percent` | [sensors/column/text](https://github.com/dqops/dqo/tree/develop/home/sensors/column/text/) |
+| column | text | <span class="no-wrap-code">`column/text/text_length_above_max_length_percent`</span> | [*sensors/column/text*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/text/) |
 
 
 **Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_length`|This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0|integer|:material-check-bold:||
+|<span class="no-wrap-code">`max_length`</span>|This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0|*integer*|:material-check-bold:||
 
 
 
@@ -832,14 +832,14 @@ The text length below min length count sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | text | `column/text/text_length_below_min_length_count` | [sensors/column/text](https://github.com/dqops/dqo/tree/develop/home/sensors/column/text/) |
+| column | text | <span class="no-wrap-code">`column/text/text_length_below_min_length_count`</span> | [*sensors/column/text*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/text/) |
 
 
 **Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`min_length`|This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0|integer|:material-check-bold:||
+|<span class="no-wrap-code">`min_length`</span>|This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0|*integer*|:material-check-bold:||
 
 
 
@@ -1183,14 +1183,14 @@ The text length below min length percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | text | `column/text/text_length_below_min_length_percent` | [sensors/column/text](https://github.com/dqops/dqo/tree/develop/home/sensors/column/text/) |
+| column | text | <span class="no-wrap-code">`column/text/text_length_below_min_length_percent`</span> | [*sensors/column/text*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/text/) |
 
 
 **Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`min_length`|This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0|integer|:material-check-bold:||
+|<span class="no-wrap-code">`min_length`</span>|This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0|*integer*|:material-check-bold:||
 
 
 
@@ -1566,15 +1566,15 @@ The text length in range percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | text | `column/text/text_length_in_range_percent` | [sensors/column/text](https://github.com/dqops/dqo/tree/develop/home/sensors/column/text/) |
+| column | text | <span class="no-wrap-code">`column/text/text_length_in_range_percent`</span> | [*sensors/column/text*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/text/) |
 
 
 **Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`min_length`|Sets a minimum text length|integer|:material-check-bold:||
-|`max_length`|Sets a maximum text length|integer|:material-check-bold:||
+|<span class="no-wrap-code">`min_length`</span>|Sets a minimum text length|*integer*|:material-check-bold:||
+|<span class="no-wrap-code">`max_length`</span>|Sets a maximum text length|*integer*|:material-check-bold:||
 
 
 
@@ -1896,7 +1896,7 @@ The text max length sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | text | `column/text/text_max_length` | [sensors/column/text](https://github.com/dqops/dqo/tree/develop/home/sensors/column/text/) |
+| column | text | <span class="no-wrap-code">`column/text/text_max_length`</span> | [*sensors/column/text*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/text/) |
 
 
 
@@ -2152,7 +2152,7 @@ The text mean length sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | text | `column/text/text_mean_length` | [sensors/column/text](https://github.com/dqops/dqo/tree/develop/home/sensors/column/text/) |
+| column | text | <span class="no-wrap-code">`column/text/text_mean_length`</span> | [*sensors/column/text*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/text/) |
 
 
 
@@ -2492,7 +2492,7 @@ The text min length sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | text | `column/text/text_min_length` | [sensors/column/text](https://github.com/dqops/dqo/tree/develop/home/sensors/column/text/) |
+| column | text | <span class="no-wrap-code">`column/text/text_min_length`</span> | [*sensors/column/text*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/text/) |
 
 
 
@@ -2748,7 +2748,7 @@ The text parsable to boolean percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | text | `column/text/text_parsable_to_boolean_percent` | [sensors/column/text](https://github.com/dqops/dqo/tree/develop/home/sensors/column/text/) |
+| column | text | <span class="no-wrap-code">`column/text/text_parsable_to_boolean_percent`</span> | [*sensors/column/text*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/text/) |
 
 
 
@@ -3034,7 +3034,7 @@ The text parsable to date percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | text | `column/text/text_parsable_to_date_percent` | [sensors/column/text](https://github.com/dqops/dqo/tree/develop/home/sensors/column/text/) |
+| column | text | <span class="no-wrap-code">`column/text/text_parsable_to_date_percent`</span> | [*sensors/column/text*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/text/) |
 
 
 
@@ -3374,7 +3374,7 @@ The text parsable to float percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | text | `column/text/text_parsable_to_float_percent` | [sensors/column/text](https://github.com/dqops/dqo/tree/develop/home/sensors/column/text/) |
+| column | text | <span class="no-wrap-code">`column/text/text_parsable_to_float_percent`</span> | [*sensors/column/text*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/text/) |
 
 
 
@@ -3622,7 +3622,7 @@ The text parsable to integer percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | text | `column/text/text_parsable_to_integer_percent` | [sensors/column/text](https://github.com/dqops/dqo/tree/develop/home/sensors/column/text/) |
+| column | text | <span class="no-wrap-code">`column/text/text_parsable_to_integer_percent`</span> | [*sensors/column/text*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/text/) |
 
 
 
@@ -3873,7 +3873,7 @@ The text surrounded by whitespace count sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | text | `column/text/text_surrounded_by_whitespace_count` | [sensors/column/text](https://github.com/dqops/dqo/tree/develop/home/sensors/column/text/) |
+| column | text | <span class="no-wrap-code">`column/text/text_surrounded_by_whitespace_count`</span> | [*sensors/column/text*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/text/) |
 
 
 
@@ -4280,7 +4280,7 @@ The text surrounded by whitespace percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | text | `column/text/text_surrounded_by_whitespace_percent` | [sensors/column/text](https://github.com/dqops/dqo/tree/develop/home/sensors/column/text/) |
+| column | text | <span class="no-wrap-code">`column/text/text_surrounded_by_whitespace_percent`</span> | [*sensors/column/text*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/text/) |
 
 
 
@@ -4723,7 +4723,7 @@ The text valid country code percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | text | `column/text/text_valid_country_code_percent` | [sensors/column/text](https://github.com/dqops/dqo/tree/develop/home/sensors/column/text/) |
+| column | text | <span class="no-wrap-code">`column/text/text_valid_country_code_percent`</span> | [*sensors/column/text*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/text/) |
 
 
 
@@ -5009,7 +5009,7 @@ The text valid currency code percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | text | `column/text/text_valid_currency_code_percent` | [sensors/column/text](https://github.com/dqops/dqo/tree/develop/home/sensors/column/text/) |
+| column | text | <span class="no-wrap-code">`column/text/text_valid_currency_code_percent`</span> | [*sensors/column/text*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/text/) |
 
 
 

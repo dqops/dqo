@@ -17,7 +17,7 @@ Verifies that the percentage of negative values in a column does not exceed the 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_negative_values_percent|profiling| |Validity|[negative_percent](../../../reference/sensors/column/numeric-column-sensors.md#negative-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`profile_negative_values_percent`</span>|profiling| |Validity|[*negative_percent*](../../../reference/sensors/column/numeric-column-sensors.md#negative-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -1204,7 +1204,7 @@ Verifies that the percentage of negative values in a column does not exceed the 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_negative_values_percent|monitoring|daily|Validity|[negative_percent](../../../reference/sensors/column/numeric-column-sensors.md#negative-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`daily_negative_values_percent`</span>|monitoring|daily|Validity|[*negative_percent*](../../../reference/sensors/column/numeric-column-sensors.md#negative-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -2393,7 +2393,7 @@ Verifies that the percentage of negative values in a column does not exceed the 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_negative_values_percent|monitoring|monthly|Validity|[negative_percent](../../../reference/sensors/column/numeric-column-sensors.md#negative-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`monthly_negative_values_percent`</span>|monitoring|monthly|Validity|[*negative_percent*](../../../reference/sensors/column/numeric-column-sensors.md#negative-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -3582,7 +3582,7 @@ Verifies that the percentage of negative values in a column does not exceed the 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_negative_values_percent|partitioned|daily|Validity|[negative_percent](../../../reference/sensors/column/numeric-column-sensors.md#negative-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`daily_partition_negative_values_percent`</span>|partitioned|daily|Validity|[*negative_percent*](../../../reference/sensors/column/numeric-column-sensors.md#negative-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -4793,7 +4793,7 @@ Verifies that the percentage of negative values in a column does not exceed the 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_negative_values_percent|partitioned|monthly|Validity|[negative_percent](../../../reference/sensors/column/numeric-column-sensors.md#negative-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`monthly_partition_negative_values_percent`</span>|partitioned|monthly|Validity|[*negative_percent*](../../../reference/sensors/column/numeric-column-sensors.md#negative-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 

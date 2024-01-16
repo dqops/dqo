@@ -17,7 +17,7 @@ Verifies that the percentage of strings matching the custom regular expression p
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_texts_matching_regex_percent|profiling| |Validity|[texts_matching_regex_percent](../../../reference/sensors/column/patterns-column-sensors.md#texts-matching-regex-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`profile_texts_matching_regex_percent`</span>|profiling| |Validity|[*texts_matching_regex_percent*](../../../reference/sensors/column/patterns-column-sensors.md#texts-matching-regex-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -1440,7 +1440,7 @@ Verifies that the percentage of strings matching the custom regular expression p
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_texts_matching_regex_percent|monitoring|daily|Validity|[texts_matching_regex_percent](../../../reference/sensors/column/patterns-column-sensors.md#texts-matching-regex-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`daily_texts_matching_regex_percent`</span>|monitoring|daily|Validity|[*texts_matching_regex_percent*](../../../reference/sensors/column/patterns-column-sensors.md#texts-matching-regex-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -2865,7 +2865,7 @@ Verifies that the percentage of strings matching the custom regular expression p
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_texts_matching_regex_percent|monitoring|monthly|Validity|[texts_matching_regex_percent](../../../reference/sensors/column/patterns-column-sensors.md#texts-matching-regex-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`monthly_texts_matching_regex_percent`</span>|monitoring|monthly|Validity|[*texts_matching_regex_percent*](../../../reference/sensors/column/patterns-column-sensors.md#texts-matching-regex-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -4290,7 +4290,7 @@ Verifies that the percentage of strings matching the custom regular expression p
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_texts_matching_regex_percent|partitioned|daily|Validity|[texts_matching_regex_percent](../../../reference/sensors/column/patterns-column-sensors.md#texts-matching-regex-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`daily_partition_texts_matching_regex_percent`</span>|partitioned|daily|Validity|[*texts_matching_regex_percent*](../../../reference/sensors/column/patterns-column-sensors.md#texts-matching-regex-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -5737,7 +5737,7 @@ Verifies that the percentage of strings matching the custom regular expression p
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_texts_matching_regex_percent|partitioned|monthly|Validity|[texts_matching_regex_percent](../../../reference/sensors/column/patterns-column-sensors.md#texts-matching-regex-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`monthly_partition_texts_matching_regex_percent`</span>|partitioned|monthly|Validity|[*texts_matching_regex_percent*](../../../reference/sensors/column/patterns-column-sensors.md#texts-matching-regex-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 

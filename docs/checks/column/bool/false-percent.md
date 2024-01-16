@@ -17,7 +17,7 @@ Verifies that the percentage of false values in a column does not exceed the min
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_false_percent|profiling| |Reasonableness|[false_percent](../../../reference/sensors/column/bool-column-sensors.md#false-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`profile_false_percent`</span>|profiling| |Reasonableness|[*false_percent*](../../../reference/sensors/column/bool-column-sensors.md#false-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -1244,7 +1244,7 @@ Verifies that the percentage of false values in a column does not exceed the min
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_false_percent|monitoring|daily|Reasonableness|[false_percent](../../../reference/sensors/column/bool-column-sensors.md#false-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`daily_false_percent`</span>|monitoring|daily|Reasonableness|[*false_percent*](../../../reference/sensors/column/bool-column-sensors.md#false-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -2473,7 +2473,7 @@ Verifies that the percentage of false values in a column does not exceed the min
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_false_percent|monitoring|monthly|Reasonableness|[false_percent](../../../reference/sensors/column/bool-column-sensors.md#false-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`monthly_false_percent`</span>|monitoring|monthly|Reasonableness|[*false_percent*](../../../reference/sensors/column/bool-column-sensors.md#false-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -3702,7 +3702,7 @@ Verifies that the percentage of false values in a column does not exceed the min
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_false_percent|partitioned|daily|Reasonableness|[false_percent](../../../reference/sensors/column/bool-column-sensors.md#false-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`daily_partition_false_percent`</span>|partitioned|daily|Reasonableness|[*false_percent*](../../../reference/sensors/column/bool-column-sensors.md#false-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -4953,7 +4953,7 @@ Verifies that the percentage of false values in a column does not exceed the min
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_false_percent|partitioned|monthly|Reasonableness|[false_percent](../../../reference/sensors/column/bool-column-sensors.md#false-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`monthly_partition_false_percent`</span>|partitioned|monthly|Reasonableness|[*false_percent*](../../../reference/sensors/column/bool-column-sensors.md#false-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 

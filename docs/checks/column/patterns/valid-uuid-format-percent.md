@@ -17,7 +17,7 @@ Verifies that the percentage of valid UUID in a text column does not fall below 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_valid_uuid_format_percent|profiling| |Validity|[valid_uuid_format_percent](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`profile_valid_uuid_format_percent`</span>|profiling| |Validity|[*valid_uuid_format_percent*](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -1244,7 +1244,7 @@ Verifies that the percentage of valid UUID in a text column does not fall below 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_valid_uuid_format_percent|monitoring|daily|Validity|[valid_uuid_format_percent](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`daily_valid_uuid_format_percent`</span>|monitoring|daily|Validity|[*valid_uuid_format_percent*](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -2473,7 +2473,7 @@ Verifies that the percentage of valid UUID in a text column does not fall below 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_valid_uuid_format_percent|monitoring|monthly|Validity|[valid_uuid_format_percent](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`monthly_valid_uuid_format_percent`</span>|monitoring|monthly|Validity|[*valid_uuid_format_percent*](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -3702,7 +3702,7 @@ Verifies that the percentage of valid UUID in a text column does not fall below 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_valid_uuid_format_percent|partitioned|daily|Validity|[valid_uuid_format_percent](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`daily_partition_valid_uuid_format_percent`</span>|partitioned|daily|Validity|[*valid_uuid_format_percent*](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -4953,7 +4953,7 @@ Verifies that the percentage of valid UUID in a text column does not fall below 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_valid_uuid_format_percent|partitioned|monthly|Validity|[valid_uuid_format_percent](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`monthly_partition_valid_uuid_format_percent`</span>|partitioned|monthly|Validity|[*valid_uuid_format_percent*](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 

@@ -17,7 +17,7 @@ Verifies that the length of a text in a column does not exceed the maximum accep
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_text_max_length|profiling| |Reasonableness|[text_max_length](../../../reference/sensors/column/text-column-sensors.md#text-max-length)|[max_value](../../../reference/rules/Comparison.md#max-value)|
+|<span class="no-wrap-code">`profile_text_max_length`</span>|profiling| |Reasonableness|[*text_max_length*](../../../reference/sensors/column/text-column-sensors.md#text-max-length)|[*max_value*](../../../reference/rules/Comparison.md#max-value)|
 
 **Command-line examples**
 
@@ -1022,7 +1022,7 @@ Verifies that the length of a text in a column does not exceed the maximum accep
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_text_max_length|monitoring|daily|Reasonableness|[text_max_length](../../../reference/sensors/column/text-column-sensors.md#text-max-length)|[max_value](../../../reference/rules/Comparison.md#max-value)|
+|<span class="no-wrap-code">`daily_text_max_length`</span>|monitoring|daily|Reasonableness|[*text_max_length*](../../../reference/sensors/column/text-column-sensors.md#text-max-length)|[*max_value*](../../../reference/rules/Comparison.md#max-value)|
 
 **Command-line examples**
 
@@ -2029,7 +2029,7 @@ Verifies that the length of a text in a column does not exceed the maximum accep
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_text_max_length|monitoring|monthly|Reasonableness|[text_max_length](../../../reference/sensors/column/text-column-sensors.md#text-max-length)|[max_value](../../../reference/rules/Comparison.md#max-value)|
+|<span class="no-wrap-code">`monthly_text_max_length`</span>|monitoring|monthly|Reasonableness|[*text_max_length*](../../../reference/sensors/column/text-column-sensors.md#text-max-length)|[*max_value*](../../../reference/rules/Comparison.md#max-value)|
 
 **Command-line examples**
 
@@ -3036,7 +3036,7 @@ Verifies that the length of a text in a column does not exceed the maximum accep
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_text_max_length|partitioned|daily|Reasonableness|[text_max_length](../../../reference/sensors/column/text-column-sensors.md#text-max-length)|[max_value](../../../reference/rules/Comparison.md#max-value)|
+|<span class="no-wrap-code">`daily_partition_text_max_length`</span>|partitioned|daily|Reasonableness|[*text_max_length*](../../../reference/sensors/column/text-column-sensors.md#text-max-length)|[*max_value*](../../../reference/rules/Comparison.md#max-value)|
 
 **Command-line examples**
 
@@ -4065,7 +4065,7 @@ Verifies that the length of a text in a column does not exceed the maximum accep
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_text_max_length|partitioned|monthly|Reasonableness|[text_max_length](../../../reference/sensors/column/text-column-sensors.md#text-max-length)|[max_value](../../../reference/rules/Comparison.md#max-value)|
+|<span class="no-wrap-code">`monthly_partition_text_max_length`</span>|partitioned|monthly|Reasonableness|[*text_max_length*](../../../reference/sensors/column/text-column-sensors.md#text-max-length)|[*max_value*](../../../reference/rules/Comparison.md#max-value)|
 
 **Command-line examples**
 

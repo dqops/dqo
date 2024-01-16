@@ -18,7 +18,7 @@ Verifies that percentage of the difference between the maximum value in a tested
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_max_match|profiling| |Accuracy|[max_value](../../../reference/sensors/column/range-column-sensors.md#max-value)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
+|<span class="no-wrap-code">`profile_max_match`</span>|profiling| |Accuracy|[*max_value*](../../../reference/sensors/column/range-column-sensors.md#max-value)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
 
 **Command-line examples**
 
@@ -483,7 +483,7 @@ Verifies that percentage of the difference between the maximum value in a tested
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_max_match|monitoring|daily|Accuracy|[max_value](../../../reference/sensors/column/range-column-sensors.md#max-value)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
+|<span class="no-wrap-code">`daily_max_match`</span>|monitoring|daily|Accuracy|[*max_value*](../../../reference/sensors/column/range-column-sensors.md#max-value)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
 
 **Command-line examples**
 
@@ -949,7 +949,7 @@ Verifies that percentage of the difference between the maximum value in a tested
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_max_match|monitoring|monthly|Accuracy|[max_value](../../../reference/sensors/column/range-column-sensors.md#max-value)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
+|<span class="no-wrap-code">`monthly_max_match`</span>|monitoring|monthly|Accuracy|[*max_value*](../../../reference/sensors/column/range-column-sensors.md#max-value)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
 
 **Command-line examples**
 
@@ -1415,7 +1415,7 @@ Verifies that percentage of the difference between the maximum value in a tested
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_max_match|partitioned|daily|Accuracy|[max_value](../../../reference/sensors/column/range-column-sensors.md#max-value)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
+|<span class="no-wrap-code">`daily_partition_max_match`</span>|partitioned|daily|Accuracy|[*max_value*](../../../reference/sensors/column/range-column-sensors.md#max-value)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
 
 **Command-line examples**
 
@@ -1895,7 +1895,7 @@ Verifies that percentage of the difference between the maximum value in a tested
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_max_match|partitioned|monthly|Accuracy|[max_value](../../../reference/sensors/column/range-column-sensors.md#max-value)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
+|<span class="no-wrap-code">`monthly_partition_max_match`</span>|partitioned|monthly|Accuracy|[*max_value*](../../../reference/sensors/column/range-column-sensors.md#max-value)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
 
 **Command-line examples**
 

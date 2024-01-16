@@ -21,7 +21,7 @@ Daily partitioned check calculating the longest time a row waited to be load
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_reload_lag|partitioned|daily|Timeliness|[partition_reload_lag](../../../reference/sensors/table/timeliness-table-sensors.md#partition-reload-lag)|[max_days](../../../reference/rules/Comparison.md#max-days)|
+|<span class="no-wrap-code">`daily_partition_reload_lag`</span>|partitioned|daily|Timeliness|[*partition_reload_lag*](../../../reference/sensors/table/timeliness-table-sensors.md#partition-reload-lag)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|
 
 **Command-line examples**
 
@@ -1750,7 +1750,7 @@ Monthly partitioned check calculating the longest time a row waited to be load
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_reload_lag|partitioned|monthly|Timeliness|[partition_reload_lag](../../../reference/sensors/table/timeliness-table-sensors.md#partition-reload-lag)|[max_days](../../../reference/rules/Comparison.md#max-days)|
+|<span class="no-wrap-code">`monthly_partition_reload_lag`</span>|partitioned|monthly|Timeliness|[*partition_reload_lag*](../../../reference/sensors/table/timeliness-table-sensors.md#partition-reload-lag)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|
 
 **Command-line examples**
 

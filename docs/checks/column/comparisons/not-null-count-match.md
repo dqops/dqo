@@ -18,7 +18,7 @@ Verifies that percentage of the difference between the count of not null values 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_not_null_count_match|profiling| |Accuracy|[not_null_count](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
+|<span class="no-wrap-code">`profile_not_null_count_match`</span>|profiling| |Accuracy|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
 
 **Command-line examples**
 
@@ -497,7 +497,7 @@ Verifies that percentage of the difference between the count of not null values 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_not_null_count_match|monitoring|daily|Accuracy|[not_null_count](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
+|<span class="no-wrap-code">`daily_not_null_count_match`</span>|monitoring|daily|Accuracy|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
 
 **Command-line examples**
 
@@ -977,7 +977,7 @@ Verifies that percentage of the difference between the count of not null values 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_not_null_count_match|monitoring|monthly|Accuracy|[not_null_count](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
+|<span class="no-wrap-code">`monthly_not_null_count_match`</span>|monitoring|monthly|Accuracy|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
 
 **Command-line examples**
 
@@ -1457,7 +1457,7 @@ Verifies that percentage of the difference between the count of not null values 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_not_null_count_match|partitioned|daily|Accuracy|[not_null_count](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
+|<span class="no-wrap-code">`daily_partition_not_null_count_match`</span>|partitioned|daily|Accuracy|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
 
 **Command-line examples**
 
@@ -1951,7 +1951,7 @@ Verifies that percentage of the difference between the count of not null values 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_not_null_count_match|partitioned|monthly|Accuracy|[not_null_count](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
+|<span class="no-wrap-code">`monthly_partition_not_null_count_match`</span>|partitioned|monthly|Accuracy|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
 
 **Command-line examples**
 

@@ -17,7 +17,7 @@ Verifies that the population standard deviation of all values in a column is not
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_population_stddev_in_range|profiling| |Reasonableness|[population_stddev](../../../reference/sensors/column/numeric-column-sensors.md#population-stddev)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`profile_population_stddev_in_range`</span>|profiling| |Reasonableness|[*population_stddev*](../../../reference/sensors/column/numeric-column-sensors.md#population-stddev)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 
@@ -846,7 +846,7 @@ Verifies that the population standard deviation of all values in a column is not
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_population_stddev_in_range|monitoring|daily|Reasonableness|[population_stddev](../../../reference/sensors/column/numeric-column-sensors.md#population-stddev)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`daily_population_stddev_in_range`</span>|monitoring|daily|Reasonableness|[*population_stddev*](../../../reference/sensors/column/numeric-column-sensors.md#population-stddev)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 
@@ -1677,7 +1677,7 @@ Verifies that the population standard deviation of all values in a column is not
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_population_stddev_in_range|monitoring|monthly|Reasonableness|[population_stddev](../../../reference/sensors/column/numeric-column-sensors.md#population-stddev)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`monthly_population_stddev_in_range`</span>|monitoring|monthly|Reasonableness|[*population_stddev*](../../../reference/sensors/column/numeric-column-sensors.md#population-stddev)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 
@@ -2508,7 +2508,7 @@ Verifies that the population standard deviation of all values in a column is not
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_population_stddev_in_range|partitioned|daily|Reasonableness|[population_stddev](../../../reference/sensors/column/numeric-column-sensors.md#population-stddev)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`daily_partition_population_stddev_in_range`</span>|partitioned|daily|Reasonableness|[*population_stddev*](../../../reference/sensors/column/numeric-column-sensors.md#population-stddev)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 
@@ -3361,7 +3361,7 @@ Verifies that the population standard deviation of all values in a column is not
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_population_stddev_in_range|partitioned|monthly|Reasonableness|[population_stddev](../../../reference/sensors/column/numeric-column-sensors.md#population-stddev)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`monthly_partition_population_stddev_in_range`</span>|partitioned|monthly|Reasonableness|[*population_stddev*](../../../reference/sensors/column/numeric-column-sensors.md#population-stddev)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 

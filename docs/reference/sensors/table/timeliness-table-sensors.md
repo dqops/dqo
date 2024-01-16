@@ -13,7 +13,7 @@ The data freshness sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| table | timeliness | `table/timeliness/data_freshness` | [sensors/table/timeliness](https://github.com/dqops/dqo/tree/develop/home/sensors/table/timeliness/) |
+| table | timeliness | <span class="no-wrap-code">`table/timeliness/data_freshness`</span> | [*sensors/table/timeliness*](https://github.com/dqops/dqo/tree/develop/home/sensors/table/timeliness/) |
 
 
 
@@ -489,7 +489,7 @@ The data ingestion delay sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| table | timeliness | `table/timeliness/data_ingestion_delay` | [sensors/table/timeliness](https://github.com/dqops/dqo/tree/develop/home/sensors/table/timeliness/) |
+| table | timeliness | <span class="no-wrap-code">`table/timeliness/data_ingestion_delay`</span> | [*sensors/table/timeliness*](https://github.com/dqops/dqo/tree/develop/home/sensors/table/timeliness/) |
 
 
 
@@ -1007,7 +1007,7 @@ The data staleness sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| table | timeliness | `table/timeliness/data_staleness` | [sensors/table/timeliness](https://github.com/dqops/dqo/tree/develop/home/sensors/table/timeliness/) |
+| table | timeliness | <span class="no-wrap-code">`table/timeliness/data_staleness`</span> | [*sensors/table/timeliness*](https://github.com/dqops/dqo/tree/develop/home/sensors/table/timeliness/) |
 
 
 
@@ -1484,7 +1484,7 @@ The partition reload lag sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| table | timeliness | `table/timeliness/partition_reload_lag` | [sensors/table/timeliness](https://github.com/dqops/dqo/tree/develop/home/sensors/table/timeliness/) |
+| table | timeliness | <span class="no-wrap-code">`table/timeliness/partition_reload_lag`</span> | [*sensors/table/timeliness*](https://github.com/dqops/dqo/tree/develop/home/sensors/table/timeliness/) |
 
 
 

@@ -42,13 +42,13 @@ All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|<p id="table import-c">`-c`</p><br/><p id="table import--connection">`--connection`</p><br/>|Connection name| ||
-|<p id="table import-fw">`-fw`</p><br/><p id="table import--file-write">`--file-write`</p><br/>|Write command response to a file| ||
-|<p id="table import--headless">`--headless`</p><br/><p id="table import-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|<p id="table import-h">`-h`</p><br/><p id="table import--help">`--help`</p><br/>|Show the help for the command and parameters| ||
-|<p id="table import-of">`-of`</p><br/><p id="table import--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
-|<p id="table import-s">`-s`</p><br/><p id="table import--schema">`--schema`</p><br/>|Schema name| ||
-|<p id="table import-t">`-t`</p><br/><p id="table import--table">`--table`</p><br/>|Table name, without the schema name.| ||
+|<div id="table import-c" class="no-wrap-code">`-c`</div><div id="table import--connection" class="no-wrap-code">`--connection`</div>|Connection name| ||
+|<div id="table import-fw" class="no-wrap-code">`-fw`</div><div id="table import--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="table import--headless" class="no-wrap-code">`--headless`</div><div id="table import-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="table import-h" class="no-wrap-code">`-h`</div><div id="table import--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="table import-of" class="no-wrap-code">`-of`</div><div id="table import--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
+|<div id="table import-s" class="no-wrap-code">`-s`</div><div id="table import--schema" class="no-wrap-code">`--schema`</div>|Schema name| ||
+|<div id="table import-t" class="no-wrap-code">`-t`</div><div id="table import--table" class="no-wrap-code">`--table`</div>|Table name, without the schema name.| ||
 
 
 
@@ -92,12 +92,12 @@ All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|<p id="table edit-c">`-c`</p><br/><p id="table edit--connection">`--connection`</p><br/>|Connection Name| ||
-|<p id="table edit-fw">`-fw`</p><br/><p id="table edit--file-write">`--file-write`</p><br/>|Write command response to a file| ||
-|<p id="table edit-t">`-t`</p><br/><p id="table edit--table">`--table`</p><br/><p id="table edit--full-table-name">`--full-table-name`</p><br/>|Full table name (schema.table), supports wildcard patterns &#x27;sch*.tab*&#x27;| ||
-|<p id="table edit--headless">`--headless`</p><br/><p id="table edit-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|<p id="table edit-h">`-h`</p><br/><p id="table edit--help">`--help`</p><br/>|Show the help for the command and parameters| ||
-|<p id="table edit-of">`-of`</p><br/><p id="table edit--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|<div id="table edit-c" class="no-wrap-code">`-c`</div><div id="table edit--connection" class="no-wrap-code">`--connection`</div>|Connection Name| ||
+|<div id="table edit-fw" class="no-wrap-code">`-fw`</div><div id="table edit--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="table edit-t" class="no-wrap-code">`-t`</div><div id="table edit--table" class="no-wrap-code">`--table`</div><div id="table edit--full-table-name" class="no-wrap-code">`--full-table-name`</div>|Full table name (schema.table), supports wildcard patterns &#x27;sch*.tab*&#x27;| ||
+|<div id="table edit--headless" class="no-wrap-code">`--headless`</div><div id="table edit-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="table edit-h" class="no-wrap-code">`-h`</div><div id="table edit--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="table edit-of" class="no-wrap-code">`-of`</div><div id="table edit--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
 
 
 
@@ -143,12 +143,12 @@ All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|<p id="table add-c">`-c`</p><br/><p id="table add--connection">`--connection`</p><br/>|Connection Name| ||
-|<p id="table add-fw">`-fw`</p><br/><p id="table add--file-write">`--file-write`</p><br/>|Write command response to a file| ||
-|<p id="table add--headless">`--headless`</p><br/><p id="table add-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|<p id="table add-h">`-h`</p><br/><p id="table add--help">`--help`</p><br/>|Show the help for the command and parameters| ||
-|<p id="table add-of">`-of`</p><br/><p id="table add--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
-|<p id="table add-t">`-t`</p><br/><p id="table add--table">`--table`</p><br/>|Table name| ||
+|<div id="table add-c" class="no-wrap-code">`-c`</div><div id="table add--connection" class="no-wrap-code">`--connection`</div>|Connection Name| ||
+|<div id="table add-fw" class="no-wrap-code">`-fw`</div><div id="table add--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="table add--headless" class="no-wrap-code">`--headless`</div><div id="table add-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="table add-h" class="no-wrap-code">`-h`</div><div id="table add--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="table add-of" class="no-wrap-code">`-of`</div><div id="table add--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
+|<div id="table add-t" class="no-wrap-code">`-t`</div><div id="table add--table" class="no-wrap-code">`--table`</div>|Table name| ||
 
 
 
@@ -194,12 +194,12 @@ All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|<p id="table remove-c">`-c`</p><br/><p id="table remove--connection">`--connection`</p><br/>|Connection Name| ||
-|<p id="table remove-fw">`-fw`</p><br/><p id="table remove--file-write">`--file-write`</p><br/>|Write command response to a file| ||
-|<p id="table remove-t">`-t`</p><br/><p id="table remove--table">`--table`</p><br/><p id="table remove--full-table-name">`--full-table-name`</p><br/>|Full table name filter in the form &quot;schema.table&quot;, but also supporting patterns: public.*, *.customers, landing*.customer*.| ||
-|<p id="table remove--headless">`--headless`</p><br/><p id="table remove-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|<p id="table remove-h">`-h`</p><br/><p id="table remove--help">`--help`</p><br/>|Show the help for the command and parameters| ||
-|<p id="table remove-of">`-of`</p><br/><p id="table remove--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|<div id="table remove-c" class="no-wrap-code">`-c`</div><div id="table remove--connection" class="no-wrap-code">`--connection`</div>|Connection Name| ||
+|<div id="table remove-fw" class="no-wrap-code">`-fw`</div><div id="table remove--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="table remove-t" class="no-wrap-code">`-t`</div><div id="table remove--table" class="no-wrap-code">`--table`</div><div id="table remove--full-table-name" class="no-wrap-code">`--full-table-name`</div>|Full table name filter in the form &quot;schema.table&quot;, but also supporting patterns: public.*, *.customers, landing*.customer*.| ||
+|<div id="table remove--headless" class="no-wrap-code">`--headless`</div><div id="table remove-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="table remove-h" class="no-wrap-code">`-h`</div><div id="table remove--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="table remove-of" class="no-wrap-code">`-of`</div><div id="table remove--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
 
 
 
@@ -245,13 +245,13 @@ All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|<p id="table update-c">`-c`</p><br/><p id="table update--connection">`--connection`</p><br/>|Connection Name| ||
-|<p id="table update-fw">`-fw`</p><br/><p id="table update--file-write">`--file-write`</p><br/>|Write command response to a file| ||
-|<p id="table update-t">`-t`</p><br/><p id="table update--table">`--table`</p><br/><p id="table update--full-table-name">`--full-table-name`</p><br/>|Full table name in the form &quot;schema.table&quot;.| ||
-|<p id="table update--headless">`--headless`</p><br/><p id="table update-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|<p id="table update-h">`-h`</p><br/><p id="table update--help">`--help`</p><br/>|Show the help for the command and parameters| ||
-|<p id="table update-n">`-n`</p><br/><p id="table update--newTable">`--newTable`</p><br/>|New table name| ||
-|<p id="table update-of">`-of`</p><br/><p id="table update--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|<div id="table update-c" class="no-wrap-code">`-c`</div><div id="table update--connection" class="no-wrap-code">`--connection`</div>|Connection Name| ||
+|<div id="table update-fw" class="no-wrap-code">`-fw`</div><div id="table update--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="table update-t" class="no-wrap-code">`-t`</div><div id="table update--table" class="no-wrap-code">`--table`</div><div id="table update--full-table-name" class="no-wrap-code">`--full-table-name`</div>|Full table name in the form &quot;schema.table&quot;.| ||
+|<div id="table update--headless" class="no-wrap-code">`--headless`</div><div id="table update-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="table update-h" class="no-wrap-code">`-h`</div><div id="table update--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="table update-n" class="no-wrap-code">`-n`</div><div id="table update--newTable" class="no-wrap-code">`--newTable`</div>|New table name| ||
+|<div id="table update-of" class="no-wrap-code">`-of`</div><div id="table update--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
 
 
 
@@ -297,14 +297,14 @@ All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|<p id="table list-c">`-c`</p><br/><p id="table list--connection">`--connection`</p><br/>|Connection name| ||
-|<p id="table list-d">`-d`</p><br/><p id="table list--dimension">`--dimension`</p><br/>|Dimension filter| ||
-|<p id="table list-fw">`-fw`</p><br/><p id="table list--file-write">`--file-write`</p><br/>|Write command response to a file| ||
-|<p id="table list-t">`-t`</p><br/><p id="table list--table">`--table`</p><br/><p id="table list--full-table-name">`--full-table-name`</p><br/>|Full table name filter in the form &quot;schema.table&quot;, but also supporting patterns: public.*, *.customers, landing*.customer*.| ||
-|<p id="table list--headless">`--headless`</p><br/><p id="table list-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|<p id="table list-h">`-h`</p><br/><p id="table list--help">`--help`</p><br/>|Show the help for the command and parameters| ||
-|<p id="table list-l">`-l`</p><br/><p id="table list--label">`--label`</p><br/>|Label filter| ||
-|<p id="table list-of">`-of`</p><br/><p id="table list--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|<div id="table list-c" class="no-wrap-code">`-c`</div><div id="table list--connection" class="no-wrap-code">`--connection`</div>|Connection name| ||
+|<div id="table list-d" class="no-wrap-code">`-d`</div><div id="table list--dimension" class="no-wrap-code">`--dimension`</div>|Dimension filter| ||
+|<div id="table list-fw" class="no-wrap-code">`-fw`</div><div id="table list--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="table list-t" class="no-wrap-code">`-t`</div><div id="table list--table" class="no-wrap-code">`--table`</div><div id="table list--full-table-name" class="no-wrap-code">`--full-table-name`</div>|Full table name filter in the form &quot;schema.table&quot;, but also supporting patterns: public.*, *.customers, landing*.customer*.| ||
+|<div id="table list--headless" class="no-wrap-code">`--headless`</div><div id="table list-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="table list-h" class="no-wrap-code">`-h`</div><div id="table list--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="table list-l" class="no-wrap-code">`-l`</div><div id="table list--label" class="no-wrap-code">`--label`</div>|Label filter| ||
+|<div id="table list-of" class="no-wrap-code">`-of`</div><div id="table list--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
 
 
 

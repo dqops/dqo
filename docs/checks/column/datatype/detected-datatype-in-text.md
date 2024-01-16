@@ -18,7 +18,7 @@ Detects the data type of text values stored in the column. The sensor returns th
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_detected_datatype_in_text|profiling| |Consistency|[string_datatype_detect](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[detected_datatype_equals](../../../reference/rules/Comparison.md#detected-datatype-equals)|
+|<span class="no-wrap-code">`profile_detected_datatype_in_text`</span>|profiling| |Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*detected_datatype_equals*](../../../reference/rules/Comparison.md#detected-datatype-equals)|
 
 **Command-line examples**
 
@@ -3693,7 +3693,7 @@ Detects the data type of text values stored in the column. The sensor returns th
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_detected_datatype_in_text|monitoring|daily|Consistency|[string_datatype_detect](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[detected_datatype_equals](../../../reference/rules/Comparison.md#detected-datatype-equals)|
+|<span class="no-wrap-code">`daily_detected_datatype_in_text`</span>|monitoring|daily|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*detected_datatype_equals*](../../../reference/rules/Comparison.md#detected-datatype-equals)|
 
 **Command-line examples**
 
@@ -7370,7 +7370,7 @@ Detects the data type of text values stored in the column. The sensor returns th
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_detected_datatype_in_text|monitoring|monthly|Consistency|[string_datatype_detect](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[detected_datatype_equals](../../../reference/rules/Comparison.md#detected-datatype-equals)|
+|<span class="no-wrap-code">`monthly_detected_datatype_in_text`</span>|monitoring|monthly|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*detected_datatype_equals*](../../../reference/rules/Comparison.md#detected-datatype-equals)|
 
 **Command-line examples**
 
@@ -11047,7 +11047,7 @@ Detects the data type of text values stored in the column. The sensor returns th
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_detected_datatype_in_text|partitioned|daily|Consistency|[string_datatype_detect](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[detected_datatype_equals](../../../reference/rules/Comparison.md#detected-datatype-equals)|
+|<span class="no-wrap-code">`daily_partition_detected_datatype_in_text`</span>|partitioned|daily|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*detected_datatype_equals*](../../../reference/rules/Comparison.md#detected-datatype-equals)|
 
 **Command-line examples**
 
@@ -14744,7 +14744,7 @@ Detects the data type of text values stored in the column. The sensor returns th
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_detected_datatype_in_text|partitioned|monthly|Consistency|[string_datatype_detect](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[detected_datatype_equals](../../../reference/rules/Comparison.md#detected-datatype-equals)|
+|<span class="no-wrap-code">`monthly_partition_detected_datatype_in_text`</span>|partitioned|monthly|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*detected_datatype_equals*](../../../reference/rules/Comparison.md#detected-datatype-equals)|
 
 **Command-line examples**
 

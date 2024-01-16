@@ -19,7 +19,7 @@ Detects if new columns were added or existing columns were removed. Retrieves th
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_column_list_changed|profiling| |Consistency|[column_list_unordered_hash](../../../reference/sensors/table/schema-table-sensors.md#column-list-unordered-hash)|[value_changed](../../../reference/rules/Comparison.md#value-changed)|
+|<span class="no-wrap-code">`profile_column_list_changed`</span>|profiling| |Consistency|[*column_list_unordered_hash*](../../../reference/sensors/table/schema-table-sensors.md#column-list-unordered-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|
 
 **Command-line examples**
 
@@ -121,7 +121,7 @@ Detects if new columns were added or existing columns were removed since the mos
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_column_list_changed|monitoring|daily|Consistency|[column_list_unordered_hash](../../../reference/sensors/table/schema-table-sensors.md#column-list-unordered-hash)|[value_changed](../../../reference/rules/Comparison.md#value-changed)|
+|<span class="no-wrap-code">`daily_column_list_changed`</span>|monitoring|daily|Consistency|[*column_list_unordered_hash*](../../../reference/sensors/table/schema-table-sensors.md#column-list-unordered-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|
 
 **Command-line examples**
 
@@ -224,7 +224,7 @@ Detects if new columns were added or existing columns were removed since the las
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_column_list_changed|monitoring|monthly|Consistency|[column_list_unordered_hash](../../../reference/sensors/table/schema-table-sensors.md#column-list-unordered-hash)|[value_changed](../../../reference/rules/Comparison.md#value-changed)|
+|<span class="no-wrap-code">`monthly_column_list_changed`</span>|monitoring|monthly|Consistency|[*column_list_unordered_hash*](../../../reference/sensors/table/schema-table-sensors.md#column-list-unordered-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|
 
 **Command-line examples**
 

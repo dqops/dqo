@@ -13,7 +13,7 @@ The false percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | bool | `column/bool/false_percent` | [sensors/column/bool](https://github.com/dqops/dqo/tree/develop/home/sensors/column/bool/) |
+| column | bool | <span class="no-wrap-code">`column/bool/false_percent`</span> | [*sensors/column/bool*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/bool/) |
 
 
 
@@ -298,7 +298,7 @@ The true percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | bool | `column/bool/true_percent` | [sensors/column/bool](https://github.com/dqops/dqo/tree/develop/home/sensors/column/bool/) |
+| column | bool | <span class="no-wrap-code">`column/bool/true_percent`</span> | [*sensors/column/bool*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/bool/) |
 
 
 

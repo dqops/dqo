@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
+from ..models.athena_authentication_mode import AthenaAuthenticationMode
 from ..models.trino_engine_type import TrinoEngineType
 from ..types import UNSET, Unset
 
@@ -24,7 +25,10 @@ class TrinoParametersSpec:
             configuration with a custom environment variable.
         user (Union[Unset, str]): Trino user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use
             dynamic substitution.
+        password (Union[Unset, str]): Trino database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}
+            format to use dynamic substitution.
         properties (Union[Unset, TrinoParametersSpecProperties]):
+        athena_authentication_mode (Union[Unset, AthenaAuthenticationMode]):
         athena_region (Union[Unset, str]): The AWS Region where queries will be run. Supports also a ${ATHENA_REGION}
             configuration with a custom environment variable.
         catalog (Union[Unset, str]): The catalog that contains the databases and the tables that will be accessed with
@@ -40,7 +44,9 @@ class TrinoParametersSpec:
     host: Union[Unset, str] = UNSET
     port: Union[Unset, str] = UNSET
     user: Union[Unset, str] = UNSET
+    password: Union[Unset, str] = UNSET
     properties: Union[Unset, "TrinoParametersSpecProperties"] = UNSET
+    athena_authentication_mode: Union[Unset, AthenaAuthenticationMode] = UNSET
     athena_region: Union[Unset, str] = UNSET
     catalog: Union[Unset, str] = UNSET
     athena_work_group: Union[Unset, str] = UNSET
@@ -56,9 +62,14 @@ class TrinoParametersSpec:
         host = self.host
         port = self.port
         user = self.user
+        password = self.password
         properties: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.properties, Unset):
             properties = self.properties.to_dict()
+
+        athena_authentication_mode: Union[Unset, str] = UNSET
+        if not isinstance(self.athena_authentication_mode, Unset):
+            athena_authentication_mode = self.athena_authentication_mode.value
 
         athena_region = self.athena_region
         catalog = self.catalog
@@ -77,8 +88,12 @@ class TrinoParametersSpec:
             field_dict["port"] = port
         if user is not UNSET:
             field_dict["user"] = user
+        if password is not UNSET:
+            field_dict["password"] = password
         if properties is not UNSET:
             field_dict["properties"] = properties
+        if athena_authentication_mode is not UNSET:
+            field_dict["athena_authentication_mode"] = athena_authentication_mode
         if athena_region is not UNSET:
             field_dict["athena_region"] = athena_region
         if catalog is not UNSET:
@@ -112,12 +127,23 @@ class TrinoParametersSpec:
 
         user = d.pop("user", UNSET)
 
+        password = d.pop("password", UNSET)
+
         _properties = d.pop("properties", UNSET)
         properties: Union[Unset, TrinoParametersSpecProperties]
         if isinstance(_properties, Unset):
             properties = UNSET
         else:
             properties = TrinoParametersSpecProperties.from_dict(_properties)
+
+        _athena_authentication_mode = d.pop("athena_authentication_mode", UNSET)
+        athena_authentication_mode: Union[Unset, AthenaAuthenticationMode]
+        if isinstance(_athena_authentication_mode, Unset):
+            athena_authentication_mode = UNSET
+        else:
+            athena_authentication_mode = AthenaAuthenticationMode(
+                _athena_authentication_mode
+            )
 
         athena_region = d.pop("athena_region", UNSET)
 
@@ -134,7 +160,9 @@ class TrinoParametersSpec:
             host=host,
             port=port,
             user=user,
+            password=password,
             properties=properties,
+            athena_authentication_mode=athena_authentication_mode,
             athena_region=athena_region,
             catalog=catalog,
             athena_work_group=athena_work_group,

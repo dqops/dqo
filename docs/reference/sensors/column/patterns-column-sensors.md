@@ -13,7 +13,7 @@ The invalid email format count sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | patterns | `column/patterns/invalid_email_format_count` | [sensors/column/patterns](https://github.com/dqops/dqo/tree/develop/home/sensors/column/patterns/) |
+| column | patterns | <span class="no-wrap-code">`column/patterns/invalid_email_format_count`</span> | [*sensors/column/patterns*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/patterns/) |
 
 
 
@@ -266,7 +266,7 @@ The invalid ip4 address format count sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | patterns | `column/patterns/invalid_ip4_address_format_count` | [sensors/column/patterns](https://github.com/dqops/dqo/tree/develop/home/sensors/column/patterns/) |
+| column | patterns | <span class="no-wrap-code">`column/patterns/invalid_ip4_address_format_count`</span> | [*sensors/column/patterns*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/patterns/) |
 
 
 
@@ -525,7 +525,7 @@ The invalid ip6 address format count sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | patterns | `column/patterns/invalid_ip6_address_format_count` | [sensors/column/patterns](https://github.com/dqops/dqo/tree/develop/home/sensors/column/patterns/) |
+| column | patterns | <span class="no-wrap-code">`column/patterns/invalid_ip6_address_format_count`</span> | [*sensors/column/patterns*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/patterns/) |
 
 
 
@@ -780,7 +780,7 @@ The invalid uuid format count sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | patterns | `column/patterns/invalid_uuid_format_count` | [sensors/column/patterns](https://github.com/dqops/dqo/tree/develop/home/sensors/column/patterns/) |
+| column | patterns | <span class="no-wrap-code">`column/patterns/invalid_uuid_format_count`</span> | [*sensors/column/patterns*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/patterns/) |
 
 
 
@@ -1034,14 +1034,14 @@ The text matching date patterns percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | patterns | `column/patterns/text_matching_date_patterns_percent` | [sensors/column/patterns](https://github.com/dqops/dqo/tree/develop/home/sensors/column/patterns/) |
+| column | patterns | <span class="no-wrap-code">`column/patterns/text_matching_date_patterns_percent`</span> | [*sensors/column/patterns*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/patterns/) |
 
 
 **Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`date_formats`|Desired date format. Sensor will try to parse the column records and cast the data using this format.|enum|:material-check-bold:|YYYY-MM-DD<br/>MM/DD/YYYY<br/>DD/MM/YYYY<br/>YYYY/MM/DD<br/>Month D, YYYY<br/>|
+|<span class="no-wrap-code">`date_formats`</span>|Desired date format. Sensor will try to parse the column records and cast the data using this format.|*enum*|:material-check-bold:|*YYYY-MM-DD*<br/>*MM/DD/YYYY*<br/>*DD/MM/YYYY*<br/>*YYYY/MM/DD*<br/>*Month D, YYYY*<br/>|
 
 
 
@@ -1490,7 +1490,7 @@ The text matching name pattern percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | patterns | `column/patterns/text_matching_name_pattern_percent` | [sensors/column/patterns](https://github.com/dqops/dqo/tree/develop/home/sensors/column/patterns/) |
+| column | patterns | <span class="no-wrap-code">`column/patterns/text_matching_name_pattern_percent`</span> | [*sensors/column/patterns*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/patterns/) |
 
 
 
@@ -1777,14 +1777,14 @@ The text not matching date pattern count sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | patterns | `column/patterns/text_not_matching_date_pattern_count` | [sensors/column/patterns](https://github.com/dqops/dqo/tree/develop/home/sensors/column/patterns/) |
+| column | patterns | <span class="no-wrap-code">`column/patterns/text_not_matching_date_pattern_count`</span> | [*sensors/column/patterns*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/patterns/) |
 
 
 **Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`date_formats`|Desired date format. Sensor will try to parse the column records and cast the data using this format.|enum|:material-check-bold:|YYYY-MM-DD<br/>MM/DD/YYYY<br/>DD/MM/YYYY<br/>YYYY/MM/DD<br/>Month D, YYYY<br/>|
+|<span class="no-wrap-code">`date_formats`</span>|Desired date format. Sensor will try to parse the column records and cast the data using this format.|*enum*|:material-check-bold:|*YYYY-MM-DD*<br/>*MM/DD/YYYY*<br/>*DD/MM/YYYY*<br/>*YYYY/MM/DD*<br/>*Month D, YYYY*<br/>|
 
 
 
@@ -2226,14 +2226,14 @@ The text not matching regex count sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | patterns | `column/patterns/text_not_matching_regex_count` | [sensors/column/patterns](https://github.com/dqops/dqo/tree/develop/home/sensors/column/patterns/) |
+| column | patterns | <span class="no-wrap-code">`column/patterns/text_not_matching_regex_count`</span> | [*sensors/column/patterns*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/patterns/) |
 
 
 **Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`regex`|This field can be used to define custom regex. In order to define custom regex, user should write correct regex as a string. If regex is not defined by user then default regex is null|string|:material-check-bold:||
+|<span class="no-wrap-code">`regex`</span>|This field can be used to define custom regex. In order to define custom regex, user should write correct regex as a string. If regex is not defined by user then default regex is null|*string*|:material-check-bold:||
 
 
 
@@ -2615,14 +2615,14 @@ The texts matching regex percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | patterns | `column/patterns/texts_matching_regex_percent` | [sensors/column/patterns](https://github.com/dqops/dqo/tree/develop/home/sensors/column/patterns/) |
+| column | patterns | <span class="no-wrap-code">`column/patterns/texts_matching_regex_percent`</span> | [*sensors/column/patterns*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/patterns/) |
 
 
 **Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`regex`|This field can be used to define custom regex. In order to define custom regex, user should write correct regex as a string. If regex is not defined by user then default regex is null|string|:material-check-bold:||
+|<span class="no-wrap-code">`regex`</span>|This field can be used to define custom regex. In order to define custom regex, user should write correct regex as a string. If regex is not defined by user then default regex is null|*string*|:material-check-bold:||
 
 
 
@@ -3002,7 +3002,7 @@ The valid uuid format percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | patterns | `column/patterns/valid_uuid_format_percent` | [sensors/column/patterns](https://github.com/dqops/dqo/tree/develop/home/sensors/column/patterns/) |
+| column | patterns | <span class="no-wrap-code">`column/patterns/valid_uuid_format_percent`</span> | [*sensors/column/patterns*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/patterns/) |
 
 
 

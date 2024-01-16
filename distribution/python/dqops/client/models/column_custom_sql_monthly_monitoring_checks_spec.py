@@ -12,8 +12,8 @@ if TYPE_CHECKING:
     from ..models.column_sql_aggregate_expression_check_spec import (
         ColumnSqlAggregateExpressionCheckSpec,
     )
-    from ..models.column_sql_condition_failed_count_check_spec import (
-        ColumnSqlConditionFailedCountCheckSpec,
+    from ..models.column_sql_condition_failed_check_spec import (
+        ColumnSqlConditionFailedCheckSpec,
     )
     from ..models.column_sql_condition_passed_percent_check_spec import (
         ColumnSqlConditionPassedPercentCheckSpec,
@@ -30,19 +30,19 @@ class ColumnCustomSqlMonthlyMonitoringChecksSpec:
         custom_checks (Union[Unset, ColumnCustomSqlMonthlyMonitoringChecksSpecCustomChecks]): Dictionary of additional
             custom checks within this category. The keys are check names defined in the definition section. The sensor
             parameters and rules should match the type of the configured sensor and rule for the custom check.
+        monthly_sql_condition_failed_on_column (Union[Unset, ColumnSqlConditionFailedCheckSpec]):
         monthly_sql_condition_passed_percent_on_column (Union[Unset, ColumnSqlConditionPassedPercentCheckSpec]):
-        monthly_sql_condition_failed_count_on_column (Union[Unset, ColumnSqlConditionFailedCountCheckSpec]):
         monthly_sql_aggregate_expression_on_column (Union[Unset, ColumnSqlAggregateExpressionCheckSpec]):
     """
 
     custom_checks: Union[
         Unset, "ColumnCustomSqlMonthlyMonitoringChecksSpecCustomChecks"
     ] = UNSET
+    monthly_sql_condition_failed_on_column: Union[
+        Unset, "ColumnSqlConditionFailedCheckSpec"
+    ] = UNSET
     monthly_sql_condition_passed_percent_on_column: Union[
         Unset, "ColumnSqlConditionPassedPercentCheckSpec"
-    ] = UNSET
-    monthly_sql_condition_failed_count_on_column: Union[
-        Unset, "ColumnSqlConditionFailedCountCheckSpec"
     ] = UNSET
     monthly_sql_aggregate_expression_on_column: Union[
         Unset, "ColumnSqlAggregateExpressionCheckSpec"
@@ -54,20 +54,18 @@ class ColumnCustomSqlMonthlyMonitoringChecksSpec:
         if not isinstance(self.custom_checks, Unset):
             custom_checks = self.custom_checks.to_dict()
 
+        monthly_sql_condition_failed_on_column: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.monthly_sql_condition_failed_on_column, Unset):
+            monthly_sql_condition_failed_on_column = (
+                self.monthly_sql_condition_failed_on_column.to_dict()
+            )
+
         monthly_sql_condition_passed_percent_on_column: Union[
             Unset, Dict[str, Any]
         ] = UNSET
         if not isinstance(self.monthly_sql_condition_passed_percent_on_column, Unset):
             monthly_sql_condition_passed_percent_on_column = (
                 self.monthly_sql_condition_passed_percent_on_column.to_dict()
-            )
-
-        monthly_sql_condition_failed_count_on_column: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
-        if not isinstance(self.monthly_sql_condition_failed_count_on_column, Unset):
-            monthly_sql_condition_failed_count_on_column = (
-                self.monthly_sql_condition_failed_count_on_column.to_dict()
             )
 
         monthly_sql_aggregate_expression_on_column: Union[Unset, Dict[str, Any]] = UNSET
@@ -81,14 +79,14 @@ class ColumnCustomSqlMonthlyMonitoringChecksSpec:
         field_dict.update({})
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
+        if monthly_sql_condition_failed_on_column is not UNSET:
+            field_dict[
+                "monthly_sql_condition_failed_on_column"
+            ] = monthly_sql_condition_failed_on_column
         if monthly_sql_condition_passed_percent_on_column is not UNSET:
             field_dict[
                 "monthly_sql_condition_passed_percent_on_column"
             ] = monthly_sql_condition_passed_percent_on_column
-        if monthly_sql_condition_failed_count_on_column is not UNSET:
-            field_dict[
-                "monthly_sql_condition_failed_count_on_column"
-            ] = monthly_sql_condition_failed_count_on_column
         if monthly_sql_aggregate_expression_on_column is not UNSET:
             field_dict[
                 "monthly_sql_aggregate_expression_on_column"
@@ -104,8 +102,8 @@ class ColumnCustomSqlMonthlyMonitoringChecksSpec:
         from ..models.column_sql_aggregate_expression_check_spec import (
             ColumnSqlAggregateExpressionCheckSpec,
         )
-        from ..models.column_sql_condition_failed_count_check_spec import (
-            ColumnSqlConditionFailedCountCheckSpec,
+        from ..models.column_sql_condition_failed_check_spec import (
+            ColumnSqlConditionFailedCheckSpec,
         )
         from ..models.column_sql_condition_passed_percent_check_spec import (
             ColumnSqlConditionPassedPercentCheckSpec,
@@ -125,6 +123,21 @@ class ColumnCustomSqlMonthlyMonitoringChecksSpec:
                 )
             )
 
+        _monthly_sql_condition_failed_on_column = d.pop(
+            "monthly_sql_condition_failed_on_column", UNSET
+        )
+        monthly_sql_condition_failed_on_column: Union[
+            Unset, ColumnSqlConditionFailedCheckSpec
+        ]
+        if isinstance(_monthly_sql_condition_failed_on_column, Unset):
+            monthly_sql_condition_failed_on_column = UNSET
+        else:
+            monthly_sql_condition_failed_on_column = (
+                ColumnSqlConditionFailedCheckSpec.from_dict(
+                    _monthly_sql_condition_failed_on_column
+                )
+            )
+
         _monthly_sql_condition_passed_percent_on_column = d.pop(
             "monthly_sql_condition_passed_percent_on_column", UNSET
         )
@@ -137,21 +150,6 @@ class ColumnCustomSqlMonthlyMonitoringChecksSpec:
             monthly_sql_condition_passed_percent_on_column = (
                 ColumnSqlConditionPassedPercentCheckSpec.from_dict(
                     _monthly_sql_condition_passed_percent_on_column
-                )
-            )
-
-        _monthly_sql_condition_failed_count_on_column = d.pop(
-            "monthly_sql_condition_failed_count_on_column", UNSET
-        )
-        monthly_sql_condition_failed_count_on_column: Union[
-            Unset, ColumnSqlConditionFailedCountCheckSpec
-        ]
-        if isinstance(_monthly_sql_condition_failed_count_on_column, Unset):
-            monthly_sql_condition_failed_count_on_column = UNSET
-        else:
-            monthly_sql_condition_failed_count_on_column = (
-                ColumnSqlConditionFailedCountCheckSpec.from_dict(
-                    _monthly_sql_condition_failed_count_on_column
                 )
             )
 
@@ -172,8 +170,8 @@ class ColumnCustomSqlMonthlyMonitoringChecksSpec:
 
         column_custom_sql_monthly_monitoring_checks_spec = cls(
             custom_checks=custom_checks,
+            monthly_sql_condition_failed_on_column=monthly_sql_condition_failed_on_column,
             monthly_sql_condition_passed_percent_on_column=monthly_sql_condition_passed_percent_on_column,
-            monthly_sql_condition_failed_count_on_column=monthly_sql_condition_failed_count_on_column,
             monthly_sql_aggregate_expression_on_column=monthly_sql_aggregate_expression_on_column,
         )
 

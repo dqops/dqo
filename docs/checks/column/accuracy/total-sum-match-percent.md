@@ -18,7 +18,7 @@ Verifies that percentage of the difference in total sum of a column in a table a
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_total_sum_match_percent|profiling| |Accuracy|[total_sum_match_percent](../../../reference/sensors/column/accuracy-column-sensors.md#total-sum-match-percent)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
+|<span class="no-wrap-code">`profile_total_sum_match_percent`</span>|profiling| |Accuracy|[*total_sum_match_percent*](../../../reference/sensors/column/accuracy-column-sensors.md#total-sum-match-percent)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
 
 **Command-line examples**
 
@@ -535,7 +535,7 @@ Verifies that the percentage of difference in total sum of a column in a table a
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_total_sum_match_percent|monitoring|daily|Accuracy|[total_sum_match_percent](../../../reference/sensors/column/accuracy-column-sensors.md#total-sum-match-percent)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
+|<span class="no-wrap-code">`daily_total_sum_match_percent`</span>|monitoring|daily|Accuracy|[*total_sum_match_percent*](../../../reference/sensors/column/accuracy-column-sensors.md#total-sum-match-percent)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
 
 **Command-line examples**
 
@@ -1053,7 +1053,7 @@ Verifies that the percentage of difference in total sum of a column in a table a
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_total_sum_match_percent|monitoring|monthly|Accuracy|[total_sum_match_percent](../../../reference/sensors/column/accuracy-column-sensors.md#total-sum-match-percent)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
+|<span class="no-wrap-code">`monthly_total_sum_match_percent`</span>|monitoring|monthly|Accuracy|[*total_sum_match_percent*](../../../reference/sensors/column/accuracy-column-sensors.md#total-sum-match-percent)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
 
 **Command-line examples**
 

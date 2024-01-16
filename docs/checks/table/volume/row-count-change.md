@@ -17,7 +17,7 @@ Verifies that the total row count of the tested table has changed by a fixed rat
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_row_count_change|profiling| |Consistency|[row_count](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[change_percent](../../../reference/rules/Change.md#change-percent)|
+|<span class="no-wrap-code">`profile_row_count_change`</span>|profiling| |Consistency|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|
 
 **Command-line examples**
 
@@ -824,7 +824,7 @@ Verifies that the total row count of the tested table has changed by a fixed rat
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_row_count_change|monitoring|daily|Consistency|[row_count](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[change_percent](../../../reference/rules/Change.md#change-percent)|
+|<span class="no-wrap-code">`daily_row_count_change`</span>|monitoring|daily|Consistency|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|
 
 **Command-line examples**
 
@@ -1633,7 +1633,7 @@ Verifies that the total row count of the tested table has changed by a fixed rat
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_row_count_change|monitoring|monthly|Consistency|[row_count](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[change_percent](../../../reference/rules/Change.md#change-percent)|
+|<span class="no-wrap-code">`monthly_row_count_change`</span>|monitoring|monthly|Consistency|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|
 
 **Command-line examples**
 
@@ -2442,7 +2442,7 @@ Verifies that the total row count of the tested table has changed by a fixed rat
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_row_count_change|partitioned|daily|Consistency|[row_count](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[change_percent](../../../reference/rules/Change.md#change-percent)|
+|<span class="no-wrap-code">`daily_partition_row_count_change`</span>|partitioned|daily|Consistency|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|
 
 **Command-line examples**
 
@@ -3273,7 +3273,7 @@ Verifies that the total row count of the tested table has changed by a fixed rat
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_row_count_change|partitioned|monthly|Consistency|[row_count](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[change_percent](../../../reference/rules/Change.md#change-percent)|
+|<span class="no-wrap-code">`monthly_partition_row_count_change`</span>|partitioned|monthly|Consistency|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|
 
 **Command-line examples**
 

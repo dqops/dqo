@@ -14,7 +14,7 @@ The string datatype detect sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | datatype | `column/datatype/string_datatype_detect` | [sensors/column/datatype](https://github.com/dqops/dqo/tree/develop/home/sensors/column/datatype/) |
+| column | datatype | <span class="no-wrap-code">`column/datatype/string_datatype_detect`</span> | [*sensors/column/datatype*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/datatype/) |
 
 
 

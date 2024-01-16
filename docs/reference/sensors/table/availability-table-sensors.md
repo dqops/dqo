@@ -13,7 +13,7 @@ The table availability sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| table | availability | `table/availability/table_availability` | [sensors/table/availability](https://github.com/dqops/dqo/tree/develop/home/sensors/table/availability/) |
+| table | availability | <span class="no-wrap-code">`table/availability/table_availability`</span> | [*sensors/table/availability*](https://github.com/dqops/dqo/tree/develop/home/sensors/table/availability/) |
 
 
 

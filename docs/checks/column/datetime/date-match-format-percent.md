@@ -19,7 +19,7 @@ Verifies that the percentage of date values matching the given format in a text 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_date_match_format_percent|profiling| |Validity|[date_match_format_percent](../../../reference/sensors/column/datetime-column-sensors.md#date-match-format-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`profile_date_match_format_percent`</span>|profiling| |Validity|[*date_match_format_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-match-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -1540,7 +1540,7 @@ Verifies that the percentage of date values matching the given format in a text 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_date_match_format_percent|monitoring|daily|Validity|[date_match_format_percent](../../../reference/sensors/column/datetime-column-sensors.md#date-match-format-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`daily_date_match_format_percent`</span>|monitoring|daily|Validity|[*date_match_format_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-match-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -3063,7 +3063,7 @@ Verifies that the percentage of date values matching the given format in a text 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_date_match_format_percent|monitoring|monthly|Validity|[date_match_format_percent](../../../reference/sensors/column/datetime-column-sensors.md#date-match-format-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`monthly_date_match_format_percent`</span>|monitoring|monthly|Validity|[*date_match_format_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-match-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -4586,7 +4586,7 @@ Verifies that the percentage of date values matching the given format in a text 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_date_match_format_percent|partitioned|daily|Validity|[date_match_format_percent](../../../reference/sensors/column/datetime-column-sensors.md#date-match-format-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`daily_partition_date_match_format_percent`</span>|partitioned|daily|Validity|[*date_match_format_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-match-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -6131,7 +6131,7 @@ Verifies that the percentage of date values matching the given format in a text 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_date_match_format_percent|partitioned|monthly|Validity|[date_match_format_percent](../../../reference/sensors/column/datetime-column-sensors.md#date-match-format-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`monthly_partition_date_match_format_percent`</span>|partitioned|monthly|Validity|[*date_match_format_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-match-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 

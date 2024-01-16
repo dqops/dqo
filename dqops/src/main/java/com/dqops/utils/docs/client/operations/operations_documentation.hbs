@@ -17,7 +17,7 @@ Follow the [link]({{clientSourceUrl}}) to see the source code on GitHub.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-{{#with returnValueField}}|{{render-type typeModel yamlFieldName}}|{{helpText}}|{{render-type typeModel}}|
+{{#with returnValueField}}|<span class="no-wrap-code">{{{render-type typeModel yamlFieldName}}}</span>|{{helpText}}|*{{render-type typeModel}}*|
 {{/with}}
 {{/if}}
 
@@ -26,7 +26,7 @@ Follow the [link]({{clientSourceUrl}}) to see the source code on GitHub.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-{{#each parametersFields}}|{{render-type typeModel yamlFieldName}}|{{helpText}}|{{render-type typeModel}}|{{checkmark required}}|
+{{#each parametersFields}}|<span class="no-wrap-code">{{{render-type typeModel yamlFieldName}}}</span>|{{helpText}}|*{{render-type typeModel}}*|{{checkmark required}}|
 {{/each}}
 {{/if}}
 
@@ -35,7 +35,7 @@ Follow the [link]({{clientSourceUrl}}) to see the source code on GitHub.
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-{{#with requestBodyField}}|{{helpText}}|{{render-type typeModel}}|{{checkmark required}}|
+{{#with requestBodyField}}|{{helpText}}|*{{render-type typeModel}}*|{{checkmark required}}|
 {{/with}}
 {{/if}}
 

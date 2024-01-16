@@ -22,6 +22,7 @@ from .anomaly_stationary_percentile_moving_average_rule_1_parameters_spec import
 from .anomaly_stationary_percentile_moving_average_rule_05_parameters_spec import (
     AnomalyStationaryPercentileMovingAverageRule05ParametersSpec,
 )
+from .athena_authentication_mode import AthenaAuthenticationMode
 from .authenticated_dashboard_model import AuthenticatedDashboardModel
 from .between_floats_rule_parameters_spec import BetweenFloatsRuleParametersSpec
 from .big_query_authentication_mode import BigQueryAuthenticationMode
@@ -1019,9 +1020,7 @@ from .column_sql_aggregate_expression_check_spec import (
 from .column_sql_aggregated_expression_sensor_parameters_spec import (
     ColumnSqlAggregatedExpressionSensorParametersSpec,
 )
-from .column_sql_condition_failed_count_check_spec import (
-    ColumnSqlConditionFailedCountCheckSpec,
-)
+from .column_sql_condition_failed_check_spec import ColumnSqlConditionFailedCheckSpec
 from .column_sql_condition_failed_count_sensor_parameters_spec import (
     ColumnSqlConditionFailedCountSensorParametersSpec,
 )
@@ -1380,9 +1379,7 @@ from .max_percent_rule_0_warning_parameters_spec import (
 )
 from .max_percent_rule_5_parameters_spec import MaxPercentRule5ParametersSpec
 from .max_value_rule_parameters_spec import MaxValueRuleParametersSpec
-from .min_count_rule_0_warning_parameters_spec import MinCountRule0WarningParametersSpec
 from .min_count_rule_1_parameters_spec import MinCountRule1ParametersSpec
-from .min_count_rule_100_fatal_parameters_spec import MinCountRule100FatalParametersSpec
 from .min_percent_rule_95_parameters_spec import MinPercentRule95ParametersSpec
 from .min_percent_rule_100_error_parameters_spec import (
     MinPercentRule100ErrorParametersSpec,
@@ -1739,9 +1736,7 @@ from .table_sql_aggregate_expression_check_spec import (
 from .table_sql_aggregated_expression_sensor_parameters_spec import (
     TableSqlAggregatedExpressionSensorParametersSpec,
 )
-from .table_sql_condition_failed_count_check_spec import (
-    TableSqlConditionFailedCountCheckSpec,
-)
+from .table_sql_condition_failed_check_spec import TableSqlConditionFailedCheckSpec
 from .table_sql_condition_failed_count_sensor_parameters_spec import (
     TableSqlConditionFailedCountSensorParametersSpec,
 )
@@ -1849,6 +1844,7 @@ __all__ = (
     "AnomalyStationaryPercentileMovingAverageRule01ParametersSpec",
     "AnomalyStationaryPercentileMovingAverageRule05ParametersSpec",
     "AnomalyStationaryPercentileMovingAverageRule1ParametersSpec",
+    "AthenaAuthenticationMode",
     "AuthenticatedDashboardModel",
     "BetweenFloatsRuleParametersSpec",
     "BigQueryAuthenticationMode",
@@ -2248,7 +2244,7 @@ __all__ = (
     "ColumnSpec",
     "ColumnSqlAggregatedExpressionSensorParametersSpec",
     "ColumnSqlAggregateExpressionCheckSpec",
-    "ColumnSqlConditionFailedCountCheckSpec",
+    "ColumnSqlConditionFailedCheckSpec",
     "ColumnSqlConditionFailedCountSensorParametersSpec",
     "ColumnSqlConditionPassedPercentCheckSpec",
     "ColumnSqlConditionPassedPercentSensorParametersSpec",
@@ -2439,8 +2435,6 @@ __all__ = (
     "MaxPercentRule0WarningParametersSpec",
     "MaxPercentRule5ParametersSpec",
     "MaxValueRuleParametersSpec",
-    "MinCountRule0WarningParametersSpec",
-    "MinCountRule100FatalParametersSpec",
     "MinCountRule1ParametersSpec",
     "MinimumGroupingSeverityLevel",
     "MinPercentRule100ErrorParametersSpec",
@@ -2636,7 +2630,7 @@ __all__ = (
     "TableSpecTableComparisons",
     "TableSqlAggregatedExpressionSensorParametersSpec",
     "TableSqlAggregateExpressionCheckSpec",
-    "TableSqlConditionFailedCountCheckSpec",
+    "TableSqlConditionFailedCheckSpec",
     "TableSqlConditionFailedCountSensorParametersSpec",
     "TableSqlConditionPassedPercentCheckSpec",
     "TableSqlConditionPassedPercentSensorParametersSpec",

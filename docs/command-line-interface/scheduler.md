@@ -42,12 +42,12 @@ All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|<p id="scheduler start-crm">`-crm`</p><br/><p id="scheduler start--check-run-mode">`--check-run-mode`</p><br/>|Check execution reporting mode (silent, summary, info, debug)| |silent<br/>summary<br/>info<br/>debug<br/>|
-|<p id="scheduler start-fw">`-fw`</p><br/><p id="scheduler start--file-write">`--file-write`</p><br/>|Write command response to a file| ||
-|<p id="scheduler start--headless">`--headless`</p><br/><p id="scheduler start-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|<p id="scheduler start-h">`-h`</p><br/><p id="scheduler start--help">`--help`</p><br/>|Show the help for the command and parameters| ||
-|<p id="scheduler start-of">`-of`</p><br/><p id="scheduler start--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
-|<p id="scheduler start-sm">`-sm`</p><br/><p id="scheduler start--synchronization-mode">`--synchronization-mode`</p><br/>|Reporting mode for the DQOps cloud synchronization (silent, summary, debug)| |silent<br/>summary<br/>debug<br/>|
+|<div id="scheduler start-crm" class="no-wrap-code">`-crm`</div><div id="scheduler start--check-run-mode" class="no-wrap-code">`--check-run-mode`</div>|Check execution reporting mode (silent, summary, info, debug)| |*silent*<br/>*summary*<br/>*info*<br/>*debug*<br/>|
+|<div id="scheduler start-fw" class="no-wrap-code">`-fw`</div><div id="scheduler start--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="scheduler start--headless" class="no-wrap-code">`--headless`</div><div id="scheduler start-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="scheduler start-h" class="no-wrap-code">`-h`</div><div id="scheduler start--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="scheduler start-of" class="no-wrap-code">`-of`</div><div id="scheduler start--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
+|<div id="scheduler start-sm" class="no-wrap-code">`-sm`</div><div id="scheduler start--synchronization-mode" class="no-wrap-code">`--synchronization-mode`</div>|Reporting mode for the DQOps cloud synchronization (silent, summary, debug)| |*silent*<br/>*summary*<br/>*debug*<br/>|
 
 
 
@@ -91,10 +91,10 @@ All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|<p id="scheduler stop-fw">`-fw`</p><br/><p id="scheduler stop--file-write">`--file-write`</p><br/>|Write command response to a file| ||
-|<p id="scheduler stop--headless">`--headless`</p><br/><p id="scheduler stop-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|<p id="scheduler stop-h">`-h`</p><br/><p id="scheduler stop--help">`--help`</p><br/>|Show the help for the command and parameters| ||
-|<p id="scheduler stop-of">`-of`</p><br/><p id="scheduler stop--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|<div id="scheduler stop-fw" class="no-wrap-code">`-fw`</div><div id="scheduler stop--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="scheduler stop--headless" class="no-wrap-code">`--headless`</div><div id="scheduler stop-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="scheduler stop-h" class="no-wrap-code">`-h`</div><div id="scheduler stop--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="scheduler stop-of" class="no-wrap-code">`-of`</div><div id="scheduler stop--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
 
 
 

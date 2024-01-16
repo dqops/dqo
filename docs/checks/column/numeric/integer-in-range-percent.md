@@ -17,7 +17,7 @@ Verifies that the percentage of values from range in a column does not exceed th
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_integer_in_range_percent|profiling| |Reasonableness|[integer_in_range_percent](../../../reference/sensors/column/numeric-column-sensors.md#integer-in-range-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`profile_integer_in_range_percent`</span>|profiling| |Reasonableness|[*integer_in_range_percent*](../../../reference/sensors/column/numeric-column-sensors.md#integer-in-range-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -1090,7 +1090,7 @@ Verifies that the percentage of values from range in a column does not exceed th
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_integer_in_range_percent|monitoring|daily|Reasonableness|[integer_in_range_percent](../../../reference/sensors/column/numeric-column-sensors.md#integer-in-range-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`daily_integer_in_range_percent`</span>|monitoring|daily|Reasonableness|[*integer_in_range_percent*](../../../reference/sensors/column/numeric-column-sensors.md#integer-in-range-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -2165,7 +2165,7 @@ Verifies that the percentage of values from range in a column does not exceed th
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_integer_in_range_percent|monitoring|monthly|Reasonableness|[integer_in_range_percent](../../../reference/sensors/column/numeric-column-sensors.md#integer-in-range-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`monthly_integer_in_range_percent`</span>|monitoring|monthly|Reasonableness|[*integer_in_range_percent*](../../../reference/sensors/column/numeric-column-sensors.md#integer-in-range-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -3240,7 +3240,7 @@ Verifies that the percentage of values from range in a column does not exceed th
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_integer_in_range_percent|partitioned|daily|Reasonableness|[integer_in_range_percent](../../../reference/sensors/column/numeric-column-sensors.md#integer-in-range-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`daily_partition_integer_in_range_percent`</span>|partitioned|daily|Reasonableness|[*integer_in_range_percent*](../../../reference/sensors/column/numeric-column-sensors.md#integer-in-range-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -4337,7 +4337,7 @@ Verifies that the percentage of values from range in a column does not exceed th
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_integer_in_range_percent|partitioned|monthly|Reasonableness|[integer_in_range_percent](../../../reference/sensors/column/numeric-column-sensors.md#integer-in-range-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`monthly_partition_integer_in_range_percent`</span>|partitioned|monthly|Reasonableness|[*integer_in_range_percent*](../../../reference/sensors/column/numeric-column-sensors.md#integer-in-range-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 

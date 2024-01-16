@@ -18,7 +18,7 @@ Verifies that percentage of the difference between the minimum value in a tested
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_min_match|profiling| |Accuracy|[min_value](../../../reference/sensors/column/range-column-sensors.md#min-value)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
+|<span class="no-wrap-code">`profile_min_match`</span>|profiling| |Accuracy|[*min_value*](../../../reference/sensors/column/range-column-sensors.md#min-value)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
 
 **Command-line examples**
 
@@ -483,7 +483,7 @@ Verifies that percentage of the difference between the minimum value in a tested
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_min_match|monitoring|daily|Accuracy|[min_value](../../../reference/sensors/column/range-column-sensors.md#min-value)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
+|<span class="no-wrap-code">`daily_min_match`</span>|monitoring|daily|Accuracy|[*min_value*](../../../reference/sensors/column/range-column-sensors.md#min-value)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
 
 **Command-line examples**
 
@@ -949,7 +949,7 @@ Verifies that percentage of the difference between the minimum value in a tested
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_min_match|monitoring|monthly|Accuracy|[min_value](../../../reference/sensors/column/range-column-sensors.md#min-value)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
+|<span class="no-wrap-code">`monthly_min_match`</span>|monitoring|monthly|Accuracy|[*min_value*](../../../reference/sensors/column/range-column-sensors.md#min-value)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
 
 **Command-line examples**
 
@@ -1415,7 +1415,7 @@ Verifies that percentage of the difference between the minimum value in a tested
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_min_match|partitioned|daily|Accuracy|[min_value](../../../reference/sensors/column/range-column-sensors.md#min-value)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
+|<span class="no-wrap-code">`daily_partition_min_match`</span>|partitioned|daily|Accuracy|[*min_value*](../../../reference/sensors/column/range-column-sensors.md#min-value)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
 
 **Command-line examples**
 
@@ -1895,7 +1895,7 @@ Verifies that percentage of the difference between the minimum value in a tested
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_min_match|partitioned|monthly|Accuracy|[min_value](../../../reference/sensors/column/range-column-sensors.md#min-value)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
+|<span class="no-wrap-code">`monthly_partition_min_match`</span>|partitioned|monthly|Accuracy|[*min_value*](../../../reference/sensors/column/range-column-sensors.md#min-value)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
 
 **Command-line examples**
 

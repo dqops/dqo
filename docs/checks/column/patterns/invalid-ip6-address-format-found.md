@@ -17,7 +17,7 @@ Verifies that the number of invalid IP6 addresses in a text column does not exce
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_invalid_ip6_address_format_found|profiling| |Validity|[invalid_ip6_address_format_count](../../../reference/sensors/column/patterns-column-sensors.md#invalid-ip6-address-format-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`profile_invalid_ip6_address_format_found`</span>|profiling| |Validity|[*invalid_ip6_address_format_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-ip6-address-format-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -1120,7 +1120,7 @@ Verifies that the number of invalid IP6 addresses in a text column does not exce
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_invalid_ip6_address_format_found|monitoring|daily|Validity|[invalid_ip6_address_format_count](../../../reference/sensors/column/patterns-column-sensors.md#invalid-ip6-address-format-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`daily_invalid_ip6_address_format_found`</span>|monitoring|daily|Validity|[*invalid_ip6_address_format_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-ip6-address-format-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -2225,7 +2225,7 @@ Verifies that the number of invalid IP6 addresses in a text column does not exce
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_invalid_ip6_address_format_found|monitoring|monthly|Validity|[invalid_ip6_address_format_count](../../../reference/sensors/column/patterns-column-sensors.md#invalid-ip6-address-format-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`monthly_invalid_ip6_address_format_found`</span>|monitoring|monthly|Validity|[*invalid_ip6_address_format_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-ip6-address-format-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -3330,7 +3330,7 @@ Verifies that the number of invalid IP6 addresses in a text column does not exce
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_invalid_ip6_address_format_found|partitioned|daily|Validity|[invalid_ip6_address_format_count](../../../reference/sensors/column/patterns-column-sensors.md#invalid-ip6-address-format-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`daily_partition_invalid_ip6_address_format_found`</span>|partitioned|daily|Validity|[*invalid_ip6_address_format_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-ip6-address-format-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -4457,7 +4457,7 @@ Verifies that the number of invalid IP6 addresses in a text column does not exce
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_invalid_ip6_address_format_found|partitioned|monthly|Validity|[invalid_ip6_address_format_count](../../../reference/sensors/column/patterns-column-sensors.md#invalid-ip6-address-format-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`monthly_partition_invalid_ip6_address_format_found`</span>|partitioned|monthly|Validity|[*invalid_ip6_address_format_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-ip6-address-format-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 

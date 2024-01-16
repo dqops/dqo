@@ -21,7 +21,7 @@ http://localhost:8888/api/mypassword
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|New Password|string| |
+|New Password|*string*| |
 
 
 
@@ -146,7 +146,7 @@ http://localhost:8888/api/users/{email}/password
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|email|User&#x27;s email|string|:material-check-bold:|
+|<span class="no-wrap-code">`email`</span>|User&#x27;s email|*string*|:material-check-bold:|
 
 
 
@@ -155,7 +155,7 @@ http://localhost:8888/api/users/{email}/password
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|New Password|string| |
+|New Password|*string*| |
 
 
 
@@ -286,7 +286,7 @@ http://localhost:8888/api/users
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|User model|[DqoCloudUserModel](../models/users.md#dqocloudusermodel)| |
+|User model|*[DqoCloudUserModel](../models/users.md#dqocloudusermodel)*| |
 
 
 
@@ -427,7 +427,7 @@ http://localhost:8888/api/users/{email}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|email|User&#x27;s email|string|:material-check-bold:|
+|<span class="no-wrap-code">`email`</span>|User&#x27;s email|*string*|:material-check-bold:|
 
 
 
@@ -541,7 +541,7 @@ http://localhost:8888/api/users
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|dqo_cloud_user_model||List[[DqoCloudUserModel](../models/users.md#dqocloudusermodel)]|
+|<span class="no-wrap-code">`dqo_cloud_user_model`</span>||*List[[DqoCloudUserModel](../models/users.md#dqocloudusermodel)]*|
 
 
 
@@ -671,7 +671,7 @@ http://localhost:8888/api/users/{email}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[dqo_cloud_user_model](../models/users.md#dqocloudusermodel)||[DqoCloudUserModel](../models/users.md#dqocloudusermodel)|
+|<span class="no-wrap-code">[`dqo_cloud_user_model`](../models/users.md#dqocloudusermodel)</span>||*[DqoCloudUserModel](../models/users.md#dqocloudusermodel)*|
 
 
 
@@ -680,7 +680,7 @@ http://localhost:8888/api/users/{email}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|email|User&#x27;s email|string|:material-check-bold:|
+|<span class="no-wrap-code">`email`</span>|User&#x27;s email|*string*|:material-check-bold:|
 
 
 
@@ -808,7 +808,7 @@ http://localhost:8888/api/users/{email}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|email|User&#x27;s email|string|:material-check-bold:|
+|<span class="no-wrap-code">`email`</span>|User&#x27;s email|*string*|:material-check-bold:|
 
 
 
@@ -817,7 +817,7 @@ http://localhost:8888/api/users/{email}
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|User model|[DqoCloudUserModel](../models/users.md#dqocloudusermodel)| |
+|User model|*[DqoCloudUserModel](../models/users.md#dqocloudusermodel)*| |
 
 
 

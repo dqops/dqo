@@ -19,7 +19,7 @@ Detects if the count of columns has changed. Retrieves the metadata of the monit
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_column_count_changed|profiling| |Consistency|[column_count](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[value_changed](../../../reference/rules/Comparison.md#value-changed)|
+|<span class="no-wrap-code">`profile_column_count_changed`</span>|profiling| |Consistency|[*column_count*](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|
 
 **Command-line examples**
 
@@ -121,7 +121,7 @@ Detects if the count of columns has changed since the most recent day. Retrieves
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_column_count_changed|monitoring|daily|Consistency|[column_count](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[value_changed](../../../reference/rules/Comparison.md#value-changed)|
+|<span class="no-wrap-code">`daily_column_count_changed`</span>|monitoring|daily|Consistency|[*column_count*](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|
 
 **Command-line examples**
 
@@ -224,7 +224,7 @@ Detects if the count of columns has changed since the last month. Retrieves the 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_column_count_changed|monitoring|monthly|Consistency|[column_count](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[value_changed](../../../reference/rules/Comparison.md#value-changed)|
+|<span class="no-wrap-code">`monthly_column_count_changed`</span>|monitoring|monthly|Consistency|[*column_count*](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|
 
 **Command-line examples**
 

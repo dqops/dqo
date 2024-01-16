@@ -12,8 +12,8 @@ if TYPE_CHECKING:
     from ..models.column_sql_aggregate_expression_check_spec import (
         ColumnSqlAggregateExpressionCheckSpec,
     )
-    from ..models.column_sql_condition_failed_count_check_spec import (
-        ColumnSqlConditionFailedCountCheckSpec,
+    from ..models.column_sql_condition_failed_check_spec import (
+        ColumnSqlConditionFailedCheckSpec,
     )
     from ..models.column_sql_condition_passed_percent_check_spec import (
         ColumnSqlConditionPassedPercentCheckSpec,
@@ -30,19 +30,19 @@ class ColumnCustomSqlProfilingChecksSpec:
         custom_checks (Union[Unset, ColumnCustomSqlProfilingChecksSpecCustomChecks]): Dictionary of additional custom
             checks within this category. The keys are check names defined in the definition section. The sensor parameters
             and rules should match the type of the configured sensor and rule for the custom check.
+        profile_sql_condition_failed_on_column (Union[Unset, ColumnSqlConditionFailedCheckSpec]):
         profile_sql_condition_passed_percent_on_column (Union[Unset, ColumnSqlConditionPassedPercentCheckSpec]):
-        profile_sql_condition_failed_count_on_column (Union[Unset, ColumnSqlConditionFailedCountCheckSpec]):
         profile_sql_aggregate_expression_on_column (Union[Unset, ColumnSqlAggregateExpressionCheckSpec]):
     """
 
     custom_checks: Union[
         Unset, "ColumnCustomSqlProfilingChecksSpecCustomChecks"
     ] = UNSET
+    profile_sql_condition_failed_on_column: Union[
+        Unset, "ColumnSqlConditionFailedCheckSpec"
+    ] = UNSET
     profile_sql_condition_passed_percent_on_column: Union[
         Unset, "ColumnSqlConditionPassedPercentCheckSpec"
-    ] = UNSET
-    profile_sql_condition_failed_count_on_column: Union[
-        Unset, "ColumnSqlConditionFailedCountCheckSpec"
     ] = UNSET
     profile_sql_aggregate_expression_on_column: Union[
         Unset, "ColumnSqlAggregateExpressionCheckSpec"
@@ -54,20 +54,18 @@ class ColumnCustomSqlProfilingChecksSpec:
         if not isinstance(self.custom_checks, Unset):
             custom_checks = self.custom_checks.to_dict()
 
+        profile_sql_condition_failed_on_column: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_sql_condition_failed_on_column, Unset):
+            profile_sql_condition_failed_on_column = (
+                self.profile_sql_condition_failed_on_column.to_dict()
+            )
+
         profile_sql_condition_passed_percent_on_column: Union[
             Unset, Dict[str, Any]
         ] = UNSET
         if not isinstance(self.profile_sql_condition_passed_percent_on_column, Unset):
             profile_sql_condition_passed_percent_on_column = (
                 self.profile_sql_condition_passed_percent_on_column.to_dict()
-            )
-
-        profile_sql_condition_failed_count_on_column: Union[
-            Unset, Dict[str, Any]
-        ] = UNSET
-        if not isinstance(self.profile_sql_condition_failed_count_on_column, Unset):
-            profile_sql_condition_failed_count_on_column = (
-                self.profile_sql_condition_failed_count_on_column.to_dict()
             )
 
         profile_sql_aggregate_expression_on_column: Union[Unset, Dict[str, Any]] = UNSET
@@ -81,14 +79,14 @@ class ColumnCustomSqlProfilingChecksSpec:
         field_dict.update({})
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
+        if profile_sql_condition_failed_on_column is not UNSET:
+            field_dict[
+                "profile_sql_condition_failed_on_column"
+            ] = profile_sql_condition_failed_on_column
         if profile_sql_condition_passed_percent_on_column is not UNSET:
             field_dict[
                 "profile_sql_condition_passed_percent_on_column"
             ] = profile_sql_condition_passed_percent_on_column
-        if profile_sql_condition_failed_count_on_column is not UNSET:
-            field_dict[
-                "profile_sql_condition_failed_count_on_column"
-            ] = profile_sql_condition_failed_count_on_column
         if profile_sql_aggregate_expression_on_column is not UNSET:
             field_dict[
                 "profile_sql_aggregate_expression_on_column"
@@ -104,8 +102,8 @@ class ColumnCustomSqlProfilingChecksSpec:
         from ..models.column_sql_aggregate_expression_check_spec import (
             ColumnSqlAggregateExpressionCheckSpec,
         )
-        from ..models.column_sql_condition_failed_count_check_spec import (
-            ColumnSqlConditionFailedCountCheckSpec,
+        from ..models.column_sql_condition_failed_check_spec import (
+            ColumnSqlConditionFailedCheckSpec,
         )
         from ..models.column_sql_condition_passed_percent_check_spec import (
             ColumnSqlConditionPassedPercentCheckSpec,
@@ -121,6 +119,21 @@ class ColumnCustomSqlProfilingChecksSpec:
                 _custom_checks
             )
 
+        _profile_sql_condition_failed_on_column = d.pop(
+            "profile_sql_condition_failed_on_column", UNSET
+        )
+        profile_sql_condition_failed_on_column: Union[
+            Unset, ColumnSqlConditionFailedCheckSpec
+        ]
+        if isinstance(_profile_sql_condition_failed_on_column, Unset):
+            profile_sql_condition_failed_on_column = UNSET
+        else:
+            profile_sql_condition_failed_on_column = (
+                ColumnSqlConditionFailedCheckSpec.from_dict(
+                    _profile_sql_condition_failed_on_column
+                )
+            )
+
         _profile_sql_condition_passed_percent_on_column = d.pop(
             "profile_sql_condition_passed_percent_on_column", UNSET
         )
@@ -133,21 +146,6 @@ class ColumnCustomSqlProfilingChecksSpec:
             profile_sql_condition_passed_percent_on_column = (
                 ColumnSqlConditionPassedPercentCheckSpec.from_dict(
                     _profile_sql_condition_passed_percent_on_column
-                )
-            )
-
-        _profile_sql_condition_failed_count_on_column = d.pop(
-            "profile_sql_condition_failed_count_on_column", UNSET
-        )
-        profile_sql_condition_failed_count_on_column: Union[
-            Unset, ColumnSqlConditionFailedCountCheckSpec
-        ]
-        if isinstance(_profile_sql_condition_failed_count_on_column, Unset):
-            profile_sql_condition_failed_count_on_column = UNSET
-        else:
-            profile_sql_condition_failed_count_on_column = (
-                ColumnSqlConditionFailedCountCheckSpec.from_dict(
-                    _profile_sql_condition_failed_count_on_column
                 )
             )
 
@@ -168,8 +166,8 @@ class ColumnCustomSqlProfilingChecksSpec:
 
         column_custom_sql_profiling_checks_spec = cls(
             custom_checks=custom_checks,
+            profile_sql_condition_failed_on_column=profile_sql_condition_failed_on_column,
             profile_sql_condition_passed_percent_on_column=profile_sql_condition_passed_percent_on_column,
-            profile_sql_condition_failed_count_on_column=profile_sql_condition_failed_count_on_column,
             profile_sql_aggregate_expression_on_column=profile_sql_aggregate_expression_on_column,
         )
 

@@ -17,7 +17,7 @@ Detects empty columns. The default rule min_count&#x3D;1 verifies that the colum
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_not_nulls_count|profiling| |Completeness|[not_null_count](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[min_count](../../../reference/rules/Comparison.md#min-count)|
+|<span class="no-wrap-code">`profile_not_nulls_count`</span>|profiling| |Completeness|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|
 
 **Command-line examples**
 
@@ -872,7 +872,7 @@ Detects empty columns. The default rule min_count&#x3D;1 verifies that the colum
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_not_nulls_count|monitoring|daily|Completeness|[not_null_count](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[min_count](../../../reference/rules/Comparison.md#min-count)|
+|<span class="no-wrap-code">`daily_not_nulls_count`</span>|monitoring|daily|Completeness|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|
 
 **Command-line examples**
 
@@ -1729,7 +1729,7 @@ Detects columns that are empty and have no values (with the rule threshold min_c
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_not_nulls_count|monitoring|monthly|Completeness|[not_null_count](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[min_count](../../../reference/rules/Comparison.md#min-count)|
+|<span class="no-wrap-code">`monthly_not_nulls_count`</span>|monitoring|monthly|Completeness|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|
 
 **Command-line examples**
 
@@ -2586,7 +2586,7 @@ Detects empty columns. The default rule min_count&#x3D;1 verifies that the colum
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_not_nulls_count|partitioned|daily|Completeness|[not_null_count](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[min_count](../../../reference/rules/Comparison.md#min-count)|
+|<span class="no-wrap-code">`daily_partition_not_nulls_count`</span>|partitioned|daily|Completeness|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|
 
 **Command-line examples**
 
@@ -3465,7 +3465,7 @@ Detects empty columns. The default rule min_count&#x3D;1 verifies that the colum
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_not_nulls_count|partitioned|monthly|Completeness|[not_null_count](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[min_count](../../../reference/rules/Comparison.md#min-count)|
+|<span class="no-wrap-code">`monthly_partition_not_nulls_count`</span>|partitioned|monthly|Completeness|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|
 
 **Command-line examples**
 

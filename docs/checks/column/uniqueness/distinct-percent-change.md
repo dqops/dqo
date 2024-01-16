@@ -17,7 +17,7 @@ Verifies that the distinct percent in a monitored column has changed by a fixed 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_distinct_percent_change|profiling| |Consistency|[distinct_percent](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[change_percent](../../../reference/rules/Change.md#change-percent)|
+|<span class="no-wrap-code">`profile_distinct_percent_change`</span>|profiling| |Consistency|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|
 
 **Command-line examples**
 
@@ -1028,7 +1028,7 @@ Verifies that the distinct percent in a monitored column has changed by a fixed 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_distinct_percent_change|monitoring|daily|Consistency|[distinct_percent](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[change_percent](../../../reference/rules/Change.md#change-percent)|
+|<span class="no-wrap-code">`daily_distinct_percent_change`</span>|monitoring|daily|Consistency|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|
 
 **Command-line examples**
 
@@ -2041,7 +2041,7 @@ Verifies that the distinct percent in a monitored column has changed by a fixed 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_distinct_percent_change|monitoring|monthly|Consistency|[distinct_percent](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[change_percent](../../../reference/rules/Change.md#change-percent)|
+|<span class="no-wrap-code">`monthly_distinct_percent_change`</span>|monitoring|monthly|Consistency|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|
 
 **Command-line examples**
 
@@ -3054,7 +3054,7 @@ Verifies that the distinct percent in a monitored column has changed by a fixed 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_distinct_percent_change|partitioned|daily|Consistency|[distinct_percent](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[change_percent](../../../reference/rules/Change.md#change-percent)|
+|<span class="no-wrap-code">`daily_partition_distinct_percent_change`</span>|partitioned|daily|Consistency|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|
 
 **Command-line examples**
 
@@ -4089,7 +4089,7 @@ Verifies that the distinct percent in a monitored column has changed by a fixed 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_distinct_percent_change|partitioned|monthly|Consistency|[distinct_percent](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[change_percent](../../../reference/rules/Change.md#change-percent)|
+|<span class="no-wrap-code">`monthly_partition_distinct_percent_change`</span>|partitioned|monthly|Consistency|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|
 
 **Command-line examples**
 

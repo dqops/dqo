@@ -22,11 +22,11 @@ if TYPE_CHECKING:
     from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
 
 
-T = TypeVar("T", bound="ColumnSqlConditionFailedCountCheckSpec")
+T = TypeVar("T", bound="ColumnSqlConditionFailedCheckSpec")
 
 
 @_attrs_define
-class ColumnSqlConditionFailedCountCheckSpec:
+class ColumnSqlConditionFailedCheckSpec:
     """
     Attributes:
         schedule_override (Union[Unset, MonitoringScheduleSpec]):
@@ -211,7 +211,7 @@ class ColumnSqlConditionFailedCountCheckSpec:
         else:
             fatal = MaxCountRule100ParametersSpec.from_dict(_fatal)
 
-        column_sql_condition_failed_count_check_spec = cls(
+        column_sql_condition_failed_check_spec = cls(
             schedule_override=schedule_override,
             comments=comments,
             disabled=disabled,
@@ -226,8 +226,8 @@ class ColumnSqlConditionFailedCountCheckSpec:
             fatal=fatal,
         )
 
-        column_sql_condition_failed_count_check_spec.additional_properties = d
-        return column_sql_condition_failed_count_check_spec
+        column_sql_condition_failed_check_spec.additional_properties = d
+        return column_sql_condition_failed_check_spec
 
     @property
     def additional_keys(self) -> List[str]:

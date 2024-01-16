@@ -19,7 +19,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|job_id|Job id|string|:material-check-bold:|
+|<span class="no-wrap-code">`job_id`</span>|Job id|*string*|:material-check-bold:|
 
 
 
@@ -133,7 +133,7 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[collect_statistics_queue_job_result](../models/jobs.md#collectstatisticsqueuejobresult)||[CollectStatisticsQueueJobResult](../models/jobs.md#collectstatisticsqueuejobresult)|
+|<span class="no-wrap-code">[`collect_statistics_queue_job_result`](../models/jobs.md#collectstatisticsqueuejobresult)</span>||*[CollectStatisticsQueueJobResult](../models/jobs.md#collectstatisticsqueuejobresult)*|
 
 
 
@@ -142,9 +142,9 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|job_business_key|Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.|string| |
-|wait|Wait until the statistic collection job finishes to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)|boolean| |
-|wait_timeout|The wait timeout in seconds, when the wait timeout elapses and the job is still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|long| |
+|<span class="no-wrap-code">`job_business_key`</span>|Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.|*string*| |
+|<span class="no-wrap-code">`wait`</span>|Wait until the statistic collection job finishes to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)|*boolean*| |
+|<span class="no-wrap-code">`wait_timeout`</span>|The wait timeout in seconds, when the wait timeout elapses and the job is still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|*long*| |
 
 
 
@@ -153,7 +153,7 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Data statistics collectors filter|[StatisticsCollectorSearchFilters](../models/jobs.md#statisticscollectorsearchfilters)| |
+|Data statistics collectors filter|*[StatisticsCollectorSearchFilters](../models/jobs.md#statisticscollectorsearchfilters)*| |
 
 
 
@@ -315,7 +315,7 @@ http://localhost:8888/api/jobs/collectstatistics/table
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[collect_statistics_queue_job_result](../models/jobs.md#collectstatisticsqueuejobresult)||[CollectStatisticsQueueJobResult](../models/jobs.md#collectstatisticsqueuejobresult)|
+|<span class="no-wrap-code">[`collect_statistics_queue_job_result`](../models/jobs.md#collectstatisticsqueuejobresult)</span>||*[CollectStatisticsQueueJobResult](../models/jobs.md#collectstatisticsqueuejobresult)*|
 
 
 
@@ -324,9 +324,9 @@ http://localhost:8888/api/jobs/collectstatistics/table
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|job_business_key|Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.|string| |
-|wait|Wait until the statistic collection job finishes to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)|boolean| |
-|wait_timeout|The wait timeout in seconds, when the wait timeout elapses and the job is still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|long| |
+|<span class="no-wrap-code">`job_business_key`</span>|Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.|*string*| |
+|<span class="no-wrap-code">`wait`</span>|Wait until the statistic collection job finishes to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)|*boolean*| |
+|<span class="no-wrap-code">`wait_timeout`</span>|The wait timeout in seconds, when the wait timeout elapses and the job is still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|*long*| |
 
 
 
@@ -335,7 +335,7 @@ http://localhost:8888/api/jobs/collectstatistics/table
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Data statistics collectors filter|[StatisticsCollectorSearchFilters](../models/jobs.md#statisticscollectorsearchfilters)| |
+|Data statistics collectors filter|*[StatisticsCollectorSearchFilters](../models/jobs.md#statisticscollectorsearchfilters)*| |
 
 
 
@@ -497,7 +497,7 @@ http://localhost:8888/api/jobs/deletestoreddata
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[delete_stored_data_queue_job_result](../models/jobs.md#deletestoreddataqueuejobresult)||[DeleteStoredDataQueueJobResult](../models/jobs.md#deletestoreddataqueuejobresult)|
+|<span class="no-wrap-code">[`delete_stored_data_queue_job_result`](../models/jobs.md#deletestoreddataqueuejobresult)</span>||*[DeleteStoredDataQueueJobResult](../models/jobs.md#deletestoreddataqueuejobresult)*|
 
 
 
@@ -506,9 +506,9 @@ http://localhost:8888/api/jobs/deletestoreddata
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|job_business_key|Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.|string| |
-|wait|Wait until the import tables job finishes to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)|boolean| |
-|wait_timeout|The wait timeout in seconds, when the wait timeout elapses and the delete stored data job is still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|long| |
+|<span class="no-wrap-code">`job_business_key`</span>|Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.|*string*| |
+|<span class="no-wrap-code">`wait`</span>|Wait until the import tables job finishes to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)|*boolean*| |
+|<span class="no-wrap-code">`wait_timeout`</span>|The wait timeout in seconds, when the wait timeout elapses and the delete stored data job is still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|*long*| |
 
 
 
@@ -517,7 +517,7 @@ http://localhost:8888/api/jobs/deletestoreddata
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Delete stored data job parameters|[DeleteStoredDataQueueJobParameters](../models/jobs.md#deletestoreddataqueuejobparameters)| |
+|Delete stored data job parameters|*[DeleteStoredDataQueueJobParameters](../models/jobs.md#deletestoreddataqueuejobparameters)*| |
 
 
 
@@ -691,7 +691,7 @@ http://localhost:8888/api/jobs/jobs
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[dqo_job_queue_initial_snapshot_model](../models/jobs.md#dqojobqueueinitialsnapshotmodel)||[DqoJobQueueInitialSnapshotModel](../models/jobs.md#dqojobqueueinitialsnapshotmodel)|
+|<span class="no-wrap-code">[`dqo_job_queue_initial_snapshot_model`](../models/jobs.md#dqojobqueueinitialsnapshotmodel)</span>||*[DqoJobQueueInitialSnapshotModel](../models/jobs.md#dqojobqueueinitialsnapshotmodel)*|
 
 
 
@@ -828,7 +828,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[dqo_job_history_entry_model](../models/jobs.md#dqojobhistoryentrymodel)||[DqoJobHistoryEntryModel](../models/jobs.md#dqojobhistoryentrymodel)|
+|<span class="no-wrap-code">[`dqo_job_history_entry_model`](../models/jobs.md#dqojobhistoryentrymodel)</span>||*[DqoJobHistoryEntryModel](../models/jobs.md#dqojobhistoryentrymodel)*|
 
 
 
@@ -837,7 +837,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|job_id|Job id|string|:material-check-bold:|
+|<span class="no-wrap-code">`job_id`</span>|Job id|*string*|:material-check-bold:|
 
 
 
@@ -960,7 +960,7 @@ http://localhost:8888/api/jobs/jobchangessince/{sequenceNumber}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[dqo_job_queue_incremental_snapshot_model](../models/jobs.md#dqojobqueueincrementalsnapshotmodel)||[DqoJobQueueIncrementalSnapshotModel](../models/jobs.md#dqojobqueueincrementalsnapshotmodel)|
+|<span class="no-wrap-code">[`dqo_job_queue_incremental_snapshot_model`](../models/jobs.md#dqojobqueueincrementalsnapshotmodel)</span>||*[DqoJobQueueIncrementalSnapshotModel](../models/jobs.md#dqojobqueueincrementalsnapshotmodel)*|
 
 
 
@@ -969,7 +969,7 @@ http://localhost:8888/api/jobs/jobchangessince/{sequenceNumber}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|sequence_number|Change sequence number to get job changes after that sequence|long|:material-check-bold:|
+|<span class="no-wrap-code">`sequence_number`</span>|Change sequence number to get job changes after that sequence|*long*|:material-check-bold:|
 
 
 
@@ -1108,7 +1108,7 @@ http://localhost:8888/api/jobs/importtables
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[import_tables_queue_job_result](../models/jobs.md#importtablesqueuejobresult)||[ImportTablesQueueJobResult](../models/jobs.md#importtablesqueuejobresult)|
+|<span class="no-wrap-code">[`import_tables_queue_job_result`](../models/jobs.md#importtablesqueuejobresult)</span>||*[ImportTablesQueueJobResult](../models/jobs.md#importtablesqueuejobresult)*|
 
 
 
@@ -1117,9 +1117,9 @@ http://localhost:8888/api/jobs/importtables
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|job_business_key|Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.|string| |
-|wait|Wait until the import tables job finishes to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)|boolean| |
-|wait_timeout|The wait timeout in seconds, when the wait timeout elapses and the import tables job is still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|long| |
+|<span class="no-wrap-code">`job_business_key`</span>|Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.|*string*| |
+|<span class="no-wrap-code">`wait`</span>|Wait until the import tables job finishes to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)|*boolean*| |
+|<span class="no-wrap-code">`wait_timeout`</span>|The wait timeout in seconds, when the wait timeout elapses and the import tables job is still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|*long*| |
 
 
 
@@ -1128,7 +1128,7 @@ http://localhost:8888/api/jobs/importtables
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Import tables job parameters|[ImportTablesQueueJobParameters](../models/jobs.md#importtablesqueuejobparameters)| |
+|Import tables job parameters|*[ImportTablesQueueJobParameters](../models/jobs.md#importtablesqueuejobparameters)*| |
 
 
 
@@ -1391,7 +1391,7 @@ http://localhost:8888/api/jobs/runchecks
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[run_checks_queue_job_result](../models/jobs.md#runchecksqueuejobresult)||[RunChecksQueueJobResult](../models/jobs.md#runchecksqueuejobresult)|
+|<span class="no-wrap-code">[`run_checks_queue_job_result`](../models/jobs.md#runchecksqueuejobresult)</span>||*[RunChecksQueueJobResult](../models/jobs.md#runchecksqueuejobresult)*|
 
 
 
@@ -1400,9 +1400,9 @@ http://localhost:8888/api/jobs/runchecks
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|job_business_key|Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.|string| |
-|wait|Wait until the checks finish to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)|boolean| |
-|wait_timeout|The wait timeout in seconds, when the wait timeout elapses and the checks are still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|long| |
+|<span class="no-wrap-code">`job_business_key`</span>|Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.|*string*| |
+|<span class="no-wrap-code">`wait`</span>|Wait until the checks finish to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)|*boolean*| |
+|<span class="no-wrap-code">`wait_timeout`</span>|The wait timeout in seconds, when the wait timeout elapses and the checks are still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|*long*| |
 
 
 
@@ -1411,7 +1411,7 @@ http://localhost:8888/api/jobs/runchecks
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Data quality check run configuration (target checks and an optional time range)|[RunChecksParameters](../models/jobs.md#runchecksparameters)| |
+|Data quality check run configuration (target checks and an optional time range)|*[RunChecksParameters](../models/jobs.md#runchecksparameters)*| |
 
 
 
@@ -1804,7 +1804,7 @@ http://localhost:8888/api/jobs/synchronize
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[synchronize_multiple_folders_queue_job_result](../models/jobs.md#synchronizemultiplefoldersqueuejobresult)||[SynchronizeMultipleFoldersQueueJobResult](../models/jobs.md#synchronizemultiplefoldersqueuejobresult)|
+|<span class="no-wrap-code">[`synchronize_multiple_folders_queue_job_result`](../models/jobs.md#synchronizemultiplefoldersqueuejobresult)</span>||*[SynchronizeMultipleFoldersQueueJobResult](../models/jobs.md#synchronizemultiplefoldersqueuejobresult)*|
 
 
 
@@ -1813,9 +1813,9 @@ http://localhost:8888/api/jobs/synchronize
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|job_business_key|Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.|string| |
-|wait|Wait until the synchronize multiple folders job finishes to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)|boolean| |
-|wait_timeout|The wait timeout in seconds, when the wait timeout elapses and the synchronization with the DQOps Cloud is still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|long| |
+|<span class="no-wrap-code">`job_business_key`</span>|Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.|*string*| |
+|<span class="no-wrap-code">`wait`</span>|Wait until the synchronize multiple folders job finishes to run, the default value is true (queue a background job and wait for the job to finish, up to waitTimeout seconds)|*boolean*| |
+|<span class="no-wrap-code">`wait_timeout`</span>|The wait timeout in seconds, when the wait timeout elapses and the synchronization with the DQOps Cloud is still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|*long*| |
 
 
 
@@ -1824,7 +1824,7 @@ http://localhost:8888/api/jobs/synchronize
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Selection of folders that should be synchronized to the DQOps Cloud|[SynchronizeMultipleFoldersDqoQueueJobParameters](../models/jobs.md#synchronizemultiplefoldersdqoqueuejobparameters)| |
+|Selection of folders that should be synchronized to the DQOps Cloud|*[SynchronizeMultipleFoldersDqoQueueJobParameters](../models/jobs.md#synchronizemultiplefoldersdqoqueuejobparameters)*| |
 
 
 
@@ -2022,7 +2022,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}/wait
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[dqo_job_history_entry_model](../models/jobs.md#dqojobhistoryentrymodel)||[DqoJobHistoryEntryModel](../models/jobs.md#dqojobhistoryentrymodel)|
+|<span class="no-wrap-code">[`dqo_job_history_entry_model`](../models/jobs.md#dqojobhistoryentrymodel)</span>||*[DqoJobHistoryEntryModel](../models/jobs.md#dqojobhistoryentrymodel)*|
 
 
 
@@ -2031,8 +2031,8 @@ http://localhost:8888/api/jobs/jobs/{jobId}/wait
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|job_id|Job id|string|:material-check-bold:|
-|wait_timeout|The wait timeout in seconds, when the wait timeout elapses and the job is still running, the method returns the job model that is not yet finished and has no results. The default timeout is 120 seconds, but could be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|long| |
+|<span class="no-wrap-code">`job_id`</span>|Job id|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`wait_timeout`</span>|The wait timeout in seconds, when the wait timeout elapses and the job is still running, the method returns the job model that is not yet finished and has no results. The default timeout is 120 seconds, but could be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|*long*| |
 
 
 
@@ -2155,7 +2155,7 @@ http://localhost:8888/api/jobs/runchecks/{jobId}/wait
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[run_checks_queue_job_result](../models/jobs.md#runchecksqueuejobresult)||[RunChecksQueueJobResult](../models/jobs.md#runchecksqueuejobresult)|
+|<span class="no-wrap-code">[`run_checks_queue_job_result`](../models/jobs.md#runchecksqueuejobresult)</span>||*[RunChecksQueueJobResult](../models/jobs.md#runchecksqueuejobresult)*|
 
 
 
@@ -2164,8 +2164,8 @@ http://localhost:8888/api/jobs/runchecks/{jobId}/wait
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|job_id|Job id, it can be a job business key assigned to the job or a job id generated by DQOps|string|:material-check-bold:|
-|wait_timeout|The wait timeout in seconds, when the wait timeout elapses and the job is still running, the method returns the job model that is not yet finished and has no results. The default timeout is 120 seconds, but could be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|long| |
+|<span class="no-wrap-code">`job_id`</span>|Job id, it can be a job business key assigned to the job or a job id generated by DQOps|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`wait_timeout`</span>|The wait timeout in seconds, when the wait timeout elapses and the job is still running, the method returns the job model that is not yet finished and has no results. The default timeout is 120 seconds, but could be reconfigured (see the &#x27;dqo&#x27; cli command documentation).|*long*| |
 
 
 

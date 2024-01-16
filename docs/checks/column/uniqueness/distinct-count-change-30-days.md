@@ -17,7 +17,7 @@ Verifies that the distinct count in a monitored column has changed by a fixed ra
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_distinct_count_change_30_days|profiling| |Consistency|[distinct_count](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[change_percent_30_days](../../../reference/rules/Change.md#change-percent-30-days)|
+|<span class="no-wrap-code">`profile_distinct_count_change_30_days`</span>|profiling| |Consistency|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*change_percent_30_days*](../../../reference/rules/Change.md#change-percent-30-days)|
 
 **Command-line examples**
 
@@ -946,7 +946,7 @@ Verifies that the distinct count in a monitored column has changed by a fixed ra
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_distinct_count_change_30_days|monitoring|daily|Consistency|[distinct_count](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[change_percent_30_days](../../../reference/rules/Change.md#change-percent-30-days)|
+|<span class="no-wrap-code">`daily_distinct_count_change_30_days`</span>|monitoring|daily|Consistency|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*change_percent_30_days*](../../../reference/rules/Change.md#change-percent-30-days)|
 
 **Command-line examples**
 
@@ -1877,7 +1877,7 @@ Verifies that the distinct count in a monitored column has changed by a fixed ra
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_distinct_count_change_30_days|partitioned|daily|Consistency|[distinct_count](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[change_percent_30_days](../../../reference/rules/Change.md#change-percent-30-days)|
+|<span class="no-wrap-code">`daily_partition_distinct_count_change_30_days`</span>|partitioned|daily|Consistency|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*change_percent_30_days*](../../../reference/rules/Change.md#change-percent-30-days)|
 
 **Command-line examples**
 

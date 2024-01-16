@@ -16,12 +16,12 @@ How to detect volume data quality issues.
 ## List of volume checks at a table level
 | Data quality check name | Data quality dimension | Description | Standard check |
 |-------------------------|------------------------|-------------|-------|
-|[row_count](../../checks/table/volume/row-count.md)|Completeness|Row count (select count(*) from ...) test that runs a row_count check, obtains a count of rows and verifies the number by calling the row count rule. The default configuration for all severity rules (warning, error, fatal data quality issue) is to require at least one row, which checks if the table is not empty.|:material-check-bold:|
-|[row_count_anomaly](../../checks/table/volume/row-count-anomaly.md)|Consistency|Table-level check that ensures that the row count is within a two-tailed percentile from measurements made during the last 90 days.| |
-|[row_count_change](../../checks/table/volume/row-count-change.md)|Consistency|Table-level check that ensures that the row count changed by a fixed rate since the last readout.| |
-|[row_count_change_1_day](../../checks/table/volume/row-count-change-1-day.md)|Consistency|Table-level check that ensures that the row count changed by a fixed rate since the last readout from yesterday.| |
-|[row_count_change_7_days](../../checks/table/volume/row-count-change-7-days.md)|Consistency|Table-level check that ensures that the row count changed by a fixed rate since the last readout from last week.| |
-|[row_count_change_30_days](../../checks/table/volume/row-count-change-30-days.md)|Consistency|Table-level check that ensures that the row count changed by a fixed rate since the last readout from last month.| |
+|[*row_count*](../../checks/table/volume/row-count.md)|Completeness|Row count (select count(*) from ...) test that runs a row_count check, obtains a count of rows and verifies the number by calling the row count rule. The default configuration for all severity rules (warning, error, fatal data quality issue) is to require at least one row, which checks if the table is not empty.|:material-check-bold:|
+|[*row_count_anomaly*](../../checks/table/volume/row-count-anomaly.md)|Consistency|Table-level check that ensures that the row count is within a two-tailed percentile from measurements made during the last 90 days.| |
+|[*row_count_change*](../../checks/table/volume/row-count-change.md)|Consistency|Table-level check that ensures that the row count changed by a fixed rate since the last readout.| |
+|[*row_count_change_1_day*](../../checks/table/volume/row-count-change-1-day.md)|Consistency|Table-level check that ensures that the row count changed by a fixed rate since the last readout from yesterday.| |
+|[*row_count_change_7_days*](../../checks/table/volume/row-count-change-7-days.md)|Consistency|Table-level check that ensures that the row count changed by a fixed rate since the last readout from last week.| |
+|[*row_count_change_30_days*](../../checks/table/volume/row-count-change-30-days.md)|Consistency|Table-level check that ensures that the row count changed by a fixed rate since the last readout from last month.| |
 
 
 **Reference and samples**

@@ -17,7 +17,7 @@ Verifies that the percentage of empty strings in a column does not exceed the ma
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_empty_text_percent|profiling| |Completeness|[empty_text_percent](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`profile_empty_text_percent`</span>|profiling| |Completeness|[*empty_text_percent*](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -1378,7 +1378,7 @@ Verifies that the percentage of empty strings in a column does not exceed the ma
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_empty_text_percent|monitoring|daily|Completeness|[empty_text_percent](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`daily_empty_text_percent`</span>|monitoring|daily|Completeness|[*empty_text_percent*](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -2741,7 +2741,7 @@ Verifies that the percentage of empty strings in a column does not exceed the ma
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_empty_text_percent|monitoring|monthly|Completeness|[empty_text_percent](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`monthly_empty_text_percent`</span>|monitoring|monthly|Completeness|[*empty_text_percent*](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -4104,7 +4104,7 @@ Verifies that the percentage of empty strings in a column does not exceed the ma
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_empty_text_percent|partitioned|daily|Completeness|[empty_text_percent](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`daily_partition_empty_text_percent`</span>|partitioned|daily|Completeness|[*empty_text_percent*](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -5489,7 +5489,7 @@ Verifies that the percentage of empty strings in a column does not exceed the ma
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_empty_text_percent|partitioned|monthly|Completeness|[empty_text_percent](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`monthly_partition_empty_text_percent`</span>|partitioned|monthly|Completeness|[*empty_text_percent*](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 

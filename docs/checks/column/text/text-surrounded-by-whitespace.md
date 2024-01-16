@@ -17,7 +17,7 @@ The check counts the number of text values in the column that are surrounded by 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_text_surrounded_by_whitespace|profiling| |Validity|[text_surrounded_by_whitespace_count](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`profile_text_surrounded_by_whitespace`</span>|profiling| |Validity|[*text_surrounded_by_whitespace_count*](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -1464,7 +1464,7 @@ The check counts the number of text values in the column that are surrounded by 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_text_surrounded_by_whitespace|monitoring|daily|Validity|[text_surrounded_by_whitespace_count](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`daily_text_surrounded_by_whitespace`</span>|monitoring|daily|Validity|[*text_surrounded_by_whitespace_count*](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -2913,7 +2913,7 @@ The check counts the number of text values in the column that are surrounded by 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_text_surrounded_by_whitespace|monitoring|monthly|Validity|[text_surrounded_by_whitespace_count](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`monthly_text_surrounded_by_whitespace`</span>|monitoring|monthly|Validity|[*text_surrounded_by_whitespace_count*](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -4362,7 +4362,7 @@ The check counts the number of text values in the column that are surrounded by 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_text_surrounded_by_whitespace|partitioned|daily|Validity|[text_surrounded_by_whitespace_count](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`daily_partition_text_surrounded_by_whitespace`</span>|partitioned|daily|Validity|[*text_surrounded_by_whitespace_count*](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -5833,7 +5833,7 @@ The check counts the number of text values in the column that are surrounded by 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_text_surrounded_by_whitespace|partitioned|monthly|Validity|[text_surrounded_by_whitespace_count](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`monthly_partition_text_surrounded_by_whitespace`</span>|partitioned|monthly|Validity|[*text_surrounded_by_whitespace_count*](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 

@@ -17,7 +17,7 @@ Verifies that the percentile 10 of all values in a column is not outside the exp
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_percentile_10_in_range|profiling| |Reasonableness|[percentile](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`profile_percentile_10_in_range`</span>|profiling| |Reasonableness|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 
@@ -1340,7 +1340,7 @@ Verifies that the percentile 10 of all values in a column is not outside the exp
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_percentile_10_in_range|monitoring|daily|Reasonableness|[percentile](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`daily_percentile_10_in_range`</span>|monitoring|daily|Reasonableness|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 
@@ -2665,7 +2665,7 @@ Verifies that the percentile 10 of all values in a column is not outside the exp
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_percentile_10_in_range|monitoring|monthly|Reasonableness|[percentile](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`monthly_percentile_10_in_range`</span>|monitoring|monthly|Reasonableness|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 
@@ -3990,7 +3990,7 @@ Verifies that the percentile 10 of all values in a column is not outside the exp
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_percentile_10_in_range|partitioned|daily|Reasonableness|[percentile](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`daily_partition_percentile_10_in_range`</span>|partitioned|daily|Reasonableness|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 
@@ -5335,7 +5335,7 @@ Verifies that the percentile 10 of all values in a column is not outside the exp
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_percentile_10_in_range|partitioned|monthly|Reasonableness|[percentile](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`monthly_partition_percentile_10_in_range`</span>|partitioned|monthly|Reasonableness|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 

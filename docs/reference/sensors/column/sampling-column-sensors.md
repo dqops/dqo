@@ -13,14 +13,14 @@ The column samples sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | sampling | `column/sampling/column_samples` | [sensors/column/sampling](https://github.com/dqops/dqo/tree/develop/home/sensors/column/sampling/) |
+| column | sampling | <span class="no-wrap-code">`column/sampling/column_samples`</span> | [*sensors/column/sampling*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/sampling/) |
 
 
 **Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`limit`|The limit of results that are returned. The default value is 10 sample values with the highest count (the most popular).|integer|:material-check-bold:||
+|<span class="no-wrap-code">`limit`</span>|The limit of results that are returned. The default value is 10 sample values with the highest count (the most popular).|*integer*|:material-check-bold:||
 
 
 

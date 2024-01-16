@@ -17,7 +17,7 @@ Verifies that the sum in a column changed in a fixed rate since the last readout
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_sum_change_7_days|profiling| |Consistency|[sum](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[change_percent_7_days](../../../reference/rules/Change.md#change-percent-7-days)|
+|<span class="no-wrap-code">`profile_sum_change_7_days`</span>|profiling| |Consistency|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*change_percent_7_days*](../../../reference/rules/Change.md#change-percent-7-days)|
 
 **Command-line examples**
 
@@ -858,7 +858,7 @@ Verifies that the sum in a column changed in a fixed rate since the last readout
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_sum_change_7_days|monitoring|daily|Consistency|[sum](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[change_percent_7_days](../../../reference/rules/Change.md#change-percent-7-days)|
+|<span class="no-wrap-code">`daily_sum_change_7_days`</span>|monitoring|daily|Consistency|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*change_percent_7_days*](../../../reference/rules/Change.md#change-percent-7-days)|
 
 **Command-line examples**
 
@@ -1701,7 +1701,7 @@ Verifies that the sum in a column changed in a fixed rate since the last readout
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_sum_change_7_days|partitioned|daily|Consistency|[sum](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[change_percent_7_days](../../../reference/rules/Change.md#change-percent-7-days)|
+|<span class="no-wrap-code">`daily_partition_sum_change_7_days`</span>|partitioned|daily|Consistency|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*change_percent_7_days*](../../../reference/rules/Change.md#change-percent-7-days)|
 
 **Command-line examples**
 

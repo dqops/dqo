@@ -13,7 +13,7 @@ The {{replace ruleName "_" " "}} data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| {{category}} | `{{fullRuleName}}` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/{{fullRuleName}}.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/{{fullRuleName}}.py) |
+| {{category}} | <span class="no-wrap-code">`{{fullRuleName}}`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/{{fullRuleName}}.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/{{fullRuleName}}.py) |
 
 {{#if definition.spec.fields}}
 **Rule parameters**
@@ -22,7 +22,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-{{#each definition.spec.fields}}|`{{displayName}}`|{{helpText}}|{{replace dataType "_type" ""}}|{{checkmark required}}|{{#each allowedValues}}{{this}}<br/>{{/each}}|
+{{#each definition.spec.fields}}|<span class="no-wrap-code">`{{displayName}}`</span>|{{helpText}}|*{{replace dataType "_type" ""}}*|{{checkmark required}}|{{#each allowedValues}}*{{this}}*<br/>{{/each}}|
 {{/each}}
 {{else}}
 {{/if}}
@@ -34,7 +34,7 @@ The rule definition YAML file *{{fullRuleName}}.dqorule.yaml* with the time wind
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     {{{ruleExample}}}
     ```
 
@@ -46,7 +46,7 @@ The rule definition YAML file *{{fullRuleName}}.dqorule.yaml* with the time wind
 
 | Parameters name | Value |
 |-----------------|-------|
-{{#each definition.spec.parameters}}|{{@key}}|{{this}}|
+{{#each definition.spec.parameters}}|*{{@key}}*|{{this}}|
 {{/each}}
 {{else}}
 {{/if}}
@@ -58,7 +58,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     {{{replace pythonSourceCode '#
     # Copyright © 2021 DQOps (support@dqops.com)
     #

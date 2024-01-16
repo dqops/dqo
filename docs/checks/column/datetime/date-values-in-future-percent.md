@@ -17,7 +17,7 @@ Verifies that the percentage of date values in future in a column does not excee
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_date_values_in_future_percent|profiling| |Validity|[date_values_in_future_percent](../../../reference/sensors/column/datetime-column-sensors.md#date-values-in-future-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`profile_date_values_in_future_percent`</span>|profiling| |Validity|[*date_values_in_future_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-values-in-future-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -1796,7 +1796,7 @@ Verifies that the percentage of date values in future in a column does not excee
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_date_values_in_future_percent|monitoring|daily|Validity|[date_values_in_future_percent](../../../reference/sensors/column/datetime-column-sensors.md#date-values-in-future-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`daily_date_values_in_future_percent`</span>|monitoring|daily|Validity|[*date_values_in_future_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-values-in-future-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -3577,7 +3577,7 @@ Verifies that the percentage of date values in future in a column does not excee
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_date_values_in_future_percent|monitoring|monthly|Validity|[date_values_in_future_percent](../../../reference/sensors/column/datetime-column-sensors.md#date-values-in-future-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`monthly_date_values_in_future_percent`</span>|monitoring|monthly|Validity|[*date_values_in_future_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-values-in-future-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -5358,7 +5358,7 @@ Verifies that the percentage of date values in future in a column does not excee
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_date_values_in_future_percent|partitioned|daily|Validity|[date_values_in_future_percent](../../../reference/sensors/column/datetime-column-sensors.md#date-values-in-future-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`daily_partition_date_values_in_future_percent`</span>|partitioned|daily|Validity|[*date_values_in_future_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-values-in-future-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -7161,7 +7161,7 @@ Verifies that the percentage of date values in future in a column does not excee
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_date_values_in_future_percent|partitioned|monthly|Validity|[date_values_in_future_percent](../../../reference/sensors/column/datetime-column-sensors.md#date-values-in-future-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`monthly_partition_date_values_in_future_percent`</span>|partitioned|monthly|Validity|[*date_values_in_future_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-values-in-future-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 

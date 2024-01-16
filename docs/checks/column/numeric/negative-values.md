@@ -17,7 +17,7 @@ Verifies that the number of negative values in a column does not exceed the maxi
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_negative_values|profiling| |Validity|[negative_count](../../../reference/sensors/column/numeric-column-sensors.md#negative-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`profile_negative_values`</span>|profiling| |Validity|[*negative_count*](../../../reference/sensors/column/numeric-column-sensors.md#negative-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -1074,7 +1074,7 @@ Verifies that the number of negative values in a column does not exceed the maxi
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_negative_values|monitoring|daily|Validity|[negative_count](../../../reference/sensors/column/numeric-column-sensors.md#negative-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`daily_negative_values`</span>|monitoring|daily|Validity|[*negative_count*](../../../reference/sensors/column/numeric-column-sensors.md#negative-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -2133,7 +2133,7 @@ Verifies that the number of negative values in a column does not exceed the maxi
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_negative_values|monitoring|monthly|Validity|[negative_count](../../../reference/sensors/column/numeric-column-sensors.md#negative-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`monthly_negative_values`</span>|monitoring|monthly|Validity|[*negative_count*](../../../reference/sensors/column/numeric-column-sensors.md#negative-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -3192,7 +3192,7 @@ Verifies that the number of negative values in a column does not exceed the maxi
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_negative_values|partitioned|daily|Validity|[negative_count](../../../reference/sensors/column/numeric-column-sensors.md#negative-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`daily_partition_negative_values`</span>|partitioned|daily|Validity|[*negative_count*](../../../reference/sensors/column/numeric-column-sensors.md#negative-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -4273,7 +4273,7 @@ Verifies that the number of negative values in a column does not exceed the maxi
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_negative_values|partitioned|monthly|Validity|[negative_count](../../../reference/sensors/column/numeric-column-sensors.md#negative-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`monthly_partition_negative_values`</span>|partitioned|monthly|Validity|[*negative_count*](../../../reference/sensors/column/numeric-column-sensors.md#negative-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 

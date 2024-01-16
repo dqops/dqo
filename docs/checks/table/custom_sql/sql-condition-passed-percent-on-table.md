@@ -17,7 +17,7 @@ Verifies that a custom SQL expression is met for each row. Counts the number of 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_sql_condition_passed_percent_on_table|profiling| |Validity|[sql_condition_passed_percent](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-condition-passed-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`profile_sql_condition_passed_percent_on_table`</span>|profiling| |Validity|[*sql_condition_passed_percent*](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-condition-passed-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -1219,7 +1219,7 @@ Verifies that a minimum percentage of rows passed a custom SQL condition (expres
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_sql_condition_passed_percent_on_table|monitoring|daily|Validity|[sql_condition_passed_percent](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-condition-passed-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`daily_sql_condition_passed_percent_on_table`</span>|monitoring|daily|Validity|[*sql_condition_passed_percent*](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-condition-passed-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -2423,7 +2423,7 @@ Verifies that a minimum percentage of rows passed a custom SQL condition (expres
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_sql_condition_passed_percent_on_table|monitoring|monthly|Validity|[sql_condition_passed_percent](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-condition-passed-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`monthly_sql_condition_passed_percent_on_table`</span>|monitoring|monthly|Validity|[*sql_condition_passed_percent*](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-condition-passed-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -3627,7 +3627,7 @@ Verifies that a minimum percentage of rows passed a custom SQL condition (expres
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_sql_condition_passed_percent_on_table|partitioned|daily|Validity|[sql_condition_passed_percent](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-condition-passed-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`daily_partition_sql_condition_passed_percent_on_table`</span>|partitioned|daily|Validity|[*sql_condition_passed_percent*](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-condition-passed-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -4853,7 +4853,7 @@ Verifies that a minimum percentage of rows passed a custom SQL condition (expres
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_sql_condition_passed_percent_on_table|partitioned|monthly|Validity|[sql_condition_passed_percent](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-condition-passed-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`monthly_partition_sql_condition_passed_percent_on_table`</span>|partitioned|monthly|Validity|[*sql_condition_passed_percent*](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-condition-passed-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 

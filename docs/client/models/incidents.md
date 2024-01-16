@@ -11,32 +11,32 @@ Detailed results for a single check. Represent one row in the check results tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|id|Check result primary key|string|
-|check_hash|Check hash, do not set a value when writing results to DQOps|long|
-|check_category|Check category name|string|
-|check_name|Check name|string|
-|check_display_name|Check display name|string|
-|[check_type](./table_comparisons.md#CheckType)|Check type|[CheckType](./table_comparisons.md#CheckType)|
-|actual_value|Actual value|double|
-|expected_value|Expected value|double|
-|warning_lower_bound|Warning lower bound|double|
-|warning_upper_bound|Warning upper bound|double|
-|error_lower_bound|Error lower bound|double|
-|error_upper_bound|Error upper bound|double|
-|fatal_lower_bound|Fatal lower bound|double|
-|fatal_upper_bound|Fatal upper bound|double|
-|severity|Issue severity, 0 - valid, 1 - warning, 2 - error, 3 - fatal|integer|
-|column_name|Column name|string|
-|data_group|Data group name|string|
-|duration_ms|Duration (ms)|integer|
-|[time_gradient](./errors.md#timeperiodgradient)|Time gradient|[TimePeriodGradient](./errors.md#timeperiodgradient)|
-|time_period|Time period|datetime|
-|include_in_kpi|Include in KPI|boolean|
-|include_in_sla|Include in SLA|boolean|
-|provider|Provider name|string|
-|quality_dimension|Data quality dimension|string|
-|sensor_name|Sensor name|string|
-|table_comparison|Table comparison name|string|
+|<span class="no-wrap-code">`id`</span>|Check result primary key|*string*|
+|<span class="no-wrap-code">`check_hash`</span>|Check hash, do not set a value when writing results to DQOps|*long*|
+|<span class="no-wrap-code">`check_category`</span>|Check category name|*string*|
+|<span class="no-wrap-code">`check_name`</span>|Check name|*string*|
+|<span class="no-wrap-code">`check_display_name`</span>|Check display name|*string*|
+|<span class="no-wrap-code">[`check_type`](./table_comparisons.md#checktype)</span>|Check type|*[CheckType](./table_comparisons.md#checktype)*|
+|<span class="no-wrap-code">`actual_value`</span>|Actual value|*double*|
+|<span class="no-wrap-code">`expected_value`</span>|Expected value|*double*|
+|<span class="no-wrap-code">`warning_lower_bound`</span>|Warning lower bound|*double*|
+|<span class="no-wrap-code">`warning_upper_bound`</span>|Warning upper bound|*double*|
+|<span class="no-wrap-code">`error_lower_bound`</span>|Error lower bound|*double*|
+|<span class="no-wrap-code">`error_upper_bound`</span>|Error upper bound|*double*|
+|<span class="no-wrap-code">`fatal_lower_bound`</span>|Fatal lower bound|*double*|
+|<span class="no-wrap-code">`fatal_upper_bound`</span>|Fatal upper bound|*double*|
+|<span class="no-wrap-code">`severity`</span>|Issue severity, 0 - valid, 1 - warning, 2 - error, 3 - fatal|*integer*|
+|<span class="no-wrap-code">`column_name`</span>|Column name|*string*|
+|<span class="no-wrap-code">`data_group`</span>|Data group name|*string*|
+|<span class="no-wrap-code">`duration_ms`</span>|Duration (ms)|*integer*|
+|<span class="no-wrap-code">[`time_gradient`](./errors.md#timeperiodgradient)</span>|Time gradient|*[TimePeriodGradient](./errors.md#timeperiodgradient)*|
+|<span class="no-wrap-code">`time_period`</span>|Time period|*datetime*|
+|<span class="no-wrap-code">`include_in_kpi`</span>|Include in KPI|*boolean*|
+|<span class="no-wrap-code">`include_in_sla`</span>|Include in SLA|*boolean*|
+|<span class="no-wrap-code">`provider`</span>|Provider name|*string*|
+|<span class="no-wrap-code">`quality_dimension`</span>|Data quality dimension|*string*|
+|<span class="no-wrap-code">`sensor_name`</span>|Sensor name|*string*|
+|<span class="no-wrap-code">`table_comparison`</span>|Table comparison name|*string*|
 
 
 ___
@@ -50,7 +50,7 @@ Enumeration of columns names on a {@link CheckResultEntryModel CheckResultEntryM
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
-|string|checkType<br/>severity<br/>executedAt<br/>sensorName<br/>checkDisplayName<br/>actualValue<br/>checkCategory<br/>checkHash<br/>checkName<br/>dataGroup<br/>expectedValue<br/>timePeriod<br/>qualityDimension<br/>timeGradient<br/>columnName<br/>|
+|string|executedAt<br/>checkHash<br/>checkCategory<br/>checkName<br/>checkDisplayName<br/>checkType<br/>actualValue<br/>expectedValue<br/>severity<br/>columnName<br/>dataGroup<br/>timeGradient<br/>timePeriod<br/>qualityDimension<br/>sensorName<br/>|
 
 ___
 
@@ -63,10 +63,10 @@ A model that stores a daily number of incidents.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|warnings|The number of failed data quality checks that generated a warning severity data quality issue.|integer|
-|errors|The number of failed data quality checks that generated an error severity data quality issue.|integer|
-|fatals|The number of failed data quality checks that generated a fatal severity data quality issue.|integer|
-|total_count|The total count of failed data quality checks on this day.|integer|
+|<span class="no-wrap-code">`warnings`</span>|The number of failed data quality checks that generated a warning severity data quality issue.|*integer*|
+|<span class="no-wrap-code">`errors`</span>|The number of failed data quality checks that generated an error severity data quality issue.|*integer*|
+|<span class="no-wrap-code">`fatals`</span>|The number of failed data quality checks that generated a fatal severity data quality issue.|*integer*|
+|<span class="no-wrap-code">`total_count`</span>|The total count of failed data quality checks on this day.|*integer*|
 
 
 ___
@@ -81,12 +81,12 @@ Model that returns histograms of the data quality issue occurrences related to a
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|has_profiling_issues|True when this data quality incident is based on data quality issues from profiling checks within the filters applied to search for linked data quality issues.|boolean|
-|has_monitoring_issues|True when this data quality incident is based on data quality issues from monitoring checks within the filters applied to search for linked data quality issues.|boolean|
-|has_partitioned_issues|True when this data quality incident is based on data quality issues from partitioned checks within the filters applied to search for linked data quality issues.|boolean|
-|days|A map of the numbers of data quality issues per day, the day uses the DQOps server timezone.|Dict[date, [IncidentDailyIssuesCount](#incidentdailyissuescount)]|
-|columns|A map of column names with the most data quality issues related to the incident. The map returns the count of issues as the value.|Dict[string, integer]|
-|checks|A map of data quality check names with the most data quality issues related to the incident. The map returns the count of issues as the value.|Dict[string, integer]|
+|<span class="no-wrap-code">`has_profiling_issues`</span>|True when this data quality incident is based on data quality issues from profiling checks within the filters applied to search for linked data quality issues.|*boolean*|
+|<span class="no-wrap-code">`has_monitoring_issues`</span>|True when this data quality incident is based on data quality issues from monitoring checks within the filters applied to search for linked data quality issues.|*boolean*|
+|<span class="no-wrap-code">`has_partitioned_issues`</span>|True when this data quality incident is based on data quality issues from partitioned checks within the filters applied to search for linked data quality issues.|*boolean*|
+|<span class="no-wrap-code">`days`</span>|A map of the numbers of data quality issues per day, the day uses the DQOps server timezone.|*Dict[date, [IncidentDailyIssuesCount](#incidentdailyissuescount)]*|
+|<span class="no-wrap-code">`columns`</span>|A map of column names with the most data quality issues related to the incident. The map returns the count of issues as the value.|*Dict[string, integer]*|
+|<span class="no-wrap-code">`checks`</span>|A map of data quality check names with the most data quality issues related to the incident. The map returns the count of issues as the value.|*Dict[string, integer]*|
 
 
 ___
@@ -100,7 +100,7 @@ Enumeration of the statuses used in the &quot;status&quot; field of the &quot;in
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
-|string|acknowledged<br/>muted<br/>open<br/>resolved<br/>|
+|string|open<br/>acknowledged<br/>resolved<br/>muted<br/>|
 
 ___
 
@@ -113,24 +113,24 @@ Data quality incident model shown on an incident details screen.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|incident_id|Incident ID - the primary key that identifies each data quality incident.|string|
-|connection|Connection name affected by a data quality incident.|string|
-|year|The year when the incident was first seen. This value is required to load an incident&#x27;s monthly partition.|integer|
-|month|The month when the incident was first seen. This value is required to load an incident&#x27;s monthly partition.|integer|
-|schema|Schema name affected by a data quality incident.|string|
-|table|Table name affected by a data quality incident.|string|
-|table_priority|Table priority of the table that was affected by a data quality incident.|integer|
-|incident_hash|Data quality incident hash that identifies similar incidents on the same incident grouping level.|long|
-|data_group|The data group that was affected by a data quality incident.|string|
-|quality_dimension|The data quality dimension that was affected by a data quality incident.|string|
-|check_category|The data quality check category that was affected by a data quality incident.|string|
-|check_type|The data quality check type that was affected by a data quality incident.|string|
-|check_name|The data quality check name that was affected by a data quality incident.|string|
-|highest_severity|The highest failed check severity that was detected as part of this data quality incident. Possible values are: 1 - warning, 2 - error, 3 - fatal.|integer|
-|minimum_severity|The minimum severity of the data quality incident, copied from the incident configuration at a connection or table at the time when the incident was first seen. Possible values are: 1 - warning, 2 - error, 3 - fatal.|integer|
-|failed_checks_count|The total number of failed data quality checks that were seen when the incident was raised for the first time.|integer|
-|issue_url|The link (url) to a ticket in an external system that is tracking this incident.|string|
-|[status](./incidents.md#IncidentStatus)|Incident status.|[IncidentStatus](./incidents.md#IncidentStatus)|
+|<span class="no-wrap-code">`incident_id`</span>|Incident ID - the primary key that identifies each data quality incident.|*string*|
+|<span class="no-wrap-code">`connection`</span>|Connection name affected by a data quality incident.|*string*|
+|<span class="no-wrap-code">`year`</span>|The year when the incident was first seen. This value is required to load an incident&#x27;s monthly partition.|*integer*|
+|<span class="no-wrap-code">`month`</span>|The month when the incident was first seen. This value is required to load an incident&#x27;s monthly partition.|*integer*|
+|<span class="no-wrap-code">`schema`</span>|Schema name affected by a data quality incident.|*string*|
+|<span class="no-wrap-code">`table`</span>|Table name affected by a data quality incident.|*string*|
+|<span class="no-wrap-code">`table_priority`</span>|Table priority of the table that was affected by a data quality incident.|*integer*|
+|<span class="no-wrap-code">`incident_hash`</span>|Data quality incident hash that identifies similar incidents on the same incident grouping level.|*long*|
+|<span class="no-wrap-code">`data_group`</span>|The data group that was affected by a data quality incident.|*string*|
+|<span class="no-wrap-code">`quality_dimension`</span>|The data quality dimension that was affected by a data quality incident.|*string*|
+|<span class="no-wrap-code">`check_category`</span>|The data quality check category that was affected by a data quality incident.|*string*|
+|<span class="no-wrap-code">`check_type`</span>|The data quality check type that was affected by a data quality incident.|*string*|
+|<span class="no-wrap-code">`check_name`</span>|The data quality check name that was affected by a data quality incident.|*string*|
+|<span class="no-wrap-code">`highest_severity`</span>|The highest failed check severity that was detected as part of this data quality incident. Possible values are: 1 - warning, 2 - error, 3 - fatal.|*integer*|
+|<span class="no-wrap-code">`minimum_severity`</span>|The minimum severity of the data quality incident, copied from the incident configuration at a connection or table at the time when the incident was first seen. Possible values are: 1 - warning, 2 - error, 3 - fatal.|*integer*|
+|<span class="no-wrap-code">`failed_checks_count`</span>|The total number of failed data quality checks that were seen when the incident was raised for the first time.|*integer*|
+|<span class="no-wrap-code">`issue_url`</span>|The link (url) to a ticket in an external system that is tracking this incident.|*string*|
+|<span class="no-wrap-code">[`status`](./incidents.md#incidentstatus)</span>|Incident status.|*[IncidentStatus](./incidents.md#incidentstatus)*|
 
 
 ___
@@ -144,7 +144,7 @@ Incident sort order columns.
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
-|string|dataGroup<br/>lastSeen<br/>firstSeen<br/>tablePriority<br/>qualityDimension<br/>checkName<br/>failedChecksCount<br/>table<br/>highestSeverity<br/>|
+|string|table<br/>tablePriority<br/>firstSeen<br/>lastSeen<br/>dataGroup<br/>qualityDimension<br/>checkName<br/>highestSeverity<br/>failedChecksCount<br/>|
 
 ___
 
@@ -157,8 +157,8 @@ Simple model that returns a list of connections and a number of open (new) data 
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|connection|Connection (data source) name.|string|
-|open_incidents|Count of open (new) data quality incidents.|integer|
+|<span class="no-wrap-code">`connection`</span>|Connection (data source) name.|*string*|
+|<span class="no-wrap-code">`open_incidents`</span>|Count of open (new) data quality incidents.|*integer*|
 
 
 ___

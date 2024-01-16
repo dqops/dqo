@@ -15,7 +15,7 @@ The anomaly differencing percentile moving average data quality rule is describe
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| percentile | `percentile/anomaly_differencing_percentile_moving_average` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/anomaly_differencing_percentile_moving_average.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/anomaly_differencing_percentile_moving_average.py) |
+| percentile | <span class="no-wrap-code">`percentile/anomaly_differencing_percentile_moving_average`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/anomaly_differencing_percentile_moving_average.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/anomaly_differencing_percentile_moving_average.py) |
 
 
 **Rule parameters**
@@ -24,7 +24,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`anomaly_percent`|Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a time window of 90 periods (days, etc.), but at least 30 readouts must exist to run the calculation. You can change the default value by modifying prediction_time_window parameterin Definitions section.|double|:material-check-bold:||
+|<span class="no-wrap-code">`anomaly_percent`</span>|Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a time window of 90 periods (days, etc.), but at least 30 readouts must exist to run the calculation. You can change the default value by modifying prediction_time_window parameterin Definitions section.|*double*|:material-check-bold:||
 
 
 
@@ -35,7 +35,7 @@ The rule definition YAML file *percentile/anomaly_differencing_percentile_moving
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -74,7 +74,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2023 DQOps (support@dqops.com)
     #
@@ -192,7 +192,7 @@ The anomaly differencing percentile moving average 30 days data quality rule is 
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| percentile | `percentile/anomaly_differencing_percentile_moving_average_30_days` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/anomaly_differencing_percentile_moving_average_30_days.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/anomaly_differencing_percentile_moving_average_30_days.py) |
+| percentile | <span class="no-wrap-code">`percentile/anomaly_differencing_percentile_moving_average_30_days`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/anomaly_differencing_percentile_moving_average_30_days.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/anomaly_differencing_percentile_moving_average_30_days.py) |
 
 
 **Rule parameters**
@@ -201,7 +201,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`anomaly_percent`|Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a time window of 30 periods (days, etc.), but at least 10 readouts must exist to run the calculation.|double|:material-check-bold:||
+|<span class="no-wrap-code">`anomaly_percent`</span>|Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a time window of 30 periods (days, etc.), but at least 10 readouts must exist to run the calculation.|*double*|:material-check-bold:||
 
 
 
@@ -212,7 +212,7 @@ The rule definition YAML file *percentile/anomaly_differencing_percentile_moving
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -250,7 +250,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2023 DQOps (support@dqops.com)
     #
@@ -367,7 +367,7 @@ The anomaly stationary percentile moving average data quality rule is described 
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| percentile | `percentile/anomaly_stationary_percentile_moving_average` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/anomaly_stationary_percentile_moving_average.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/anomaly_stationary_percentile_moving_average.py) |
+| percentile | <span class="no-wrap-code">`percentile/anomaly_stationary_percentile_moving_average`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/anomaly_stationary_percentile_moving_average.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/anomaly_stationary_percentile_moving_average.py) |
 
 
 **Rule parameters**
@@ -376,7 +376,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`anomaly_percent`|Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a time window of 90 periods (days, etc.), but at least 30 readouts must exist to run the calculation. You can change the default value by modifying prediction_time_window parameterin Definitions section.|double|:material-check-bold:||
+|<span class="no-wrap-code">`anomaly_percent`</span>|Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a time window of 90 periods (days, etc.), but at least 30 readouts must exist to run the calculation. You can change the default value by modifying prediction_time_window parameterin Definitions section.|*double*|:material-check-bold:||
 
 
 
@@ -387,7 +387,7 @@ The rule definition YAML file *percentile/anomaly_stationary_percentile_moving_a
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -426,7 +426,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2023 DQOps (support@dqops.com)
     #
@@ -539,7 +539,7 @@ The anomaly stationary percentile moving average 30 days data quality rule is de
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| percentile | `percentile/anomaly_stationary_percentile_moving_average_30_days` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/anomaly_stationary_percentile_moving_average_30_days.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/anomaly_stationary_percentile_moving_average_30_days.py) |
+| percentile | <span class="no-wrap-code">`percentile/anomaly_stationary_percentile_moving_average_30_days`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/anomaly_stationary_percentile_moving_average_30_days.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/anomaly_stationary_percentile_moving_average_30_days.py) |
 
 
 **Rule parameters**
@@ -548,7 +548,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`anomaly_percent`|Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 30 time periods (days, etc.) time window, but at least 10 readouts must exist to run the calculation.|double|:material-check-bold:||
+|<span class="no-wrap-code">`anomaly_percent`</span>|Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 30 time periods (days, etc.) time window, but at least 10 readouts must exist to run the calculation.|*double*|:material-check-bold:||
 
 
 
@@ -559,7 +559,7 @@ The rule definition YAML file *percentile/anomaly_stationary_percentile_moving_a
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -597,7 +597,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2023 DQOps (support@dqops.com)
     #
@@ -711,7 +711,7 @@ The change percentile moving 30 days data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| percentile | `percentile/change_percentile_moving_30_days` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/change_percentile_moving_30_days.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/change_percentile_moving_30_days.py) |
+| percentile | <span class="no-wrap-code">`percentile/change_percentile_moving_30_days`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/change_percentile_moving_30_days.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/change_percentile_moving_30_days.py) |
 
 
 **Rule parameters**
@@ -720,8 +720,8 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`percentile_above`|Probability that the current sensor readout will achieve values greater than it would be expected from the estimated distribution based on the previous values gathered within the time window. In other words, the upper quantile of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 30 time periods (days, etc.) time window, but at least 10 readouts must exist to run the calculation.|double| ||
-|`percentile_below`|Probability that the current sensor readout will achieve values lesser than it would be expected from the estimated distribution based on the previous values gathered within the time window. In other words, the lower quantile of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 30 time periods (days, etc.) time window, but at least 10 readouts must exist to run the calculation.|double| ||
+|<span class="no-wrap-code">`percentile_above`</span>|Probability that the current sensor readout will achieve values greater than it would be expected from the estimated distribution based on the previous values gathered within the time window. In other words, the upper quantile of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 30 time periods (days, etc.) time window, but at least 10 readouts must exist to run the calculation.|*double*| ||
+|<span class="no-wrap-code">`percentile_below`</span>|Probability that the current sensor readout will achieve values lesser than it would be expected from the estimated distribution based on the previous values gathered within the time window. In other words, the lower quantile of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 30 time periods (days, etc.) time window, but at least 10 readouts must exist to run the calculation.|*double*| ||
 
 
 
@@ -732,7 +732,7 @@ The rule definition YAML file *percentile/change_percentile_moving_30_days.dqoru
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -783,7 +783,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2023 DQOps (support@dqops.com)
     #
@@ -909,7 +909,7 @@ The change percentile moving 60 days data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| percentile | `percentile/change_percentile_moving_60_days` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/change_percentile_moving_60_days.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/change_percentile_moving_60_days.py) |
+| percentile | <span class="no-wrap-code">`percentile/change_percentile_moving_60_days`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/change_percentile_moving_60_days.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/change_percentile_moving_60_days.py) |
 
 
 **Rule parameters**
@@ -918,8 +918,8 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`percentile_above`|Probability that the current sensor readout will achieve values greater than it would be expected from the estimated distribution based on the previous values gathered within the time window. In other words, the upper quantile of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 60 time periods (days, etc.) time window, but at least 20 readouts must exist to run the calculation.|double| ||
-|`percentile_below`|Probability that the current sensor readout will achieve values lesser than it would be expected from the estimated distribution based on the previous values gathered within the time window. In other words, the lower quantile of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 60 time periods (days, etc.) time window, but at least 20 readouts must exist to run the calculation.|double| ||
+|<span class="no-wrap-code">`percentile_above`</span>|Probability that the current sensor readout will achieve values greater than it would be expected from the estimated distribution based on the previous values gathered within the time window. In other words, the upper quantile of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 60 time periods (days, etc.) time window, but at least 20 readouts must exist to run the calculation.|*double*| ||
+|<span class="no-wrap-code">`percentile_below`</span>|Probability that the current sensor readout will achieve values lesser than it would be expected from the estimated distribution based on the previous values gathered within the time window. In other words, the lower quantile of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 60 time periods (days, etc.) time window, but at least 20 readouts must exist to run the calculation.|*double*| ||
 
 
 
@@ -930,7 +930,7 @@ The rule definition YAML file *percentile/change_percentile_moving_60_days.dqoru
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -981,7 +981,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2023 DQOps (support@dqops.com)
     #
@@ -1107,7 +1107,7 @@ The change percentile moving 7 days data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| percentile | `percentile/change_percentile_moving_7_days` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/change_percentile_moving_7_days.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/change_percentile_moving_7_days.py) |
+| percentile | <span class="no-wrap-code">`percentile/change_percentile_moving_7_days`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/change_percentile_moving_7_days.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/change_percentile_moving_7_days.py) |
 
 
 **Rule parameters**
@@ -1116,8 +1116,8 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`percentile_above`|Probability that the current sensor readout will achieve values greater than it would be expected from the estimated distribution based on the previous values gathered within the time window. In other words, the upper quantile of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 7 time periods (days, etc.) time window, but at least 3 readouts must exist to run the calculation.|double| ||
-|`percentile_below`|Probability that the current sensor readout will achieve values lesser than it would be expected from the estimated distribution based on the previous values gathered within the time window. In other words, the lower quantile of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 7 time periods (days, etc.) time window, but at least 3 readouts must exist to run the calculation.|double| ||
+|<span class="no-wrap-code">`percentile_above`</span>|Probability that the current sensor readout will achieve values greater than it would be expected from the estimated distribution based on the previous values gathered within the time window. In other words, the upper quantile of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 7 time periods (days, etc.) time window, but at least 3 readouts must exist to run the calculation.|*double*| ||
+|<span class="no-wrap-code">`percentile_below`</span>|Probability that the current sensor readout will achieve values lesser than it would be expected from the estimated distribution based on the previous values gathered within the time window. In other words, the lower quantile of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 7 time periods (days, etc.) time window, but at least 3 readouts must exist to run the calculation.|*double*| ||
 
 
 
@@ -1128,7 +1128,7 @@ The rule definition YAML file *percentile/change_percentile_moving_7_days.dqorul
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -1179,7 +1179,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2023 DQOps (support@dqops.com)
     #
@@ -1304,7 +1304,7 @@ The percentile moving 30 days data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| percentile | `percentile/percentile_moving_30_days` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/percentile_moving_30_days.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/percentile_moving_30_days.py) |
+| percentile | <span class="no-wrap-code">`percentile/percentile_moving_30_days`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/percentile_moving_30_days.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/percentile_moving_30_days.py) |
 
 
 **Rule parameters**
@@ -1313,8 +1313,8 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`percentile_above`|Probability that the current sensor readout will achieve values greater than it would be expected from the estimated distribution based on the previous values gathered within the time window. In other words, the upper quantile of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 30 time periods (days, etc.) time window, but at least 10 readouts must exist to run the calculation.|double| ||
-|`percentile_below`|Probability that the current sensor readout will achieve values lesser than it would be expected from the estimated distribution based on the previous values gathered within the time window. In other words, the lower quantile of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 30 time periods (days, etc.) time window, but at least 10 readouts must exist to run the calculation.|double| ||
+|<span class="no-wrap-code">`percentile_above`</span>|Probability that the current sensor readout will achieve values greater than it would be expected from the estimated distribution based on the previous values gathered within the time window. In other words, the upper quantile of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 30 time periods (days, etc.) time window, but at least 10 readouts must exist to run the calculation.|*double*| ||
+|<span class="no-wrap-code">`percentile_below`</span>|Probability that the current sensor readout will achieve values lesser than it would be expected from the estimated distribution based on the previous values gathered within the time window. In other words, the lower quantile of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 30 time periods (days, etc.) time window, but at least 10 readouts must exist to run the calculation.|*double*| ||
 
 
 
@@ -1325,7 +1325,7 @@ The rule definition YAML file *percentile/percentile_moving_30_days.dqorule.yaml
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -1376,7 +1376,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2023 DQOps (support@dqops.com)
     #
@@ -1498,7 +1498,7 @@ The percentile moving 60 days data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| percentile | `percentile/percentile_moving_60_days` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/percentile_moving_60_days.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/percentile_moving_60_days.py) |
+| percentile | <span class="no-wrap-code">`percentile/percentile_moving_60_days`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/percentile_moving_60_days.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/percentile_moving_60_days.py) |
 
 
 **Rule parameters**
@@ -1507,8 +1507,8 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`percentile_above`|Probability that the current sensor readout will achieve values greater than it would be expected from the estimated distribution based on the previous values gathered within the time window. In other words, the upper quantile of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 60 time periods (days, etc.) time window, but at least 20 readouts must exist to run the calculation.|double| ||
-|`percentile_below`|Probability that the current sensor readout will achieve values lesser than it would be expected from the estimated distribution based on the previous values gathered within the time window. In other words, the lower quantile of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 60 time periods (days, etc.) time window, but at least 20 readouts must exist to run the calculation.|double| ||
+|<span class="no-wrap-code">`percentile_above`</span>|Probability that the current sensor readout will achieve values greater than it would be expected from the estimated distribution based on the previous values gathered within the time window. In other words, the upper quantile of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 60 time periods (days, etc.) time window, but at least 20 readouts must exist to run the calculation.|*double*| ||
+|<span class="no-wrap-code">`percentile_below`</span>|Probability that the current sensor readout will achieve values lesser than it would be expected from the estimated distribution based on the previous values gathered within the time window. In other words, the lower quantile of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 60 time periods (days, etc.) time window, but at least 20 readouts must exist to run the calculation.|*double*| ||
 
 
 
@@ -1519,7 +1519,7 @@ The rule definition YAML file *percentile/percentile_moving_60_days.dqorule.yaml
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -1570,7 +1570,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2023 DQOps (support@dqops.com)
     #
@@ -1692,7 +1692,7 @@ The percentile moving 7 days data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| percentile | `percentile/percentile_moving_7_days` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/percentile_moving_7_days.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/percentile_moving_7_days.py) |
+| percentile | <span class="no-wrap-code">`percentile/percentile_moving_7_days`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/percentile_moving_7_days.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/percentile/percentile_moving_7_days.py) |
 
 
 **Rule parameters**
@@ -1701,8 +1701,8 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`percentile_above`|Probability that the current sensor readout will achieve values greater than it would be expected from the estimated distribution based on the previous values gathered within the time window. In other words, the upper quantile of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 7 time periods (days, etc.) time window, but at least 3 readouts must exist to run the calculation.|double| ||
-|`percentile_below`|Probability that the current sensor readout will achieve values lesser than it would be expected from the estimated distribution based on the previous values gathered within the time window. In other words, the lower quantile of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 7 time periods (days, etc.) time window, but at least 3 readouts must exist to run the calculation.|double| ||
+|<span class="no-wrap-code">`percentile_above`</span>|Probability that the current sensor readout will achieve values greater than it would be expected from the estimated distribution based on the previous values gathered within the time window. In other words, the upper quantile of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 7 time periods (days, etc.) time window, but at least 3 readouts must exist to run the calculation.|*double*| ||
+|<span class="no-wrap-code">`percentile_below`</span>|Probability that the current sensor readout will achieve values lesser than it would be expected from the estimated distribution based on the previous values gathered within the time window. In other words, the lower quantile of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 7 time periods (days, etc.) time window, but at least 3 readouts must exist to run the calculation.|*double*| ||
 
 
 
@@ -1713,7 +1713,7 @@ The rule definition YAML file *percentile/percentile_moving_7_days.dqorule.yaml*
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -1764,7 +1764,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2023 DQOps (support@dqops.com)
     #

@@ -13,7 +13,7 @@ The row count sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| table | volume | `table/volume/row_count` | [sensors/table/volume](https://github.com/dqops/dqo/tree/develop/home/sensors/table/volume/) |
+| table | volume | <span class="no-wrap-code">`table/volume/row_count`</span> | [*sensors/table/volume*](https://github.com/dqops/dqo/tree/develop/home/sensors/table/volume/) |
 
 
 

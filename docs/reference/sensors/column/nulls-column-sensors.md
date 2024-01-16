@@ -13,7 +13,7 @@ The not null count sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | nulls | `column/nulls/not_null_count` | [sensors/column/nulls](https://github.com/dqops/dqo/tree/develop/home/sensors/column/nulls/) |
+| column | nulls | <span class="no-wrap-code">`column/nulls/not_null_count`</span> | [*sensors/column/nulls*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/nulls/) |
 
 
 
@@ -208,7 +208,7 @@ The not null percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | nulls | `column/nulls/not_null_percent` | [sensors/column/nulls](https://github.com/dqops/dqo/tree/develop/home/sensors/column/nulls/) |
+| column | nulls | <span class="no-wrap-code">`column/nulls/not_null_percent`</span> | [*sensors/column/nulls*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/nulls/) |
 
 
 
@@ -429,7 +429,7 @@ The null count sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | nulls | `column/nulls/null_count` | [sensors/column/nulls](https://github.com/dqops/dqo/tree/develop/home/sensors/column/nulls/) |
+| column | nulls | <span class="no-wrap-code">`column/nulls/null_count`</span> | [*sensors/column/nulls*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/nulls/) |
 
 
 
@@ -672,7 +672,7 @@ The null percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | nulls | `column/nulls/null_percent` | [sensors/column/nulls](https://github.com/dqops/dqo/tree/develop/home/sensors/column/nulls/) |
+| column | nulls | <span class="no-wrap-code">`column/nulls/null_percent`</span> | [*sensors/column/nulls*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/nulls/) |
 
 
 

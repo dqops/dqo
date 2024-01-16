@@ -13,7 +13,7 @@ The column count sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| table | schema | `table/schema/column_count` | [sensors/table/schema](https://github.com/dqops/dqo/tree/develop/home/sensors/table/schema/) |
+| table | schema | <span class="no-wrap-code">`table/schema/column_count`</span> | [*sensors/table/schema*](https://github.com/dqops/dqo/tree/develop/home/sensors/table/schema/) |
 
 
 
@@ -39,7 +39,7 @@ The column list ordered hash sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| table | schema | `table/schema/column_list_ordered_hash` | [sensors/table/schema](https://github.com/dqops/dqo/tree/develop/home/sensors/table/schema/) |
+| table | schema | <span class="no-wrap-code">`table/schema/column_list_ordered_hash`</span> | [*sensors/table/schema*](https://github.com/dqops/dqo/tree/develop/home/sensors/table/schema/) |
 
 
 
@@ -65,7 +65,7 @@ The column list unordered hash sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| table | schema | `table/schema/column_list_unordered_hash` | [sensors/table/schema](https://github.com/dqops/dqo/tree/develop/home/sensors/table/schema/) |
+| table | schema | <span class="no-wrap-code">`table/schema/column_list_unordered_hash`</span> | [*sensors/table/schema*](https://github.com/dqops/dqo/tree/develop/home/sensors/table/schema/) |
 
 
 
@@ -92,7 +92,7 @@ The column types hash sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| table | schema | `table/schema/column_types_hash` | [sensors/table/schema](https://github.com/dqops/dqo/tree/develop/home/sensors/table/schema/) |
+| table | schema | <span class="no-wrap-code">`table/schema/column_types_hash`</span> | [*sensors/table/schema*](https://github.com/dqops/dqo/tree/develop/home/sensors/table/schema/) |
 
 
 

@@ -12,8 +12,8 @@ if TYPE_CHECKING:
     from ..models.table_sql_aggregate_expression_check_spec import (
         TableSqlAggregateExpressionCheckSpec,
     )
-    from ..models.table_sql_condition_failed_count_check_spec import (
-        TableSqlConditionFailedCountCheckSpec,
+    from ..models.table_sql_condition_failed_check_spec import (
+        TableSqlConditionFailedCheckSpec,
     )
     from ..models.table_sql_condition_passed_percent_check_spec import (
         TableSqlConditionPassedPercentCheckSpec,
@@ -30,26 +30,22 @@ class TableCustomSqlDailyMonitoringChecksSpec:
         custom_checks (Union[Unset, TableCustomSqlDailyMonitoringChecksSpecCustomChecks]): Dictionary of additional
             custom checks within this category. The keys are check names defined in the definition section. The sensor
             parameters and rules should match the type of the configured sensor and rule for the custom check.
+        daily_sql_condition_failed_on_table (Union[Unset, TableSqlConditionFailedCheckSpec]):
         daily_sql_condition_passed_percent_on_table (Union[Unset, TableSqlConditionPassedPercentCheckSpec]):
-        daily_sql_condition_failed_count_on_table (Union[Unset, TableSqlConditionFailedCountCheckSpec]):
         daily_sql_aggregate_expression_on_table (Union[Unset, TableSqlAggregateExpressionCheckSpec]):
-        min_sql_condition_passed_percent_on_table (Union[Unset, TableSqlConditionPassedPercentCheckSpec]):
     """
 
     custom_checks: Union[
         Unset, "TableCustomSqlDailyMonitoringChecksSpecCustomChecks"
     ] = UNSET
+    daily_sql_condition_failed_on_table: Union[
+        Unset, "TableSqlConditionFailedCheckSpec"
+    ] = UNSET
     daily_sql_condition_passed_percent_on_table: Union[
         Unset, "TableSqlConditionPassedPercentCheckSpec"
     ] = UNSET
-    daily_sql_condition_failed_count_on_table: Union[
-        Unset, "TableSqlConditionFailedCountCheckSpec"
-    ] = UNSET
     daily_sql_aggregate_expression_on_table: Union[
         Unset, "TableSqlAggregateExpressionCheckSpec"
-    ] = UNSET
-    min_sql_condition_passed_percent_on_table: Union[
-        Unset, "TableSqlConditionPassedPercentCheckSpec"
     ] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -57,6 +53,12 @@ class TableCustomSqlDailyMonitoringChecksSpec:
         custom_checks: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.custom_checks, Unset):
             custom_checks = self.custom_checks.to_dict()
+
+        daily_sql_condition_failed_on_table: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_sql_condition_failed_on_table, Unset):
+            daily_sql_condition_failed_on_table = (
+                self.daily_sql_condition_failed_on_table.to_dict()
+            )
 
         daily_sql_condition_passed_percent_on_table: Union[
             Unset, Dict[str, Any]
@@ -66,22 +68,10 @@ class TableCustomSqlDailyMonitoringChecksSpec:
                 self.daily_sql_condition_passed_percent_on_table.to_dict()
             )
 
-        daily_sql_condition_failed_count_on_table: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_sql_condition_failed_count_on_table, Unset):
-            daily_sql_condition_failed_count_on_table = (
-                self.daily_sql_condition_failed_count_on_table.to_dict()
-            )
-
         daily_sql_aggregate_expression_on_table: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_sql_aggregate_expression_on_table, Unset):
             daily_sql_aggregate_expression_on_table = (
                 self.daily_sql_aggregate_expression_on_table.to_dict()
-            )
-
-        min_sql_condition_passed_percent_on_table: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.min_sql_condition_passed_percent_on_table, Unset):
-            min_sql_condition_passed_percent_on_table = (
-                self.min_sql_condition_passed_percent_on_table.to_dict()
             )
 
         field_dict: Dict[str, Any] = {}
@@ -89,22 +79,18 @@ class TableCustomSqlDailyMonitoringChecksSpec:
         field_dict.update({})
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
+        if daily_sql_condition_failed_on_table is not UNSET:
+            field_dict[
+                "daily_sql_condition_failed_on_table"
+            ] = daily_sql_condition_failed_on_table
         if daily_sql_condition_passed_percent_on_table is not UNSET:
             field_dict[
                 "daily_sql_condition_passed_percent_on_table"
             ] = daily_sql_condition_passed_percent_on_table
-        if daily_sql_condition_failed_count_on_table is not UNSET:
-            field_dict[
-                "daily_sql_condition_failed_count_on_table"
-            ] = daily_sql_condition_failed_count_on_table
         if daily_sql_aggregate_expression_on_table is not UNSET:
             field_dict[
                 "daily_sql_aggregate_expression_on_table"
             ] = daily_sql_aggregate_expression_on_table
-        if min_sql_condition_passed_percent_on_table is not UNSET:
-            field_dict[
-                "min_sql_condition_passed_percent_on_table"
-            ] = min_sql_condition_passed_percent_on_table
 
         return field_dict
 
@@ -116,8 +102,8 @@ class TableCustomSqlDailyMonitoringChecksSpec:
         from ..models.table_sql_aggregate_expression_check_spec import (
             TableSqlAggregateExpressionCheckSpec,
         )
-        from ..models.table_sql_condition_failed_count_check_spec import (
-            TableSqlConditionFailedCountCheckSpec,
+        from ..models.table_sql_condition_failed_check_spec import (
+            TableSqlConditionFailedCheckSpec,
         )
         from ..models.table_sql_condition_passed_percent_check_spec import (
             TableSqlConditionPassedPercentCheckSpec,
@@ -132,6 +118,21 @@ class TableCustomSqlDailyMonitoringChecksSpec:
             custom_checks = (
                 TableCustomSqlDailyMonitoringChecksSpecCustomChecks.from_dict(
                     _custom_checks
+                )
+            )
+
+        _daily_sql_condition_failed_on_table = d.pop(
+            "daily_sql_condition_failed_on_table", UNSET
+        )
+        daily_sql_condition_failed_on_table: Union[
+            Unset, TableSqlConditionFailedCheckSpec
+        ]
+        if isinstance(_daily_sql_condition_failed_on_table, Unset):
+            daily_sql_condition_failed_on_table = UNSET
+        else:
+            daily_sql_condition_failed_on_table = (
+                TableSqlConditionFailedCheckSpec.from_dict(
+                    _daily_sql_condition_failed_on_table
                 )
             )
 
@@ -150,21 +151,6 @@ class TableCustomSqlDailyMonitoringChecksSpec:
                 )
             )
 
-        _daily_sql_condition_failed_count_on_table = d.pop(
-            "daily_sql_condition_failed_count_on_table", UNSET
-        )
-        daily_sql_condition_failed_count_on_table: Union[
-            Unset, TableSqlConditionFailedCountCheckSpec
-        ]
-        if isinstance(_daily_sql_condition_failed_count_on_table, Unset):
-            daily_sql_condition_failed_count_on_table = UNSET
-        else:
-            daily_sql_condition_failed_count_on_table = (
-                TableSqlConditionFailedCountCheckSpec.from_dict(
-                    _daily_sql_condition_failed_count_on_table
-                )
-            )
-
         _daily_sql_aggregate_expression_on_table = d.pop(
             "daily_sql_aggregate_expression_on_table", UNSET
         )
@@ -180,27 +166,11 @@ class TableCustomSqlDailyMonitoringChecksSpec:
                 )
             )
 
-        _min_sql_condition_passed_percent_on_table = d.pop(
-            "min_sql_condition_passed_percent_on_table", UNSET
-        )
-        min_sql_condition_passed_percent_on_table: Union[
-            Unset, TableSqlConditionPassedPercentCheckSpec
-        ]
-        if isinstance(_min_sql_condition_passed_percent_on_table, Unset):
-            min_sql_condition_passed_percent_on_table = UNSET
-        else:
-            min_sql_condition_passed_percent_on_table = (
-                TableSqlConditionPassedPercentCheckSpec.from_dict(
-                    _min_sql_condition_passed_percent_on_table
-                )
-            )
-
         table_custom_sql_daily_monitoring_checks_spec = cls(
             custom_checks=custom_checks,
+            daily_sql_condition_failed_on_table=daily_sql_condition_failed_on_table,
             daily_sql_condition_passed_percent_on_table=daily_sql_condition_passed_percent_on_table,
-            daily_sql_condition_failed_count_on_table=daily_sql_condition_failed_count_on_table,
             daily_sql_aggregate_expression_on_table=daily_sql_aggregate_expression_on_table,
-            min_sql_condition_passed_percent_on_table=min_sql_condition_passed_percent_on_table,
         )
 
         table_custom_sql_daily_monitoring_checks_spec.additional_properties = d

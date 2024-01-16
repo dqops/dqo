@@ -17,7 +17,7 @@ Verifies that the median in a column changed in a fixed rate since the last read
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_median_change|profiling| |Consistency|[percentile](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[change_percent](../../../reference/rules/Change.md#change-percent)|
+|<span class="no-wrap-code">`profile_median_change`</span>|profiling| |Consistency|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|
 
 **Command-line examples**
 
@@ -1346,7 +1346,7 @@ Verifies that the median in a column changed in a fixed rate since the last read
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_median_change|monitoring|daily|Consistency|[percentile](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[change_percent](../../../reference/rules/Change.md#change-percent)|
+|<span class="no-wrap-code">`daily_median_change`</span>|monitoring|daily|Consistency|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|
 
 **Command-line examples**
 
@@ -2677,7 +2677,7 @@ Verifies that the median in a column changed in a fixed rate since the last read
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_median_change|monitoring|monthly|Consistency|[percentile](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[change_percent](../../../reference/rules/Change.md#change-percent)|
+|<span class="no-wrap-code">`monthly_median_change`</span>|monitoring|monthly|Consistency|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|
 
 **Command-line examples**
 
@@ -4008,7 +4008,7 @@ Verifies that the median in a column changed in a fixed rate since the last read
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_median_change|partitioned|daily|Consistency|[percentile](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[change_percent](../../../reference/rules/Change.md#change-percent)|
+|<span class="no-wrap-code">`daily_partition_median_change`</span>|partitioned|daily|Consistency|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|
 
 **Command-line examples**
 
@@ -5359,7 +5359,7 @@ Verifies that the median in a column changed in a fixed rate since the last read
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_median_change|partitioned|monthly|Consistency|[percentile](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[change_percent](../../../reference/rules/Change.md#change-percent)|
+|<span class="no-wrap-code">`monthly_partition_median_change`</span>|partitioned|monthly|Consistency|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|
 
 **Command-line examples**
 

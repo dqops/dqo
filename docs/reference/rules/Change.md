@@ -13,7 +13,7 @@ The between change data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| change | `change/between_change` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/change/between_change.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/change/between_change.py) |
+| change | <span class="no-wrap-code">`change/between_change`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/change/between_change.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/change/between_change.py) |
 
 
 **Rule parameters**
@@ -22,8 +22,8 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`from`|Minimum accepted change with regards to the previous readout (inclusive).|double| ||
-|`to`|Maximum accepted change with regards to the previous readout (inclusive).|double| ||
+|<span class="no-wrap-code">`from`</span>|Minimum accepted change with regards to the previous readout (inclusive).|*double*| ||
+|<span class="no-wrap-code">`to`</span>|Maximum accepted change with regards to the previous readout (inclusive).|*double*| ||
 
 
 
@@ -34,7 +34,7 @@ The rule definition YAML file *change/between_change.dqorule.yaml* with the time
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -73,7 +73,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2023 DQOps (support@dqops.com)
     #
@@ -175,7 +175,7 @@ The between change 1 day data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| change | `change/between_change_1_day` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/change/between_change_1_day.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/change/between_change_1_day.py) |
+| change | <span class="no-wrap-code">`change/between_change_1_day`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/change/between_change_1_day.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/change/between_change_1_day.py) |
 
 
 **Rule parameters**
@@ -184,9 +184,9 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`from`|Minimum accepted change with regards to the previous readout (inclusive).|double| ||
-|`to`|Maximum accepted change with regards to the previous readout (inclusive).|double| ||
-|`exact_day`|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 1 day. If no results are found from that time, no results or errors will be generated.|boolean| ||
+|<span class="no-wrap-code">`from`</span>|Minimum accepted change with regards to the previous readout (inclusive).|*double*| ||
+|<span class="no-wrap-code">`to`</span>|Maximum accepted change with regards to the previous readout (inclusive).|*double*| ||
+|<span class="no-wrap-code">`exact_day`</span>|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 1 day. If no results are found from that time, no results or errors will be generated.|*boolean*| ||
 
 
 
@@ -197,7 +197,7 @@ The rule definition YAML file *change/between_change_1_day.dqorule.yaml* with th
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -244,7 +244,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2023 DQOps (support@dqops.com)
     #
@@ -355,7 +355,7 @@ The between change 30 days data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| change | `change/between_change_30_days` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/change/between_change_30_days.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/change/between_change_30_days.py) |
+| change | <span class="no-wrap-code">`change/between_change_30_days`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/change/between_change_30_days.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/change/between_change_30_days.py) |
 
 
 **Rule parameters**
@@ -364,9 +364,9 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`from`|Minimum accepted change with regards to the previous readout (inclusive).|double| ||
-|`to`|Maximum accepted change with regards to the previous readout (inclusive).|double| ||
-|`exact_day`|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 30 days. If no results are found from that time, no results or errors will be generated.|boolean| ||
+|<span class="no-wrap-code">`from`</span>|Minimum accepted change with regards to the previous readout (inclusive).|*double*| ||
+|<span class="no-wrap-code">`to`</span>|Maximum accepted change with regards to the previous readout (inclusive).|*double*| ||
+|<span class="no-wrap-code">`exact_day`</span>|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 30 days. If no results are found from that time, no results or errors will be generated.|*boolean*| ||
 
 
 
@@ -377,7 +377,7 @@ The rule definition YAML file *change/between_change_30_days.dqorule.yaml* with 
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -424,7 +424,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2023 DQOps (support@dqops.com)
     #
@@ -535,7 +535,7 @@ The between change 7 days data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| change | `change/between_change_7_days` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/change/between_change_7_days.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/change/between_change_7_days.py) |
+| change | <span class="no-wrap-code">`change/between_change_7_days`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/change/between_change_7_days.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/change/between_change_7_days.py) |
 
 
 **Rule parameters**
@@ -544,9 +544,9 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`from`|Minimum accepted change with regards to the previous readout (inclusive).|double| ||
-|`to`|Maximum accepted change with regards to the previous readout (inclusive).|double| ||
-|`exact_day`|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 7 days. If no results are found from that time, no results or errors will be generated.|boolean| ||
+|<span class="no-wrap-code">`from`</span>|Minimum accepted change with regards to the previous readout (inclusive).|*double*| ||
+|<span class="no-wrap-code">`to`</span>|Maximum accepted change with regards to the previous readout (inclusive).|*double*| ||
+|<span class="no-wrap-code">`exact_day`</span>|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 7 days. If no results are found from that time, no results or errors will be generated.|*boolean*| ||
 
 
 
@@ -557,7 +557,7 @@ The rule definition YAML file *change/between_change_7_days.dqorule.yaml* with t
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -604,7 +604,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2023 DQOps (support@dqops.com)
     #
@@ -715,7 +715,7 @@ The between percent change data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| change | `change/between_percent_change` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/change/between_percent_change.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/change/between_percent_change.py) |
+| change | <span class="no-wrap-code">`change/between_percent_change`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/change/between_percent_change.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/change/between_percent_change.py) |
 
 
 **Rule parameters**
@@ -724,8 +724,8 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`from_percent`|Minimum accepted change relative to the previous readout (inclusive).|double| ||
-|`to_percent`|Maximum accepted change relative to the previous readout (inclusive).|double| ||
+|<span class="no-wrap-code">`from_percent`</span>|Minimum accepted change relative to the previous readout (inclusive).|*double*| ||
+|<span class="no-wrap-code">`to_percent`</span>|Maximum accepted change relative to the previous readout (inclusive).|*double*| ||
 
 
 
@@ -736,7 +736,7 @@ The rule definition YAML file *change/between_percent_change.dqorule.yaml* with 
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -775,7 +775,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2023 DQOps (support@dqops.com)
     #
@@ -872,7 +872,7 @@ The between percent change 1 day data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| change | `change/between_percent_change_1_day` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/change/between_percent_change_1_day.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/change/between_percent_change_1_day.py) |
+| change | <span class="no-wrap-code">`change/between_percent_change_1_day`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/change/between_percent_change_1_day.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/change/between_percent_change_1_day.py) |
 
 
 **Rule parameters**
@@ -881,9 +881,9 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`from_percent`|Minimum accepted change relative to the previous readout (inclusive).|double| ||
-|`to_percent`|Maximum accepted change relative to the previous readout (inclusive).|double| ||
-|`exact_day`|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 1 day. If no results are found from that time, no results or errors will be generated.|boolean| ||
+|<span class="no-wrap-code">`from_percent`</span>|Minimum accepted change relative to the previous readout (inclusive).|*double*| ||
+|<span class="no-wrap-code">`to_percent`</span>|Maximum accepted change relative to the previous readout (inclusive).|*double*| ||
+|<span class="no-wrap-code">`exact_day`</span>|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 1 day. If no results are found from that time, no results or errors will be generated.|*boolean*| ||
 
 
 
@@ -894,7 +894,7 @@ The rule definition YAML file *change/between_percent_change_1_day.dqorule.yaml*
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -941,7 +941,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2023 DQOps (support@dqops.com)
     #
@@ -1046,7 +1046,7 @@ The between percent change 30 days data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| change | `change/between_percent_change_30_days` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/change/between_percent_change_30_days.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/change/between_percent_change_30_days.py) |
+| change | <span class="no-wrap-code">`change/between_percent_change_30_days`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/change/between_percent_change_30_days.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/change/between_percent_change_30_days.py) |
 
 
 **Rule parameters**
@@ -1055,9 +1055,9 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`from_percent`|Minimum accepted change relative to the previous readout (inclusive).|double| ||
-|`to_percent`|Maximum accepted change relative to the previous readout (inclusive).|double| ||
-|`exact_day`|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 30 days. If no results are found from that time, no results or errors will be generated.|boolean| ||
+|<span class="no-wrap-code">`from_percent`</span>|Minimum accepted change relative to the previous readout (inclusive).|*double*| ||
+|<span class="no-wrap-code">`to_percent`</span>|Maximum accepted change relative to the previous readout (inclusive).|*double*| ||
+|<span class="no-wrap-code">`exact_day`</span>|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 30 days. If no results are found from that time, no results or errors will be generated.|*boolean*| ||
 
 
 
@@ -1068,7 +1068,7 @@ The rule definition YAML file *change/between_percent_change_30_days.dqorule.yam
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -1117,7 +1117,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2023 DQOps (support@dqops.com)
     #
@@ -1222,7 +1222,7 @@ The between percent change 7 days data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| change | `change/between_percent_change_7_days` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/change/between_percent_change_7_days.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/change/between_percent_change_7_days.py) |
+| change | <span class="no-wrap-code">`change/between_percent_change_7_days`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/change/between_percent_change_7_days.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/change/between_percent_change_7_days.py) |
 
 
 **Rule parameters**
@@ -1231,9 +1231,9 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`from_percent`|Minimum accepted change relative to the previous readout (inclusive).|double| ||
-|`to_percent`|Maximum accepted change relative to the previous readout (inclusive).|double| ||
-|`exact_day`|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 7 days. If no results are found from that time, no results or errors will be generated.|boolean| ||
+|<span class="no-wrap-code">`from_percent`</span>|Minimum accepted change relative to the previous readout (inclusive).|*double*| ||
+|<span class="no-wrap-code">`to_percent`</span>|Maximum accepted change relative to the previous readout (inclusive).|*double*| ||
+|<span class="no-wrap-code">`exact_day`</span>|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 7 days. If no results are found from that time, no results or errors will be generated.|*boolean*| ||
 
 
 
@@ -1244,7 +1244,7 @@ The rule definition YAML file *change/between_percent_change_7_days.dqorule.yaml
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -1291,7 +1291,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2023 DQOps (support@dqops.com)
     #
@@ -1396,7 +1396,7 @@ The change difference data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| change | `change/change_difference` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/change/change_difference.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/change/change_difference.py) |
+| change | <span class="no-wrap-code">`change/change_difference`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/change/change_difference.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/change/change_difference.py) |
 
 
 **Rule parameters**
@@ -1405,7 +1405,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_difference`|Maximum accepted absolute difference compared to previous readout (inclusive).|double|:material-check-bold:||
+|<span class="no-wrap-code">`max_difference`</span>|Maximum accepted absolute difference compared to previous readout (inclusive).|*double*|:material-check-bold:||
 
 
 
@@ -1416,7 +1416,7 @@ The rule definition YAML file *change/change_difference.dqorule.yaml* with the t
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -1450,7 +1450,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2023 DQOps (support@dqops.com)
     #
@@ -1546,7 +1546,7 @@ The change difference 1 day data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| change | `change/change_difference_1_day` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/change/change_difference_1_day.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/change/change_difference_1_day.py) |
+| change | <span class="no-wrap-code">`change/change_difference_1_day`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/change/change_difference_1_day.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/change/change_difference_1_day.py) |
 
 
 **Rule parameters**
@@ -1555,8 +1555,8 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_difference`|Maximum accepted absolute difference compared to a readout 1 day ago (inclusive).|double|:material-check-bold:||
-|`exact_day`|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 1 day. If no results are found from that time, no results or errors will be generated.|boolean| ||
+|<span class="no-wrap-code">`max_difference`</span>|Maximum accepted absolute difference compared to a readout 1 day ago (inclusive).|*double*|:material-check-bold:||
+|<span class="no-wrap-code">`exact_day`</span>|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 1 day. If no results are found from that time, no results or errors will be generated.|*boolean*| ||
 
 
 
@@ -1567,7 +1567,7 @@ The rule definition YAML file *change/change_difference_1_day.dqorule.yaml* with
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -1610,7 +1610,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2023 DQOps (support@dqops.com)
     #
@@ -1714,7 +1714,7 @@ The change difference 30 days data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| change | `change/change_difference_30_days` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/change/change_difference_30_days.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/change/change_difference_30_days.py) |
+| change | <span class="no-wrap-code">`change/change_difference_30_days`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/change/change_difference_30_days.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/change/change_difference_30_days.py) |
 
 
 **Rule parameters**
@@ -1723,8 +1723,8 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_difference`|Maximum accepted absolute difference compared to a readout 30 days ago (inclusive).|double|:material-check-bold:||
-|`exact_day`|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 30 days. If no results are found from that time, no results or errors will be generated.|boolean| ||
+|<span class="no-wrap-code">`max_difference`</span>|Maximum accepted absolute difference compared to a readout 30 days ago (inclusive).|*double*|:material-check-bold:||
+|<span class="no-wrap-code">`exact_day`</span>|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 30 days. If no results are found from that time, no results or errors will be generated.|*boolean*| ||
 
 
 
@@ -1735,7 +1735,7 @@ The rule definition YAML file *change/change_difference_30_days.dqorule.yaml* wi
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -1778,7 +1778,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2023 DQOps (support@dqops.com)
     #
@@ -1882,7 +1882,7 @@ The change difference 7 days data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| change | `change/change_difference_7_days` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/change/change_difference_7_days.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/change/change_difference_7_days.py) |
+| change | <span class="no-wrap-code">`change/change_difference_7_days`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/change/change_difference_7_days.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/change/change_difference_7_days.py) |
 
 
 **Rule parameters**
@@ -1891,8 +1891,8 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_difference`|Maximum accepted absolute difference compared to a readout 7 days ago (inclusive).|double|:material-check-bold:||
-|`exact_day`|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 7 days. If no results are found from that time, no results or errors will be generated.|boolean| ||
+|<span class="no-wrap-code">`max_difference`</span>|Maximum accepted absolute difference compared to a readout 7 days ago (inclusive).|*double*|:material-check-bold:||
+|<span class="no-wrap-code">`exact_day`</span>|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 7 days. If no results are found from that time, no results or errors will be generated.|*boolean*| ||
 
 
 
@@ -1903,7 +1903,7 @@ The rule definition YAML file *change/change_difference_7_days.dqorule.yaml* wit
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -1946,7 +1946,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2023 DQOps (support@dqops.com)
     #
@@ -2050,7 +2050,7 @@ The change percent data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| change | `change/change_percent` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/change/change_percent.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/change/change_percent.py) |
+| change | <span class="no-wrap-code">`change/change_percent`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/change/change_percent.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/change/change_percent.py) |
 
 
 **Rule parameters**
@@ -2059,7 +2059,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_percent`|Percentage of maximum accepted change compared to previous readout (inclusive).|double|:material-check-bold:||
+|<span class="no-wrap-code">`max_percent`</span>|Percentage of maximum accepted change compared to previous readout (inclusive).|*double*|:material-check-bold:||
 
 
 
@@ -2070,7 +2070,7 @@ The rule definition YAML file *change/change_percent.dqorule.yaml* with the time
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -2103,7 +2103,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2023 DQOps (support@dqops.com)
     #
@@ -2199,7 +2199,7 @@ The change percent 1 day data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| change | `change/change_percent_1_day` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/change/change_percent_1_day.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/change/change_percent_1_day.py) |
+| change | <span class="no-wrap-code">`change/change_percent_1_day`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/change/change_percent_1_day.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/change/change_percent_1_day.py) |
 
 
 **Rule parameters**
@@ -2208,8 +2208,8 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_percent`|Percentage of maximum accepted change compared to a readout 1 day ago (inclusive).|double|:material-check-bold:||
-|`exact_day`|When the exact_day parameter is unchecked (exact_day: false), the rule search for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 1 day. If no results are found from that time, no results or errors will be generated.|boolean| ||
+|<span class="no-wrap-code">`max_percent`</span>|Percentage of maximum accepted change compared to a readout 1 day ago (inclusive).|*double*|:material-check-bold:||
+|<span class="no-wrap-code">`exact_day`</span>|When the exact_day parameter is unchecked (exact_day: false), the rule search for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 1 day. If no results are found from that time, no results or errors will be generated.|*boolean*| ||
 
 
 
@@ -2220,7 +2220,7 @@ The rule definition YAML file *change/change_percent_1_day.dqorule.yaml* with th
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -2261,7 +2261,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2023 DQOps (support@dqops.com)
     #
@@ -2365,7 +2365,7 @@ The change percent 30 days data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| change | `change/change_percent_30_days` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/change/change_percent_30_days.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/change/change_percent_30_days.py) |
+| change | <span class="no-wrap-code">`change/change_percent_30_days`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/change/change_percent_30_days.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/change/change_percent_30_days.py) |
 
 
 **Rule parameters**
@@ -2374,8 +2374,8 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_percent`|Percentage of maximum accepted change compared to a readout 30 days ago (inclusive).|double|:material-check-bold:||
-|`exact_day`|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 30 days. If no results are found from that time, no results or errors will be generated.|boolean| ||
+|<span class="no-wrap-code">`max_percent`</span>|Percentage of maximum accepted change compared to a readout 30 days ago (inclusive).|*double*|:material-check-bold:||
+|<span class="no-wrap-code">`exact_day`</span>|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 30 days. If no results are found from that time, no results or errors will be generated.|*boolean*| ||
 
 
 
@@ -2386,7 +2386,7 @@ The rule definition YAML file *change/change_percent_30_days.dqorule.yaml* with 
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -2427,7 +2427,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2023 DQOps (support@dqops.com)
     #
@@ -2531,7 +2531,7 @@ The change percent 7 days data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| change | `change/change_percent_7_days` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/change/change_percent_7_days.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/change/change_percent_7_days.py) |
+| change | <span class="no-wrap-code">`change/change_percent_7_days`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/change/change_percent_7_days.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/change/change_percent_7_days.py) |
 
 
 **Rule parameters**
@@ -2540,8 +2540,8 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_percent`|Percentage of maximum accepted change compared to a readout 7 days ago (inclusive).|double|:material-check-bold:||
-|`exact_day`|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 7 days. If no results are found from that time, no results or errors will be generated.|boolean| ||
+|<span class="no-wrap-code">`max_percent`</span>|Percentage of maximum accepted change compared to a readout 7 days ago (inclusive).|*double*|:material-check-bold:||
+|<span class="no-wrap-code">`exact_day`</span>|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 7 days. If no results are found from that time, no results or errors will be generated.|*boolean*| ||
 
 
 
@@ -2552,7 +2552,7 @@ The rule definition YAML file *change/change_percent_7_days.dqorule.yaml* with t
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -2593,7 +2593,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2023 DQOps (support@dqops.com)
     #

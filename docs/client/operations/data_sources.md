@@ -17,7 +17,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|schema_remote_model||List[[SchemaRemoteModel](../models/data_sources.md#schemaremotemodel)]|
+|<span class="no-wrap-code">`schema_remote_model`</span>||*List[[SchemaRemoteModel](../models/data_sources.md#schemaremotemodel)]*|
 
 
 
@@ -26,7 +26,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|:material-check-bold:|
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
 
 
 
@@ -155,7 +155,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|remote_table_list_model||List[[RemoteTableListModel](../models/data_sources.md#remotetablelistmodel)]|
+|<span class="no-wrap-code">`remote_table_list_model`</span>||*List[[RemoteTableListModel](../models/data_sources.md#remotetablelistmodel)]*|
 
 
 
@@ -164,8 +164,8 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|:material-check-bold:|
-|schema_name|Schema name|string|:material-check-bold:|
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|:material-check-bold:|
 
 
 
@@ -298,7 +298,7 @@ http://localhost:8888/api/datasource/testconnection
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[connection_test_model](../models/data_sources.md#connectiontestmodel)||[ConnectionTestModel](../models/data_sources.md#connectiontestmodel)|
+|<span class="no-wrap-code">[`connection_test_model`](../models/data_sources.md#connectiontestmodel)</span>||*[ConnectionTestModel](../models/data_sources.md#connectiontestmodel)*|
 
 
 
@@ -307,7 +307,7 @@ http://localhost:8888/api/datasource/testconnection
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|verify_name_uniqueness|Verify if the connection name is unique, the default value is true|boolean| |
+|<span class="no-wrap-code">`verify_name_uniqueness`</span>|Verify if the connection name is unique, the default value is true|*boolean*| |
 
 
 
@@ -316,7 +316,7 @@ http://localhost:8888/api/datasource/testconnection
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Basic connection model|[ConnectionModel](../models/common.md#connectionmodel)| |
+|Basic connection model|*[ConnectionModel](../models/common.md#connectionmodel)*| |
 
 
 

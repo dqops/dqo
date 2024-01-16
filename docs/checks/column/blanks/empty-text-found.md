@@ -17,7 +17,7 @@ Verifies that empty strings in a column does not exceed the maximum accepted cou
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_empty_text_found|profiling| |Completeness|[empty_text_count](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`profile_empty_text_found`</span>|profiling| |Completeness|[*empty_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -1250,7 +1250,7 @@ Verifies that the number of empty strings in a column does not exceed the maximu
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_empty_text_found|monitoring|daily|Completeness|[empty_text_count](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`daily_empty_text_found`</span>|monitoring|daily|Completeness|[*empty_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -2485,7 +2485,7 @@ Verifies that the number of empty strings in a column does not exceed the maximu
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_empty_text_found|monitoring|monthly|Completeness|[empty_text_count](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`monthly_empty_text_found`</span>|monitoring|monthly|Completeness|[*empty_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -3720,7 +3720,7 @@ Verifies that the number of empty strings in a column does not exceed the maximu
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_empty_text_found|partitioned|daily|Completeness|[empty_text_count](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`daily_partition_empty_text_found`</span>|partitioned|daily|Completeness|[*empty_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -4977,7 +4977,7 @@ Verifies that the number of empty strings in a column does not exceed the maximu
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_empty_text_found|partitioned|monthly|Completeness|[empty_text_count](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`monthly_partition_empty_text_found`</span>|partitioned|monthly|Completeness|[*empty_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 

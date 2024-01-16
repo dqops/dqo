@@ -17,7 +17,7 @@ Detects if the number of column matches an expected number. Retrieves the metada
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_column_count|profiling| |Completeness|[column_count](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[equals_integer](../../../reference/rules/Comparison.md#equals-integer)|
+|<span class="no-wrap-code">`profile_column_count`</span>|profiling| |Completeness|[*column_count*](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[*equals_integer*](../../../reference/rules/Comparison.md#equals-integer)|
 
 **Command-line examples**
 
@@ -132,7 +132,7 @@ Detects if the number of column matches an expected number. Retrieves the metada
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_column_count|monitoring|daily|Completeness|[column_count](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[equals_integer](../../../reference/rules/Comparison.md#equals-integer)|
+|<span class="no-wrap-code">`daily_column_count`</span>|monitoring|daily|Completeness|[*column_count*](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[*equals_integer*](../../../reference/rules/Comparison.md#equals-integer)|
 
 **Command-line examples**
 
@@ -248,7 +248,7 @@ Detects if the number of column matches an expected number. Retrieves the metada
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_column_count|monitoring|monthly|Completeness|[column_count](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[equals_integer](../../../reference/rules/Comparison.md#equals-integer)|
+|<span class="no-wrap-code">`monthly_column_count`</span>|monitoring|monthly|Completeness|[*column_count*](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[*equals_integer*](../../../reference/rules/Comparison.md#equals-integer)|
 
 **Command-line examples**
 

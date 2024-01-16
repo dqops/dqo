@@ -17,7 +17,7 @@ Verifies that the length of a text in a column does not fall below the minimum a
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_text_min_length|profiling| |Reasonableness|[text_min_length](../../../reference/sensors/column/text-column-sensors.md#text-min-length)|[min_value](../../../reference/rules/Comparison.md#min-value)|
+|<span class="no-wrap-code">`profile_text_min_length`</span>|profiling| |Reasonableness|[*text_min_length*](../../../reference/sensors/column/text-column-sensors.md#text-min-length)|[*min_value*](../../../reference/rules/Comparison.md#min-value)|
 
 **Command-line examples**
 
@@ -1022,7 +1022,7 @@ Verifies that the length of a text in a column does not fall below the minimum a
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_text_min_length|monitoring|daily|Reasonableness|[text_min_length](../../../reference/sensors/column/text-column-sensors.md#text-min-length)|[min_value](../../../reference/rules/Comparison.md#min-value)|
+|<span class="no-wrap-code">`daily_text_min_length`</span>|monitoring|daily|Reasonableness|[*text_min_length*](../../../reference/sensors/column/text-column-sensors.md#text-min-length)|[*min_value*](../../../reference/rules/Comparison.md#min-value)|
 
 **Command-line examples**
 
@@ -2029,7 +2029,7 @@ Verifies that the length of a text in a column does not fall below the minimum a
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_text_min_length|monitoring|monthly|Reasonableness|[text_min_length](../../../reference/sensors/column/text-column-sensors.md#text-min-length)|[min_value](../../../reference/rules/Comparison.md#min-value)|
+|<span class="no-wrap-code">`monthly_text_min_length`</span>|monitoring|monthly|Reasonableness|[*text_min_length*](../../../reference/sensors/column/text-column-sensors.md#text-min-length)|[*min_value*](../../../reference/rules/Comparison.md#min-value)|
 
 **Command-line examples**
 
@@ -3036,7 +3036,7 @@ Verifies that the length of a text in a column does not fall below the minimum a
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_text_min_length|partitioned|daily|Reasonableness|[text_min_length](../../../reference/sensors/column/text-column-sensors.md#text-min-length)|[min_value](../../../reference/rules/Comparison.md#min-value)|
+|<span class="no-wrap-code">`daily_partition_text_min_length`</span>|partitioned|daily|Reasonableness|[*text_min_length*](../../../reference/sensors/column/text-column-sensors.md#text-min-length)|[*min_value*](../../../reference/rules/Comparison.md#min-value)|
 
 **Command-line examples**
 
@@ -4065,7 +4065,7 @@ Verifies that the length of a text in a column does not fall below the minimum a
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_text_min_length|partitioned|monthly|Reasonableness|[text_min_length](../../../reference/sensors/column/text-column-sensors.md#text-min-length)|[min_value](../../../reference/rules/Comparison.md#min-value)|
+|<span class="no-wrap-code">`monthly_partition_text_min_length`</span>|partitioned|monthly|Reasonableness|[*text_min_length*](../../../reference/sensors/column/text-column-sensors.md#text-min-length)|[*min_value*](../../../reference/rules/Comparison.md#min-value)|
 
 **Command-line examples**
 

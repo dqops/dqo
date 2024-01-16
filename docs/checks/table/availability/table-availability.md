@@ -19,7 +19,7 @@ Verifies availability of a table in a monitored database using a simple query.
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_table_availability|profiling| |Availability|[table_availability](../../../reference/sensors/table/availability-table-sensors.md#table-availability)|[max_failures](../../../reference/rules/Comparison.md#max-failures)|
+|<span class="no-wrap-code">`profile_table_availability`</span>|profiling| |Availability|[*table_availability*](../../../reference/sensors/table/availability-table-sensors.md#table-availability)|[*max_failures*](../../../reference/rules/Comparison.md#max-failures)|
 
 **Command-line examples**
 
@@ -536,7 +536,7 @@ Verifies availability of a table in a monitored database using a simple query. S
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_table_availability|monitoring|daily|Availability|[table_availability](../../../reference/sensors/table/availability-table-sensors.md#table-availability)|[max_failures](../../../reference/rules/Comparison.md#max-failures)|
+|<span class="no-wrap-code">`daily_table_availability`</span>|monitoring|daily|Availability|[*table_availability*](../../../reference/sensors/table/availability-table-sensors.md#table-availability)|[*max_failures*](../../../reference/rules/Comparison.md#max-failures)|
 
 **Command-line examples**
 
@@ -1054,7 +1054,7 @@ Verifies availability of a table in a monitored database using a simple query. S
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_table_availability|monitoring|monthly|Availability|[table_availability](../../../reference/sensors/table/availability-table-sensors.md#table-availability)|[max_failures](../../../reference/rules/Comparison.md#max-failures)|
+|<span class="no-wrap-code">`monthly_table_availability`</span>|monitoring|monthly|Availability|[*table_availability*](../../../reference/sensors/table/availability-table-sensors.md#table-availability)|[*max_failures*](../../../reference/rules/Comparison.md#max-failures)|
 
 **Command-line examples**
 

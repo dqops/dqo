@@ -17,7 +17,7 @@ Measures the percent of not null values in a column. Raises a data quality excep
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_not_nulls_percent|profiling| |Completeness|[not_null_percent](../../../reference/sensors/column/nulls-column-sensors.md#not-null-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`profile_not_nulls_percent`</span>|profiling| |Completeness|[*not_null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -984,7 +984,7 @@ Measures the percent of not null values in a column. Raises a data quality excep
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_not_nulls_percent|monitoring|daily|Completeness|[not_null_percent](../../../reference/sensors/column/nulls-column-sensors.md#not-null-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`daily_not_nulls_percent`</span>|monitoring|daily|Completeness|[*not_null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -1953,7 +1953,7 @@ Measures the percent of not null values in a column. Raises a data quality excep
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_not_nulls_percent|monitoring|monthly|Completeness|[not_null_percent](../../../reference/sensors/column/nulls-column-sensors.md#not-null-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`monthly_not_nulls_percent`</span>|monitoring|monthly|Completeness|[*not_null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -2922,7 +2922,7 @@ Measures the percent of not null values in a column. Raises a data quality excep
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_not_nulls_percent|partitioned|daily|Completeness|[not_null_percent](../../../reference/sensors/column/nulls-column-sensors.md#not-null-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`daily_partition_not_nulls_percent`</span>|partitioned|daily|Completeness|[*not_null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -3913,7 +3913,7 @@ Measures the percent of not null values in a column. Raises a data quality excep
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_not_nulls_percent|partitioned|monthly|Completeness|[not_null_percent](../../../reference/sensors/column/nulls-column-sensors.md#not-null-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`monthly_partition_not_nulls_percent`</span>|partitioned|monthly|Completeness|[*not_null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 

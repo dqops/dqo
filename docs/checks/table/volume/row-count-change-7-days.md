@@ -17,7 +17,7 @@ Verifies that the total row count of the tested table has changed by a fixed rat
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_row_count_change_7_days|profiling| |Consistency|[row_count](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[change_percent_7_days](../../../reference/rules/Change.md#change-percent-7-days)|
+|<span class="no-wrap-code">`profile_row_count_change_7_days`</span>|profiling| |Consistency|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*change_percent_7_days*](../../../reference/rules/Change.md#change-percent-7-days)|
 
 **Command-line examples**
 
@@ -830,7 +830,7 @@ Verifies that the total row count of the tested table has changed by a fixed rat
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_row_count_change_7_days|monitoring|daily|Consistency|[row_count](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[change_percent_7_days](../../../reference/rules/Change.md#change-percent-7-days)|
+|<span class="no-wrap-code">`daily_row_count_change_7_days`</span>|monitoring|daily|Consistency|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*change_percent_7_days*](../../../reference/rules/Change.md#change-percent-7-days)|
 
 **Command-line examples**
 
@@ -1645,7 +1645,7 @@ Verifies that the total row count of the tested table has changed by a fixed rat
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_row_count_change_7_days|partitioned|daily|Consistency|[row_count](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[change_percent_7_days](../../../reference/rules/Change.md#change-percent-7-days)|
+|<span class="no-wrap-code">`daily_partition_row_count_change_7_days`</span>|partitioned|daily|Consistency|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*change_percent_7_days*](../../../reference/rules/Change.md#change-percent-7-days)|
 
 **Command-line examples**
 

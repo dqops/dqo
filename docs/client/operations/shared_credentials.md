@@ -21,7 +21,7 @@ http://localhost:8888/api/credentials
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Shared credential model|[SharedCredentialModel](../models/shared_credentials.md#sharedcredentialmodel)| |
+|Shared credential model|*[SharedCredentialModel](../models/shared_credentials.md#sharedcredentialmodel)*| |
 
 
 
@@ -166,7 +166,7 @@ http://localhost:8888/api/credentials/{credentialName}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|credential_name|Full shared credential name|string|:material-check-bold:|
+|<span class="no-wrap-code">`credential_name`</span>|Full shared credential name|*string*|:material-check-bold:|
 
 
 
@@ -282,7 +282,7 @@ http://localhost:8888/api/credentials/{credentialName}/download
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|credential_name|Shared credential file name|string|:material-check-bold:|
+|<span class="no-wrap-code">`credential_name`</span>|Shared credential file name|*string*|:material-check-bold:|
 
 
 
@@ -400,7 +400,7 @@ http://localhost:8888/api/credentials
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|shared_credential_list_model||List[[SharedCredentialListModel](../models/shared_credentials.md#sharedcredentiallistmodel)]|
+|<span class="no-wrap-code">`shared_credential_list_model`</span>||*List[[SharedCredentialListModel](../models/shared_credentials.md#sharedcredentiallistmodel)]*|
 
 
 
@@ -530,7 +530,7 @@ http://localhost:8888/api/credentials/{credentialName}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[shared_credential_model](../models/shared_credentials.md#sharedcredentialmodel)||[SharedCredentialModel](../models/shared_credentials.md#sharedcredentialmodel)|
+|<span class="no-wrap-code">[`shared_credential_model`](../models/shared_credentials.md#sharedcredentialmodel)</span>||*[SharedCredentialModel](../models/shared_credentials.md#sharedcredentialmodel)*|
 
 
 
@@ -539,7 +539,7 @@ http://localhost:8888/api/credentials/{credentialName}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|credential_name|Shared credential file name|string|:material-check-bold:|
+|<span class="no-wrap-code">`credential_name`</span>|Shared credential file name|*string*|:material-check-bold:|
 
 
 
@@ -668,7 +668,7 @@ http://localhost:8888/api/credential/{credentialName}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|credential_name|Credential file name that will be updated|string|:material-check-bold:|
+|<span class="no-wrap-code">`credential_name`</span>|Credential file name that will be updated|*string*|:material-check-bold:|
 
 
 
@@ -677,7 +677,7 @@ http://localhost:8888/api/credential/{credentialName}
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Shared credential model|[SharedCredentialModel](../models/shared_credentials.md#sharedcredentialmodel)| |
+|Shared credential model|*[SharedCredentialModel](../models/shared_credentials.md#sharedcredentialmodel)*| |
 
 
 

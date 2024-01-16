@@ -13,14 +13,14 @@ The {{replace sensorName "_" " "}} sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| {{target}} | {{category}} | `{{fullSensorName}}` | [sensors/{{target}}/{{category}}](https://github.com/dqops/dqo/tree/develop/home/sensors/{{target}}/{{category}}/) |
+| {{target}} | {{category}} | <span class="no-wrap-code">`{{fullSensorName}}`</span> | [*sensors/{{target}}/{{category}}*](https://github.com/dqops/dqo/tree/develop/home/sensors/{{target}}/{{category}}/) |
 
 {{#if definition.spec.fields}}
 **Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-{{#each definition.spec.fields}}|`{{displayName}}`|{{helpText}}|{{replace dataType "_type" ""}}|{{checkmark required}}|{{#each allowedValues}}{{this}}<br/>{{/each}}|
+{{#each definition.spec.fields}}|<span class="no-wrap-code">`{{displayName}}`</span>|{{helpText}}|*{{replace dataType "_type" ""}}*|{{checkmark required}}|{{#each allowedValues}}*{{this}}*<br/>{{/each}}|
 {{/each}}
 {{else}}
 {{/if}}
@@ -32,7 +32,7 @@ The additional parameters that can be passed to the sensor are shown below.
 
 | Parameters name | Value |
 |-----------------|-------|
-{{#each definition.spec.parameters}}|{{@key}}|{{this}}|
+{{#each definition.spec.parameters}}|*{{@key}}*|{{this}}|
 {{/each}}
 {{else}}
 {{/if}}

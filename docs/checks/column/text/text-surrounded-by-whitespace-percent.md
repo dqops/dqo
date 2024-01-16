@@ -17,7 +17,7 @@ Verifies that the percentage of text values that are surrounded by whitespace ch
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_text_surrounded_by_whitespace_percent|profiling| |Validity|[text_surrounded_by_whitespace_percent](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`profile_text_surrounded_by_whitespace_percent`</span>|profiling| |Validity|[*text_surrounded_by_whitespace_percent*](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -1602,7 +1602,7 @@ Verifies that the percentage of text values that are surrounded by whitespace ch
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_text_surrounded_by_whitespace_percent|monitoring|daily|Validity|[text_surrounded_by_whitespace_percent](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`daily_text_surrounded_by_whitespace_percent`</span>|monitoring|daily|Validity|[*text_surrounded_by_whitespace_percent*](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -3189,7 +3189,7 @@ Verifies that the percentage of text values that are surrounded by whitespace ch
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_text_surrounded_by_whitespace_percent|monitoring|monthly|Validity|[text_surrounded_by_whitespace_percent](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`monthly_text_surrounded_by_whitespace_percent`</span>|monitoring|monthly|Validity|[*text_surrounded_by_whitespace_percent*](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -4776,7 +4776,7 @@ Verifies that the percentage of text values that are surrounded by whitespace ch
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_text_surrounded_by_whitespace_percent|partitioned|daily|Validity|[text_surrounded_by_whitespace_percent](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`daily_partition_text_surrounded_by_whitespace_percent`</span>|partitioned|daily|Validity|[*text_surrounded_by_whitespace_percent*](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -6385,7 +6385,7 @@ Verifies that the percentage of text values that are surrounded by whitespace ch
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_text_surrounded_by_whitespace_percent|partitioned|monthly|Validity|[text_surrounded_by_whitespace_percent](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`monthly_partition_text_surrounded_by_whitespace_percent`</span>|partitioned|monthly|Validity|[*text_surrounded_by_whitespace_percent*](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 

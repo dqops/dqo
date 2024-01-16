@@ -17,7 +17,7 @@ Verifies that the total row count of the tested table changes in a rate within a
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_row_count_anomaly|profiling| |Consistency|[row_count](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[anomaly_differencing_percentile_moving_average](../../../reference/rules/Percentile.md#anomaly-differencing-percentile-moving-average)|
+|<span class="no-wrap-code">`profile_row_count_anomaly`</span>|profiling| |Consistency|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*anomaly_differencing_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-differencing-percentile-moving-average)|
 
 **Command-line examples**
 
@@ -824,7 +824,7 @@ Verifies that the total row count of the tested table changes in a rate within a
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_row_count_anomaly|monitoring|daily|Consistency|[row_count](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[anomaly_differencing_percentile_moving_average](../../../reference/rules/Percentile.md#anomaly-differencing-percentile-moving-average)|
+|<span class="no-wrap-code">`daily_row_count_anomaly`</span>|monitoring|daily|Consistency|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*anomaly_differencing_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-differencing-percentile-moving-average)|
 
 **Command-line examples**
 
@@ -1633,7 +1633,7 @@ Verifies that the total row count of the tested table is within a percentile fro
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_row_count_anomaly|partitioned|daily|Consistency|[row_count](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[anomaly_stationary_percentile_moving_average](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|
+|<span class="no-wrap-code">`daily_partition_row_count_anomaly`</span>|partitioned|daily|Consistency|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*anomaly_stationary_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|
 
 **Command-line examples**
 

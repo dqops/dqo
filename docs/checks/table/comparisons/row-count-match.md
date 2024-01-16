@@ -17,7 +17,7 @@ Verifies that the row count of the tested (parent) table matches the row count o
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_row_count_match|profiling| |Accuracy|[row_count](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
+|<span class="no-wrap-code">`profile_row_count_match`</span>|profiling| |Accuracy|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
 
 **Command-line examples**
 
@@ -467,7 +467,7 @@ Verifies that the row count of the tested (parent) table matches the row count o
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_row_count_match|monitoring|daily|Accuracy|[row_count](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
+|<span class="no-wrap-code">`daily_row_count_match`</span>|monitoring|daily|Accuracy|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
 
 **Command-line examples**
 
@@ -918,7 +918,7 @@ Verifies that the row count of the tested (parent) table matches the row count o
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_row_count_match|monitoring|monthly|Accuracy|[row_count](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
+|<span class="no-wrap-code">`monthly_row_count_match`</span>|monitoring|monthly|Accuracy|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
 
 **Command-line examples**
 
@@ -1369,7 +1369,7 @@ Verifies that the row count of the tested (parent) table matches the row count o
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_row_count_match|partitioned|daily|Accuracy|[row_count](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
+|<span class="no-wrap-code">`daily_partition_row_count_match`</span>|partitioned|daily|Accuracy|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
 
 **Command-line examples**
 
@@ -1834,7 +1834,7 @@ Verifies that the row count of the tested (parent) table matches the row count o
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_row_count_match|partitioned|monthly|Accuracy|[row_count](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
+|<span class="no-wrap-code">`monthly_partition_row_count_match`</span>|partitioned|monthly|Accuracy|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
 
 **Command-line examples**
 

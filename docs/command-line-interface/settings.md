@@ -42,12 +42,12 @@ All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|<p id="settings editor set-fw">`-fw`</p><br/><p id="settings editor set--file-write">`--file-write`</p><br/>|Write command response to a file| ||
-|<p id="settings editor set--headless">`--headless`</p><br/><p id="settings editor set-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|<p id="settings editor set-h">`-h`</p><br/><p id="settings editor set--help">`--help`</p><br/>|Show the help for the command and parameters| ||
-|<p id="settings editor set-n">`-n`</p><br/><p id="settings editor set--name">`--name`</p><br/>|Editor name| |VSC<br/>IntelliJ<br/>Eclipse<br/>PyCharm<br/>|
-|<p id="settings editor set-of">`-of`</p><br/><p id="settings editor set--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
-|<p id="settings editor set-p">`-p`</p><br/><p id="settings editor set--path">`--path`</p><br/>|Editor path| ||
+|<div id="settings editor set-fw" class="no-wrap-code">`-fw`</div><div id="settings editor set--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="settings editor set--headless" class="no-wrap-code">`--headless`</div><div id="settings editor set-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="settings editor set-h" class="no-wrap-code">`-h`</div><div id="settings editor set--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="settings editor set-n" class="no-wrap-code">`-n`</div><div id="settings editor set--name" class="no-wrap-code">`--name`</div>|Editor name| |*VSC*<br/>*IntelliJ*<br/>*Eclipse*<br/>*PyCharm*<br/>|
+|<div id="settings editor set-of" class="no-wrap-code">`-of`</div><div id="settings editor set--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
+|<div id="settings editor set-p" class="no-wrap-code">`-p`</div><div id="settings editor set--path" class="no-wrap-code">`--path`</div>|Editor path| ||
 
 
 
@@ -91,10 +91,10 @@ All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|<p id="settings editor remove-fw">`-fw`</p><br/><p id="settings editor remove--file-write">`--file-write`</p><br/>|Write command response to a file| ||
-|<p id="settings editor remove--headless">`--headless`</p><br/><p id="settings editor remove-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|<p id="settings editor remove-h">`-h`</p><br/><p id="settings editor remove--help">`--help`</p><br/>|Show the help for the command and parameters| ||
-|<p id="settings editor remove-of">`-of`</p><br/><p id="settings editor remove--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|<div id="settings editor remove-fw" class="no-wrap-code">`-fw`</div><div id="settings editor remove--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="settings editor remove--headless" class="no-wrap-code">`--headless`</div><div id="settings editor remove-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="settings editor remove-h" class="no-wrap-code">`-h`</div><div id="settings editor remove--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="settings editor remove-of" class="no-wrap-code">`-of`</div><div id="settings editor remove--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
 
 
 
@@ -138,10 +138,10 @@ All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|<p id="settings editor show-fw">`-fw`</p><br/><p id="settings editor show--file-write">`--file-write`</p><br/>|Write command response to a file| ||
-|<p id="settings editor show--headless">`--headless`</p><br/><p id="settings editor show-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|<p id="settings editor show-h">`-h`</p><br/><p id="settings editor show--help">`--help`</p><br/>|Show the help for the command and parameters| ||
-|<p id="settings editor show-of">`-of`</p><br/><p id="settings editor show--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|<div id="settings editor show-fw" class="no-wrap-code">`-fw`</div><div id="settings editor show--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="settings editor show--headless" class="no-wrap-code">`--headless`</div><div id="settings editor show-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="settings editor show-h" class="no-wrap-code">`-h`</div><div id="settings editor show--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="settings editor show-of" class="no-wrap-code">`-of`</div><div id="settings editor show--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
 
 
 
@@ -185,10 +185,10 @@ All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|<p id="settings init-fw">`-fw`</p><br/><p id="settings init--file-write">`--file-write`</p><br/>|Write command response to a file| ||
-|<p id="settings init--headless">`--headless`</p><br/><p id="settings init-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|<p id="settings init-h">`-h`</p><br/><p id="settings init--help">`--help`</p><br/>|Show the help for the command and parameters| ||
-|<p id="settings init-of">`-of`</p><br/><p id="settings init--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|<div id="settings init-fw" class="no-wrap-code">`-fw`</div><div id="settings init--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="settings init--headless" class="no-wrap-code">`--headless`</div><div id="settings init-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="settings init-h" class="no-wrap-code">`-h`</div><div id="settings init--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="settings init-of" class="no-wrap-code">`-of`</div><div id="settings init--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
 
 
 
@@ -232,10 +232,10 @@ All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|<p id="settings remove-fw">`-fw`</p><br/><p id="settings remove--file-write">`--file-write`</p><br/>|Write command response to a file| ||
-|<p id="settings remove--headless">`--headless`</p><br/><p id="settings remove-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|<p id="settings remove-h">`-h`</p><br/><p id="settings remove--help">`--help`</p><br/>|Show the help for the command and parameters| ||
-|<p id="settings remove-of">`-of`</p><br/><p id="settings remove--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|<div id="settings remove-fw" class="no-wrap-code">`-fw`</div><div id="settings remove--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="settings remove--headless" class="no-wrap-code">`--headless`</div><div id="settings remove-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="settings remove-h" class="no-wrap-code">`-h`</div><div id="settings remove--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="settings remove-of" class="no-wrap-code">`-of`</div><div id="settings remove--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
 
 
 
@@ -279,10 +279,10 @@ All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|<p id="settings apikey set-fw">`-fw`</p><br/><p id="settings apikey set--file-write">`--file-write`</p><br/>|Write command response to a file| ||
-|<p id="settings apikey set--headless">`--headless`</p><br/><p id="settings apikey set-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|<p id="settings apikey set-h">`-h`</p><br/><p id="settings apikey set--help">`--help`</p><br/>|Show the help for the command and parameters| ||
-|<p id="settings apikey set-of">`-of`</p><br/><p id="settings apikey set--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|<div id="settings apikey set-fw" class="no-wrap-code">`-fw`</div><div id="settings apikey set--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="settings apikey set--headless" class="no-wrap-code">`--headless`</div><div id="settings apikey set-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="settings apikey set-h" class="no-wrap-code">`-h`</div><div id="settings apikey set--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="settings apikey set-of" class="no-wrap-code">`-of`</div><div id="settings apikey set--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
 
 
 
@@ -326,10 +326,10 @@ All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|<p id="settings apikey remove-fw">`-fw`</p><br/><p id="settings apikey remove--file-write">`--file-write`</p><br/>|Write command response to a file| ||
-|<p id="settings apikey remove--headless">`--headless`</p><br/><p id="settings apikey remove-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|<p id="settings apikey remove-h">`-h`</p><br/><p id="settings apikey remove--help">`--help`</p><br/>|Show the help for the command and parameters| ||
-|<p id="settings apikey remove-of">`-of`</p><br/><p id="settings apikey remove--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|<div id="settings apikey remove-fw" class="no-wrap-code">`-fw`</div><div id="settings apikey remove--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="settings apikey remove--headless" class="no-wrap-code">`--headless`</div><div id="settings apikey remove-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="settings apikey remove-h" class="no-wrap-code">`-h`</div><div id="settings apikey remove--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="settings apikey remove-of" class="no-wrap-code">`-of`</div><div id="settings apikey remove--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
 
 
 
@@ -373,10 +373,10 @@ All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|<p id="settings apikey show-fw">`-fw`</p><br/><p id="settings apikey show--file-write">`--file-write`</p><br/>|Write command response to a file| ||
-|<p id="settings apikey show--headless">`--headless`</p><br/><p id="settings apikey show-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|<p id="settings apikey show-h">`-h`</p><br/><p id="settings apikey show--help">`--help`</p><br/>|Show the help for the command and parameters| ||
-|<p id="settings apikey show-of">`-of`</p><br/><p id="settings apikey show--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|<div id="settings apikey show-fw" class="no-wrap-code">`-fw`</div><div id="settings apikey show--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="settings apikey show--headless" class="no-wrap-code">`--headless`</div><div id="settings apikey show-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="settings apikey show-h" class="no-wrap-code">`-h`</div><div id="settings apikey show--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="settings apikey show-of" class="no-wrap-code">`-of`</div><div id="settings apikey show--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
 
 
 
@@ -420,10 +420,10 @@ All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|<p id="settings timezone set-fw">`-fw`</p><br/><p id="settings timezone set--file-write">`--file-write`</p><br/>|Write command response to a file| ||
-|<p id="settings timezone set--headless">`--headless`</p><br/><p id="settings timezone set-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|<p id="settings timezone set-h">`-h`</p><br/><p id="settings timezone set--help">`--help`</p><br/>|Show the help for the command and parameters| ||
-|<p id="settings timezone set-of">`-of`</p><br/><p id="settings timezone set--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|<div id="settings timezone set-fw" class="no-wrap-code">`-fw`</div><div id="settings timezone set--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="settings timezone set--headless" class="no-wrap-code">`--headless`</div><div id="settings timezone set-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="settings timezone set-h" class="no-wrap-code">`-h`</div><div id="settings timezone set--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="settings timezone set-of" class="no-wrap-code">`-of`</div><div id="settings timezone set--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
 
 
 
@@ -467,10 +467,10 @@ All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|<p id="settings timezone remove-fw">`-fw`</p><br/><p id="settings timezone remove--file-write">`--file-write`</p><br/>|Write command response to a file| ||
-|<p id="settings timezone remove--headless">`--headless`</p><br/><p id="settings timezone remove-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|<p id="settings timezone remove-h">`-h`</p><br/><p id="settings timezone remove--help">`--help`</p><br/>|Show the help for the command and parameters| ||
-|<p id="settings timezone remove-of">`-of`</p><br/><p id="settings timezone remove--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|<div id="settings timezone remove-fw" class="no-wrap-code">`-fw`</div><div id="settings timezone remove--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="settings timezone remove--headless" class="no-wrap-code">`--headless`</div><div id="settings timezone remove-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="settings timezone remove-h" class="no-wrap-code">`-h`</div><div id="settings timezone remove--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="settings timezone remove-of" class="no-wrap-code">`-of`</div><div id="settings timezone remove--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
 
 
 
@@ -514,10 +514,10 @@ All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|<p id="settings timezone show-fw">`-fw`</p><br/><p id="settings timezone show--file-write">`--file-write`</p><br/>|Write command response to a file| ||
-|<p id="settings timezone show--headless">`--headless`</p><br/><p id="settings timezone show-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|<p id="settings timezone show-h">`-h`</p><br/><p id="settings timezone show--help">`--help`</p><br/>|Show the help for the command and parameters| ||
-|<p id="settings timezone show-of">`-of`</p><br/><p id="settings timezone show--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|<div id="settings timezone show-fw" class="no-wrap-code">`-fw`</div><div id="settings timezone show--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="settings timezone show--headless" class="no-wrap-code">`--headless`</div><div id="settings timezone show-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="settings timezone show-h" class="no-wrap-code">`-h`</div><div id="settings timezone show--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="settings timezone show-of" class="no-wrap-code">`-of`</div><div id="settings timezone show--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
 
 
 

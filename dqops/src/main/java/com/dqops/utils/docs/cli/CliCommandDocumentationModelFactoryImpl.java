@@ -24,6 +24,7 @@ import picocli.CommandLine;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Documentation factory that creates documentation of a single CLI command.
@@ -69,7 +70,7 @@ public class CliCommandDocumentationModelFactoryImpl implements CliCommandDocume
 
         for (CommandLine.Model.OptionSpec optionSpec : options) {
             CliOptionDocumentationModel optionDocumentationModel = new CliOptionDocumentationModel();
-            optionDocumentationModel.setNames(optionSpec.names());
+            optionDocumentationModel.setNames(List.of(optionSpec.names()).stream().map(o -> o.trim()).collect(Collectors.toList()));
             optionDocumentationModel.setDescription(optionSpec.description());
             optionDocumentationModel.setRequired(optionSpec.required());
 

@@ -18,7 +18,7 @@ Verifies that the tested table has at least a minimum accepted number of rows. T
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_row_count|profiling| |Completeness|[row_count](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[min_count](../../../reference/rules/Comparison.md#min-count)|
+|<span class="no-wrap-code">`profile_row_count`</span>|profiling| |Completeness|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|
 
 **Command-line examples**
 
@@ -817,7 +817,7 @@ Verifies that the tested table has at least a minimum accepted number of rows. T
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_row_count|monitoring|daily|Completeness|[row_count](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[min_count](../../../reference/rules/Comparison.md#min-count)|
+|<span class="no-wrap-code">`daily_row_count`</span>|monitoring|daily|Completeness|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|
 
 **Command-line examples**
 
@@ -1618,7 +1618,7 @@ Verifies that the tested table has at least a minimum accepted number of rows. T
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_row_count|monitoring|monthly|Completeness|[row_count](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[min_count](../../../reference/rules/Comparison.md#min-count)|
+|<span class="no-wrap-code">`monthly_row_count`</span>|monitoring|monthly|Completeness|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|
 
 **Command-line examples**
 
@@ -2419,7 +2419,7 @@ Verifies that each daily partition in the tested table has at least a minimum ac
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_row_count|partitioned|daily|Completeness|[row_count](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[min_count](../../../reference/rules/Comparison.md#min-count)|
+|<span class="no-wrap-code">`daily_partition_row_count`</span>|partitioned|daily|Completeness|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|
 
 **Command-line examples**
 
@@ -3242,7 +3242,7 @@ Verifies that each monthly partition in the tested table has at least a minimum 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_row_count|partitioned|monthly|Completeness|[row_count](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[min_count](../../../reference/rules/Comparison.md#min-count)|
+|<span class="no-wrap-code">`monthly_partition_row_count`</span>|partitioned|monthly|Completeness|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|
 
 **Command-line examples**
 

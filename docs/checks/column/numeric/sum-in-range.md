@@ -17,7 +17,7 @@ Verifies that the sum of all values in a column is not outside the expected rang
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_sum_in_range|profiling| |Reasonableness|[sum](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`profile_sum_in_range`</span>|profiling| |Reasonableness|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 
@@ -846,7 +846,7 @@ Verifies that the sum of all values in a column is not outside the expected rang
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_sum_in_range|monitoring|daily|Reasonableness|[sum](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`daily_sum_in_range`</span>|monitoring|daily|Reasonableness|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 
@@ -1677,7 +1677,7 @@ Verifies that the sum of all values in a column does not exceed the expected ran
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_sum_in_range|monitoring|monthly|Reasonableness|[sum](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`monthly_sum_in_range`</span>|monitoring|monthly|Reasonableness|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 
@@ -2508,7 +2508,7 @@ Verifies that the sum of all values in a column is not outside the expected rang
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_sum_in_range|partitioned|daily|Reasonableness|[sum](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`daily_partition_sum_in_range`</span>|partitioned|daily|Reasonableness|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 
@@ -3361,7 +3361,7 @@ Verifies that the sum of all values in a column is not outside the expected rang
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_sum_in_range|partitioned|monthly|Reasonableness|[sum](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`monthly_partition_sum_in_range`</span>|partitioned|monthly|Reasonableness|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 

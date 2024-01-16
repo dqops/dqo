@@ -17,7 +17,7 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_sql_aggregate_expression_on_table|profiling| |Reasonableness|[sql_aggregated_expression](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-aggregated-expression)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`profile_sql_aggregate_expression_on_table`</span>|profiling| |Reasonableness|[*sql_aggregated_expression*](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-aggregated-expression)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 
@@ -857,7 +857,7 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_sql_aggregate_expression_on_table|monitoring|daily|Reasonableness|[sql_aggregated_expression](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-aggregated-expression)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`daily_sql_aggregate_expression_on_table`</span>|monitoring|daily|Reasonableness|[*sql_aggregated_expression*](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-aggregated-expression)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 
@@ -1699,7 +1699,7 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_sql_aggregate_expression_on_table|monitoring|monthly|Reasonableness|[sql_aggregated_expression](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-aggregated-expression)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`monthly_sql_aggregate_expression_on_table`</span>|monitoring|monthly|Reasonableness|[*sql_aggregated_expression*](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-aggregated-expression)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 
@@ -2541,7 +2541,7 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_sql_aggregate_expression_on_table|partitioned|daily|Reasonableness|[sql_aggregated_expression](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-aggregated-expression)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`daily_partition_sql_aggregate_expression_on_table`</span>|partitioned|daily|Reasonableness|[*sql_aggregated_expression*](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-aggregated-expression)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 
@@ -3405,7 +3405,7 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_sql_aggregate_expression_on_table|partitioned|monthly|Reasonableness|[sql_aggregated_expression](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-aggregated-expression)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`monthly_partition_sql_aggregate_expression_on_table`</span>|partitioned|monthly|Reasonableness|[*sql_aggregated_expression*](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-aggregated-expression)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 

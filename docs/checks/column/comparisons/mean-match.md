@@ -18,7 +18,7 @@ Verifies that percentage of the difference between the mean (average) value in a
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_mean_match|profiling| |Accuracy|[mean](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
+|<span class="no-wrap-code">`profile_mean_match`</span>|profiling| |Accuracy|[*mean*](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
 
 **Command-line examples**
 
@@ -483,7 +483,7 @@ Verifies that percentage of the difference between the mean (average) value in a
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_mean_match|monitoring|daily|Accuracy|[mean](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
+|<span class="no-wrap-code">`daily_mean_match`</span>|monitoring|daily|Accuracy|[*mean*](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
 
 **Command-line examples**
 
@@ -949,7 +949,7 @@ Verifies that percentage of the difference between the mean (average) value in a
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_mean_match|monitoring|monthly|Accuracy|[mean](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
+|<span class="no-wrap-code">`monthly_mean_match`</span>|monitoring|monthly|Accuracy|[*mean*](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
 
 **Command-line examples**
 
@@ -1415,7 +1415,7 @@ Verifies that percentage of the difference between the mean (average) value in a
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_mean_match|partitioned|daily|Accuracy|[mean](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
+|<span class="no-wrap-code">`daily_partition_mean_match`</span>|partitioned|daily|Accuracy|[*mean*](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
 
 **Command-line examples**
 
@@ -1895,7 +1895,7 @@ Verifies that percentage of the difference between the mean (average) value in a
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_mean_match|partitioned|monthly|Accuracy|[mean](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
+|<span class="no-wrap-code">`monthly_partition_mean_match`</span>|partitioned|monthly|Accuracy|[*mean*](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
 
 **Command-line examples**
 

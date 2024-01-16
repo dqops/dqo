@@ -17,7 +17,7 @@ Verifies that the minimum value in a column is not outside the expected range.
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_min_in_range|profiling| |Reasonableness|[min_value](../../../reference/sensors/column/range-column-sensors.md#min-value)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`profile_min_in_range`</span>|profiling| |Reasonableness|[*min_value*](../../../reference/sensors/column/range-column-sensors.md#min-value)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 
@@ -846,7 +846,7 @@ Verifies that the minimum value in a column is not outside the expected range. S
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_min_in_range|monitoring|daily|Reasonableness|[min_value](../../../reference/sensors/column/range-column-sensors.md#min-value)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`daily_min_in_range`</span>|monitoring|daily|Reasonableness|[*min_value*](../../../reference/sensors/column/range-column-sensors.md#min-value)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 
@@ -1677,7 +1677,7 @@ Verifies that the minimum value in a column does not exceed the expected range. 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_min_in_range|monitoring|monthly|Reasonableness|[min_value](../../../reference/sensors/column/range-column-sensors.md#min-value)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`monthly_min_in_range`</span>|monitoring|monthly|Reasonableness|[*min_value*](../../../reference/sensors/column/range-column-sensors.md#min-value)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 
@@ -2508,7 +2508,7 @@ Verifies that the minimum value in a column is not outside the expected range. S
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_min_in_range|partitioned|daily|Reasonableness|[min_value](../../../reference/sensors/column/range-column-sensors.md#min-value)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`daily_partition_min_in_range`</span>|partitioned|daily|Reasonableness|[*min_value*](../../../reference/sensors/column/range-column-sensors.md#min-value)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 
@@ -3361,7 +3361,7 @@ Verifies that the minimum value in a column is not outside the expected range. S
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_min_in_range|partitioned|monthly|Reasonableness|[min_value](../../../reference/sensors/column/range-column-sensors.md#min-value)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`monthly_partition_min_in_range`</span>|partitioned|monthly|Reasonableness|[*min_value*](../../../reference/sensors/column/range-column-sensors.md#min-value)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 

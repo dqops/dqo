@@ -17,7 +17,7 @@ Verifies that the percentage text values that are parsable to a date value in a 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_text_parsable_to_date_percent|profiling| |Validity|[text_parsable_to_date_percent](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-date-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`profile_text_parsable_to_date_percent`</span>|profiling| |Validity|[*text_parsable_to_date_percent*](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-date-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -1360,7 +1360,7 @@ Verifies that the percentage text values that are parsable to a date value in a 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_text_parsable_to_date_percent|monitoring|daily|Validity|[text_parsable_to_date_percent](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-date-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`daily_text_parsable_to_date_percent`</span>|monitoring|daily|Validity|[*text_parsable_to_date_percent*](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-date-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -2705,7 +2705,7 @@ Verifies that the percentage text values that are parsable to a date value in a 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_text_parsable_to_date_percent|monitoring|monthly|Validity|[text_parsable_to_date_percent](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-date-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`monthly_text_parsable_to_date_percent`</span>|monitoring|monthly|Validity|[*text_parsable_to_date_percent*](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-date-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -4050,7 +4050,7 @@ Verifies that the percentage text values that are parsable to a date value in a 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_text_parsable_to_date_percent|partitioned|daily|Validity|[text_parsable_to_date_percent](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-date-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`daily_partition_text_parsable_to_date_percent`</span>|partitioned|daily|Validity|[*text_parsable_to_date_percent*](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-date-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -5417,7 +5417,7 @@ Verifies that the percentage text values that are parsable to a date value in a 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_text_parsable_to_date_percent|partitioned|monthly|Validity|[text_parsable_to_date_percent](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-date-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`monthly_partition_text_parsable_to_date_percent`</span>|partitioned|monthly|Validity|[*text_parsable_to_date_percent*](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-date-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 

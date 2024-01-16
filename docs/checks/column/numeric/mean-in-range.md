@@ -17,7 +17,7 @@ Verifies that the average (mean) of all values in a column is not outside the ex
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_mean_in_range|profiling| |Reasonableness|[mean](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`profile_mean_in_range`</span>|profiling| |Reasonableness|[*mean*](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 
@@ -846,7 +846,7 @@ Verifies that the average (mean) of all values in a column is not outside the ex
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_mean_in_range|monitoring|daily|Reasonableness|[mean](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`daily_mean_in_range`</span>|monitoring|daily|Reasonableness|[*mean*](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 
@@ -1677,7 +1677,7 @@ Verifies that the average (mean) of all values in a column does not exceed the e
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_mean_in_range|monitoring|monthly|Reasonableness|[mean](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`monthly_mean_in_range`</span>|monitoring|monthly|Reasonableness|[*mean*](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 
@@ -2508,7 +2508,7 @@ Verifies that the average (mean) of all values in a column is not outside the ex
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_mean_in_range|partitioned|daily|Reasonableness|[mean](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`daily_partition_mean_in_range`</span>|partitioned|daily|Reasonableness|[*mean*](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 
@@ -3361,7 +3361,7 @@ Verifies that the average (mean) of all values in a column is not outside the ex
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_mean_in_range|partitioned|monthly|Reasonableness|[mean](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`monthly_partition_mean_in_range`</span>|partitioned|monthly|Reasonableness|[*mean*](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 

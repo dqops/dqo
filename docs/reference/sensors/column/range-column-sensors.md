@@ -13,7 +13,7 @@ The max value sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | range | `column/range/max_value` | [sensors/column/range](https://github.com/dqops/dqo/tree/develop/home/sensors/column/range/) |
+| column | range | <span class="no-wrap-code">`column/range/max_value`</span> | [*sensors/column/range*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/range/) |
 
 
 
@@ -201,7 +201,7 @@ The min value sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | range | `column/range/min_value` | [sensors/column/range](https://github.com/dqops/dqo/tree/develop/home/sensors/column/range/) |
+| column | range | <span class="no-wrap-code">`column/range/min_value`</span> | [*sensors/column/range*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/range/) |
 
 
 

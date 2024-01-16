@@ -13,7 +13,7 @@ The between floats data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| comparison | `comparison/between_floats` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/between_floats.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/between_floats.py) |
+| comparison | <span class="no-wrap-code">`comparison/between_floats`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/between_floats.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/between_floats.py) |
 
 
 **Rule parameters**
@@ -22,8 +22,8 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`from`|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
-|`to`|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
+|<span class="no-wrap-code">`from`</span>|Minimum accepted value for the actual_value returned by the sensor (inclusive).|*double*| ||
+|<span class="no-wrap-code">`to`</span>|Maximum accepted value for the actual_value returned by the sensor (inclusive).|*double*| ||
 
 
 
@@ -34,7 +34,7 @@ The rule definition YAML file *comparison/between_floats.dqorule.yaml* with the 
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -71,7 +71,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2021 DQOps (support@dqops.com)
     #
@@ -165,7 +165,7 @@ The between ints data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| comparison | `comparison/between_ints` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/between_ints.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/between_ints.py) |
+| comparison | <span class="no-wrap-code">`comparison/between_ints`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/between_ints.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/between_ints.py) |
 
 
 **Rule parameters**
@@ -174,8 +174,8 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`from`|Minimum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
-|`to`|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
+|<span class="no-wrap-code">`from`</span>|Minimum accepted value for the actual_value returned by the sensor (inclusive).|*long*| ||
+|<span class="no-wrap-code">`to`</span>|Maximum accepted value for the actual_value returned by the sensor (inclusive).|*long*| ||
 
 
 
@@ -186,7 +186,7 @@ The rule definition YAML file *comparison/between_ints.dqorule.yaml* with the ti
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -223,7 +223,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2021 DQOps (support@dqops.com)
     #
@@ -318,7 +318,7 @@ The count between data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| comparison | `comparison/count_between` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/count_between.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/count_between.py) |
+| comparison | <span class="no-wrap-code">`comparison/count_between`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/count_between.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/count_between.py) |
 
 
 **Rule parameters**
@@ -327,8 +327,8 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`min_count`|Minimum accepted count (inclusive), leave empty when the limit is not assigned.|long|:material-check-bold:||
-|`max_count`|Maximum accepted count (inclusive), leave empty when the limit is not assigned.|long|:material-check-bold:||
+|<span class="no-wrap-code">`min_count`</span>|Minimum accepted count (inclusive), leave empty when the limit is not assigned.|*long*|:material-check-bold:||
+|<span class="no-wrap-code">`max_count`</span>|Maximum accepted count (inclusive), leave empty when the limit is not assigned.|*long*|:material-check-bold:||
 
 
 
@@ -339,7 +339,7 @@ The rule definition YAML file *comparison/count_between.dqorule.yaml* with the t
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -378,7 +378,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2021 DQOps (support@dqops.com)
     #
@@ -469,7 +469,7 @@ The detected datatype equals data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| comparison | `comparison/detected_datatype_equals` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/detected_datatype_equals.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/detected_datatype_equals.py) |
+| comparison | <span class="no-wrap-code">`comparison/detected_datatype_equals`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/detected_datatype_equals.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/detected_datatype_equals.py) |
 
 
 **Rule parameters**
@@ -478,7 +478,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`expected_datatype`|Expected data type code, the values for the sensor&#x27;s actual values are: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - texts, 7 - mixed data types.|enum| |integers<br/>floats<br/>dates<br/>timestamps<br/>booleans<br/>texts<br/>mixed<br/>|
+|<span class="no-wrap-code">`expected_datatype`</span>|Expected data type code, the values for the sensor&#x27;s actual values are: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - texts, 7 - mixed data types.|*enum*| |*integers*<br/>*floats*<br/>*dates*<br/>*timestamps*<br/>*booleans*<br/>*texts*<br/>*mixed*<br/>|
 
 
 
@@ -489,7 +489,7 @@ The rule definition YAML file *comparison/detected_datatype_equals.dqorule.yaml*
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -526,7 +526,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2021 DQOps (support@dqops.com)
     #
@@ -626,7 +626,7 @@ The diff percent data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| comparison | `comparison/diff_percent` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/diff_percent.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/diff_percent.py) |
+| comparison | <span class="no-wrap-code">`comparison/diff_percent`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/diff_percent.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/diff_percent.py) |
 
 
 **Rule parameters**
@@ -635,7 +635,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_diff_percent`|Maximum accepted value for the percentage of difference between expected_value and actual_value returned by the sensor (inclusive).|double|:material-check-bold:||
+|<span class="no-wrap-code">`max_diff_percent`</span>|Maximum accepted value for the percentage of difference between expected_value and actual_value returned by the sensor (inclusive).|*double*|:material-check-bold:||
 
 
 
@@ -646,7 +646,7 @@ The rule definition YAML file *comparison/diff_percent.dqorule.yaml* with the ti
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -675,7 +675,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2021 DQOps (support@dqops.com)
     #
@@ -772,7 +772,7 @@ The equals data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| comparison | `comparison/equals` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/equals.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/equals.py) |
+| comparison | <span class="no-wrap-code">`comparison/equals`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/equals.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/equals.py) |
 
 
 **Rule parameters**
@@ -781,8 +781,8 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`expected_value`|Expected value for the actual_value returned by the sensor. The sensor value should equal expected_value +/- the error_margin.|double|:material-check-bold:||
-|`error_margin`|Error margin for comparison.|double| ||
+|<span class="no-wrap-code">`expected_value`</span>|Expected value for the actual_value returned by the sensor. The sensor value should equal expected_value +/- the error_margin.|*double*|:material-check-bold:||
+|<span class="no-wrap-code">`error_margin`</span>|Error margin for comparison.|*double*| ||
 
 
 
@@ -793,7 +793,7 @@ The rule definition YAML file *comparison/equals.dqorule.yaml* with the time win
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -830,7 +830,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2021 DQOps (support@dqops.com)
     #
@@ -919,7 +919,7 @@ The equals 0 data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| comparison | `comparison/equals_0` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/equals_0.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/equals_0.py) |
+| comparison | <span class="no-wrap-code">`comparison/equals_0`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/equals_0.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/equals_0.py) |
 
 
 
@@ -931,7 +931,7 @@ The rule definition YAML file *comparison/equals_0.dqorule.yaml* with the time w
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -953,7 +953,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2021 DQOps (support@dqops.com)
     #
@@ -1042,7 +1042,7 @@ The equals 1 data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| comparison | `comparison/equals_1` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/equals_1.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/equals_1.py) |
+| comparison | <span class="no-wrap-code">`comparison/equals_1`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/equals_1.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/equals_1.py) |
 
 
 
@@ -1054,7 +1054,7 @@ The rule definition YAML file *comparison/equals_1.dqorule.yaml* with the time w
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -1076,7 +1076,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2021 DQOps (support@dqops.com)
     #
@@ -1165,7 +1165,7 @@ The equals integer data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| comparison | `comparison/equals_integer` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/equals_integer.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/equals_integer.py) |
+| comparison | <span class="no-wrap-code">`comparison/equals_integer`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/equals_integer.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/equals_integer.py) |
 
 
 **Rule parameters**
@@ -1174,7 +1174,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`expected_value`|Expected value for the actual_value returned by the sensor. It must be an integer value.|long|:material-check-bold:||
+|<span class="no-wrap-code">`expected_value`</span>|Expected value for the actual_value returned by the sensor. It must be an integer value.|*long*|:material-check-bold:||
 
 
 
@@ -1185,7 +1185,7 @@ The rule definition YAML file *comparison/equals_integer.dqorule.yaml* with the 
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -1216,7 +1216,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2021 DQOps (support@dqops.com)
     #
@@ -1304,7 +1304,7 @@ The max data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| comparison | `comparison/max` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/max.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/max.py) |
+| comparison | <span class="no-wrap-code">`comparison/max`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/max.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/max.py) |
 
 
 **Rule parameters**
@@ -1313,7 +1313,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_value`|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double|:material-check-bold:||
+|<span class="no-wrap-code">`max_value`</span>|Maximum accepted value for the actual_value returned by the sensor (inclusive).|*double*|:material-check-bold:||
 
 
 
@@ -1324,7 +1324,7 @@ The rule definition YAML file *comparison/max.dqorule.yaml* with the time window
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -1355,7 +1355,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2021 DQOps (support@dqops.com)
     #
@@ -1444,7 +1444,7 @@ The max count data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| comparison | `comparison/max_count` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/max_count.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/max_count.py) |
+| comparison | <span class="no-wrap-code">`comparison/max_count`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/max_count.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/max_count.py) |
 
 
 **Rule parameters**
@@ -1453,7 +1453,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_count`|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long|:material-check-bold:||
+|<span class="no-wrap-code">`max_count`</span>|Maximum accepted value for the actual_value returned by the sensor (inclusive).|*long*|:material-check-bold:||
 
 
 
@@ -1464,7 +1464,7 @@ The rule definition YAML file *comparison/max_count.dqorule.yaml* with the time 
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -1495,7 +1495,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2021 DQOps (support@dqops.com)
     #
@@ -1584,7 +1584,7 @@ The max days data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| comparison | `comparison/max_days` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/max_days.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/max_days.py) |
+| comparison | <span class="no-wrap-code">`comparison/max_days`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/max_days.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/max_days.py) |
 
 
 **Rule parameters**
@@ -1593,7 +1593,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_days`|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double|:material-check-bold:||
+|<span class="no-wrap-code">`max_days`</span>|Maximum accepted value for the actual_value returned by the sensor (inclusive).|*double*|:material-check-bold:||
 
 
 
@@ -1604,7 +1604,7 @@ The rule definition YAML file *comparison/max_days.dqorule.yaml* with the time w
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -1633,7 +1633,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2021 DQOps (support@dqops.com)
     #
@@ -1722,7 +1722,7 @@ The max failures data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| comparison | `comparison/max_failures` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/max_failures.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/max_failures.py) |
+| comparison | <span class="no-wrap-code">`comparison/max_failures`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/max_failures.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/max_failures.py) |
 
 
 **Rule parameters**
@@ -1731,7 +1731,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_failures`|Maximum number of consecutive days with check failures. A check is failed when a sensor query fails due to a connection error, missing or corrupted table.|long|:material-check-bold:||
+|<span class="no-wrap-code">`max_failures`</span>|Maximum number of consecutive days with check failures. A check is failed when a sensor query fails due to a connection error, missing or corrupted table.|*long*|:material-check-bold:||
 
 
 
@@ -1742,7 +1742,7 @@ The rule definition YAML file *comparison/max_failures.dqorule.yaml* with the ti
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -1776,7 +1776,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2021 DQOps (support@dqops.com)
     #
@@ -1886,7 +1886,7 @@ The max missing data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| comparison | `comparison/max_missing` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/max_missing.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/max_missing.py) |
+| comparison | <span class="no-wrap-code">`comparison/max_missing`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/max_missing.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/max_missing.py) |
 
 
 **Rule parameters**
@@ -1895,7 +1895,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_missing`|The maximum number of values from the expected_values list that were not found in the column (inclusive).|long|:material-check-bold:||
+|<span class="no-wrap-code">`max_missing`</span>|The maximum number of values from the expected_values list that were not found in the column (inclusive).|*long*|:material-check-bold:||
 
 
 
@@ -1906,7 +1906,7 @@ The rule definition YAML file *comparison/max_missing.dqorule.yaml* with the tim
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -1935,7 +1935,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2021 DQOps (support@dqops.com)
     #
@@ -2028,7 +2028,7 @@ The max percent data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| comparison | `comparison/max_percent` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/max_percent.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/max_percent.py) |
+| comparison | <span class="no-wrap-code">`comparison/max_percent`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/max_percent.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/max_percent.py) |
 
 
 **Rule parameters**
@@ -2037,7 +2037,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_percent`|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double|:material-check-bold:||
+|<span class="no-wrap-code">`max_percent`</span>|Maximum accepted value for the actual_value returned by the sensor (inclusive).|*double*|:material-check-bold:||
 
 
 
@@ -2048,7 +2048,7 @@ The rule definition YAML file *comparison/max_percent.dqorule.yaml* with the tim
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -2079,7 +2079,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2021 DQOps (support@dqops.com)
     #
@@ -2168,7 +2168,7 @@ The max value data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| comparison | `comparison/max_value` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/max_value.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/max_value.py) |
+| comparison | <span class="no-wrap-code">`comparison/max_value`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/max_value.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/max_value.py) |
 
 
 **Rule parameters**
@@ -2177,7 +2177,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_value`|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double|:material-check-bold:||
+|<span class="no-wrap-code">`max_value`</span>|Maximum accepted value for the actual_value returned by the sensor (inclusive).|*double*|:material-check-bold:||
 
 
 
@@ -2188,7 +2188,7 @@ The rule definition YAML file *comparison/max_value.dqorule.yaml* with the time 
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -2219,7 +2219,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2021 DQOps (support@dqops.com)
     #
@@ -2308,7 +2308,7 @@ The min data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| comparison | `comparison/min` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/min.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/min.py) |
+| comparison | <span class="no-wrap-code">`comparison/min`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/min.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/min.py) |
 
 
 **Rule parameters**
@@ -2317,7 +2317,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`min_value`|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double|:material-check-bold:||
+|<span class="no-wrap-code">`min_value`</span>|Minimum accepted value for the actual_value returned by the sensor (inclusive).|*double*|:material-check-bold:||
 
 
 
@@ -2328,7 +2328,7 @@ The rule definition YAML file *comparison/min.dqorule.yaml* with the time window
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -2359,7 +2359,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2021 DQOps (support@dqops.com)
     #
@@ -2448,7 +2448,7 @@ The min count data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| comparison | `comparison/min_count` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/min_count.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/min_count.py) |
+| comparison | <span class="no-wrap-code">`comparison/min_count`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/min_count.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/min_count.py) |
 
 
 **Rule parameters**
@@ -2457,7 +2457,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`min_count`|Minimum accepted value for the actual_value returned by the sensor (inclusive).|long|:material-check-bold:||
+|<span class="no-wrap-code">`min_count`</span>|Minimum accepted value for the actual_value returned by the sensor (inclusive).|*long*|:material-check-bold:||
 
 
 
@@ -2468,7 +2468,7 @@ The rule definition YAML file *comparison/min_count.dqorule.yaml* with the time 
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -2497,7 +2497,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2021 DQOps (support@dqops.com)
     #
@@ -2586,7 +2586,7 @@ The min percent data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| comparison | `comparison/min_percent` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/min_percent.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/min_percent.py) |
+| comparison | <span class="no-wrap-code">`comparison/min_percent`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/min_percent.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/min_percent.py) |
 
 
 **Rule parameters**
@@ -2595,7 +2595,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`min_percent`|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double|:material-check-bold:||
+|<span class="no-wrap-code">`min_percent`</span>|Minimum accepted value for the actual_value returned by the sensor (inclusive).|*double*|:material-check-bold:||
 
 
 
@@ -2606,7 +2606,7 @@ The rule definition YAML file *comparison/min_percent.dqorule.yaml* with the tim
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -2637,7 +2637,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2021 DQOps (support@dqops.com)
     #
@@ -2726,7 +2726,7 @@ The min value data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| comparison | `comparison/min_value` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/min_value.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/min_value.py) |
+| comparison | <span class="no-wrap-code">`comparison/min_value`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/min_value.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/min_value.py) |
 
 
 **Rule parameters**
@@ -2735,7 +2735,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`min_value`|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double|:material-check-bold:||
+|<span class="no-wrap-code">`min_value`</span>|Minimum accepted value for the actual_value returned by the sensor (inclusive).|*double*|:material-check-bold:||
 
 
 
@@ -2746,7 +2746,7 @@ The rule definition YAML file *comparison/min_value.dqorule.yaml* with the time 
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
     apiVersion: dqo/v1
     kind: rule
@@ -2777,7 +2777,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2021 DQOps (support@dqops.com)
     #
@@ -2866,7 +2866,7 @@ The value changed data quality rule is described below.
 
 | Category | Full rule name | Rule specification source code | Python source code |
 | ---------|----------------|--------------------|--------------------|
-| comparison | `comparison/value_changed` | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/value_changed.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/value_changed.py) |
+| comparison | <span class="no-wrap-code">`comparison/value_changed`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/value_changed.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/value_changed.py) |
 
 
 
@@ -2878,7 +2878,7 @@ The rule definition YAML file *comparison/value_changed.dqorule.yaml* with the t
 
 ??? abstract "Please expand to see the content of the .dqorule.yaml file"
 
-    ```yaml
+    ``` { .yaml linenums="1" }
     apiVersion: dqo/v1
     kind: rule
     spec:
@@ -2902,7 +2902,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ??? abstract "Rule source code"
 
-    ```python
+    ``` { .python linenums="1" }
     #
     # Copyright © 2021 DQOps (support@dqops.com)
     #

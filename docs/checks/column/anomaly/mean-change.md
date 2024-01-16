@@ -17,7 +17,7 @@ Verifies that the mean value in a column changed in a fixed rate since the last 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_mean_change|profiling| |Consistency|[mean](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[change_percent](../../../reference/rules/Change.md#change-percent)|
+|<span class="no-wrap-code">`profile_mean_change`</span>|profiling| |Consistency|[*mean*](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|
 
 **Command-line examples**
 
@@ -852,7 +852,7 @@ Verifies that the mean value in a column changed in a fixed rate since the last 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_mean_change|monitoring|daily|Consistency|[mean](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[change_percent](../../../reference/rules/Change.md#change-percent)|
+|<span class="no-wrap-code">`daily_mean_change`</span>|monitoring|daily|Consistency|[*mean*](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|
 
 **Command-line examples**
 
@@ -1689,7 +1689,7 @@ Verifies that the mean value in a column changed in a fixed rate since the last 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_mean_change|monitoring|monthly|Consistency|[mean](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[change_percent](../../../reference/rules/Change.md#change-percent)|
+|<span class="no-wrap-code">`monthly_mean_change`</span>|monitoring|monthly|Consistency|[*mean*](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|
 
 **Command-line examples**
 
@@ -2526,7 +2526,7 @@ Verifies that the mean value in a column changed in a fixed rate since last read
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_mean_change|partitioned|daily|Consistency|[mean](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[change_percent](../../../reference/rules/Change.md#change-percent)|
+|<span class="no-wrap-code">`daily_partition_mean_change`</span>|partitioned|daily|Consistency|[*mean*](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|
 
 **Command-line examples**
 
@@ -3385,7 +3385,7 @@ Verifies that the mean value in a column changed in a fixed rate since the last 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_mean_change|partitioned|monthly|Consistency|[mean](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[change_percent](../../../reference/rules/Change.md#change-percent)|
+|<span class="no-wrap-code">`monthly_partition_mean_change`</span>|partitioned|monthly|Consistency|[*mean*](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|
 
 **Command-line examples**
 

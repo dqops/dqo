@@ -20,7 +20,7 @@ Calculates the time difference in days between the current date and the most rec
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_data_staleness|profiling| |Timeliness|[data_staleness](../../../reference/sensors/table/timeliness-table-sensors.md#data-staleness)|[max_days](../../../reference/rules/Comparison.md#max-days)|
+|<span class="no-wrap-code">`profile_data_staleness`</span>|profiling| |Timeliness|[*data_staleness*](../../../reference/sensors/table/timeliness-table-sensors.md#data-staleness)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|
 
 **Command-line examples**
 
@@ -1539,7 +1539,7 @@ Daily  calculating the time difference in days between the current date and the 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_data_staleness|monitoring|daily|Timeliness|[data_staleness](../../../reference/sensors/table/timeliness-table-sensors.md#data-staleness)|[max_days](../../../reference/rules/Comparison.md#max-days)|
+|<span class="no-wrap-code">`daily_data_staleness`</span>|monitoring|daily|Timeliness|[*data_staleness*](../../../reference/sensors/table/timeliness-table-sensors.md#data-staleness)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|
 
 **Command-line examples**
 
@@ -3060,7 +3060,7 @@ Monthly monitoring calculating the time difference in days between the current d
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_data_staleness|monitoring|monthly|Timeliness|[data_staleness](../../../reference/sensors/table/timeliness-table-sensors.md#data-staleness)|[max_days](../../../reference/rules/Comparison.md#max-days)|
+|<span class="no-wrap-code">`monthly_data_staleness`</span>|monitoring|monthly|Timeliness|[*data_staleness*](../../../reference/sensors/table/timeliness-table-sensors.md#data-staleness)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|
 
 **Command-line examples**
 
@@ -4581,7 +4581,7 @@ Daily partitioned check calculating the time difference in days between the curr
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_data_staleness|partitioned|daily|Timeliness|[data_staleness](../../../reference/sensors/table/timeliness-table-sensors.md#data-staleness)|[max_days](../../../reference/rules/Comparison.md#max-days)|
+|<span class="no-wrap-code">`daily_partition_data_staleness`</span>|partitioned|daily|Timeliness|[*data_staleness*](../../../reference/sensors/table/timeliness-table-sensors.md#data-staleness)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|
 
 **Command-line examples**
 
@@ -6122,7 +6122,7 @@ Monthly partitioned check calculating the time difference in days between the cu
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_data_staleness|partitioned|monthly|Timeliness|[data_staleness](../../../reference/sensors/table/timeliness-table-sensors.md#data-staleness)|[max_days](../../../reference/rules/Comparison.md#max-days)|
+|<span class="no-wrap-code">`monthly_partition_data_staleness`</span>|partitioned|monthly|Timeliness|[*data_staleness*](../../../reference/sensors/table/timeliness-table-sensors.md#data-staleness)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|
 
 **Command-line examples**
 

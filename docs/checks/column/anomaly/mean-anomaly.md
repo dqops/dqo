@@ -17,7 +17,7 @@ Verifies that the mean value in a column changes in a rate within a percentile b
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_mean_anomaly|profiling| |Consistency|[mean](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[anomaly_stationary_percentile_moving_average](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|
+|<span class="no-wrap-code">`profile_mean_anomaly`</span>|profiling| |Consistency|[*mean*](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[*anomaly_stationary_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|
 
 **Command-line examples**
 
@@ -852,7 +852,7 @@ Verifies that the mean value in a column changes in a rate within a percentile b
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_mean_anomaly|monitoring|daily|Consistency|[mean](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[anomaly_stationary_percentile_moving_average](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|
+|<span class="no-wrap-code">`daily_mean_anomaly`</span>|monitoring|daily|Consistency|[*mean*](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[*anomaly_stationary_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|
 
 **Command-line examples**
 
@@ -1689,7 +1689,7 @@ Verifies that the mean value in a column is within a percentile from measurement
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_mean_anomaly|partitioned|daily|Consistency|[mean](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[anomaly_stationary_percentile_moving_average](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|
+|<span class="no-wrap-code">`daily_partition_mean_anomaly`</span>|partitioned|daily|Consistency|[*mean*](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[*anomaly_stationary_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|
 
 **Command-line examples**
 

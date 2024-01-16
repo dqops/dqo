@@ -17,7 +17,7 @@ Verifies that the maximum value in a column is not outside the expected range.
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_max_in_range|profiling| |Reasonableness|[max_value](../../../reference/sensors/column/range-column-sensors.md#max-value)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`profile_max_in_range`</span>|profiling| |Reasonableness|[*max_value*](../../../reference/sensors/column/range-column-sensors.md#max-value)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 
@@ -846,7 +846,7 @@ Verifies that the maximum value in a column is not outside the expected range. S
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_max_in_range|monitoring|daily|Reasonableness|[max_value](../../../reference/sensors/column/range-column-sensors.md#max-value)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`daily_max_in_range`</span>|monitoring|daily|Reasonableness|[*max_value*](../../../reference/sensors/column/range-column-sensors.md#max-value)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 
@@ -1677,7 +1677,7 @@ Verifies that the maximum value in a column does not exceed the expected range. 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_max_in_range|monitoring|monthly|Reasonableness|[max_value](../../../reference/sensors/column/range-column-sensors.md#max-value)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`monthly_max_in_range`</span>|monitoring|monthly|Reasonableness|[*max_value*](../../../reference/sensors/column/range-column-sensors.md#max-value)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 
@@ -2508,7 +2508,7 @@ Verifies that the maximum value in a column is not outside the expected range. S
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_max_in_range|partitioned|daily|Reasonableness|[max_value](../../../reference/sensors/column/range-column-sensors.md#max-value)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`daily_partition_max_in_range`</span>|partitioned|daily|Reasonableness|[*max_value*](../../../reference/sensors/column/range-column-sensors.md#max-value)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 
@@ -3361,7 +3361,7 @@ Verifies that the maximum value in a column is not outside the expected range. S
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_max_in_range|partitioned|monthly|Reasonableness|[max_value](../../../reference/sensors/column/range-column-sensors.md#max-value)|[between_floats](../../../reference/rules/Comparison.md#between-floats)|
+|<span class="no-wrap-code">`monthly_partition_max_in_range`</span>|partitioned|monthly|Reasonableness|[*max_value*](../../../reference/sensors/column/range-column-sensors.md#max-value)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
 
 **Command-line examples**
 

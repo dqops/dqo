@@ -13,15 +13,15 @@ The total average match percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | accuracy | `column/accuracy/total_average_match_percent` | [sensors/column/accuracy](https://github.com/dqops/dqo/tree/develop/home/sensors/column/accuracy/) |
+| column | accuracy | <span class="no-wrap-code">`column/accuracy/total_average_match_percent`</span> | [*sensors/column/accuracy*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/accuracy/) |
 
 
 **Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`referenced_table`|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|string|:material-check-bold:||
-|`referenced_column`|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|string|:material-check-bold:||
+|<span class="no-wrap-code">`referenced_table`</span>|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|*string*|:material-check-bold:||
+|<span class="no-wrap-code">`referenced_column`</span>|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|*string*|:material-check-bold:||
 
 
 
@@ -293,15 +293,15 @@ The total max match percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | accuracy | `column/accuracy/total_max_match_percent` | [sensors/column/accuracy](https://github.com/dqops/dqo/tree/develop/home/sensors/column/accuracy/) |
+| column | accuracy | <span class="no-wrap-code">`column/accuracy/total_max_match_percent`</span> | [*sensors/column/accuracy*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/accuracy/) |
 
 
 **Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`referenced_table`|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|string|:material-check-bold:||
-|`referenced_column`|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|string|:material-check-bold:||
+|<span class="no-wrap-code">`referenced_table`</span>|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|*string*|:material-check-bold:||
+|<span class="no-wrap-code">`referenced_column`</span>|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|*string*|:material-check-bold:||
 
 
 
@@ -569,15 +569,15 @@ The total min match percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | accuracy | `column/accuracy/total_min_match_percent` | [sensors/column/accuracy](https://github.com/dqops/dqo/tree/develop/home/sensors/column/accuracy/) |
+| column | accuracy | <span class="no-wrap-code">`column/accuracy/total_min_match_percent`</span> | [*sensors/column/accuracy*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/accuracy/) |
 
 
 **Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`referenced_table`|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|string|:material-check-bold:||
-|`referenced_column`|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|string|:material-check-bold:||
+|<span class="no-wrap-code">`referenced_table`</span>|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|*string*|:material-check-bold:||
+|<span class="no-wrap-code">`referenced_column`</span>|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|*string*|:material-check-bold:||
 
 
 
@@ -846,15 +846,15 @@ The total not null count match percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | accuracy | `column/accuracy/total_not_null_count_match_percent` | [sensors/column/accuracy](https://github.com/dqops/dqo/tree/develop/home/sensors/column/accuracy/) |
+| column | accuracy | <span class="no-wrap-code">`column/accuracy/total_not_null_count_match_percent`</span> | [*sensors/column/accuracy*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/accuracy/) |
 
 
 **Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`referenced_table`|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|string|:material-check-bold:||
-|`referenced_column`|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|string|:material-check-bold:||
+|<span class="no-wrap-code">`referenced_table`</span>|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|*string*|:material-check-bold:||
+|<span class="no-wrap-code">`referenced_column`</span>|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|*string*|:material-check-bold:||
 
 
 
@@ -1123,15 +1123,15 @@ The total sum match percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | accuracy | `column/accuracy/total_sum_match_percent` | [sensors/column/accuracy](https://github.com/dqops/dqo/tree/develop/home/sensors/column/accuracy/) |
+| column | accuracy | <span class="no-wrap-code">`column/accuracy/total_sum_match_percent`</span> | [*sensors/column/accuracy*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/accuracy/) |
 
 
 **Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`referenced_table`|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|string|:material-check-bold:||
-|`referenced_column`|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|string|:material-check-bold:||
+|<span class="no-wrap-code">`referenced_table`</span>|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|*string*|:material-check-bold:||
+|<span class="no-wrap-code">`referenced_column`</span>|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|*string*|:material-check-bold:||
 
 
 

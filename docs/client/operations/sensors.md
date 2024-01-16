@@ -19,7 +19,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|full_sensor_name|Full sensor name|string|:material-check-bold:|
+|<span class="no-wrap-code">`full_sensor_name`</span>|Full sensor name|*string*|:material-check-bold:|
 
 
 
@@ -28,7 +28,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Dictionary of sensor definitions|[SensorModel](../models/sensors.md#sensormodel)| |
+|Dictionary of sensor definitions|*[SensorModel](../models/sensors.md#sensormodel)*| |
 
 
 
@@ -225,7 +225,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|full_sensor_name|Full sensor name|string|:material-check-bold:|
+|<span class="no-wrap-code">`full_sensor_name`</span>|Full sensor name|*string*|:material-check-bold:|
 
 
 
@@ -339,7 +339,7 @@ http://localhost:8888/api/sensors
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|sensor_list_model||List[[SensorListModel](../models/sensors.md#sensorlistmodel)]|
+|<span class="no-wrap-code">`sensor_list_model`</span>||*List[[SensorListModel](../models/sensors.md#sensorlistmodel)]*|
 
 
 
@@ -472,7 +472,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[sensor_model](../models/sensors.md#sensormodel)||[SensorModel](../models/sensors.md#sensormodel)|
+|<span class="no-wrap-code">[`sensor_model`](../models/sensors.md#sensormodel)</span>||*[SensorModel](../models/sensors.md#sensormodel)*|
 
 
 
@@ -481,7 +481,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|full_sensor_name|Full sensor name|string|:material-check-bold:|
+|<span class="no-wrap-code">`full_sensor_name`</span>|Full sensor name|*string*|:material-check-bold:|
 
 
 
@@ -620,7 +620,7 @@ http://localhost:8888/api/definitions/sensors
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[sensor_folder_model](../models/sensors.md#sensorfoldermodel)||[SensorFolderModel](../models/sensors.md#sensorfoldermodel)|
+|<span class="no-wrap-code">[`sensor_folder_model`](../models/sensors.md#sensorfoldermodel)</span>||*[SensorFolderModel](../models/sensors.md#sensorfoldermodel)*|
 
 
 
@@ -746,7 +746,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|full_sensor_name|Full sensor name|string|:material-check-bold:|
+|<span class="no-wrap-code">`full_sensor_name`</span>|Full sensor name|*string*|:material-check-bold:|
 
 
 
@@ -755,7 +755,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Dictionary of sensor definitions|[SensorModel](../models/sensors.md#sensormodel)| |
+|Dictionary of sensor definitions|*[SensorModel](../models/sensors.md#sensormodel)*| |
 
 
 

@@ -58,9 +58,9 @@ class ColumnAnomalyDailyMonitoringChecksSpec:
         custom_checks (Union[Unset, ColumnAnomalyDailyMonitoringChecksSpecCustomChecks]): Dictionary of additional
             custom checks within this category. The keys are check names defined in the definition section. The sensor
             parameters and rules should match the type of the configured sensor and rule for the custom check.
+        daily_sum_anomaly (Union[Unset, ColumnSumAnomalyDifferencingCheckSpec]):
         daily_mean_anomaly (Union[Unset, ColumnMeanAnomalyStationaryCheckSpec]):
         daily_median_anomaly (Union[Unset, ColumnMedianAnomalyStationaryCheckSpec]):
-        daily_sum_anomaly (Union[Unset, ColumnSumAnomalyDifferencingCheckSpec]):
         daily_mean_change (Union[Unset, ColumnMeanChangeCheckSpec]):
         daily_median_change (Union[Unset, ColumnMedianChangeCheckSpec]):
         daily_sum_change (Union[Unset, ColumnSumChangeCheckSpec]):
@@ -78,9 +78,9 @@ class ColumnAnomalyDailyMonitoringChecksSpec:
     custom_checks: Union[
         Unset, "ColumnAnomalyDailyMonitoringChecksSpecCustomChecks"
     ] = UNSET
+    daily_sum_anomaly: Union[Unset, "ColumnSumAnomalyDifferencingCheckSpec"] = UNSET
     daily_mean_anomaly: Union[Unset, "ColumnMeanAnomalyStationaryCheckSpec"] = UNSET
     daily_median_anomaly: Union[Unset, "ColumnMedianAnomalyStationaryCheckSpec"] = UNSET
-    daily_sum_anomaly: Union[Unset, "ColumnSumAnomalyDifferencingCheckSpec"] = UNSET
     daily_mean_change: Union[Unset, "ColumnMeanChangeCheckSpec"] = UNSET
     daily_median_change: Union[Unset, "ColumnMedianChangeCheckSpec"] = UNSET
     daily_sum_change: Union[Unset, "ColumnSumChangeCheckSpec"] = UNSET
@@ -102,6 +102,10 @@ class ColumnAnomalyDailyMonitoringChecksSpec:
         if not isinstance(self.custom_checks, Unset):
             custom_checks = self.custom_checks.to_dict()
 
+        daily_sum_anomaly: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_sum_anomaly, Unset):
+            daily_sum_anomaly = self.daily_sum_anomaly.to_dict()
+
         daily_mean_anomaly: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_mean_anomaly, Unset):
             daily_mean_anomaly = self.daily_mean_anomaly.to_dict()
@@ -109,10 +113,6 @@ class ColumnAnomalyDailyMonitoringChecksSpec:
         daily_median_anomaly: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_median_anomaly, Unset):
             daily_median_anomaly = self.daily_median_anomaly.to_dict()
-
-        daily_sum_anomaly: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_sum_anomaly, Unset):
-            daily_sum_anomaly = self.daily_sum_anomaly.to_dict()
 
         daily_mean_change: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_mean_change, Unset):
@@ -167,12 +167,12 @@ class ColumnAnomalyDailyMonitoringChecksSpec:
         field_dict.update({})
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
+        if daily_sum_anomaly is not UNSET:
+            field_dict["daily_sum_anomaly"] = daily_sum_anomaly
         if daily_mean_anomaly is not UNSET:
             field_dict["daily_mean_anomaly"] = daily_mean_anomaly
         if daily_median_anomaly is not UNSET:
             field_dict["daily_median_anomaly"] = daily_median_anomaly
-        if daily_sum_anomaly is not UNSET:
-            field_dict["daily_sum_anomaly"] = daily_sum_anomaly
         if daily_mean_change is not UNSET:
             field_dict["daily_mean_change"] = daily_mean_change
         if daily_median_change is not UNSET:
@@ -257,6 +257,15 @@ class ColumnAnomalyDailyMonitoringChecksSpec:
                 )
             )
 
+        _daily_sum_anomaly = d.pop("daily_sum_anomaly", UNSET)
+        daily_sum_anomaly: Union[Unset, ColumnSumAnomalyDifferencingCheckSpec]
+        if isinstance(_daily_sum_anomaly, Unset):
+            daily_sum_anomaly = UNSET
+        else:
+            daily_sum_anomaly = ColumnSumAnomalyDifferencingCheckSpec.from_dict(
+                _daily_sum_anomaly
+            )
+
         _daily_mean_anomaly = d.pop("daily_mean_anomaly", UNSET)
         daily_mean_anomaly: Union[Unset, ColumnMeanAnomalyStationaryCheckSpec]
         if isinstance(_daily_mean_anomaly, Unset):
@@ -273,15 +282,6 @@ class ColumnAnomalyDailyMonitoringChecksSpec:
         else:
             daily_median_anomaly = ColumnMedianAnomalyStationaryCheckSpec.from_dict(
                 _daily_median_anomaly
-            )
-
-        _daily_sum_anomaly = d.pop("daily_sum_anomaly", UNSET)
-        daily_sum_anomaly: Union[Unset, ColumnSumAnomalyDifferencingCheckSpec]
-        if isinstance(_daily_sum_anomaly, Unset):
-            daily_sum_anomaly = UNSET
-        else:
-            daily_sum_anomaly = ColumnSumAnomalyDifferencingCheckSpec.from_dict(
-                _daily_sum_anomaly
             )
 
         _daily_mean_change = d.pop("daily_mean_change", UNSET)
@@ -390,9 +390,9 @@ class ColumnAnomalyDailyMonitoringChecksSpec:
 
         column_anomaly_daily_monitoring_checks_spec = cls(
             custom_checks=custom_checks,
+            daily_sum_anomaly=daily_sum_anomaly,
             daily_mean_anomaly=daily_mean_anomaly,
             daily_median_anomaly=daily_median_anomaly,
-            daily_sum_anomaly=daily_sum_anomaly,
             daily_mean_change=daily_mean_change,
             daily_median_change=daily_median_change,
             daily_sum_change=daily_sum_change,

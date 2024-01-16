@@ -17,7 +17,7 @@ Verifies that the number of text values not matching the custom regular expressi
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_text_not_matching_regex_found|profiling| |Validity|[text_not_matching_regex_count](../../../reference/sensors/column/patterns-column-sensors.md#text-not-matching-regex-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`profile_text_not_matching_regex_found`</span>|profiling| |Validity|[*text_not_matching_regex_count*](../../../reference/sensors/column/patterns-column-sensors.md#text-not-matching-regex-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -1444,7 +1444,7 @@ Verifies that the number of text values not matching the custom regular expressi
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_text_not_matching_regex_found|monitoring|daily|Validity|[text_not_matching_regex_count](../../../reference/sensors/column/patterns-column-sensors.md#text-not-matching-regex-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`daily_text_not_matching_regex_found`</span>|monitoring|daily|Validity|[*text_not_matching_regex_count*](../../../reference/sensors/column/patterns-column-sensors.md#text-not-matching-regex-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -2873,7 +2873,7 @@ Verifies that the number of text values not matching the custom regular expressi
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_text_not_matching_regex_found|monitoring|monthly|Validity|[text_not_matching_regex_count](../../../reference/sensors/column/patterns-column-sensors.md#text-not-matching-regex-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`monthly_text_not_matching_regex_found`</span>|monitoring|monthly|Validity|[*text_not_matching_regex_count*](../../../reference/sensors/column/patterns-column-sensors.md#text-not-matching-regex-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -4302,7 +4302,7 @@ Verifies that the number of text values not matching the custom regular expressi
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_text_not_matching_regex_found|partitioned|daily|Validity|[text_not_matching_regex_count](../../../reference/sensors/column/patterns-column-sensors.md#text-not-matching-regex-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`daily_partition_text_not_matching_regex_found`</span>|partitioned|daily|Validity|[*text_not_matching_regex_count*](../../../reference/sensors/column/patterns-column-sensors.md#text-not-matching-regex-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -5753,7 +5753,7 @@ Verifies that the number of text values not matching the custom regular expressi
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_text_not_matching_regex_found|partitioned|monthly|Validity|[text_not_matching_regex_count](../../../reference/sensors/column/patterns-column-sensors.md#text-not-matching-regex-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`monthly_partition_text_not_matching_regex_found`</span>|partitioned|monthly|Validity|[*text_not_matching_regex_count*](../../../reference/sensors/column/patterns-column-sensors.md#text-not-matching-regex-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 

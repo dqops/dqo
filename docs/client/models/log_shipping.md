@@ -11,8 +11,8 @@ External log entry that would be logged on the server.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|window_location|window.location value at the time when the log entry was reported.|string|
-|message|Log message that should be logged.|string|
+|<span class="no-wrap-code">`window_location`</span>|window.location value at the time when the log entry was reported.|*string*|
+|<span class="no-wrap-code">`message`</span>|Log message that should be logged.|*string*|
 
 
 ___

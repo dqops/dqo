@@ -182,9 +182,9 @@ public class HandlebarsDocumentationUtilities {
                 // Only simple objects get complete linkage
                 String templateToReturn = null;
                 if ((isSimpleObject(typeModel) || isLinkableEnum(typeModel)) && typeModel.getClassUsedOnTheFieldPath() != null) {
-                    templateToReturn = "[%s](" + typeModel.getClassUsedOnTheFieldPath() + ")";
+                    templateToReturn = "[`%s`](" + changeAnchorToLowerCase(typeModel.getClassUsedOnTheFieldPath()) + ")";
                 } else {
-                    templateToReturn = "%s";
+                    templateToReturn = "`%s`";
                 }
                 return String.format(templateToReturn, displayText);
             }
@@ -211,13 +211,27 @@ public class HandlebarsDocumentationUtilities {
                 default:
                     if (typeModel.getClassUsedOnTheFieldPath() != null) {
                         return "[" + typeModel.getClassNameUsedOnTheField() + "]" +
-                                "(" + typeModel.getClassUsedOnTheFieldPath() + ")";
+                                "(" + changeAnchorToLowerCase(typeModel.getClassUsedOnTheFieldPath()) + ")";
                     }
                     else {
-                        return typeModel.getClassNameUsedOnTheField();
+                        return "`" + typeModel.getClassNameUsedOnTheField() + "`";
                     }
 
             }
+        }
+
+        /**
+         * Finds an anchor after the '#' sign in the url and changes it to lower case.
+         * @param url Url to fix.
+         * @return Fixed url.
+         */
+        private String changeAnchorToLowerCase(String url) {
+            int indexOfHash = url.indexOf('#');
+            if (indexOfHash < 0) {
+                return url;
+            }
+
+            return url.substring(0, indexOfHash) + url.substring(indexOfHash).toLowerCase();
         }
 
         private boolean isLinkableEnum(TypeModel typeModel) {

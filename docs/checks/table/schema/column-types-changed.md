@@ -20,7 +20,7 @@ Detects if new columns were added, removed or their data types have changed. Ret
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_column_types_changed|profiling| |Consistency|[column_types_hash](../../../reference/sensors/table/schema-table-sensors.md#column-types-hash)|[value_changed](../../../reference/rules/Comparison.md#value-changed)|
+|<span class="no-wrap-code">`profile_column_types_changed`</span>|profiling| |Consistency|[*column_types_hash*](../../../reference/sensors/table/schema-table-sensors.md#column-types-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|
 
 **Command-line examples**
 
@@ -122,7 +122,7 @@ Detects if new columns were added, removed or their data types have changed sinc
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_column_types_changed|monitoring|daily|Consistency|[column_types_hash](../../../reference/sensors/table/schema-table-sensors.md#column-types-hash)|[value_changed](../../../reference/rules/Comparison.md#value-changed)|
+|<span class="no-wrap-code">`daily_column_types_changed`</span>|monitoring|daily|Consistency|[*column_types_hash*](../../../reference/sensors/table/schema-table-sensors.md#column-types-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|
 
 **Command-line examples**
 
@@ -225,7 +225,7 @@ Detects if new columns were added, removed or their data types have changed sinc
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_column_types_changed|monitoring|monthly|Consistency|[column_types_hash](../../../reference/sensors/table/schema-table-sensors.md#column-types-hash)|[value_changed](../../../reference/rules/Comparison.md#value-changed)|
+|<span class="no-wrap-code">`monthly_column_types_changed`</span>|monitoring|monthly|Consistency|[*column_types_hash*](../../../reference/sensors/table/schema-table-sensors.md#column-types-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|
 
 **Command-line examples**
 

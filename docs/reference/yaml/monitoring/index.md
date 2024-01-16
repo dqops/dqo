@@ -27,8 +27,8 @@ The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |---------------|--------------------------|
-|[daily](./table-daily-monitoring-checks.md#TableDailyMonitoringCheckCategoriesSpec)|[TableDailyMonitoringCheckCategoriesSpec](./table-daily-monitoring-checks.md#TableDailyMonitoringCheckCategoriesSpec)|
-|[monthly](./table-monthly-monitoring-checks.md#TableMonthlyMonitoringCheckCategoriesSpec)|[TableMonthlyMonitoringCheckCategoriesSpec](./table-monthly-monitoring-checks.md#TableMonthlyMonitoringCheckCategoriesSpec)|
+|[&#x60;daily&#x60;](./table-daily-monitoring-checks.md#tabledailymonitoringcheckcategoriesspec)|[TableDailyMonitoringCheckCategoriesSpec](./table-daily-monitoring-checks.md#tabledailymonitoringcheckcategoriesspec)|
+|[&#x60;monthly&#x60;](./table-monthly-monitoring-checks.md#tablemonthlymonitoringcheckcategoriesspec)|[TableMonthlyMonitoringCheckCategoriesSpec](./table-monthly-monitoring-checks.md#tablemonthlymonitoringcheckcategoriesspec)|
 
 
 
@@ -59,8 +59,8 @@ The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |---------------|--------------------------|
-|[daily](./column-daily-monitoring-checks.md#ColumnDailyMonitoringCheckCategoriesSpec)|[ColumnDailyMonitoringCheckCategoriesSpec](./column-daily-monitoring-checks.md#ColumnDailyMonitoringCheckCategoriesSpec)|
-|[monthly](./column-monthly-monitoring-checks.md#ColumnMonthlyMonitoringCheckCategoriesSpec)|[ColumnMonthlyMonitoringCheckCategoriesSpec](./column-monthly-monitoring-checks.md#ColumnMonthlyMonitoringCheckCategoriesSpec)|
+|[&#x60;daily&#x60;](./column-daily-monitoring-checks.md#columndailymonitoringcheckcategoriesspec)|[ColumnDailyMonitoringCheckCategoriesSpec](./column-daily-monitoring-checks.md#columndailymonitoringcheckcategoriesspec)|
+|[&#x60;monthly&#x60;](./column-monthly-monitoring-checks.md#columnmonthlymonitoringcheckcategoriesspec)|[ColumnMonthlyMonitoringCheckCategoriesSpec](./column-monthly-monitoring-checks.md#columnmonthlymonitoringcheckcategoriesspec)|
 
 
 

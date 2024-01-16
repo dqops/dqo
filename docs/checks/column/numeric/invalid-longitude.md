@@ -17,7 +17,7 @@ Verifies that the number of invalid longitude values in a column does not exceed
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_invalid_longitude|profiling| |Validity|[invalid_longitude_count](../../../reference/sensors/column/numeric-column-sensors.md#invalid-longitude-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`profile_invalid_longitude`</span>|profiling| |Validity|[*invalid_longitude_count*](../../../reference/sensors/column/numeric-column-sensors.md#invalid-longitude-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -1072,7 +1072,7 @@ Verifies that the number of invalid longitude values in a column does not exceed
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_invalid_longitude|monitoring|daily|Validity|[invalid_longitude_count](../../../reference/sensors/column/numeric-column-sensors.md#invalid-longitude-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`daily_invalid_longitude`</span>|monitoring|daily|Validity|[*invalid_longitude_count*](../../../reference/sensors/column/numeric-column-sensors.md#invalid-longitude-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -2129,7 +2129,7 @@ Verifies that the number of invalid longitude values in a column does not exceed
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_invalid_longitude|monitoring|monthly|Validity|[invalid_longitude_count](../../../reference/sensors/column/numeric-column-sensors.md#invalid-longitude-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`monthly_invalid_longitude`</span>|monitoring|monthly|Validity|[*invalid_longitude_count*](../../../reference/sensors/column/numeric-column-sensors.md#invalid-longitude-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -3186,7 +3186,7 @@ Verifies that the number of invalid longitude values in a column does not exceed
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_invalid_longitude|partitioned|daily|Validity|[invalid_longitude_count](../../../reference/sensors/column/numeric-column-sensors.md#invalid-longitude-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`daily_partition_invalid_longitude`</span>|partitioned|daily|Validity|[*invalid_longitude_count*](../../../reference/sensors/column/numeric-column-sensors.md#invalid-longitude-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -4265,7 +4265,7 @@ Verifies that the number of invalid longitude values in a column does not exceed
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_invalid_longitude|partitioned|monthly|Validity|[invalid_longitude_count](../../../reference/sensors/column/numeric-column-sensors.md#invalid-longitude-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`monthly_partition_invalid_longitude`</span>|partitioned|monthly|Validity|[*invalid_longitude_count*](../../../reference/sensors/column/numeric-column-sensors.md#invalid-longitude-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 

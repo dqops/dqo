@@ -17,7 +17,7 @@ The check counts the number of text values in the column that is below the lengt
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_text_length_below_min_length|profiling| |Reasonableness|[text_length_below_min_length_count](../../../reference/sensors/column/text-column-sensors.md#text-length-below-min-length-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`profile_text_length_below_min_length`</span>|profiling| |Reasonableness|[*text_length_below_min_length_count*](../../../reference/sensors/column/text-column-sensors.md#text-length-below-min-length-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -1300,7 +1300,7 @@ The check counts the number of text values in the column that is below the lengt
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_text_length_below_min_length|monitoring|daily|Reasonableness|[text_length_below_min_length_count](../../../reference/sensors/column/text-column-sensors.md#text-length-below-min-length-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`daily_text_length_below_min_length`</span>|monitoring|daily|Reasonableness|[*text_length_below_min_length_count*](../../../reference/sensors/column/text-column-sensors.md#text-length-below-min-length-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -2585,7 +2585,7 @@ The check counts the number of text values in the column that is below the lengt
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_text_length_below_min_length|monitoring|monthly|Reasonableness|[text_length_below_min_length_count](../../../reference/sensors/column/text-column-sensors.md#text-length-below-min-length-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`monthly_text_length_below_min_length`</span>|monitoring|monthly|Reasonableness|[*text_length_below_min_length_count*](../../../reference/sensors/column/text-column-sensors.md#text-length-below-min-length-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -3870,7 +3870,7 @@ The check counts the number of text values in the column that is below the lengt
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_text_length_below_min_length|partitioned|daily|Reasonableness|[text_length_below_min_length_count](../../../reference/sensors/column/text-column-sensors.md#text-length-below-min-length-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`daily_partition_text_length_below_min_length`</span>|partitioned|daily|Reasonableness|[*text_length_below_min_length_count*](../../../reference/sensors/column/text-column-sensors.md#text-length-below-min-length-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 
@@ -5177,7 +5177,7 @@ The check counts the number of text values in the column that is below the lengt
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_text_length_below_min_length|partitioned|monthly|Reasonableness|[text_length_below_min_length_count](../../../reference/sensors/column/text-column-sensors.md#text-length-below-min-length-count)|[max_count](../../../reference/rules/Comparison.md#max-count)|
+|<span class="no-wrap-code">`monthly_partition_text_length_below_min_length`</span>|partitioned|monthly|Reasonableness|[*text_length_below_min_length_count*](../../../reference/sensors/column/text-column-sensors.md#text-length-below-min-length-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
 
 **Command-line examples**
 

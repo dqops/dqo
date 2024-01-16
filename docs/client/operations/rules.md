@@ -19,7 +19,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|full_rule_name|Full rule name|string|:material-check-bold:|
+|<span class="no-wrap-code">`full_rule_name`</span>|Full rule name|*string*|:material-check-bold:|
 
 
 
@@ -28,7 +28,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Rule model|[RuleModel](../models/rules.md#rulemodel)| |
+|Rule model|*[RuleModel](../models/rules.md#rulemodel)*| |
 
 
 
@@ -197,7 +197,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|full_rule_name|Full rule name|string|:material-check-bold:|
+|<span class="no-wrap-code">`full_rule_name`</span>|Full rule name|*string*|:material-check-bold:|
 
 
 
@@ -311,7 +311,7 @@ http://localhost:8888/api/rules
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|rule_list_model||List[[RuleListModel](../models/rules.md#rulelistmodel)]|
+|<span class="no-wrap-code">`rule_list_model`</span>||*List[[RuleListModel](../models/rules.md#rulelistmodel)]*|
 
 
 
@@ -450,7 +450,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[rule_model](../models/rules.md#rulemodel)||[RuleModel](../models/rules.md#rulemodel)|
+|<span class="no-wrap-code">[`rule_model`](../models/rules.md#rulemodel)</span>||*[RuleModel](../models/rules.md#rulemodel)*|
 
 
 
@@ -459,7 +459,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|full_rule_name|Full rule name|string|:material-check-bold:|
+|<span class="no-wrap-code">`full_rule_name`</span>|Full rule name|*string*|:material-check-bold:|
 
 
 
@@ -590,7 +590,7 @@ http://localhost:8888/api/definitions/rules
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[rule_folder_model](../models/rules.md#rulefoldermodel)||[RuleFolderModel](../models/rules.md#rulefoldermodel)|
+|<span class="no-wrap-code">[`rule_folder_model`](../models/rules.md#rulefoldermodel)</span>||*[RuleFolderModel](../models/rules.md#rulefoldermodel)*|
 
 
 
@@ -764,7 +764,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|full_rule_name|Full rule name|string|:material-check-bold:|
+|<span class="no-wrap-code">`full_rule_name`</span>|Full rule name|*string*|:material-check-bold:|
 
 
 
@@ -773,7 +773,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|List of rule definitions|[RuleModel](../models/rules.md#rulemodel)| |
+|List of rule definitions|*[RuleModel](../models/rules.md#rulemodel)*| |
 
 
 

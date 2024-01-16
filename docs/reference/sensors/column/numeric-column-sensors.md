@@ -14,15 +14,15 @@ The integer in range percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | numeric | `column/numeric/integer_in_range_percent` | [sensors/column/numeric](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
+| column | numeric | <span class="no-wrap-code">`column/numeric/integer_in_range_percent`</span> | [*sensors/column/numeric*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
 
 
 **Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`min_value`|Minimum value range variable.|long| ||
-|`max_value`|Maximum value range variable.|long| ||
+|<span class="no-wrap-code">`min_value`</span>|Minimum value range variable.|*long*| ||
+|<span class="no-wrap-code">`max_value`</span>|Maximum value range variable.|*long*| ||
 
 
 
@@ -269,7 +269,7 @@ The invalid latitude count sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | numeric | `column/numeric/invalid_latitude_count` | [sensors/column/numeric](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
+| column | numeric | <span class="no-wrap-code">`column/numeric/invalid_latitude_count`</span> | [*sensors/column/numeric*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
 
 
 
@@ -512,7 +512,7 @@ The invalid longitude count sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | numeric | `column/numeric/invalid_longitude_count` | [sensors/column/numeric](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
+| column | numeric | <span class="no-wrap-code">`column/numeric/invalid_longitude_count`</span> | [*sensors/column/numeric*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
 
 
 
@@ -755,7 +755,7 @@ The mean sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | numeric | `column/numeric/mean` | [sensors/column/numeric](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
+| column | numeric | <span class="no-wrap-code">`column/numeric/mean`</span> | [*sensors/column/numeric*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
 
 
 
@@ -943,7 +943,7 @@ The negative count sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | numeric | `column/numeric/negative_count` | [sensors/column/numeric](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
+| column | numeric | <span class="no-wrap-code">`column/numeric/negative_count`</span> | [*sensors/column/numeric*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
 
 
 
@@ -1187,7 +1187,7 @@ The negative percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | numeric | `column/numeric/negative_percent` | [sensors/column/numeric](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
+| column | numeric | <span class="no-wrap-code">`column/numeric/negative_percent`</span> | [*sensors/column/numeric*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
 
 
 
@@ -1463,7 +1463,7 @@ The non negative count sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | numeric | `column/numeric/non_negative_count` | [sensors/column/numeric](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
+| column | numeric | <span class="no-wrap-code">`column/numeric/non_negative_count`</span> | [*sensors/column/numeric*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
 
 
 
@@ -1707,7 +1707,7 @@ The non negative percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | numeric | `column/numeric/non_negative_percent` | [sensors/column/numeric](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
+| column | numeric | <span class="no-wrap-code">`column/numeric/non_negative_percent`</span> | [*sensors/column/numeric*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
 
 
 
@@ -1952,14 +1952,14 @@ The number above max value count sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | numeric | `column/numeric/number_above_max_value_count` | [sensors/column/numeric](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
+| column | numeric | <span class="no-wrap-code">`column/numeric/number_above_max_value_count`</span> | [*sensors/column/numeric*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
 
 
 **Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_value`|This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0|integer|:material-check-bold:||
+|<span class="no-wrap-code">`max_value`</span>|This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0|*integer*|:material-check-bold:||
 
 
 
@@ -2203,14 +2203,14 @@ The number above max value percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | numeric | `column/numeric/number_above_max_value_percent` | [sensors/column/numeric](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
+| column | numeric | <span class="no-wrap-code">`column/numeric/number_above_max_value_percent`</span> | [*sensors/column/numeric*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
 
 
 **Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`max_value`|This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0|integer|:material-check-bold:||
+|<span class="no-wrap-code">`max_value`</span>|This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0|*integer*|:material-check-bold:||
 
 
 
@@ -2465,14 +2465,14 @@ The number below min value count sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | numeric | `column/numeric/number_below_min_value_count` | [sensors/column/numeric](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
+| column | numeric | <span class="no-wrap-code">`column/numeric/number_below_min_value_count`</span> | [*sensors/column/numeric*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
 
 
 **Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`min_value`|This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0|integer|:material-check-bold:||
+|<span class="no-wrap-code">`min_value`</span>|This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0|*integer*|:material-check-bold:||
 
 
 
@@ -2716,14 +2716,14 @@ The number below min value percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | numeric | `column/numeric/number_below_min_value_percent` | [sensors/column/numeric](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
+| column | numeric | <span class="no-wrap-code">`column/numeric/number_below_min_value_percent`</span> | [*sensors/column/numeric*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
 
 
 **Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`min_value`|This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0|integer|:material-check-bold:||
+|<span class="no-wrap-code">`min_value`</span>|This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0|*integer*|:material-check-bold:||
 
 
 
@@ -2970,15 +2970,15 @@ The number in range percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | numeric | `column/numeric/number_in_range_percent` | [sensors/column/numeric](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
+| column | numeric | <span class="no-wrap-code">`column/numeric/number_in_range_percent`</span> | [*sensors/column/numeric*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
 
 
 **Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`min_value`|Minimum value for the range.|double| ||
-|`max_value`|Maximum value for the range.|double| ||
+|<span class="no-wrap-code">`min_value`</span>|Minimum value for the range.|*double*| ||
+|<span class="no-wrap-code">`max_value`</span>|Maximum value for the range.|*double*| ||
 
 
 
@@ -3222,14 +3222,14 @@ The percentile sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | numeric | `column/numeric/percentile` | [sensors/column/numeric](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
+| column | numeric | <span class="no-wrap-code">`column/numeric/percentile`</span> | [*sensors/column/numeric*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
 
 
 **Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`percentile_value`|Median (50th percentile), must equal 0.5|double|:material-check-bold:||
+|<span class="no-wrap-code">`percentile_value`</span>|Median (50th percentile), must equal 0.5|*double*|:material-check-bold:||
 
 
 
@@ -3602,7 +3602,7 @@ The population stddev sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | numeric | `column/numeric/population_stddev` | [sensors/column/numeric](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
+| column | numeric | <span class="no-wrap-code">`column/numeric/population_stddev`</span> | [*sensors/column/numeric*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
 
 
 
@@ -3790,7 +3790,7 @@ The population variance sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | numeric | `column/numeric/population_variance` | [sensors/column/numeric](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
+| column | numeric | <span class="no-wrap-code">`column/numeric/population_variance`</span> | [*sensors/column/numeric*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
 
 
 
@@ -3978,7 +3978,7 @@ The sample stddev sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | numeric | `column/numeric/sample_stddev` | [sensors/column/numeric](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
+| column | numeric | <span class="no-wrap-code">`column/numeric/sample_stddev`</span> | [*sensors/column/numeric*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
 
 
 
@@ -4166,7 +4166,7 @@ The sample variance sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | numeric | `column/numeric/sample_variance` | [sensors/column/numeric](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
+| column | numeric | <span class="no-wrap-code">`column/numeric/sample_variance`</span> | [*sensors/column/numeric*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
 
 
 
@@ -4354,7 +4354,7 @@ The sum sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | numeric | `column/numeric/sum` | [sensors/column/numeric](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
+| column | numeric | <span class="no-wrap-code">`column/numeric/sum`</span> | [*sensors/column/numeric*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
 
 
 
@@ -4542,7 +4542,7 @@ The valid latitude percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | numeric | `column/numeric/valid_latitude_percent` | [sensors/column/numeric](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
+| column | numeric | <span class="no-wrap-code">`column/numeric/valid_latitude_percent`</span> | [*sensors/column/numeric*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
 
 
 
@@ -4787,7 +4787,7 @@ The valid longitude percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | numeric | `column/numeric/valid_longitude_percent` | [sensors/column/numeric](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
+| column | numeric | <span class="no-wrap-code">`column/numeric/valid_longitude_percent`</span> | [*sensors/column/numeric*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/numeric/) |
 
 
 

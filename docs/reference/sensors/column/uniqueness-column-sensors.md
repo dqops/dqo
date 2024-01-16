@@ -13,7 +13,7 @@ The distinct count sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | uniqueness | `column/uniqueness/distinct_count` | [sensors/column/uniqueness](https://github.com/dqops/dqo/tree/develop/home/sensors/column/uniqueness/) |
+| column | uniqueness | <span class="no-wrap-code">`column/uniqueness/distinct_count`</span> | [*sensors/column/uniqueness*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/uniqueness/) |
 
 
 
@@ -223,7 +223,7 @@ The distinct percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | uniqueness | `column/uniqueness/distinct_percent` | [sensors/column/uniqueness](https://github.com/dqops/dqo/tree/develop/home/sensors/column/uniqueness/) |
+| column | uniqueness | <span class="no-wrap-code">`column/uniqueness/distinct_percent`</span> | [*sensors/column/uniqueness*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/uniqueness/) |
 
 
 
@@ -455,7 +455,7 @@ The duplicate count sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | uniqueness | `column/uniqueness/duplicate_count` | [sensors/column/uniqueness](https://github.com/dqops/dqo/tree/develop/home/sensors/column/uniqueness/) |
+| column | uniqueness | <span class="no-wrap-code">`column/uniqueness/duplicate_count`</span> | [*sensors/column/uniqueness*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/uniqueness/) |
 
 
 
@@ -654,7 +654,7 @@ The duplicate percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | uniqueness | `column/uniqueness/duplicate_percent` | [sensors/column/uniqueness](https://github.com/dqops/dqo/tree/develop/home/sensors/column/uniqueness/) |
+| column | uniqueness | <span class="no-wrap-code">`column/uniqueness/duplicate_percent`</span> | [*sensors/column/uniqueness*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/uniqueness/) |
 
 
 

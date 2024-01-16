@@ -17,7 +17,7 @@ The check counts the percentage of values in the column that is above the value 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_number_above_max_value_percent|profiling| |Validity|[number_above_max_value_percent](../../../reference/sensors/column/numeric-column-sensors.md#number-above-max-value-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`profile_number_above_max_value_percent`</span>|profiling| |Validity|[*number_above_max_value_percent*](../../../reference/sensors/column/numeric-column-sensors.md#number-above-max-value-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -1124,7 +1124,7 @@ The check counts the percentage of values in the column that is above the value 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_number_above_max_value_percent|monitoring|daily|Validity|[number_above_max_value_percent](../../../reference/sensors/column/numeric-column-sensors.md#number-above-max-value-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`daily_number_above_max_value_percent`</span>|monitoring|daily|Validity|[*number_above_max_value_percent*](../../../reference/sensors/column/numeric-column-sensors.md#number-above-max-value-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -2233,7 +2233,7 @@ The check counts the percentage of values in the column that is above the value 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_number_above_max_value_percent|monitoring|monthly|Validity|[number_above_max_value_percent](../../../reference/sensors/column/numeric-column-sensors.md#number-above-max-value-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`monthly_number_above_max_value_percent`</span>|monitoring|monthly|Validity|[*number_above_max_value_percent*](../../../reference/sensors/column/numeric-column-sensors.md#number-above-max-value-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -3342,7 +3342,7 @@ The check counts the percentage of values in the column that is above the value 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_number_above_max_value_percent|partitioned|daily|Validity|[number_above_max_value_percent](../../../reference/sensors/column/numeric-column-sensors.md#number-above-max-value-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`daily_partition_number_above_max_value_percent`</span>|partitioned|daily|Validity|[*number_above_max_value_percent*](../../../reference/sensors/column/numeric-column-sensors.md#number-above-max-value-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -4473,7 +4473,7 @@ The check counts the percentage of values in the column that is above the value 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_number_above_max_value_percent|partitioned|monthly|Validity|[number_above_max_value_percent](../../../reference/sensors/column/numeric-column-sensors.md#number-above-max-value-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`monthly_partition_number_above_max_value_percent`</span>|partitioned|monthly|Validity|[*number_above_max_value_percent*](../../../reference/sensors/column/numeric-column-sensors.md#number-above-max-value-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 

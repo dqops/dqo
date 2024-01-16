@@ -17,7 +17,7 @@ Verifies that the percentage of non-negative values in a column does not exceed 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_non_negative_values_percent|profiling| |Validity|[non_negative_percent](../../../reference/sensors/column/numeric-column-sensors.md#non-negative-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`profile_non_negative_values_percent`</span>|profiling| |Validity|[*non_negative_percent*](../../../reference/sensors/column/numeric-column-sensors.md#non-negative-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -1080,7 +1080,7 @@ Verifies that the percentage of non-negative values in a column does not exceed 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_non_negative_values_percent|monitoring|daily|Validity|[non_negative_percent](../../../reference/sensors/column/numeric-column-sensors.md#non-negative-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`daily_non_negative_values_percent`</span>|monitoring|daily|Validity|[*non_negative_percent*](../../../reference/sensors/column/numeric-column-sensors.md#non-negative-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -2145,7 +2145,7 @@ Verifies that the percentage of non-negative values in a column does not exceed 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_non_negative_values_percent|monitoring|monthly|Validity|[non_negative_percent](../../../reference/sensors/column/numeric-column-sensors.md#non-negative-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`monthly_non_negative_values_percent`</span>|monitoring|monthly|Validity|[*non_negative_percent*](../../../reference/sensors/column/numeric-column-sensors.md#non-negative-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -3210,7 +3210,7 @@ Verifies that the percentage of non-negative values in a column does not exceed 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_non_negative_values_percent|partitioned|daily|Validity|[non_negative_percent](../../../reference/sensors/column/numeric-column-sensors.md#non-negative-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`daily_partition_non_negative_values_percent`</span>|partitioned|daily|Validity|[*non_negative_percent*](../../../reference/sensors/column/numeric-column-sensors.md#non-negative-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -4297,7 +4297,7 @@ Verifies that the percentage of non-negative values in a column does not exceed 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_non_negative_values_percent|partitioned|monthly|Validity|[non_negative_percent](../../../reference/sensors/column/numeric-column-sensors.md#non-negative-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`monthly_partition_non_negative_values_percent`</span>|partitioned|monthly|Validity|[*non_negative_percent*](../../../reference/sensors/column/numeric-column-sensors.md#non-negative-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 

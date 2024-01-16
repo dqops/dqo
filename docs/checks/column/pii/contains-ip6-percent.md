@@ -17,7 +17,7 @@ Verifies that the percentage of rows that contains valid IP6 address values in a
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_contains_ip6_percent|profiling| |Validity|[contains_ip6_percent](../../../reference/sensors/column/pii-column-sensors.md#contains-ip6-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`profile_contains_ip6_percent`</span>|profiling| |Validity|[*contains_ip6_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-ip6-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -1522,7 +1522,7 @@ Verifies that the percentage of rows that contains valid IP6 address values in a
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_contains_ip6_percent|monitoring|daily|Validity|[contains_ip6_percent](../../../reference/sensors/column/pii-column-sensors.md#contains-ip6-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`daily_contains_ip6_percent`</span>|monitoring|daily|Validity|[*contains_ip6_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-ip6-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -3029,7 +3029,7 @@ Verifies that the percentage of rows that contains valid IP6 address values in a
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_contains_ip6_percent|monitoring|monthly|Validity|[contains_ip6_percent](../../../reference/sensors/column/pii-column-sensors.md#contains-ip6-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`monthly_contains_ip6_percent`</span>|monitoring|monthly|Validity|[*contains_ip6_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-ip6-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -4536,7 +4536,7 @@ Verifies that the percentage of rows that contains valid IP6 address values in a
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_contains_ip6_percent|partitioned|daily|Validity|[contains_ip6_percent](../../../reference/sensors/column/pii-column-sensors.md#contains-ip6-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`daily_partition_contains_ip6_percent`</span>|partitioned|daily|Validity|[*contains_ip6_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-ip6-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -6065,7 +6065,7 @@ Verifies that the percentage of rows that contains valid IP6 address values in a
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_contains_ip6_percent|partitioned|monthly|Validity|[contains_ip6_percent](../../../reference/sensors/column/pii-column-sensors.md#contains-ip6-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`monthly_partition_contains_ip6_percent`</span>|partitioned|monthly|Validity|[*contains_ip6_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-ip6-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 

@@ -194,8 +194,7 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
             List<CheckCurrentDataQualityStatusModel> sampleChecksValues = SampleListUtility.generateList(CheckCurrentDataQualityStatusModel.class, 2,
                     CheckCurrentDataQualityStatusModel::getLastExecutedAt,
                     lastExecutedAt -> lastExecutedAt.plus(
-                            Math.abs(new Random(Integer.toUnsignedLong(
-                                    lastExecutedAt.atZone(ZoneId.systemDefault()).getMinute())).nextInt()) % 120,
+                            Math.abs(new Random(100).nextInt()) % 120,
                             ChronoUnit.MINUTES),
                     CheckCurrentDataQualityStatusModel::setLastExecutedAt,
 
@@ -222,6 +221,9 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
             int validResultsAggregate = (int) allSampleChecks.stream().filter(c -> c.getCurrentSeverity() == CheckResultStatus.valid).count();
             int warningResults = (int) allSampleChecks.stream().filter(c -> c.getCurrentSeverity() == CheckResultStatus.warning).count();
             int errorResults = (int) allSampleChecks.stream().filter(c -> c.getCurrentSeverity() == CheckResultStatus.error).count();
+            int fatalResults = (int) allSampleChecks.stream().filter(c -> c.getCurrentSeverity() == CheckResultStatus.fatal).count();
+            RuleSeverityLevel highestSeverity =
+                    fatalResults > 0 ? RuleSeverityLevel.fatal : errorResults > 0 ? RuleSeverityLevel.error : warningResults > 0 ? RuleSeverityLevel.warning : RuleSeverityLevel.valid;
 
             TableCurrentDataQualityStatusModel result = new TableCurrentDataQualityStatusModel() {{
                 setConnectionName(SampleStringsRegistry.getConnectionName());
@@ -232,6 +234,10 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
                 setValidResults(validResultsAggregate);
                 setWarnings(warningResults);
                 setErrors(errorResults);
+                setCurrentSeverity(highestSeverity);
+                setHighestHistoricalSeverity(RuleSeverityLevel.fatal);
+                setChecks(sampleChecks);
+                setColumns(sampleColumns);
                 setFatals(0);
                 setExecutionErrors(0);
             }};

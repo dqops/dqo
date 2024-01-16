@@ -17,7 +17,7 @@ Verifies that the null percent value in a column changes in a rate within a perc
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_nulls_percent_anomaly|profiling| |Consistency|[null_percent](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[anomaly_stationary_percentile_moving_average](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|
+|<span class="no-wrap-code">`profile_nulls_percent_anomaly`</span>|profiling| |Consistency|[*null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[*anomaly_stationary_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|
 
 **Command-line examples**
 
@@ -1204,7 +1204,7 @@ Verifies that the null percent value in a column changes in a rate within a perc
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_nulls_percent_anomaly|monitoring|daily|Consistency|[null_percent](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[anomaly_stationary_percentile_moving_average](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|
+|<span class="no-wrap-code">`daily_nulls_percent_anomaly`</span>|monitoring|daily|Consistency|[*null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[*anomaly_stationary_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|
 
 **Command-line examples**
 
@@ -2393,7 +2393,7 @@ Verifies that the null percent value in a column changes in a rate within a perc
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_nulls_percent_anomaly|partitioned|daily|Consistency|[null_percent](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[anomaly_stationary_percentile_moving_average](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|
+|<span class="no-wrap-code">`daily_partition_nulls_percent_anomaly`</span>|partitioned|daily|Consistency|[*null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[*anomaly_stationary_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|
 
 **Command-line examples**
 

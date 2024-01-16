@@ -17,7 +17,7 @@ Verifies that the percentage of date values in the range defined by the user in 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_datetime_value_in_range_date_percent|profiling| |Validity|[value_in_range_date_percent](../../../reference/sensors/column/datetime-column-sensors.md#value-in-range-date-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`profile_datetime_value_in_range_date_percent`</span>|profiling| |Validity|[*value_in_range_date_percent*](../../../reference/sensors/column/datetime-column-sensors.md#value-in-range-date-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -1491,7 +1491,7 @@ Verifies that the percentage of date values in the range defined by the user in 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_datetime_value_in_range_date_percent|monitoring|daily|Validity|[value_in_range_date_percent](../../../reference/sensors/column/datetime-column-sensors.md#value-in-range-date-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`daily_datetime_value_in_range_date_percent`</span>|monitoring|daily|Validity|[*value_in_range_date_percent*](../../../reference/sensors/column/datetime-column-sensors.md#value-in-range-date-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -2967,7 +2967,7 @@ Verifies that the percentage of date values in the range defined by the user in 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_datetime_value_in_range_date_percent|monitoring|monthly|Validity|[value_in_range_date_percent](../../../reference/sensors/column/datetime-column-sensors.md#value-in-range-date-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`monthly_datetime_value_in_range_date_percent`</span>|monitoring|monthly|Validity|[*value_in_range_date_percent*](../../../reference/sensors/column/datetime-column-sensors.md#value-in-range-date-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -4443,7 +4443,7 @@ Verifies that the percentage of date values in the range defined by the user in 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_datetime_value_in_range_date_percent|partitioned|daily|Validity|[value_in_range_date_percent](../../../reference/sensors/column/datetime-column-sensors.md#value-in-range-date-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`daily_partition_datetime_value_in_range_date_percent`</span>|partitioned|daily|Validity|[*value_in_range_date_percent*](../../../reference/sensors/column/datetime-column-sensors.md#value-in-range-date-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 
@@ -5938,7 +5938,7 @@ Verifies that the percentage of date values in the range defined by the user in 
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_datetime_value_in_range_date_percent|partitioned|monthly|Validity|[value_in_range_date_percent](../../../reference/sensors/column/datetime-column-sensors.md#value-in-range-date-percent)|[max_percent](../../../reference/rules/Comparison.md#max-percent)|
+|<span class="no-wrap-code">`monthly_partition_datetime_value_in_range_date_percent`</span>|partitioned|monthly|Validity|[*value_in_range_date_percent*](../../../reference/sensors/column/datetime-column-sensors.md#value-in-range-date-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
 
 **Command-line examples**
 

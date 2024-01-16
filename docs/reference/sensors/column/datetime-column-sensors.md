@@ -13,14 +13,14 @@ The date match format percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | datetime | `column/datetime/date_match_format_percent` | [sensors/column/datetime](https://github.com/dqops/dqo/tree/develop/home/sensors/column/datetime/) |
+| column | datetime | <span class="no-wrap-code">`column/datetime/date_match_format_percent`</span> | [*sensors/column/datetime*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/datetime/) |
 
 
 **Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`date_formats`|Desired date format. Sensor will try to parse the column records and cast the data using this format.|enum|:material-check-bold:|DD/MM/YYYY<br/>DD-MM-YYYY<br/>DD.MM.YYYY<br/>YYYY-MM-DD<br/>|
+|<span class="no-wrap-code">`date_formats`</span>|Desired date format. Sensor will try to parse the column records and cast the data using this format.|*enum*|:material-check-bold:|*DD/MM/YYYY*<br/>*DD-MM-YYYY*<br/>*DD.MM.YYYY*<br/>*YYYY-MM-DD*<br/>|
 
 
 
@@ -449,7 +449,7 @@ The date values in future percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | datetime | `column/datetime/date_values_in_future_percent` | [sensors/column/datetime](https://github.com/dqops/dqo/tree/develop/home/sensors/column/datetime/) |
+| column | datetime | <span class="no-wrap-code">`column/datetime/date_values_in_future_percent`</span> | [*sensors/column/datetime*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/datetime/) |
 
 
 
@@ -1010,15 +1010,15 @@ The value in range date percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | datetime | `column/datetime/value_in_range_date_percent` | [sensors/column/datetime](https://github.com/dqops/dqo/tree/develop/home/sensors/column/datetime/) |
+| column | datetime | <span class="no-wrap-code">`column/datetime/value_in_range_date_percent`</span> | [*sensors/column/datetime*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/datetime/) |
 
 
 **Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`min_value`|Lower bound range variable.|date| ||
-|`max_value`|Upper bound range variable.|date| ||
+|<span class="no-wrap-code">`min_value`</span>|Lower bound range variable.|*date*| ||
+|<span class="no-wrap-code">`max_value`</span>|Upper bound range variable.|*date*| ||
 
 
 

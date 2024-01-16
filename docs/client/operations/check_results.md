@@ -17,7 +17,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_results_list_model||List[[CheckResultsListModel](../models/check_results.md#checkresultslistmodel)]|
+|<span class="no-wrap-code">`check_results_list_model`</span>||*List[[CheckResultsListModel](../models/check_results.md#checkresultslistmodel)]*|
 
 
 
@@ -26,18 +26,18 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|:material-check-bold:|
-|schema_name|Schema name|string|:material-check-bold:|
-|table_name|Table name|string|:material-check-bold:|
-|column_name|Column name|string|:material-check-bold:|
-|[time_scale](../models/common.md#checktimescale)|Time scale|[CheckTimeScale](../models/common.md#checktimescale)|:material-check-bold:|
-|data_group|Data group|string| |
-|month_start|Month start boundary|string| |
-|month_end|Month end boundary|string| |
-|check_name|Check name|string| |
-|category|Check category name|string| |
-|table_comparison|Table comparison name|string| |
-|max_results_per_check|Maximum number of results per check, the default is 100|long| |
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`table_name`</span>|Table name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`column_name`</span>|Column name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">[`time_scale`](../models/common.md#checktimescale)</span>|Time scale|*[CheckTimeScale](../models/common.md#checktimescale)*|:material-check-bold:|
+|<span class="no-wrap-code">`data_group`</span>|Data group|*string*| |
+|<span class="no-wrap-code">`month_start`</span>|Month start boundary|*string*| |
+|<span class="no-wrap-code">`month_end`</span>|Month end boundary|*string*| |
+|<span class="no-wrap-code">`check_name`</span>|Check name|*string*| |
+|<span class="no-wrap-code">`category`</span>|Check category name|*string*| |
+|<span class="no-wrap-code">`table_comparison`</span>|Table comparison name|*string*| |
+|<span class="no-wrap-code">`max_results_per_check`</span>|Maximum number of results per check, the default is 100|*long*| |
 
 
 
@@ -524,7 +524,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_results_list_model||List[[CheckResultsListModel](../models/check_results.md#checkresultslistmodel)]|
+|<span class="no-wrap-code">`check_results_list_model`</span>||*List[[CheckResultsListModel](../models/check_results.md#checkresultslistmodel)]*|
 
 
 
@@ -533,18 +533,18 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|:material-check-bold:|
-|schema_name|Schema name|string|:material-check-bold:|
-|table_name|Table name|string|:material-check-bold:|
-|column_name|Column name|string|:material-check-bold:|
-|[time_scale](../models/common.md#checktimescale)|Time scale|[CheckTimeScale](../models/common.md#checktimescale)|:material-check-bold:|
-|data_group|Data group|string| |
-|month_start|Month start boundary|string| |
-|month_end|Month end boundary|string| |
-|check_name|Check name|string| |
-|category|Check category name|string| |
-|table_comparison|Table comparison name|string| |
-|max_results_per_check|Maximum number of results per check, the default is 100|long| |
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`table_name`</span>|Table name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`column_name`</span>|Column name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">[`time_scale`](../models/common.md#checktimescale)</span>|Time scale|*[CheckTimeScale](../models/common.md#checktimescale)*|:material-check-bold:|
+|<span class="no-wrap-code">`data_group`</span>|Data group|*string*| |
+|<span class="no-wrap-code">`month_start`</span>|Month start boundary|*string*| |
+|<span class="no-wrap-code">`month_end`</span>|Month end boundary|*string*| |
+|<span class="no-wrap-code">`check_name`</span>|Check name|*string*| |
+|<span class="no-wrap-code">`category`</span>|Check category name|*string*| |
+|<span class="no-wrap-code">`table_comparison`</span>|Table comparison name|*string*| |
+|<span class="no-wrap-code">`max_results_per_check`</span>|Maximum number of results per check, the default is 100|*long*| |
 
 
 
@@ -1031,7 +1031,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_results_list_model||List[[CheckResultsListModel](../models/check_results.md#checkresultslistmodel)]|
+|<span class="no-wrap-code">`check_results_list_model`</span>||*List[[CheckResultsListModel](../models/check_results.md#checkresultslistmodel)]*|
 
 
 
@@ -1040,17 +1040,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|:material-check-bold:|
-|schema_name|Schema name|string|:material-check-bold:|
-|table_name|Table name|string|:material-check-bold:|
-|column_name|Column name|string|:material-check-bold:|
-|data_group|Data group|string| |
-|month_start|Month start boundary|string| |
-|month_end|Month end boundary|string| |
-|check_name|Check name|string| |
-|category|Check category name|string| |
-|table_comparison|Table comparison name|string| |
-|max_results_per_check|Maximum number of results per check, the default is 100|long| |
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`table_name`</span>|Table name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`column_name`</span>|Column name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`data_group`</span>|Data group|*string*| |
+|<span class="no-wrap-code">`month_start`</span>|Month start boundary|*string*| |
+|<span class="no-wrap-code">`month_end`</span>|Month end boundary|*string*| |
+|<span class="no-wrap-code">`check_name`</span>|Check name|*string*| |
+|<span class="no-wrap-code">`category`</span>|Check category name|*string*| |
+|<span class="no-wrap-code">`table_comparison`</span>|Table comparison name|*string*| |
+|<span class="no-wrap-code">`max_results_per_check`</span>|Maximum number of results per check, the default is 100|*long*| |
 
 
 
@@ -1533,7 +1533,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_current_data_quality_status_model](../models/check_results.md#tablecurrentdataqualitystatusmodel)||[TableCurrentDataQualityStatusModel](../models/check_results.md#tablecurrentdataqualitystatusmodel)|
+|<span class="no-wrap-code">[`table_current_data_quality_status_model`](../models/check_results.md#tablecurrentdataqualitystatusmodel)</span>||*[TableCurrentDataQualityStatusModel](../models/check_results.md#tablecurrentdataqualitystatusmodel)*|
 
 
 
@@ -1542,20 +1542,20 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|:material-check-bold:|
-|schema_name|Schema name|string|:material-check-bold:|
-|table_name|Table name|string|:material-check-bold:|
-|months|Optional filter - the number of months to review the data quality check results. For partitioned checks, it is the number of months to analyze. The default value is 1 (which is the current month and 1 previous month).|long| |
-|since|Optional filter that accepts an UTC timestamp to read only data quality check results captured since that timestamp.|string| |
-|profiling|Optional check type filter to detect the current status of the profiling checks results. The default value is false, excluding profiling checks from the current table status detection. If enabled, only the status of the most recent check result is retrieved.|boolean| |
-|monitoring|Optional check type filter to detect the current status of the monitoring checks results. The default value is true, including monitoring checks in the current table status detection. If enabled, only the status of the most recent check result is retrieved.|boolean| |
-|partitioned|Optional check type filter to detect the current status of the partitioned checks results. The default value is true, including partitioned checks in the current table status detection. Detection of the status of partitioned checks is different. When enabled, DQOps checks the highest severity status of all partitions since the **since** date or within the last **months**.|boolean| |
-|[check_time_scale](../models/common.md#checktimescale)|Optional time scale filter for monitoring and partitioned checks (values: daily or monthly).|[CheckTimeScale](../models/common.md#checktimescale)| |
-|data_group|Optional data group|string| |
-|check_name|Optional check name|string| |
-|category|Optional check category name|string| |
-|table_comparison|Optional table comparison name|string| |
-|quality_dimension|Optional data quality dimension|string| |
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`table_name`</span>|Table name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`months`</span>|Optional filter - the number of months to review the data quality check results. For partitioned checks, it is the number of months to analyze. The default value is 1 (which is the current month and 1 previous month).|*long*| |
+|<span class="no-wrap-code">`since`</span>|Optional filter that accepts an UTC timestamp to read only data quality check results captured since that timestamp.|*string*| |
+|<span class="no-wrap-code">`profiling`</span>|Optional check type filter to detect the current status of the profiling checks results. The default value is false, excluding profiling checks from the current table status detection. If enabled, only the status of the most recent check result is retrieved.|*boolean*| |
+|<span class="no-wrap-code">`monitoring`</span>|Optional check type filter to detect the current status of the monitoring checks results. The default value is true, including monitoring checks in the current table status detection. If enabled, only the status of the most recent check result is retrieved.|*boolean*| |
+|<span class="no-wrap-code">`partitioned`</span>|Optional check type filter to detect the current status of the partitioned checks results. The default value is true, including partitioned checks in the current table status detection. Detection of the status of partitioned checks is different. When enabled, DQOps checks the highest severity status of all partitions since the **since** date or within the last **months**.|*boolean*| |
+|<span class="no-wrap-code">[`check_time_scale`](../models/common.md#checktimescale)</span>|Optional time scale filter for monitoring and partitioned checks (values: daily or monthly).|*[CheckTimeScale](../models/common.md#checktimescale)*| |
+|<span class="no-wrap-code">`data_group`</span>|Optional data group|*string*| |
+|<span class="no-wrap-code">`check_name`</span>|Optional check name|*string*| |
+|<span class="no-wrap-code">`category`</span>|Optional check category name|*string*| |
+|<span class="no-wrap-code">`table_comparison`</span>|Optional table comparison name|*string*| |
+|<span class="no-wrap-code">`quality_dimension`</span>|Optional data quality dimension|*string*| |
 
 
 
@@ -1671,6 +1671,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  "connection_name" : "sample_connection",
 	  "schema_name" : "sample_schema",
 	  "table_name" : "sample_table",
+	  "current_severity" : "warning",
+	  "highest_historical_severity" : "fatal",
 	  "last_check_executed_at" : "2007-10-14T16:42:42Z",
 	  "executed_checks" : 8,
 	  "valid_results" : 3,
@@ -1678,8 +1680,100 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  "errors" : 0,
 	  "fatals" : 0,
 	  "execution_errors" : 0,
-	  "checks" : { },
-	  "columns" : { }
+	  "checks" : {
+	    "table_sample_check_1" : {
+	      "current_severity" : "warning",
+	      "highest_historical_severity" : "error",
+	      "last_executed_at" : "2007-10-14T14:13:42Z",
+	      "check_type" : "profiling",
+	      "category" : "sample_category",
+	      "quality_dimension" : "sample_quality_dimension"
+	    },
+	    "table_sample_check_2" : {
+	      "current_severity" : "valid",
+	      "highest_historical_severity" : "error",
+	      "last_executed_at" : "2007-10-14T14:39:42Z",
+	      "check_type" : "profiling",
+	      "category" : "sample_category",
+	      "quality_dimension" : "sample_quality_dimension"
+	    }
+	  },
+	  "columns" : {
+	    "sample_column_1" : {
+	      "current_severity" : "warning",
+	      "highest_historical_severity" : "error",
+	      "last_check_executed_at" : "2007-10-14T16:42:42Z",
+	      "executed_checks" : 3,
+	      "valid_results" : 1,
+	      "warnings" : 2,
+	      "errors" : 0,
+	      "fatals" : 0,
+	      "execution_errors" : 0,
+	      "checks" : {
+	        "sample_check_1" : {
+	          "current_severity" : "warning",
+	          "highest_historical_severity" : "error",
+	          "last_executed_at" : "2007-10-14T14:13:42Z",
+	          "check_type" : "profiling",
+	          "category" : "sample_category",
+	          "quality_dimension" : "sample_quality_dimension"
+	        },
+	        "sample_check_2" : {
+	          "current_severity" : "valid",
+	          "highest_historical_severity" : "error",
+	          "last_executed_at" : "2007-10-14T14:45:42Z",
+	          "check_type" : "profiling",
+	          "category" : "sample_category",
+	          "quality_dimension" : "sample_quality_dimension"
+	        },
+	        "sample_check_3" : {
+	          "current_severity" : "warning",
+	          "highest_historical_severity" : "error",
+	          "last_executed_at" : "2007-10-14T16:42:42Z",
+	          "check_type" : "profiling",
+	          "category" : "sample_category",
+	          "quality_dimension" : "sample_quality_dimension"
+	        }
+	      }
+	    },
+	    "sample_column_2" : {
+	      "current_severity" : "warning",
+	      "highest_historical_severity" : "error",
+	      "last_check_executed_at" : "2007-10-14T16:42:42Z",
+	      "executed_checks" : 3,
+	      "valid_results" : 1,
+	      "warnings" : 2,
+	      "errors" : 0,
+	      "fatals" : 0,
+	      "execution_errors" : 0,
+	      "checks" : {
+	        "sample_check_1" : {
+	          "current_severity" : "warning",
+	          "highest_historical_severity" : "error",
+	          "last_executed_at" : "2007-10-14T14:13:42Z",
+	          "check_type" : "profiling",
+	          "category" : "sample_category",
+	          "quality_dimension" : "sample_quality_dimension"
+	        },
+	        "sample_check_2" : {
+	          "current_severity" : "valid",
+	          "highest_historical_severity" : "error",
+	          "last_executed_at" : "2007-10-14T14:45:42Z",
+	          "check_type" : "profiling",
+	          "category" : "sample_category",
+	          "quality_dimension" : "sample_quality_dimension"
+	        },
+	        "sample_check_3" : {
+	          "current_severity" : "warning",
+	          "highest_historical_severity" : "error",
+	          "last_executed_at" : "2007-10-14T16:42:42Z",
+	          "check_type" : "profiling",
+	          "category" : "sample_category",
+	          "quality_dimension" : "sample_quality_dimension"
+	        }
+	      }
+	    }
+	  }
 	}
     ```
 
@@ -1699,7 +1793,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_results_list_model||List[[CheckResultsListModel](../models/check_results.md#checkresultslistmodel)]|
+|<span class="no-wrap-code">`check_results_list_model`</span>||*List[[CheckResultsListModel](../models/check_results.md#checkresultslistmodel)]*|
 
 
 
@@ -1708,17 +1802,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|:material-check-bold:|
-|schema_name|Schema name|string|:material-check-bold:|
-|table_name|Table name|string|:material-check-bold:|
-|[time_scale](../models/common.md#checktimescale)|Time scale|[CheckTimeScale](../models/common.md#checktimescale)|:material-check-bold:|
-|data_group|Data group|string| |
-|month_start|Month start boundary|string| |
-|month_end|Month end boundary|string| |
-|check_name|Check name|string| |
-|category|Check category name|string| |
-|table_comparison|Table comparison name|string| |
-|max_results_per_check|Maximum number of results per check, the default is 100|long| |
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`table_name`</span>|Table name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">[`time_scale`](../models/common.md#checktimescale)</span>|Time scale|*[CheckTimeScale](../models/common.md#checktimescale)*|:material-check-bold:|
+|<span class="no-wrap-code">`data_group`</span>|Data group|*string*| |
+|<span class="no-wrap-code">`month_start`</span>|Month start boundary|*string*| |
+|<span class="no-wrap-code">`month_end`</span>|Month end boundary|*string*| |
+|<span class="no-wrap-code">`check_name`</span>|Check name|*string*| |
+|<span class="no-wrap-code">`category`</span>|Check category name|*string*| |
+|<span class="no-wrap-code">`table_comparison`</span>|Table comparison name|*string*| |
+|<span class="no-wrap-code">`max_results_per_check`</span>|Maximum number of results per check, the default is 100|*long*| |
 
 
 
@@ -2201,7 +2295,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_results_list_model||List[[CheckResultsListModel](../models/check_results.md#checkresultslistmodel)]|
+|<span class="no-wrap-code">`check_results_list_model`</span>||*List[[CheckResultsListModel](../models/check_results.md#checkresultslistmodel)]*|
 
 
 
@@ -2210,17 +2304,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|:material-check-bold:|
-|schema_name|Schema name|string|:material-check-bold:|
-|table_name|Table name|string|:material-check-bold:|
-|[time_scale](../models/common.md#checktimescale)|Time scale|[CheckTimeScale](../models/common.md#checktimescale)|:material-check-bold:|
-|data_group|Data group|string| |
-|month_start|Month start boundary|string| |
-|month_end|Month end boundary|string| |
-|check_name|Check name|string| |
-|category|Check category name|string| |
-|table_comparison|Table comparison name|string| |
-|max_results_per_check|Maximum number of results per check, the default is 100|long| |
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`table_name`</span>|Table name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">[`time_scale`](../models/common.md#checktimescale)</span>|Time scale|*[CheckTimeScale](../models/common.md#checktimescale)*|:material-check-bold:|
+|<span class="no-wrap-code">`data_group`</span>|Data group|*string*| |
+|<span class="no-wrap-code">`month_start`</span>|Month start boundary|*string*| |
+|<span class="no-wrap-code">`month_end`</span>|Month end boundary|*string*| |
+|<span class="no-wrap-code">`check_name`</span>|Check name|*string*| |
+|<span class="no-wrap-code">`category`</span>|Check category name|*string*| |
+|<span class="no-wrap-code">`table_comparison`</span>|Table comparison name|*string*| |
+|<span class="no-wrap-code">`max_results_per_check`</span>|Maximum number of results per check, the default is 100|*long*| |
 
 
 
@@ -2703,7 +2797,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_results_list_model||List[[CheckResultsListModel](../models/check_results.md#checkresultslistmodel)]|
+|<span class="no-wrap-code">`check_results_list_model`</span>||*List[[CheckResultsListModel](../models/check_results.md#checkresultslistmodel)]*|
 
 
 
@@ -2712,16 +2806,16 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|:material-check-bold:|
-|schema_name|Schema name|string|:material-check-bold:|
-|table_name|Table name|string|:material-check-bold:|
-|data_group|Data group|string| |
-|month_start|Month start boundary|string| |
-|month_end|Month end boundary|string| |
-|check_name|Check name|string| |
-|category|Check category name|string| |
-|table_comparison|Table comparison name|string| |
-|max_results_per_check|Maximum number of results per check, the default is 100|long| |
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`table_name`</span>|Table name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`data_group`</span>|Data group|*string*| |
+|<span class="no-wrap-code">`month_start`</span>|Month start boundary|*string*| |
+|<span class="no-wrap-code">`month_end`</span>|Month end boundary|*string*| |
+|<span class="no-wrap-code">`check_name`</span>|Check name|*string*| |
+|<span class="no-wrap-code">`category`</span>|Check category name|*string*| |
+|<span class="no-wrap-code">`table_comparison`</span>|Table comparison name|*string*| |
+|<span class="no-wrap-code">`max_results_per_check`</span>|Maximum number of results per check, the default is 100|*long*| |
 
 
 

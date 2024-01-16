@@ -19,7 +19,7 @@ Calculates the number of days since the most recent event timestamp (freshness)
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_data_freshness|profiling| |Timeliness|[data_freshness](../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)|[max_days](../../../reference/rules/Comparison.md#max-days)|
+|<span class="no-wrap-code">`profile_data_freshness`</span>|profiling| |Timeliness|[*data_freshness*](../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|
 
 **Command-line examples**
 
@@ -1536,7 +1536,7 @@ Daily  calculating the number of days since the most recent event timestamp (fre
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_data_freshness|monitoring|daily|Timeliness|[data_freshness](../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)|[max_days](../../../reference/rules/Comparison.md#max-days)|
+|<span class="no-wrap-code">`daily_data_freshness`</span>|monitoring|daily|Timeliness|[*data_freshness*](../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|
 
 **Command-line examples**
 
@@ -3055,7 +3055,7 @@ Monthly monitoring calculating the number of days since the most recent event ti
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_data_freshness|monitoring|monthly|Timeliness|[data_freshness](../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)|[max_days](../../../reference/rules/Comparison.md#max-days)|
+|<span class="no-wrap-code">`monthly_data_freshness`</span>|monitoring|monthly|Timeliness|[*data_freshness*](../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|
 
 **Command-line examples**
 
@@ -4574,7 +4574,7 @@ Daily partitioned check calculating the number of days since the most recent eve
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_data_freshness|partitioned|daily|Timeliness|[data_freshness](../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)|[max_days](../../../reference/rules/Comparison.md#max-days)|
+|<span class="no-wrap-code">`daily_partition_data_freshness`</span>|partitioned|daily|Timeliness|[*data_freshness*](../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|
 
 **Command-line examples**
 
@@ -6113,7 +6113,7 @@ Monthly partitioned check calculating the number of days since the most recent e
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_data_freshness|partitioned|monthly|Timeliness|[data_freshness](../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)|[max_days](../../../reference/rules/Comparison.md#max-days)|
+|<span class="no-wrap-code">`monthly_partition_data_freshness`</span>|partitioned|monthly|Timeliness|[*data_freshness*](../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|
 
 **Command-line examples**
 

@@ -17,7 +17,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|errors_list_model||List[[ErrorsListModel](../models/errors.md#errorslistmodel)]|
+|<span class="no-wrap-code">`errors_list_model`</span>||*List[[ErrorsListModel](../models/errors.md#errorslistmodel)]*|
 
 
 
@@ -26,18 +26,18 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|:material-check-bold:|
-|schema_name|Schema name|string|:material-check-bold:|
-|table_name|Table name|string|:material-check-bold:|
-|column_name|Column name|string|:material-check-bold:|
-|[time_scale](../models/common.md#checktimescale)|Time scale|[CheckTimeScale](../models/common.md#checktimescale)|:material-check-bold:|
-|data_group|Data group|string| |
-|month_start|Month start boundary|string| |
-|month_end|Month end boundary|string| |
-|check_name|Check name|string| |
-|category|Check category name|string| |
-|table_comparison|Table comparison name|string| |
-|max_results_per_check|Maximum number of results per check, the default is 100|long| |
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`table_name`</span>|Table name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`column_name`</span>|Column name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">[`time_scale`](../models/common.md#checktimescale)</span>|Time scale|*[CheckTimeScale](../models/common.md#checktimescale)*|:material-check-bold:|
+|<span class="no-wrap-code">`data_group`</span>|Data group|*string*| |
+|<span class="no-wrap-code">`month_start`</span>|Month start boundary|*string*| |
+|<span class="no-wrap-code">`month_end`</span>|Month end boundary|*string*| |
+|<span class="no-wrap-code">`check_name`</span>|Check name|*string*| |
+|<span class="no-wrap-code">`category`</span>|Check category name|*string*| |
+|<span class="no-wrap-code">`table_comparison`</span>|Table comparison name|*string*| |
+|<span class="no-wrap-code">`max_results_per_check`</span>|Maximum number of results per check, the default is 100|*long*| |
 
 
 
@@ -182,7 +182,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|errors_list_model||List[[ErrorsListModel](../models/errors.md#errorslistmodel)]|
+|<span class="no-wrap-code">`errors_list_model`</span>||*List[[ErrorsListModel](../models/errors.md#errorslistmodel)]*|
 
 
 
@@ -191,18 +191,18 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|:material-check-bold:|
-|schema_name|Schema name|string|:material-check-bold:|
-|table_name|Table name|string|:material-check-bold:|
-|column_name|Column name|string|:material-check-bold:|
-|[time_scale](../models/common.md#checktimescale)|Time scale|[CheckTimeScale](../models/common.md#checktimescale)|:material-check-bold:|
-|data_group|Data group|string| |
-|month_start|Month start boundary|string| |
-|month_end|Month end boundary|string| |
-|check_name|Check name|string| |
-|category|Check category name|string| |
-|table_comparison|Table comparison name|string| |
-|max_results_per_check|Maximum number of results per check, the default is 100|long| |
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`table_name`</span>|Table name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`column_name`</span>|Column name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">[`time_scale`](../models/common.md#checktimescale)</span>|Time scale|*[CheckTimeScale](../models/common.md#checktimescale)*|:material-check-bold:|
+|<span class="no-wrap-code">`data_group`</span>|Data group|*string*| |
+|<span class="no-wrap-code">`month_start`</span>|Month start boundary|*string*| |
+|<span class="no-wrap-code">`month_end`</span>|Month end boundary|*string*| |
+|<span class="no-wrap-code">`check_name`</span>|Check name|*string*| |
+|<span class="no-wrap-code">`category`</span>|Check category name|*string*| |
+|<span class="no-wrap-code">`table_comparison`</span>|Table comparison name|*string*| |
+|<span class="no-wrap-code">`max_results_per_check`</span>|Maximum number of results per check, the default is 100|*long*| |
 
 
 
@@ -347,7 +347,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|errors_list_model||List[[ErrorsListModel](../models/errors.md#errorslistmodel)]|
+|<span class="no-wrap-code">`errors_list_model`</span>||*List[[ErrorsListModel](../models/errors.md#errorslistmodel)]*|
 
 
 
@@ -356,17 +356,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|:material-check-bold:|
-|schema_name|Schema name|string|:material-check-bold:|
-|table_name|Table name|string|:material-check-bold:|
-|column_name|Column name|string|:material-check-bold:|
-|data_group|Data group|string| |
-|month_start|Month start boundary|string| |
-|month_end|Month end boundary|string| |
-|check_name|Check name|string| |
-|category|Check category name|string| |
-|table_comparison|Table comparison name|string| |
-|max_results_per_check|Maximum number of results per check, the default is 100|long| |
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`table_name`</span>|Table name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`column_name`</span>|Column name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`data_group`</span>|Data group|*string*| |
+|<span class="no-wrap-code">`month_start`</span>|Month start boundary|*string*| |
+|<span class="no-wrap-code">`month_end`</span>|Month end boundary|*string*| |
+|<span class="no-wrap-code">`check_name`</span>|Check name|*string*| |
+|<span class="no-wrap-code">`category`</span>|Check category name|*string*| |
+|<span class="no-wrap-code">`table_comparison`</span>|Table comparison name|*string*| |
+|<span class="no-wrap-code">`max_results_per_check`</span>|Maximum number of results per check, the default is 100|*long*| |
 
 
 
@@ -507,7 +507,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|errors_list_model||List[[ErrorsListModel](../models/errors.md#errorslistmodel)]|
+|<span class="no-wrap-code">`errors_list_model`</span>||*List[[ErrorsListModel](../models/errors.md#errorslistmodel)]*|
 
 
 
@@ -516,17 +516,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|:material-check-bold:|
-|schema_name|Schema name|string|:material-check-bold:|
-|table_name|Table name|string|:material-check-bold:|
-|[time_scale](../models/common.md#checktimescale)|Time scale|[CheckTimeScale](../models/common.md#checktimescale)|:material-check-bold:|
-|data_group|Data group|string| |
-|month_start|Month start boundary|string| |
-|month_end|Month end boundary|string| |
-|check_name|Check name|string| |
-|category|Check category name|string| |
-|table_comparison|Table comparison name|string| |
-|max_results_per_check|Maximum number of results per check, the default is 100|long| |
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`table_name`</span>|Table name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">[`time_scale`](../models/common.md#checktimescale)</span>|Time scale|*[CheckTimeScale](../models/common.md#checktimescale)*|:material-check-bold:|
+|<span class="no-wrap-code">`data_group`</span>|Data group|*string*| |
+|<span class="no-wrap-code">`month_start`</span>|Month start boundary|*string*| |
+|<span class="no-wrap-code">`month_end`</span>|Month end boundary|*string*| |
+|<span class="no-wrap-code">`check_name`</span>|Check name|*string*| |
+|<span class="no-wrap-code">`category`</span>|Check category name|*string*| |
+|<span class="no-wrap-code">`table_comparison`</span>|Table comparison name|*string*| |
+|<span class="no-wrap-code">`max_results_per_check`</span>|Maximum number of results per check, the default is 100|*long*| |
 
 
 
@@ -667,7 +667,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|errors_list_model||List[[ErrorsListModel](../models/errors.md#errorslistmodel)]|
+|<span class="no-wrap-code">`errors_list_model`</span>||*List[[ErrorsListModel](../models/errors.md#errorslistmodel)]*|
 
 
 
@@ -676,17 +676,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|:material-check-bold:|
-|schema_name|Schema name|string|:material-check-bold:|
-|table_name|Table name|string|:material-check-bold:|
-|[time_scale](../models/common.md#checktimescale)|Time scale|[CheckTimeScale](../models/common.md#checktimescale)|:material-check-bold:|
-|data_group|Data group|string| |
-|month_start|Month start boundary|string| |
-|month_end|Month end boundary|string| |
-|check_name|Check name|string| |
-|category|Check category name|string| |
-|table_comparison|Table comparison name|string| |
-|max_results_per_check|Maximum number of results per check, the default is 100|long| |
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`table_name`</span>|Table name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">[`time_scale`](../models/common.md#checktimescale)</span>|Time scale|*[CheckTimeScale](../models/common.md#checktimescale)*|:material-check-bold:|
+|<span class="no-wrap-code">`data_group`</span>|Data group|*string*| |
+|<span class="no-wrap-code">`month_start`</span>|Month start boundary|*string*| |
+|<span class="no-wrap-code">`month_end`</span>|Month end boundary|*string*| |
+|<span class="no-wrap-code">`check_name`</span>|Check name|*string*| |
+|<span class="no-wrap-code">`category`</span>|Check category name|*string*| |
+|<span class="no-wrap-code">`table_comparison`</span>|Table comparison name|*string*| |
+|<span class="no-wrap-code">`max_results_per_check`</span>|Maximum number of results per check, the default is 100|*long*| |
 
 
 
@@ -827,7 +827,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|errors_list_model||List[[ErrorsListModel](../models/errors.md#errorslistmodel)]|
+|<span class="no-wrap-code">`errors_list_model`</span>||*List[[ErrorsListModel](../models/errors.md#errorslistmodel)]*|
 
 
 
@@ -836,16 +836,16 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|:material-check-bold:|
-|schema_name|Schema name|string|:material-check-bold:|
-|table_name|Table name|string|:material-check-bold:|
-|data_group|Data group|string| |
-|month_start|Month start boundary|string| |
-|month_end|Month end boundary|string| |
-|check_name|Check name|string| |
-|category|Check category name|string| |
-|table_comparison|Table comparison name|string| |
-|max_results_per_check|Maximum number of results per check, the default is 100|long| |
+|<span class="no-wrap-code">`connection_name`</span>|Connection name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`schema_name`</span>|Schema name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`table_name`</span>|Table name|*string*|:material-check-bold:|
+|<span class="no-wrap-code">`data_group`</span>|Data group|*string*| |
+|<span class="no-wrap-code">`month_start`</span>|Month start boundary|*string*| |
+|<span class="no-wrap-code">`month_end`</span>|Month end boundary|*string*| |
+|<span class="no-wrap-code">`check_name`</span>|Check name|*string*| |
+|<span class="no-wrap-code">`category`</span>|Check category name|*string*| |
+|<span class="no-wrap-code">`table_comparison`</span>|Table comparison name|*string*| |
+|<span class="no-wrap-code">`max_results_per_check`</span>|Maximum number of results per check, the default is 100|*long*| |
 
 
 

@@ -18,7 +18,7 @@ Verifies that percentage of the difference between the sum of values in a tested
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_sum_match|profiling| |Accuracy|[sum](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
+|<span class="no-wrap-code">`profile_sum_match`</span>|profiling| |Accuracy|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
 
 **Command-line examples**
 
@@ -483,7 +483,7 @@ Verifies that percentage of the difference between the sum of values in a tested
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_sum_match|monitoring|daily|Accuracy|[sum](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
+|<span class="no-wrap-code">`daily_sum_match`</span>|monitoring|daily|Accuracy|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
 
 **Command-line examples**
 
@@ -949,7 +949,7 @@ Verifies that percentage of the difference between the sum of values in a tested
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_sum_match|monitoring|monthly|Accuracy|[sum](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
+|<span class="no-wrap-code">`monthly_sum_match`</span>|monitoring|monthly|Accuracy|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
 
 **Command-line examples**
 
@@ -1415,7 +1415,7 @@ Verifies that percentage of the difference between the sum of values in a tested
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_sum_match|partitioned|daily|Accuracy|[sum](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
+|<span class="no-wrap-code">`daily_partition_sum_match`</span>|partitioned|daily|Accuracy|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
 
 **Command-line examples**
 
@@ -1895,7 +1895,7 @@ Verifies that percentage of the difference between the sum of values in a tested
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_sum_match|partitioned|monthly|Accuracy|[sum](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[diff_percent](../../../reference/rules/Comparison.md#diff-percent)|
+|<span class="no-wrap-code">`monthly_partition_sum_match`</span>|partitioned|monthly|Accuracy|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
 
 **Command-line examples**
 

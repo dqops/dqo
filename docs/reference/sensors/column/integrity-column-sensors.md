@@ -13,15 +13,15 @@ The foreign key match percent sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | integrity | `column/integrity/foreign_key_match_percent` | [sensors/column/integrity](https://github.com/dqops/dqo/tree/develop/home/sensors/column/integrity/) |
+| column | integrity | <span class="no-wrap-code">`column/integrity/foreign_key_match_percent`</span> | [*sensors/column/integrity*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/integrity/) |
 
 
 **Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`foreign_table`|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|string|:material-check-bold:||
-|`foreign_column`|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|string|:material-check-bold:||
+|<span class="no-wrap-code">`foreign_table`</span>|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|*string*|:material-check-bold:||
+|<span class="no-wrap-code">`foreign_column`</span>|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|*string*|:material-check-bold:||
 
 
 
@@ -365,15 +365,15 @@ The foreign key not match count sensor is documented below.
 
 | Target | Category | Full sensor name | Source code on GitHub |
 |--------|----------|------------------|-----------------------|
-| column | integrity | `column/integrity/foreign_key_not_match_count` | [sensors/column/integrity](https://github.com/dqops/dqo/tree/develop/home/sensors/column/integrity/) |
+| column | integrity | <span class="no-wrap-code">`column/integrity/foreign_key_not_match_count`</span> | [*sensors/column/integrity*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/integrity/) |
 
 
 **Sensor parameters**
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|`foreign_table`|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|string|:material-check-bold:||
-|`foreign_column`|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|string|:material-check-bold:||
+|<span class="no-wrap-code">`foreign_table`</span>|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|*string*|:material-check-bold:||
+|<span class="no-wrap-code">`foreign_column`</span>|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|*string*|:material-check-bold:||
 
 
 

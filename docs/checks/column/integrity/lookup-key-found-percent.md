@@ -17,7 +17,7 @@ Verifies that the percentage of values in a column that matches values in anothe
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_lookup_key_found_percent|profiling| |Integrity|[foreign_key_match_percent](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-match-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`profile_lookup_key_found_percent`</span>|profiling| |Integrity|[*foreign_key_match_percent*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-match-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -1306,7 +1306,7 @@ Verifies that the percentage of values in a column that matches values in anothe
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_lookup_key_found_percent|monitoring|daily|Integrity|[foreign_key_match_percent](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-match-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`daily_lookup_key_found_percent`</span>|monitoring|daily|Integrity|[*foreign_key_match_percent*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-match-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -2597,7 +2597,7 @@ Verifies that the percentage of values in a column that matches values in anothe
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_lookup_key_found_percent|monitoring|monthly|Integrity|[foreign_key_match_percent](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-match-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`monthly_lookup_key_found_percent`</span>|monitoring|monthly|Integrity|[*foreign_key_match_percent*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-match-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -3888,7 +3888,7 @@ Verifies that the percentage of values in a column that matches values in anothe
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_lookup_key_found_percent|partitioned|daily|Integrity|[foreign_key_match_percent](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-match-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`daily_partition_lookup_key_found_percent`</span>|partitioned|daily|Integrity|[*foreign_key_match_percent*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-match-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 
@@ -5201,7 +5201,7 @@ Verifies that the percentage of values in a column that matches values in anothe
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_lookup_key_found_percent|partitioned|monthly|Integrity|[foreign_key_match_percent](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-match-percent)|[min_percent](../../../reference/rules/Comparison.md#min-percent)|
+|<span class="no-wrap-code">`monthly_partition_lookup_key_found_percent`</span>|partitioned|monthly|Integrity|[*foreign_key_match_percent*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-match-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
 
 **Command-line examples**
 

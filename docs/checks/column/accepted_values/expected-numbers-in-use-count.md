@@ -19,7 +19,7 @@ Verifies that the expected numeric values were found in the column. Raises a dat
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_expected_numbers_in_use_count|profiling| |Reasonableness|[expected_numbers_in_use_count](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-numbers-in-use-count)|[max_missing](../../../reference/rules/Comparison.md#max-missing)|
+|<span class="no-wrap-code">`profile_expected_numbers_in_use_count`</span>|profiling| |Reasonableness|[*expected_numbers_in_use_count*](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-numbers-in-use-count)|[*max_missing*](../../../reference/rules/Comparison.md#max-missing)|
 
 **Command-line examples**
 
@@ -1522,7 +1522,7 @@ Verifies that the expected numeric values were found in the column. Raises a dat
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_expected_numbers_in_use_count|monitoring|daily|Reasonableness|[expected_numbers_in_use_count](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-numbers-in-use-count)|[max_missing](../../../reference/rules/Comparison.md#max-missing)|
+|<span class="no-wrap-code">`daily_expected_numbers_in_use_count`</span>|monitoring|daily|Reasonableness|[*expected_numbers_in_use_count*](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-numbers-in-use-count)|[*max_missing*](../../../reference/rules/Comparison.md#max-missing)|
 
 **Command-line examples**
 
@@ -3027,7 +3027,7 @@ Verifies that the expected numeric values were found in the column. Raises a dat
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_expected_numbers_in_use_count|monitoring|monthly|Reasonableness|[expected_numbers_in_use_count](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-numbers-in-use-count)|[max_missing](../../../reference/rules/Comparison.md#max-missing)|
+|<span class="no-wrap-code">`monthly_expected_numbers_in_use_count`</span>|monitoring|monthly|Reasonableness|[*expected_numbers_in_use_count*](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-numbers-in-use-count)|[*max_missing*](../../../reference/rules/Comparison.md#max-missing)|
 
 **Command-line examples**
 
@@ -4532,7 +4532,7 @@ Verifies that the expected numeric values were found in the column. Raises a dat
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_expected_numbers_in_use_count|partitioned|daily|Reasonableness|[expected_numbers_in_use_count](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-numbers-in-use-count)|[max_missing](../../../reference/rules/Comparison.md#max-missing)|
+|<span class="no-wrap-code">`daily_partition_expected_numbers_in_use_count`</span>|partitioned|daily|Reasonableness|[*expected_numbers_in_use_count*](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-numbers-in-use-count)|[*max_missing*](../../../reference/rules/Comparison.md#max-missing)|
 
 **Command-line examples**
 
@@ -6059,7 +6059,7 @@ Verifies that the expected numeric values were found in the column. Raises a dat
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_expected_numbers_in_use_count|partitioned|monthly|Reasonableness|[expected_numbers_in_use_count](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-numbers-in-use-count)|[max_missing](../../../reference/rules/Comparison.md#max-missing)|
+|<span class="no-wrap-code">`monthly_partition_expected_numbers_in_use_count`</span>|partitioned|monthly|Reasonableness|[*expected_numbers_in_use_count*](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-numbers-in-use-count)|[*max_missing*](../../../reference/rules/Comparison.md#max-missing)|
 
 **Command-line examples**
 

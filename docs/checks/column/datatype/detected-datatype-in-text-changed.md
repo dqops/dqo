@@ -19,7 +19,7 @@ Detects that the data type of texts stored in a text column has changed since th
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_detected_datatype_in_text_changed|profiling| |Consistency|[string_datatype_detect](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[value_changed](../../../reference/rules/Comparison.md#value-changed)|
+|<span class="no-wrap-code">`profile_detected_datatype_in_text_changed`</span>|profiling| |Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|
 
 **Command-line examples**
 
@@ -3682,7 +3682,7 @@ Detects that the data type of texts stored in a text column has changed since th
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_detected_datatype_in_text_changed|monitoring|daily|Consistency|[string_datatype_detect](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[value_changed](../../../reference/rules/Comparison.md#value-changed)|
+|<span class="no-wrap-code">`daily_detected_datatype_in_text_changed`</span>|monitoring|daily|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|
 
 **Command-line examples**
 
@@ -7347,7 +7347,7 @@ Detects that the data type of texts stored in a text column has changed since th
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_detected_datatype_in_text_changed|monitoring|monthly|Consistency|[string_datatype_detect](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[value_changed](../../../reference/rules/Comparison.md#value-changed)|
+|<span class="no-wrap-code">`monthly_detected_datatype_in_text_changed`</span>|monitoring|monthly|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|
 
 **Command-line examples**
 
@@ -11012,7 +11012,7 @@ Detects that the data type of texts stored in a text column has changed when com
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_detected_datatype_in_text_changed|partitioned|daily|Consistency|[string_datatype_detect](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[value_changed](../../../reference/rules/Comparison.md#value-changed)|
+|<span class="no-wrap-code">`daily_partition_detected_datatype_in_text_changed`</span>|partitioned|daily|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|
 
 **Command-line examples**
 
@@ -14697,7 +14697,7 @@ Detects that the data type of texts stored in a text column has changed when com
 
 |Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_detected_datatype_in_text_changed|partitioned|monthly|Consistency|[string_datatype_detect](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[value_changed](../../../reference/rules/Comparison.md#value-changed)|
+|<span class="no-wrap-code">`monthly_partition_detected_datatype_in_text_changed`</span>|partitioned|monthly|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|
 
 **Command-line examples**
 
