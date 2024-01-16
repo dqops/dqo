@@ -164,7 +164,7 @@ apiVersion: dqo/v1
 kind: source
 spec:
   provider_type: databricks
-    databricks:
+  databricks:
     host: <databricks_host>.azuredatabricks.net
     catalog: samples
     http_path: /sql/1.0/warehouses/<warehouse_id>
@@ -176,6 +176,11 @@ spec:
     max_incident_length_days: 60
     mute_for_days: 60
 ```
+
+### **Reference of all connection parameters**
+The complete documentation of all connection parameters used in the `spec.databricks` node is
+described in the reference of the [DatabricksParametersSpec](../reference/yaml/ConnectionYaml.md#databricksparametersspec)
+YAML files format reference.
 
 ## Next steps
 

@@ -66,10 +66,6 @@ public class TrinoParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("Trino database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String password;
 
-    @CommandLine.Option(names = {"-T"}, description = "Trino additional properties that are added to the JDBC connection string")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private Map<String, String> properties;
-
     @CommandLine.Option(names = {"--athena-authentication-mode"}, description = "The authentication mode for AWS Athena. Supports also a ${ATHENA_AUTHENTICATION_MODE} configuration with a custom environment variable.")
     @JsonPropertyDescription("The authentication mode for AWS Athena. Supports also a ${ATHENA_AUTHENTICATION_MODE} configuration with a custom environment variable.")
     private AthenaAuthenticationMode athenaAuthenticationMode;
@@ -89,6 +85,11 @@ public class TrinoParametersSpec extends BaseProviderParametersSpec
     @CommandLine.Option(names = {"--athena-output-location"}, description = "The location in Amazon S3 where query results will be stored. Supports also a ${ATHENA_OUTPUT_LOCATION} configuration with a custom environment variable.")
     @JsonPropertyDescription("The location in Amazon S3 where query results will be stored. Supports also a ${ATHENA_OUTPUT_LOCATION} configuration with a custom environment variable.")
     private String athenaOutputLocation;
+
+    @CommandLine.Option(names = {"-T"}, description = "Trino additional properties that are added to the JDBC connection string")
+    @JsonPropertyDescription("A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private Map<String, String> properties;
 
     /**
      * Returns the trino engine type.
@@ -173,23 +174,6 @@ public class TrinoParametersSpec extends BaseProviderParametersSpec
     public void setPassword(String password) {
         setDirtyIf(!Objects.equals(this.password, password));
         this.password = password;
-    }
-
-    /**
-     * Returns a key/value map of additional properties that are included in the JDBC connection string.
-     * @return Key/value dictionary of additional JDBC properties.
-     */
-    public Map<String, String> getProperties() {
-        return properties;
-    }
-
-    /**
-     * Sets a dictionary of additional connection parameters that are added to the JDBC connection string.
-     * @param properties Key/value dictionary with extra parameters.
-     */
-    public void setProperties(Map<String, String> properties) {
-        setDirtyIf(!Objects.equals(this.properties, properties));
-        this.properties = properties != null ? Collections.unmodifiableMap(properties) : null;
     }
 
     /**
@@ -286,6 +270,24 @@ public class TrinoParametersSpec extends BaseProviderParametersSpec
         setDirtyIf(!Objects.equals(this.athenaOutputLocation, athenaOutputLocation));
         this.athenaOutputLocation = athenaOutputLocation;
     }
+
+    /**
+     * Returns a key/value map of additional properties that are included in the JDBC connection string.
+     * @return Key/value dictionary of additional JDBC properties.
+     */
+    public Map<String, String> getProperties() {
+        return properties;
+    }
+
+    /**
+     * Sets a dictionary of additional connection parameters that are added to the JDBC connection string.
+     * @param properties Key/value dictionary with extra parameters.
+     */
+    public void setProperties(Map<String, String> properties) {
+        setDirtyIf(!Objects.equals(this.properties, properties));
+        this.properties = properties != null ? Collections.unmodifiableMap(properties) : null;
+    }
+
 
     /**
      * Returns the child map on the spec class with all fields.

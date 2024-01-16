@@ -83,7 +83,7 @@ public class FileSensorDefinitionWrapperImpl extends SensorDefinitionWrapperImpl
                 if (!Objects.equals(deserialized.getApiVersion(), ApiVersion.CURRENT_API_VERSION)) {
                     throw new LocalFileSystemException("apiVersion not supported in file " + fileNode.getFilePath().toString());
                 }
-                if (deserialized.getKind() != SpecificationKind.SENSOR) {
+                if (deserialized.getKind() != SpecificationKind.sensor) {
                     throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
                 }
 

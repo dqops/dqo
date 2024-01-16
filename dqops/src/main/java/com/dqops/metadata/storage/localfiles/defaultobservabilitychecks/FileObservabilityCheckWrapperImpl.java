@@ -50,8 +50,8 @@ public class FileObservabilityCheckWrapperImpl extends DefaultObservabilityCheck
                 if (deserializedSpec == null) {
                     DefaultObservabilityChecksYaml deserialized = this.yamlSerializer.deserialize(textContent, DefaultObservabilityChecksYaml.class, fileNode.getPhysicalAbsolutePath());
                     deserializedSpec = deserialized.getSpec();
-                    if (deserialized.getKind() != SpecificationKind.DEFAULT_CHECKS) {
-                        log.info("Invalid specification kind, found: " + deserialized.getKind() + ", but expected: " + SpecificationKind.DEFAULT_CHECKS);
+                    if (deserialized.getKind() != SpecificationKind.default_checks) {
+                        log.info("Invalid specification kind, found: " + deserialized.getKind() + ", but expected: " + SpecificationKind.default_checks);
 //                        throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
                     }
                     if (deserializedSpec != null) {

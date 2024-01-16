@@ -31,7 +31,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`highest_severity`</span>|The highest failed check severity that was detected as part of this data quality incident. Possible values are: 1 - warning, 2 - error, 3 - fatal.|*integer*| | | |
 |<span class="no-wrap-code ">`failed_checks_count`</span>|The total number of failed data quality checks that were seen when the incident was raised for the first time.|*integer*| | | |
 |<span class="no-wrap-code ">`issue_url`</span>|The link (url) to a ticket in an external system that is tracking this incident.|*string*| | | |
-|<span class="no-wrap-code ">`status`</span>|Incident status.|*enum*|open<br/>acknowledged<br/>resolved<br/>muted<br/>| | |
+|<span class="no-wrap-code ">`status`</span>|Incident status.|*enum*|*open*<br/>*acknowledged*<br/>*resolved*<br/>*muted*<br/>| | |
 |<span class="no-wrap-code ">`text`</span>|Notification text in Markdown format that contains the most important fields from the class.|*string*| | | |
 
 

@@ -74,6 +74,7 @@ public class SqlServerParametersSpec extends BaseProviderParametersSpec
     private Boolean disableEncryption;
 
     @CommandLine.Option(names = {"-S"}, description = "SQL Server additional properties that are added to the JDBC connection string")
+    @JsonPropertyDescription("A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, String> properties;
 

@@ -174,6 +174,12 @@ spec:
     mute_for_days: 60
 ```
 
+### **Reference of all connection parameters**
+The complete documentation of all connection parameters used in the `spec.oracle` node is
+described in the reference of the [OracleParametersSpec](../reference/yaml/ConnectionYaml.md#oracleparametersspec)
+YAML files format reference.
+
+
 ## Next steps
 
 - We have provided a variety of use cases which use openly available datasets [Google Cloud](https://cloud.google.com/datasets) to help you in using DQOps effectively. You can find the [full list of use cases here](../examples/index.md).

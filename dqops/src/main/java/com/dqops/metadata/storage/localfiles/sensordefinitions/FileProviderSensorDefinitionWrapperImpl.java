@@ -80,7 +80,7 @@ public class FileProviderSensorDefinitionWrapperImpl extends ProviderSensorDefin
                     if (!Objects.equals(deserialized.getApiVersion(), ApiVersion.CURRENT_API_VERSION)) {
                         throw new LocalFileSystemException("apiVersion not supported in file " + fileNode.getFilePath().toString());
                     }
-                    if (deserialized.getKind() != SpecificationKind.PROVIDER_SENSOR) {
+                    if (deserialized.getKind() != SpecificationKind.provider_sensor) {
                         throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
                     }
 

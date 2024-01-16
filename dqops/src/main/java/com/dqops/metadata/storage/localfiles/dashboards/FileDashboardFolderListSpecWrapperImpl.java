@@ -70,7 +70,7 @@ public class FileDashboardFolderListSpecWrapperImpl extends DashboardFolderListS
                     }
 
                     deserializedSpec.setFileLastModified(fileContent.getLastModified());
-                    if (deserialized.getKind() != SpecificationKind.DASHBOARDS) {
+                    if (deserialized.getKind() != SpecificationKind.dashboards) {
                         throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
                     }
                     fileContent.setCachedObjectInstance(deserializedSpec.deepClone());

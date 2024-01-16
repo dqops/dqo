@@ -50,8 +50,8 @@ public class FileDefaultIncidentWebhookNotificationsWrapperImpl extends DefaultI
                 if (deserializedSpec == null) {
                     DefaultNotificationsYaml deserialized = this.yamlSerializer.deserialize(textContent, DefaultNotificationsYaml.class, fileNode.getPhysicalAbsolutePath());
                     deserializedSpec = deserialized.getSpec();
-                    if (deserialized.getKind() != SpecificationKind.DEFAULT_NOTIFICATIONS) {
-                        log.info("Invalid specification kind, found: " + deserialized.getKind() + ", but expected: " + SpecificationKind.DEFAULT_NOTIFICATIONS);
+                    if (deserialized.getKind() != SpecificationKind.default_notifications) {
+                        log.info("Invalid specification kind, found: " + deserialized.getKind() + ", but expected: " + SpecificationKind.default_notifications);
 //                        throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
                     }
                     if (deserializedSpec != null) {

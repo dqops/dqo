@@ -161,6 +161,12 @@ spec:
     quota_project_id: project
 ```
 
+### **Reference of all connection parameters**
+The complete documentation of all connection parameters used in the `spec.bigquery` node is
+described in the reference of the [BigQueryParametersSpec](../reference/yaml/ConnectionYaml.md#bigqueryparametersspec)
+YAML files format reference.
+
+
 ## Using Google Application Credentials authentication
 
 [Application Default Credentials](https://cloud.google.com/docs/authentication/provide-credentials-adc) is a strategy used by the Google authentication libraries to automatically find 

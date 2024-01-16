@@ -18,15 +18,24 @@ package com.dqops.metadata.storage.localfiles.sensordefinitions;
 import com.dqops.core.filesystem.ApiVersion;
 import com.dqops.metadata.definitions.sensors.SensorDefinitionSpec;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
+import com.dqops.utils.reflection.DefaultFieldValue;
 import com.dqops.utils.serialization.InvalidYamlStatusHolder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 /**
  * Data quality sensor definition YAML schema for a data quality sensor specification.
  */
 public class SensorDefinitionYaml implements InvalidYamlStatusHolder {
+    @JsonPropertyDescription("DQOps YAML schema version")
+    @DefaultFieldValue(ApiVersion.CURRENT_API_VERSION)
     private String apiVersion = ApiVersion.CURRENT_API_VERSION;
-    private SpecificationKind kind = SpecificationKind.SENSOR;
+
+    @JsonPropertyDescription("File type")
+    @DefaultFieldValue("sensor")
+    private SpecificationKind kind = SpecificationKind.sensor;
+
+    @JsonPropertyDescription("Custom data quality sensor specification object with definition of a custom sensor")
     private SensorDefinitionSpec spec = new SensorDefinitionSpec();
 
     @JsonIgnore

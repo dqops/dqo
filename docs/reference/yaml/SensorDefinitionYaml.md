@@ -17,9 +17,9 @@ The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|<span class="no-wrap-code ">`api_version`</span>||*string*| | | |
-|<span class="no-wrap-code ">`kind`</span>||*enum*|source<br/>table<br/>sensor<br/>provider_sensor<br/>rule<br/>check<br/>settings<br/>file_index<br/>dashboards<br/>default_schedules<br/>default_checks<br/>default_notifications<br/>| | |
-|<span class="no-wrap-code ">[`spec`](./SensorDefinitionYaml.md#sensordefinitionspec)</span>||*[SensorDefinitionSpec](./SensorDefinitionYaml.md#sensordefinitionspec)*| | | |
+|<span class="no-wrap-code ">`api_version`</span>|DQOps YAML schema version|*string*| |dqo/v1| |
+|<span class="no-wrap-code ">`kind`</span>|File type|*enum*|*source*<br/>*table*<br/>*sensor*<br/>*provider_sensor*<br/>*rule*<br/>*check*<br/>*settings*<br/>*file_index*<br/>*dashboards*<br/>*default_schedules*<br/>*default_checks*<br/>*default_notifications*<br/>|sensor| |
+|<span class="no-wrap-code ">[`spec`](./SensorDefinitionYaml.md#sensordefinitionspec)</span>|Custom data quality sensor specification object with definition of a custom sensor|*[SensorDefinitionSpec](./SensorDefinitionYaml.md#sensordefinitionspec)*| | | |
 
 
 
@@ -96,8 +96,8 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`field_name`</span>|Field name that matches the field name (snake_case) used in the YAML specification.|*string*| | | |
 |<span class="no-wrap-code ">`display_name`</span>|Field display name that should be shown as a label for the control.|*string*| | | |
 |<span class="no-wrap-code ">`help_text`</span>|Help text (full description) that will be shown to the user as a hint when the cursor is moved over the control.|*string*| | | |
-|<span class="no-wrap-code ">`data_type`</span>|Parameter data type.|*enum*|string<br/>boolean<br/>integer<br/>long<br/>double<br/>date<br/>datetime<br/>column_name<br/>enum<br/>string_list<br/>integer_list<br/>object<br/>| | |
-|<span class="no-wrap-code ">`display_hint`</span>|UI control display hint.|*enum*|textarea<br/>| | |
+|<span class="no-wrap-code ">`data_type`</span>|Parameter data type.|*enum*|*string*<br/>*boolean*<br/>*integer*<br/>*long*<br/>*double*<br/>*date*<br/>*datetime*<br/>*column_name*<br/>*enum*<br/>*string_list*<br/>*integer_list*<br/>*object*<br/>| | |
+|<span class="no-wrap-code ">`display_hint`</span>|UI control display hint.|*enum*|*textarea*<br/>| | |
 |<span class="no-wrap-code ">`required`</span>|True when the value for the parameter must be provided.|*boolean*| | | |
 |<span class="no-wrap-code ">`allowed_values`</span>|List of allowed values for a field that is of an enum type.|*List[string]*| | | |
 |<span class="no-wrap-code ">`sample_values`</span>|List of sample values. The sample values are used in the documentation or help messages.|*List[string]*| | | |

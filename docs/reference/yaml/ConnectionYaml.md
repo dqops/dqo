@@ -17,9 +17,9 @@ The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|<span class="no-wrap-code ">`api_version`</span>||*string*| | | |
-|<span class="no-wrap-code ">`kind`</span>||*enum*|source<br/>table<br/>sensor<br/>provider_sensor<br/>rule<br/>check<br/>settings<br/>file_index<br/>dashboards<br/>default_schedules<br/>default_checks<br/>default_notifications<br/>| | |
-|<span class="no-wrap-code ">[`spec`](./ConnectionYaml.md#connectionspec)</span>||*[ConnectionSpec](./ConnectionYaml.md#connectionspec)*| | | |
+|<span class="no-wrap-code ">`api_version`</span>|DQOps YAML schema version|*string*| |dqo/v1| |
+|<span class="no-wrap-code ">`kind`</span>|File type|*enum*|*source*<br/>*table*<br/>*sensor*<br/>*provider_sensor*<br/>*rule*<br/>*check*<br/>*settings*<br/>*file_index*<br/>*dashboards*<br/>*default_schedules*<br/>*default_checks*<br/>*default_notifications*<br/>|source| |
+|<span class="no-wrap-code ">[`spec`](./ConnectionYaml.md#connectionspec)</span>|Connection specification object with the connection parameters to the data source|*[ConnectionSpec](./ConnectionYaml.md#connectionspec)*| | | |
 
 
 
@@ -47,7 +47,7 @@ The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|<span class="no-wrap-code ">`provider_type`</span>|Database provider type (required).|*enum*|bigquery<br/>databricks<br/>mysql<br/>oracle<br/>postgresql<br/>presto<br/>redshift<br/>snowflake<br/>spark<br/>sqlserver<br/>trino<br/>| | |
+|<span class="no-wrap-code ">`provider_type`</span>|Database provider type (required).|*enum*|*bigquery*<br/>*databricks*<br/>*mysql*<br/>*oracle*<br/>*postgresql*<br/>*presto*<br/>*redshift*<br/>*snowflake*<br/>*spark*<br/>*sqlserver*<br/>*trino*<br/>| | |
 |<span class="no-wrap-code ">[`bigquery`](./ConnectionYaml.md#bigqueryparametersspec)</span>|BigQuery connection parameters. Specify parameters in the bigquery section.|*[BigQueryParametersSpec](./ConnectionYaml.md#bigqueryparametersspec)*| | | |
 |<span class="no-wrap-code ">[`snowflake`](./ConnectionYaml.md#snowflakeparametersspec)</span>|Snowflake connection parameters. Specify parameters in the snowflake section or set the url (which is the Snowflake JDBC url).|*[SnowflakeParametersSpec](./ConnectionYaml.md#snowflakeparametersspec)*| | | |
 |<span class="no-wrap-code ">[`postgresql`](./ConnectionYaml.md#postgresqlparametersspec)</span>|PostgreSQL connection parameters. Specify parameters in the postgresql section or set the url (which is the PostgreSQL JDBC url).|*[PostgresqlParametersSpec](./ConnectionYaml.md#postgresqlparametersspec)*| | | |
@@ -93,9 +93,9 @@ The structure of this object is described below
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |<span class="no-wrap-code ">`source_project_id`</span>|Source GCP project ID. This is the project that has datasets that will be imported.|*string*| | | |
-|<span class="no-wrap-code ">`jobs_create_project`</span>|Configures the way how to select the project that will be used to start BigQuery jobs and will be used for billing. The user/service identified by the credentials must have bigquery.jobs.create permission in that project.|*enum*|create_jobs_in_source_project<br/>create_jobs_in_default_project_from_credentials<br/>create_jobs_in_selected_billing_project_id<br/>| | |
+|<span class="no-wrap-code ">`jobs_create_project`</span>|Configures the way how to select the project that will be used to start BigQuery jobs and will be used for billing. The user/service identified by the credentials must have bigquery.jobs.create permission in that project.|*enum*|*create_jobs_in_source_project*<br/>*create_jobs_in_default_project_from_credentials*<br/>*create_jobs_in_selected_billing_project_id*<br/>| | |
 |<span class="no-wrap-code ">`billing_project_id`</span>|Billing GCP project ID. This is the project used as the default GCP project. The calling user must have a bigquery.jobs.create permission in this project.|*string*| | | |
-|<span class="no-wrap-code ">`authentication_mode`</span>|Authentication mode to the Google Cloud.|*enum*|google_application_credentials<br/>json_key_content<br/>json_key_path<br/>| | |
+|<span class="no-wrap-code ">`authentication_mode`</span>|Authentication mode to the Google Cloud.|*enum*|*google_application_credentials*<br/>*json_key_content*<br/>*json_key_path*<br/>| | |
 |<span class="no-wrap-code ">`json_key_content`</span>|JSON key content. Use an environment variable that contains the content of the key as ${KEY_ENV} or a name of a secret in the GCP Secret Manager: ${sm://key-secret-name}. Requires the authentication-mode: json_key_content.|*string*| | | |
 |<span class="no-wrap-code ">`json_key_path`</span>|A path to the JSON key file. Requires the authentication-mode: json_key_path.|*string*| | | |
 |<span class="no-wrap-code ">`quota_project_id`</span>|Quota GCP project ID.|*string*| | | |
@@ -132,7 +132,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`user`</span>|Snowflake user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`password`</span>|Snowflake database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`role`</span>|Snowflake role name. Supports also ${SNOWFLAKE_ROLE} configuration with a custom environment variable.|*string*| | | |
-|<span class="no-wrap-code ">`properties`</span>||*Dict[string, string]*| | | |
+|<span class="no-wrap-code ">`properties`</span>|A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.|*Dict[string, string]*| | | |
 
 
 
@@ -166,8 +166,8 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`user`</span>|PostgreSQL user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`password`</span>|PostgreSQL database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`options`</span>|PostgreSQL connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${POSTGRESQL_OPTIONS} configuration with a custom environment variable.|*string*| | | |
-|<span class="no-wrap-code ">`sslmode`</span>|Sslmode PostgreSQL connection parameter. The default value is disabled.|*enum*|disable<br/>allow<br/>prefer<br/>require<br/>verify-ca<br/>verify-full<br/>| | |
-|<span class="no-wrap-code ">`properties`</span>||*Dict[string, string]*| | | |
+|<span class="no-wrap-code ">`sslmode`</span>|Sslmode PostgreSQL connection parameter. The default value is disabled.|*enum*|*disable*<br/>*allow*<br/>*prefer*<br/>*require*<br/>*verify-ca*<br/>*verify-full*<br/>| | |
+|<span class="no-wrap-code ">`properties`</span>|A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.|*Dict[string, string]*| | | |
 
 
 
@@ -201,7 +201,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`user`</span>|Redshift user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`password`</span>|Redshift database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`options`</span>|Redshift connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${REDSHIFT_OPTIONS} configuration with a custom environment variable.|*string*| | | |
-|<span class="no-wrap-code ">`properties`</span>||*Dict[string, string]*| | | |
+|<span class="no-wrap-code ">`properties`</span>|A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.|*Dict[string, string]*| | | |
 
 
 
@@ -236,7 +236,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`password`</span>|SQL Server database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`options`</span>|SQL Server connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${SQLSERVER_OPTIONS} configuration with a custom environment variable.|*string*| | | |
 |<span class="no-wrap-code ">`disable_encryption`</span>|Disable SSL encryption parameter. The default value is false. You may need to disable encryption when SQL Server is started in Docker.|*boolean*| | | |
-|<span class="no-wrap-code ">`properties`</span>||*Dict[string, string]*| | | |
+|<span class="no-wrap-code ">`properties`</span>|A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.|*Dict[string, string]*| | | |
 
 
 
@@ -269,7 +269,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`database`</span>|Presto database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`user`</span>|Presto user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`password`</span>|Presto database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
-|<span class="no-wrap-code ">`properties`</span>||*Dict[string, string]*| | | |
+|<span class="no-wrap-code ">`properties`</span>|A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.|*Dict[string, string]*| | | |
 
 
 
@@ -297,17 +297,17 @@ The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|<span class="no-wrap-code ">`trino_engine_type`</span>|Trino engine type. Supports also a ${TRINO_ENGINE} configuration with a custom environment variable.|*enum*|trino<br/>athena<br/>| | |
+|<span class="no-wrap-code ">`trino_engine_type`</span>|Trino engine type. Supports also a ${TRINO_ENGINE} configuration with a custom environment variable.|*enum*|*trino*<br/>*athena*<br/>| | |
 |<span class="no-wrap-code ">`host`</span>|Trino host name. Supports also a ${TRINO_HOST} configuration with a custom environment variable.|*string*| | | |
 |<span class="no-wrap-code ">`port`</span>|Trino port number. The default port is 8080. Supports also a ${TRINO_PORT} configuration with a custom environment variable.|*string*| | | |
 |<span class="no-wrap-code ">`user`</span>|Trino user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`password`</span>|Trino database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
-|<span class="no-wrap-code ">`properties`</span>||*Dict[string, string]*| | | |
-|<span class="no-wrap-code ">`athena_authentication_mode`</span>|The authentication mode for AWS Athena. Supports also a ${ATHENA_AUTHENTICATION_MODE} configuration with a custom environment variable.|*enum*|iam<br/>default_credentials<br/>| | |
+|<span class="no-wrap-code ">`athena_authentication_mode`</span>|The authentication mode for AWS Athena. Supports also a ${ATHENA_AUTHENTICATION_MODE} configuration with a custom environment variable.|*enum*|*iam*<br/>*default_credentials*<br/>| | |
 |<span class="no-wrap-code ">`athena_region`</span>|The AWS Region where queries will be run. Supports also a ${ATHENA_REGION} configuration with a custom environment variable.|*string*| | | |
 |<span class="no-wrap-code ">`catalog`</span>|The catalog that contains the databases and the tables that will be accessed with the driver. Supports also a ${TRINO_CATALOG} configuration with a custom environment variable.|*string*| | | |
 |<span class="no-wrap-code ">`athena_work_group`</span>|The workgroup in which queries will run. Supports also a ${ATHENA_WORK_GROUP} configuration with a custom environment variable.|*string*| | | |
 |<span class="no-wrap-code ">`athena_output_location`</span>|The location in Amazon S3 where query results will be stored. Supports also a ${ATHENA_OUTPUT_LOCATION} configuration with a custom environment variable.|*string*| | | |
+|<span class="no-wrap-code ">`properties`</span>|A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.|*Dict[string, string]*| | | |
 
 
 
@@ -341,8 +341,8 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`user`</span>|MySQL user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`password`</span>|MySQL database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`options`</span>|MySQL connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${MYSQL_OPTIONS} configuration with a custom environment variable.|*string*| | | |
-|<span class="no-wrap-code ">`sslmode`</span>|SslMode MySQL connection parameter.|*enum*|DISABLED<br/>PREFERRED<br/>REQUIRED<br/>VERIFY_CA<br/>VERIFY_IDENTITY<br/>| | |
-|<span class="no-wrap-code ">`properties`</span>||*Dict[string, string]*| | | |
+|<span class="no-wrap-code ">`sslmode`</span>|SslMode MySQL connection parameter.|*enum*|*DISABLED*<br/>*PREFERRED*<br/>*REQUIRED*<br/>*VERIFY_CA*<br/>*VERIFY_IDENTITY*<br/>| | |
+|<span class="no-wrap-code ">`properties`</span>|A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.|*Dict[string, string]*| | | |
 
 
 
@@ -377,7 +377,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`password`</span>|Oracle database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`options`</span>|Oracle connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${ORACLE_OPTIONS} configuration with a custom environment variable.|*string*| | | |
 |<span class="no-wrap-code ">`initialization_sql`</span>|Custom SQL that is executed after connecting to Oracle. This SQL script can configure the default language, for example: alter session set NLS_DATE_FORMAT&#x3D;&#x27;YYYY-DD-MM HH24:MI:SS&#x27;|*string*| | | |
-|<span class="no-wrap-code ">`properties`</span>||*Dict[string, string]*| | | |
+|<span class="no-wrap-code ">`properties`</span>|A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.|*Dict[string, string]*| | | |
 
 
 
@@ -410,7 +410,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`user`</span>|Spark user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`password`</span>|Spark database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`options`</span>|Spark connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${REDSHIFT_OPTIONS} configuration with a custom environment variable.|*string*| | | |
-|<span class="no-wrap-code ">`properties`</span>||*Dict[string, string]*| | | |
+|<span class="no-wrap-code ">`properties`</span>|A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.|*Dict[string, string]*| | | |
 
 
 
@@ -446,7 +446,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`http_path`</span>|Databricks http path to the warehouse. For example: /sql/1.0/warehouses/&lt;warehouse instance id&gt;. Supports also a ${DATABRICKS_HTTP_PATH} configuration with a custom environment variable.|*string*| | | |
 |<span class="no-wrap-code ">`access_token`</span>|Databricks access token the warehouse. Supports also a ${DATABRICKS_ACCESS_TOKEN} configuration with a custom environment variable.|*string*| | | |
 |<span class="no-wrap-code ">`options`</span>|Databricks connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${DATABRICKS_OPTIONS} configuration with a custom environment variable.|*string*| | | |
-|<span class="no-wrap-code ">`properties`</span>||*Dict[string, string]*| | | |
+|<span class="no-wrap-code ">`properties`</span>|A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.|*Dict[string, string]*| | | |
 
 
 
@@ -514,7 +514,7 @@ The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|<span class="no-wrap-code ">`source`</span>|The source of the data grouping dimension value. The default grouping dimension source is a tag. Assign a tag when there are multiple similar tables that store the same data for different areas (countries, etc.). This could be a country name if a table or partition stores information for that country.|*enum*|tag<br/>column_value<br/>| | |
+|<span class="no-wrap-code ">`source`</span>|The source of the data grouping dimension value. The default grouping dimension source is a tag. Assign a tag when there are multiple similar tables that store the same data for different areas (countries, etc.). This could be a country name if a table or partition stores information for that country.|*enum*|*tag*<br/>*column_value*<br/>| | |
 |<span class="no-wrap-code ">`tag`</span>|The value assigned to a data quality grouping dimension when the source is &#x27;tag&#x27;. Assign a hardcoded (static) data grouping dimension value (tag) when there are multiple similar tables that store the same data for different areas (countries, etc.). This could be a country name if a table or partition stores information for that country.|*string*| | | |
 |<span class="no-wrap-code ">`column`</span>|Column name that contains a dynamic data grouping dimension value (for dynamic data-driven data groupings). Sensor queries will be extended with a GROUP BY {data group level colum name}, sensors (and alerts) will be calculated for each unique value of the specified column. Also a separate time series will be tracked for each value.|*string*| | | |
 |<span class="no-wrap-code ">`name`</span>|Data grouping dimension name.|*string*| | | |
@@ -581,8 +581,8 @@ The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|<span class="no-wrap-code ">`grouping_level`</span>|Grouping level of failed data quality checks for creating higher level data quality incidents. The default grouping level is by a table, a data quality dimension and a check category (i.e. a datatype data quality incident detected on a table X in the numeric checks category).|*enum*|table<br/>table_dimension<br/>table_dimension_category<br/>table_dimension_category_type<br/>table_dimension_category_name<br/>| | |
-|<span class="no-wrap-code ">`minimum_severity`</span>|Minimum severity level of data quality issues that are grouped into incidents. The default minimum severity level is &#x27;warning&#x27;. Other supported severity levels are &#x27;error&#x27; and &#x27;fatal&#x27;.|*enum*|warning<br/>error<br/>fatal<br/>| | |
+|<span class="no-wrap-code ">`grouping_level`</span>|Grouping level of failed data quality checks for creating higher level data quality incidents. The default grouping level is by a table, a data quality dimension and a check category (i.e. a datatype data quality incident detected on a table X in the numeric checks category).|*enum*|*table*<br/>*table_dimension*<br/>*table_dimension_category*<br/>*table_dimension_category_type*<br/>*table_dimension_category_name*<br/>| | |
+|<span class="no-wrap-code ">`minimum_severity`</span>|Minimum severity level of data quality issues that are grouped into incidents. The default minimum severity level is &#x27;warning&#x27;. Other supported severity levels are &#x27;error&#x27; and &#x27;fatal&#x27;.|*enum*|*warning*<br/>*error*<br/>*fatal*<br/>| | |
 |<span class="no-wrap-code ">`divide_by_data_groups`</span>|Create separate data quality incidents for each data group, creating different incidents for different groups of rows. By default, data groups are ignored for grouping data quality issues into data quality incidents.|*boolean*| | | |
 |<span class="no-wrap-code ">`max_incident_length_days`</span>|The maximum length of a data quality incident in days. When a new data quality issue is detected after max_incident_length_days days since a similar data quality was first seen, a new data quality incident is created that will capture all following data quality issues for the next max_incident_length_days days. The default value is 60 days.|*integer*| | | |
 |<span class="no-wrap-code ">`mute_for_days`</span>|The number of days that all similar data quality issues are muted when a a data quality incident is closed in the &#x27;mute&#x27; status.|*integer*| | | |

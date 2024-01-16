@@ -157,26 +157,31 @@ character can be used at the beginning, in the middle or at the end of the name.
 Connection configurations are stored in the YAML files in the `./sources` folder. The name of the connection is also
 the name of the folder where the configuration file is stored.
 
-Below is a sample YAML file showing an example configuration of the Trino data source connection.
+Below is a sample YAML file showing an example configuration of a Trino data source connection.
 
 ``` yaml
 apiVersion: dqo/v1
 kind: source
 spec:
   provider_type: trino
-    trino:
-      trino_engine_type: trino
-      host: localhost
-      port: 8080
-      user: test
-      password: xxx
-      catalog: memory
+  trino:
+    trino_engine_type: trino
+    host: localhost
+    port: 8080
+    user: test
+    password: xxx
+    catalog: memory
   incident_grouping:
     grouping_level: table_dimension_category
     minimum_severity: warning
     max_incident_length_days: 60
     mute_for_days: 60
 ```
+
+### **Reference of all connection parameters**
+The complete documentation of all connection parameters used in the `spec.trino` node is
+described in the reference of the [TrinoParametersSpec](../reference/yaml/ConnectionYaml.md#trinoparametersspec)
+YAML files format reference.
 
 ## Next steps
 

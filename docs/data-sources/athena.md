@@ -172,21 +172,27 @@ apiVersion: dqo/v1
 kind: source
 spec:
   provider_type: trino
-    trino:
-      trino_engine_type: athena
-      user: <aws access key id>
-      password: <aws secret acces key>
-      athena_authentication_mode: iam
-      athena_region: us-east-1
-      catalog: awsdatacatalog
-      athena_work_group: primary
-      athena_output_location: s3://you_bucket_name/a_path
+  trino:
+    trino_engine_type: athena
+    user: <aws access key id>
+    password: <aws secret acces key>
+    athena_authentication_mode: iam
+    athena_region: us-east-1
+    catalog: awsdatacatalog
+    athena_work_group: primary
+    athena_output_location: s3://you_bucket_name/a_path
   incident_grouping:
     grouping_level: table_dimension_category
     minimum_severity: warning
     max_incident_length_days: 60
     mute_for_days: 60
 ```
+
+### **Reference of all connection parameters**
+The complete documentation of all connection parameters used in the `spec.trino` node is
+described in the reference of the [TrinoParametersSpec](../reference/yaml/ConnectionYaml.md#trinoparametersspec)
+YAML files format reference.
+
 
 ## Next steps
 

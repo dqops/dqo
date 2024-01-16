@@ -22,38 +22,38 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public enum SpecificationKind {
     @JsonProperty("source")
-    SOURCE,
+    source,
 
     @JsonProperty("table")
-    TABLE,
+    table,
 
     @JsonProperty("sensor")
-    SENSOR,
+    sensor,
 
     @JsonProperty("provider_sensor")
-    PROVIDER_SENSOR,
+    provider_sensor,
 
     @JsonProperty("rule")
-    RULE,
+    rule,
 
     @JsonProperty("check")
-    CHECK,
+    check,
 
     @JsonProperty("settings")
-    SETTINGS,
+    settings,
 
     @JsonProperty("file_index")
-    FILE_INDEX,
+    file_index,
 
     @JsonProperty("dashboards")
-    DASHBOARDS,
+    dashboards,
 
     @JsonProperty("default_schedules")
-    DEFAULT_SCHEDULES,
+    default_schedules,
 
     @JsonProperty("default_checks")
-    DEFAULT_CHECKS,
+    default_checks,
 
     @JsonProperty("default_notifications")
-    DEFAULT_NOTIFICATIONS;
+    default_notifications;
 }

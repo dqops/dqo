@@ -146,6 +146,11 @@ public class ReflectionServiceImpl implements ReflectionService {
                 field.getAnnotation(DisplayName.class).value() : null;
         DisplayHint displayHint = field.isAnnotationPresent(ControlDisplayHint.class) ?
                 field.getAnnotation(ControlDisplayHint.class).value() : null;
+        String defaultStringValue = field.isAnnotationPresent(DefaultFieldValue.class) ?
+                field.getAnnotation(DefaultFieldValue.class).value() : null;
+        Object defaultValue = defaultStringValue == null ? null :
+                fieldType == String.class ? defaultStringValue : fieldType.isEnum() ?
+                        Enum.valueOf((Class<Enum>)fieldType, defaultStringValue) : defaultStringValue;
         String[] sampleValues = field.isAnnotationPresent(SampleValues.class) ?
                 field.getAnnotation(SampleValues.class).values() : null;
         boolean requiredAnnotationPresent = field.isAnnotationPresent(RequiredField.class);
@@ -165,7 +170,7 @@ public class ReflectionServiceImpl implements ReflectionService {
             setYamlFieldName(yamlFieldName);
             setDisplayName(displayName != null ? displayName : yamlFieldName);
             setHelpText(helpText);
-            setDefaultValue(DEFAULT_VALUES.getOrDefault(fieldType, null));
+            setDefaultValue(DEFAULT_VALUES.getOrDefault(fieldType, defaultValue));
             setDisplayHint(displayHint);
             setSampleValues(sampleValues);
             setRequiredOrNotNullable(requiredAnnotationPresent || notNullableField);

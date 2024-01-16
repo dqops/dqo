@@ -18,8 +18,10 @@ package com.dqops.metadata.storage.localfiles.settings;
 import com.dqops.core.filesystem.ApiVersion;
 import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
+import com.dqops.utils.reflection.DefaultFieldValue;
 import com.dqops.utils.serialization.InvalidYamlStatusHolder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 /**
  * DQOps local settings that are stored in the *$DQO_USER_HOME/.localsettings.dqosettings.yaml* file in the user's DQOps home folder.
@@ -27,8 +29,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * passed when starting DQOps.
  */
 public class LocalSettingsYaml implements InvalidYamlStatusHolder {
+	@JsonPropertyDescription("DQOps YAML schema version")
+	@DefaultFieldValue(ApiVersion.CURRENT_API_VERSION)
 	private String apiVersion = ApiVersion.CURRENT_API_VERSION;
-	private SpecificationKind kind = SpecificationKind.SETTINGS;
+
+	@JsonPropertyDescription("File type")
+	@DefaultFieldValue("settings")
+	private SpecificationKind kind = SpecificationKind.settings;
+
+	@JsonPropertyDescription("The object that stores the configuration settings of a local DQOps instance")
 	private LocalSettingsSpec spec = new LocalSettingsSpec();
 
 	@JsonIgnore

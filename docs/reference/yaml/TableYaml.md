@@ -17,9 +17,9 @@ The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|<span class="no-wrap-code ">`api_version`</span>||*string*| | | |
-|<span class="no-wrap-code ">`kind`</span>||*enum*|source<br/>table<br/>sensor<br/>provider_sensor<br/>rule<br/>check<br/>settings<br/>file_index<br/>dashboards<br/>default_schedules<br/>default_checks<br/>default_notifications<br/>| | |
-|<span class="no-wrap-code ">[`spec`](./TableYaml.md#tablespec)</span>||*[TableSpec](./TableYaml.md#tablespec)*| | | |
+|<span class="no-wrap-code ">`api_version`</span>|DQOps YAML schema version|*string*| |dqo/v1| |
+|<span class="no-wrap-code ">`kind`</span>|File type|*enum*|*source*<br/>*table*<br/>*sensor*<br/>*provider_sensor*<br/>*rule*<br/>*check*<br/>*settings*<br/>*file_index*<br/>*dashboards*<br/>*default_schedules*<br/>*default_checks*<br/>*default_notifications*<br/>|table| |
+|<span class="no-wrap-code ">[`spec`](./TableYaml.md#tablespec)</span>|Table specification object with the table metadata and the configuration of data quality checks|*[TableSpec](./TableYaml.md#tablespec)*| | | |
 
 
 
@@ -217,8 +217,8 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`reference_table_name`</span>|The name of the reference table that is imported into DQOps. The reference table&#x27;s metadata must be imported into DQOps.|*string*| | | |
 |<span class="no-wrap-code ">`compared_table_filter`</span>|Optional custom SQL filter expression that is added to the SQL query that retrieves the data from the compared table. This expression must be a SQL expression that will be added to the WHERE clause when querying the compared table.|*string*| | | |
 |<span class="no-wrap-code ">`reference_table_filter`</span>|Optional custom SQL filter expression that is added to the SQL query that retrieves the data from the reference table (the source of truth). This expression must be a SQL expression that will be added to the WHERE clause when querying the reference table.|*string*| | | |
-|<span class="no-wrap-code ">`check_type`</span>|The type of checks (profiling, monitoring, partitioned) that this check comparison configuration is applicable. The default value is &#x27;profiling&#x27;.|*enum*|profiling<br/>monitoring<br/>partitioned<br/>| | |
-|<span class="no-wrap-code ">`time_scale`</span>|The time scale that this check comparison configuration is applicable. Supported values are &#x27;daily&#x27; and &#x27;monthly&#x27; for monitoring and partitioned checks or an empty value for profiling checks.|*enum*|daily<br/>monthly<br/>| | |
+|<span class="no-wrap-code ">`check_type`</span>|The type of checks (profiling, monitoring, partitioned) that this check comparison configuration is applicable. The default value is &#x27;profiling&#x27;.|*enum*|*profiling*<br/>*monitoring*<br/>*partitioned*<br/>| | |
+|<span class="no-wrap-code ">`time_scale`</span>|The time scale that this check comparison configuration is applicable. Supported values are &#x27;daily&#x27; and &#x27;monthly&#x27; for monitoring and partitioned checks or an empty value for profiling checks.|*enum*|*daily*<br/>*monthly*<br/>| | |
 |<span class="no-wrap-code ">[`grouping_columns`](./TableYaml.md#tablecomparisongroupingcolumnspairslistspec)</span>|List of column pairs from both the compared table and the reference table that are used in a GROUP BY clause  for grouping both the compared table and the reference table (the source of truth). The columns are used in the next of the table comparison to join the results of data groups (row counts, sums of columns) between the compared table and the reference table to compare the differences.|*[TableComparisonGroupingColumnsPairsListSpec](./TableYaml.md#tablecomparisongroupingcolumnspairslistspec)*| | | |
 
 
@@ -305,8 +305,8 @@ The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|<span class="no-wrap-code ">`grouping_level`</span>|Grouping level of failed data quality checks for creating higher level data quality incidents. The default grouping level is by a table, a data quality dimension and a check category (i.e. a datatype data quality incident detected on a table X in the numeric checks category).|*enum*|table<br/>table_dimension<br/>table_dimension_category<br/>table_dimension_category_type<br/>table_dimension_category_name<br/>| | |
-|<span class="no-wrap-code ">`minimum_severity`</span>|Minimum severity level of data quality issues that are grouped into incidents. The default minimum severity level is &#x27;warning&#x27;. Other supported severity levels are &#x27;error&#x27; and &#x27;fatal&#x27;.|*enum*|warning<br/>error<br/>fatal<br/>| | |
+|<span class="no-wrap-code ">`grouping_level`</span>|Grouping level of failed data quality checks for creating higher level data quality incidents. The default grouping level is by a table, a data quality dimension and a check category (i.e. a datatype data quality incident detected on a table X in the numeric checks category).|*enum*|*table*<br/>*table_dimension*<br/>*table_dimension_category*<br/>*table_dimension_category_type*<br/>*table_dimension_category_name*<br/>| | |
+|<span class="no-wrap-code ">`minimum_severity`</span>|Minimum severity level of data quality issues that are grouped into incidents. The default minimum severity level is &#x27;warning&#x27;. Other supported severity levels are &#x27;error&#x27; and &#x27;fatal&#x27;.|*enum*|*warning*<br/>*error*<br/>*fatal*<br/>| | |
 |<span class="no-wrap-code ">`divide_by_data_group`</span>|Create separate data quality incidents for each data group, creating different incidents for different groups of rows. By default, data groups are ignored for grouping data quality issues into data quality incidents.|*boolean*| | | |
 |<span class="no-wrap-code ">`disabled`</span>|Disables data quality incident creation for failed data quality checks on the table.|*boolean*| | | |
 

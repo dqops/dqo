@@ -25,7 +25,7 @@ The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-{{#each objectFields}}|<span class="no-wrap-code ">{{{render-type typeModel yamlFieldName}}}</span>|{{helpText}}|*{{render-type typeModel}}*|{{#if enumValuesByName}}{{#each enumValuesByName}}{{this.yamlName}}<br/>{{/each}}{{else}} {{/if}}|{{#if defaultValue}}{{defaultValue}}{{else}} {{/if}}|{{#if sampleValues}}{{#each sampleValues}}{{this}}<br/>{{/each}}{{else}} {{/if}}|
+{{#each objectFields}}|<span class="no-wrap-code ">{{{render-type typeModel yamlFieldName}}}</span>|{{helpText}}|*{{render-type typeModel}}*|{{#if enumValuesByName}}{{#each enumValuesByName}}*{{this.yamlName}}*<br/>{{/each}}{{else}} {{/if}}|{{#if defaultValue}}{{defaultValue}}{{else}} {{/if}}|{{#if sampleValues}}{{#each sampleValues}}{{this}}<br/>{{/each}}{{else}} {{/if}}|
 {{/each}}
 {{/if}}
 {{/if}}

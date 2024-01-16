@@ -29918,6 +29918,7 @@
         },
         "properties" : {
           "type" : "object",
+          "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.",
           "additionalProperties" : {
             "type" : "string"
           }
@@ -31232,6 +31233,7 @@
         },
         "properties" : {
           "type" : "object",
+          "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.",
           "additionalProperties" : {
             "type" : "string"
           }
@@ -31304,6 +31306,7 @@
         },
         "properties" : {
           "type" : "object",
+          "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.",
           "additionalProperties" : {
             "type" : "string"
           }
@@ -31426,6 +31429,7 @@
         },
         "properties" : {
           "type" : "object",
+          "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.",
           "additionalProperties" : {
             "type" : "string"
           }
@@ -31457,6 +31461,7 @@
         },
         "properties" : {
           "type" : "object",
+          "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.",
           "additionalProperties" : {
             "type" : "string"
           }
@@ -31620,6 +31625,7 @@
         },
         "properties" : {
           "type" : "object",
+          "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.",
           "additionalProperties" : {
             "type" : "string"
           }
@@ -32406,6 +32412,7 @@
         },
         "properties" : {
           "type" : "object",
+          "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.",
           "additionalProperties" : {
             "type" : "string"
           }
@@ -32437,6 +32444,7 @@
         },
         "properties" : {
           "type" : "object",
+          "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.",
           "additionalProperties" : {
             "type" : "string"
           }
@@ -32511,6 +32519,7 @@
         },
         "properties" : {
           "type" : "object",
+          "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.",
           "additionalProperties" : {
             "type" : "string"
           }
@@ -35891,12 +35900,6 @@
           "type" : "string",
           "description" : "Trino database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
         },
-        "properties" : {
-          "type" : "object",
-          "additionalProperties" : {
-            "type" : "string"
-          }
-        },
         "athena_authentication_mode" : {
           "type" : "string",
           "description" : "The authentication mode for AWS Athena. Supports also a ${ATHENA_AUTHENTICATION_MODE} configuration with a custom environment variable.",
@@ -35917,6 +35920,13 @@
         "athena_output_location" : {
           "type" : "string",
           "description" : "The location in Amazon S3 where query results will be stored. Supports also a ${ATHENA_OUTPUT_LOCATION} configuration with a custom environment variable."
+        },
+        "properties" : {
+          "type" : "object",
+          "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.",
+          "additionalProperties" : {
+            "type" : "string"
+          }
         },
         "database" : {
           "type" : "string"

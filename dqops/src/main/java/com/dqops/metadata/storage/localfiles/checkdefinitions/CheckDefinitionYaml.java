@@ -18,15 +18,24 @@ package com.dqops.metadata.storage.localfiles.checkdefinitions;
 import com.dqops.core.filesystem.ApiVersion;
 import com.dqops.metadata.definitions.checks.CheckDefinitionSpec;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
+import com.dqops.utils.reflection.DefaultFieldValue;
 import com.dqops.utils.serialization.InvalidYamlStatusHolder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 /**
- * Custom check specification that describes a pair of a sensor name and rule name.
+ * Custom data quality check file that describes a pair of a sensor name and rule name.
  */
 public class CheckDefinitionYaml implements InvalidYamlStatusHolder {
+    @JsonPropertyDescription("DQOps YAML schema version")
+    @DefaultFieldValue(ApiVersion.CURRENT_API_VERSION)
     private String apiVersion = ApiVersion.CURRENT_API_VERSION;
-    private SpecificationKind kind = SpecificationKind.CHECK;
+
+    @JsonPropertyDescription("File type")
+    @DefaultFieldValue("check")
+    private SpecificationKind kind = SpecificationKind.check;
+
+    @JsonPropertyDescription("Custom data quality check specification object with definition of a custom check")
     private CheckDefinitionSpec spec = new CheckDefinitionSpec();
 
     @JsonIgnore

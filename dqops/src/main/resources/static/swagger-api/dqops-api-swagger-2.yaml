@@ -28702,6 +28702,8 @@ definitions:
           \ configuration with a custom environment variable."
       properties:
         type: "object"
+        description: "A dictionary of custom JDBC parameters that are added to the\
+          \ JDBC connection string, a key/value dictionary."
         additionalProperties:
           type: "string"
       database:
@@ -29894,6 +29896,8 @@ definitions:
         - "VERIFY_IDENTITY"
       properties:
         type: "object"
+        description: "A dictionary of custom JDBC parameters that are added to the\
+          \ JDBC connection string, a key/value dictionary."
         additionalProperties:
           type: "string"
   Optional:
@@ -29953,6 +29957,8 @@ definitions:
           \ set NLS_DATE_FORMAT='YYYY-DD-MM HH24:MI:SS'"
       properties:
         type: "object"
+        description: "A dictionary of custom JDBC parameters that are added to the\
+          \ JDBC connection string, a key/value dictionary."
         additionalProperties:
           type: "string"
   ParameterDefinitionSpec:
@@ -30088,6 +30094,8 @@ definitions:
         - "verify-full"
       properties:
         type: "object"
+        description: "A dictionary of custom JDBC parameters that are added to the\
+          \ JDBC connection string, a key/value dictionary."
         additionalProperties:
           type: "string"
   PrestoParametersSpec:
@@ -30115,6 +30123,8 @@ definitions:
           \ format to use dynamic substitution."
       properties:
         type: "object"
+        description: "A dictionary of custom JDBC parameters that are added to the\
+          \ JDBC connection string, a key/value dictionary."
         additionalProperties:
           type: "string"
   ProviderSensorDefinitionSpec:
@@ -30289,6 +30299,8 @@ definitions:
           \ configuration with a custom environment variable."
       properties:
         type: "object"
+        description: "A dictionary of custom JDBC parameters that are added to the\
+          \ JDBC connection string, a key/value dictionary."
         additionalProperties:
           type: "string"
   RemoteTableListModel:
@@ -31056,6 +31068,8 @@ definitions:
           \ with a custom environment variable."
       properties:
         type: "object"
+        description: "A dictionary of custom JDBC parameters that are added to the\
+          \ JDBC connection string, a key/value dictionary."
         additionalProperties:
           type: "string"
   SparkParametersSpec:
@@ -31085,6 +31099,8 @@ definitions:
           \ configuration with a custom environment variable."
       properties:
         type: "object"
+        description: "A dictionary of custom JDBC parameters that are added to the\
+          \ JDBC connection string, a key/value dictionary."
         additionalProperties:
           type: "string"
       database:
@@ -31149,6 +31165,8 @@ definitions:
           \ You may need to disable encryption when SQL Server is started in Docker."
       properties:
         type: "object"
+        description: "A dictionary of custom JDBC parameters that are added to the\
+          \ JDBC connection string, a key/value dictionary."
         additionalProperties:
           type: "string"
   StatisticsCollectorSearchFilters:
@@ -34833,10 +34851,6 @@ definitions:
         type: "string"
         description: "Trino database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
           \ format to use dynamic substitution."
-      properties:
-        type: "object"
-        additionalProperties:
-          type: "string"
       athena_authentication_mode:
         type: "string"
         description: "The authentication mode for AWS Athena. Supports also a ${ATHENA_AUTHENTICATION_MODE}\
@@ -34862,6 +34876,12 @@ definitions:
         description: "The location in Amazon S3 where query results will be stored.\
           \ Supports also a ${ATHENA_OUTPUT_LOCATION} configuration with a custom\
           \ environment variable."
+      properties:
+        type: "object"
+        description: "A dictionary of custom JDBC parameters that are added to the\
+          \ JDBC connection string, a key/value dictionary."
+        additionalProperties:
+          type: "string"
       database:
         type: "string"
   ValueChangedRuleParametersSpec:
