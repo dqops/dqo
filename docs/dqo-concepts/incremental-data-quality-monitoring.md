@@ -63,7 +63,7 @@ DQOps was designed with focus for measuring the data quality of **financial data
 for data quality analysis.
 
 
-## Incremental data quality monitoring
+## Configuring incremental data quality monitoring
 Partitioned data quality checks are designed for running incrementally, to analyze only the most recent data.
 DQOps generates data quality SQL queries with an additional **WHERE *partition_by_column* >= [first date]** filter condition.
 
@@ -95,7 +95,7 @@ When the table is physically partitioned by the column used by partitioned check
 all modern databases will apply a partition elimination optimization to scan only the data in the selected time window.
 By default, that is the last 7 days for daily partitioned checks and last month for monthly partitioned checks.
 
-## Benefits of incremental data quality
+## Benefits of incremental data quality monitoring
 
 ### **Detect issues early**
 New data quality issues usually appear in new data, when the source system was updated, the data model has changed,
@@ -126,6 +126,26 @@ Fact tables, especially those using slowly changing dimensions, are naturally de
 When you are connecting DQOps to a fact table, always configure the *partition_by_column* column name on the *Date and time columns* table's tab.
 
 The *partition_by_column* should be the name of the **date dimension** column.
+
+
+### **Analyze append-only tables**
+All other tables that track financial transactions and cannot be modified are obvious candidates for 
+incremental data quality monitoring, because only the most recent data can change, and the old records are not modified.
+
+
+### **Analyze financial data**
+The tables that are tracking financial transactions are usually append-only tables.
+The time periods of interest for financial data is aligned with tax reporting periods (i.e. monthly),
+or fiscal years. In both cases, using the [monthly partitioned checks](definition-of-data-quality-checks/partition-checks.md)
+enables tracking the quality of all financial data for one month.
+
+The financial data from the previous month is considered complete when all data quality checks for the previous
+month passed. That is why many of the data quality dashboards in DQOps have filters to select
+teh current month and the previous month. The data for the current month is still arriving and can be affected
+by data quality issues, but the data for the past month must pass the [data quality KPIs](definition-of-data-quality-kpis.md)
+for all required [data quality dimensions](data-quality-dimensions.md).
+
+![KPIs scorecard - summary](https://dqops.com/docs/images/working-with-dqo/data-quality-dashboards/kpis-scorecard-dashboards.png)
 
 
 ## What's next
