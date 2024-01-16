@@ -146,7 +146,7 @@ Below is the example of raw text message in the Markdown language which you can 
 > <http://localhost:8888/incidents/your_connection_name/2023/9/1 | **View in DQOps**>
 ```
 
-## External system linking
+## Linking incidents to external ticketing systems
 
 A notification has a special field called **issue URL**, which allows user to add an URL from an external ticketing system. 
 The issue URL can be added at any time. 
@@ -154,4 +154,6 @@ Adding an Issue URL to an incident provides easy access to the issue in the tick
 
 ## Next steps
 
-Now that you have learned about notifications, [set up Slack integration](../slack/configuring-slack-notifications.md) to receive them directly in Slack.
+- Now that you have learned about notifications, [set up Slack integration](../slack/configuring-slack-notifications.md) to receive them directly in Slack.
+- Learn how the [data quality incident workflow](../../dqo-concepts/grouping-data-quality-issues-to-incidents.md) is managed
+  by DQOps by grouping similar data quality issues into data quality incidents.

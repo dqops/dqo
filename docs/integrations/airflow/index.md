@@ -40,8 +40,12 @@ In case you get the error in a task based on DQOps airflow operator in logs, her
 
 **httpx.ConnectError: [Errno 111] Connection refused**
 
-This error points out that the DQOps python client can not connect to the DQOps application. The reasons are:
+This error points out that the DQOps python client can not connect to the DQOps instance. The reasons are:
 
-- DQOps application is down, server is not running
-- Passed url to application is invalid 
-- The DQOps server is not reachable due to network configuration 
+- DQOps instance is down, or the server is not working
+- The DQOps base url passed to the operator is invalid 
+- The DQOps server is not reachable due to networking issues 
+
+
+## What's next
+- Look at the use case of [integrating DQOps data quality checks with Dbt](../dbt/index.md) to learn how to run Dbt and DQOps together in Apache Airflow.

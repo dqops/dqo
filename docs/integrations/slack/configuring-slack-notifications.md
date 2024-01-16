@@ -154,3 +154,8 @@ dqo> dqo --dqo.instance.return-base-url=https://dqops.mycompany.com/ run
 The base URL for a DQOps Cloud SaaS instance is already configured, 
 and the base address is *https://&lt;customer&gt;.us.dqops.com* for instances hosted in the USA. 
 
+## What's next
+- Read the reference of [sending data quality incident notifications to any system using webhooks](../webhooks/index.md).
+- Learn how the [data quality incident workflow](../../dqo-concepts/grouping-data-quality-issues-to-incidents.md) is managed
+  by DQOps by grouping similar data quality issues into data quality incidents.
+
