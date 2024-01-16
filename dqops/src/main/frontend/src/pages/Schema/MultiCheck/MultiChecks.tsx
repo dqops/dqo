@@ -170,7 +170,6 @@ export const MultiChecks = () => {
       });
     }
   };
-  console.log(searchResults, filterParameters, multiCheckSearchedChecks)
 
   return (
     <div className="text-sm py-4">

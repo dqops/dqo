@@ -36,9 +36,9 @@ export default function MultiChecksTableItem({
             onChange={() => onChangeSelection(check)}
             checked={checked}
           />
-          <div className="cursor-not-allowed">
+          <div>
             <Switch
-              className="pointer-events-none cursor-not-allowed"
+              className="pointer-events-none"
               checked={check.configured ?? false}
             />
           </div>
@@ -47,7 +47,7 @@ export default function MultiChecksTableItem({
       <Button
         label={check.check_name}
         variant="text"
-        className="px-4 py-2 text-left underline"
+        className="px-4 py-2 text-left underline text-sm"
         onClick={() =>
           goToCheckDefinition(
             check.column_name
