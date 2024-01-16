@@ -15,10 +15,9 @@
  */
 package com.dqops.utils.docs.client.operations;
 
-import com.dqops.utils.docs.LinkageStore;
 import com.dqops.utils.docs.client.MainPageClientDocumentationModel;
-import com.dqops.utils.docs.files.DocumentationFolder;
 import com.dqops.utils.docs.client.apimodel.OpenAPIModel;
+import com.dqops.utils.docs.files.DocumentationFolder;
 
 import java.nio.file.Path;
 

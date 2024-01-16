@@ -15,20 +15,11 @@
  */
 package com.dqops.utils.docs.client;
 
-import lombok.Data;
+import com.dqops.utils.docs.files.DocumentationMarkdownFile;
 
 /**
- * Container object with subcomponents used to generate REST API index page.
+ * Yaml documentation generator that generate documentation for yaml.
  */
-@Data
-public class MainPageClientDocumentationModel {
-    /**
-     * Documentation model for the index (listing of operations and models) of the REST API index page.
-     */
-    private MainPageClientIndexDocumentationModel indexDocumentationModel;
-
-    /**
-     * Documentation model for the Python client guide. Contains selected examples on how to use the `dqops` package in Python.
-     */
-    private MainPageClientGuideDocumentationModel guideDocumentationModel;
+public interface MainPageClientDocumentationGenerator {
+    DocumentationMarkdownFile renderMainPageDocumentation(MainPageClientDocumentationModel mainPageModel);
 }

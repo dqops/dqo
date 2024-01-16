@@ -29,6 +29,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Python client documentation generator that generate documentation for operations.
@@ -76,8 +77,8 @@ public class OperationsDocumentationGeneratorImpl implements OperationsDocumenta
         }
 
         operationsSuperiorObjectDocumentationModels.sort(Comparator.comparing(OperationsSuperiorObjectDocumentationModel::getSuperiorClassSimpleName));
-        mainPageModel.setOperations(operationsSuperiorObjectDocumentationModels);
-        mainPageModel.setSelectedExamples(selectUsageExamplesForClientMainPage(operationsSuperiorObjectDocumentationModels));
+        mainPageModel.getIndexDocumentationModel().setOperations(operationsSuperiorObjectDocumentationModels);
+        mainPageModel.getGuideDocumentationModel().setSelectedExamples(selectUsageExamplesForClientMainPage(operationsSuperiorObjectDocumentationModels));
 
         MainPageOperationsDocumentationModel mainPageOperationsDocumentationModel = new MainPageOperationsDocumentationModel();
         mainPageOperationsDocumentationModel.setControllerOperations(operationsSuperiorObjectDocumentationModels);
@@ -103,7 +104,26 @@ public class OperationsDocumentationGeneratorImpl implements OperationsDocumenta
 
     protected List<OperationUsageExampleDocumentationModel> selectUsageExamplesForClientMainPage(
             List<OperationsSuperiorObjectDocumentationModel> operationsSuperiorModels) {
-        // TODO: tutaj dalej praca
-        return new ArrayList<>();
+        List<OperationUsageExampleDocumentationModel> selectedUsageExamples = new ArrayList<>();
+
+        OperationsOperationDocumentationModel runChecksOperation = operationsSuperiorModels.stream()
+                .filter(controller -> controller.getSuperiorClassSimpleName().equals("jobs"))
+                .flatMap(controller -> controller.getOperationObjects().stream())
+                .filter(operation -> operation.getOperationPythonName().equals("run_checks"))
+                .findAny().get();
+        OperationUsageExampleDocumentationModel runChecksExample = getUsageExampleFromOperationModel(runChecksOperation);
+
+        runChecksExample.setExampleName("Run checks");
+        runChecksExample.setExampleDescription(runChecksOperation.getOperationDescription());
+        selectedUsageExamples.add(runChecksExample);
+
+        return selectedUsageExamples;
+    }
+
+    protected OperationUsageExampleDocumentationModel getUsageExampleFromOperationModel(OperationsOperationDocumentationModel operationDocumentationModel) {
+        Optional<OperationUsageExampleDocumentationModel> usageExample = operationDocumentationModel.getUsageExamples().stream()
+                .filter(example -> example.getExecutionMethod() == OperationExecutionMethod.auth_python_sync)
+                .findAny();
+        return usageExample.get();
     }
 }

@@ -16,21 +16,15 @@
 package com.dqops.utils.docs.client.models;
 
 import com.dqops.utils.docs.HandlebarsDocumentationUtilities;
-import com.dqops.utils.docs.LinkageStore;
-import com.dqops.utils.docs.checks.CheckCategoryDocumentationModel;
-import com.dqops.utils.docs.checks.MainPageCheckDocumentationModel;
 import com.dqops.utils.docs.client.MainPageClientDocumentationModel;
 import com.dqops.utils.docs.client.apimodel.ComponentModel;
-import com.dqops.utils.docs.client.operations.OperationsSuperiorObjectDocumentationModel;
 import com.dqops.utils.docs.files.DocumentationFolder;
 import com.dqops.utils.docs.files.DocumentationMarkdownFile;
-import com.dqops.utils.docs.sensors.MainPageSensorDocumentationModel;
 import com.github.jknack.handlebars.Template;
 import com.google.common.collect.Streams;
 
 import java.nio.file.Path;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -70,7 +64,7 @@ public class ModelsDocumentationGeneratorImpl implements ModelsDocumentationGene
         List<ModelsSuperiorObjectDocumentationModel> modelsSuperiorObjectDocumentationModels =
                 modelsDocumentationModelFactory.createDocumentationForModels(componentModels);
 
-        mainPageModel.setModels(Streams.concat(
+        mainPageModel.getIndexDocumentationModel().setModels(Streams.concat(
                 Stream.of(sharedModelsDocumentationModel),
                 modelsSuperiorObjectDocumentationModels.stream()
         ).collect(Collectors.toList()));

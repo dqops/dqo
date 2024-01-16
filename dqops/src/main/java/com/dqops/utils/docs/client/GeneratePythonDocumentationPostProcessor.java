@@ -16,8 +16,6 @@
 package com.dqops.utils.docs.client;
 
 import com.dqops.utils.docs.*;
-import com.dqops.utils.docs.checks.CheckCategoryDocumentationModel;
-import com.dqops.utils.docs.checks.MainPageCheckDocumentationModel;
 import com.dqops.utils.docs.client.apimodel.OpenAPIModel;
 import com.dqops.utils.docs.client.models.ModelsDocumentationGenerator;
 import com.dqops.utils.docs.client.models.ModelsDocumentationGeneratorImpl;
@@ -45,6 +43,7 @@ import io.swagger.v3.oas.models.parameters.Parameter;
 import io.swagger.v3.oas.models.parameters.RequestBody;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.parser.core.models.SwaggerParseResult;
+import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -102,6 +101,8 @@ public class GeneratePythonDocumentationPostProcessor {
             OpenAPIModel openAPIModel = OpenAPIModel.fromOpenAPI(openAPI, targetLinkage, linkageStore, docsModelLinkageService, componentReflectionService);
 
             MainPageClientDocumentationModel mainPageClientDocumentationModel = new MainPageClientDocumentationModel();
+            mainPageClientDocumentationModel.setIndexDocumentationModel(new MainPageClientIndexDocumentationModel());
+            mainPageClientDocumentationModel.setGuideDocumentationModel(new MainPageClientGuideDocumentationModel());
 
             generateDocumentationForModels(projectDir, openAPIModel, mainPageClientDocumentationModel);
             generateDocumentationForOperations(projectDir, openAPIModel, mainPageClientDocumentationModel);
@@ -235,13 +236,7 @@ public class GeneratePythonDocumentationPostProcessor {
                 .toAbsolutePath().normalize();
         DocumentationFolder currentOperationsDocFiles = DocumentationFolderFactory.loadCurrentFiles(operationsDocPath);
 
-        DocumentationReflectionService documentationReflectionService = new DocumentationReflectionServiceImpl(new ReflectionServiceImpl());
-        PythonExampleDocumentationModelFactory pythonExampleDocumentationModelFactory = new PythonExampleDocumentationModelFactoryImpl(
-                documentationReflectionService,
-                new PythonSerializerImpl(new ParsedSampleObjectFactoryImpl(documentationReflectionService))
-        );
-        PythonExampleDocumentationGenerator pythonExampleDocumentationGenerator = new PythonExampleDocumentationGeneratorImpl(pythonExampleDocumentationModelFactory);
-        UsageExampleModelFactory usageExampleModelFactory = new UsageExampleModelFactoryImpl(pythonExampleDocumentationGenerator);
+        UsageExampleModelFactory usageExampleModelFactory = getUsageExampleModelFactory();
         OperationsDocumentationGenerator operationsDocumentationGenerator = new OperationsDocumentationGeneratorImpl(
                 new OperationsDocumentationModelFactoryImpl(),
                 usageExampleModelFactory);
@@ -249,6 +244,17 @@ public class GeneratePythonDocumentationPostProcessor {
         DocumentationFolder renderedDocumentation = operationsDocumentationGenerator.renderOperationsDocumentation(
                 projectRoot, openAPIModel, mainPageModel);
         renderedDocumentation.writeModifiedFiles(currentOperationsDocFiles);
+    }
+
+    @NotNull
+    private static UsageExampleModelFactory getUsageExampleModelFactory() {
+        DocumentationReflectionService documentationReflectionService = new DocumentationReflectionServiceImpl(new ReflectionServiceImpl());
+        PythonExampleDocumentationModelFactory pythonExampleDocumentationModelFactory = new PythonExampleDocumentationModelFactoryImpl(
+                documentationReflectionService,
+                new PythonSerializerImpl(new ParsedSampleObjectFactoryImpl(documentationReflectionService))
+        );
+        PythonExampleDocumentationGenerator pythonExampleDocumentationGenerator = new PythonExampleDocumentationGeneratorImpl(pythonExampleDocumentationModelFactory);
+        return new UsageExampleModelFactoryImpl(pythonExampleDocumentationGenerator);
     }
 
     protected static void generateMainPageDocumentation(Path projectRoot,
@@ -259,22 +265,22 @@ public class GeneratePythonDocumentationPostProcessor {
                 .toAbsolutePath().normalize();
         DocumentationFolder currentClientDocFiles = DocumentationFolderFactory.loadCurrentFiles(clientPath);
 
-        mainPageModel.setModels(
-                mainPageModel.getModels().stream()
+        mainPageModel.getIndexDocumentationModel().setModels(
+                mainPageModel.getIndexDocumentationModel().getModels().stream()
                         .sorted(Comparator.comparing(
                                 ModelsSuperiorObjectDocumentationModel::getLocationFilePath,
                                 cherryPickComparator.thenComparing(Comparator.naturalOrder()))
                         ).collect(Collectors.toList())
         );
 
-        Template mainPageTemplate = HandlebarsDocumentationUtilities.compileTemplate("client/main_page_documentation");
+        DocumentationResourceFileLoader documentationResourceFileLoader = new DocumentationResourceFileLoaderImpl(projectRoot);
+        MainPageClientDocumentationGenerator mainPageClientDocumentationGenerator = new MainPageClientDocumentationGeneratorImpl(documentationResourceFileLoader);
+        DocumentationMarkdownFile mainPageFile = mainPageClientDocumentationGenerator.renderMainPageDocumentation(mainPageModel);
 
         DocumentationFolder renderedDocFiles = DocumentationFolderFactory.loadCurrentFiles(clientPath);
-        DocumentationMarkdownFile mainPageDocumentationMarkdownFile = renderedDocFiles.addNestedFile("index" + ".md");
-        mainPageDocumentationMarkdownFile.setRenderContext(mainPageModel);
+        DocumentationMarkdownFile nestedFile = renderedDocFiles.addNestedFile(mainPageFile);
+        nestedFile.setRenderContext(mainPageModel);
 
-        String renderedMainPageDocument = HandlebarsDocumentationUtilities.renderTemplate(mainPageTemplate, mainPageModel);
-        mainPageDocumentationMarkdownFile.setFileContent(renderedMainPageDocument);
         renderedDocFiles.writeModifiedFiles(currentClientDocFiles);
     }
 

@@ -15,20 +15,24 @@
  */
 package com.dqops.utils.docs.client;
 
+import com.dqops.utils.docs.client.models.ModelsSuperiorObjectDocumentationModel;
+import com.dqops.utils.docs.client.operations.OperationsSuperiorObjectDocumentationModel;
 import lombok.Data;
 
+import java.util.List;
+
 /**
- * Container object with subcomponents used to generate REST API index page.
+ * Container object with a list of all REST API methods and models.
  */
 @Data
-public class MainPageClientDocumentationModel {
+public class MainPageClientIndexDocumentationModel {
     /**
-     * Documentation model for the index (listing of operations and models) of the REST API index page.
+     * Operations superior object documentation models.
      */
-    private MainPageClientIndexDocumentationModel indexDocumentationModel;
+    private List<OperationsSuperiorObjectDocumentationModel> operations;
 
     /**
-     * Documentation model for the Python client guide. Contains selected examples on how to use the `dqops` package in Python.
+     * Models superior object documentation models.
      */
-    private MainPageClientGuideDocumentationModel guideDocumentationModel;
+    private List<ModelsSuperiorObjectDocumentationModel> models;
 }
