@@ -288,7 +288,7 @@ The elements of a dashboard node are:
   as the dashboard name defined in Looker Studio
 
 - `url` stores the embeddable dashboard url that you should now copy from the *Embed report* screen shown
-  in the [Getting the embeddable dashboard url](#getting-the-embeddable-dashboard-url) section
+  in the [Getting the embeddable dashboard url](#get-the-embeddable-dashboard-url) section
 
 - `width` and `height` are the width and height of the dashboard  which is set in Looker Studio in the *Theme and Layout* section
 
@@ -309,7 +309,7 @@ Your dashboard will be visible in the **Data Quality Dashboards** section in the
 ## Change built-in dashboards
 If any of the DQOps built-in dashboard does not serve your purpose and you need to change the layout, 
 reorder the filters or add new sections, simply make a copy of the dashboard following this manual up to the
-section of [Adding the dashboard to DQOps](#adding-the-dashboard-to-dqops). 
+section of [Adding the dashboard to DQOps](#add-the-dashboard-to-dqops). 
 
 Copy the whole folder tree where the dashboard is found from the 
 [default dashboard list file](https://github.com/dqops/dqo/blob/develop/home/settings/dashboardslist.dqodashboards.yaml)
@@ -338,3 +338,11 @@ The `ds0.token` parameter must be changed back to `0` before publishing the repo
 for any user who knows the report url will be accessible to anybody, allowing to see your private data.
 
 The *DQOps Cloud Looker Studio Community Connector API Key* is available only for paid customers of DQOps.
+
+
+## What's next
+- Learn the [data quality KPI formula](../../dqo-concepts/definition-of-data-quality-kpis.md) used by DQOps.
+- Find out what [types of data quality dashboards](../../dqo-concepts/types-of-data-quality-dashboards.md) are provided with DQOps.
+- Learn how the [data quality workflow with data quality dashboards](../../working-with-dqo/daily-monitoring-of-data-quality.md) uses
+  the data quality dashboards for reviewing the data quality issues.
+
