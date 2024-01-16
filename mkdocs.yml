@@ -476,6 +476,7 @@ nav:
 ########## END INCLUDE RULE REFERENCE
 ########## INCLUDE YAML REFERENCE - DO NOT MODIFY MANUALLY
     - DQOps YAML files schema:
+      - 'reference/yaml/index.md'
       - profiling:
         - 'reference/yaml/profiling/index.md'
         - table profiling checks: 'reference/yaml/profiling/table-profiling-checks.md'

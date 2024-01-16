@@ -21,9 +21,9 @@ The following reference documentation shows the definition of data quality senso
 ## File format references 
 The following reference documentation describes YAML file formats and Parquet schema used by DQOps.
 
- - **DQOps YAML files reference**
+ - **[DQOps YAML files reference](./yaml/index.md)**
 
-    All YAML files used by DQOps are described in this section. The most important ones are:
+    All YAML files used by DQOps are described in this section. The most important files are:
 
      - **[.dqoconnection.yaml](./yaml/ConnectionYaml.md)** with the configuration of the data source.
 

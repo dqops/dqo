@@ -355,6 +355,7 @@ public class GenerateDocumentationPostProcessor {
         DocumentationFolder renderedDocumentation = yamlDocumentationGenerator.renderYamlDocumentation(projectRoot, linkageStore, yamlDocumentationSchema);
         renderedDocumentation.writeModifiedFiles(currentYamlDocFiles);
 
+        renderedDocumentation.addNestedFile("index.md"); // adding the manually created index file
         List<String> renderedIndexYaml = renderedDocumentation.generateMkDocsNavigation(4);
         FileContentIndexReplaceUtility.replaceContentLines(projectRoot.resolve("../mkdocs.yml"),
                 renderedIndexYaml,
