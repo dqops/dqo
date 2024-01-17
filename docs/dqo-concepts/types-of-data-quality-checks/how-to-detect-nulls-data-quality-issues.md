@@ -16,15 +16,15 @@ How to detect nulls data quality issues.
 ## List of nulls checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |
 |-------------------------|------------------------|-------------|-------|
-|[*nulls_count*](../../checks/column/nulls/nulls-count.md)|Completeness|Column-level check that ensures that there are no more than a set number of null values in the monitored column.|:material-check-bold:|
-|[*nulls_percent*](../../checks/column/nulls/nulls-percent.md)|Completeness|Column-level check that ensures that there are no more than a set percentage of null values in the monitored column.| |
-|[*not_nulls_count*](../../checks/column/nulls/not-nulls-count.md)|Completeness|Column-level check that ensures that there are no more than a set number of null values in the monitored column.|:material-check-bold:|
-|[*not_nulls_percent*](../../checks/column/nulls/not-nulls-percent.md)|Completeness|Column-level check that ensures that there are no more than a set percentage of not null values in the monitored column.|:material-check-bold:|
-|[*nulls_percent_anomaly*](../../checks/column/nulls/nulls-percent-anomaly.md)|Consistency|Column-level check that ensures that the null percent value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days. Use in partitioned checks.| |
-|[*nulls_percent_change*](../../checks/column/nulls/nulls-percent-change.md)|Consistency|Column-level check that ensures that the null percent in a monitored column has changed by a fixed rate since the last readout.| |
-|[*nulls_percent_change_1_day*](../../checks/column/nulls/nulls-percent-change-1-day.md)|Consistency|Column-level check that ensures that the null percent in a monitored column has changed by a fixed rate since the last readout from yesterday.| |
-|[*nulls_percent_change_7_days*](../../checks/column/nulls/nulls-percent-change-7-days.md)|Consistency|Column-level check that ensures that the null percent in a monitored column has changed by a fixed rate since the last readout from last week.| |
-|[*nulls_percent_change_30_days*](../../checks/column/nulls/nulls-percent-change-30-days.md)|Consistency|Column-level check that ensures that the null percent in a monitored column has changed by a fixed rate since the last readout from last month.| |
+|[*nulls_count*](../../checks/column/nulls/nulls-count.md)|Completeness|A column-level check that ensures that there are no more than a set number of null values in the monitored column.|:material-check-bold:|
+|[*nulls_percent*](../../checks/column/nulls/nulls-percent.md)|Completeness|A column-level check that ensures that there are no more than a set percentage of null values in the monitored column.| |
+|[*not_nulls_count*](../../checks/column/nulls/not-nulls-count.md)|Completeness|A column-level check that ensures that there are no more than a set number of null values in the monitored column.|:material-check-bold:|
+|[*not_nulls_percent*](../../checks/column/nulls/not-nulls-percent.md)|Completeness|A column-level check that ensures that there are no more than a set percentage of not null values in the monitored column.|:material-check-bold:|
+|[*nulls_percent_anomaly*](../../checks/column/nulls/nulls-percent-anomaly.md)|Consistency|A column-level check that ensures that the null percent value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days. Use in partitioned checks.| |
+|[*nulls_percent_change*](../../checks/column/nulls/nulls-percent-change.md)|Consistency|A column-level check that ensures that the null percent in a monitored column has changed by a fixed rate since the last readout.| |
+|[*nulls_percent_change_1_day*](../../checks/column/nulls/nulls-percent-change-1-day.md)|Consistency|A column-level check that ensures that the null percent in a monitored column has changed by a fixed rate since the last readout from yesterday.| |
+|[*nulls_percent_change_7_days*](../../checks/column/nulls/nulls-percent-change-7-days.md)|Consistency|A column-level check that ensures that the null percent in a monitored column has changed by a fixed rate since the last readout from last week.| |
+|[*nulls_percent_change_30_days*](../../checks/column/nulls/nulls-percent-change-30-days.md)|Consistency|A column-level check that ensures that the null percent in a monitored column has changed by a fixed rate since the last readout from the last month.| |
 
 
 **Reference and samples**

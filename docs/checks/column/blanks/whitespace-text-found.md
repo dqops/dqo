@@ -1,6 +1,6 @@
 # whitespace text found data quality checks
 
-Column-level check that ensures that there are no more than a maximum number of whitespace texts in a monitored column.
+A column-level check that ensures that there are no more than a maximum number of whitespace texts in a monitored column.
 
 
 ___

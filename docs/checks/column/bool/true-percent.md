@@ -1,6 +1,6 @@
 # true percent data quality checks
 
-Column level check that ensures that there are at least percentage of rows with a true value in a monitored column.
+A column-level check that ensures that the proportion of true values in a column is not below the minimum accepted percentage.
 
 
 ___

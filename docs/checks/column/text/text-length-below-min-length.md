@@ -1,6 +1,6 @@
 # text length below min length data quality checks
 
-Column-level check that ensures that the number of texts in the monitored column with a length below the length defined by the user as a parameter does not exceed set thresholds.
+A column-level check that ensures that the number of text values in the monitored column with a length below the length defined by the user as a parameter does not exceed set thresholds.
 
 
 ___

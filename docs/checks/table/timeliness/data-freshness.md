@@ -1,6 +1,6 @@
 # data freshness data quality checks
 
-Table-level check that calculates the time difference between the most recent row in the table and the current time.
+A table-level check that calculates the time difference between the most recent row in the table and the current time.
  The timestamp column that is used for comparison is defined as the timestamp_columns.event_timestamp_column on the table configuration.
  This check is also known as &quot;Data Freshness&quot;.
 

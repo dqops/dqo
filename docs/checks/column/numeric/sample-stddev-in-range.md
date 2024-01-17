@@ -1,6 +1,6 @@
 # sample stddev in range data quality checks
 
-Column level check that ensures the sample standard deviation is in an expected range in a monitored column.
+A column-level check that ensures that the standard deviation of the sample is within the expected range in the monitored column.
 
 
 ___

@@ -27,7 +27,8 @@ class SparkParametersSpec:
         options (Union[Unset, str]): Spark connection 'options' initialization parameter. For example setting this to -c
             statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a
             ${REDSHIFT_OPTIONS} configuration with a custom environment variable.
-        properties (Union[Unset, SparkParametersSpecProperties]):
+        properties (Union[Unset, SparkParametersSpecProperties]): A dictionary of custom JDBC parameters that are added
+            to the JDBC connection string, a key/value dictionary.
         database (Union[Unset, str]):
     """
 

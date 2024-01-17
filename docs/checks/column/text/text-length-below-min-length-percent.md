@@ -1,6 +1,6 @@
 # text length below min length percent data quality checks
 
-Column-level check that ensures that the percentage of texts in the monitored column with a length below the length defined by the user as a parameter does not fall below set thresholds.
+A column-level check that ensures that the percentage of text values in the monitored column with a length below the length defined by the user as a parameter does not fall below set thresholds.
 
 
 ___

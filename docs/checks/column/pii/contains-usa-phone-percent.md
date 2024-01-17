@@ -1,6 +1,6 @@
 # contains usa phone percent data quality checks
 
-Column check that calculates the percentage of rows that contains USA phone number values in a column.
+Column check that calculates the percentage of rows that contains USA phone number values in a monitored column.
 
 
 ___

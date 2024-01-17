@@ -33,7 +33,8 @@ class PostgresqlParametersSpec:
             to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports
             also a ${POSTGRESQL_OPTIONS} configuration with a custom environment variable.
         sslmode (Union[Unset, PostgresqlSslMode]):
-        properties (Union[Unset, PostgresqlParametersSpecProperties]):
+        properties (Union[Unset, PostgresqlParametersSpecProperties]): A dictionary of custom JDBC parameters that are
+            added to the JDBC connection string, a key/value dictionary.
     """
 
     host: Union[Unset, str] = UNSET

@@ -1,8 +1,8 @@
 # expected numbers in use count data quality checks
 
-Column-level check that counts unique values in a numeric column and counts how many values out of a list of expected numeric values were found in the column.
- The check raises a data quality issue when the threshold of maximum number of missing values was exceeded (too many expected values were not found in the column).
- This check is useful for analysing columns with a low number of unique values, such as status codes, to detect that all status codes are in use in any row.
+A column-level check that counts unique values in a numeric column and counts how many values out of a list of expected numeric values were found in the column.
+ The check raises a data quality issue when the threshold for the maximum number of missing has been exceeded (too many expected values were not found in the column).
+ This check is useful for analysing columns with a low number of unique values, such as status codes, to detect whether all status codes are used in any row.
 
 
 ___

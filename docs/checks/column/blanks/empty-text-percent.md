@@ -1,6 +1,6 @@
 # empty text percent data quality checks
 
-Column-level check that ensures that there are no more than a maximum percent of empty texts in a monitored column.
+A column-level check that ensures that there are no more than a maximum percent of empty texts in a monitored column.
 
 
 ___

@@ -1,7 +1,7 @@
 # column exists data quality checks
 
-Column level check that reads the metadata of the monitored table and verifies that the column still exists in the data source.
- The data quality sensor returns 1.0 when the column was found or 0.0 when the column was not found.
+A column-level check that reads the metadata of the monitored table and verifies if the column still exists in the data source.
+ The data quality sensor returns a value of 1.0 when the column is found or 0.0 when the column is not found.
 
 
 ___

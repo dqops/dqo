@@ -1,6 +1,6 @@
 # column types changed data quality checks
 
-Table-level check that detects if the column names or column types have changed since the last time the check was run.
+A table-level check that detects if the column names or column types have changed since the last time the check was run.
  This check calculates a hash of the column names and all the components of the column&#x27;s data type: the data type name, length, scale, precision and nullability.
  A data quality issue will be detected if the hash of the column data types has changed. This check does not depend on the order of columns, the columns could be reordered as long
  as all columns are still present and the data types match since the last time they were tested.

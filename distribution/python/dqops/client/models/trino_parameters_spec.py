@@ -27,7 +27,6 @@ class TrinoParametersSpec:
             dynamic substitution.
         password (Union[Unset, str]): Trino database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}
             format to use dynamic substitution.
-        properties (Union[Unset, TrinoParametersSpecProperties]):
         athena_authentication_mode (Union[Unset, AthenaAuthenticationMode]):
         athena_region (Union[Unset, str]): The AWS Region where queries will be run. Supports also a ${ATHENA_REGION}
             configuration with a custom environment variable.
@@ -37,6 +36,8 @@ class TrinoParametersSpec:
             ${ATHENA_WORK_GROUP} configuration with a custom environment variable.
         athena_output_location (Union[Unset, str]): The location in Amazon S3 where query results will be stored.
             Supports also a ${ATHENA_OUTPUT_LOCATION} configuration with a custom environment variable.
+        properties (Union[Unset, TrinoParametersSpecProperties]): A dictionary of custom JDBC parameters that are added
+            to the JDBC connection string, a key/value dictionary.
         database (Union[Unset, str]):
     """
 
@@ -45,12 +46,12 @@ class TrinoParametersSpec:
     port: Union[Unset, str] = UNSET
     user: Union[Unset, str] = UNSET
     password: Union[Unset, str] = UNSET
-    properties: Union[Unset, "TrinoParametersSpecProperties"] = UNSET
     athena_authentication_mode: Union[Unset, AthenaAuthenticationMode] = UNSET
     athena_region: Union[Unset, str] = UNSET
     catalog: Union[Unset, str] = UNSET
     athena_work_group: Union[Unset, str] = UNSET
     athena_output_location: Union[Unset, str] = UNSET
+    properties: Union[Unset, "TrinoParametersSpecProperties"] = UNSET
     database: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -63,10 +64,6 @@ class TrinoParametersSpec:
         port = self.port
         user = self.user
         password = self.password
-        properties: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.properties, Unset):
-            properties = self.properties.to_dict()
-
         athena_authentication_mode: Union[Unset, str] = UNSET
         if not isinstance(self.athena_authentication_mode, Unset):
             athena_authentication_mode = self.athena_authentication_mode.value
@@ -75,6 +72,10 @@ class TrinoParametersSpec:
         catalog = self.catalog
         athena_work_group = self.athena_work_group
         athena_output_location = self.athena_output_location
+        properties: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.properties, Unset):
+            properties = self.properties.to_dict()
+
         database = self.database
 
         field_dict: Dict[str, Any] = {}
@@ -90,8 +91,6 @@ class TrinoParametersSpec:
             field_dict["user"] = user
         if password is not UNSET:
             field_dict["password"] = password
-        if properties is not UNSET:
-            field_dict["properties"] = properties
         if athena_authentication_mode is not UNSET:
             field_dict["athena_authentication_mode"] = athena_authentication_mode
         if athena_region is not UNSET:
@@ -102,6 +101,8 @@ class TrinoParametersSpec:
             field_dict["athena_work_group"] = athena_work_group
         if athena_output_location is not UNSET:
             field_dict["athena_output_location"] = athena_output_location
+        if properties is not UNSET:
+            field_dict["properties"] = properties
         if database is not UNSET:
             field_dict["database"] = database
 
@@ -129,13 +130,6 @@ class TrinoParametersSpec:
 
         password = d.pop("password", UNSET)
 
-        _properties = d.pop("properties", UNSET)
-        properties: Union[Unset, TrinoParametersSpecProperties]
-        if isinstance(_properties, Unset):
-            properties = UNSET
-        else:
-            properties = TrinoParametersSpecProperties.from_dict(_properties)
-
         _athena_authentication_mode = d.pop("athena_authentication_mode", UNSET)
         athena_authentication_mode: Union[Unset, AthenaAuthenticationMode]
         if isinstance(_athena_authentication_mode, Unset):
@@ -153,6 +147,13 @@ class TrinoParametersSpec:
 
         athena_output_location = d.pop("athena_output_location", UNSET)
 
+        _properties = d.pop("properties", UNSET)
+        properties: Union[Unset, TrinoParametersSpecProperties]
+        if isinstance(_properties, Unset):
+            properties = UNSET
+        else:
+            properties = TrinoParametersSpecProperties.from_dict(_properties)
+
         database = d.pop("database", UNSET)
 
         trino_parameters_spec = cls(
@@ -161,12 +162,12 @@ class TrinoParametersSpec:
             port=port,
             user=user,
             password=password,
-            properties=properties,
             athena_authentication_mode=athena_authentication_mode,
             athena_region=athena_region,
             catalog=catalog,
             athena_work_group=athena_work_group,
             athena_output_location=athena_output_location,
+            properties=properties,
             database=database,
         )
 

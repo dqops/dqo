@@ -1,6 +1,6 @@
 # contains ip6 percent data quality checks
 
-Column check that calculates the percentage of rows that contains valid IP6 address values in a column.
+Column check that calculates the percentage of rows that contains valid IP6 address values in a monitored column.
 
 
 ___

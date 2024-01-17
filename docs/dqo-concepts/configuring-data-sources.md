@@ -143,7 +143,7 @@ The file name pattern for [\*.dqotable.yaml](../reference/yaml/TableYaml.md) fil
    
      - *dataset* in [BigQuery](../data-sources/bigquery.md)
 
-  - `<table_name>` part stores the table name
+ - `<table_name>` part stores the table name
 
 An example of a [`DQOps user home`](dqops-user-home-folder.md) folder with two tables is shown below.
 

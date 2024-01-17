@@ -1,6 +1,6 @@
 # text not matching date pattern found data quality checks
 
-Column check that calculates quantity of values that does not match the date regex in a column.
+A column-level that calculates the quantity of values that do not match the date regex in a monitored column.
 
 
 ___

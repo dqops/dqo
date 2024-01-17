@@ -1,6 +1,6 @@
 # min in range data quality checks
 
-Column level check that ensures that the minimum values are in an expected range in a monitored column.
+A column-level check that ensures that the minimum values are within the expected range in the monitored column.
 
 
 ___

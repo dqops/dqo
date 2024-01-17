@@ -1,6 +1,6 @@
 # duplicate percent data quality checks
 
-Column-level check that ensures that the percentage of duplicate values in a column does not exceed the maximum accepted percentage.
+A column-level check that ensures that the percentage of duplicate values in a column does not exceed the maximum accepted percentage.
 
 
 ___

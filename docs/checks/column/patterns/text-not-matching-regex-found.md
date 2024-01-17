@@ -1,6 +1,6 @@
 # text not matching regex found data quality checks
 
-Column check that calculates quantity of values that does not match the custom regex in a column.
+A column-level that calculates the quantity of values that do not match the custom regex in a monitored column.
 
 
 ___

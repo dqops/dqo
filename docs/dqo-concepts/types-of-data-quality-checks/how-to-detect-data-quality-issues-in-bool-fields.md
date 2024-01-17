@@ -16,8 +16,8 @@ How to detect bool data quality issues.
 ## List of bool checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |
 |-------------------------|------------------------|-------------|-------|
-|[*true_percent*](../../checks/column/bool/true-percent.md)|Reasonableness|Column level check that ensures that there are at least percentage of rows with a true value in a monitored column.|:material-check-bold:|
-|[*false_percent*](../../checks/column/bool/false-percent.md)|Reasonableness|Column level check that ensures that there are at least a minimum percentage of rows with a false value in a monitored column.|:material-check-bold:|
+|[*true_percent*](../../checks/column/bool/true-percent.md)|Reasonableness|A column-level check that ensures that the proportion of true values in a column is not below the minimum accepted percentage.|:material-check-bold:|
+|[*false_percent*](../../checks/column/bool/false-percent.md)|Reasonableness|A column-level check that ensures that the proportion of false values in a column is not below the minimum accepted percentage.|:material-check-bold:|
 
 
 **Reference and samples**

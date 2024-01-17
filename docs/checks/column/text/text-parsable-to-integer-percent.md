@@ -1,6 +1,6 @@
 # text parsable to integer percent data quality checks
 
-Column-level check that ensures that the percentage of texts that are parsable to integer in the monitored column does not fall below set thresholds.
+A column-level check that ensures that the percentage of text values that are parsable to integer in the monitored column does not fall below set thresholds.
 
 
 ___

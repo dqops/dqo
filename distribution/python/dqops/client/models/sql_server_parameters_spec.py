@@ -33,7 +33,8 @@ class SqlServerParametersSpec:
             also a ${SQLSERVER_OPTIONS} configuration with a custom environment variable.
         disable_encryption (Union[Unset, bool]): Disable SSL encryption parameter. The default value is false. You may
             need to disable encryption when SQL Server is started in Docker.
-        properties (Union[Unset, SqlServerParametersSpecProperties]):
+        properties (Union[Unset, SqlServerParametersSpecProperties]): A dictionary of custom JDBC parameters that are
+            added to the JDBC connection string, a key/value dictionary.
     """
 
     host: Union[Unset, str] = UNSET

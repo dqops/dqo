@@ -1,6 +1,6 @@
 # row count change 7 days data quality checks
 
-Table-level check that ensures that the row count changed by a fixed rate since the last readout from last week.
+A table-level check that ensures that the row count changed by a fixed rate since the last readout from last week.
 
 
 ___

@@ -1,6 +1,6 @@
 # median in range data quality checks
 
-Column level check that ensures that the median of values in a monitored column is in an expected range.
+A column-level check that ensures that the median value in the monitored column is within the expected range.
 
 
 ___

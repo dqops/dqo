@@ -1,10 +1,10 @@
 # number found in set percent data quality checks
 
-Column level check that calculates the percentage of rows for which the tested numeric column contains a value from the set of expected values.
+A column-level check that calculates the percentage of rows for which the tested numeric column contains a value from a set of expected values.
  Columns with null values are also counted as a passing value (the sensor assumes that a &#x27;null&#x27; is also an expected and accepted value).
  The check raises a data quality issue when the percentage of rows with a not null column value that is not expected (not one of the values in the expected_values set)
- is below an expected threshold, for example 99% of rows should have values from the defined domain.
- This data quality check is useful for checking numeric columns that store numeric codes (such as status codes) that the only values found in the column are from a set of expected values.
+ is below the expected threshold. For example, 99% of rows should have values from the defined domain.
+ This data quality check is useful for checking numeric columns that store numeric codes (such as status codes) to see if the only values found in the column are from the set of expected values.
 
 
 ___

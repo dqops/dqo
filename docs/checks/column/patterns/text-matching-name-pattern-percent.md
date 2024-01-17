@@ -1,6 +1,6 @@
 # text matching name pattern percent data quality checks
 
-Column check that calculates the percentage of values that match the name regex in a column.
+A column-level that calculates the percentage of values that match the name regex in a monitored column.
 
 
 ___

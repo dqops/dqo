@@ -1,7 +1,7 @@
 # column type changed data quality checks
 
-Column level check that detects if the data type of the column has changed since the last time it was retrieved.
- This check calculates a hash of all the components of the column&#x27;s data type: the data type name, length, scale, precision and nullability.
+A column-level check that detects if the data type of the column has changed since the last retrieval.
+ This check calculates the hash of all the components of the column&#x27;s data type: the data type name, length, scale, precision and nullability.
  A data quality issue will be detected if the hash of the column&#x27;s data types has changed.
 
 

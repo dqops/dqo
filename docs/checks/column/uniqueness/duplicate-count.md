@@ -1,6 +1,6 @@
 # duplicate count data quality checks
 
-Column-level check that ensures that the number of duplicate values in a column does not exceed the maximum accepted count.
+A column-level check that ensures that the number of duplicate values in a column does not exceed the maximum accepted count.
 
 
 ___

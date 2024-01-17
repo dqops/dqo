@@ -1,6 +1,6 @@
 # text matching date pattern percent data quality checks
 
-Column check that calculates the percentage of values that match the date regex in a column.
+A column-level check that calculates the percentage of values that match the date regex in a monitored column.
 
 
 ___

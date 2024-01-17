@@ -1,6 +1,6 @@
 # texts matching regex percent data quality checks
 
-Column check that calculates the percentage of values that matches the custom regex in a column.
+A column-level that calculates the percentage of values that match the custom regex in a monitored column.
 
 
 ___

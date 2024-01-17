@@ -10,7 +10,7 @@ spec:
     data_type: enum
     required: true
     allowed_values:
-    - YYYY-MM-DD
     - DD/MM/YYYY
-    - DD.MM.YYYY
     - DD-MM-YYYY
+    - DD.MM.YYYY
+    - YYYY-MM-DD

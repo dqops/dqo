@@ -1,6 +1,6 @@
 # text surrounded by whitespace data quality checks
 
-Column-level check that ensures that there are no more than a maximum number of texts that are surrounded by whitespace in a monitored column.
+A column-level check that ensures that there are no more than a maximum number of text values that are surrounded by whitespace in a monitored column.
 
 
 ___

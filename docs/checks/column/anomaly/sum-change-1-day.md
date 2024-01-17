@@ -1,6 +1,6 @@
 # sum change 1 day data quality checks
 
-Column level check that ensures that the sum in a monitored column has changed by a fixed rate since the last readout from yesterday.
+A column-level check that ensures that the sum in a monitored column has changed by a fixed rate since the last readout from yesterday.
 
 
 ___

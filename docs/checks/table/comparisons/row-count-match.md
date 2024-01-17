@@ -1,6 +1,6 @@
 # row count match data quality checks
 
-Table level comparison check compares the row count of the current (parent) table to the row count of the reference table.
+Table level comparison check that compares the row count of the current (parent) table with the row count of the reference table.
 
 
 ___

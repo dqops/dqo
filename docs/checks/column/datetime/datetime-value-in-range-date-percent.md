@@ -1,6 +1,6 @@
 # datetime value in range date percent data quality checks
 
-Column-level check that ensures that there are no more than a set percentage of date values in given range in a monitored column.
+A column-level check that ensures that there are no more than a set percentage of date values in a given range in a monitored column.
 
 
 ___

@@ -1,6 +1,6 @@
 # max match data quality checks
 
-Column-level check that ensures that compares the maximum value in the tested column to maximum value in a reference column from the reference table.
+A column-level check that ensures that compares the maximum value in the tested column to maximum value in a reference column from the reference table.
  Compares the maximum values for each group of data. The data is grouped using a GROUP BY clause and groups are matched between the tested (parent) table and the reference table (the source of truth).
 
 

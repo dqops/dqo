@@ -1,6 +1,6 @@
 # valid latitude percent data quality checks
 
-Column level check that ensures that there are no more than a set percentage of valid latitude values in a monitored column.
+A column-level check that ensures that there are no more than a set percentage of valid latitude values in a monitored column.
 
 
 ___

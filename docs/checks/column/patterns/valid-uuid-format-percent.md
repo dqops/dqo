@@ -1,6 +1,6 @@
 # valid uuid format percent data quality checks
 
-Column-level check that ensures that the percentage of valid UUID strings in the monitored column does not fall below set thresholds.
+A column-level check that ensures that the percentage of valid UUID strings in the monitored column does not fall below set thresholds.
 
 
 ___

@@ -1,6 +1,6 @@
 # text min length data quality checks
 
-Column-level check that ensures that the length of text in a column does not fall below the minimum accepted length.
+A column-level check that ensures that the length of text in a column does not fall below the minimum accepted length.
 
 
 ___

@@ -1,6 +1,6 @@
 # distinct count change 30 days data quality checks
 
-Column-level check that ensures that the distinct count in a monitored column has changed by a fixed rate since the last readout from last month.
+A column-level check that ensures that the distinct count in a monitored column has changed by a fixed rate since the last readout from last month.
 
 
 ___

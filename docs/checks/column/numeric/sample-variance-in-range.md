@@ -1,6 +1,6 @@
 # sample variance in range data quality checks
 
-Column level check that ensures the sample variance is in an expected range in a monitored column.
+A column-level check that ensures the sample varianceis within the expected range in a monitored column.
 
 
 ___

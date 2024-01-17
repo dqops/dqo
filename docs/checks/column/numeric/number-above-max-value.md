@@ -1,6 +1,6 @@
 # number above max value data quality checks
 
-Column level check that ensures that the number of values in the monitored column with a value above the value defined by the user as a parameter does not exceed set thresholds.
+A column-level check that ensures that the number of values in the monitored column with a value above a user-defined value as a parameter does not exceed set thresholds.
 
 
 ___

@@ -1,6 +1,6 @@
 # contains email percent data quality checks
 
-Column check that calculates the percentage of rows that contains valid email values in a column.
+Column check that calculates the percentage of rows that contains valid email values in a monitored column.
 
 
 ___

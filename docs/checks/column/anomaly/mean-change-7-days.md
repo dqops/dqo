@@ -1,6 +1,6 @@
 # mean change 7 days data quality checks
 
-Column level check that ensures that the mean value in a monitored column has changed by a fixed rate since the last readout from last week.
+A column-level check that ensures that the mean value in a monitored column has changed by a fixed rate since the last readout from last week.
 
 
 ___

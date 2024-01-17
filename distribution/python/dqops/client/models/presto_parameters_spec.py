@@ -28,7 +28,8 @@ class PrestoParametersSpec:
             dynamic substitution.
         password (Union[Unset, str]): Presto database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}
             format to use dynamic substitution.
-        properties (Union[Unset, PrestoParametersSpecProperties]):
+        properties (Union[Unset, PrestoParametersSpecProperties]): A dictionary of custom JDBC parameters that are added
+            to the JDBC connection string, a key/value dictionary.
     """
 
     host: Union[Unset, str] = UNSET

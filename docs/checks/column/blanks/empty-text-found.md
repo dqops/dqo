@@ -1,6 +1,6 @@
 # empty text found data quality checks
 
-Column-level check that ensures that there are no more than a maximum number of empty texts in a monitored column.
+A column-level check that ensures that there are no more than a maximum number of empty texts in a monitored column.
 
 
 ___

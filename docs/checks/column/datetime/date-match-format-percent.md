@@ -1,8 +1,8 @@
 # date match format percent data quality checks
 
-Column level check that validates values in text columns if they are valid dates, matching one of predefined date formats.
- Measures the percentage of rows that match the expected date format in a column and raises an issue if not enough rows match the format.
- Use the default value 100.0 (percent) to verify that all values match a given date format.
+A column-level check that validates the values in text columns to ensure that they are valid dates, matching one of predefined date formats.
+ It measures the percentage of rows that match the expected date format in a column and raises an issue if not enough rows match the format.
+ The default value 100.0 (percent) verifies that all values match a given date format.
 
 
 ___

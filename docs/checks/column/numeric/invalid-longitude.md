@@ -1,6 +1,6 @@
 # invalid longitude data quality checks
 
-Column-level check that ensures that there are no more than a set number of invalid longitude values in a monitored column.
+A column-level check that ensures that there are no more than a set number of invalid longitude values in a monitored column.
 
 
 ___

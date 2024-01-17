@@ -1,6 +1,6 @@
 # sum anomaly data quality checks
 
-Column level check that ensures that the sum in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
+A column-level check that ensures that the sum in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
 
 
 ___

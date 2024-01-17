@@ -1,6 +1,6 @@
 # contains usa zipcode percent data quality checks
 
-Column check that calculates the percentage of rows that contains USA zip code values in a column.
+Column check that calculates the percentage of rows that contains USA zip code values in a monitored column.
 
 
 ___

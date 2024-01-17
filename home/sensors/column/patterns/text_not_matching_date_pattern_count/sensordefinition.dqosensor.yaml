@@ -11,7 +11,7 @@ spec:
     required: true
     allowed_values:
     - YYYY-MM-DD
-    - "Month D, YYYY"
     - MM/DD/YYYY
-    - YYYY/MM/DD
     - DD/MM/YYYY
+    - YYYY/MM/DD
+    - "Month D, YYYY"

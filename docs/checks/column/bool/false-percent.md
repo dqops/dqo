@@ -1,6 +1,6 @@
 # false percent data quality checks
 
-Column level check that ensures that there are at least a minimum percentage of rows with a false value in a monitored column.
+A column-level check that ensures that the proportion of false values in a column is not below the minimum accepted percentage.
 
 
 ___

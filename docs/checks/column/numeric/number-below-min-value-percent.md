@@ -1,6 +1,6 @@
 # number below min value percent data quality checks
 
-Column level check that ensures that the percentage of values in the monitored column with a value below the value defined by the user as a parameter does not fall below set thresholds.
+A column-level check that ensures that the percentage of values in the monitored column with a value below a user-defined value as a parameter does not fall below set thresholds.
 
 
 ___

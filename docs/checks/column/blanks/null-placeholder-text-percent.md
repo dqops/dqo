@@ -1,6 +1,6 @@
 # null placeholder text percent data quality checks
 
-Column-level check that ensures that there are no more than a maximum percent of rows with a null placeholder texts in a monitored column.
+A column-level check that ensures that there are no more than a maximum percent of rows with a null placeholder text in a monitored column.
 
 
 ___

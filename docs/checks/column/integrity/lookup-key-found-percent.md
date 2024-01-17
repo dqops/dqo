@@ -1,6 +1,6 @@
 # lookup key found percent data quality checks
 
-Column-level check that ensures that there are no more than a minimum percentage of values matching values in another table column.
+A column-level check that ensures that there are no more than a minimum percentage of values matching values in another table column.
 
 
 ___

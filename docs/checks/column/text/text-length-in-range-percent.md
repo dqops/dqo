@@ -1,6 +1,6 @@
 # text length in range percent data quality checks
 
-Column check that calculates the percentage of texts with a length below the indicated by the user length in a column.
+Column check that calculates the percentage of text values with a length below the indicated by the user length in a monitored column.
 
 
 ___

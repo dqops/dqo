@@ -1,6 +1,6 @@
 # lookup key not found data quality checks
 
-Column-level check that ensures that there are no more than a maximum number of values not matching values in another table column.
+A column-level check that ensures that there are no more than a maximum number of values not matching values in another table column.
 
 
 ___

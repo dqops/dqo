@@ -1,6 +1,6 @@
 # distinct count data quality checks
 
-Column-level check that ensures that the number of unique values in a column does not fall below the minimum accepted count.
+A column-level check that ensures that the number of unique values in a column does not fall below the minimum accepted count.
 
 
 ___

@@ -1,6 +1,6 @@
 # sql condition passed percent on column data quality checks
 
-Column level check that ensures that a set percentage of rows passed a custom SQL condition (expression).
+A column-level check that ensures that a set percentage of rows passed a custom SQL condition (expression).
 
 
 ___

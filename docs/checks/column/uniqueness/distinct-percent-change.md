@@ -1,6 +1,6 @@
 # distinct percent change data quality checks
 
-Column-level check that ensures that the distinct percent in a monitored column has changed by a fixed rate since the last readout.
+A column-level check that ensures that the distinct percent in a monitored column has changed by a fixed rate since the last readout.
 
 
 ___

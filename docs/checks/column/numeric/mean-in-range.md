@@ -1,6 +1,6 @@
 # mean in range data quality checks
 
-Column level check that ensures that the average (mean) of values in a monitored column is in an expected range.
+A column-level check that ensures that the average (mean) value in the monitored column is within the expected range.
 
 
 ___

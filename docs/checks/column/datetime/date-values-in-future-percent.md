@@ -1,6 +1,6 @@
 # date values in future percent data quality checks
 
-Column-level check that ensures that there are no more than a set percentage of date values in future in a monitored column.
+A column-level check that ensures that there are no more than a set percentage of date values in the future in a monitored column.
 
 
 ___

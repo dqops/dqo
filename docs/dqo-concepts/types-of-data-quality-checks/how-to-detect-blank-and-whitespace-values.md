@@ -11,12 +11,12 @@ How to detect blanks data quality issues.
 ## List of blanks checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |
 |-------------------------|------------------------|-------------|-------|
-|[*empty_text_found*](../../checks/column/blanks/empty-text-found.md)|Completeness|Column-level check that ensures that there are no more than a maximum number of empty texts in a monitored column.|:material-check-bold:|
-|[*whitespace_text_found*](../../checks/column/blanks/whitespace-text-found.md)|Completeness|Column-level check that ensures that there are no more than a maximum number of whitespace texts in a monitored column.|:material-check-bold:|
-|[*null_placeholder_text_found*](../../checks/column/blanks/null-placeholder-text-found.md)|Completeness|Column-level check that ensures that there are no more than a maximum number of rows with a null placeholder texts in a monitored column.|:material-check-bold:|
-|[*empty_text_percent*](../../checks/column/blanks/empty-text-percent.md)|Completeness|Column-level check that ensures that there are no more than a maximum percent of empty texts in a monitored column.| |
-|[*whitespace_text_percent*](../../checks/column/blanks/whitespace-text-percent.md)|Completeness|Column-level check that ensures that there are no more than a maximum percent of whitespace texts in a monitored column.| |
-|[*null_placeholder_text_percent*](../../checks/column/blanks/null-placeholder-text-percent.md)|Completeness|Column-level check that ensures that there are no more than a maximum percent of rows with a null placeholder texts in a monitored column.| |
+|[*empty_text_found*](../../checks/column/blanks/empty-text-found.md)|Completeness|A column-level check that ensures that there are no more than a maximum number of empty texts in a monitored column.|:material-check-bold:|
+|[*whitespace_text_found*](../../checks/column/blanks/whitespace-text-found.md)|Completeness|A column-level check that ensures that there are no more than a maximum number of whitespace texts in a monitored column.|:material-check-bold:|
+|[*null_placeholder_text_found*](../../checks/column/blanks/null-placeholder-text-found.md)|Completeness|A column-level check that ensures that there are no more than a maximum number of rows with a null placeholder text in a monitored column.|:material-check-bold:|
+|[*empty_text_percent*](../../checks/column/blanks/empty-text-percent.md)|Completeness|A column-level check that ensures that there are no more than a maximum percent of empty texts in a monitored column.| |
+|[*whitespace_text_percent*](../../checks/column/blanks/whitespace-text-percent.md)|Completeness|A column-level check that ensures that there are no more than a maximum percent of whitespace texts in a monitored column.| |
+|[*null_placeholder_text_percent*](../../checks/column/blanks/null-placeholder-text-percent.md)|Completeness|A column-level check that ensures that there are no more than a maximum percent of rows with a null placeholder text in a monitored column.| |
 
 
 **Reference and samples**

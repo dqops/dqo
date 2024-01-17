@@ -18639,7 +18639,7 @@
           "$ref" : "#/definitions/ValueChangedRuleParametersSpec"
         },
         "error" : {
-          "description" : "Default alerting thresholdthat raises a data quality issue at an error severity level, detects that the data type of values stored in a column has changed since the last time it was evaluated or the data type in the current daily/monthly partition differs from the data type in the previous partition.",
+          "description" : "Default alerting threshold that raises a data quality issue at an error severity level, detects that the data type of values stored in a column has changed since the last time it was evaluated or the data type in the current daily/monthly partition differs from the data type in the previous partition.",
           "$ref" : "#/definitions/ValueChangedRuleParametersSpec"
         },
         "fatal" : {
@@ -23130,15 +23130,15 @@
           "$ref" : "#/definitions/ColumnNumericNumberFoundInSetPercentSensorParametersSpec"
         },
         "warning" : {
-          "description" : "Default alerting threshold for a percentage of rows with valid values in a column (from the set of expected values). Raises a data quality issue with at a warning severity level when the percentage of valid rows is below the minimum percentage threshold.",
+          "description" : "Default alerting threshold for a percentage of rows with valid values in a column (from a set of expected values). Raises a data quality issue with at a warning severity level when the percentage of valid rows is below the minimum percentage threshold.",
           "$ref" : "#/definitions/MinPercentRule100WarningParametersSpec"
         },
         "error" : {
-          "description" : "Default alerting threshold for a percentage of rows with valid values in a column (from the set of expected values). Raises a data quality issue with at an error severity level when the percentage of valid rows is below the minimum percentage threshold",
+          "description" : "Default alerting threshold for a percentage of rows with valid values in a column (from a set of expected values). Raises a data quality issue with at an error severity level when the percentage of valid rows is below the minimum percentage threshold",
           "$ref" : "#/definitions/MinPercentRule100ErrorParametersSpec"
         },
         "fatal" : {
-          "description" : "Default alerting threshold for a percentage of rows with valid values in a column (from the set of expected values). Raises a data quality issue with at a fatal severity level when the percentage of valid rows is below the minimum percentage threshold",
+          "description" : "Default alerting threshold for a percentage of rows with valid values in a column (from a set of expected values). Raises a data quality issue with at a fatal severity level when the percentage of valid rows is below the minimum percentage threshold",
           "$ref" : "#/definitions/MinPercentRule95ParametersSpec"
         }
       }
@@ -23190,7 +23190,7 @@
           "$ref" : "#/definitions/MinPercentRule100WarningParametersSpec"
         },
         "error" : {
-          "description" : "Default alerting threshold for set percentage of values from range in a column that raises a data quality error (alert).",
+          "description" : "Default alerting threshold for set percentage of values from the range in a column that raises a data quality error (alert).",
           "$ref" : "#/definitions/MinPercentRule100ErrorParametersSpec"
         },
         "fatal" : {
@@ -26883,15 +26883,15 @@
           "$ref" : "#/definitions/ColumnAcceptedValuesTextFoundInSetPercentSensorParametersSpec"
         },
         "warning" : {
-          "description" : "Default alerting threshold for a percentage of rows with valid values in a column (from the set of expected values). Raises a data quality issue with at a warning severity level when the percentage of valid rows is below the minimum percentage threshold.",
+          "description" : "Default alerting threshold for a percentage of rows with valid values in a column (from a set of expected values). Raises a data quality issue with at a warning severity level when the percentage of valid rows is below the minimum percentage threshold.",
           "$ref" : "#/definitions/MinPercentRule100WarningParametersSpec"
         },
         "error" : {
-          "description" : "Default alerting threshold for a percentage of rows with valid values in a column (from the set of expected values). Raises a data quality issue with at an error severity level when the percentage of valid rows is below the minimum percentage threshold.",
+          "description" : "Default alerting threshold for a percentage of rows with valid values in a column (from a set of expected values). Raises a data quality issue with at an error severity level when the percentage of valid rows is below the minimum percentage threshold.",
           "$ref" : "#/definitions/MinPercentRule100ErrorParametersSpec"
         },
         "fatal" : {
-          "description" : "Default alerting threshold for a percentage of rows with valid values in a column (from the set of expected values). Raises a data quality issue with at a fatal severity level when the percentage of valid rows is below the minimum percentage threshold.",
+          "description" : "Default alerting threshold for a percentage of rows with valid values in a column (from a set of expected values). Raises a data quality issue with at a fatal severity level when the percentage of valid rows is below the minimum percentage threshold.",
           "$ref" : "#/definitions/MinPercentRule95ParametersSpec"
         }
       }

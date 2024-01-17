@@ -1,6 +1,6 @@
 # nulls percent data quality checks
 
-Column-level check that ensures that there are no more than a set percentage of null values in the monitored column.
+A column-level check that ensures that there are no more than a set percentage of null values in the monitored column.
 
 
 ___

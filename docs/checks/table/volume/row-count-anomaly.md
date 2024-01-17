@@ -1,6 +1,6 @@
 # row count anomaly data quality checks
 
-Table-level check that ensures that the row count is within a two-tailed percentile from measurements made during the last 90 days.
+A table-level check that ensures that the row count is within a two-tailed percentile from measurements made during the last 90 days.
 
 
 ___

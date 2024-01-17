@@ -8,7 +8,7 @@ T = TypeVar("T", bound="SparkParametersSpecProperties")
 
 @_attrs_define
 class SparkParametersSpecProperties:
-    """ """
+    """A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary."""
 
     additional_properties: Dict[str, str] = _attrs_field(init=False, factory=dict)
 

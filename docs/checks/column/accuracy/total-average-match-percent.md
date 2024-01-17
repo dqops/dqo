@@ -1,7 +1,7 @@
 # total average match percent data quality checks
 
-Column level check that ensures that difference between the average value in the tested column and the average value of another column in a referenced table is below a maximum accepted percentage of difference.
- This check runs an SQL query with an INNER JOIN clause to join to the other (referenced) table that must be defined in the same database.
+A column-level check that ensures that the difference between the average value in the tested column and the average value of another column in the referenced table is below the maximum accepted percentage of difference.
+ This check runs an SQL query with an INNER JOIN clause to join another (referenced) table that must be defined in the same database.
 
 
 ___

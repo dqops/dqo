@@ -1,6 +1,6 @@
 # sql condition passed percent on table data quality checks
 
-Table-level check that ensures that a minimum percentage of rows passed a custom SQL condition (expression).
+A table-level check that ensures that a minimum percentage of rows passed a custom SQL condition (expression).
 
 
 ___

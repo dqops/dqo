@@ -125,7 +125,7 @@ ___
 
 
 ## ColumnDistinctCountAnomalyStationaryPartitionCheckSpec
-Column-level check that ensures that the distinct count value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days. Use in partitioned checks.
+A column-level check that ensures that the distinct count value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days. Use in partitioned checks.
 
 
 
@@ -445,7 +445,7 @@ ___
 
 
 ## ColumnSumAnomalyStationaryPartitionCheckSpec
-Column level check that ensures that the sum in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
+A column-level check that ensures that the sum in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
 
 
 

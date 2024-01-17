@@ -1,6 +1,6 @@
 # percentile 25 in range data quality checks
 
-Column level check that ensures that the percentile 25 of values in a monitored column is in an expected range.
+A column-level check that ensures that the 25th percentile of values in the monitored column is within the expected range.
 
 
 ___

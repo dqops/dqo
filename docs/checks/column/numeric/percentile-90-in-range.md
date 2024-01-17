@@ -1,6 +1,6 @@
 # percentile 90 in range data quality checks
 
-Column-level check that ensures that the percentile 90 of values in a monitored column is in an expected range.
+A column-level check that ensures that the 90th percentile of values in the monitored column is within the expected range.
 
 
 ___

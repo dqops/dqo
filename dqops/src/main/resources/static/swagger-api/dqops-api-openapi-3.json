@@ -30024,7 +30024,7 @@
               "originalRef" : "#/components/schemas/ValueChangedRuleParametersSpec"
             },
             "error" : {
-              "description" : "Default alerting thresholdthat raises a data quality issue at an error severity level, detects that the data type of values stored in a column has changed since the last time it was evaluated or the data type in the current daily/monthly partition differs from the data type in the previous partition.",
+              "description" : "Default alerting threshold that raises a data quality issue at an error severity level, detects that the data type of values stored in a column has changed since the last time it was evaluated or the data type in the current daily/monthly partition differs from the data type in the previous partition.",
               "$ref" : "#/components/schemas/ValueChangedRuleParametersSpec",
               "originalRef" : "#/components/schemas/ValueChangedRuleParametersSpec"
             },
@@ -41906,17 +41906,17 @@
               "originalRef" : "#/components/schemas/ColumnNumericNumberFoundInSetPercentSensorParametersSpec"
             },
             "warning" : {
-              "description" : "Default alerting threshold for a percentage of rows with valid values in a column (from the set of expected values). Raises a data quality issue with at a warning severity level when the percentage of valid rows is below the minimum percentage threshold.",
+              "description" : "Default alerting threshold for a percentage of rows with valid values in a column (from a set of expected values). Raises a data quality issue with at a warning severity level when the percentage of valid rows is below the minimum percentage threshold.",
               "$ref" : "#/components/schemas/MinPercentRule100WarningParametersSpec",
               "originalRef" : "#/components/schemas/MinPercentRule100WarningParametersSpec"
             },
             "error" : {
-              "description" : "Default alerting threshold for a percentage of rows with valid values in a column (from the set of expected values). Raises a data quality issue with at an error severity level when the percentage of valid rows is below the minimum percentage threshold",
+              "description" : "Default alerting threshold for a percentage of rows with valid values in a column (from a set of expected values). Raises a data quality issue with at an error severity level when the percentage of valid rows is below the minimum percentage threshold",
               "$ref" : "#/components/schemas/MinPercentRule100ErrorParametersSpec",
               "originalRef" : "#/components/schemas/MinPercentRule100ErrorParametersSpec"
             },
             "fatal" : {
-              "description" : "Default alerting threshold for a percentage of rows with valid values in a column (from the set of expected values). Raises a data quality issue with at a fatal severity level when the percentage of valid rows is below the minimum percentage threshold",
+              "description" : "Default alerting threshold for a percentage of rows with valid values in a column (from a set of expected values). Raises a data quality issue with at a fatal severity level when the percentage of valid rows is below the minimum percentage threshold",
               "$ref" : "#/components/schemas/MinPercentRule95ParametersSpec",
               "originalRef" : "#/components/schemas/MinPercentRule95ParametersSpec"
             }
@@ -42059,7 +42059,7 @@
               "originalRef" : "#/components/schemas/MinPercentRule100WarningParametersSpec"
             },
             "error" : {
-              "description" : "Default alerting threshold for set percentage of values from range in a column that raises a data quality error (alert).",
+              "description" : "Default alerting threshold for set percentage of values from the range in a column that raises a data quality error (alert).",
               "$ref" : "#/components/schemas/MinPercentRule100ErrorParametersSpec",
               "originalRef" : "#/components/schemas/MinPercentRule100ErrorParametersSpec"
             },
@@ -51702,17 +51702,17 @@
               "originalRef" : "#/components/schemas/ColumnAcceptedValuesTextFoundInSetPercentSensorParametersSpec"
             },
             "warning" : {
-              "description" : "Default alerting threshold for a percentage of rows with valid values in a column (from the set of expected values). Raises a data quality issue with at a warning severity level when the percentage of valid rows is below the minimum percentage threshold.",
+              "description" : "Default alerting threshold for a percentage of rows with valid values in a column (from a set of expected values). Raises a data quality issue with at a warning severity level when the percentage of valid rows is below the minimum percentage threshold.",
               "$ref" : "#/components/schemas/MinPercentRule100WarningParametersSpec",
               "originalRef" : "#/components/schemas/MinPercentRule100WarningParametersSpec"
             },
             "error" : {
-              "description" : "Default alerting threshold for a percentage of rows with valid values in a column (from the set of expected values). Raises a data quality issue with at an error severity level when the percentage of valid rows is below the minimum percentage threshold.",
+              "description" : "Default alerting threshold for a percentage of rows with valid values in a column (from a set of expected values). Raises a data quality issue with at an error severity level when the percentage of valid rows is below the minimum percentage threshold.",
               "$ref" : "#/components/schemas/MinPercentRule100ErrorParametersSpec",
               "originalRef" : "#/components/schemas/MinPercentRule100ErrorParametersSpec"
             },
             "fatal" : {
-              "description" : "Default alerting threshold for a percentage of rows with valid values in a column (from the set of expected values). Raises a data quality issue with at a fatal severity level when the percentage of valid rows is below the minimum percentage threshold.",
+              "description" : "Default alerting threshold for a percentage of rows with valid values in a column (from a set of expected values). Raises a data quality issue with at a fatal severity level when the percentage of valid rows is below the minimum percentage threshold.",
               "$ref" : "#/components/schemas/MinPercentRule95ParametersSpec",
               "originalRef" : "#/components/schemas/MinPercentRule95ParametersSpec"
             }
@@ -59563,11 +59563,13 @@
               "exampleSetFlag" : false,
               "types" : [ "string" ]
             },
+            "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "object" ],
             "jsonSchema" : {
-              "type" : "object"
+              "type" : "object",
+              "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary."
             }
           },
           "database" : {
@@ -59616,6 +59618,7 @@
             },
             "properties" : {
               "type" : "object",
+              "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.",
               "additionalProperties" : {
                 "type" : "string"
               }
@@ -63013,11 +63016,13 @@
               "exampleSetFlag" : false,
               "types" : [ "string" ]
             },
+            "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "object" ],
             "jsonSchema" : {
-              "type" : "object"
+              "type" : "object",
+              "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary."
             }
           }
         },
@@ -63057,6 +63062,7 @@
             },
             "properties" : {
               "type" : "object",
+              "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.",
               "additionalProperties" : {
                 "type" : "string"
               }
@@ -63214,11 +63220,13 @@
               "exampleSetFlag" : false,
               "types" : [ "string" ]
             },
+            "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "object" ],
             "jsonSchema" : {
-              "type" : "object"
+              "type" : "object",
+              "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary."
             }
           }
         },
@@ -63257,6 +63265,7 @@
             },
             "properties" : {
               "type" : "object",
+              "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.",
               "additionalProperties" : {
                 "type" : "string"
               }
@@ -63531,11 +63540,13 @@
               "exampleSetFlag" : false,
               "types" : [ "string" ]
             },
+            "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "object" ],
             "jsonSchema" : {
-              "type" : "object"
+              "type" : "object",
+              "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary."
             }
           }
         },
@@ -63575,6 +63586,7 @@
             },
             "properties" : {
               "type" : "object",
+              "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.",
               "additionalProperties" : {
                 "type" : "string"
               }
@@ -63628,11 +63640,13 @@
               "exampleSetFlag" : false,
               "types" : [ "string" ]
             },
+            "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "object" ],
             "jsonSchema" : {
-              "type" : "object"
+              "type" : "object",
+              "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary."
             }
           }
         },
@@ -63663,6 +63677,7 @@
             },
             "properties" : {
               "type" : "object",
+              "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.",
               "additionalProperties" : {
                 "type" : "string"
               }
@@ -64054,11 +64069,13 @@
               "exampleSetFlag" : false,
               "types" : [ "string" ]
             },
+            "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "object" ],
             "jsonSchema" : {
-              "type" : "object"
+              "type" : "object",
+              "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary."
             }
           }
         },
@@ -64093,6 +64110,7 @@
             },
             "properties" : {
               "type" : "object",
+              "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.",
               "additionalProperties" : {
                 "type" : "string"
               }
@@ -66102,11 +66120,13 @@
               "exampleSetFlag" : false,
               "types" : [ "string" ]
             },
+            "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "object" ],
             "jsonSchema" : {
-              "type" : "object"
+              "type" : "object",
+              "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary."
             }
           }
         },
@@ -66141,6 +66161,7 @@
             },
             "properties" : {
               "type" : "object",
+              "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.",
               "additionalProperties" : {
                 "type" : "string"
               }
@@ -66194,11 +66215,13 @@
               "exampleSetFlag" : false,
               "types" : [ "string" ]
             },
+            "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "object" ],
             "jsonSchema" : {
-              "type" : "object"
+              "type" : "object",
+              "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary."
             }
           },
           "database" : {
@@ -66235,6 +66258,7 @@
             },
             "properties" : {
               "type" : "object",
+              "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.",
               "additionalProperties" : {
                 "type" : "string"
               }
@@ -66389,11 +66413,13 @@
               "exampleSetFlag" : false,
               "types" : [ "string" ]
             },
+            "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "object" ],
             "jsonSchema" : {
-              "type" : "object"
+              "type" : "object",
+              "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary."
             }
           }
         },
@@ -66432,6 +66458,7 @@
             },
             "properties" : {
               "type" : "object",
+              "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.",
               "additionalProperties" : {
                 "type" : "string"
               }
@@ -75403,21 +75430,6 @@
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
-          "properties" : {
-            "type" : "object",
-            "additionalProperties" : {
-              "type" : "string",
-              "extensions" : { },
-              "exampleSetFlag" : false,
-              "types" : [ "string" ]
-            },
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "object" ],
-            "jsonSchema" : {
-              "type" : "object"
-            }
-          },
           "athena_authentication_mode" : {
             "$ref" : "#/components/schemas/AthenaAuthenticationMode",
             "exampleSetFlag" : false
@@ -75449,6 +75461,23 @@
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
+          },
+          "properties" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "string",
+              "extensions" : { },
+              "exampleSetFlag" : false,
+              "types" : [ "string" ]
+            },
+            "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "object" ],
+            "jsonSchema" : {
+              "type" : "object",
+              "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary."
+            }
           },
           "database" : {
             "type" : "string",
@@ -75483,12 +75512,6 @@
               "type" : "string",
               "description" : "Trino database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
             },
-            "properties" : {
-              "type" : "object",
-              "additionalProperties" : {
-                "type" : "string"
-              }
-            },
             "athena_authentication_mode" : {
               "type" : "string",
               "description" : "The authentication mode for AWS Athena. Supports also a ${ATHENA_AUTHENTICATION_MODE} configuration with a custom environment variable.",
@@ -75509,6 +75532,13 @@
             "athena_output_location" : {
               "type" : "string",
               "description" : "The location in Amazon S3 where query results will be stored. Supports also a ${ATHENA_OUTPUT_LOCATION} configuration with a custom environment variable."
+            },
+            "properties" : {
+              "type" : "object",
+              "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.",
+              "additionalProperties" : {
+                "type" : "string"
+              }
             },
             "database" : {
               "type" : "string"

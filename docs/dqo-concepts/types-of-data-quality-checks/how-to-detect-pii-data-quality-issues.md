@@ -16,11 +16,11 @@ How to detect pii data quality issues.
 ## List of pii checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |
 |-------------------------|------------------------|-------------|-------|
-|[*contains_usa_phone_percent*](../../checks/column/pii/contains-usa-phone-percent.md)|Validity|Column check that calculates the percentage of rows that contains USA phone number values in a column.|:material-check-bold:|
-|[*contains_email_percent*](../../checks/column/pii/contains-email-percent.md)|Validity|Column check that calculates the percentage of rows that contains valid email values in a column.|:material-check-bold:|
-|[*contains_usa_zipcode_percent*](../../checks/column/pii/contains-usa-zipcode-percent.md)|Validity|Column check that calculates the percentage of rows that contains USA zip code values in a column.| |
-|[*contains_ip4_percent*](../../checks/column/pii/contains-ip4-percent.md)|Validity|Column check that calculates the percentage of rows that contains valid IP4 address values in a column.| |
-|[*contains_ip6_percent*](../../checks/column/pii/contains-ip6-percent.md)|Validity|Column check that calculates the percentage of rows that contains valid IP6 address values in a column.| |
+|[*contains_usa_phone_percent*](../../checks/column/pii/contains-usa-phone-percent.md)|Validity|Column check that calculates the percentage of rows that contains USA phone number values in a monitored column.|:material-check-bold:|
+|[*contains_email_percent*](../../checks/column/pii/contains-email-percent.md)|Validity|Column check that calculates the percentage of rows that contains valid email values in a monitored column.|:material-check-bold:|
+|[*contains_usa_zipcode_percent*](../../checks/column/pii/contains-usa-zipcode-percent.md)|Validity|Column check that calculates the percentage of rows that contains USA zip code values in a monitored column.| |
+|[*contains_ip4_percent*](../../checks/column/pii/contains-ip4-percent.md)|Validity|Column check that calculates the percentage of rows that contains valid IP4 address values in a monitored column.| |
+|[*contains_ip6_percent*](../../checks/column/pii/contains-ip6-percent.md)|Validity|Column check that calculates the percentage of rows that contains valid IP6 address values in a monitored column.| |
 
 
 **Reference and samples**
