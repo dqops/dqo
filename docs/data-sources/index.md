@@ -174,3 +174,7 @@ DQOps supports the following data sources.
   <div class="four-divs-element"></div>
 
 </div>
+
+
+## What's more
+- Learn how to [configure connections to data sources in YAML](../dqo-concepts/configuring-data-sources.md#data-sources) files. 
