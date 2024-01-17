@@ -1,5 +1,5 @@
 # Schedules overview
-Read this guide to learn how to configure scheduling of data quality checks at various levels.
+Read this guide to learn how to configure the scheduling of data quality checks at various levels.
 
 ## Overview
 

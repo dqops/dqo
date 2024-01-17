@@ -1,5 +1,5 @@
 # Activate and deactivate multiple checks
-Read this guide to learn now to activate or deactivate multiple data quality checks in the DQOps UI.
+Read this guide to learn how to activate or deactivate multiple data quality checks in the DQOps user interface.
 
 ## Overview
 
