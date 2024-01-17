@@ -73,7 +73,7 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
         if (!Strings.isNullOrEmpty(port)) {
             try {
                 int portNumber = Integer.parseInt(port);
-                jdbcConnectionBuilder.append(";port=");
+                jdbcConnectionBuilder.append(";port="); // todo: isn't it a property?
                 jdbcConnectionBuilder.append(portNumber);
             }
             catch (NumberFormatException nfe) {
@@ -82,7 +82,7 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
         }
         String database = this.getSecretValueProvider().expandValue(sqlserverSpec.getDatabase(), secretValueLookupContext);
         if (!Strings.isNullOrEmpty(database)) {
-            jdbcConnectionBuilder.append(";databaseName=");
+            jdbcConnectionBuilder.append(";databaseName="); // todo: isn't it a property?
             jdbcConnectionBuilder.append(database);
         }
 
@@ -99,11 +99,29 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
             dataSourceProperties.putAll(sqlserverSpec.getProperties());
         }
 
-        String userName = this.getSecretValueProvider().expandValue(sqlserverSpec.getUser(), secretValueLookupContext);
-        hikariConfig.setUsername(userName);
+        switch (sqlserverSpec.getAuthenticationMode()){
+            case sql_password:
+            case active_directory_password:
+            case active_directory_managed_identity:
+            case active_directory_service_principal:
 
-        String password = this.getSecretValueProvider().expandValue(sqlserverSpec.getPassword(), secretValueLookupContext);
-        hikariConfig.setPassword(password);
+                String userName = this.getSecretValueProvider().expandValue(sqlserverSpec.getUser(), secretValueLookupContext);
+                hikariConfig.setUsername(userName);
+
+                String password = this.getSecretValueProvider().expandValue(sqlserverSpec.getPassword(), secretValueLookupContext);
+                hikariConfig.setPassword(password);
+
+                break;
+            case default_credential:
+                    // todo:
+
+                break;
+            default:
+                new RuntimeException("Given enum is not supported : " + sqlserverSpec.getAuthenticationMode());
+        }
+
+        String authenticationValue = getJdbcAuthenticationValue(sqlserverSpec.getAuthenticationMode());
+        dataSourceProperties.put("authentication", authenticationValue);
 
         String options =  this.getSecretValueProvider().expandValue(sqlserverSpec.getOptions(), secretValueLookupContext);
         if (!Strings.isNullOrEmpty(options)) {
@@ -112,6 +130,23 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
 
         hikariConfig.setDataSourceProperties(dataSourceProperties);
         return hikariConfig;
+    }
+
+    /**
+     * Returns the value for the key "authentication" for the jdbc connection string.
+     * @param authenticationMode
+     * @return
+     */
+    private String getJdbcAuthenticationValue(SqlServerAuthenticationMode authenticationMode){
+        switch (authenticationMode){
+            case sql_password:                          return "SqlPassword";
+            case active_directory_password:             return "ActiveDirectoryPassword";
+            case active_directory_managed_identity:     return "ActiveDirectoryManagedIdentity";
+            case active_directory_service_principal:    return "ActiveDirectoryServicePrincipal";
+            case default_credential:                    return null; // todo
+            default: new RuntimeException("Given enum is not supported : " + authenticationMode);
+        }
+        return null;
     }
 
     /**

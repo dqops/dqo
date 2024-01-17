@@ -34,4 +34,9 @@ public final class DefaultCloudCredentialFileNames {
      * The name for the file with the default AWS configuration.
      */
     public static final String AWS_DEFAULT_CONFIG_NAME = "AWS_default_config";
+
+    /**
+     * The name for the file with the default application credentials for Azure.
+     */
+    public static final String AZURE_DEFAULT_CREDENTIALS_NAME = "Azure_default_credentials";
 }
