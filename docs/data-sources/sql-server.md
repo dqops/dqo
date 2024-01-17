@@ -3,12 +3,14 @@ Read this guide to learn how to connect DQOps to Microsoft SQL Server from the U
 
 ## Overview
 
-Microsoft SQL Server is a relational database management system developed by Microsoft that supports a wide variety of 
+[Microsoft SQL Server](https://learn.microsoft.com/en-us/sql/sql-server/) is a relational database management system developed by Microsoft that supports a wide variety of 
 transaction processing, business intelligence and analytics applications in corporate IT environments.
 
 ## Prerequisite credentials
 
-You need a SQL Server account. Use the TCP/IP Properties (IP Addresses Tab) dialog box to configure the TCP/IP protocol 
+To add SQL Server data source connection to DQOps you need a SQL Server account. 
+
+Use the TCP/IP Properties (IP Addresses Tab) dialog box to configure the TCP/IP protocol 
 options for a specific IP address. In case of restrictions, you need to add the IP address used by DQOps to [Allowed IP Addresses in SQL Server Network Policies](https://learn.microsoft.com/en-us/sql/tools/configuration-manager/tcp-ip-properties-ip-addresses-tab?view=sql-server-ver16).
 
 ## Add SQL Server connection using the user interface

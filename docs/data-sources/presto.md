@@ -3,11 +3,7 @@ Read this guide to learn how to connect DQOps to Presto from the UI, command-lin
 
 ## Overview
 
-Presto is an open source SQL query engine that’s fast, reliable, and efficient at scale.
-
-## Prerequisite credentials
-
-You need a Presto.
+[Presto](https://prestodb.io/docs/0.284/index.html) is an open source SQL query engine that’s fast, reliable, and efficient at scale.
 
 ## Add Presto connection using the user interface
 

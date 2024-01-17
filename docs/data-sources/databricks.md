@@ -3,12 +3,14 @@ Read this guide to learn how to connect DQOps to Databricks from the UI, command
 
 ## Overview
 
-Databricks is a unified, open analytics platform for building, deploying, sharing, and maintaining enterprise-grade data, analytics, and AI solutions at scale.
+[Databricks](https://docs.databricks.com/en/index.html) is a unified, open analytics platform for building, deploying, 
+sharing, and maintaining enterprise-grade data, analytics, and AI solutions at scale.
 
 ## Prerequisite credentials
 
-You need a Databricks SQL Warehouse instance.
-It is recommended to use an access token to connect an instance, so a permission to generate access token or a possession of a previously generated token is necessary.
+To add Databricks data source connection to DQOps you need a Databricks SQL Warehouse instance.
+It is also recommended to use an access token to connect an instance, so a permission to generate access token or a 
+possession of a previously generated token is necessary.
 
 ## Add Databricks connection using the user interface
 

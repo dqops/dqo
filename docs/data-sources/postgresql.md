@@ -8,7 +8,9 @@ with many features that safely store and scale the most complicated data workloa
 
 ## Prerequisite credentials
 
-You need a PostgreSQL account. By default, PostgreSQL restricts connections to hosts and networks included in the 
+To add PostgreSQL data source connection to DQOps you need a PostgreSQL account. 
+
+By default, PostgreSQL restricts connections to hosts and networks included in the 
 pg_hba.conf file. In case of restrictions you need to add the IP address used by DQOps to
 [Allowed IP Addresses in PostgreSQL Network Policies](https://www.postgresql.org/docs/9.1/auth-pg-hba-conf.html).
 
