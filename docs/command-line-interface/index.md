@@ -94,6 +94,8 @@ All command-line commands supported from the DQOps shell or directly from the sy
 |--------------|-------------|
  | <span class="no-wrap-code">[`dqo cloud login`](./cloud.md#dqo-cloud-login)</span> | Allow user to provide login credentials if the user already has an account. |
  | <span class="no-wrap-code">[`dqo cloud password`](./cloud.md#dqo-cloud-password)</span> | Allows the user to change the password that is used to log in to DQOps Cloud account using the email and password. |
+ | <span class="no-wrap-code">[`dqo cloud sync enable`](./cloud.md#dqo-cloud-sync-enable)</span> | For this command description is not added yet. |
+ | <span class="no-wrap-code">[`dqo cloud sync disable`](./cloud.md#dqo-cloud-sync-disable)</span> | For this command description is not added yet. |
  | <span class="no-wrap-code">[`dqo cloud sync data`](./cloud.md#dqo-cloud-sync-data)</span> | Uploads any local changes to the cloud and downloads any changes made to the cloud version of the &quot;data&quot; folder. |
  | <span class="no-wrap-code">[`dqo cloud sync sources`](./cloud.md#dqo-cloud-sync-sources)</span> | Uploads any local changes to the cloud and downloads any changes made to the cloud version of the &quot;sources&quot; folder. |
  | <span class="no-wrap-code">[`dqo cloud sync sensors`](./cloud.md#dqo-cloud-sync-sensors)</span> | Uploads any local changes to the cloud and downloads any changes made to the cloud version of the &quot;sensors&quot; folder. |

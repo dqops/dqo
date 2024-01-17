@@ -52,6 +52,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`editor_name`</span>|Editor name spec (VSC, Eclipse, Intellij)|*string*| | | |
 |<span class="no-wrap-code ">`editor_path`</span>|Editor path on user&#x27;s computer|*string*| | | |
 |<span class="no-wrap-code ">`api_key`</span>|Api key|*string*| | | |
+|<span class="no-wrap-code ">`disable_cloud_sync`</span>|Disable synchronization with DQOps cloud|*boolean*| | | |
 |<span class="no-wrap-code ">`instance_signature_key`</span>|DQOps instance signature key used to sign keys. This should be a Base64 encoded binary key at a 32 bytes length.|*string*| | | |
 |<span class="no-wrap-code ">`time_zone`</span>|Default IANA time zone name of the server. This time zone is used to convert the time of UTC timestamps values returned from databases to a uniform local date and time. The default value is the local time zone of the DQOps server instance.|*string*| | | |
 

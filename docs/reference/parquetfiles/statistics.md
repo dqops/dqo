@@ -1,11 +1,11 @@
 # DQOps statistics parquet table schema
-The parquet file schema for the statistics table stored in the *$DQO_USER_HOME/.data/statistics* folder in DQOps.
+The parquet file schema for the statistics table stored in the *[$DQO_USER_HOME](../../dqo-concepts/dqops-user-home-folder.md)/.data/statistics* folder in DQOps.
 
 ## Table description
 
 The basic profiling results (statistics) table that stores basic profiling statistical values.
- The statistics are stored in the errors table is located in the *$DQO_USER_HOME/.data/statistics* folder that contains uncompressed parquet files.
- The table is partitioned using a Hive compatible partitioning folder structure. When the *$DQO_USER_HOME* is not configured, it is the folder where DQOps was started (the DQOps user&#x27;s home folder).
+ The statistics are stored in the errors table is located in the *[$DQO_USER_HOME](../../dqo-concepts/dqops-user-home-folder.md)/.data/statistics* folder that contains uncompressed parquet files.
+ The table is partitioned using a Hive compatible partitioning folder structure. When the *[$DQO_USER_HOME](../../dqo-concepts/dqops-user-home-folder.md)* is not configured, it is the folder where DQOps was started (the DQOps user&#x27;s home folder).
 
  The folder partitioning structure for this table is:
  *c&#x3D;[connection_name]/t&#x3D;[schema_name.table_name]/m&#x3D;[first_day_of_month]/*, for example: *c&#x3D;myconnection/t&#x3D;public.analyzedtable/m&#x3D;2023-01-01/*.
@@ -68,3 +68,6 @@ The columns of this table are described below.
  | created_by | The login of the user that created the row. | STRING |
  | updated_by | The login of the user that updated the row. | STRING |
 
+
+## What's more
+- You can find more information on how the Parquet files are partitioned in the [data quality results storage concept](../../dqo-concepts/data-storage-of-data-quality-results.md).
