@@ -55,6 +55,7 @@ To start DQOps in a Shell mode follow the steps below.
     If you want to use the current folder as your `DQOps User Home`, you can bind this folder to the `/dqo/userhome` mount point in
     the DQOps docker image. Please keep in mind that the `DQOps User Home` folder should be empty (to initialize it on startup)
     or it should be already a valid `DQOps User Home` folder.
+    Read the [DQOps user home folder concept](../dqo-concepts/dqops-user-home-folder.md) to learn more.
 
     ```
     docker run -v .:/dqo/userhome -it -p 8888:8888 dqops/dqo

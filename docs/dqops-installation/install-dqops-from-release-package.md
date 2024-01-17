@@ -70,7 +70,8 @@ To use DQOps you need:
 5.  Create DQOps `DQOps user home` folder.
 
     After installation, you will be asked whether to initialize the [DQOps user home folder](../dqo-concepts/dqops-user-home-folder.md) in the default location. Type Y to create the folder.  
-    The DQOps user home folder locally stores data such as sensor and checkout readings, as well as data source configurations. [You can learn more about data storage here](../dqo-concepts/data-storage-of-data-quality-results.md).
+    The DQOps user home folder locally stores data such as sensor and checkout readings, as well as data source configurations.
+    Read the [DQOps user home folder concept](../dqo-concepts/dqops-user-home-folder.md) to learn more.
 
     ![Initializing DQOps user home folder](https://dqops.com/docs/images/getting-started/initializing-user-home-folder2.png)
 

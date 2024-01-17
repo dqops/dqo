@@ -78,7 +78,7 @@ To pull **[dqops/dqo](https://github.com/dqops/dqo.git)** project from GitHub an
     After installation, you will be asked whether to initialize the DQOps `DQOps User Home` folder in the default location.
     Type Y to initialize the folder content.  
     The `DQOps User Home` folder locally stores data such as sensor readouts and checkout results, as well as data source configurations.
-    [You can learn more about data storage here](../dqo-concepts/data-storage-of-data-quality-results.md).
+    Read the [DQOps user home folder concept](../dqo-concepts/dqops-user-home-folder.md) to learn more.
 
     ![Initializing DQOps user home folder](https://dqops.com/docs/images/getting-started/initializing-user-home-folder2.png)
 
