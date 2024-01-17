@@ -101,14 +101,15 @@ export default function SingleSharedCredential() {
         <div className='flex items-center justify-center space-x-1 pr-5 overflow-hidden'>
         {credential_name ? 
         <a href={`/api/credentials/${credential_name}/download`} rel="noreferrer" target="_blank">
-            <Button label='Downland'
+            <Button label='Download'
             color='primary'
+            className='w-30'
             variant='contained'/>
             </a> : null }
         <Button label={credential_name ? 'Save' : 'Add shared credential'}
          color='primary'
          variant='contained'
-         className='w-55 mr-10 my-3'
+         className={credential_name ? 'w-30 mr-10 my-3' : 'w-55 mr-10 my-3'}
          onClick={credential_name ? editSharedCredential : addSharedCredential}
          disabled={incorrectBinaryText === true}
          />
