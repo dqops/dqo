@@ -130,8 +130,8 @@ public class CliInitializerImpl implements CliInitializer {
      * @param headless Is application running in headless mode.
      */
     protected void tryLoginToDqoCloud(boolean headless) {
+        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.getLocalUserPrincipal();
         try {
-            DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.getLocalUserPrincipal();
             DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey(userPrincipal.getDataDomainIdentity());
             if (apiKey != null) {
                 return; // api key is provided somehow (by an environment variable or in the local settings)
@@ -147,6 +147,10 @@ public class CliInitializerImpl implements CliInitializer {
 
         if (this.dqoCloudConfigurationProperties.isStartWithoutApiKey()) {
             return;
+        }
+
+        if (this.dqoCloudApiKeyProvider.isCloudSynchronizationDisabled(userPrincipal.getDataDomainIdentity())) {
+            return; // user intentionally disabled cloud sync using 'cloud sync disable' command
         }
 
         if (!this.terminalReader.promptBoolean("Log in to DQOps Cloud?", true)) {

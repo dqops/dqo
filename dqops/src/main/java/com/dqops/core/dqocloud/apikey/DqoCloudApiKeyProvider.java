@@ -33,6 +33,14 @@ public interface DqoCloudApiKeyProvider {
     DqoCloudApiKey getApiKey(UserDomainIdentity userIdentity);
 
     /**
+     * Checks if the synchronization with DQOps Cloud is intentionally disabled (by running a `dqo cloud sync disable` command), so the returned api key was null,
+     * but in fact an api key is present.
+     * @param userIdentity User identity, used to find the data domain name for which we need the DQOps Cloud synchronization key.
+     * @return True when the api key was intentionally disabled.
+     */
+    boolean isCloudSynchronizationDisabled(UserDomainIdentity userIdentity);
+
+    /**
      * Invalidates the cached api key.
      */
     void invalidate();

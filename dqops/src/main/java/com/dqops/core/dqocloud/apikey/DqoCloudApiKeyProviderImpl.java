@@ -101,15 +101,16 @@ public class DqoCloudApiKeyProviderImpl implements DqoCloudApiKeyProvider {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentityForRootHome);
             SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
             LocalSettingsSpec localSettingsSpec = settingsWrapper.getSpec();
+            boolean cloudSyncDisabledInSettings = localSettingsSpec != null && localSettingsSpec.isDisableCloudSync();
             String apiKey = null;
 
-            if (localSettingsSpec != null) {
+            if (localSettingsSpec != null && !cloudSyncDisabledInSettings) {
                 SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(userHomeContext.getUserHome());
                 LocalSettingsSpec settings = localSettingsSpec.expandAndTrim(this.secretValueProvider, secretValueLookupContext);
                 apiKey = settings.getApiKey();
             }
 
-            if (Strings.isNullOrEmpty(apiKey)) {
+            if (Strings.isNullOrEmpty(apiKey) && !cloudSyncDisabledInSettings) {
                 apiKey = this.dqoCloudConfigurationProperties.getApiKey(); // take the api keys from configuration, it could be pulled from a secret manager or environment variables
             }
 
@@ -131,6 +132,24 @@ public class DqoCloudApiKeyProviderImpl implements DqoCloudApiKeyProvider {
         } catch (Exception e) {
             throw new DqoCloudInvalidKeyException("DQOps Cloud Pairing API Key is invalid, error: " + e.getMessage(), e);
         }
+    }
+
+    /**
+     * Checks if the synchronization with DQOps Cloud is intentionally disabled (by running a `dqo cloud sync disable` command), so the returned api key was null,
+     * but in fact an api key is present.
+     *
+     * @param userIdentity User identity, used to find the data domain name for which we need the DQOps Cloud synchronization key.
+     * @return True when the api key was intentionally disabled.
+     */
+    @Override
+    public boolean isCloudSynchronizationDisabled(UserDomainIdentity userIdentity) {
+        UserDomainIdentity userIdentityForRootHome = userIdentity != null ? userIdentity : UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY;
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentityForRootHome);
+        SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
+        LocalSettingsSpec localSettingsSpec = settingsWrapper.getSpec();
+        boolean cloudSyncDisabledInSettings = localSettingsSpec != null && localSettingsSpec.isDisableCloudSync();
+
+        return cloudSyncDisabledInSettings;
     }
 
     /**

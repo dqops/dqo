@@ -82,6 +82,10 @@ public class LookerStudioUrlServiceImpl implements LookerStudioUrlService {
             }
 
             ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getDataDomainIdentity());
+            if (authenticatedClient == null) {
+                throw new DqoCloudInvalidKeyException("Invalid DQOps Cloud Pairing API Key or synchronization with DQOps Cloud is disabled, run \"cloud login\" in DQOps shell to receive a current DQOps Cloud Pairing API Key.");
+            }
+
             LookerStudioKeyRequestApi lookerStudioKeyRequestApi = new LookerStudioKeyRequestApi(authenticatedClient);
             String queryApiKey = lookerStudioKeyRequestApi.issueLookerStudioApiKey(userPrincipal.getDataDomainIdentity().getDataDomainCloud());
 
@@ -95,7 +99,7 @@ public class LookerStudioUrlServiceImpl implements LookerStudioUrlService {
         }
         catch (HttpClientErrorException httpClientErrorException) {
             if (httpClientErrorException.getStatusCode().is4xxClientError()) {
-                throw new DqoCloudInvalidKeyException("Invalid API Key, run \"cloud login\" in DQOps shell to receive a current DQOps Cloud API Key.");
+                throw new DqoCloudInvalidKeyException("Invalid DQOps Cloud Pairing API Key, run \"cloud login\" in DQOps shell to receive a current DQOps Cloud Pairing API Key.");
             }
 
             throw new DqoRuntimeException("Failed to receive a refresh token from DQOps Cloud", httpClientErrorException);

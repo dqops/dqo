@@ -147,6 +147,7 @@ function DashboardProvider(props: any) {
           [tabId]: false
         }));
       } catch (err) {
+        console.log(err);
         setError((prev) => ({
           ...prev,
           [tabId]: true

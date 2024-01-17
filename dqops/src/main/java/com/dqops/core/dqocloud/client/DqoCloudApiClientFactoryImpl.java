@@ -69,6 +69,9 @@ public class DqoCloudApiClientFactoryImpl implements DqoCloudApiClientFactory {
         ApiClient apiClient = new ApiClient(this.restTemplate);
         apiClient.setBasePath(this.dqoCloudConfigurationProperties.getRestApiBaseUrl());
         DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey(userIdentity);
+        if (apiKey == null) {
+            return null; // authentication with dqops cloud is disabled
+        }
         apiClient.setApiKey(apiKey.getApiKeyToken());
 //        apiClient.setDebugging(true);
 

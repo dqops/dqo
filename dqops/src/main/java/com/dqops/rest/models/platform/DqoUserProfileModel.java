@@ -238,4 +238,32 @@ public class DqoUserProfileModel {
 
         return model;
     }
+
+    /**
+     * Creates a user's profile model for FREE user, not authenticated to DQOps Cloud.
+     * @return Empty profile.
+     */
+    public static DqoUserProfileModel createFreeUserModel() {
+        return new DqoUserProfileModel() {{
+            setAccountRole(DqoUserRole.ADMIN);
+            setCanManageAccount(false);
+            setCanViewAnyObject(true);
+            setCanManageScheduler(true);
+            setCanCancelJobs(true);
+            setCanRunChecks(true);
+            setCanDeleteData(true);
+            setCanCollectStatistics(true);
+            setCanManageDataSources(true);
+            setCanSynchronize(false);
+            setCanEditComments(true);
+            setCanEditLabels(true);
+            setCanManageDefinitions(true);
+            setCanCompareTables(true);
+            setCanManageUsers(false);
+            setCanManageAndViewSharedCredentials(true);
+            setTenant("Standalone");
+            setLicenseType(DqoCloudLicenseType.FREE.name());
+            setJobsLimit(1);
+        }};
+    }
 }

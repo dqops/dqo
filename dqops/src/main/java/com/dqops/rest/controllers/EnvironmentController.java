@@ -135,7 +135,6 @@ public class EnvironmentController {
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = DqoUserProfileModel.class),
-            @ApiResponse(code = 404, message = "Instance not authenticated to DQOps Cloud, the DQOps Cloud API key is missing.", response = Void.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
@@ -143,7 +142,8 @@ public class EnvironmentController {
             @AuthenticationPrincipal DqoUserPrincipal principal) {
         DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey(principal.getDataDomainIdentity());
         if (apiKey == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+            DqoUserProfileModel dqoUserProfileModel = DqoUserProfileModel.createFreeUserModel();
+            return new ResponseEntity<>(Mono.just(dqoUserProfileModel), HttpStatus.OK);
         }
 
         DqoUserProfileModel dqoUserProfileModel = DqoUserProfileModel.fromApiKeyAndPrincipal(apiKey, principal);

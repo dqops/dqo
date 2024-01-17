@@ -12473,9 +12473,6 @@
               "$ref" : "#/definitions/DqoUserProfileModel"
             }
           },
-          "404" : {
-            "description" : "Instance not authenticated to DQOps Cloud, the DQOps Cloud API key is missing."
-          },
           "500" : {
             "description" : "Internal Server Error",
             "schema" : {

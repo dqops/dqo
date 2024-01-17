@@ -17,6 +17,7 @@ package com.dqops.core.synchronization.service;
 
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
+import com.dqops.core.dqocloud.apikey.DqoCloudInvalidKeyException;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.core.synchronization.contract.SynchronizationRoot;
@@ -90,6 +91,10 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
                                   boolean forceRefreshNativeTable,
                                   FileSystemSynchronizationListener synchronizationListener) {
         DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey(userIdentity);
+        if (apiKey == null) {
+            throw new DqoCloudInvalidKeyException("Invalid DQOps Cloud Pairing API Key or synchronization with DQOps Cloud is disabled, run \"cloud login\" in DQOps shell to receive a current DQOps Cloud Pairing API Key.");
+        }
+
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentity);
         UserHome userHome = userHomeContext.getUserHome();
 
