@@ -54,8 +54,10 @@ for each data group returned by the query.
 
 In order to avoid storing too many data quality results in the DQOps Cloud Data Warehouse,
 DQOps captures only the first 1000 results. When the query returns more than 1000 rows, DQOps will
-cancel the query and discard the remaining results. The behavior can be changed using the
-*--dqo.sensor.limit.fail-on-sensor-readout-limit-exceeded=true* configuration parameter.
+cancel the query and returns ann error. The behavior can be changed using the
+*--dqo.sensor.limit.fail-on-sensor-readout-limit-exceeded=false* configuration parameter, which
+will disable the error. DQOps will compare only the first 1000 data groups between the tested table
+and the reference table, silently discarding the remaining rows (data groups).
 
 The columns used for data grouping should be selected with care, knowing that using columns with
 too many distinct values (more than 1000) will cause result set truncation.

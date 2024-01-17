@@ -383,3 +383,9 @@ The following list describes the role of each internal component.
 14.  `Notification queue` is an internal component that calls [notifications](../../integrations/webhooks/index.md)
      webhooks, sending new data quality incidents and incident's status changes.
 
+
+## What's next
+- Learn how the [local data quality data lake](../data-storage-of-data-quality-results.md) is used to store a local copy
+  of data quality results, and how the data is partitioned.
+- Review the [DQOps hybrid deployment architecture](dqops-architecture.md) to understand how DQOps synchronizes the data with 
+  the data quality data lake in the DQOps Cloud.

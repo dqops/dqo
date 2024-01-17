@@ -57,7 +57,7 @@ nav:
       - Incident management: "dqo-concepts/grouping-data-quality-issues-to-incidents.md"
       - User interface overview: "dqo-concepts/dqops-user-interface-overview.md"
       - Command-line interface: "dqo-concepts/command-line-interface.md"
-      - Data storage: "dqo-concepts/data-storage-of-data-quality-results.md"
+      - Storing data quality results: "dqo-concepts/data-storage-of-data-quality-results.md"
       - Deployment architecture: "dqo-concepts/architecture/dqops-architecture.md"
       - Check execution flow: "dqo-concepts/architecture/data-quality-check-execution-flow.md"
   - Installing DQOps:

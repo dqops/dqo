@@ -210,3 +210,8 @@ To set up a data grouping configuration at the table level
             column_type: STRING
             nullable: true
     ```
+   
+## What's more
+- Read the [concept of running data quality checks with data grouping](../dqo-concepts/measuring-data-quality-with-data-grouping.md)
+  to understand how DQOps generates queries with a **GROUP BY** clause to analyze data quality for each group of rows.
+
