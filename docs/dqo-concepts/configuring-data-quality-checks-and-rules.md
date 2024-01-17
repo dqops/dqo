@@ -103,14 +103,14 @@ spec:
 
 The elements of the profiling checks configuration are listed in the table below.
 
-| Line  | Element&nbsp;path (within the `spec` node)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description                                                                                                                                                                                                                           |
-|-------|--------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 6     | `profiling_checks`                                                                                                             | The table-level [profiling checks container profiling checks specification](../reference/yaml/profiling/table-profiling-checks.md#tableprofilingcheckcategoriesspec) where the profiling checks are configured.                    |
-| 7     | `profiling_checks.volume`                                                                                                      | A *volume* category node. Similar data quality checks are grouped in caregories. Other categories are sibling nodes of this node.                                                                                                     |
-| 8     | `profiling_checks.volume.` `profile_row_count`                                                                                 | The configuration of the [profile_row_count](../checks/table/volume/row-count.md#profile-row-count) data quality check. When a node with the name of the data quality check is added to the category node,check becomes activated. |
-| 9     | `profiling_checks.volume.` `profile_row_count.warning`                                                                         | The configuration of a [data quality rule](definition-of-data-quality-rules.md) at a **warning** severity level. This rule will raise  a **warning** severity level data quality issue if the *sensor readout* does not meet the rule parameter.        |
-| 10    | `profiling_checks.volume.` `profile_row_count.warning.min_count`                                                               | The rule parameter for the [min_count](../reference/rules/Comparison.md#min-count) rule. It is the smallest accepted row count (the *sensor readout* captured by the data quality check's sensor) that will make the rule pass.    |
-| 11    | `profiling_checks.schema`                                                                                                      | Yet another check category node.                                                                                                                                                                                                      |   
+| Line | Element&nbsp;path (within the `spec` node)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description                                                                                                                                                                                                                                      |
+|------|--------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 6    | `profiling_checks`                                                                                                             | The table-level [profiling checks container profiling checks specification](../reference/yaml/profiling/table-profiling-checks.md#tableprofilingcheckcategoriesspec) where the profiling checks are configured.                                  |
+| 7    | `profiling_checks.volume`                                                                                                      | A *volume* category node. Similar data quality checks are grouped in caregories. Other categories are sibling nodes of this node.                                                                                                                |
+| 8    | `profiling_checks.volume.` `profile_row_count`                                                                                 | The configuration of the [profile_row_count](../checks/table/volume/row-count.md#profile-row-count) data quality check. When a node with the name of the data quality check is added to the category node,check becomes activated.               |
+| 9    | `profiling_checks.volume.` `profile_row_count.warning`                                                                         | The configuration of a [data quality rule](definition-of-data-quality-rules.md) at a **warning** severity level. This rule will raise  a **warning** severity level data quality issue if the *sensor readout* does not meet the rule parameter. |
+| 10   | `profiling_checks.volume.` `profile_row_count.warning.min_count`                                                               | The rule parameter for the [min_count](../reference/rules/Comparison.md#min-count) rule. It is the smallest accepted row count (the *sensor readout* captured by the data quality check's sensor) that will make the rule pass.                  |
+| 11   | `profiling_checks.schema`                                                                                                      | Yet another check category node.                                                                                                                                                                                                                 |
 
 
 ### **Table-level monitoring checks**
@@ -230,7 +230,7 @@ excludes today for daily checks and the current month from monthly checks.
 The default values for the `daily_partitioning_include_today` and `monthly_partitioning_include_current_month` is *false*.
 
 
-## Configuring issue severity levels
+## Configure issue severity levels
 The data quality checks in DQOps allow setting different rule thresholds for different data quality issue severity levels.
 The severity levels are **warning** to receive a simple warning when the issue is identified,
 **error** when the issue should be resolved, and should decrease the data quality KPI score,
@@ -356,7 +356,7 @@ The `parameters` node is present in every data quality check, but it is not save
 when no parameters are specified.
 
 
-## Configuring columns
+## Configure columns
 The list of columns is stored in the `spec.columns` node in the *.dqotable.yaml* file.
 The [configuration of the column metadata](configuring-data-sources.md#configuring-columns) is described 
 in the configuration of the data sources.
@@ -484,11 +484,11 @@ spec:
 1.  The selection of the column that will be used for date partitioning in the **GROUP BY** SQL clause.
 2.  The container of the column-level [partitioned checks](definition-of-data-quality-checks/partition-checks.md).
 
-## Activating multiple checks at once
+## Activate multiple checks at once
 DQOps supports also alternative methods of activating data quality checks, designed to configure thousands of checks at once,
 by turning on data quality checks using filters for target tables, columns, and the column's data type.
 
-### **Activating multiple checks with DQOps shell**
+### **Activate multiple checks with DQOps shell**
 The [`dqo check activate`](../command-line-interface/check.md#dqo-check-activate) command supports activating multiple checks
 from the [DQOps shell](command-line-interface.md). 
 Ready-to-use command examples for activating data quality checks are provided in the [documentation of data quality checks](../checks/index.md).
@@ -515,10 +515,13 @@ Configuring data quality checks to raise *error* severity issues requires slight
 dqo> check activate -c=connection_name -t=public.fact_* -ch=daily_nulls_percent -col=*_id --enable-error -Emax_percent=0
 ```
 
-### **Configuring multiple checks from UI**
-DQOps supports also using the user interface to search for target tables and columns to activate data quality checks,
-or review the configuration of rules. Follow the [managing multiple data quality checks](../working-with-dqo/activate-and-deactivate-multiple-checks.md)
-manual to see the screens.
+### **Configure multiple checks using the UI**
+DQOps provides the option to configure multiple checks from the user interface. You can search for target tables and 
+columns to activate data quality checks or review the configuration of rules.
+
+![Search for checks on the multiple check editor](https://dqops.com/docs/images/working-with-dqo/activate-and-deactivate-multiple-checks/search-for-checks.png)
+
+To learn more about [managing multiple data quality checks](../working-with-dqo/activate-and-deactivate-multiple-checks.md), refer to the manual.
 
 
 ## What's next
