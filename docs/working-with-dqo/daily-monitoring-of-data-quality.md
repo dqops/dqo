@@ -6,7 +6,7 @@ Read this guide to understand the daily workflow of using DQOps to review recent
 **Problem:** To ensure the accuracy and reliability of your data, it is essential to monitor it on a daily basis. 
 By doing so, you can spot any issues early on and take prompt action to solve them.
 
-**Solution**: To achieve this, you can set up daily monitoring of data quality checks. This system will automatically 
+**Solution:** To achieve this, you can set up daily monitoring of data quality checks. This system will automatically 
 run data quality checks on a regular basis and notify you immediately if it discovers any issues. Additionally, you can 
 review the results of the checks on data quality dashboards, which provide a comprehensive overview of your data quality status.
 
