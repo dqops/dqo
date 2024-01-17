@@ -32,7 +32,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column-level check that counts how many expected text values are among the TOP most popular values in the column.
+ * A column-level check that counts how many expected text values are among the TOP most popular values in the column.
  * The check will first count the number of occurrences of each column's value and will pick the TOP X most popular values (configurable by the 'top' parameter).
  * Then, it will compare the list of most popular values to the given list of expected values that should be most popular.
  * This check will verify how many supposed most popular values (provided in the 'expected_values' list) were not found in the top X most popular values in the column.

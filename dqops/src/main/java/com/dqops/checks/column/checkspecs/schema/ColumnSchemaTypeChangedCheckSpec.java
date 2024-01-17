@@ -33,8 +33,8 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that detects if the data type of the column has changed since the last time it was retrieved.
- * This check calculates a hash of all the components of the column's data type: the data type name, length, scale, precision and nullability.
+ * A column-level check that detects if the data type of the column has changed since the last retrieval.
+ * This check calculates the hash of all the components of the column's data type: the data type name, length, scale, precision and nullability.
  * A data quality issue will be detected if the hash of the column's data types has changed.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)

@@ -35,10 +35,10 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Table level check that uses a custom SQL expression on each row to verify (assert) that all rows pass a custom condition defined as an SQL condition.
+ * A table-level check that uses a custom SQL expression on each row to verify (assert) that all rows pass a custom condition defined as an SQL condition.
  * Use the {alias} token to reference the tested table. This data quality check can be used to compare columns on the same table.
  * For example, the condition can verify that the value in the *col_price* column is higher than the *col_tax* column using an SQL expression: `{alias}.col_price > {alias}.col_tax`.
- * Use an SQL expression that returns a *true* value for valid values and *false* for invalid values, because it is an assertion.
+ * Use an SQL expression that returns a *true* value for valid values and a *false* one for invalid values, because it is an assertion.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

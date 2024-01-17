@@ -33,12 +33,12 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column-level check that calculates the percentage of rows for which the tested text column contains a value from the set of expected values.
+ * A column-level check that calculates the percentage of rows for which the tested text column contains a value from a set of expected values.
  * Columns with null values are also counted as a passing value (the sensor assumes that a 'null' is also an expected and accepted value).
  * The check raises a data quality issue when the percentage of rows with a not null column value that is not expected (not one of the values in the expected_values set)
- * is below an expected threshold, for example 99% of rows should have values from the defined domain.
- * This data quality check is useful for checking text columns that have a low number of unique values and all the values should be from a set of expected values.
- * For example, testing a country, state, currency, gender, type, department columns whose expected values are known.
+ * is below the expected threshold. For example, 99% of rows should have values from the defined domain.
+ * This data quality check is useful for checking text columns that have a small number of unique values, and all the values should come from a set of expected values.
+ * For example, testing country, state, currency, gender, type, and department columns whose expected values are known.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -55,17 +55,17 @@ public class ColumnTextFoundInSetPercentCheckSpec
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnAcceptedValuesTextFoundInSetPercentSensorParametersSpec parameters = new ColumnAcceptedValuesTextFoundInSetPercentSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a percentage of rows with valid values in a column (from the set of expected values). Raises a data quality issue with at a warning severity level when the percentage of valid rows is below the minimum percentage threshold.")
+    @JsonPropertyDescription("Default alerting threshold for a percentage of rows with valid values in a column (from a set of expected values). Raises a data quality issue with at a warning severity level when the percentage of valid rows is below the minimum percentage threshold.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MinPercentRule100WarningParametersSpec warning;
 
-    @JsonPropertyDescription("Default alerting threshold for a percentage of rows with valid values in a column (from the set of expected values). Raises a data quality issue with at an error severity level when the percentage of valid rows is below the minimum percentage threshold.")
+    @JsonPropertyDescription("Default alerting threshold for a percentage of rows with valid values in a column (from a set of expected values). Raises a data quality issue with at an error severity level when the percentage of valid rows is below the minimum percentage threshold.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MinPercentRule100ErrorParametersSpec error;
 
-    @JsonPropertyDescription("Default alerting threshold for a percentage of rows with valid values in a column (from the set of expected values). Raises a data quality issue with at a fatal severity level when the percentage of valid rows is below the minimum percentage threshold.")
+    @JsonPropertyDescription("Default alerting threshold for a percentage of rows with valid values in a column (from a set of expected values). Raises a data quality issue with at a fatal severity level when the percentage of valid rows is below the minimum percentage threshold.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MinPercentRule95ParametersSpec fatal;

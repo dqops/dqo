@@ -35,8 +35,8 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that difference between the minimum value in the tested column and the minimum value in another column in a referenced table is below a maximum accepted percentage of difference.
- * This check runs an SQL query with an INNER JOIN clause to join to the other (referenced) table that must be defined in the same database.
+ * A column-level check that ensures that the difference between the minimum value in the tested column and the minimum value in another column in a referenced table is below a maximum accepted percentage of difference.
+ * This check runs an SQL query with an INNER JOIN clause to join another (referenced) table that must be defined in the same database.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

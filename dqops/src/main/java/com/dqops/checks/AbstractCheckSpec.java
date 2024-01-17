@@ -377,7 +377,7 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
 
     /**
      * Returns the data quality check name (YAML compliant) that is used as a field name on a check category class.
-     * @return Check category name, for example "row_count", etc.
+     * @return Check category name, for example, "row_count", etc.
      */
     @JsonIgnore
     public String getCheckName() {

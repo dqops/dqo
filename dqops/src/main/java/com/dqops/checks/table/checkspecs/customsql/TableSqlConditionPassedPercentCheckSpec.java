@@ -34,7 +34,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Table-level check that ensures that a minimum percentage of rows passed a custom SQL condition (expression).
+ * A table-level check that ensures that a minimum percentage of rows passed a custom SQL condition (expression).
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

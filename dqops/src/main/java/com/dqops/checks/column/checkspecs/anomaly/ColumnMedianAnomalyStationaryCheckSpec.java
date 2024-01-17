@@ -34,7 +34,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that the median in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
+ * A column-level check that ensures that the median in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
