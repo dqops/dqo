@@ -35,7 +35,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column check that calculates the percentage of values that matches the custom regex in a column.
+ * A column-level that calculates the percentage of values that match the custom regex in a monitored column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

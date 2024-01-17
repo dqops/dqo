@@ -32,7 +32,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column-level check that ensures that the population variance is in an expected range in a monitored column.
+ * A column-level check that ensures that the population varianceis within the expected range in a monitored column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

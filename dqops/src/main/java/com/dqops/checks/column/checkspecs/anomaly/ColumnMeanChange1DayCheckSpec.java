@@ -34,7 +34,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that the mean value in a monitored column has changed by a fixed rate since the last readout from yesterday.
+ * A column-level check that ensures that the mean value in a monitored column has changed by a fixed rate since the last readout from yesterday.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

@@ -34,7 +34,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column check that calculates the percentage of rows that contains valid IP6 address values in a column.
+ * Column check that calculates the percentage of rows that contains valid IP6 address values in a monitored column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

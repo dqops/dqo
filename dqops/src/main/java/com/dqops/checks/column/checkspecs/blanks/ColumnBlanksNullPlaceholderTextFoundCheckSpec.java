@@ -35,7 +35,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column-level check that ensures that there are no more than a maximum number of rows with a null placeholder texts in a monitored column.
+ * A column-level check that ensures that there are no more than a maximum number of rows with a null placeholder text in a monitored column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

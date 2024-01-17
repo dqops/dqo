@@ -34,7 +34,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column-level check that ensures that there is at least a minimum percentage of valid text values that are valid date strings (are parsable to a DATE type) in a monitored column.
+ * A column-level check that ensures that there is at least a minimum percentage of valid text values that are valid date strings (are parsable to a DATE type) in a monitored column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

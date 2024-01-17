@@ -34,7 +34,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Table-level check that ensures that the row count is within a two-tailed percentile from measurements made during the last 90 days. Use in partitioned checks.
+ * A table-level check that ensures that the row count is within a two-tailed percentile from measurements made during the last 90 days. Use in partitioned checks.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

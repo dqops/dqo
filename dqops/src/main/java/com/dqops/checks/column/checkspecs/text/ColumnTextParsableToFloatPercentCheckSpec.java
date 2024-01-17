@@ -34,7 +34,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that the percentage of strings that are parsable to float in the monitored column does not fall below set thresholds.
+ * A column-level check that ensures that the percentage of strings that are parsable to float in the monitored column does not fall below set thresholds.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

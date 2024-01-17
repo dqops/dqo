@@ -34,8 +34,8 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Row count (select count(*) from ...) test that runs a row_count check, obtains a count of rows and verifies the number by calling the row count rule.
- * The default configuration for all severity rules (warning, error, fatal data quality issue) is to require at least one row, which checks if the table is not empty.
+ * A table-level check that ensures that the tested table has at least a minimum accepted number of rows.
+ * The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the table is not empty.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

@@ -32,7 +32,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that there are no more than a set percentage of values from range in a monitored column.
+ * A column-level check that ensures that there are no more than a set percentage of values from the range in a monitored column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -54,7 +54,7 @@ public class ColumnNumberInRangePercentCheckSpec
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MinPercentRule100WarningParametersSpec warning;
 
-    @JsonPropertyDescription("Default alerting threshold for set percentage of values from range in a column that raises a data quality error (alert).")
+    @JsonPropertyDescription("Default alerting threshold for set percentage of values from the range in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MinPercentRule100ErrorParametersSpec error;

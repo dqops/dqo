@@ -34,7 +34,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column-level check that ensures that the percentage of boolean placeholder texts ('0', '1', 'true', 'false', 'yes', 'no', 'y', 'n') in the monitored column does not fall below the minimum percentage.
+ * A column-level check that ensures that the percentage of boolean placeholder texts ('0', '1', 'true', 'false', 'yes', 'no', 'y', 'n') in the monitored column does not fall below the minimum percentage.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

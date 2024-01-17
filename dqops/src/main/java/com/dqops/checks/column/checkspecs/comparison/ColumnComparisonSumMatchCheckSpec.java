@@ -36,7 +36,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column-level check that ensures that compares the sum of the values in the tested column to the sum of values in a reference column from the reference table.
+ * A column-level check that ensures that compares the sum of the values in the tested column to the sum of values in a reference column from the reference table.
  * Compares the sum of values for each group of data. The data is grouped using a GROUP BY clause and groups are matched between the tested (parent) table and the reference table (the source of truth).
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)

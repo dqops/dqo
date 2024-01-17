@@ -32,7 +32,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Table-level check that calculates a given SQL aggregate expression and compares it with a maximum accepted value.
+ * A table-level check that calculates a given SQL aggregate expression and compares it with a maximum accepted value.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
