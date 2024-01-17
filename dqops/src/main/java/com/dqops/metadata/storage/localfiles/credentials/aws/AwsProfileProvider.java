@@ -1,4 +1,4 @@
-package com.dqops.metadata.storage.localfiles.credentials;
+package com.dqops.metadata.storage.localfiles.credentials.aws;
 
 import com.dqops.core.secrets.SecretValueLookupContext;
 import software.amazon.awssdk.profiles.Profile;
