@@ -137,7 +137,7 @@ public class CliInitializerImpl implements CliInitializer {
                 return; // api key is provided somehow (by an environment variable or in the local settings)
             }
         } catch (Exception ex) {
-            System.err.println("Cannot retrieve the API Key, the key is probably invalid: " + ex.getMessage());
+            System.err.println("Cannot retrieve the DQOps Cloud Pairing API Key, the key is probably invalid: " + ex.getMessage());
 //            ex.printStackTrace(System.err);
         }
 
@@ -154,6 +154,9 @@ public class CliInitializerImpl implements CliInitializer {
         }
 
         if (!this.terminalReader.promptBoolean("Log in to DQOps Cloud?", true)) {
+            if (this.terminalReader.promptBoolean("Disable synchronization with DQOps Cloud and run in an offline mode?", false)) {
+                this.cloudLoginService.disableCloudSync();
+            }
             return;
         }
 

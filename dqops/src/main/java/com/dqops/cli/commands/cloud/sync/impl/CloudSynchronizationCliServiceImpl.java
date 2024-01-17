@@ -107,10 +107,10 @@ public class CloudSynchronizationCliServiceImpl implements CloudSynchronizationC
             // the api key is missing
 
             if (headlessMode) {
-                throw new CliRequiredParameterMissingException("API Key is missing, please run \"cloud login\" to configure your DQOps Cloud API KEY");
+                throw new CliRequiredParameterMissingException("DQOps Cloud Pairing API Key is missing, please run \"cloud login\" to configure your DQOps Cloud API Pairing Key");
             }
 
-            Boolean loginMe = this.terminalFactory.getReader().promptBoolean("DQOps Cloud API Key is missing, do you want to log in or register to DOQps Cloud?",
+            Boolean loginMe = this.terminalFactory.getReader().promptBoolean("DQOps Cloud Pairing API Key is missing, do you want to log in or register to DOQps Cloud?",
                     true);
             if (loginMe) {
                 if (!this.cloudLoginService.logInToDqoCloud()) {
