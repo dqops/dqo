@@ -3,8 +3,8 @@ Read this guide to learn how to connect DQOps to BigQuery from the UI, command-l
 
 ## Overview
 
-BigQuery is a fully managed enterprise data warehouse from Google Cloud that helps manage and analyze data with built-in
-features like machine learning, geospatial analysis, and business intelligence.
+[BigQuery](https://cloud.google.com/bigquery/docs) is a fully managed enterprise data warehouse from Google Cloud that 
+helps manage and analyze data with built-in features like machine learning, geospatial analysis, and business intelligence.
 
 ## Prerequisite credentials
 

@@ -3,14 +3,17 @@ Read this guide to learn how to connect DQOps to MySQL from the UI, command-line
 
 ## Overview
 
-MySQL is an open source, easy-to-use and flexible SQL database management system developed, distributed, and supported by Oracle Corporation.
+[MySQL](https://dev.mysql.com/doc/) is an open source, easy-to-use and flexible SQL database management system developed, distributed, and supported by Oracle Corporation.
 MySQL is generally faster and more efficient than other relational database management systems (RDBMS), so it is often the preferred
 choice for applications that require high performance.
 
 ## Prerequisite credentials
 
-You need a MySQL account. Use the TCP/IP Properties (IP Addresses Tab) dialog box to configure the TCP/IP protocol options
-for a specific IP address. In case of restrictions, you need to add the IP address used by DQOps to [NDB Cluster TCP/IP Connections Using Direct Connections](https://dev.mysql.com/doc/refman/8.0/en/mysql-cluster-tcp-definition-direct.html).
+To add MySQL data source connection to DQOps you need a MySQL account. 
+
+Use the TCP/IP Properties (IP Addresses Tab) dialog box to configure the TCP/IP protocol options for a specific IP address. 
+
+In case of restrictions, you need to add the IP address used by DQOps to [NDB Cluster TCP/IP Connections Using Direct Connections](https://dev.mysql.com/doc/refman/8.0/en/mysql-cluster-tcp-definition-direct.html).
 
 ## Add MySQL connection using the user interface
 
