@@ -85,8 +85,8 @@ To start DQOps in a server mode follow the steps below.
      You need to provide the path to your local `DQOps User Home` folder
    - The `-p` flag creates a mapping between the host’s port 8888 to the container’s port 8888. Without the port mapping, you would not be able to access the application.
    - The `-d` flag turns on a daemon mode
-   - The `-m` parameter configures the memory size for the container. We are advising to allocate at least 1 GB of memory for the DQOps
-     container, which is configured by `-m=1g`. DQOps container runs one Java JVM process and several small Python processes (two per core)
+   - The `-m` parameter configures the memory size for the container. We are advising to allocate at least 2 GB of memory for the DQOps
+     container, which is configured by `-m=2g`. DQOps container runs one Java JVM process and several small Python processes (two per core)
      that are running the rules. DQOps runtime allocates 80% of the container memory for the JVM heap. The memory is used for caching
      YAML and parquet files in memory. The memory size could be changed by passing the `DQO_JAVA_OPTS`
      environment variable to the container using the following docker run parameter: `-e DQO_JAVA_OPTS=-XX:MaxRAMPercentage=60.0`
