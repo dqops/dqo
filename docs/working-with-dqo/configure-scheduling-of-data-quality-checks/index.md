@@ -94,9 +94,11 @@ command `scheduler stop`. For further information on the `scheduler` commands, p
 
 Scheduler can also be started in a server mode that continuously run a job scheduler and synchronize the data every 10 minutes.
 To do this, simply enter the command below in your terminal:
+
 ```
 $ dqo run
 ```
+
 To terminate dqo running in the background, simply use the Ctrl+C.
 
 For more information on the `run` command, please refer to the [Command-line interface section](../../command-line-interface/run.md).
@@ -115,6 +117,7 @@ new schedules, start dqo with the following parameter:
 ```
 $ dqo --dqo.scheduler.scan-metadata-cron-schedule=<Unix cron expression>
 ```
+
 Please use quotation marks when defining a frequency in cron format.
 
 You can also configure this parameter by setting `DQO_SCHEDULER_SCAN_METADATA_CRON_SCHEDULE=<Unix cron expression>` 
@@ -127,6 +130,11 @@ with the following parameter:
 ```
 $ dqo --dqo.scheduler.enable-cloud-sync=<true/false>
 ```
+
 To enable synchronization type `true`, to disable it type `false`.
 
 You can also configure this parameter by setting `DQO_SCHEDULER_ENABLE_CLOUD_SYNC=<TRUE/FALSE>` environment variable.
+
+## What's next
+- Learn how to configure [CRON schedules for running data quality checks](configuring-schedules-by-modifying-yaml-file.md) in YAML files.
+- The format of expression and sample schedules are documented in the [cron formatting](cron-formatting.md) reference.
