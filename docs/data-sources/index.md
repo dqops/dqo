@@ -1,3 +1,7 @@
+---
+glightbox: false
+---
+
 # Supported data sources
 The list of data sources supported by DQOps for running data quality checks, and observing the data quality.
 
@@ -15,155 +19,157 @@ parameters you need to specify, see the document dedicated to each data source.
 
 DQOps supports the following data sources.
 
-<div markdown="1" class="four-divs-row">
+<br>
 
-<figure markdown class="four-divs-element">
-  ![Icon](https://dqops.com/docs/images/data-sources52345326/alloy-db.svg){ loading=lazy, class="image-center" }
-  <figcaption markdown>[AlloyDB for PostgreSQL](./postgresql.md)</figcaption>
-</figure>
+<div class="four-divs-row">
 
-<figure markdown class="four-divs-element">
-  ![Icon](https://dqops.com/docs/images/data-sources52345326/amazon-athena.svg){ loading=lazy, class="image-center" }
-  <figcaption markdown>[Amazon Athena](./athena.md)</figcaption>
-</figure>
+  <a href="./postgresql" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/alloy-db.svg">
+    <p>AlloyDB for PostgreSQL</p>
+  </a>
 
-<figure markdown class="four-divs-element">
-  ![Icon](https://dqops.com/docs/images/data-sources52345326/amazon-rds1.svg){ loading=lazy, class="image-center" }
-  <figcaption markdown>[Amazon Aurora](./postgresql.md)</figcaption>
-</figure>
+  <a href="./athena" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/amazon-athena.svg">
+    <p>Amazon Athena</p>
+  </a>
 
-<figure markdown class="four-divs-element">
-  ![Icon](https://dqops.com/docs/images/data-sources52345326/amazon-rds1.svg){ loading=lazy, class="image-center" }
-  <figcaption markdown>[Amazon RDS for MySQL](./mysql.md)</figcaption>
-</figure>
+  <a href="./postgresql" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/amazon-rds.svg">
+    <p>Amazon Aurora</p>
+  </a>
 
-<figure markdown class="four-divs-element">
-  ![Icon](https://dqops.com/docs/images/data-sources52345326/amazon-rds1.svg){ loading=lazy, class="image-center" }
-  <figcaption markdown>[Amazon RDS for PostgreSQL](./postgresql.md)</figcaption>
-</figure>
+  <a href="./redshift" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/redshift.svg">
+    <p>Amazon Redshift</p>
+  </a>
 
-<figure markdown class="four-divs-element">
-  ![Icon](https://dqops.com/docs/images/data-sources52345326/amazon-rds1.svg){ loading=lazy, class="image-center" }
-  <figcaption markdown>[Amazon RDS for SQL Server](./sql-server.md)</figcaption>
-</figure>
+  <a href="./mysql" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/amazon-rds.svg">
+    <p>Amazon RDS for MySQL</p>
+  </a>
 
-<figure markdown class="four-divs-element">
-  ![Icon](https://dqops.com/docs/images/data-sources52345326/azure-database-mysql.svg){ loading=lazy, class="image-center" }
-  <figcaption markdown>[Azure Database for MySQL](./mysql.md)</figcaption>
-</figure>
+  <a href="./postgresql" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/amazon-rds.svg">
+    <p>Amazon RDS for PostgreSQL</p>
+  </a>
 
-<figure markdown class="four-divs-element">
-  ![Icon](https://dqops.com/docs/images/data-sources52345326/azure-database-postgresql.svg){ loading=lazy, class="image-center" }
-  <figcaption markdown>[Azure Database for PostgreSQL](./postgresql.md)</figcaption>
-</figure>
+  <a href="./sql-server" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/amazon-rds.svg">
+    <p>Amazon RDS for SQL Server</p>
+  </a>
 
-<figure markdown class="four-divs-element">
-  ![Icon](https://dqops.com/docs/images/data-sources52345326/azure-sql-database.svg){ loading=lazy, class="image-center" }
-  <figcaption markdown>[Azure SQL Database](./sql-server.md)</figcaption>
-</figure>
+  <a href="./mysql" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/azure-database-mysql.svg">
+    <p>Azure Database for MySQL</p>
+  </a>
 
-<figure markdown class="four-divs-element">
-  ![Icon](https://dqops.com/docs/images/data-sources52345326/azure-sql-managed-instance.svg){ loading=lazy, class="image-center" }
-  <figcaption markdown>[Azure SQL Managed Instance](./sql-server.md)</figcaption>
-</figure>
+  <a href="./postgresql" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/azure-database-postgresql.svg">
+    <p>Azure Database for PostgreSQL</p>
+  </a>
 
-<figure markdown class="four-divs-element">
-  ![Icon](https://dqops.com/docs/images/data-sources52345326/azure-synapse-analytics.svg){ loading=lazy, class="image-center" }
-  <figcaption markdown>[Azure Synapse Analytics](./sql-server.md)</figcaption>
-</figure>
+  <a href="./sql-server" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/azure-sql-database.svg">
+    <p>Azure SQL Database</p>
+  </a>
 
-<figure markdown class="four-divs-element">
-  ![Icon](https://dqops.com/docs/images/data-sources52345326/bigquery.svg){ loading=lazy, class="image-center" }
-  <figcaption markdown>[Google BigQuery](./bigquery.md)</figcaption>
-</figure>
+  <a href="./sql-server" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/azure-sql-managed-instance.svg">
+    <p>Azure SQL Managed Instance</p>
+  </a>
 
-<figure markdown class="four-divs-element">
-  ![Icon](https://dqops.com/docs/images/data-sources52345326/cloud-sql.svg){ loading=lazy, class="image-center" }
-  <figcaption markdown>[Cloud SQL for MySQL](./mysql.md)</figcaption>
-</figure>
+  <a href="./sql-server" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/azure-synapse-analytics.svg">
+    <p>Azure Synapse Analytics</p>
+  </a>
 
-<figure markdown class="four-divs-element">
-  ![Icon](https://dqops.com/docs/images/data-sources52345326/cloud-sql.svg){ loading=lazy, class="image-center" }
-  <figcaption markdown>[Cloud SQL for PostgreSQL](./postgresql.md)</figcaption>
-</figure>
+  <a href="./bigquery" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/bigquery.svg">
+    <p>Google BigQuery</p>
+  </a>
 
-<figure markdown class="four-divs-element">
-  ![Icon](https://dqops.com/docs/images/data-sources52345326/cloud-sql.svg){ loading=lazy, class="image-center" }
-  <figcaption markdown>[Cloud SQL for SQL Server](./sql-server.md)</figcaption>
-</figure>
+  <a href="./mysql" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/cloud-sql.svg">
+    <p>Cloud SQL for MySQL</p>
+  </a>
 
-<figure markdown class="four-divs-element">
-  ![Icon](https://dqops.com/docs/images/data-sources52345326/cockroach-db.svg){ loading=lazy, class="image-center" }
-  <figcaption markdown>[CockroachDB](./postgresql.md)</figcaption>
-</figure>
+  <a href="./postgresql" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/cloud-sql.svg">
+    <p>Cloud SQL for PostgreSQL</p>
+  </a>
 
-<figure markdown class="four-divs-element">
-  ![Icon](https://dqops.com/docs/images/data-sources52345326/databricks1.svg){ loading=lazy, class="image-center" }
-  <figcaption markdown>[Databricks](./databricks.md)</figcaption>
-</figure>
+  <a href="./sql-server" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/cloud-sql.svg">
+    <p>Cloud SQL for SQL Server</p>
+  </a>
 
-<figure markdown class="four-divs-element">
-  ![Icon](https://dqops.com/docs/images/data-sources52345326/maria-db.svg){ loading=lazy, class="image-center" }
-  <figcaption markdown>[MariaDB](./mysql.md)</figcaption>
-</figure>
+  <a href="./postgresql" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/cockroach-db.svg">
+    <p>CockroachDB</p>
+  </a>
 
-<figure markdown class="four-divs-element">
-  ![Icon](https://dqops.com/docs/images/data-sources52345326/mssql-server1.svg){ loading=lazy, class="image-center" }
-  <figcaption markdown>[Microsoft SQL Server](./sql-server.md)</figcaption>
-</figure>
+  <a href="./databricks" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/databricks.svg">
+    <p>Databricks</p>
+  </a>
 
-<figure markdown class="four-divs-element">
-  ![Icon](https://dqops.com/docs/images/data-sources52345326/mysql.svg){ loading=lazy, class="image-center" }
-  <figcaption markdown>[MySQL](./mysql.md)</figcaption>
-</figure>
+  <a href="./mysql" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/maria-db.svg">
+    <p>MariaDB</p>
+  </a>
 
-<figure markdown class="four-divs-element">
-  ![Icon](https://dqops.com/docs/images/data-sources52345326/oracle1.svg){ loading=lazy, class="image-center" }
-  <figcaption markdown>[Oracle](./oracle.md)</figcaption>
-</figure>
+  <a href="./sql-server" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/mssql-server.svg">
+    <p>Microsoft SQL Server</p>
+  </a>
 
-<figure markdown class="four-divs-element">
-  ![Icon](https://dqops.com/docs/images/data-sources52345326/percona-server.svg){ loading=lazy, class="image-center" }
-  <figcaption markdown>[Percona Server for MySQL](./mysql.md)</figcaption>
-</figure>
+  <a href="./mysql" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/mysql.svg">
+    <p>MySQL</p>
+  </a>
 
-<figure markdown class="four-divs-element">
-  ![Icon](https://dqops.com/docs/images/data-sources52345326/postgresql.svg){ loading=lazy, class="image-center" }
-  <figcaption markdown>[PostgreSQL](./postgresql.md)</figcaption>
-</figure>
+  <a href="./oracle" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/oracle.svg">
+    <p>Oracle</p>
+  </a>
 
-<figure markdown class="four-divs-element">
-  ![Icon](https://dqops.com/docs/images/data-sources52345326/presto.svg){ loading=lazy, class="image-center" }
-  <figcaption markdown>[Presto](./presto.md)</figcaption>
-</figure>
+  <a href="./mysql" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/percona-server.svg">
+    <p>Percona Server for MySQL</p>
+  </a>
 
-<figure markdown class="four-divs-element">
-  ![Icon](https://dqops.com/docs/images/data-sources52345326/redshift2.svg){ loading=lazy, class="image-center" }
-  <figcaption markdown>[Amazon Redshift](./redshift.md)</figcaption>
-</figure>
+  <a href="./postgresql" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/postgresql.svg">
+    <p>PostgreSQL</p>
+  </a>
 
-<figure markdown class="four-divs-element">
-  ![Icon](https://dqops.com/docs/images/data-sources52345326/snowflake.svg){ loading=lazy, class="image-center" }
-  <figcaption markdown>[Snowflake](./snowflake.md)</figcaption>
-</figure>
+  <a href="./presto" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/presto.svg">
+    <p>Presto</p>
+  </a>
 
-<figure markdown class="four-divs-element">
-  ![Icon](https://dqops.com/docs/images/data-sources52345326/spark.svg){ loading=lazy, class="image-center" }
-  <figcaption markdown>[Apache Spark](./spark.md)</figcaption>
-</figure>
+  <a href="./snowflake" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/snowflake.svg">
+    <p>Snowflake</p>
+  </a>
 
-<figure markdown class="four-divs-element">
-  ![Icon](https://dqops.com/docs/images/data-sources52345326/trino1.svg){ loading=lazy, class="image-center" }
-  <figcaption markdown>[Trino](./trino.md)</figcaption>
-</figure>
+  <a href="./spark" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/spark.svg">
+    <p>Spark</p>
+  </a>
 
-<figure markdown class="four-divs-element">
-  ![Icon](https://dqops.com/docs/images/data-sources52345326/yugabyte-db.svg){ loading=lazy, class="image-center" }
-  <figcaption markdown>[YugabyteDB](./postgresql.md)</figcaption>
-</figure>
+  <a href="./trino" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/trino.svg">
+    <p>Trino</p>
+  </a>
 
-<div class="four-divs-element"></div>
-<div class="four-divs-element"></div>
-<div class="four-divs-element"></div>
+  <a href="./postgresql" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/yugabyte-db.svg">
+    <p>YugabyteDB</p>
+  </a>
+
+  <div class="four-divs-element"></div>
+  <div class="four-divs-element"></div>
+  <div class="four-divs-element"></div>
 
 </div>
