@@ -11,6 +11,27 @@ To modify the schedule you can use the user interface as described below or [man
 Different types of checks, such as Profiling, Monitoring, and Partition, have their own schedules. For more information
 on these [different check types, please refer to the DQOps Concepts section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
+## Default schedule configuration
+
+DQOps automatically sets the default schedule configuration for all newly imported tables. 
+
+You can find the default schedule configuration stored in the [defaultschedules.dqoschedules.yaml](../../reference/yaml/DefaultSchedulesYaml.md) file,
+which is located in the `settings/` folder. 
+
+It is important to note that DQOps does not use these schedules directly, and changing the file will not affect your
+data sources. The configuration file is only used to copy the default [cron](cron-formatting.md) schedules to the data source connection file 
+when you import the data source.
+
+To change the default schedule configuration, follow these steps:
+
+![Change default schedule configuration](https://dqops.com/docs/images/working-with-dqo/schedules/default-schedules-configuration.png)
+
+1. Go to the **Configuration** section.
+2. Click on the **Default schedules** option in the three view on the left.
+3. Select the tab with the checks type you want to modify.
+4. Specify the schedule using a [Unix cron expression](cron-formatting.md) or select one of the options provided.
+5. Click on the **Save** button to save your changes.
+
 ## Configure a schedule at connection and table level
 
 To set up or modify a schedule for the entire connection or table, follow these steps:
@@ -18,11 +39,8 @@ To set up or modify a schedule for the entire connection or table, follow these 
 ![Navigating to schedule configuration](https://dqops.com/docs/images/working-with-dqo/schedules/navigating-to-schedule-configuration.png)
 
 1. Navigate to the **Data Source** section.
-
 2. Choose the connection or table where you want to set or modify the schedule from the tree view on the left.
-
 3. Click on the **Schedule** tab.
-
 4. Select the check type:
 
     - Profiling
@@ -32,7 +50,6 @@ To set up or modify a schedule for the entire connection or table, follow these 
     - Partition Monthly
    
 5. Specify the schedule using a [Unix cron expression](./cron-formatting.md) or select one of the options provided.
-
 6. Once you have set the schedule, click on the **Save** button to save your changes.
 
 Once a schedule is set up for a particular connection, it will execute all the checks that have been configured across 
@@ -55,13 +72,9 @@ To set up a schedule for a specific check, follow these steps:
 ![Configuring a schedule at check level](https://dqops.com/docs/images/working-with-dqo/schedules/configuring-schedule-at-check-level.png)
 
 1. Navigate to the section with a check type of interest (**Profiling**, **Monitoring checks** or **Partition checks**).
-
 2. Choose table or column of interest from the tree view on the left.
-
 3. Enable the check of interest then click the **Setting** button and go to the **Schedule Override** tab.
-
 4. Specify the schedule using a Unix cron expression or select one of the options provided.
-
 5. Once you have set the schedule, click the **Save** button to save your changes.
 
 Please note that any changes made to the schedule at the check level will override the schedule set for the entire 
