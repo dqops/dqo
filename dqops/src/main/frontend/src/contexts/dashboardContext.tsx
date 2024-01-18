@@ -89,7 +89,6 @@ function DashboardProvider(props: any) {
       try {
         if (folders.length === 0) {
           tabId = [folder, dashboard?.dashboard_name].join('-');
-          console.log('tabId', tabId);
             const res = await DashboardsApi.getDashboardLevel1(
             folder,
             dashboard?.dashboard_name ?? '',
@@ -169,10 +168,8 @@ function DashboardProvider(props: any) {
             ...prev,
             [tabId]: false
           }));
-        }
-      
+        }   
       } catch (err) {
-        console.log(err);
         setError((prev) => ({
           ...prev,
           [tabId]: true
