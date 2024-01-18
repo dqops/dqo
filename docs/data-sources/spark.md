@@ -5,6 +5,10 @@ Read this guide to learn how to connect DQOps to Apache Spark from the UI, comma
 
 [Apache Spark](https://spark.apache.org/documentation.html) is an open-source unified analytics engine for large-scale data processing.
 
+## Prerequisite credentials
+
+You need a Spark Thrift Server to be running that provides a connection through JDBC to data in Spark.
+
 ## Add Spark connection using the user interface
 
 ### **Navigate to the connection settings**
