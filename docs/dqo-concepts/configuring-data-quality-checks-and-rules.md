@@ -7,9 +7,16 @@ the [&lt;schema_name&gt;.&lt;table_name&gt;.dqotable.yaml](../reference/yaml/Tab
 These files are placed in the *[$DQO_USER_HOME/sources/&lt;connection_name&gt;/](dqops-user-home-folder.md#monitored-tables)* folders
 in the `DQOps user home`.
 The role and layout of the `DQOps user home` folder is described on the [DQOps user home](dqops-user-home-folder.md) page.
-The configuration of data sources and adding table metadata is described in the previous [configuring data sources](configuring-data-sources.md) article.
 
-``` { .yaml .annotate linenums="1" }
+Read the [configuration of data sources](configuring-data-sources.md) to know how to add data sources.
+The [concept of the table metadata in DQOps](configuring-table-metadata.md) describes how to manage
+the [.dqotable.yaml](../reference/yaml/TableYaml.md) table metadata files.
+
+The following example of a [table metadata file](configuring-table-metadata.md#table-yaml-file-structure)
+shows the location of [data quality check](definition-of-data-quality-checks/index.md) nodes where the
+parameters for the data quality checks and data quality rules is defined.
+
+``` { .yaml .annotate linenums="1" hl_lines="11 14 16 19 21" }
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -356,9 +363,9 @@ The `parameters` node is present in every data quality check, but it is not save
 when no parameters are specified.
 
 
-## Configure columns
+## Configuring column-level checks
 The list of columns is stored in the `spec.columns` node in the *.dqotable.yaml* file.
-The [configuration of the column metadata](configuring-data-sources.md#configuring-columns) is described 
+The [configuration of the column metadata](configuring-table-metadata.md#configuring-columns) is described 
 in the configuration of the data sources.
 
 ### **Column profiling checks**
