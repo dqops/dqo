@@ -264,8 +264,28 @@ spec:
 The `sql_expression` parameter is an SQL expression that uses a token `{alias}.{column}` to reference the
 raw value of the overwritten column.
 
+
 ## Additional table configuration
 The following examples show how to apply additional configuration on a table level.
+
+### **Table owner**
+Store the name of the data owner, for reference and for informative purposes.
+
+``` { .yaml .annotate linenums="1" hl_lines="5" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  owner: "John Smith"
+  columns:
+    cumulative_confirmed:
+      monitoring_checks:
+        daily:
+          nulls:
+            daily_nulls_percent:
+              warning:
+                max_percent: 0
+```
 
 ### **Table filter predicate**
 DQOps analyzes all rows in a table. This behavior may not be always desired.
@@ -299,36 +319,6 @@ spec:
 ```
 
 1. The table filter using a token `{alias}` that is replaced with the real table alias that is used in the SQL query.
-
-
-### **Applying table filters at a data quality check level**
-
-DQOps also supports setting the filter at a data quality check level. The filter will affect only a single check, while all other
-checks defined on the table will analyze the whole table or use the table-level filter. The filter predicate
-is specified in the `parameters.filter` node inside the check's configuration as shown on the following example.
-
-For further guidance of configuring checks, read the [configuring data quality checks](configuring-data-quality-checks-and-rules.md) article.
-
-``` { .yaml .annotate linenums="1" hl_lines="15-16" }
-# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
-apiVersion: dqo/v1
-kind: table
-spec:
-  columns:
-    date:
-      type_snapshot:
-        column_type: DATE
-        nullable: true
-    cumulative_confirmed:
-      monitoring_checks:
-        daily:
-          nulls:
-            daily_nulls_percent:
-              parameters:
-                filter: "{alias}.date >= '2023-11-06'"
-              warning:
-                max_percent: 0
-```
 
 
 ### **Table stage**
@@ -414,6 +404,59 @@ Please download the eBook to learn more about the concept.
     of the data quality KPIs article. Using priorities enables a quick return of investment for data quality projects.
 
 
+### **Custom scheduling**
+DQOps runs all data quality checks configured on all tables in a data source using the
+[CRON schedule](../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md#configure-a-schedule-at-connection-and-table-level).
+
+It is also possible to configure a custom schedules for a table.
+
+``` { .yaml .annotate linenums="1" hl_lines="5-15" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  schedules_override:
+    profiling:
+      cron_expression: 0 7 1 * *
+    monitoring_daily:
+      cron_expression: 0 7 * * *
+    monitoring_monthly:
+      cron_expression: 0 7 * * *
+    partitioned_daily:
+      cron_expression: 0 7 * * *
+    partitioned_monthly:
+      cron_expression: 0 7 * * *
+  columns:
+    cumulative_confirmed:
+      monitoring_checks:
+        daily:
+          nulls:
+            daily_nulls_percent:
+              warning:
+                max_percent: 0
+```
+
+Or exclude scheduling some types of data quality checks.
+``` { .yaml .annotate linenums="1" hl_lines="7 9" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  schedules_override:
+    profiling:
+      disabled: true
+    monitoring_daily:
+      disabled: true
+  columns:
+    cumulative_confirmed:
+      monitoring_checks:
+        daily:
+          nulls:
+            daily_nulls_percent:
+              warning:
+                max_percent: 0
+```
+
 ### **Labels**
 Tables and columns can be tagged with labels. The labels are used by DQOps for targeting data quality checks
 when the [checks are run](running-data-quality-checks.md).
@@ -441,6 +484,51 @@ spec:
             daily_nulls_percent:
               warning:
                 max_percent: 0
+```
+
+### **Comments**
+You can also track comments about tables.
+This feature becomes important if multiple users are maintaining data quality checks,
+and 
+
+``` { .yaml .annotate linenums="1" hl_lines="13-16" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  columns:
+    cumulative_confirmed:
+      monitoring_checks:
+        daily:
+          nulls:
+            daily_nulls_percent:
+              warning:
+                max_percent: 0
+  comments:
+    - date: 2024-01-18T14:57:09.931
+      comment_by: user
+      comment: "This table cannot have any null values"
+```
+
+Comments are also supported for columns.
+
+``` { .yaml .annotate linenums="1" hl_lines="13-16" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  columns:
+    cumulative_confirmed:
+      monitoring_checks:
+        daily:
+          nulls:
+            daily_nulls_percent:
+              warning:
+                max_percent: 0
+      comments:
+        - date: 2024-01-18T14:57:09.931
+          comment_by: user
+          comment: "This column cannot have any null values"
 ```
 
 ## What's next

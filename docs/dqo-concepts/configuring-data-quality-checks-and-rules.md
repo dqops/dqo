@@ -223,7 +223,8 @@ spec:
 7.  The **monthly** partitioned checks container.
 8.  The configuration of the [monthly_partition_row_count](../checks/table/volume/row-count.md#monthly-partition-row-count) data quality check.
 
-The `incremental_time_window` section configures how the incremental data quality check execution work on partitioned data.
+The `incremental_time_window` section configures how the [incremental data quality check execution](incremental-data-quality-monitoring.md)
+work on partitioned data.
 DQOps generates SQL queries from the Jinja2 sensor templates by adding a **WHERE** clause that applies a query filter
 on the table, scanning only the last 7 days for daily checks or the data since the 1st day of the previous month for monthly checks.
 The additional filter predicate is similar to the following SQL fragment.
@@ -235,6 +236,10 @@ WHERE analyzed_table."date" >= DATE_ADD(CURRENT_DATE(), INTERVAL -{{daily_partit
 Because the data may change during the day, the default configuration of incremental partitioned checks in DQOps
 excludes today for daily checks and the current month from monthly checks.
 The default values for the `daily_partitioning_include_today` and `monthly_partitioning_include_current_month` is *false*.
+
+Read the [concept of incremental data quality monitoring](incremental-data-quality-monitoring.md) to learn
+why running [partitioned data quality](definition-of-data-quality-checks/partition-checks.md) is superior
+for append-only tables, financial data, and very big tables.
 
 
 ## Configure issue severity levels
@@ -490,6 +495,226 @@ spec:
 
 1.  The selection of the column that will be used for date partitioning in the **GROUP BY** SQL clause.
 2.  The container of the column-level [partitioned checks](definition-of-data-quality-checks/partition-checks.md).
+
+## Additional configuration
+All data quality check nodes in [.dqotable.yaml](../reference/yaml/TableYaml.md) file support also
+adding additional configuration at a data quality check level.
+
+### **Disable a data quality check**
+A data quality check can be disabled. A disabled data quality check is skipped when
+[running data quality checks](running-data-quality-checks.md), but the configuration is preserved in the  
+[.dqotable.yaml](../reference/yaml/TableYaml.md) file.
+
+``` { .yaml .annotate linenums="1" hl_lines="12" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  columns:
+    cumulative_confirmed:
+      monitoring_checks:
+        daily:
+          nulls:
+            daily_nulls_percent:
+              parameters:
+               disabled: true
+              warning:
+                max_percent: 0
+```
+
+
+
+### **Change the data quality dimension**
+The [data quality dimension](data-quality-dimensions.md) name that is stored in the
+[data quality parquet result files](../reference/parquetfiles/check_results.md) can be changed,
+if the default quality dimension name used internally by DQOps does not meet the data quality reporting requirements.
+
+``` { .yaml .annotate linenums="1" hl_lines="12" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  columns:
+    cumulative_confirmed:
+      monitoring_checks:
+        daily:
+          nulls:
+            daily_nulls_percent:
+              parameters:
+                quality_dimension: Validity
+              warning:
+                max_percent: 0
+```
+
+### **Change the display name**
+The data quality check name that is used on data quality dashboards can be also modified.
+Instead of showing the technical name of the data quality check (`daily_nulls_percent` in this example),
+a more user-friendly name "cumulative_confirmed has too many null values" will be shown.
+
+``` { .yaml .annotate linenums="1" hl_lines="12" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  columns:
+    cumulative_confirmed:
+      monitoring_checks:
+        daily:
+          nulls:
+            daily_nulls_percent:
+              parameters:
+                display_name: "cumulative_confirmed has too many null values"
+              warning:
+                max_percent: 0
+```
+
+### **Exclude from data quality KPI formula**
+Some data quality checks can be excluded from [calculating the data quality KPI score](definition-of-data-quality-kpis.md).
+
+``` { .yaml .annotate linenums="1" hl_lines="12" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  columns:
+    cumulative_confirmed:
+      monitoring_checks:
+        daily:
+          nulls:
+            daily_nulls_percent:
+              parameters:
+                exclude_from_kpi: true
+              warning:
+                max_percent: 0
+```
+
+### **Use a different data grouping**
+A data quality check can use a custom [data grouping of data quality results](measuring-data-quality-with-data-grouping.md),
+selecting a different data grouping name.
+
+``` { .yaml .annotate linenums="1" hl_lines="13-16 24" }
+apiVersion: dqo/v1
+kind: table
+spec:
+  default_grouping_name: group_by_country_and_state
+  groupings:
+    group_by_country_and_state:
+      level_1:
+        source: column_value
+        column: country
+      level_2:
+        source: column_value
+        column: state
+    group_only_by_country:
+      level_1:
+        source: column_value
+        column: country
+  columns:
+    cumulative_confirmed:
+      monitoring_checks:
+        daily:
+          nulls:
+            daily_nulls_percent:
+              parameters:
+                grouping: group_only_by_country
+              warning:
+                max_percent: 0
+```
+
+### **Custom run schedule**
+A single data quality check can use its own [CRON schedule](../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md),
+instead of using the default schedule defined on the [connection](configuring-data-sources.md#data-quality-check-scheduling) 
+or [table](configuring-table-metadata.md) levels.
+
+``` { .yaml .annotate linenums="1" hl_lines="11-12" }
+apiVersion: dqo/v1
+kind: table
+spec:
+  columns:
+    cumulative_confirmed:
+      monitoring_checks:
+        daily:
+          nulls:
+            daily_nulls_percent:
+              parameters:
+                schedule_override: 
+                  cron_expression: 0 2 1 * *
+              warning:
+                max_percent: 0
+```
+
+### **Exclude a check from scheduling**
+A check can be excluded from scheduled execution when a [CRON schedule](../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md)
+triggers running all checks on a connection, or a table.
+
+``` { .yaml .annotate linenums="1" hl_lines="11-12" }
+apiVersion: dqo/v1
+kind: table
+spec:
+  columns:
+    cumulative_confirmed:
+      monitoring_checks:
+        daily:
+          nulls:
+            daily_nulls_percent:
+              parameters:
+                schedule_override: 
+                  disabled: true
+              warning:
+                max_percent: 0
+```
+
+### **Applying table filters at a data quality check level**
+DQOps also supports setting a [table filter predicate](configuring-table-metadata.md#table-filter-predicate)
+at a data quality check level. The filter will affect only a single check, while all other
+checks defined on the table will analyze the whole table or use the table-level filter. The filter predicate
+is specified in the `parameters.filter` node inside the check's configuration as shown on the following example.
+
+For further guidance of configuring checks, read the [configuring data quality checks](configuring-data-quality-checks-and-rules.md) article.
+
+``` { .yaml .annotate linenums="1" hl_lines="15-16" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  columns:
+    date:
+      type_snapshot:
+        column_type: DATE
+        nullable: true
+    cumulative_confirmed:
+      monitoring_checks:
+        daily:
+          nulls:
+            daily_nulls_percent:
+              parameters:
+                filter: "{alias}.date >= '2023-11-06'"
+              warning:
+                max_percent: 0
+```
+
+### **Adding comments**
+You can also add custom comments to a configured data quality check.
+This feature becomes important if multiple users are maintaining data quality checks,
+and some changes to the check's thresholds were applied.
+
+``` { .yaml .annotate linenums="1" hl_lines="9-12" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  monitoring_checks:
+    daily:
+	  volume:
+		daily_row_count:
+		  comments:
+			- date: 2024-01-18T14:57:09.931
+			  comment_by: user
+			  comment: "Minimum row count changed to 100 rows, because we are expecting to have one row per country"
+			warning:
+			  min_count: 100
+```
+
 
 ## Activate multiple checks at once
 DQOps supports also alternative methods of activating data quality checks, designed to configure thousands of checks at once,
