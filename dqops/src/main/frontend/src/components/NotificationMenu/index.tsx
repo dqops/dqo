@@ -48,17 +48,17 @@ const NotificationMenu = () => {
   }, []);
   const [jobsData, errorsData, jobs] = useMemo(() => {
     const jobsData = Object.values(job_dictionary_state)
-      .sort((a, b) => (b.jobId?.jobId || 0) - (a.jobId?.jobId || 0))
+      // .sort((a, b) => (b.jobId?.jobId || 0) - (a.jobId?.jobId || 0))
       .map((item) => ({ type: 'job', item }));
   
     const errorData = errors.map((item : any) => ({ type: 'error', item }));
   
-    jobsData.sort((a, b) => {
-      const date1 = getNotificationDate(a);
-      const date2 = getNotificationDate(b);
+    // jobsData.sort((a, b) => {
+    //   const date1 = getNotificationDate(a);
+    //   const date2 = getNotificationDate(b);
   
-      return moment(date1).isBefore(moment(date2)) ? 1 : -1;
-    });
+    //   return moment(date1).isBefore(moment(date2)) ? 1 : -1;
+    // });
   
     const newJobArray = jobsData
       .filter((z) => z.item.jobId?.parentJobId?.jobId === undefined)
