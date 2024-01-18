@@ -13,14 +13,14 @@ nav:
       - Review results on the dashboards: "getting-started/review-results-on-dashboards.md"
   - DQOps concepts:
       - "dqo-concepts/index.md"
-      - Data quality checks:
+      - What is a data quality check:
           - "dqo-concepts/definition-of-data-quality-checks/index.md"
           - Data profiling checks: "dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md"
           - Data observability monitoring checks: "dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md"
           - Partition checks: "dqo-concepts/definition-of-data-quality-checks/partition-checks.md"
       - Configuring data sources: "dqo-concepts/configuring-data-sources.md"
       - Configuring table metadata: "dqo-concepts/configuring-table-metadata.md"
-      - Configuring checks: "dqo-concepts/configuring-data-quality-checks-and-rules.md"
+      - Configuring data quality checks: "dqo-concepts/configuring-data-quality-checks-and-rules.md"
 ########## INCLUDE TYPES OF CHECKS REFERENCE - DO NOT MODIFY MANUALLY
       - Categories of checks:
         - 'dqo-concepts/types-of-data-quality-checks/index.md'
@@ -45,7 +45,7 @@ nav:
         - Text values: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md'
         - Uniqueness and duplicates: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md'
 ########## END INCLUDE TYPES OF CHECKS REFERENCE
-      - Running checks: "dqo-concepts/running-data-quality-checks.md"
+      - Running data quality checks: "dqo-concepts/running-data-quality-checks.md"
       - Data observability: "dqo-concepts/data-observability.md"
       - DQOps user home: "dqo-concepts/dqops-user-home-folder.md"
       - Data quality sensors: "dqo-concepts/definition-of-data-quality-sensors.md"
@@ -60,7 +60,7 @@ nav:
       - Command-line interface: "dqo-concepts/command-line-interface.md"
       - Storing data quality results: "dqo-concepts/data-storage-of-data-quality-results.md"
       - Deployment architecture: "dqo-concepts/architecture/dqops-architecture.md"
-      - Check execution flow: "dqo-concepts/architecture/data-quality-check-execution-flow.md"
+      - Quality check execution flow: "dqo-concepts/architecture/data-quality-check-execution-flow.md"
   - Installing DQOps:
       - "dqops-installation/index.md"
       - Download DQOps using PIP: "dqops-installation/install-dqops-using-pip.md"
@@ -557,7 +557,9 @@ theme:
   font: false
 # Disable search, the index is too big
 plugins:
-  - glightbox
+  - glightbox:
+      skip_classes:
+        - glightbox-ignored-image
   - meta-descriptions:
       export_csv: false
       quiet: true

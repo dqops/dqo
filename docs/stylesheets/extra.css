@@ -2,7 +2,7 @@
   width: 95%;
   max-width: 95%;
 }
-.md-typeset :not(h1):not(h2) {
+.md-typeset {
   font-size: 16px;
 }
 .md-typeset h1{
@@ -10,6 +10,9 @@
 }
 .md-typeset h2{
   font-size: 1.4em;
+}
+.md-typeset h3{
+  font-size: 1.2em;
 }
 .md-nav {
   font-size: 16px;

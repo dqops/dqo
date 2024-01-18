@@ -29,20 +29,25 @@
           <a
             href="https://dqops.com/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/"
             target="_blank"
+            id="aEbookLink"
           >
             <img
-              src="\docs\images\ebook.png"
+              src="/docs/images/dqops-ebook-open-with-process.png"
               alt="A step-by-step guide to improve data quality"
               title="A step-by-step guide to improve data quality"
               id="imageEbook"
+              class="glightbox-ignored-image"
             />
           </a>
         </div>
         <div>
-          <p style="font-weight: 700" id="ebookDescription">
-            Check out eBook "A Step-by-Step Guide to Improve Data Quality"
-            created by the DQOps team based on their experience in data
-            cleansing and data quality monitoring.
+          <p class="ebook-description-popup">
+            Check out "A Step-by-Step Guide to Improve Data Quality" eBook
+            created by the DQOps team.
+          </p>
+          <p class="ebook-description-popup">
+            Learn the whole process of profiling, monitoring,
+            and fixing data quality issues.
           </p>
           <div class="_form_35" style="background-color: white"></div>
           <script
@@ -62,9 +67,26 @@
     display: flex;
   }
 
+  #aEbookLink {
+    border-style: none !important;
+    border-color: transparent !important;
+    outline : none !important;
+  }
+
   #imageEbook {
     width: 800px;
+    border-style: none !important;
   }
+
+  #aEbook {
+    border-style: none !important;
+  }
+
+  .ebook-description-popup {
+    margin-left: 10px;
+    text-size: 16px;
+  }
+
   .modal__overlay {
     position: fixed;
     top: 0;
@@ -148,7 +170,7 @@
     }
   }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/micromodal/dist/micromodal.min.js"></script>
+<script src="/docs/javascripts/micromodal.min.js"></script>
 <script>
   if (
     document.cookie &&

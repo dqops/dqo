@@ -4,7 +4,7 @@ Follow this guide to learn each concept of DQOps Data Quality Operations Center 
 ## List of DQOps concepts
 These topics introduce the basic concepts of DQOps.
 
- - **[Data quality checks](definition-of-data-quality-checks/index.md)**
+ - **[What is a data quality check](definition-of-data-quality-checks/index.md)**
 
     A data quality check detects data quality issues. The check in DQOps is defined as a pair
     of a [sensor](definition-of-data-quality-sensors.md) that captures metrics from the data source and a [rule](definition-of-data-quality-rules.md) that verifies the sensor's readout.
@@ -12,8 +12,8 @@ These topics introduce the basic concepts of DQOps.
     and the [max_percent](../reference/rules/Comparison.md#max-percent) rule to detect if the maximum percent
     of null values in a tested column is satisfied.
 
-    If the percent of null values in a column raises above the threshold (maximum allowed percent),
-    a data quality issue is raised.
+    If the [percent of null values](../checks/column/nulls/nulls-percent.md) in a column raises above the threshold 
+    (maximum allowed percent), a data quality issue is raised.
 
     DQOps has three types of data quality checks:
    
@@ -21,7 +21,8 @@ These topics introduce the basic concepts of DQOps.
 
      - [Monitoring checks](definition-of-data-quality-checks/data-observability-monitoring-checks.md) for observing and measuring the data quality daily or monthly
 
-     - [Partition checks](definition-of-data-quality-checks/partition-checks.md) for analyzing partitioned data incrementally, or analyzing
+     - [Partition checks](definition-of-data-quality-checks/partition-checks.md) for
+       [analyzing partitioned data incrementally](incremental-data-quality-monitoring.md), or analyzing
        incrementally any table that has a date column.
 
 
@@ -33,7 +34,19 @@ These topics introduce the basic concepts of DQOps.
     The connection parameters to data sources and metadata of imported tables can be edited in two ways,
     by using the [DQOps user interface](dqops-user-interface-overview.md), or by changing the YAML configuration files directly.
     Other methods of managing data sources include also using the [command-line interface](command-line-interface.md),
-    or using the [DQOps Python client](../client/index.md).
+    or using the [DQOps Python client](../client/index.md). Review the [list of data quality sources](../data-sources/index.md)
+    to see which databases are supported by DQOps. 
+
+
+ - **[Configuring table metadata](configuring-table-metadata.md)**
+
+    The metadata and the [configuration of all data quality checks](configuring-data-quality-checks-and-rules.md)
+    is stored in [*.dqotable.yaml*](../reference/yaml/TableYaml.md) YAML files, following a naming convention
+    `sources/<data_source_name>/<schema_name>.<table_name>.dqotable.yaml`. 
+    The files can be stored and versioned in your Git repository. 
+ 
+    You can also easily add similar tables, or move the data quality check configuration from
+    development tables to production tables by copying and renaming the [*.dqotable.yaml*](../reference/yaml/TableYaml.md) files.
 
 
  - **[Configuring data quality checks](configuring-data-quality-checks-and-rules.md)**
@@ -42,9 +55,10 @@ These topics introduce the basic concepts of DQOps.
     by setting the [data quality rule](definition-of-data-quality-rules.md) parameters.
 
     DQOps uses YAML files to keep the configuration of data sources and the activated data quality checks on monitored tables.
-    The DQOps YAML file format is fully documented and the YAML schema files are published.
+    The [DQOps YAML file format](../reference/yaml/index.md) is fully documented and the YAML schema files are published.
     
-    The DQOps YAML schema files allow unprecedented coding experience with Visual Studio Code when managing the
+    The DQOps YAML schema files allow unprecedented 
+    [coding experience with Visual Studio Code](../integrations/visual-studio-code/index.md) when managing the
     configuring the data quality checks directly in the editor. Code completion, syntax validation and help hints
     are shown by Visual Studio Code and many other editors when editing DQOps YAML files.
     
