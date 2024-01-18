@@ -139,6 +139,15 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
                     dataSourceProperties.put("authentication", azureCredential.get().getAuthentication());
 
                 } else {
+                    // In case of authentication from local .azure folder (azure cli is installed, executed: az login and az account get-access-token), it got two issues:
+                    // 1. Token based login to Azure SQL end up with the error: Login failed for user '<token-identified principal>'. Incorrect or invalid token.
+                    // 2. Token generation has to be done out of the createHikariConfig method due to block method
+
+                    // TokenRequestContext tokenRequestContext = new TokenRequestContext().addScopes("https://management.azure.com/.default");
+                    // TokenCredential dacWithUserAssignedManagedIdentity = new DefaultAzureCredentialBuilder().build();
+                    // Mono<AccessToken> accessTokenMono = dacWithUserAssignedManagedIdentity.getToken(tokenRequestContext);
+                    // dataSourceProperties.put("accessToken", accessTokenMono.block().getToken());
+
                     new RuntimeException("Can't use default credentials set in " + DefaultCloudCredentialFileNames.AZURE_DEFAULT_CREDENTIALS_NAME + " file.");
                 }
                 break;
