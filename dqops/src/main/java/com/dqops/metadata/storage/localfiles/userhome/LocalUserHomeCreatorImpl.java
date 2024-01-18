@@ -300,6 +300,12 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
                 if (!Files.exists(defaultAwsConfigPath)) {
                     Files.writeString(defaultAwsConfigPath, DefaultCloudCredentialFileContent.AWS_DEFAULT_CONFIG_INITIAL_CONTENT);
                 }
+
+                Path defaultAzureCredentialsPath = userHomeMarkerPath.resolve(BuiltInFolderNames.CREDENTIALS)
+                        .resolve(DefaultCloudCredentialFileNames.AZURE_DEFAULT_CREDENTIALS_NAME);
+                if (!Files.exists(defaultAzureCredentialsPath)) {
+                    Files.writeString(defaultAzureCredentialsPath, DefaultCloudCredentialFileContent.AZURE_DEFAULT_CREDENTIALS_INITIAL_CONTENT);
+                }
             }
         }
         catch (Exception ex) {

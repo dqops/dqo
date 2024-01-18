@@ -21,6 +21,9 @@ import com.dqops.connectors.jdbc.JdbcConnectionPool;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.ConnectionSpec;
+import com.dqops.metadata.storage.localfiles.credentials.DefaultCloudCredentialFileNames;
+import com.dqops.metadata.storage.localfiles.credentials.azure.AzureCredential;
+import com.dqops.metadata.storage.localfiles.credentials.azure.AzureCredentialsProvider;
 import com.zaxxer.hikari.HikariConfig;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +34,7 @@ import tech.tablesaw.api.Table;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.Properties;
 
 /**
@@ -40,6 +44,8 @@ import java.util.Properties;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
 
+    private final AzureCredentialsProvider azureCredentialsProvider;
+
     /**
      * Injection constructor for the MS SQL Server connection.
      * @param jdbcConnectionPool Jdbc connection pool.
@@ -47,9 +53,11 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
      */
     @Autowired
     public SqlServerSourceConnection(JdbcConnectionPool jdbcConnectionPool,
-                                      SecretValueProvider secretValueProvider,
-                                      SqlServerConnectionProvider sqlServerConnectionProvider) {
+                                     SecretValueProvider secretValueProvider,
+                                     SqlServerConnectionProvider sqlServerConnectionProvider,
+                                     AzureCredentialsProvider azureCredentialsProvider) {
         super(jdbcConnectionPool, secretValueProvider, sqlServerConnectionProvider);
+        this.azureCredentialsProvider = azureCredentialsProvider;
     }
 
     /**
@@ -73,7 +81,7 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
         if (!Strings.isNullOrEmpty(port)) {
             try {
                 int portNumber = Integer.parseInt(port);
-                jdbcConnectionBuilder.append(";port=");
+                jdbcConnectionBuilder.append(";port="); // todo: isn't it a property?
                 jdbcConnectionBuilder.append(portNumber);
             }
             catch (NumberFormatException nfe) {
@@ -82,7 +90,7 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
         }
         String database = this.getSecretValueProvider().expandValue(sqlserverSpec.getDatabase(), secretValueLookupContext);
         if (!Strings.isNullOrEmpty(database)) {
-            jdbcConnectionBuilder.append(";databaseName=");
+            jdbcConnectionBuilder.append(";databaseName="); // todo: isn't it a property?
             jdbcConnectionBuilder.append(database);
         }
 
@@ -99,11 +107,53 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
             dataSourceProperties.putAll(sqlserverSpec.getProperties());
         }
 
-        String userName = this.getSecretValueProvider().expandValue(sqlserverSpec.getUser(), secretValueLookupContext);
-        hikariConfig.setUsername(userName);
+        switch (sqlserverSpec.getAuthenticationMode()){
+            case sql_password:
+            case active_directory_password:
+            case active_directory_service_principal:
 
-        String password = this.getSecretValueProvider().expandValue(sqlserverSpec.getPassword(), secretValueLookupContext);
-        hikariConfig.setPassword(password);
+                String userName = this.getSecretValueProvider().expandValue(sqlserverSpec.getUser(), secretValueLookupContext);
+                hikariConfig.setUsername(userName);
+
+                String password = this.getSecretValueProvider().expandValue(sqlserverSpec.getPassword(), secretValueLookupContext);
+                hikariConfig.setPassword(password);
+
+                String authenticationValue = getJdbcAuthenticationValue(sqlserverSpec.getAuthenticationMode());
+                dataSourceProperties.put("authentication", authenticationValue);
+
+                break;
+            case default_credential:
+
+                Optional<AzureCredential> azureCredential = azureCredentialsProvider.provideCredentials(secretValueLookupContext);
+                if(azureCredential.isPresent()
+                        && !azureCredential.get().getUser().isEmpty()
+                        && !azureCredential.get().getPassword().isEmpty()
+                        && !azureCredential.get().getAuthentication().isEmpty()
+                ){
+                    String defaultUserName = this.getSecretValueProvider().expandValue(azureCredential.get().getUser(), secretValueLookupContext);
+                    hikariConfig.setUsername(defaultUserName);
+
+                    String defaultPassword = this.getSecretValueProvider().expandValue(azureCredential.get().getPassword(), secretValueLookupContext);
+                    hikariConfig.setPassword(defaultPassword);
+
+                    dataSourceProperties.put("authentication", azureCredential.get().getAuthentication());
+
+                } else {
+                    // In case of authentication from local .azure folder (azure cli is installed, executed: az login and az account get-access-token), it got two issues:
+                    // 1. Token based login to Azure SQL end up with the error: Login failed for user '<token-identified principal>'. Incorrect or invalid token.
+                    // 2. Token generation has to be done out of the createHikariConfig method due to block method
+
+                    // TokenRequestContext tokenRequestContext = new TokenRequestContext().addScopes("https://management.azure.com/.default");
+                    // TokenCredential dacWithUserAssignedManagedIdentity = new DefaultAzureCredentialBuilder().build();
+                    // Mono<AccessToken> accessTokenMono = dacWithUserAssignedManagedIdentity.getToken(tokenRequestContext);
+                    // dataSourceProperties.put("accessToken", accessTokenMono.block().getToken());
+
+                    new RuntimeException("Can't use default credentials set in " + DefaultCloudCredentialFileNames.AZURE_DEFAULT_CREDENTIALS_NAME + " file.");
+                }
+                break;
+            default:
+                new RuntimeException("Given enum is not supported : " + sqlserverSpec.getAuthenticationMode());
+        }
 
         String options =  this.getSecretValueProvider().expandValue(sqlserverSpec.getOptions(), secretValueLookupContext);
         if (!Strings.isNullOrEmpty(options)) {
@@ -112,6 +162,21 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
 
         hikariConfig.setDataSourceProperties(dataSourceProperties);
         return hikariConfig;
+    }
+
+    /**
+     * Returns the value for the key "authentication" for the jdbc connection string.
+     * @param authenticationMode
+     * @return
+     */
+    private String getJdbcAuthenticationValue(SqlServerAuthenticationMode authenticationMode){
+        switch (authenticationMode){
+            case sql_password:                          return "SqlPassword";
+            case active_directory_password:             return "ActiveDirectoryPassword";
+            case active_directory_service_principal:    return "ActiveDirectoryServicePrincipal";
+            default: new RuntimeException("Given enum is not supported : " + authenticationMode);
+        }
+        return null;
     }
 
     /**

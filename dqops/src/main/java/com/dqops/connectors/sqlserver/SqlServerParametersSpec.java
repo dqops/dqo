@@ -73,6 +73,10 @@ public class SqlServerParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("Disable SSL encryption parameter. The default value is false. You may need to disable encryption when SQL Server is started in Docker.")
     private Boolean disableEncryption;
 
+    @CommandLine.Option(names = {"--sqlserver-authentication-mode"}, description = "Authenticaiton mode for the SQL Server. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("Authenticaiton mode for the SQL Server. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    private SqlServerAuthenticationMode authenticationMode;
+
     @CommandLine.Option(names = {"-S"}, description = "SQL Server additional properties that are added to the JDBC connection string")
     @JsonPropertyDescription("A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -198,6 +202,24 @@ public class SqlServerParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
+     * Returns the authentication mode for SQL Server
+     * @return The authentication mode for SQL Server
+     */
+    public SqlServerAuthenticationMode getAuthenticationMode() {
+        return authenticationMode;
+    }
+
+    /**
+     * Sets the authentication mode for SQL Server
+     * @param authenticationMode The authentication mode for SQL Server
+     */
+    public void setAuthenticationMode(SqlServerAuthenticationMode authenticationMode) {
+        setDirtyIf(!Objects.equals(this.authenticationMode, authenticationMode));
+        this.authenticationMode = authenticationMode;
+    }
+
+
+    /**
      * Returns a key/value map of additional properties that are included in the JDBC connection string.
      * @return Key/value dictionary of additional JDBC properties.
      */
@@ -247,6 +269,7 @@ public class SqlServerParametersSpec extends BaseProviderParametersSpec
         cloned.user = secretValueProvider.expandValue(cloned.user, lookupContext);
         cloned.password = secretValueProvider.expandValue(cloned.password, lookupContext);
         cloned.options = secretValueProvider.expandValue(cloned.options, lookupContext);
+        cloned.authenticationMode = SqlServerAuthenticationMode.valueOf(secretValueProvider.expandValue(cloned.authenticationMode.toString(), lookupContext));
         cloned.properties = secretValueProvider.expandProperties(cloned.properties, lookupContext);
 
         return cloned;

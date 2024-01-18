@@ -43,4 +43,12 @@ public final class DefaultCloudCredentialFileContent {
     public static final String AWS_DEFAULT_CONFIG_INITIAL_CONTENT =
             "[default]\n" +
             "region = us-east-1\n";
+
+    /**
+     * The initial content of the Azure_default_credentials shared secret file.
+     */
+    public static final String AZURE_DEFAULT_CREDENTIALS_INITIAL_CONTENT =
+            "user=PLEASE_REPLACE_WITH_YOUR_AZURE_USER_OR_CLIENT_ID\n" +
+            "password=PLEASE_REPLACE_WITH_YOUR_AZURE_USER_PASSWORD_OR_CLIENT_SECRET\n" +
+            "authentication=PLEASE_REPLACE_WITH_YOUR_AZURE_AUTHENTICATION_METHOD\n";
 }

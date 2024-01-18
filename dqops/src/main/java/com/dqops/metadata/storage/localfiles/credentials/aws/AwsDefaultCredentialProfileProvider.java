@@ -1,6 +1,9 @@
-package com.dqops.metadata.storage.localfiles.credentials;
+package com.dqops.metadata.storage.localfiles.credentials.aws;
 
 import com.dqops.core.secrets.SecretValueLookupContext;
+import com.dqops.metadata.storage.localfiles.credentials.DefaultCloudCredentialFileContent;
+import com.dqops.metadata.storage.localfiles.credentials.DefaultCloudCredentialFileNames;
+import com.dqops.metadata.storage.localfiles.credentials.FileSharedCredentialWrapperImpl;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.profiles.Profile;
 import software.amazon.awssdk.profiles.ProfileFile;
