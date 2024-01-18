@@ -29135,6 +29135,10 @@ definitions:
         type: "boolean"
         description: "User can manage shared credentials and view (or download) already\
           \ defined shared credentials."
+      can_change_own_password:
+        type: "boolean"
+        description: "User can change his own password in DQOps Cloud, because the\
+          \ DQOps Cloud Pairing API Key is valid and synchronization is enabled."
     description: "The model that describes the current user and his access rights."
   Duration:
     type: "object"

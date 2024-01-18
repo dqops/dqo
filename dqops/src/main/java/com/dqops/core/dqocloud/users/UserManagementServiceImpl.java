@@ -29,6 +29,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -61,6 +62,11 @@ public class UserManagementServiceImpl implements UserManagementService {
             userPrincipal.throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.VIEW);
 
             ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getDataDomainIdentity());
+            if (authenticatedClient == null) {
+                // no api key
+                return new ArrayList<>();
+            }
+
             AccountUsersApi accountUsersApi = new AccountUsersApi(authenticatedClient);
             List<DqoUserModel> cloudUserList = accountUsersApi.listAccountUsers();
 
@@ -94,6 +100,10 @@ public class UserManagementServiceImpl implements UserManagementService {
             userPrincipal.throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.VIEW);
 
             ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getDataDomainIdentity());
+            if (authenticatedClient == null) {
+                return null;
+            }
+
             AccountUsersApi accountUsersApi = new AccountUsersApi(authenticatedClient);
             DqoUserModel cloudUserModel = accountUsersApi.getAccountUser(email);
 
@@ -129,6 +139,10 @@ public class UserManagementServiceImpl implements UserManagementService {
             userPrincipal.throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.MANAGE_ACCOUNT);
 
             ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getDataDomainIdentity());
+            if (authenticatedClient == null) {
+                throw new DqoCloudInvalidKeyException("Invalid API Key, run \"cloud login\" in DQOps shell to receive a current DQOps Cloud API Key.");
+            }
+
             AccountUsersApi accountUsersApi = new AccountUsersApi(authenticatedClient);
             DqoUserModel dqoUserModel = new DqoUserModel() {{
                 setEmail(userModel.getEmail());
@@ -137,6 +151,9 @@ public class UserManagementServiceImpl implements UserManagementService {
             }};
 
             accountUsersApi.createAccountUser(dqoUserModel);
+        }
+        catch (DqoCloudInvalidKeyException ex) {
+            throw ex;
         }
         catch (HttpClientErrorException httpClientErrorException) {
             if (httpClientErrorException.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(412))) {
@@ -162,6 +179,10 @@ public class UserManagementServiceImpl implements UserManagementService {
             userPrincipal.throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.MANAGE_ACCOUNT);
 
             ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getDataDomainIdentity());
+            if (authenticatedClient == null) {
+                throw new DqoCloudInvalidKeyException("Invalid API Key, run \"cloud login\" in DQOps shell to receive a current DQOps Cloud API Key.");
+            }
+
             AccountUsersApi accountUsersApi = new AccountUsersApi(authenticatedClient);
             DqoUserModel dqoUserModel = new DqoUserModel() {{
                 setEmail(userModel.getEmail());
@@ -169,6 +190,9 @@ public class UserManagementServiceImpl implements UserManagementService {
             }};
 
             accountUsersApi.updateAccountUser(userModel.getEmail(), dqoUserModel);
+        }
+        catch (DqoCloudInvalidKeyException ex) {
+            throw ex;
         }
         catch (HttpClientErrorException httpClientErrorException) {
             if (httpClientErrorException.getStatusCode().value() == 404) {
@@ -194,8 +218,15 @@ public class UserManagementServiceImpl implements UserManagementService {
             userPrincipal.throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.MANAGE_ACCOUNT);
 
             ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getDataDomainIdentity());
+            if (authenticatedClient == null) {
+                throw new DqoCloudInvalidKeyException("Invalid API Key, run \"cloud login\" in DQOps shell to receive a current DQOps Cloud API Key.");
+            }
+
             AccountUsersApi accountUsersApi = new AccountUsersApi(authenticatedClient);
             accountUsersApi.deleteAccountUser(email);
+        }
+        catch (DqoCloudInvalidKeyException ex) {
+            throw ex;
         }
         catch (HttpClientErrorException httpClientErrorException) {
             if (httpClientErrorException.getStatusCode().value() == 404) {
@@ -225,8 +256,15 @@ public class UserManagementServiceImpl implements UserManagementService {
             }
 
             ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getDataDomainIdentity());
+            if (authenticatedClient == null) {
+                throw new DqoCloudInvalidKeyException("Invalid API Key, run \"cloud login\" in DQOps shell to receive a current DQOps Cloud API Key.");
+            }
+
             AccountUsersApi accountUsersApi = new AccountUsersApi(authenticatedClient);
             accountUsersApi.changeAccountUserPassword(email, newPassword);
+        }
+        catch (DqoCloudInvalidKeyException ex) {
+            throw ex;
         }
         catch (HttpClientErrorException httpClientErrorException) {
             if (httpClientErrorException.getStatusCode().value() == 404) {
