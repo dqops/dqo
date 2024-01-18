@@ -103,6 +103,7 @@ public class GeneratePythonDocumentationPostProcessor {
             MainPageClientDocumentationModel mainPageClientDocumentationModel = new MainPageClientDocumentationModel();
             mainPageClientDocumentationModel.setIndexDocumentationModel(new MainPageClientIndexDocumentationModel());
             mainPageClientDocumentationModel.setGuideDocumentationModel(new MainPageClientGuideDocumentationModel());
+            mainPageClientDocumentationModel.setConnectingDocumentationModel(new MainPageClientConnectingDocumentationModel());
 
             generateDocumentationForModels(projectDir, openAPIModel, mainPageClientDocumentationModel);
             generateDocumentationForOperations(projectDir, openAPIModel, mainPageClientDocumentationModel);

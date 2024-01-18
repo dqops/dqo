@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Python client documentation generator that generate documentation for operations.
@@ -79,6 +80,7 @@ public class OperationsDocumentationGeneratorImpl implements OperationsDocumenta
         operationsSuperiorObjectDocumentationModels.sort(Comparator.comparing(OperationsSuperiorObjectDocumentationModel::getSuperiorClassSimpleName));
         mainPageModel.getIndexDocumentationModel().setOperations(operationsSuperiorObjectDocumentationModels);
         mainPageModel.getGuideDocumentationModel().setSelectedExamples(selectUsageExamplesForClientMainPage(operationsSuperiorObjectDocumentationModels));
+        mainPageModel.getConnectingDocumentationModel().setConnectingExamples(selectConnectingExamplesForClientMainPage(operationsSuperiorObjectDocumentationModels));
 
         MainPageOperationsDocumentationModel mainPageOperationsDocumentationModel = new MainPageOperationsDocumentationModel();
         mainPageOperationsDocumentationModel.setControllerOperations(operationsSuperiorObjectDocumentationModels);
@@ -106,18 +108,79 @@ public class OperationsDocumentationGeneratorImpl implements OperationsDocumenta
             List<OperationsSuperiorObjectDocumentationModel> operationsSuperiorModels) {
         List<OperationUsageExampleDocumentationModel> selectedUsageExamples = new ArrayList<>();
 
-        OperationsOperationDocumentationModel runChecksOperation = operationsSuperiorModels.stream()
+        // Jobs
+        OperationsSuperiorObjectDocumentationModel jobsController = operationsSuperiorModels.stream()
                 .filter(controller -> controller.getSuperiorClassSimpleName().equals("jobs"))
-                .flatMap(controller -> controller.getOperationObjects().stream())
+                .findAny().get();
+
+        OperationsOperationDocumentationModel runChecksOperation = jobsController.getOperationObjects().stream()
                 .filter(operation -> operation.getOperationPythonName().equals("run_checks"))
                 .findAny().get();
         OperationUsageExampleDocumentationModel runChecksExample = getUsageExampleFromOperationModel(runChecksOperation);
-
         runChecksExample.setExampleName("Run checks");
         runChecksExample.setExampleDescription(runChecksOperation.getOperationDescription());
         selectedUsageExamples.add(runChecksExample);
 
+        List<OperationsOperationDocumentationModel> collectStatisticsOperations = jobsController.getOperationObjects().stream()
+                .filter(operation -> operation.getOperationPythonName().contains("collect_statistics"))
+                .collect(Collectors.toList());
+        OperationsOperationDocumentationModel collectStatisticsOnTablesOperation = collectStatisticsOperations.stream()
+                .filter(operation -> operation.getOperationPythonName().contains("table"))
+                .findAny().get();
+        OperationUsageExampleDocumentationModel collectStatisticsOnTablesExample = getUsageExampleFromOperationModel(collectStatisticsOnTablesOperation);
+        collectStatisticsOnTablesExample.setExampleName("Collect statistics on tables");
+        collectStatisticsOnTablesExample.setExampleDescription(collectStatisticsOnTablesOperation.getOperationDescription());
+        selectedUsageExamples.add(collectStatisticsOnTablesExample);
+        OperationsOperationDocumentationModel collectStatisticsOnDataGroupsOperation = collectStatisticsOperations.stream()
+                .filter(operation -> operation.getOperationPythonName().contains("data_groups"))
+                .findAny().get();
+        OperationUsageExampleDocumentationModel collectStatisticsOnDataGroupsExample = getUsageExampleFromOperationModel(collectStatisticsOnDataGroupsOperation);
+        collectStatisticsOnDataGroupsExample.setExampleName("Collect statistics on data groups");
+        collectStatisticsOnDataGroupsExample.setExampleDescription(collectStatisticsOnDataGroupsOperation.getOperationDescription());
+        selectedUsageExamples.add(collectStatisticsOnDataGroupsExample);
+
+        OperationsOperationDocumentationModel importTablesOperation = jobsController.getOperationObjects().stream()
+                .filter(operation -> operation.getOperationPythonName().equals("import_tables"))
+                .findAny().get();
+        OperationUsageExampleDocumentationModel importTablesExample = getUsageExampleFromOperationModel(importTablesOperation);
+        importTablesExample.setExampleName("Import tables");
+        importTablesExample.setExampleDescription(importTablesOperation.getOperationDescription());
+        selectedUsageExamples.add(importTablesExample);
+
+        // Check results
+        OperationsSuperiorObjectDocumentationModel checkResultsController = operationsSuperiorModels.stream()
+                .filter(controller -> controller.getSuperiorClassSimpleName().equals("check_results"))
+                .findAny().get();
+        OperationsOperationDocumentationModel getTableDataQualityStatusOperation = checkResultsController.getOperationObjects().stream()
+                .filter(operation -> operation.getOperationPythonName().equals("get_table_data_quality_status"))
+                .findAny().get();
+        OperationUsageExampleDocumentationModel getTableDataQualityStatusExample = getUsageExampleFromOperationModel(getTableDataQualityStatusOperation);
+        getTableDataQualityStatusExample.setExampleName("Get table data quality status");
+        getTableDataQualityStatusExample.setExampleDescription(getTableDataQualityStatusOperation.getOperationDescription());
+        selectedUsageExamples.add(getTableDataQualityStatusExample);
+
+        // Jobs (continuation)
+        OperationsOperationDocumentationModel waitForJobOperation = jobsController.getOperationObjects().stream()
+                .filter(operation -> operation.getOperationPythonName().equals("wait_for_job"))
+                .findAny().get();
+        OperationUsageExampleDocumentationModel waitForJobExample = getUsageExampleFromOperationModel(waitForJobOperation);
+        waitForJobExample.setExampleName("Wait for job");
+        waitForJobExample.setExampleDescription(waitForJobOperation.getOperationDescription());
+        selectedUsageExamples.add(waitForJobExample);
+
         return selectedUsageExamples;
+    }
+
+    protected List<OperationUsageExampleDocumentationModel> selectConnectingExamplesForClientMainPage(
+            List<OperationsSuperiorObjectDocumentationModel> operationsSuperiorModels) {
+        OperationsSuperiorObjectDocumentationModel connectionsController = operationsSuperiorModels.stream()
+                .filter(controller -> controller.getSuperiorClassSimpleName().equals("connections"))
+                .findAny().get();
+        OperationsOperationDocumentationModel getAllConnectionsOperation = connectionsController.getOperationObjects().stream()
+                .filter(operation -> operation.getOperationPythonName().equals("get_all_connections"))
+                .findAny().get();
+
+        return getAllConnectionsOperation.getUsageExamples();
     }
 
     protected OperationUsageExampleDocumentationModel getUsageExampleFromOperationModel(OperationsOperationDocumentationModel operationDocumentationModel) {

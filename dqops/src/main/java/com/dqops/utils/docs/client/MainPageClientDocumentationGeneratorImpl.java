@@ -39,12 +39,15 @@ public class MainPageClientDocumentationGeneratorImpl implements MainPageClientD
         String renderedGuide = HandlebarsDocumentationUtilities.renderTemplate(mainPageGuideTemplate, mainPageModel.getGuideDocumentationModel());
         Template mainPageIndexTemplate = HandlebarsDocumentationUtilities.compileTemplate("client/main_page_index");
         String renderedIndex = HandlebarsDocumentationUtilities.renderTemplate(mainPageIndexTemplate, mainPageModel.getIndexDocumentationModel());
+        Template mainPageConnectingTemplate = HandlebarsDocumentationUtilities.compileTemplate("client/main_page_connecting");
+        String renderedConnecting = HandlebarsDocumentationUtilities.renderTemplate(mainPageConnectingTemplate, mainPageModel.getConnectingDocumentationModel());
 
         DocumentationMarkdownFile mainPageFile = documentationResourceFileLoader.loadFileAndReplaceTokens(
                 Path.of("client", "index.md"),
                 Map.of(
                         "<!-- INCLUDE CLIENT_INDEX -->", renderedIndex,
-                        "<!-- INCLUDE CLIENT_GUIDE -->", renderedGuide
+                        "<!-- INCLUDE CLIENT_GUIDE -->", renderedGuide,
+                        "<!-- INCLUDE CLIENT_CONNECTING -->", renderedConnecting
                 )
         );
 

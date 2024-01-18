@@ -31,4 +31,9 @@ public class MainPageClientDocumentationModel {
      * Documentation model for the Python client guide. Contains selected examples on how to use the `dqops` package in Python.
      */
     private MainPageClientGuideDocumentationModel guideDocumentationModel;
+
+    /**
+     * Documentation model for the connecting methods. Contains selected examples on how to connect with the REST API.
+     */
+    private MainPageClientConnectingDocumentationModel connectingDocumentationModel;
 }

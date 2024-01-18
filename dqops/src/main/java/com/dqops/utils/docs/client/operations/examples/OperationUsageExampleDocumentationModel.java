@@ -44,4 +44,9 @@ public class OperationUsageExampleDocumentationModel {
      * Rendered example.
      */
     private String renderedExample;
+
+    /**
+     * Description of the example snippet to be included in a footer.
+     */
+    private String exampleFooter;
 }
