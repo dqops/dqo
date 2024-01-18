@@ -4,6 +4,7 @@ import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.metadata.storage.localfiles.credentials.DefaultCloudCredentialFileContent;
 import com.dqops.metadata.storage.localfiles.credentials.DefaultCloudCredentialFileNames;
 import com.dqops.metadata.storage.localfiles.credentials.FileSharedCredentialWrapperImpl;
+import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -12,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Component
 public class AzureCredentialsProviderImpl implements AzureCredentialsProvider {
 
     public Optional<AzureCredential> provideCredentials(SecretValueLookupContext secretValueLookupContext){

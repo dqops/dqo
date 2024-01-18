@@ -21,6 +21,9 @@ import com.dqops.connectors.jdbc.JdbcConnectionPool;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.ConnectionSpec;
+import com.dqops.metadata.storage.localfiles.credentials.DefaultCloudCredentialFileNames;
+import com.dqops.metadata.storage.localfiles.credentials.azure.AzureCredential;
+import com.dqops.metadata.storage.localfiles.credentials.azure.AzureCredentialsProvider;
 import com.zaxxer.hikari.HikariConfig;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +34,7 @@ import tech.tablesaw.api.Table;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.Properties;
 
 /**
@@ -40,6 +44,8 @@ import java.util.Properties;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
 
+    private final AzureCredentialsProvider azureCredentialsProvider;
+
     /**
      * Injection constructor for the MS SQL Server connection.
      * @param jdbcConnectionPool Jdbc connection pool.
@@ -47,9 +53,11 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
      */
     @Autowired
     public SqlServerSourceConnection(JdbcConnectionPool jdbcConnectionPool,
-                                      SecretValueProvider secretValueProvider,
-                                      SqlServerConnectionProvider sqlServerConnectionProvider) {
+                                     SecretValueProvider secretValueProvider,
+                                     SqlServerConnectionProvider sqlServerConnectionProvider,
+                                     AzureCredentialsProvider azureCredentialsProvider) {
         super(jdbcConnectionPool, secretValueProvider, sqlServerConnectionProvider);
+        this.azureCredentialsProvider = azureCredentialsProvider;
     }
 
     /**
@@ -102,7 +110,6 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
         switch (sqlserverSpec.getAuthenticationMode()){
             case sql_password:
             case active_directory_password:
-            case active_directory_managed_identity:
             case active_directory_service_principal:
 
                 String userName = this.getSecretValueProvider().expandValue(sqlserverSpec.getUser(), secretValueLookupContext);
@@ -111,17 +118,33 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
                 String password = this.getSecretValueProvider().expandValue(sqlserverSpec.getPassword(), secretValueLookupContext);
                 hikariConfig.setPassword(password);
 
+                String authenticationValue = getJdbcAuthenticationValue(sqlserverSpec.getAuthenticationMode());
+                dataSourceProperties.put("authentication", authenticationValue);
+
                 break;
             case default_credential:
-                    // todo:
 
+                Optional<AzureCredential> azureCredential = azureCredentialsProvider.provideCredentials(secretValueLookupContext);
+                if(azureCredential.isPresent()
+                        && !azureCredential.get().getUser().isEmpty()
+                        && !azureCredential.get().getPassword().isEmpty()
+                        && !azureCredential.get().getAuthentication().isEmpty()
+                ){
+                    String defaultUserName = this.getSecretValueProvider().expandValue(azureCredential.get().getUser(), secretValueLookupContext);
+                    hikariConfig.setUsername(defaultUserName);
+
+                    String defaultPassword = this.getSecretValueProvider().expandValue(azureCredential.get().getPassword(), secretValueLookupContext);
+                    hikariConfig.setPassword(defaultPassword);
+
+                    dataSourceProperties.put("authentication", azureCredential.get().getAuthentication());
+
+                } else {
+                    new RuntimeException("Can't use default credentials set in " + DefaultCloudCredentialFileNames.AZURE_DEFAULT_CREDENTIALS_NAME + " file.");
+                }
                 break;
             default:
                 new RuntimeException("Given enum is not supported : " + sqlserverSpec.getAuthenticationMode());
         }
-
-        String authenticationValue = getJdbcAuthenticationValue(sqlserverSpec.getAuthenticationMode());
-        dataSourceProperties.put("authentication", authenticationValue);
 
         String options =  this.getSecretValueProvider().expandValue(sqlserverSpec.getOptions(), secretValueLookupContext);
         if (!Strings.isNullOrEmpty(options)) {
@@ -141,9 +164,7 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
         switch (authenticationMode){
             case sql_password:                          return "SqlPassword";
             case active_directory_password:             return "ActiveDirectoryPassword";
-            case active_directory_managed_identity:     return "ActiveDirectoryManagedIdentity";
             case active_directory_service_principal:    return "ActiveDirectoryServicePrincipal";
-            case default_credential:                    return null; // todo
             default: new RuntimeException("Given enum is not supported : " + authenticationMode);
         }
         return null;
