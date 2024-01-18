@@ -30,7 +30,7 @@ const options = [
   }
 ];
 
-const athenaAuthenticaionOptions = [
+const athenaAuthenticationOptions = [
   {
     label: 'IAM',
     value: TrinoParametersSpecAthenaAuthenticationModeEnum.iam
@@ -104,7 +104,7 @@ const TrinoConnection = ({
       <>
         <Select
           label="Athena authentication option"
-          options={athenaAuthenticaionOptions}
+          options={athenaAuthenticationOptions}
           className="mb-4"
           value={ trino?.athena_authentication_mode }
           onChange={(value) => { handleChange({ athena_authentication_mode: value })}}
