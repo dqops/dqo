@@ -62,3 +62,8 @@ pop-up with a randomly generated password. You may choose to enter your own pass
 and contains both uppercase and lowercase letters and digits.
 
 ![Change-users-password](https://dqops.com/docs/images/working-with-dqo/users-managment/changePassword.png)
+
+## What's next
+
+- Check the detailed manual of [how to run data quality checks using the check editor](run-data-quality-checks.md).
+- Learn how to [review the data quality results on dashboards](review-the-data-quality-results-on-dashboards.md) to identify all tables and columns affected by issues. 

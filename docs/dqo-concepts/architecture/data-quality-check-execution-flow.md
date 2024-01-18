@@ -1,5 +1,5 @@
 # Data quality check execution flow
-Read this in-depth article to understand the internals of the DQOps engine, now it runs sensors, rules, and when execution errors are reported.
+Read this in-depth article to understand the internals of the DQOps engine, how it runs sensors, rules, and when execution errors are reported.
 
 ## Overview
 

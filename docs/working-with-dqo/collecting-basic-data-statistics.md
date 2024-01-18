@@ -81,4 +81,5 @@ Note that the results displayed may vary depending on the data type.
 
 ## What's next
 
-- [Learn how to run data quality checks](run-data-quality-checks.md).
+- Check the detailed manual of [how to run data quality checks using the check editor](run-data-quality-checks.md).
+- Now you might want to check how to [delete data quality results including basic data statistics results](delete-data-quality-results.md).

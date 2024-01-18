@@ -30,13 +30,8 @@ Entry requirements include:
 
 ## Integration examples
 
+Check the detailed examples of integration with dbt
+
 - [Dbt cloud with run checks](dbt-cloud-run-checks-use-case.md)
 - [Dbt cloud with table status](dbt-cloud-table-status-use-case.md)
 - [Dbt core with run checks](dbt-core-use-case.md)
-
-
-## What's next
-
-- [Learn about run checks Airflow operator](../airflow/run-checks-operator.md)
-- [Learn about wait for job Airflow operator](../airflow/wait-for-job-operator.md)
-

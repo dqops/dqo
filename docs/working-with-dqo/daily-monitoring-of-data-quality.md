@@ -3,10 +3,10 @@ Read this guide to understand the daily workflow of using DQOps to review recent
 
 ## Overview 
 
-**Problem:** To ensure the accuracy and reliability of your data, it is essential to monitor it on a daily basis. 
+**Problem:** To ensure the accuracy, completeness, consistency and reliability of your data, it is essential to monitor it on a daily basis. 
 By doing so, you can spot any issues early on and take prompt action to solve them.
 
-**Solution:** To achieve this, you can set up daily monitoring of data quality checks. This system will automatically 
+**Solution:** To achieve this, you can set up daily monitoring of data quality checks in the DQOps. The platform will automatically 
 run data quality checks on a regular basis and notify you immediately if it discovers any issues. Additionally, you can 
 review the results of the checks on data quality dashboards, which provide a comprehensive overview of your data quality status.
 
@@ -27,8 +27,8 @@ You can learn more about each default check by clicking on the links below.
 
 **Profiling checks type**
 
-| Target | Check name                                                          | Description                                                                                                                                        |
-|--------|---------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
+| Target | Check name                                                       | Description                                                                                                                                        |
+|--------|------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
 | table  | [profile row count](../checks/table/volume/row-count.md)         | Counts the number of rows in a table.                                                                                                              |
 | table  | [profile column count](../checks/table/schema/column-count.md)   | Retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to an expected number of columns. |
 | column | [profile nulls count](../checks/column/nulls/nulls-count.md)     | Ensures that there are no more than a set number of null values in the monitored column.                                                           |
@@ -36,8 +36,8 @@ You can learn more about each default check by clicking on the links below.
 
 **Daily monitoring checks type**
 
-| Target | Check name                                                                                                   | Description                                                                                                                                        |
-|--------|--------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
+| Target | Check name                                                                                                | Description                                                                                                                                        |
+|--------|-----------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
 | table  | [daily row count](../checks/table/volume/row-count.md)                                                    | Counts the number of rows in a table.                                                                                                              |
 | table  | [daily row count change](../checks/table/volume/row-count-change.md)                                      | Ensures that the row count changed by a fixed rate since the last readout.                                                                         |
 | table  | [daily row count anomaly](../checks/table/volume/row-count-anomaly.md)                                    | Ensures that the row count is within a two-tailed percentile from measurements made during the last 90 days.                                       |

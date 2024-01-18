@@ -204,7 +204,8 @@ To add and run data quality checks using the DQOps Shell, follow the steps below
 
 ## What's next
 
-- [Learn about setting schedules](configure-scheduling-of-data-quality-checks/index.md) to easily customize when checks are run.
-- [Learn how to delete data quality results](delete-data-quality-results.md).
+- Now you might want to check how to [delete data quality results](delete-data-quality-results.md).
+- With DQOps you can [activate, deactivate or modify multiple data quality checks at once](activate-and-deactivate-multiple-checks.md). Follow the link to learn more. 
+- DQOps provide you with summary statistics about your table and column. This information can be valuable in deciding which data quality checks and threshold levels should be set to monitor data quality. For more details about [Basic data statistics, click here](collecting-basic-data-statistics.md).
 - Learn more how [targeting data quality checks](../dqo-concepts/running-data-quality-checks.md) when you want to run
   data quality checks only for selected tables or columns, using filters.

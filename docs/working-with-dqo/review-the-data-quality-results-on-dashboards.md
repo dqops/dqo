@@ -61,20 +61,20 @@ To export data from a table or chart, follow these steps:
 
 1. Hover over the table or chart you wish to export.
 
-2. Right-click on the chart or click three dots icon and select Export.
+2. Right-click on the chart or click three dots icon and select **Export**.
    
     ![Export data presented in dashboards](https://dqops.com/docs/images/working-with-dqo/data-quality-dashboards/export-results-from-dashboard.png)
 
 3. Enter a name for your export and select an Export As option:
 
-    - CSV creates a comma separated text file.
-    - CSV (Excel) creates a comma separated text file where non-ASCII characters are encoded properly for use in Excel.
-    - Google Sheets sends your data directly to Sheets.
+    - **CSV** creates a comma separated text file.
+    - **CSV (Excel)** creates a comma separated text file where non-ASCII characters are encoded properly for use in Excel.
+    - **Google Sheets** sends your data directly to Sheets.
    
-4. Select the Keep value formatting option if you wish to retain the number and date formats applied in Looker Studio in the exported data.
+4. Select the **Keep value formatting** option if you wish to retain the number and date formats applied in Looker Studio in the exported data.
 
 
 ## What's next
 
-- [Learn how to run data quality checks](run-data-quality-checks.md).
+- Check the detailed manual of [how to run data quality checks using the check editor](run-data-quality-checks.md).
 - [Learn about setting schedules](configure-scheduling-of-data-quality-checks/index.md) to easily customize when checks are run.
