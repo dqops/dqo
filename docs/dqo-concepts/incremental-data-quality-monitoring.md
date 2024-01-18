@@ -145,7 +145,7 @@ teh current month and the previous month. The data for the current month is stil
 by data quality issues, but the data for the past month must pass the [data quality KPIs](definition-of-data-quality-kpis.md)
 for all required [data quality dimensions](data-quality-dimensions.md).
 
-![KPIs scorecard - summary](https://dqops.com/docs/images/working-with-dqo/data-quality-dashboards/kpis-scorecard-dashboards.png)
+![KPIs scorecard - summary](https://dqops.com/docs/images/working-with-dqo/data-quality-dashboards/kpis-scorecard-dashboards2.png)
 
 
 ## What's next

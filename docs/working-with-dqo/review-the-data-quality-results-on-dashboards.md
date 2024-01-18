@@ -27,10 +27,19 @@ in the Concept section.
 For example, to review the summary KPIs of all executed monitoring checks you can use the **KPIs scorecard - summary** dashboard.
 You can find it in the **Monitoring** group, **Data quality KPIs** subgroup.
 
-![KPIs scorecard - summary](https://dqops.com/docs/images/working-with-dqo/data-quality-dashboards/kpis-scorecard-dashboards.png)
+![KPIs scorecard - summary](https://dqops.com/docs/images/working-with-dqo/data-quality-dashboards/kpis-scorecard-dashboards2.png)
 
 When you hover over the name of the dashboard in the tree view, thumbnails are displayed to help you identify the
 type of dashboard.
+
+### **Switching view between basic and advanced dashboards**
+
+In DQOps the dashboards are divided into two groups: basic and advanced dashboards.
+
+The toggle button **Show advanced dashboards** at the top of the tree view allows to toggle between
+displaying only basic dashboards or both basic and more advanced dashboards.
+
+![Advanced dashboards toggle button](https://dqops.com/docs/images/working-with-dqo/data-quality-dashboards/advanced-dashboards-toggle-button.png)
 
 ### **Filtering**
 

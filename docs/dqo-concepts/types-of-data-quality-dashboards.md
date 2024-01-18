@@ -17,15 +17,25 @@ to the data quality lakehouse.
 
 To view dashboards, simply go to the **Data Quality Dashboard** section, and select the dashboard of interest from the tree
 view on the left. There are several groups and subgroups of data quality dashboards dedicated to analyzing results from 
-data quality checks.
+data quality checks. 
 
 For example, to review the summary KPIs of all executed monitoring checks you can use the **KPIs scorecard - summary** dashboard.
 You can find it in the **Monitoring** group, **Data quality KPIs** subgroup.
 
-![KPIs scorecard - summary](https://dqops.com/docs/images/working-with-dqo/data-quality-dashboards/kpis-scorecard-dashboards.png)
+![KPIs scorecard - summary](https://dqops.com/docs/images/working-with-dqo/data-quality-dashboards/kpis-scorecard-dashboards2.png)
 
-When you hover over the name of the dashboard in the tree view, thumbnails are displayed to help you identify the 
+When you hover over the name of the dashboard in the tree view, thumbnails are displayed to help you identify the
 type of dashboard.
+
+### **Switching view between basic and advanced dashboards**
+
+In DQOps the dashboards are divided into two groups: basic and advanced dashboards.
+
+The toggle button **Show advanced dashboards** at the top of the tree view allows to toggle between
+displaying only basic dashboards or both basic and more advanced dashboards.
+
+![Advanced dashboards toggle button](https://dqops.com/docs/images/working-with-dqo/data-quality-dashboards/advanced-dashboards-toggle-button.png)
+
 
 ### **Filtering**
 
@@ -73,9 +83,9 @@ check several times a day only the most recent readout is stored. The previous r
 
 Below are the list of major subgroups within Profiling, Monitoring, and Partitions groups
 
-### **Current table status**
+### **Current status**
 
-**Current table status** dashboards allow data engineers and data owners to quickly evaluate the data quality of monitored
+**Current status** dashboards allow data engineers and data owners to quickly evaluate the data quality of monitored
 tables and columns. The dashboards display a color-coded status that indicates the severity level detected by run
 checks. When the status is green, it means that the monitored column has no data quality issues. However, if the status
 is yellow, orange, or red, it indicates that there were some issues detected. The dashboard also displays the number
@@ -85,21 +95,23 @@ These dashboards allow filtering data by:
 
 * time frame, 
 * connection,
+* priority
 * schema,
+* data group
+* stage
 * data quality dimension,
 * check category,
-* data group,
 * table, 
 * column.
  
-**Current table status per data quality dimension** dashboard is a representative of this group.
+**Current table status** dashboard is a representative of this group.
 
-![Current table status per data quality dimension](https://dqops.com/docs/images/concepts/data-quality-dashboards/current-table-status-per-data-quality-dimension.png)
+![Current table status](https://dqops.com/docs/images/concepts/data-quality-dashboards/current-table-status.png)
 
 
 ### **Highest issue severity per day**
 
-**Highest issue severity per day** dashboards allow for reviewing and filtering a summary number of issues that arise 
+**Highest issue severity per day** advanced dashboards allow for reviewing and filtering a summary number of issues that arise 
 from data quality checks per day. Depending on the dashboard, the summary is grouped by table, column, 
 [data grouping](measuring-data-quality-with-data-grouping.md), or [check category](../checks/index.md).
 These dashboards help evaluate the areas with the highest number of data quality issues that should be addressed. 
@@ -124,7 +136,7 @@ These dashboards allow filtering data by:
 
 ### **Data quality issues count**
 
-**Data quality issues** dashboards allow evaluation of the number issues and its severity level per table, or per check category. 
+**Data quality issues count** advanced dashboards allow evaluation of the number issues and its severity level per table, or per check category. 
 Another two types of dashboards in this subgroup allows reviewing the total number of failed checks (warning, error, fatal)
 per day of the month, or per table and day of the month.
 
@@ -158,7 +170,7 @@ With these dashboards, senior management can review a summary of data quality KP
 [data quality dimensions](data-quality-dimensions.md), 
 [check category](../checks/index.md), [data grouping](measuring-data-quality-with-data-grouping.md) and day.
 
-**KPIs per table and day** is a representative of this group. It allows reviewing data quality KPIs per table
+**KPIs per table and day** is a representative of advanced dashboards in this group. It allows reviewing data quality KPIs per table
 and day of the month. 
 
 This dashboard allows filtering data by:
@@ -181,7 +193,7 @@ This dashboard allows filtering data by:
 
 ### **Check results**
 
-**Check results** dashboards allow to review the details of the executed checks results.
+**Check results** advanced dashboards allow to review the details of the executed checks results.
 
 **History of data quality check results** is a representative of this group. This dashboard displays all executed
 checks run on tables and columns and allows reviewing their set parameters, as well as actual and expected values.
@@ -210,19 +222,8 @@ This dashboard allows filtering data by:
 **Data Quality Dimensions** group contains dashboards dedicated for different data quality dimension such as availability,
 completeness, or timeliness. 
 
-**Availability**, **Completeness**, Timeliness, and **Validity** dimensions has at least two dashboards. One dedicated to reviewing current issues and the
-other to history of issues. 
-
-**Timeliness** dimensions has specialized dashboards for evaluating:
-
-* Current timeliness issues
-* History of timeliness issues
-* Table freshness - tables with the most current data,
-* Table freshness - tables with the oldest data,
-* Table staleness - tables most recently loaded
-* Table staleness - tables no longer loaded
-* History of table freshness
-* Minimum, maximum and average delay
+**Availability**, **Completeness**, and **Validity** dimensions has at least two dashboards. Basic dashboard
+dedicated to reviewing current issues and the advanced dashboard for reviewing the history of issues. 
 
 
 **Current completeness issues on columns** is a representative of **Completeness** subgroup. This dashboard summarizes
@@ -247,9 +248,37 @@ This dashboard allows filtering data by:
 ![Current completeness issues on columns](https://dqops.com/docs/images/concepts/data-quality-dashboards/current-completeness-issues-on-columns.png)
 
 
+**Timeliness** dimensions has specialized dashboards for evaluating:
+
+* Current timeliness issues
+* History of timeliness issues
+* Table freshness - tables with the most current data,
+* Table freshness - tables with the oldest data,
+* Table staleness - tables most recently loaded
+* Table staleness - tables no longer loaded
+* History of table freshness
+* Minimum, maximum and average delay
+
+**Table freshness - tables with the oldest data** is a representative of **Timeliness** subgroup. This dashboard summarizes
+tables with the longest delay measured by the [table_freshness](../checks/table/timeliness/data-freshness.md) check.
+
+This dashboard allows filtering data by:
+
+* time window (from last 7 days to last 3 months)
+* connection,
+* schema,
+* data group,
+* stages,
+* priorities,
+* check name,
+* table.
+
+![Table freshness - tables with the oldest data](https://dqops.com/docs/images/concepts/data-quality-dashboards/table-freshness-tables-with-the-oldest-data.png)
+
+
 ### **Volume**
 
-**Volume** dashboards in the **Monitoring** group help to evaluate the largest tables by number of rows and empty 
+**Volume** dashboards in the **Monitoring** group help to evaluate the largest tables by number of rows and empty
 or too small tables. While dashboards in the **Partitions** group (**Partition volume statistics**) display daily 
 partitions row count and too small partitions.
 
@@ -271,13 +300,29 @@ This dashboard allows filtering data by:
 
 ### **PII**
 
-**PII** dashboards display results from column checks detecting the percentage of Personal Identifiable Information in data. 
-PII includes phone numbers ([contains_usa_phone_percent](../checks/column/pii/contains-usa-phone-percent.md)), 
-emails ([contains_email_percent](../checks/column/pii/contains-email-percent.md)), 
-zipcodes ([contains_usa_zipcode_percent](../checks/column/pii/contains-usa-zipcode-percent.md)), or 
-IP addresses ([contains_ip4_percent](../checks/column/pii/contains-ip4-percent.md), 
+**PII** dashboards display results from column checks detecting the percentage of Personal Identifiable Information in data.
+PII includes phone numbers ([contains_usa_phone_percent](../checks/column/pii/contains-usa-phone-percent.md)),
+emails ([contains_email_percent](../checks/column/pii/contains-email-percent.md)),
+zipcodes ([contains_usa_zipcode_percent](../checks/column/pii/contains-usa-zipcode-percent.md)), or
+IP addresses ([contains_ip4_percent](../checks/column/pii/contains-ip4-percent.md),
 [contains_ip6_percent](../checks/column/pii/contains-ip6-percent.md)).
 
+**PII data detected** dashboard is a representative of PII subgroup.  This dashboard displays columns monitored with PII checks mentioned above.
+
+This dashboard allows filtering data by:
+
+* time window (from last 7 days to last 6 months)
+* connection,
+* schema,
+* data group,
+* check name,
+* severity
+* stages,
+* priority,
+* table,
+* column.
+
+![PII data detected dashboard](https://dqops.com/docs/images/concepts/data-quality-dashboards/pii-data-detected-dashboard.png)
 
 ### **Schema changes**
 
@@ -347,8 +392,19 @@ This dashboard allows filtering data by:
 
 ### **Checks no longer in use**
 
-**Checks no longer in use** dashboards show summary tables and charts of checks that are no longer in use.
+**Checks no longer in use - summary table** dashboard shows summary tables of checks that are no longer in use.
 
+This dashboard allows filtering data by:
+
+* time window (older than one month to older than a year)
+* connection,
+* table,
+* column
+* check type,
+* quality dimension,
+* check category.
+
+![Checks no longer in use - summary tables dashboard](https://dqops.com/docs/images/concepts/data-quality-dashboards/checks-no-longer-in-use.png)
 
 ## What's next
 
