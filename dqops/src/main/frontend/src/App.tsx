@@ -24,7 +24,9 @@ import 'chartjs-adapter-moment';
 
 axios.interceptors.response.use(undefined, function (error) {
   const statusCode = error.response ? error.response.status : null;
-  if (statusCode === 401 || statusCode === 403) {
+  if (
+    // statusCode === 401 ||
+     statusCode === 403) {
     location.reload();
   }
   return Promise.reject(error);
