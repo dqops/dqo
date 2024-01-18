@@ -12,28 +12,21 @@ public enum SqlServerAuthenticationMode {
      * The authentication is SqlPassword
      */
     @JsonProperty("sql_password")
-    sql_password,   // todo: test the connection with use of it one more time
+    sql_password,
 
     /**
      * Uses the Azure Active Directory Authentication with Password
      * The authentication is ActiveDirectoryPassword.
      */
     @JsonProperty("active_directory_password")
-    active_directory_password, // todo: test the connection with use of it one more time
-
-    /**
-     * Uses the Azure Active Directory Authentication with Managed Identity.
-     * The authentication is ActiveDirectoryManagedIdentity
-     */
-    @JsonProperty("active_directory_managed_identity")
-    active_directory_managed_identity, // todo: test the connection with use of it one more time
+    active_directory_password,
 
     /**
      * Uses the Azure Active Directory Authentication with Service Pricnipal
      * The authentication is ActiveDirectoryServicePrincipal
      */
     @JsonProperty("active_directory_service_principal")
-    active_directory_service_principal, // todo: test the connection with use of it one more time
+    active_directory_service_principal,
 
     /**
      * Uses the DQOps default credential from USER_HOME/.credentials/Azure_default_credentials
