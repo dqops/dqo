@@ -33,7 +33,7 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
                 )}
               />
               <div className="text-xl font-semibold text-gray-700">
-                {option.name}
+                {option.displayName}
               </div>
             </div>
           ))}
