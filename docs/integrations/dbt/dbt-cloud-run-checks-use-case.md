@@ -1,5 +1,5 @@
 # DQOps run checks example with the DbtCloud
-This example shows now to integrate DbtCloud jobs with running data quality checks with DQOps.
+This example shows how to integrate DbtCloud jobs with running data quality checks with DQOps.
 
 ## Integration example
 

@@ -66,7 +66,7 @@ Now, you should see a copy if the selected dashboard but without any data.
 
 ## Authorize access to dashboard
 
-After making a copy of the dashboard, now you need to authorize access to the data.
+After making a copy of the dashboard, how you need to authorize access to the data.
 
 ![Dashboard with no data](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/no-data.png)
 

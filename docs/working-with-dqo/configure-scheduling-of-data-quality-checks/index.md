@@ -15,12 +15,15 @@ on these [different check types, please refer to the DQOps Concepts section](../
 
 DQOps automatically sets the default schedule configuration for all newly imported tables. 
 
-You can find the default schedule configuration stored in the [defaultschedules.dqoschedules.yaml](../../reference/yaml/DefaultSchedulesYaml.md) file,
-which is located in the `settings/` folder. 
+You can find the default schedule configuration stored in the 
+[$DQO_USER_HOME/settings/defaultschedules.dqoschedules.yaml](../../reference/yaml/DefaultSchedulesYaml.md) file located 
+in the [DQOps user home](../../dqo-concepts/data-observability.md).
 
 It is important to note that DQOps does not use these schedules directly, and changing the file will not affect your
 data sources. The configuration file is only used to copy the default [cron](cron-formatting.md) schedules to the data source connection file 
 when you import the data source.
+
+### **Change the default schedule configuration**
 
 To change the default schedule configuration, follow these steps:
 
