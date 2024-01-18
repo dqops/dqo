@@ -32518,6 +32518,11 @@
           "type" : "boolean",
           "description" : "Disable SSL encryption parameter. The default value is false. You may need to disable encryption when SQL Server is started in Docker."
         },
+        "authentication_mode" : {
+          "type" : "string",
+          "description" : "Authenticaiton mode for the SQL Server. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.",
+          "enum" : [ "sql_password", "active_directory_password", "active_directory_service_principal", "default_credential" ]
+        },
         "properties" : {
           "type" : "object",
           "description" : "A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.",

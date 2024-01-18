@@ -192,7 +192,7 @@ spec:
       sql_expression: "CASE WHEN SPLIT({alias}.message, '|')[0] = 'EVN' THEN SPLIT({alias}.message, '|')[1] ELSE NULL END" # (4)!
       monitoring_checks:
         daily:
-          strings:
+          accepted_values:
             daily_text_found_in_set_percent:
               parameters:
                 expected_values:

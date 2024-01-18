@@ -352,7 +352,7 @@ spec:
         nullable: true
       monitoring_checks:
         daily:
-          strings:
+          accepted_values:
             daily_text_found_in_set_percent:
               parameters:
                 expected_values:
