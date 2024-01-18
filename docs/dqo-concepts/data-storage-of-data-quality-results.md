@@ -365,18 +365,29 @@ When no local changes are present, the button is white.
 
 
 ### **Synchronize from command-line**
-The synchronization can be triggered from the DQOps command line. The following commands are supported.
+The synchronization can be triggered from the [DQOps command line](command-line-interface.md).
+The following commands are supported.
 
-| Command&nbsp;name                                                                                 | Description                                                                                                                                                              |
-|---------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| &gt; [`cloud sync all`](../command-line-interface/cloud.md#dqo-cloud-sync-all)                 | Synchronizes all files between the local `DQOps user home` folder and the DQOps Cloud Data Lake                                                                          |
-| &gt; [`cloud sync data`](../command-line-interface/cloud.md#dqo-cloud-sync-data)               | Synchronizes only parquet (data) files between the local `DQOps user home`*/.data* folder and the DQOps Cloud Data Lake                                                  |
-| &gt; [`cloud sync sources`](../command-line-interface/cloud.md#dqo-cloud-sync-sources)         | Synchronizes only the configuration of data sources (YAML files) between the local `DQOps user home`*/sources* folder and the DQOps Cloud Data Lake                      |
-| &gt; [`cloud sync sensors`](../command-line-interface/cloud.md#dqo-cloud-sync-sensors)         | Synchronizes only the definition of custom data quality sensors (query templates) between the local `DQOps user home`*/sensors* folder and the DQOps Cloud Data Lake     |
-| &gt; [`cloud sync rules`](../command-line-interface/cloud.md#dqo-cloud-sync-rules)             | Synchronizes only the definition of custom data quality rules (Python functions) between the local `DQOps user home`*/rules* folder and the DQOps Cloud Data Lake        |
-| &gt; [`cloud sync checks`](../command-line-interface/cloud.md#dqo-cloud-sync-checks)           | Synchronizes only the definition of custom data quality checks (sensor and rule pairs) between the local `DQOps user home`*/checks* folder and the DQOps Cloud Data Lake |
-| &gt; [`cloud sync settings`](../command-line-interface/cloud.md#dqo-cloud-sync-settings)       | Synchronizes only the configuration (setting) files between the local `DQOps user home`*/settings* folder and the DQOps Cloud Data Lake                                  |
-| &gt; [`cloud sync credentials`](../command-line-interface/cloud.md#dqo-cloud-sync-credentials) | Synchronizes only the shared credential files between the local `DQOps user home`*/credentials* folder and the DQOps Cloud Data Lake                                     |
+| Command&nbsp;name                                                                              | Description                                                                                                                                                               |
+|------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| &gt; [`cloud sync all`](../command-line-interface/cloud.md#dqo-cloud-sync-all)                 | Synchronizes all files between the local `DQOps user home` folder and the DQOps Cloud Data Lake.                                                                          |
+| &gt; [`cloud sync data`](../command-line-interface/cloud.md#dqo-cloud-sync-data)               | Synchronizes only parquet (data) files between the local `DQOps user home`*/.data* folder and the DQOps Cloud Data Lake.                                                  |
+| &gt; [`cloud sync sources`](../command-line-interface/cloud.md#dqo-cloud-sync-sources)         | Synchronizes only the configuration of data sources (YAML files) between the local `DQOps user home`*/sources* folder and the DQOps Cloud Data Lake.                      |
+| &gt; [`cloud sync sensors`](../command-line-interface/cloud.md#dqo-cloud-sync-sensors)         | Synchronizes only the definition of custom data quality sensors (query templates) between the local `DQOps user home`*/sensors* folder and the DQOps Cloud Data Lake.     |
+| &gt; [`cloud sync rules`](../command-line-interface/cloud.md#dqo-cloud-sync-rules)             | Synchronizes only the definition of custom data quality rules (Python functions) between the local `DQOps user home`*/rules* folder and the DQOps Cloud Data Lake.        |
+| &gt; [`cloud sync checks`](../command-line-interface/cloud.md#dqo-cloud-sync-checks)           | Synchronizes only the definition of custom data quality checks (sensor and rule pairs) between the local `DQOps user home`*/checks* folder and the DQOps Cloud Data Lake. |
+| &gt; [`cloud sync settings`](../command-line-interface/cloud.md#dqo-cloud-sync-settings)       | Synchronizes only the configuration (setting) files between the local `DQOps user home`*/settings* folder and the DQOps Cloud Data Lake.                                  |
+| &gt; [`cloud sync credentials`](../command-line-interface/cloud.md#dqo-cloud-sync-credentials) | Synchronizes only the shared credential files between the local `DQOps user home`*/credentials* folder and the DQOps Cloud Data Lake.                                     |
+
+If you are planning to use an open-source version of DQOps, without synchronizing the data with DQOps, you can
+disable synchronization using the following commands. However, you will not have access
+to the [data quality data warehouse](architecture/dqops-architecture.md#data-quality-data-warehouse),
+and the [data quality dashboards](types-of-data-quality-dashboards.md) will not work.
+
+| Command&nbsp;name                                                                      | Description                                                                                             |
+|----------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
+| &gt; [`cloud sync disable`](../command-line-interface/cloud.md#dqo-cloud-sync-disable) | Disables synchronization of the `DQOps user home` folder and the data quality results with DQOps Cloud. |
+| &gt; [`cloud sync enable`](../command-line-interface/cloud.md#dqo-cloud-sync-enable)   | Enables synchronization of the `DQOps user home` folder and the data quality results with DQOps Cloud.  |
 
 
 ### **Automatic synchronization**
@@ -398,7 +409,7 @@ Synchronization of a DQOps instance with the DQOps Cloud Data Lake can be also t
 Please find the documentation of all parameters in the [`synchronize_folders` command reference](../client/operations/jobs.md#synchronize_folders).
 
 
-```python
+``` { .python linenums="1" }
 from dqops import client
 from dqops.client.api.jobs import synchronize_folders
 from dqops.client.models import FileSynchronizationDirection, \
@@ -435,7 +446,6 @@ synchronize_folders.sync(
 )
 
 ```
-
 
 
 ### **Push data quality results to a private cloud**
