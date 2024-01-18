@@ -1,13 +1,13 @@
 # DQOps check_results parquet table schema
-The parquet file schema for the check_results table stored in the *$DQO_USER_HOME/.data/check_results* folder in DQOps.
+The parquet file schema for the check_results table stored in the *[$DQO_USER_HOME](../../dqo-concepts/dqops-user-home-folder.md)/.data/check_results* folder in DQOps.
 
 ## Table description
 
 The data quality check results table that stores the data quality check results - a copy of sensor readouts (copied from the sensor_readouts table) and evaluated by the data quality rules.
  This table differs from the *sensor_readouts* by adding also the result of the rule evaluation. The additional columns are the &#x27;severity&#x27; which says if the check passed (the severity is 0)
  or the data quality check raised a data quality issue with a severity warning - 1, error - 2 or fatal - 3.
- The check results are stored in the check_results table is located in the *$DQO_USER_HOME/.data/check_results* folder that contains uncompressed parquet files.
- The table is partitioned using a Hive compatible partitioning folder structure. When the *$DQO_USER_HOME* is not configured, it is the folder where DQOps was started (the DQOps user&#x27;s home folder).
+ The check results are stored in the check_results table is located in the *[$DQO_USER_HOME](../../dqo-concepts/dqops-user-home-folder.md)/.data/check_results* folder that contains uncompressed parquet files.
+ The table is partitioned using a Hive compatible partitioning folder structure. When the *[$DQO_USER_HOME](../../dqo-concepts/dqops-user-home-folder.md)* is not configured, it is the folder where DQOps was started (the DQOps user&#x27;s home folder).
 
  The folder partitioning structure for this table is:
  *c&#x3D;[connection_name]/t&#x3D;[schema_name.table_name]/m&#x3D;[first_day_of_month]/*, for example: *c&#x3D;myconnection/t&#x3D;public.testedtable/m&#x3D;2023-01-01/*.
@@ -78,3 +78,6 @@ The columns of this table are described below.
  | warning_lower_bound | The warning lower bound, returned by the warning severity rule. | DOUBLE |
  | warning_upper_bound | The warning upper bound, returned by the warning severity rule. | DOUBLE |
 
+
+## What's more
+- You can find more information on how the Parquet files are partitioned in the [data quality results storage concept](../../dqo-concepts/data-storage-of-data-quality-results.md).

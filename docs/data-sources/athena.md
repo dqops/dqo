@@ -3,11 +3,19 @@ Read this guide to learn how to connect DQOps to Amazon Athena from the UI, comm
 
 ## Overview
 
-Amazon Athena is a serverless, interactive analytics service built on open-source frameworks, supporting open-table and file formats.
+[Amazon Athena](https://docs.aws.amazon.com/athena/) is a serverless, interactive analytics service built on open-source
+frameworks, that makes it easy to analyze data in Amazon S3 using standard SQL.
 
 ## Prerequisite credentials
 
-You need an Athena.
+To add Athena data source connection to DQOps you need the following:
+
+- An AWS account
+- An S3 bucket where the data will be written
+- An AWS Lake Formation database where tables will be created (one per stream)
+- AWS credentials in the form of either the pair Access key ID / Secret key ID or a role with the following permissions:
+    - Writing objects in the S3 bucket
+    - Updating of the Lake Formation database
 
 ## Add Athena connection using the user interface
 

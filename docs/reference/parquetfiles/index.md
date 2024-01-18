@@ -12,3 +12,6 @@ The list of parquet tables used by DQOps to store data quality results in the *[
 |[sensor_readouts](./sensor_readouts.md)|The data quality sensor readouts table that stores readouts (measures) captured by DQOps sensors, before the value are evaluated by the data quality rules.|
 |[statistics](./statistics.md)|The basic profiling results (statistics) table that stores basic profiling statistical values.|
 
+
+## What's more
+- You can find more information on how the Parquet files are partitioned in the [data quality results storage concept](../../dqo-concepts/data-storage-of-data-quality-results.md).

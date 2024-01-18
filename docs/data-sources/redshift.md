@@ -3,12 +3,14 @@ Read this guide to learn how to connect DQOps to AWS Redshift from the UI, comma
 
 ## Overview
 
-Amazon Redshift is a fully managed, petabyte-scale data warehouse service in the cloud from Amazon Web Services.  
+[Amazon Redshift](https://docs.aws.amazon.com/redshift/) is a fully managed, petabyte-scale data warehouse service in the cloud from Amazon Web Services.  
 Redshift can handle analytic workloads on big data sets stored by a column-oriented DBMS principle
 
 ## Prerequisite credentials
 
-You need a Redshift account. Amazon Redshift uses an elastic IP address for the external IP address. An elastic IP 
+To add Redshift data source connection to DQOps you need a Redshift account.
+
+Amazon Redshift uses an elastic IP address for the external IP address. An elastic IP 
 address is a static IP address. In case of restrictions, you need to add the IP address used by DQOps
 to [Allowed IP Addresses in Redshift Network Policies](https://docs.aws.amazon.com/redshift/latest/mgmt/managing-clusters-vpc.html).
 

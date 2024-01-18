@@ -8,12 +8,14 @@ Instructions on how to configure the schedule using the user interface can be fo
 
 ## Configuring a schedule at the connection level
 
-To schedule a check on an entire connection, you first need to open the YAML file of that connection. To do this, simply
-use the [connection edit](../../command-line-interface/connection.md#dqo-connection-edit) command, which will launch the
-YAML file in Visual Studio Code. To make working with the YAML file even easier, we recommend installing the YAML
-extension by RedHat and the Better Jinja extension by Samuel Colvin.
+To schedule a check on an entire connection, you first need to open the YAML file of that connection.
+You can edit the YAML file directly on the disk, or let DQOps open the right file in the text editor using
+the [connection edit](../../command-line-interface/connection.md#dqo-connection-edit) command from the [DQOps shell](../working-with-dqo-shell.md). This command will open Visual Studio Code
+to edit the file. You will find more information about [configuring code-completion and schema validation in Visual Studio Code](../../integrations/visual-studio-code/index.md)
+in the [DQOps integrations](../../integrations/index.md) section.
 
 For example, to edit the connection named "testconnection" just run
+
 ```
 connection edit -c=testconnection
 ```
@@ -107,6 +109,7 @@ the YAML files will look like the ones provided below:
 
 
 === "Schedule on table level row_count check"
+
     ``` yaml hl_lines="11-12"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -136,7 +139,9 @@ the YAML files will look like the ones provided below:
             column_type: FLOAT64
             nullable: true
     ```
+
 === "Schedule on column level nulls_count check"
+
     ```yaml hl_lines="16-17"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -162,3 +167,7 @@ the YAML files will look like the ones provided below:
             column_type: STRING
             nullable: true 
     ```
+
+## What's next
+- Learn how DQOps [stores the configuration of data sources](../../dqo-concepts/configuring-data-sources.md).
+- Learn how to configure [scheduling data quality checks](index.md) from the DQOps user interface.

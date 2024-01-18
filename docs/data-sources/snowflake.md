@@ -3,11 +3,13 @@ Read this guide to learn how to connect DQOps to Snowflake from the UI, command-
 
 ## Overview
 
-Snowflake is a cloud-based data warehouse that separates storage from compute resources and requires little maintenance.
+[Snowflake](https://docs.snowflake.com/) is a cloud-based data warehouse that separates storage from compute resources and requires little maintenance.
 
 ## Prerequisite credentials
 
-You need a Snowflake account. By default, Snowflake instances are open to any IP address unless you configure network 
+To add Snowflake data source connection to DQOps you need a Snowflake account. 
+
+By default, Snowflake instances are open to any IP address unless you configure network 
 policies that restrict this communication. In case of restrictions you need to add the IP address used by DQOps to 
 [Allowed IP Addresses in Snowflake Network Policies](https://docs.snowflake.com/en/user-guide/network-policies#modifying-network-policies).
 

@@ -113,3 +113,6 @@ to run all the activated checks use the following command
     ```
     docker run -v .:/dqo/userhome -it -p 8888:8888 dqops/dqo check run
     ```
+
+## What's more
+- Review the full list of all [DQOps command-line commands](../command-line-interface/index.md) in the DQOps command-line reference.

@@ -45,3 +45,7 @@ important that the data arrives in a certain format - the company should priorit
 
 You can learn more about defining data quality requirements and how to set up the whole data quality monitoring process in our eBook 
 ["A step-by-step guide to improve data quality"](https://dqops.com/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/).
+
+## What's more
+- Review the [types of data quality dashboards](types-of-data-quality-dashboards.md) that are provided with DQOps.
+- Learn how DQOps calculates [data quality KPIs per data quality dimension](definition-of-data-quality-kpis.md#monthly-with-data-quality-dimensions).

@@ -151,7 +151,7 @@ filter and sort them.
 ![Incident details screen](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/incident-details-screen2.png)
 
 
-## Filter data quality checks
+## Filter data quality check results
 
 Use filtering to restrict the types of data quality issues that appear in the list and on the bar chart.
 
@@ -170,4 +170,7 @@ To sort the issue table, simply click on the sorting icon next to any column hea
 
 ## What's next
 
-- [Learn more about incident notifications](../integrations/webhooks/index.md)
+- [Learn more about incident notifications](../integrations/webhooks/index.md) and how to get notified about new data quality incidents on Slack or by publishing
+  messages using webhooks.
+- Read the [concept of grouping data quality issues to incidents](../dqo-concepts/grouping-data-quality-issues-to-incidents.md) to understand
+  how DQOps groups similar data quality issues (failed quality checks) into incidents.

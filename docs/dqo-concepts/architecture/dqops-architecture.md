@@ -273,3 +273,8 @@ A cloud hosted VM running the DQOps instance is hosted in the cloud by DQOps. Th
 are redirected to the DQOps Cloud login page to authenticate. It is also possible to configure a custom OpenID connector
 to authenticate through the customer's login page.
 
+## What's more
+- Learn how DQOps [runs data quality checks, sensors, and rules](data-quality-check-execution-flow.md), and when the
+  errors are reported.
+- Learn how the [local data quality data lake](../data-storage-of-data-quality-results.md) is used to store a local copy
+  of data quality results, and how the data is partitioned.

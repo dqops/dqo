@@ -505,13 +505,13 @@ The rule definition YAML file *comparison/detected_datatype_equals.dqorule.yaml*
           \ - texts, 7 - mixed data types."
         data_type: enum
         allowed_values:
+        - integers
         - floats
-        - texts
+        - dates
         - timestamps
         - booleans
-        - dates
+        - texts
         - mixed
-        - integers
     ```
 
 

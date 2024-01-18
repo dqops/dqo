@@ -99,6 +99,100 @@ All parameters supported by the command are listed below.
 
 ___
 
+## dqo cloud sync enable
+
+Enables synchronization with DQOps Cloud if it was disabled before
+
+
+**Description**
+
+
+For this command description is not provided yet.
+
+
+
+
+**Command-line synopsis**
+
+```
+$ dqo [dqo options...] cloud sync enable [-h] [-fw] [-hl] [-of=<outputFormat>]
+
+```
+
+**DQOps shell synopsis**
+
+```
+dqo> cloud sync enable [-h] [-fw] [-hl] [-of=<outputFormat>]
+
+```
+
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
+
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
+|-----------------------------------------------|-------------|:-----------------:|-----------------|
+|<div id="cloud sync enable-fw" class="no-wrap-code">`-fw`</div><div id="cloud sync enable--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="cloud sync enable--headless" class="no-wrap-code">`--headless`</div><div id="cloud sync enable-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="cloud sync enable-h" class="no-wrap-code">`-h`</div><div id="cloud sync enable--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="cloud sync enable-of" class="no-wrap-code">`-of`</div><div id="cloud sync enable--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
+
+
+
+
+
+
+___
+
+## dqo cloud sync disable
+
+Disable synchronization with DQOps Cloud, allowing to work offline, but without access to the data quality dashboards
+
+
+**Description**
+
+
+For this command description is not provided yet.
+
+
+
+
+**Command-line synopsis**
+
+```
+$ dqo [dqo options...] cloud sync disable [-h] [-fw] [-hl] [-of=<outputFormat>]
+
+```
+
+**DQOps shell synopsis**
+
+```
+dqo> cloud sync disable [-h] [-fw] [-hl] [-of=<outputFormat>]
+
+```
+
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
+
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
+|-----------------------------------------------|-------------|:-----------------:|-----------------|
+|<div id="cloud sync disable-fw" class="no-wrap-code">`-fw`</div><div id="cloud sync disable--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="cloud sync disable--headless" class="no-wrap-code">`--headless`</div><div id="cloud sync disable-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="cloud sync disable-h" class="no-wrap-code">`-h`</div><div id="cloud sync disable--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="cloud sync disable-of" class="no-wrap-code">`-of`</div><div id="cloud sync disable--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
+
+
+
+
+
+
+___
+
 ## dqo cloud sync data
 
 Synchronize local &quot;data&quot; folder with sensor readouts and rule results with DQOps Cloud

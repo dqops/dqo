@@ -71,3 +71,7 @@ A summary of deleted data similar to the following table will be displayed.
 
 Using various parameters, you can limit the data that will be deleted to a specific table, column, time period, data type,
 check name, check category type, and more. For a full description of the `data delete` command and its parameters, see the [Command-line interface section](../command-line-interface/data.md).
+
+## What's more
+- Read the [concept of storing data quality results](../dqo-concepts/data-storage-of-data-quality-results.md) to understand
+  how DQOps stores the data in a local copy of the data quality data lake.

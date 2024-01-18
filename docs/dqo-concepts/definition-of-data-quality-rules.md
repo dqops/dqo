@@ -139,3 +139,9 @@ available at the link.
   - [change multiply moving stddev within 7 days](../reference/rules/Stdev.md#change-multiply-moving-stdev-within-7-days)
   - [change multiply moving stddev within 30 days](../reference/rules/Stdev.md#change-multiply-moving-stdev-within-30-days)
   - [change multiply moving stddev within 60 days](../reference/rules/Stdev.md#change-multiply-moving-stdev-within-60-days)
+
+
+## What's next
+- Learn how DQOps [executes data quality sensors and rules](architecture/data-quality-check-execution-flow.md).
+- Review the schema of a [check_results](../reference/parquetfiles/check_results.md) Parquet table where DQOps stores
+  the data quality check results after validating the measure (sensor readout) captured by a [data quality sensor](definition-of-data-quality-sensors.md).

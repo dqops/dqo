@@ -29,3 +29,8 @@ Cron expression usage examples:
 `0 0 * * SUN`   At 12:00 AM, only on Sunday
 
 `0 22 * * 1-5`  Every weekday (Mon-Fri) at 10:00 PM
+
+
+## What's next
+- Learn how to configure [scheduling data quality checks](index.md) from the DQOps user interface.
+- Learn how to configure [CRON schedules for running data quality checks](configuring-schedules-by-modifying-yaml-file.md) in YAML files.
