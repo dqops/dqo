@@ -500,6 +500,13 @@ spec:
 All data quality check nodes in [.dqotable.yaml](../reference/yaml/TableYaml.md) file support also
 adding additional configuration at a data quality check level.
 
+The parameters for a single configured data quality checks are shown on the
+[data quality check editor screen](dqops-user-interface-overview.md#check-editor) in the user interface
+after clicking a wheel icon.
+
+![Data quality check settings panel in DQOps](https://dqops.com/docs/images/concepts/configuring-checks/check_level_settings_panel_min.png)
+
+
 ### **Disable a data quality check**
 A data quality check can be disabled. A disabled data quality check is skipped when
 [running data quality checks](running-data-quality-checks.md), but the configuration is preserved in the  
