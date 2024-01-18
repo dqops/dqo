@@ -29,18 +29,18 @@ Try our [tutorial](./getting-started/index.md) to learn how to start monitoring 
 
 You can use DQOps with the most popular databases. [Learn here how to connect a data source to DQOps](./data-sources/index.md).
 
-![Google BigQuery](https://dqops.com/docs/images/connections/google-bigquery.png)
-&nbsp; &nbsp; &nbsp; ![Snowflake](https://dqops.com/docs/images/connections/snowflake.png)
-&nbsp; &nbsp; &nbsp; ![Amazon Redshift](https://dqops.com/docs/images/connections/amazon-redshift1.png)
-&nbsp; &nbsp; &nbsp; ![PostgreSQL](https://dqops.com/docs/images/connections/postgresql.png)
-&nbsp; &nbsp; &nbsp; ![Microsoft SQL Server](https://dqops.com/docs/images/connections/microsoft-sql-server.png)
+![Athena](https://dqops.com/docs/images/connections/athena2.png)
+&nbsp; &nbsp; &nbsp; ![Google BigQuery](https://dqops.com/docs/images/connections/google-bigquery.png)
+&nbsp; &nbsp; &nbsp; ![Databricks](https://dqops.com/docs/images/connections/databricks.png)
 &nbsp; &nbsp; &nbsp; ![MySQL](https://dqops.com/docs/images/connections/mysql.png)
 &nbsp; &nbsp; &nbsp; ![Oracle](https://dqops.com/docs/images/connections/oracle2.png)
-&nbsp; &nbsp; &nbsp; ![Spark](https://dqops.com/docs/images/connections/spark.png)
-&nbsp; &nbsp; &nbsp; ![Databricks](https://dqops.com/docs/images/connections/databricks.png)
+&nbsp; &nbsp; &nbsp; ![PostgreSQL](https://dqops.com/docs/images/connections/postgresql.png)
 &nbsp; &nbsp; &nbsp; ![Presto](https://dqops.com/docs/images/connections/presto1.png)
+&nbsp; &nbsp; &nbsp; ![Amazon Redshift](https://dqops.com/docs/images/connections/amazon-redshift1.png)
+&nbsp; &nbsp; &nbsp; ![Snowflake](https://dqops.com/docs/images/connections/snowflake.png)
+&nbsp; &nbsp; &nbsp; ![Spark](https://dqops.com/docs/images/connections/spark.png)
+&nbsp; &nbsp; &nbsp; ![Microsoft SQL Server](https://dqops.com/docs/images/connections/microsoft-sql-server.png)
 &nbsp; &nbsp; &nbsp; ![Trino](https://dqops.com/docs/images/connections/trino1.png)
-&nbsp; &nbsp; &nbsp; ![Athena](https://dqops.com/docs/images/connections/athena2.png)
 
 
 ## DQOps user interface
@@ -49,10 +49,17 @@ DQOps has a dynamic user interface for configuration of all data quality checks 
 Tabs allow managing data quality checks at the same time on multiple tables. Just imagine that it is a web based
 Visual Studio Code for data quality. 
 
-![](https://dqops.com/docs/images/dqo-screen1.png){ loading=lazy } &nbsp; &nbsp; &nbsp; ![](https://dqops.com/docs/images/dqo-screen2.png){ loading=lazy }
+![DQOps supports the most popular data sources](https://dqops.com/docs/images/dqops-data-sources2.png "DQOps supports the most popular data sources"){ loading=lazy } &nbsp; &nbsp; &nbsp; ![DQOps enables quick data profiling](https://dqops.com/docs/images/dqops-profiling.png "DQOps enables quick data profiling"){ loading=lazy }
 
 
-![](https://dqops.com/docs/images/dqo-screen3.png){ loading=lazy } &nbsp; &nbsp; &nbsp; ![](https://dqops.com/docs/images/dqo-screen4.png){ loading=lazy } 
+![Checks in DQOps can be quickly edited with intuitive user interface](https://dqops.com/docs/images/dqops-checks-editor.png "Checks in DQOps can be quickly edited with intuitive user interface"){ loading=lazy } &nbsp; &nbsp; &nbsp; ![With DQOps, you can conveniently keep track of the issues that arise during data quality monitoring](https://dqops.com/docs/images/dqops-incidents-management.png "With DQOps, you can conveniently keep track of the issues that arise during data quality monitoring"){ loading=lazy } 
+
+## DQOps dashboards
+
+DQOps has multiple built-in data quality dashboards for displaying [data quality KPI](./dqo-concepts/definition-of-data-quality-kpis.md)
+and enabling quick identification of tables with data quality issues.
+
+![DQOps dashboards simplify monitoring of data quality KPIs](https://dqops.com/docs/images/dqops-kpis-scorecard-dashboard.png "DQOps dashboards simplify monitoring of data quality KPIs"){ loading=lazy } &nbsp; &nbsp; &nbsp; ![DQOps dashboards enable quick identification of tables with data quality issues](https://dqops.com/docs/images/dqops-current-completeness-issues-dashboard.png "DQOps dashboards enable quick identification of tables with data quality issues"){ loading=lazy } 
 
 ## Additional resources
 
@@ -62,4 +69,3 @@ Check out eBook ["A step-by-step guide to improve data quality"](https://dqops.c
 created by the DQOps team based on their experience in data cleansing and data quality monitoring.
 
 ![A step-by-step guide to improve data quality](./images/dqops-ebook-open-with-process.png "A step-by-step guide to improve data quality"){ loading=lazy }
-
