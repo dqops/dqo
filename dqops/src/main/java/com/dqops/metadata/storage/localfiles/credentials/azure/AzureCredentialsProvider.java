@@ -12,7 +12,7 @@ public interface AzureCredentialsProvider {
     /**
      * Provides the Azure credentials.
      * @param secretValueLookupContext Secret value lookup context used to access shared credentials.
-     * @return Azure Credential object.
+     * @return Optional Azure Credential object.
      */
     Optional<AzureCredential> provideCredentials(SecretValueLookupContext secretValueLookupContext);
 }

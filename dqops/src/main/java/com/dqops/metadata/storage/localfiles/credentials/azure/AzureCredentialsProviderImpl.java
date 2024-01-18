@@ -13,9 +13,17 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Azure credentials provider implementation.
+ */
 @Component
 public class AzureCredentialsProviderImpl implements AzureCredentialsProvider {
 
+    /**
+     * Provides the Azure credentials from the DQOps' default credentials.
+     * @param secretValueLookupContext Secret value lookup context used to access shared credentials.
+     * @return Optional Azure Credential object.
+     */
     public Optional<AzureCredential> provideCredentials(SecretValueLookupContext secretValueLookupContext){
 
         FileSharedCredentialWrapperImpl defaultCredentialsSharedSecret =

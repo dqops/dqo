@@ -33,5 +33,5 @@ public enum SqlServerAuthenticationMode {
      * The authentication is acquired from the file.
      */
     @JsonProperty("default_credential")
-    default_credential, // todo: test the connection with use of it one more time
+    default_credential,
 }
