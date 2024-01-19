@@ -177,7 +177,7 @@ To navigate to a list of checks:
 Learn more about [navigating the check editor](../dqo-concepts/dqops-user-interface-overview.md#check-editor).
 
 
-### **Run checks**
+### **Running the use cases**
 
 Run the activated check using the **Run check** button.
 
