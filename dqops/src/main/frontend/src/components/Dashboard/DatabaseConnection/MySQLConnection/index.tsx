@@ -5,12 +5,14 @@ import {
   MysqlParametersSpecSslmodeEnum,
   SingleStoreParametersSpecLoadBalancingModeEnum,
   SharedCredentialListModel,
-  MysqlParametersSpecMysqlEngineTypeEnum
+  MysqlParametersSpecMysqlEngineTypeEnum,
+  SingleStoreParametersSpec
 } from '../../../../api';
 import JdbcPropertiesView from '../JdbcProperties';
 import Select from '../../../Select';
 import SectionWrapper from '../../SectionWrapper';
 import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
+import Checkbox from '../../../Checkbox';
 
 interface IMySQLConnectionProps {
   mysql?: MysqlParametersSpec;
@@ -81,14 +83,13 @@ const MySQLConnection = ({
 }: IMySQLConnectionProps) => {
   const handleChange = (obj: Partial<MysqlParametersSpec>) => {
     if (!onChange) return;
-// todo: to ensure the below works
     onChange({
       ...mysql,
+      ...obj,
       single_store_parameters_spec: {
-        // ...(mysql?.single_store_parameters_spec || {}), // make sure the object exists
-        ...(obj.single_store_parameters_spec || {})
+        ...mysql?.single_store_parameters_spec,
+        ...obj?.single_store_parameters_spec
       },
-      ...obj
     });
   };
 
@@ -179,6 +180,17 @@ const MySQLConnection = ({
           className="mb-4"
           value={mysql?.sslmode}
           onChange={(value) => handleChange({ sslmode: value })}
+        />
+      }
+
+      { mysql?.mysql_engine_type === MysqlParametersSpecMysqlEngineTypeEnum.singlestore &&
+        <Checkbox
+          checked={ mysql?.single_store_parameters_spec?.use_ssl }
+          onChange={(checked) => handleChange({ 
+            single_store_parameters_spec : { use_ssl: checked } 
+          })}
+          label="Use SSL"
+          labelPosition="left"
         />
       }
 
