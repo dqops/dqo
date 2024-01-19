@@ -44,7 +44,7 @@ To configure the event and/or ingestion timestamp columns:
 The event and ingestion timestamps for timeliness checks can be also configured by adding
 the appropriate parameters to the YAML configuration file.
 
-Below is an example of the YAML file showing sample configuration with set event timestamps column `event_timestamp_column`,
+Below is an example of the YAML file showing a sample configuration with set event timestamps column `event_timestamp_column`,
 ingestion timestamps column `ingestion_timestamp_column`.
 
 ``` yaml hl_lines="7-9"

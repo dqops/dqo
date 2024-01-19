@@ -23,7 +23,7 @@ For example, if we run the check for three consecutive days, the results table c
 
 The original time_period timestamp of the result e.g. 2023-04-05T09:06:53.386Z is truncated to midnight for daily checks.
 
-If there was a change in the data on 2023-04-07, and we run the check again, the table will be updated to show the latest result. 
+If there is a change in the data on 2023-04-07, and we run the check again, the table will be updated to show the latest result. 
 
 | actual_value |    time_period |
 |-------------:|---------------:|
@@ -38,10 +38,10 @@ For monthly monitoring checks, the original time_period of the result e.g. 2023-
 
 This approach allows you to track the data quality over time and calculate daily and monthly data quality KPIs.
 
-## Checks configuration in the YAML file
+## Check configuration in the YAML file
 Monitoring data quality checks, like other data quality checks in DQOps, are defined as YAML files.
 
-Below is an example of the YAML file showing sample configuration of a daily and monthly monitoring column data quality check
+Below is an example of the YAML file showing a sample configuration of a daily and monthly monitoring column data quality check
 nulls_percent.
 
 === "Daily monitoring check"
@@ -105,9 +105,9 @@ The `spec` section contains the details of the table, including the target schem
 
 The `timestamp_columns` section specifies the column names for various timestamps in the data.
 
-The `columns` section lists the columns in the table which has configured checks. In this example the column named
+The `columns` section lists the columns in the table which has configured checks. In this example, the column named
 `target_column` has a configured daily or monthly check `nulls_percent`. This means that the sensor reads the percentage of null
-values in `target_column`. If the percentage exceeds a certain threshold, an error, warning, or fatal message will
+values in `target_column`. If the percentage exceeds a certain threshold, an error, warning, or fatal issue will
 be raised. 
 
 For daily monitoring check even if the check is run several times a day, only the last sensor readout for each day

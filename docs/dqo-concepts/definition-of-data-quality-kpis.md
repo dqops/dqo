@@ -51,7 +51,7 @@ are shown as orange (*error* severity issue) and red (*fatal* severity issue) bo
 DQOps supports configuring [data quality rules](definition-of-data-quality-rules.md) at three severity levels:
 
 - *warning* severity issues are dedicated for anomalies and less severe data quality issues that the data producer
-  (the data owner) should not be accountable, because those type of issues are expected.
+  (the data owner) should not be accountable because those type of issues are expected.
   The *warning* severity issues are calculated as passed data quality checks, not decreasing the data quality KPI.
 
 - *error* severity issues are dedicated for data quality issues that should be resolved over time.
@@ -77,7 +77,7 @@ The data quality issues can be divided into two groups
 
 - Data quality issues that the **data producer** should be accountable for, they should be included in the KPI score
 
-- Random data quality issues that are occasionally expected, or the data producer is not able to fix them, because the data
+- Random data quality issues that are occasionally expected, or the data producer is not able to fix them because the data
   is received from an external source. For example, the data engineering team that has set up the data pipeline to load
   data received from a CRM platform is responsible for loading the data correctly, but cannot be make accountable for missing
   data (completeness issues), when the data was not entered by the sales team.
@@ -286,7 +286,7 @@ Data quality dashboards in DQOps truncate the *time_period* columns to the first
 | 2023-**03**-01                  | 1000            | 945           | **94.5%** |
 | 2023-**04**-01                  | 1000            | 947           | **94.7%** |
 
-Data quality KPIs in DQOps are calculated in monthly periods, because this scale allows to notice changes in the data quality score during 
+Data quality KPIs in DQOps are calculated in monthly periods because this scale allows to notice changes in the data quality score during 
 recurring data quality review sessions.
 Month-to-month changes to the data quality KPI can be reviewed using drill-down dashboards.
 The data engineering team can plan implementation tasks such as rebuilding a data pipeline that is loading corrupted data.

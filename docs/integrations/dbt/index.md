@@ -6,7 +6,7 @@ This guide lists the integration options between DQOps and Dbt for running data 
 Airflow orchestrated pipelines for loading data do not provide observability facilities.
 It requires to open external applications or web pages and to search for loaded data.
 The inspection of loaded data with simple checks are configured complexly in Airflow.
-It also limits the long-term view perspective on the issue, because the review of a single result of e.g. an SQL query to the data has a lack of context.
+It also limits the long-term view perspective on the issue because the review of a single result of e.g. an SQL query to the data has a lack of context.
 
 DQOps provides the automatic verification of the data that are available straight in the Airflow DAG execution details.
 Also, when the data issue occurs, it will be visible on the main Airflow page.

@@ -10,7 +10,7 @@ Partition checks are designed to measure the data quality in partitioned data. I
 partition checks produce separate monitoring results for each partition. There are two categories of partition checks: daily checks and monthly checks.
 
 The daily partition checks store the most recent sensor readouts for each partition and each day when the data quality
-check was run. This means that if you run check several times a day only the most recent readout is stored. The previous readouts for
+check was run. This means that if you run a check several times a day only the most recent readout is stored. The previous readouts for
 that day will be overwritten.
 
 For example, we have a table with results from three consecutive days that look like this:
@@ -28,7 +28,7 @@ For example, we have a table with results from three consecutive days that look 
 |       96.06% | 2023-04-07T09:10:44.386Z |
 
 Daily partitioned data should be analyzed separately, for each daily partition. That is why daily partition checks use
-**GROUP BY** clause with daily time slicing.
+the **GROUP BY** clause with daily time slicing.
 
 The following Google BigQuery query example captures time-sliced data to calculate metrics for each day separately.
 
@@ -50,7 +50,7 @@ The results grouped by day may look like this:
 
 The original time_period of the result e.g. 2023-04-05T09:07:03.578Z is truncated to midnight for daily checks.
 
-When there was a change in the data and on 2023-04-07 we run the check again, the table will be updated to show the latest result.
+When there was a change in the data and on 2023-04-07 we ran the check again, the table will be updated to show the latest result.
 
 | actual_value |    time_period |
 |-------------:|---------------:|
@@ -68,7 +68,7 @@ To run a partition check, you need to select a column that serves as the time pa
 ## Partition checks configuration in the YAML file
 Partition data quality checks, like other data quality checks in DQOps, are defined as YAML files.
 
-Below is an example of the YAML file showing sample configuration of a daily and monthly partition column data quality check
+Below is an example of the YAML file showing a sample configuration of a daily and monthly partition column data quality check
 nulls_percent.
 
 === "Daily partition check"
@@ -131,7 +131,7 @@ datetime column**. Furthermore, this column will be highlighted in orange in the
 
 ![Not configured data partitioning column warning](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/not-configured-date-partitioning-column-warning.png)
 
-In order to enable time partition check, set a column that contains date, datetime or timestamp.
+To enable the time partition check, set a column that contains the date, datetime, or timestamp.
 
 1.  Go to the **Data Sources** section.
 
@@ -142,14 +142,14 @@ In order to enable time partition check, set a column that contains date, dateti
 
     ![Partitioning column configuration](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/date-or-datetime-column-configuration-for-partion-checks.png)
 
-    You can also get to this screen by clicking the **Configure the date partitioning column** button located at the screen with a list of partition checks.
+    You can also get to this screen by clicking the **Configure the date partitioning column** button located on the screen with a list of partition checks.
 
-4.  Click the Save button in the upper right corner.
+4.  Click the **Save** button in the upper right corner.
 
 The date or datetime column for partition checks can be also configured by adding
 the appropriate parameters to the YAML configuration file.
 
-Below is an example of the YAML file showing sample configuration with set datetime column `event_timestamp` for partition
+Below is an example of the YAML file showing a sample configuration with set datetime column `event_timestamp` for partition
 checks `partition_by_column`.
 
 ``` yaml hl_lines="10"

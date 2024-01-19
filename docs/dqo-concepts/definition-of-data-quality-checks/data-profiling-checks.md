@@ -17,7 +17,7 @@ is run three times in April, and one time in May the table with the results coul
 |       95.51% | 2023-04-30T09:07:03.578Z |
 |       94.52% | 2023-05-01T09:08:50.635Z |
 
-If there was a change in the data, and we run the check again in May, the result for May will be updated.
+If there is a change in the data, and we run the check again in May, the result for May will be updated.
 
 | actual_value |                  time_period |
 |-------------:|-----------------------------:|
@@ -25,10 +25,10 @@ If there was a change in the data, and we run the check again in May, the result
 |   **95.79%** | **2023-05-02T11:47:20.843Z** |
 
 
-## Checks configuration in the YAML file
-Profiling data quality checks, like other data quality checks in DQOps are defined as YAML files.
+## Check configuration in the YAML file
+Profiling data quality checks, like other data quality checks in DQOps, are defined as YAML files.
 
-Below is an example of the YAML file showing sample configuration of a profiling column data quality check nulls_percent.
+Below is an example of the YAML file showing a sample configuration of a profiling column data quality check nulls_percent.
 
 ``` yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -57,7 +57,7 @@ The `spec` section contains the details of the table, including the target schem
 
 The `timestamp_columns` section specifies the column names for various timestamps in the data.
 
-The `columns` section lists the columns in the table which has configured checks. In this example the column named
+The `columns` section lists the columns in the table that has configured checks. In this example, the column named
 `target_column` has a configured check `profile_nulls_percent`. This means that the sensor reads the percentage of null
 values in `target_column`. If the percentage exceeds a certain threshold, an error, warning, or fatal message will
 be raised.

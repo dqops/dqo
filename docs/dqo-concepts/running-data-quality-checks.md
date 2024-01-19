@@ -1,12 +1,12 @@
 # Running data quality checks
-Read this guide to learn how to run data quality checks in DQOps, and what are the available filtering options to run only the checks that you want.
+Read this guide to learn how to run data quality checks in DQOps and what filtering options are available to run only the checks you want.
 
 ## Overview
 
-DQOps supports running data quality checks from the DQOps command-line shell, user interface, Python client
-and triggered directly by a call to a REST API endpoint [run_checks](../client/operations/jobs.md#run_checks).
+DQOps supports running data quality checks from the DQOps command-line shell, user interface, and Python client
+and is triggered directly by a call to a REST API endpoint [run_checks](../client/operations/jobs.md#run_checks).
 
-Data quality checks can be also scheduled to run in regular intervals to continuously monitor the data sources.
+Data quality checks can be also scheduled to run at regular intervals to continuously monitor the data sources.
 DQOps uses an internal job scheduler that is based on a popular Quartz library. The schedules are defined as CRON
 expressions compatible with the Linux CRON format.
 
@@ -94,7 +94,7 @@ dqo> check run --connection=sales-dwh --full-table-name=public.dim_*(1)
 
 ## Selecting checks to run 
 DQOps supports also running checks only on selected columns, running only one data quality check on multiple
-tables or columns. We can also target one type of checks, *profiling*, *monitoring* or *partitioned*.
+tables or columns. We can also target one type of check, *profiling*, *monitoring* or *partitioned*.
 
 The [check run](../command-line-interface/check.md#dqo-check-run) command for running checks on a column,
 running only one check or all checks from one type is shown below. 
@@ -162,7 +162,7 @@ spec:
 ```
 
 When a column name is provided to filter the checks, only column-level checks are executed.
-The table-level check are ignored. The `--column=` filter will select column(s) to analyze.
+The table-level checks are ignored. The `--column=` filter will select column(s) to analyze.
 The filter supports also patterns such as `--column=*_id`, `--column=date_*`, or `--column=col_*_id`.
 
 ``` { .asc .annotate }
@@ -205,7 +205,7 @@ dqo> check run --connection=sales-dwh --full-table-name=public.fact_sales --chec
 
 
 ## Targeting checks by type
-Instead of running checks one by one, we can run all checks from one type of checks.
+Instead of running checks one by one, we can run all checks from one type of check.
 
 ### **Running profiling checks**
 The next example *.dqotable.yaml* shows a mixture of *profiling* and *monitoring* checks. We want to run only *profiling* checks.
@@ -233,7 +233,7 @@ spec:
             min_count: 1
 ```
 
-The type of checks is filtered using the `--check-type=` parameter. In order to run only
+The type of check is filtered using the `--check-type=` parameter. In order to run only
 [profiling checks](definition-of-data-quality-checks/data-profiling-checks.md), we will use the following command.
 
 ``` { .asc .annotate }
@@ -454,7 +454,7 @@ spec:
         nullable: true
 ```
 
-The previous command that runs only *daily monitoring* checks will run both the table and column level checks.
+The previous command that runs only *daily monitoring* checks will run both the table and column-level checks.
 
 ``` { .asc .annotate }
 dqo> check run --connection=sales-dwh --full-table-name=public.fact_sales --check-type=monitoring --time-scale=daily
@@ -467,11 +467,11 @@ We can also run all checks in a category, skipping other categories.
 !!! info "Filtering by category and check type"
 
     Please be aware that the same categories are present also in other types of checks (*profiling*, *monitoring* or *partitioned*),
-    so using just the category name may not be enough. The check name were unique in the previous example of targeting
+    so using just the category name may not be enough. The check name was unique in the previous example of targeting
     a single check by its name, but the check type and optionally the check time scale should be specified to avoid
     running unexpected data quality checks.
 
-The following example shows both checks defined in the *nulls* and in the *schema* category on a column.
+The following example shows both checks defined in the *nulls* and the *schema* category on a column.
 The highlighted section shows only the *schema* checks that we want to run on all columns.
 
 ``` { .yaml .annotate linenums="1" hl_lines="16-19 26-29" }
@@ -522,8 +522,8 @@ Data quality checks can be also executed from external tools, data pipelines or 
 
 ### **DQOps Python client**
 The [**dqops** PyPi package](../dqops-installation/install-dqops-using-pip.md) contains a [DQOps REST API Python client](../client/index.md)
-for running data quality checks, and for performing all operations that available in the [DQOps user interface](dqops-user-interface-overview.md).
-The DQOps client could be used inside data pipelines or data preparation code to verify the quality of tables.
+for running data quality checks, and for performing all operations that are available in the [DQOps user interface](dqops-user-interface-overview.md).
+The DQOps client can be used inside data pipelines or data preparation code to verify the quality of tables.
 
 If you want to connect to a local DQOps instance from your data pipeline code, you can use
 the unauthenticated client. First, create the client object.
@@ -534,9 +534,9 @@ from dqops import client
 dqops_client = client.Client(base_url="http://localhost:8888")
 ```
 
-Alternatively, if you are connecting to production instance of DQOps that has authentication
-enabled, you have to open the user's profile screen in DQOps and generate your DQOps API Key.
-Then take the key and use it as the token, when creating an `AuthenticatedClient` instead.
+Alternatively, if you are connecting to a production instance of DQOps that has authentication
+enabled, you have to open the user profile screen in DQOps and generate your DQOps API Key.
+Then take the key and use it as the token when creating an `AuthenticatedClient`.
 
 ``` { .python linenums="1" }
 from dqops import client
