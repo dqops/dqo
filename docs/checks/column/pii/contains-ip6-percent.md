@@ -15,13 +15,13 @@ The **contains ip6 percent** data quality check has the following variants for e
 
 Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_contains_ip6_percent`</span>|profiling| |Validity|[*contains_ip6_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-ip6-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_contains_ip6_percent`</span>|[pii](../../../dqo-concepts/types-of-data-quality-checks.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*contains_ip6_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-ip6-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile contains ip6 percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile contains ip6 percent data quality check.
 
 ??? example "Managing profile contains ip6 percent check from DQOps shell"
 
@@ -1520,13 +1520,13 @@ ___
 
 Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_contains_ip6_percent`</span>|monitoring|daily|Validity|[*contains_ip6_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-ip6-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_contains_ip6_percent`</span>|[pii](../../../dqo-concepts/types-of-data-quality-checks.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*contains_ip6_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-ip6-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily contains ip6 percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily contains ip6 percent data quality check.
 
 ??? example "Managing daily contains ip6 percent check from DQOps shell"
 
@@ -3027,13 +3027,13 @@ ___
 
 Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_contains_ip6_percent`</span>|monitoring|monthly|Validity|[*contains_ip6_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-ip6-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_contains_ip6_percent`</span>|[pii](../../../dqo-concepts/types-of-data-quality-checks.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*contains_ip6_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-ip6-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly contains ip6 percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly contains ip6 percent data quality check.
 
 ??? example "Managing monthly contains ip6 percent check from DQOps shell"
 
@@ -4534,13 +4534,13 @@ ___
 
 Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each daily partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_contains_ip6_percent`</span>|partitioned|daily|Validity|[*contains_ip6_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-ip6-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_contains_ip6_percent`</span>|[pii](../../../dqo-concepts/types-of-data-quality-checks.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*contains_ip6_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-ip6-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition contains ip6 percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition contains ip6 percent data quality check.
 
 ??? example "Managing daily partition contains ip6 percent check from DQOps shell"
 
@@ -6063,13 +6063,13 @@ ___
 
 Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_partition_contains_ip6_percent`</span>|partitioned|monthly|Validity|[*contains_ip6_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-ip6-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_contains_ip6_percent`</span>|[pii](../../../dqo-concepts/types-of-data-quality-checks.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*contains_ip6_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-ip6-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition contains ip6 percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly partition contains ip6 percent data quality check.
 
 ??? example "Managing monthly partition contains ip6 percent check from DQOps shell"
 

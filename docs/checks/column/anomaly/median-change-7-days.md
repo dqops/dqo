@@ -15,13 +15,13 @@ The **median change 7 days** data quality check has the following variants for e
 
 Verifies that the median in a column changed in a fixed rate since the last readout from the last week.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_median_change_7_days`</span>|profiling| |Consistency|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*change_percent_7_days*](../../../reference/rules/Change.md#change-percent-7-days)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_median_change_7_days`</span>|[anomaly](../../../dqo-concepts/types-of-data-quality-checks.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*change_percent_7_days*](../../../reference/rules/Change.md#change-percent-7-days)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile median change 7 days data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile median change 7 days data quality check.
 
 ??? example "Managing profile median change 7 days check from DQOps shell"
 
@@ -1350,13 +1350,13 @@ ___
 
 Verifies that the median in a column changed in a fixed rate since the last readout from the last week.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_median_change_7_days`</span>|monitoring|daily|Consistency|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*change_percent_7_days*](../../../reference/rules/Change.md#change-percent-7-days)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_median_change_7_days`</span>|[anomaly](../../../dqo-concepts/types-of-data-quality-checks.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*change_percent_7_days*](../../../reference/rules/Change.md#change-percent-7-days)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily median change 7 days data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily median change 7 days data quality check.
 
 ??? example "Managing daily median change 7 days check from DQOps shell"
 
@@ -2687,13 +2687,13 @@ ___
 
 Verifies that the median in a column changed in a fixed rate since the last readout from the last week.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_median_change_7_days`</span>|partitioned|daily|Consistency|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*change_percent_7_days*](../../../reference/rules/Change.md#change-percent-7-days)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_median_change_7_days`</span>|[anomaly](../../../dqo-concepts/types-of-data-quality-checks.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Consistency|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*change_percent_7_days*](../../../reference/rules/Change.md#change-percent-7-days)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition median change 7 days data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition median change 7 days data quality check.
 
 ??? example "Managing daily partition median change 7 days check from DQOps shell"
 

@@ -17,13 +17,13 @@ The **column list changed** data quality check has the following variants for ea
 
 Detects if new columns were added or existing columns were removed. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names. Compares the current hash to the previously known hash to detect any changes to the list of columns.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_column_list_changed`</span>|profiling| |Consistency|[*column_list_unordered_hash*](../../../reference/sensors/table/schema-table-sensors.md#column-list-unordered-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_column_list_changed`</span>|[schema](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*column_list_unordered_hash*](../../../reference/sensors/table/schema-table-sensors.md#column-list-unordered-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile column list changed data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile column list changed data quality check.
 
 ??? example "Managing profile column list changed check from DQOps shell"
 
@@ -119,13 +119,13 @@ ___
 
 Detects if new columns were added or existing columns were removed since the most recent day. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names. Compares the current hash to the previously known hash to detect any changes to the list of columns.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_column_list_changed`</span>|monitoring|daily|Consistency|[*column_list_unordered_hash*](../../../reference/sensors/table/schema-table-sensors.md#column-list-unordered-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_column_list_changed`</span>|[schema](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*column_list_unordered_hash*](../../../reference/sensors/table/schema-table-sensors.md#column-list-unordered-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily column list changed data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily column list changed data quality check.
 
 ??? example "Managing daily column list changed check from DQOps shell"
 
@@ -222,13 +222,13 @@ ___
 
 Detects if new columns were added or existing columns were removed since the last month. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names. Compares the current hash to the previously known hash to detect any changes to the list of columns.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_column_list_changed`</span>|monitoring|monthly|Consistency|[*column_list_unordered_hash*](../../../reference/sensors/table/schema-table-sensors.md#column-list-unordered-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_column_list_changed`</span>|[schema](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Consistency|[*column_list_unordered_hash*](../../../reference/sensors/table/schema-table-sensors.md#column-list-unordered-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly column list changed data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly column list changed data quality check.
 
 ??? example "Managing monthly column list changed check from DQOps shell"
 

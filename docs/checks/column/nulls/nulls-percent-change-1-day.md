@@ -15,13 +15,13 @@ The **nulls percent change 1 day** data quality check has the following variants
 
 Verifies that the null percent value in a column changed in a fixed rate since last readout from yesterday.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_nulls_percent_change_1_day`</span>|profiling| |Consistency|[*null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[*change_percent_1_day*](../../../reference/rules/Change.md#change-percent-1-day)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_nulls_percent_change_1_day`</span>|[nulls](../../../dqo-concepts/types-of-data-quality-checks.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[*change_percent_1_day*](../../../reference/rules/Change.md#change-percent-1-day)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile nulls percent change 1 day data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile nulls percent change 1 day data quality check.
 
 ??? example "Managing profile nulls percent change 1 day check from DQOps shell"
 
@@ -1208,13 +1208,13 @@ ___
 
 Verifies that the null percent value in a column changed in a fixed rate since the last readout from yesterday.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_nulls_percent_change_1_day`</span>|monitoring|daily|Consistency|[*null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[*change_percent_1_day*](../../../reference/rules/Change.md#change-percent-1-day)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_nulls_percent_change_1_day`</span>|[nulls](../../../dqo-concepts/types-of-data-quality-checks.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[*change_percent_1_day*](../../../reference/rules/Change.md#change-percent-1-day)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily nulls percent change 1 day data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily nulls percent change 1 day data quality check.
 
 ??? example "Managing daily nulls percent change 1 day check from DQOps shell"
 
@@ -2403,13 +2403,13 @@ ___
 
 Verifies that the null percent value in a column changed in a fixed rate since the last readout from yesterday.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_nulls_percent_change_1_day`</span>|partitioned|daily|Consistency|[*null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[*change_percent_1_day*](../../../reference/rules/Change.md#change-percent-1-day)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_nulls_percent_change_1_day`</span>|[nulls](../../../dqo-concepts/types-of-data-quality-checks.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Consistency|[*null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[*change_percent_1_day*](../../../reference/rules/Change.md#change-percent-1-day)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition nulls percent change 1 day data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition nulls percent change 1 day data quality check.
 
 ??? example "Managing daily partition nulls percent change 1 day check from DQOps shell"
 

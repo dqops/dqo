@@ -16,13 +16,13 @@ The **column exists** data quality check has the following variants for each
 
 Checks the metadata of the monitored table and verifies if the column exists.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_column_exists`</span>|profiling| |Completeness|[*column_exists*](../../../reference/sensors/column/schema-column-sensors.md#column-exists)|[*equals_1*](../../../reference/rules/Comparison.md#equals-1)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_column_exists`</span>|[schema](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Completeness|[*column_exists*](../../../reference/sensors/column/schema-column-sensors.md#column-exists)|[*equals_1*](../../../reference/rules/Comparison.md#equals-1)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile column exists data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile column exists data quality check.
 
 ??? example "Managing profile column exists check from DQOps shell"
 
@@ -121,13 +121,13 @@ ___
 
 Checks the metadata of the monitored table and verifies if the column exists. Stores the most recent value for each day when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_column_exists`</span>|monitoring|daily|Completeness|[*column_exists*](../../../reference/sensors/column/schema-column-sensors.md#column-exists)|[*equals_1*](../../../reference/rules/Comparison.md#equals-1)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_column_exists`</span>|[schema](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Completeness|[*column_exists*](../../../reference/sensors/column/schema-column-sensors.md#column-exists)|[*equals_1*](../../../reference/rules/Comparison.md#equals-1)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily column exists data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily column exists data quality check.
 
 ??? example "Managing daily column exists check from DQOps shell"
 
@@ -227,13 +227,13 @@ ___
 
 Checks the metadata of the monitored table and verifies if the column exists. Stores the most recent value for each month when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_column_exists`</span>|monitoring|monthly|Completeness|[*column_exists*](../../../reference/sensors/column/schema-column-sensors.md#column-exists)|[*equals_1*](../../../reference/rules/Comparison.md#equals-1)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_column_exists`</span>|[schema](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Completeness|[*column_exists*](../../../reference/sensors/column/schema-column-sensors.md#column-exists)|[*equals_1*](../../../reference/rules/Comparison.md#equals-1)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly column exists data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly column exists data quality check.
 
 ??? example "Managing monthly column exists check from DQOps shell"
 

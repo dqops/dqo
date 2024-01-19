@@ -19,13 +19,13 @@ The **data ingestion delay** data quality check has the following variants for e
 
 Calculates the time difference in days between the most recent event timestamp and the most recent ingestion timestamp
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_data_ingestion_delay`</span>|profiling| |Timeliness|[*data_ingestion_delay*](../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_data_ingestion_delay`</span>|[timeliness](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Timeliness|[*data_ingestion_delay*](../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[*max_days*](../../../reference/rules/Comparison.md#max-days)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile data ingestion delay data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile data ingestion delay data quality check.
 
 ??? example "Managing profile data ingestion delay check from DQOps shell"
 
@@ -1636,13 +1636,13 @@ ___
 
 Daily  calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_data_ingestion_delay`</span>|monitoring|daily|Timeliness|[*data_ingestion_delay*](../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_data_ingestion_delay`</span>|[timeliness](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Timeliness|[*data_ingestion_delay*](../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[*max_days*](../../../reference/rules/Comparison.md#max-days)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily data ingestion delay data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily data ingestion delay data quality check.
 
 ??? example "Managing daily data ingestion delay check from DQOps shell"
 
@@ -3255,13 +3255,13 @@ ___
 
 Monthly monitoring calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_data_ingestion_delay`</span>|monitoring|monthly|Timeliness|[*data_ingestion_delay*](../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_data_ingestion_delay`</span>|[timeliness](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Timeliness|[*data_ingestion_delay*](../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[*max_days*](../../../reference/rules/Comparison.md#max-days)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly data ingestion delay data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly data ingestion delay data quality check.
 
 ??? example "Managing monthly data ingestion delay check from DQOps shell"
 
@@ -4874,13 +4874,13 @@ ___
 
 Daily partitioned check calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_data_ingestion_delay`</span>|partitioned|daily|Timeliness|[*data_ingestion_delay*](../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_data_ingestion_delay`</span>|[timeliness](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Timeliness|[*data_ingestion_delay*](../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[*max_days*](../../../reference/rules/Comparison.md#max-days)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition data ingestion delay data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition data ingestion delay data quality check.
 
 ??? example "Managing daily partition data ingestion delay check from DQOps shell"
 
@@ -6513,13 +6513,13 @@ ___
 
 Monthly partitioned check calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_partition_data_ingestion_delay`</span>|partitioned|monthly|Timeliness|[*data_ingestion_delay*](../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_data_ingestion_delay`</span>|[timeliness](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Timeliness|[*data_ingestion_delay*](../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[*max_days*](../../../reference/rules/Comparison.md#max-days)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition data ingestion delay data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly partition data ingestion delay data quality check.
 
 ??? example "Managing monthly partition data ingestion delay check from DQOps shell"
 

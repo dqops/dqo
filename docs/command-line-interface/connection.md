@@ -114,8 +114,10 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
                 [--snowflake-user=<user>] [--snowflake-warehouse=<warehouse>]
                 [--spark-host=<host>] [--spark-options=<options>]
                 [--spark-password=<password>] [--spark-port=<port>]
-                [--spark-user=<user>] [--sqlserver-database=<database>]
-                [--sqlserver-host=<host>] [--sqlserver-options=<options>]
+                [--spark-user=<user>]
+                [--sqlserver-authentication-mode=<authenticationMode>]
+                [--sqlserver-database=<database>] [--sqlserver-host=<host>]
+                [--sqlserver-options=<options>]
                 [--sqlserver-password=<password>] [--sqlserver-port=<port>]
                 [--sqlserver-user=<user>] [-t=<providerType>]
                 [--trino-catalog=<catalog>] [--trino-engine=<trinoEngineType>]
@@ -173,8 +175,10 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--snowflake-user=<user>] [--snowflake-warehouse=<warehouse>]
                 [--spark-host=<host>] [--spark-options=<options>]
                 [--spark-password=<password>] [--spark-port=<port>]
-                [--spark-user=<user>] [--sqlserver-database=<database>]
-                [--sqlserver-host=<host>] [--sqlserver-options=<options>]
+                [--spark-user=<user>]
+                [--sqlserver-authentication-mode=<authenticationMode>]
+                [--sqlserver-database=<database>] [--sqlserver-host=<host>]
+                [--sqlserver-options=<options>]
                 [--sqlserver-password=<password>] [--sqlserver-port=<port>]
                 [--sqlserver-user=<user>] [-t=<providerType>]
                 [--trino-catalog=<catalog>] [--trino-engine=<trinoEngineType>]
@@ -264,6 +268,7 @@ All parameters supported by the command are listed below.
 |<div id="connection add--spark-password" class="no-wrap-code">`--spark-password`</div>|Spark database password. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--spark-port" class="no-wrap-code">`--spark-port`</div>|Spark port number| ||
 |<div id="connection add--spark-user" class="no-wrap-code">`--spark-user`</div>|Spark user name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--sqlserver-authentication-mode" class="no-wrap-code">`--sqlserver-authentication-mode`</div>|Authenticaiton mode for the SQL Server. The value can be in the null format to use dynamic substitution.| |*sql_password*<br/>*active_directory_password*<br/>*active_directory_service_principal*<br/>*default_credential*<br/>|
 |<div id="connection add--sqlserver-database" class="no-wrap-code">`--sqlserver-database`</div>|SQL Server database name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--sqlserver-disable-encryption" class="no-wrap-code">`--sqlserver-disable-encryption`</div>|Disable SSL encryption parameter. The default value is false. You may need to disable encryption when SQL Server is started in Docker.| ||
 |<div id="connection add--sqlserver-host" class="no-wrap-code">`--sqlserver-host`</div>|SQL Server host name| ||
@@ -402,6 +407,7 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
                    [--snowflake-warehouse=<warehouse>] [--spark-host=<host>]
                    [--spark-options=<options>] [--spark-password=<password>]
                    [--spark-port=<port>] [--spark-user=<user>]
+                   [--sqlserver-authentication-mode=<authenticationMode>]
                    [--sqlserver-database=<database>] [--sqlserver-host=<host>]
                    [--sqlserver-options=<options>]
                    [--sqlserver-password=<password>] [--sqlserver-port=<port>]
@@ -463,6 +469,7 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--snowflake-warehouse=<warehouse>] [--spark-host=<host>]
                    [--spark-options=<options>] [--spark-password=<password>]
                    [--spark-port=<port>] [--spark-user=<user>]
+                   [--sqlserver-authentication-mode=<authenticationMode>]
                    [--sqlserver-database=<database>] [--sqlserver-host=<host>]
                    [--sqlserver-options=<options>]
                    [--sqlserver-password=<password>] [--sqlserver-port=<port>]
@@ -553,6 +560,7 @@ All parameters supported by the command are listed below.
 |<div id="connection update--spark-password" class="no-wrap-code">`--spark-password`</div>|Spark database password. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--spark-port" class="no-wrap-code">`--spark-port`</div>|Spark port number| ||
 |<div id="connection update--spark-user" class="no-wrap-code">`--spark-user`</div>|Spark user name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--sqlserver-authentication-mode" class="no-wrap-code">`--sqlserver-authentication-mode`</div>|Authenticaiton mode for the SQL Server. The value can be in the null format to use dynamic substitution.| |*sql_password*<br/>*active_directory_password*<br/>*active_directory_service_principal*<br/>*default_credential*<br/>|
 |<div id="connection update--sqlserver-database" class="no-wrap-code">`--sqlserver-database`</div>|SQL Server database name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--sqlserver-disable-encryption" class="no-wrap-code">`--sqlserver-disable-encryption`</div>|Disable SSL encryption parameter. The default value is false. You may need to disable encryption when SQL Server is started in Docker.| ||
 |<div id="connection update--sqlserver-host" class="no-wrap-code">`--sqlserver-host`</div>|SQL Server host name| ||

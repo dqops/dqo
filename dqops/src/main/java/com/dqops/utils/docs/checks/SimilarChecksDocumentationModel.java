@@ -46,11 +46,6 @@ public class SimilarChecksDocumentationModel {
     private String primaryCheckName;
 
     /**
-     * The class of check, it is either "standard" or "advanced".
-     */
-    private String checkClass;
-
-    /**
      * True for standard data quality checks, false for advanced.
      */
     private boolean standard;

@@ -15,13 +15,13 @@ The **texts matching regex percent** data quality check has the following varian
 
 Verifies that the percentage of strings matching the custom regular expression pattern does not fall below the minimum accepted percentage.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_texts_matching_regex_percent`</span>|profiling| |Validity|[*texts_matching_regex_percent*](../../../reference/sensors/column/patterns-column-sensors.md#texts-matching-regex-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_texts_matching_regex_percent`</span>|[patterns](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*texts_matching_regex_percent*](../../../reference/sensors/column/patterns-column-sensors.md#texts-matching-regex-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile texts matching regex percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile texts matching regex percent data quality check.
 
 ??? example "Managing profile texts matching regex percent check from DQOps shell"
 
@@ -1438,13 +1438,13 @@ ___
 
 Verifies that the percentage of strings matching the custom regular expression pattern does not fall below the minimum accepted percentage.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_texts_matching_regex_percent`</span>|monitoring|daily|Validity|[*texts_matching_regex_percent*](../../../reference/sensors/column/patterns-column-sensors.md#texts-matching-regex-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_texts_matching_regex_percent`</span>|[patterns](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*texts_matching_regex_percent*](../../../reference/sensors/column/patterns-column-sensors.md#texts-matching-regex-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily texts matching regex percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily texts matching regex percent data quality check.
 
 ??? example "Managing daily texts matching regex percent check from DQOps shell"
 
@@ -2863,13 +2863,13 @@ ___
 
 Verifies that the percentage of strings matching the custom regular expression pattern does not fall below the minimum accepted percentage.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_texts_matching_regex_percent`</span>|monitoring|monthly|Validity|[*texts_matching_regex_percent*](../../../reference/sensors/column/patterns-column-sensors.md#texts-matching-regex-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_texts_matching_regex_percent`</span>|[patterns](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*texts_matching_regex_percent*](../../../reference/sensors/column/patterns-column-sensors.md#texts-matching-regex-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly texts matching regex percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly texts matching regex percent data quality check.
 
 ??? example "Managing monthly texts matching regex percent check from DQOps shell"
 
@@ -4288,13 +4288,13 @@ ___
 
 Verifies that the percentage of strings matching the custom regular expression pattern does not fall below the minimum accepted percentage.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_texts_matching_regex_percent`</span>|partitioned|daily|Validity|[*texts_matching_regex_percent*](../../../reference/sensors/column/patterns-column-sensors.md#texts-matching-regex-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_texts_matching_regex_percent`</span>|[patterns](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*texts_matching_regex_percent*](../../../reference/sensors/column/patterns-column-sensors.md#texts-matching-regex-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition texts matching regex percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition texts matching regex percent data quality check.
 
 ??? example "Managing daily partition texts matching regex percent check from DQOps shell"
 
@@ -5735,13 +5735,13 @@ ___
 
 Verifies that the percentage of strings matching the custom regular expression pattern does not fall below the minimum accepted percentage.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_partition_texts_matching_regex_percent`</span>|partitioned|monthly|Validity|[*texts_matching_regex_percent*](../../../reference/sensors/column/patterns-column-sensors.md#texts-matching-regex-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_texts_matching_regex_percent`</span>|[patterns](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*texts_matching_regex_percent*](../../../reference/sensors/column/patterns-column-sensors.md#texts-matching-regex-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition texts matching regex percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly partition texts matching regex percent data quality check.
 
 ??? example "Managing monthly partition texts matching regex percent check from DQOps shell"
 

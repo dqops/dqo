@@ -16,13 +16,13 @@ The **detected datatype in text** data quality check has the following variants 
 
 Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_detected_datatype_in_text`</span>|profiling| |Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*detected_datatype_equals*](../../../reference/rules/Comparison.md#detected-datatype-equals)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_detected_datatype_in_text`</span>|[datatype](../../../dqo-concepts/types-of-data-quality-checks.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*detected_datatype_equals*](../../../reference/rules/Comparison.md#detected-datatype-equals)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile detected datatype in text data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile detected datatype in text data quality check.
 
 ??? example "Managing profile detected datatype in text check from DQOps shell"
 
@@ -3691,13 +3691,13 @@ ___
 
 Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_detected_datatype_in_text`</span>|monitoring|daily|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*detected_datatype_equals*](../../../reference/rules/Comparison.md#detected-datatype-equals)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_detected_datatype_in_text`</span>|[datatype](../../../dqo-concepts/types-of-data-quality-checks.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*detected_datatype_equals*](../../../reference/rules/Comparison.md#detected-datatype-equals)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily detected datatype in text data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily detected datatype in text data quality check.
 
 ??? example "Managing daily detected datatype in text check from DQOps shell"
 
@@ -7368,13 +7368,13 @@ ___
 
 Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores the most recent check result for each month when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_detected_datatype_in_text`</span>|monitoring|monthly|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*detected_datatype_equals*](../../../reference/rules/Comparison.md#detected-datatype-equals)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_detected_datatype_in_text`</span>|[datatype](../../../dqo-concepts/types-of-data-quality-checks.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*detected_datatype_equals*](../../../reference/rules/Comparison.md#detected-datatype-equals)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly detected datatype in text data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly detected datatype in text data quality check.
 
 ??? example "Managing monthly detected datatype in text check from DQOps shell"
 
@@ -11045,13 +11045,13 @@ ___
 
 Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores a separate data quality check result for each daily partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_detected_datatype_in_text`</span>|partitioned|daily|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*detected_datatype_equals*](../../../reference/rules/Comparison.md#detected-datatype-equals)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_detected_datatype_in_text`</span>|[datatype](../../../dqo-concepts/types-of-data-quality-checks.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*detected_datatype_equals*](../../../reference/rules/Comparison.md#detected-datatype-equals)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition detected datatype in text data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition detected datatype in text data quality check.
 
 ??? example "Managing daily partition detected datatype in text check from DQOps shell"
 
@@ -14742,13 +14742,13 @@ ___
 
 Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores a separate data quality check result for each monthly partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_partition_detected_datatype_in_text`</span>|partitioned|monthly|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*detected_datatype_equals*](../../../reference/rules/Comparison.md#detected-datatype-equals)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_detected_datatype_in_text`</span>|[datatype](../../../dqo-concepts/types-of-data-quality-checks.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*detected_datatype_equals*](../../../reference/rules/Comparison.md#detected-datatype-equals)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition detected datatype in text data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly partition detected datatype in text data quality check.
 
 ??? example "Managing monthly partition detected datatype in text check from DQOps shell"
 

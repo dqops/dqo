@@ -15,13 +15,13 @@ The **null placeholder text found** data quality check has the following variant
 
 Verifies that the number of null placeholders in a column does not exceed the maximum accepted count.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_null_placeholder_text_found`</span>|profiling| |Completeness|[*null_placeholder_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#null-placeholder-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_null_placeholder_text_found`</span>|[blanks](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Completeness|[*null_placeholder_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#null-placeholder-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile null placeholder text found data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile null placeholder text found data quality check.
 
 ??? example "Managing profile null placeholder text found check from DQOps shell"
 
@@ -1214,13 +1214,13 @@ ___
 
 Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_null_placeholder_text_found`</span>|monitoring|daily|Completeness|[*null_placeholder_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#null-placeholder-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_null_placeholder_text_found`</span>|[blanks](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Completeness|[*null_placeholder_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#null-placeholder-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily null placeholder text found data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily null placeholder text found data quality check.
 
 ??? example "Managing daily null placeholder text found check from DQOps shell"
 
@@ -2415,13 +2415,13 @@ ___
 
 Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_null_placeholder_text_found`</span>|monitoring|monthly|Completeness|[*null_placeholder_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#null-placeholder-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_null_placeholder_text_found`</span>|[blanks](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Completeness|[*null_placeholder_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#null-placeholder-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly null placeholder text found data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly null placeholder text found data quality check.
 
 ??? example "Managing monthly null placeholder text found check from DQOps shell"
 
@@ -3616,13 +3616,13 @@ ___
 
 Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_null_placeholder_text_found`</span>|partitioned|daily|Completeness|[*null_placeholder_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#null-placeholder-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_null_placeholder_text_found`</span>|[blanks](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Completeness|[*null_placeholder_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#null-placeholder-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition null placeholder text found data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition null placeholder text found data quality check.
 
 ??? example "Managing daily partition null placeholder text found check from DQOps shell"
 
@@ -4839,13 +4839,13 @@ ___
 
 Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_partition_null_placeholder_text_found`</span>|partitioned|monthly|Completeness|[*null_placeholder_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#null-placeholder-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_null_placeholder_text_found`</span>|[blanks](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Completeness|[*null_placeholder_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#null-placeholder-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition null placeholder text found data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly partition null placeholder text found data quality check.
 
 ??? example "Managing monthly partition null placeholder text found check from DQOps shell"
 

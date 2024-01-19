@@ -15,13 +15,13 @@ The **sql condition passed percent on column** data quality check has the follow
 
 Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Reference the current column by using tokens, for example: &#x60;{alias}.{column} &gt; {alias}.col_tax&#x60;.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_sql_condition_passed_percent_on_column`</span>|profiling| |Validity|[*sql_condition_passed_percent*](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-condition-passed-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_sql_condition_passed_percent_on_column`</span>|[custom_sql](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-with-custom-sql.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*sql_condition_passed_percent*](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-condition-passed-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile sql condition passed percent on column data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile sql condition passed percent on column data quality check.
 
 ??? example "Managing profile sql condition passed percent on column check from DQOps shell"
 
@@ -1193,13 +1193,13 @@ ___
 
 Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Reference the current column by using tokens, for example: &#x60;{alias}.{column} &gt; {alias}.col_tax&#x60;. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_sql_condition_passed_percent_on_column`</span>|monitoring|daily|Validity|[*sql_condition_passed_percent*](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-condition-passed-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_sql_condition_passed_percent_on_column`</span>|[custom_sql](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-with-custom-sql.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*sql_condition_passed_percent*](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-condition-passed-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily sql condition passed percent on column data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily sql condition passed percent on column data quality check.
 
 ??? example "Managing daily sql condition passed percent on column check from DQOps shell"
 
@@ -2373,13 +2373,13 @@ ___
 
 Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Reference the current column by using tokens, for example: &#x60;{alias}.{column} &gt; {alias}.col_tax&#x60;.  Stores the most recent check result for each month when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_sql_condition_passed_percent_on_column`</span>|monitoring|monthly|Validity|[*sql_condition_passed_percent*](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-condition-passed-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_sql_condition_passed_percent_on_column`</span>|[custom_sql](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-with-custom-sql.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*sql_condition_passed_percent*](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-condition-passed-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly sql condition passed percent on column data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly sql condition passed percent on column data quality check.
 
 ??? example "Managing monthly sql condition passed percent on column check from DQOps shell"
 
@@ -3553,13 +3553,13 @@ ___
 
 Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Reference the current column by using tokens, for example: &#x60;{alias}.{column} &gt; {alias}.col_tax&#x60;. Stores a separate data quality check result for each daily partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_sql_condition_passed_percent_on_column`</span>|partitioned|daily|Validity|[*sql_condition_passed_percent*](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-condition-passed-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_sql_condition_passed_percent_on_column`</span>|[custom_sql](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-with-custom-sql.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*sql_condition_passed_percent*](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-condition-passed-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition sql condition passed percent on column data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition sql condition passed percent on column data quality check.
 
 ??? example "Managing daily partition sql condition passed percent on column check from DQOps shell"
 
@@ -4755,13 +4755,13 @@ ___
 
 Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Reference the current column by using tokens, for example: &#x60;{alias}.{column} &gt; {alias}.col_tax&#x60;. Stores a separate data quality check result for each monthly partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_partition_sql_condition_passed_percent_on_column`</span>|partitioned|monthly|Validity|[*sql_condition_passed_percent*](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-condition-passed-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_sql_condition_passed_percent_on_column`</span>|[custom_sql](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-with-custom-sql.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*sql_condition_passed_percent*](../../../reference/sensors/column/custom_sql-column-sensors.md#sql-condition-passed-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition sql condition passed percent on column data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly partition sql condition passed percent on column data quality check.
 
 ??? example "Managing monthly partition sql condition passed percent on column check from DQOps shell"
 

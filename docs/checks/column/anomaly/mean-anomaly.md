@@ -15,13 +15,13 @@ The **mean anomaly** data quality check has the following variants for each
 
 Verifies that the mean value in a column changes in a rate within a percentile boundary during the last 90 days.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_mean_anomaly`</span>|profiling| |Consistency|[*mean*](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[*anomaly_stationary_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_mean_anomaly`</span>|[anomaly](../../../dqo-concepts/types-of-data-quality-checks.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*mean*](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[*anomaly_stationary_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile mean anomaly data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile mean anomaly data quality check.
 
 ??? example "Managing profile mean anomaly check from DQOps shell"
 
@@ -850,13 +850,13 @@ ___
 
 Verifies that the mean value in a column changes in a rate within a percentile boundary during the last 90 days.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_mean_anomaly`</span>|monitoring|daily|Consistency|[*mean*](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[*anomaly_stationary_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_mean_anomaly`</span>|[anomaly](../../../dqo-concepts/types-of-data-quality-checks.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*mean*](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[*anomaly_stationary_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily mean anomaly data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily mean anomaly data quality check.
 
 ??? example "Managing daily mean anomaly check from DQOps shell"
 
@@ -1687,13 +1687,13 @@ ___
 
 Verifies that the mean value in a column is within a percentile from measurements made during the last 90 days.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_mean_anomaly`</span>|partitioned|daily|Consistency|[*mean*](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[*anomaly_stationary_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_mean_anomaly`</span>|[anomaly](../../../dqo-concepts/types-of-data-quality-checks.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Consistency|[*mean*](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[*anomaly_stationary_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition mean anomaly data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition mean anomaly data quality check.
 
 ??? example "Managing daily partition mean anomaly check from DQOps shell"
 

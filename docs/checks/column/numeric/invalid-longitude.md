@@ -15,13 +15,13 @@ The **invalid longitude** data quality check has the following variants for each
 
 Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_invalid_longitude`</span>|profiling| |Validity|[*invalid_longitude_count*](../../../reference/sensors/column/numeric-column-sensors.md#invalid-longitude-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_invalid_longitude`</span>|[numeric](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*invalid_longitude_count*](../../../reference/sensors/column/numeric-column-sensors.md#invalid-longitude-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile invalid longitude data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile invalid longitude data quality check.
 
 ??? example "Managing profile invalid longitude check from DQOps shell"
 
@@ -1070,13 +1070,13 @@ ___
 
 Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_invalid_longitude`</span>|monitoring|daily|Validity|[*invalid_longitude_count*](../../../reference/sensors/column/numeric-column-sensors.md#invalid-longitude-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_invalid_longitude`</span>|[numeric](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*invalid_longitude_count*](../../../reference/sensors/column/numeric-column-sensors.md#invalid-longitude-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily invalid longitude data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily invalid longitude data quality check.
 
 ??? example "Managing daily invalid longitude check from DQOps shell"
 
@@ -2127,13 +2127,13 @@ ___
 
 Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Stores the most recent value for each month when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_invalid_longitude`</span>|monitoring|monthly|Validity|[*invalid_longitude_count*](../../../reference/sensors/column/numeric-column-sensors.md#invalid-longitude-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_invalid_longitude`</span>|[numeric](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*invalid_longitude_count*](../../../reference/sensors/column/numeric-column-sensors.md#invalid-longitude-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly invalid longitude data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly invalid longitude data quality check.
 
 ??? example "Managing monthly invalid longitude check from DQOps shell"
 
@@ -3184,13 +3184,13 @@ ___
 
 Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_invalid_longitude`</span>|partitioned|daily|Validity|[*invalid_longitude_count*](../../../reference/sensors/column/numeric-column-sensors.md#invalid-longitude-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_invalid_longitude`</span>|[numeric](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*invalid_longitude_count*](../../../reference/sensors/column/numeric-column-sensors.md#invalid-longitude-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition invalid longitude data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition invalid longitude data quality check.
 
 ??? example "Managing daily partition invalid longitude check from DQOps shell"
 
@@ -4263,13 +4263,13 @@ ___
 
 Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_partition_invalid_longitude`</span>|partitioned|monthly|Validity|[*invalid_longitude_count*](../../../reference/sensors/column/numeric-column-sensors.md#invalid-longitude-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_invalid_longitude`</span>|[numeric](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*invalid_longitude_count*](../../../reference/sensors/column/numeric-column-sensors.md#invalid-longitude-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition invalid longitude data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly partition invalid longitude data quality check.
 
 ??? example "Managing monthly partition invalid longitude check from DQOps shell"
 

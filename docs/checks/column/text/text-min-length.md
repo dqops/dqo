@@ -15,13 +15,13 @@ The **text min length** data quality check has the following variants for each
 
 Verifies that the length of a text in a column does not fall below the minimum accepted length
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_text_min_length`</span>|profiling| |Reasonableness|[*text_min_length*](../../../reference/sensors/column/text-column-sensors.md#text-min-length)|[*min_value*](../../../reference/rules/Comparison.md#min-value)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_text_min_length`</span>|[text](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Reasonableness|[*text_min_length*](../../../reference/sensors/column/text-column-sensors.md#text-min-length)|[*min_value*](../../../reference/rules/Comparison.md#min-value)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile text min length data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile text min length data quality check.
 
 ??? example "Managing profile text min length check from DQOps shell"
 
@@ -1020,13 +1020,13 @@ ___
 
 Verifies that the length of a text in a column does not fall below the minimum accepted length. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_text_min_length`</span>|monitoring|daily|Reasonableness|[*text_min_length*](../../../reference/sensors/column/text-column-sensors.md#text-min-length)|[*min_value*](../../../reference/rules/Comparison.md#min-value)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_text_min_length`</span>|[text](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Reasonableness|[*text_min_length*](../../../reference/sensors/column/text-column-sensors.md#text-min-length)|[*min_value*](../../../reference/rules/Comparison.md#min-value)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily text min length data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily text min length data quality check.
 
 ??? example "Managing daily text min length check from DQOps shell"
 
@@ -2027,13 +2027,13 @@ ___
 
 Verifies that the length of a text in a column does not fall below the minimum accepted length. Stores the most recent captured value for each month when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_text_min_length`</span>|monitoring|monthly|Reasonableness|[*text_min_length*](../../../reference/sensors/column/text-column-sensors.md#text-min-length)|[*min_value*](../../../reference/rules/Comparison.md#min-value)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_text_min_length`</span>|[text](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Reasonableness|[*text_min_length*](../../../reference/sensors/column/text-column-sensors.md#text-min-length)|[*min_value*](../../../reference/rules/Comparison.md#min-value)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly text min length data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly text min length data quality check.
 
 ??? example "Managing monthly text min length check from DQOps shell"
 
@@ -3034,13 +3034,13 @@ ___
 
 Verifies that the length of a text in a column does not fall below the minimum accepted length. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_text_min_length`</span>|partitioned|daily|Reasonableness|[*text_min_length*](../../../reference/sensors/column/text-column-sensors.md#text-min-length)|[*min_value*](../../../reference/rules/Comparison.md#min-value)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_text_min_length`</span>|[text](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Reasonableness|[*text_min_length*](../../../reference/sensors/column/text-column-sensors.md#text-min-length)|[*min_value*](../../../reference/rules/Comparison.md#min-value)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition text min length data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition text min length data quality check.
 
 ??? example "Managing daily partition text min length check from DQOps shell"
 
@@ -4063,13 +4063,13 @@ ___
 
 Verifies that the length of a text in a column does not fall below the minimum accepted length. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_partition_text_min_length`</span>|partitioned|monthly|Reasonableness|[*text_min_length*](../../../reference/sensors/column/text-column-sensors.md#text-min-length)|[*min_value*](../../../reference/rules/Comparison.md#min-value)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_text_min_length`</span>|[text](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Reasonableness|[*text_min_length*](../../../reference/sensors/column/text-column-sensors.md#text-min-length)|[*min_value*](../../../reference/rules/Comparison.md#min-value)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition text min length data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly partition text min length data quality check.
 
 ??? example "Managing monthly partition text min length check from DQOps shell"
 

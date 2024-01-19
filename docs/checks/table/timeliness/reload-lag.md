@@ -19,13 +19,13 @@ The **reload lag** data quality check has the following variants for each
 
 Daily partitioned check calculating the longest time a row waited to be load
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_reload_lag`</span>|partitioned|daily|Timeliness|[*partition_reload_lag*](../../../reference/sensors/table/timeliness-table-sensors.md#partition-reload-lag)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_reload_lag`</span>|[timeliness](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Timeliness|[*partition_reload_lag*](../../../reference/sensors/table/timeliness-table-sensors.md#partition-reload-lag)|[*max_days*](../../../reference/rules/Comparison.md#max-days)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition reload lag data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition reload lag data quality check.
 
 ??? example "Managing daily partition reload lag check from DQOps shell"
 
@@ -1748,13 +1748,13 @@ ___
 
 Monthly partitioned check calculating the longest time a row waited to be load
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_partition_reload_lag`</span>|partitioned|monthly|Timeliness|[*partition_reload_lag*](../../../reference/sensors/table/timeliness-table-sensors.md#partition-reload-lag)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_reload_lag`</span>|[timeliness](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Timeliness|[*partition_reload_lag*](../../../reference/sensors/table/timeliness-table-sensors.md#partition-reload-lag)|[*max_days*](../../../reference/rules/Comparison.md#max-days)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition reload lag data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly partition reload lag data quality check.
 
 ??? example "Managing monthly partition reload lag check from DQOps shell"
 

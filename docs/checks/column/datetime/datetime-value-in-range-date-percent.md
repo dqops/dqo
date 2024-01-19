@@ -15,13 +15,13 @@ The **datetime value in range date percent** data quality check has the followin
 
 Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_datetime_value_in_range_date_percent`</span>|profiling| |Validity|[*value_in_range_date_percent*](../../../reference/sensors/column/datetime-column-sensors.md#value-in-range-date-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_datetime_value_in_range_date_percent`</span>|[datetime](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-dates.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*value_in_range_date_percent*](../../../reference/sensors/column/datetime-column-sensors.md#value-in-range-date-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile datetime value in range date percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile datetime value in range date percent data quality check.
 
 ??? example "Managing profile datetime value in range date percent check from DQOps shell"
 
@@ -1489,13 +1489,13 @@ ___
 
 Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_datetime_value_in_range_date_percent`</span>|monitoring|daily|Validity|[*value_in_range_date_percent*](../../../reference/sensors/column/datetime-column-sensors.md#value-in-range-date-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_datetime_value_in_range_date_percent`</span>|[datetime](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-dates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*value_in_range_date_percent*](../../../reference/sensors/column/datetime-column-sensors.md#value-in-range-date-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily datetime value in range date percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily datetime value in range date percent data quality check.
 
 ??? example "Managing daily datetime value in range date percent check from DQOps shell"
 
@@ -2965,13 +2965,13 @@ ___
 
 Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_datetime_value_in_range_date_percent`</span>|monitoring|monthly|Validity|[*value_in_range_date_percent*](../../../reference/sensors/column/datetime-column-sensors.md#value-in-range-date-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_datetime_value_in_range_date_percent`</span>|[datetime](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-dates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*value_in_range_date_percent*](../../../reference/sensors/column/datetime-column-sensors.md#value-in-range-date-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly datetime value in range date percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly datetime value in range date percent data quality check.
 
 ??? example "Managing monthly datetime value in range date percent check from DQOps shell"
 
@@ -4441,13 +4441,13 @@ ___
 
 Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_datetime_value_in_range_date_percent`</span>|partitioned|daily|Validity|[*value_in_range_date_percent*](../../../reference/sensors/column/datetime-column-sensors.md#value-in-range-date-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_datetime_value_in_range_date_percent`</span>|[datetime](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-dates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*value_in_range_date_percent*](../../../reference/sensors/column/datetime-column-sensors.md#value-in-range-date-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition datetime value in range date percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition datetime value in range date percent data quality check.
 
 ??? example "Managing daily partition datetime value in range date percent check from DQOps shell"
 
@@ -5936,13 +5936,13 @@ ___
 
 Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_partition_datetime_value_in_range_date_percent`</span>|partitioned|monthly|Validity|[*value_in_range_date_percent*](../../../reference/sensors/column/datetime-column-sensors.md#value-in-range-date-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_datetime_value_in_range_date_percent`</span>|[datetime](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-dates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*value_in_range_date_percent*](../../../reference/sensors/column/datetime-column-sensors.md#value-in-range-date-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition datetime value in range date percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly partition datetime value in range date percent data quality check.
 
 ??? example "Managing monthly partition datetime value in range date percent check from DQOps shell"
 

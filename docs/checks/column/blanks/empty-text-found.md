@@ -15,13 +15,13 @@ The **empty text found** data quality check has the following variants for each
 
 Verifies that empty strings in a column does not exceed the maximum accepted count.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_empty_text_found`</span>|profiling| |Completeness|[*empty_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_empty_text_found`</span>|[blanks](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Completeness|[*empty_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile empty text found data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile empty text found data quality check.
 
 ??? example "Managing profile empty text found check from DQOps shell"
 
@@ -1248,13 +1248,13 @@ ___
 
 Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_empty_text_found`</span>|monitoring|daily|Completeness|[*empty_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_empty_text_found`</span>|[blanks](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Completeness|[*empty_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily empty text found data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily empty text found data quality check.
 
 ??? example "Managing daily empty text found check from DQOps shell"
 
@@ -2483,13 +2483,13 @@ ___
 
 Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_empty_text_found`</span>|monitoring|monthly|Completeness|[*empty_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_empty_text_found`</span>|[blanks](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Completeness|[*empty_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly empty text found data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly empty text found data quality check.
 
 ??? example "Managing monthly empty text found check from DQOps shell"
 
@@ -3718,13 +3718,13 @@ ___
 
 Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_empty_text_found`</span>|partitioned|daily|Completeness|[*empty_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_empty_text_found`</span>|[blanks](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Completeness|[*empty_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition empty text found data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition empty text found data quality check.
 
 ??? example "Managing daily partition empty text found check from DQOps shell"
 
@@ -4975,13 +4975,13 @@ ___
 
 Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_partition_empty_text_found`</span>|partitioned|monthly|Completeness|[*empty_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_empty_text_found`</span>|[blanks](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Completeness|[*empty_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition empty text found data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly partition empty text found data quality check.
 
 ??? example "Managing monthly partition empty text found check from DQOps shell"
 

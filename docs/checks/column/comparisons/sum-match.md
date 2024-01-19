@@ -16,13 +16,13 @@ The **sum match** data quality check has the following variants for each
 
 Verifies that percentage of the difference between the sum of values in a tested column in a parent table and the sum of a values in a column in the reference table. The difference must be below defined percentage thresholds.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_sum_match`</span>|profiling| |Accuracy|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_sum_match`</span>|[comparisons](../../../dqo-concepts/types-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Accuracy|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile sum match data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile sum match data quality check.
 
 ??? example "Managing profile sum match check from DQOps shell"
 
@@ -481,13 +481,13 @@ ___
 
 Verifies that percentage of the difference between the sum of values in a tested column in a parent table and the sum of a values in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_sum_match`</span>|monitoring|daily|Accuracy|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_sum_match`</span>|[comparisons](../../../dqo-concepts/types-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Accuracy|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily sum match data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily sum match data quality check.
 
 ??? example "Managing daily sum match check from DQOps shell"
 
@@ -947,13 +947,13 @@ ___
 
 Verifies that percentage of the difference between the sum of values in a tested column in a parent table and the sum of a values in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each month when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_sum_match`</span>|monitoring|monthly|Accuracy|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_sum_match`</span>|[comparisons](../../../dqo-concepts/types-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Accuracy|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly sum match data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly sum match data quality check.
 
 ??? example "Managing monthly sum match check from DQOps shell"
 
@@ -1413,13 +1413,13 @@ ___
 
 Verifies that percentage of the difference between the sum of values in a tested column in a parent table and the sum of a values in a column in the reference table. The difference must be below defined percentage thresholds. Compares each daily partition (each day of data) between the compared table and the reference table (the source of truth).
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_sum_match`</span>|partitioned|daily|Accuracy|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_sum_match`</span>|[comparisons](../../../dqo-concepts/types-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Accuracy|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition sum match data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition sum match data quality check.
 
 ??? example "Managing daily partition sum match check from DQOps shell"
 
@@ -1893,13 +1893,13 @@ ___
 
 Verifies that percentage of the difference between the sum of values in a tested column in a parent table and the sum of a values in a column in the reference table. The difference must be below defined percentage thresholds. Compares each monthly partition (each month of data) between the compared table and the reference table (the source of truth).
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_partition_sum_match`</span>|partitioned|monthly|Accuracy|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_sum_match`</span>|[comparisons](../../../dqo-concepts/types-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Accuracy|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition sum match data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly partition sum match data quality check.
 
 ??? example "Managing monthly partition sum match check from DQOps shell"
 

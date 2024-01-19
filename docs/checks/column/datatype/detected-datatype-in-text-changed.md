@@ -17,13 +17,13 @@ The **detected datatype in text changed** data quality check has the following v
 
 Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_detected_datatype_in_text_changed`</span>|profiling| |Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_detected_datatype_in_text_changed`</span>|[datatype](../../../dqo-concepts/types-of-data-quality-checks.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile detected datatype in text changed data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile detected datatype in text changed data quality check.
 
 ??? example "Managing profile detected datatype in text changed check from DQOps shell"
 
@@ -3680,13 +3680,13 @@ ___
 
 Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_detected_datatype_in_text_changed`</span>|monitoring|daily|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_detected_datatype_in_text_changed`</span>|[datatype](../../../dqo-concepts/types-of-data-quality-checks.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily detected datatype in text changed data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily detected datatype in text changed data quality check.
 
 ??? example "Managing daily detected datatype in text changed check from DQOps shell"
 
@@ -7345,13 +7345,13 @@ ___
 
 Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_detected_datatype_in_text_changed`</span>|monitoring|monthly|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_detected_datatype_in_text_changed`</span>|[datatype](../../../dqo-concepts/types-of-data-quality-checks.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly detected datatype in text changed data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly detected datatype in text changed data quality check.
 
 ??? example "Managing monthly detected datatype in text changed check from DQOps shell"
 
@@ -11010,13 +11010,13 @@ ___
 
 Detects that the data type of texts stored in a text column has changed when compared to an earlier not empty partition. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Stores a separate data quality check result for each daily partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_detected_datatype_in_text_changed`</span>|partitioned|daily|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_detected_datatype_in_text_changed`</span>|[datatype](../../../dqo-concepts/types-of-data-quality-checks.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition detected datatype in text changed data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition detected datatype in text changed data quality check.
 
 ??? example "Managing daily partition detected datatype in text changed check from DQOps shell"
 
@@ -14695,13 +14695,13 @@ ___
 
 Detects that the data type of texts stored in a text column has changed when compared to an earlier not empty partition. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Stores a separate data quality check result for each monthly partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_partition_detected_datatype_in_text_changed`</span>|partitioned|monthly|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_detected_datatype_in_text_changed`</span>|[datatype](../../../dqo-concepts/types-of-data-quality-checks.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition detected datatype in text changed data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly partition detected datatype in text changed data quality check.
 
 ??? example "Managing monthly partition detected datatype in text changed check from DQOps shell"
 

@@ -15,13 +15,13 @@ The **nulls count** data quality check has the following variants for each
 
 Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_nulls_count`</span>|profiling| |Completeness|[*null_count*](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_nulls_count`</span>|[nulls](../../../dqo-concepts/types-of-data-quality-checks.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Completeness|[*null_count*](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile nulls count data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile nulls count data quality check.
 
 ??? example "Managing profile nulls count check from DQOps shell"
 
@@ -1070,13 +1070,13 @@ ___
 
 Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_nulls_count`</span>|monitoring|daily|Completeness|[*null_count*](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_nulls_count`</span>|[nulls](../../../dqo-concepts/types-of-data-quality-checks.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Completeness|[*null_count*](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily nulls count data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily nulls count data quality check.
 
 ??? example "Managing daily nulls count check from DQOps shell"
 
@@ -2127,13 +2127,13 @@ ___
 
 Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores the most recent count check result for each month when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_nulls_count`</span>|monitoring|monthly|Completeness|[*null_count*](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_nulls_count`</span>|[nulls](../../../dqo-concepts/types-of-data-quality-checks.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Completeness|[*null_count*](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly nulls count data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly nulls count data quality check.
 
 ??? example "Managing monthly nulls count check from DQOps shell"
 
@@ -3184,13 +3184,13 @@ ___
 
 Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_nulls_count`</span>|partitioned|daily|Completeness|[*null_count*](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_nulls_count`</span>|[nulls](../../../dqo-concepts/types-of-data-quality-checks.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Completeness|[*null_count*](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition nulls count data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition nulls count data quality check.
 
 ??? example "Managing daily partition nulls count check from DQOps shell"
 
@@ -4263,13 +4263,13 @@ ___
 
 Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_partition_nulls_count`</span>|partitioned|monthly|Completeness|[*null_count*](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_nulls_count`</span>|[nulls](../../../dqo-concepts/types-of-data-quality-checks.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Completeness|[*null_count*](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition nulls count data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly partition nulls count data quality check.
 
 ??? example "Managing monthly partition nulls count check from DQOps shell"
 

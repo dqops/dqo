@@ -17,13 +17,13 @@ The **data freshness** data quality check has the following variants for each
 
 Calculates the number of days since the most recent event timestamp (freshness)
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_data_freshness`</span>|profiling| |Timeliness|[*data_freshness*](../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_data_freshness`</span>|[timeliness](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Timeliness|[*data_freshness*](../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile data freshness data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile data freshness data quality check.
 
 ??? example "Managing profile data freshness check from DQOps shell"
 
@@ -1534,13 +1534,13 @@ ___
 
 Daily  calculating the number of days since the most recent event timestamp (freshness)
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_data_freshness`</span>|monitoring|daily|Timeliness|[*data_freshness*](../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_data_freshness`</span>|[timeliness](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Timeliness|[*data_freshness*](../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily data freshness data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily data freshness data quality check.
 
 ??? example "Managing daily data freshness check from DQOps shell"
 
@@ -3053,13 +3053,13 @@ ___
 
 Monthly monitoring calculating the number of days since the most recent event timestamp (freshness)
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_data_freshness`</span>|monitoring|monthly|Timeliness|[*data_freshness*](../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_data_freshness`</span>|[timeliness](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Timeliness|[*data_freshness*](../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly data freshness data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly data freshness data quality check.
 
 ??? example "Managing monthly data freshness check from DQOps shell"
 
@@ -4572,13 +4572,13 @@ ___
 
 Daily partitioned check calculating the number of days since the most recent event timestamp (freshness)
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_data_freshness`</span>|partitioned|daily|Timeliness|[*data_freshness*](../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_data_freshness`</span>|[timeliness](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Timeliness|[*data_freshness*](../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition data freshness data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition data freshness data quality check.
 
 ??? example "Managing daily partition data freshness check from DQOps shell"
 
@@ -6111,13 +6111,13 @@ ___
 
 Monthly partitioned check calculating the number of days since the most recent event (freshness)
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_partition_data_freshness`</span>|partitioned|monthly|Timeliness|[*data_freshness*](../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_data_freshness`</span>|[timeliness](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Timeliness|[*data_freshness*](../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition data freshness data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly partition data freshness data quality check.
 
 ??? example "Managing monthly partition data freshness check from DQOps shell"
 

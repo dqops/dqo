@@ -15,13 +15,13 @@ The **distinct percent change** data quality check has the following variants fo
 
 Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_distinct_percent_change`</span>|profiling| |Consistency|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_distinct_percent_change`</span>|[uniqueness](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*change_percent*](../../../reference/rules/Change.md#change-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile distinct percent change data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile distinct percent change data quality check.
 
 ??? example "Managing profile distinct percent change check from DQOps shell"
 
@@ -1026,13 +1026,13 @@ ___
 
 Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_distinct_percent_change`</span>|monitoring|daily|Consistency|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_distinct_percent_change`</span>|[uniqueness](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*change_percent*](../../../reference/rules/Change.md#change-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily distinct percent change data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily distinct percent change data quality check.
 
 ??? example "Managing daily distinct percent change check from DQOps shell"
 
@@ -2039,13 +2039,13 @@ ___
 
 Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_distinct_percent_change`</span>|monitoring|monthly|Consistency|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_distinct_percent_change`</span>|[uniqueness](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Consistency|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*change_percent*](../../../reference/rules/Change.md#change-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly distinct percent change data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly distinct percent change data quality check.
 
 ??? example "Managing monthly distinct percent change check from DQOps shell"
 
@@ -3052,13 +3052,13 @@ ___
 
 Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_distinct_percent_change`</span>|partitioned|daily|Consistency|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_distinct_percent_change`</span>|[uniqueness](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Consistency|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*change_percent*](../../../reference/rules/Change.md#change-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition distinct percent change data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition distinct percent change data quality check.
 
 ??? example "Managing daily partition distinct percent change check from DQOps shell"
 
@@ -4087,13 +4087,13 @@ ___
 
 Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_partition_distinct_percent_change`</span>|partitioned|monthly|Consistency|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_distinct_percent_change`</span>|[uniqueness](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Consistency|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*change_percent*](../../../reference/rules/Change.md#change-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition distinct percent change data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly partition distinct percent change data quality check.
 
 ??? example "Managing monthly partition distinct percent change check from DQOps shell"
 

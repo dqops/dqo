@@ -18,13 +18,13 @@ The **data staleness** data quality check has the following variants for each
 
 Calculates the time difference in days between the current date and the most recent data ingestion timestamp (staleness)
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_data_staleness`</span>|profiling| |Timeliness|[*data_staleness*](../../../reference/sensors/table/timeliness-table-sensors.md#data-staleness)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_data_staleness`</span>|[timeliness](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Timeliness|[*data_staleness*](../../../reference/sensors/table/timeliness-table-sensors.md#data-staleness)|[*max_days*](../../../reference/rules/Comparison.md#max-days)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile data staleness data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile data staleness data quality check.
 
 ??? example "Managing profile data staleness check from DQOps shell"
 
@@ -1537,13 +1537,13 @@ ___
 
 Daily  calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_data_staleness`</span>|monitoring|daily|Timeliness|[*data_staleness*](../../../reference/sensors/table/timeliness-table-sensors.md#data-staleness)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_data_staleness`</span>|[timeliness](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Timeliness|[*data_staleness*](../../../reference/sensors/table/timeliness-table-sensors.md#data-staleness)|[*max_days*](../../../reference/rules/Comparison.md#max-days)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily data staleness data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily data staleness data quality check.
 
 ??? example "Managing daily data staleness check from DQOps shell"
 
@@ -3058,13 +3058,13 @@ ___
 
 Monthly monitoring calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_data_staleness`</span>|monitoring|monthly|Timeliness|[*data_staleness*](../../../reference/sensors/table/timeliness-table-sensors.md#data-staleness)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_data_staleness`</span>|[timeliness](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Timeliness|[*data_staleness*](../../../reference/sensors/table/timeliness-table-sensors.md#data-staleness)|[*max_days*](../../../reference/rules/Comparison.md#max-days)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly data staleness data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly data staleness data quality check.
 
 ??? example "Managing monthly data staleness check from DQOps shell"
 
@@ -4579,13 +4579,13 @@ ___
 
 Daily partitioned check calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_data_staleness`</span>|partitioned|daily|Timeliness|[*data_staleness*](../../../reference/sensors/table/timeliness-table-sensors.md#data-staleness)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_data_staleness`</span>|[timeliness](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Timeliness|[*data_staleness*](../../../reference/sensors/table/timeliness-table-sensors.md#data-staleness)|[*max_days*](../../../reference/rules/Comparison.md#max-days)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition data staleness data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition data staleness data quality check.
 
 ??? example "Managing daily partition data staleness check from DQOps shell"
 
@@ -6120,13 +6120,13 @@ ___
 
 Monthly partitioned check calculating the time difference in days between the current date and the most recent data data ingestion timestamp (staleness)
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_partition_data_staleness`</span>|partitioned|monthly|Timeliness|[*data_staleness*](../../../reference/sensors/table/timeliness-table-sensors.md#data-staleness)|[*max_days*](../../../reference/rules/Comparison.md#max-days)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_data_staleness`</span>|[timeliness](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Timeliness|[*data_staleness*](../../../reference/sensors/table/timeliness-table-sensors.md#data-staleness)|[*max_days*](../../../reference/rules/Comparison.md#max-days)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition data staleness data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly partition data staleness data quality check.
 
 ??? example "Managing monthly partition data staleness check from DQOps shell"
 
