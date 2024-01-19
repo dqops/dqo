@@ -430,6 +430,12 @@ export const databaseOptions: IDatabaseOption[] = [
     displayName: 'Presto'
   },
   {
+    type: ConnectionModelProviderTypeEnum.mysql,
+    name: 'Single Store',
+    iconName: 'singlestore',
+    displayName: 'Single Store'
+  },
+  {
     type: ConnectionModelProviderTypeEnum.spark,
     name: 'Spark',
     iconName: 'spark',
