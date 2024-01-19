@@ -41,6 +41,7 @@ You can use DQOps with the most popular databases. [Learn here how to connect a 
 &nbsp; &nbsp; &nbsp; ![Spark](https://dqops.com/docs/images/connections/spark.png)
 &nbsp; &nbsp; &nbsp; ![Microsoft SQL Server](https://dqops.com/docs/images/connections/microsoft-sql-server.png)
 &nbsp; &nbsp; &nbsp; ![Trino](https://dqops.com/docs/images/connections/trino1.png)
+&nbsp; &nbsp; &nbsp; ![Single Store](https://dqops.com/docs/images/connections/single-store.png)
 
 
 ## DQOps user interface
