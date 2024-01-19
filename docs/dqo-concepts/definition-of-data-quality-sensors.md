@@ -124,6 +124,19 @@ The sensor's query results are called **sensor readouts** in DQOps. The results 
 in a [sensor_readouts](../reference/parquetfiles/sensor_readouts.md) parquet table as described in
 the [data quality results storage](data-storage-of-data-quality-results.md) concept.
 
+## Configure sensors in DQOps
+
+You can easily configure sensors in DQOps using the **Configuration** section of the user interface.
+
+Below is an example of screens with the definition for the [text_length_in_range_percent](../reference/sensors/column/text-column-sensors.md) sensor
+and the Jinja template for the PostgreSQL database which can be modified.
+
+
+![Sensor definition configuration](https://dqops.com/docs/images/concepts/sensor-definition-configuration.png)
+
+
+![PostgreSQL template](https://dqops.com/docs/images/concepts/sensor-postgresql-jinja-template.png)
+
 
 ## What's next
 - Learn how DQOps [executes data quality sensors and rules](architecture/data-quality-check-execution-flow.md).

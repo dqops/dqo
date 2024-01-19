@@ -326,6 +326,15 @@ unnecessary pressure on the data source caused by data quality monitoring.
 Please read the [monitoring data quality incrementally](../incremental-data-quality-monitoring.md) guide for details
 and additional use cases.
 
+## Change configuration of data quality checks
+
+You can easily change the rules and sensor associated wit the checks in DQOps using the **Configuration** section of the user interface.
+
+Below is an example of the **Configuration** screen for the `daily_row-count` check.
+
+
+![Check definition configuration](https://dqops.com/docs/images/concepts/check-definition-configuration.png)
+
 
 ## What's next
 

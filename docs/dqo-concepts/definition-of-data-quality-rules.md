@@ -146,6 +146,18 @@ available at the link.
     - [multiply moving stddev within 30 days](../reference/rules/Stdev.md#multiply-moving-stdev-within-30-days)
     - [multiply moving stddev within 60 days](../reference/rules/Stdev.md#multiply-moving-stdev-within-60-days)
 
+## Configure rules in DQOps
+
+You can easily configure rules in DQOps using the **Configuration** section of the user interface.
+
+Below is an example of screen with the rule definition and the Python code for the [percent moving average](../reference/rules/Averages.md#percent-moving-average) rule 
+
+
+![Rule definition configuration](https://dqops.com/docs/images/concepts/rule-definition-configuration.png)
+
+
+![Rule Python code configuration](https://dqops.com/docs/images/concepts/rule-python-code-configuration.png)
+
 
 ## What's next
 - Learn how DQOps [executes data quality sensors and rules](architecture/data-quality-check-execution-flow.md).
