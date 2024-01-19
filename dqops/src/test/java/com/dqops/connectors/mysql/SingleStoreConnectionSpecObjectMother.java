@@ -48,7 +48,7 @@ public class SingleStoreConnectionSpecObjectMother {
 
             SingleStoreParametersSpec singleStoreParametersSpec = new SingleStoreParametersSpec(){{
                 setHostDescriptions(List.of(secretValueProvider.expandValue("${SINGLE_STORE_HOST_DESCRIPTIONS}", secretValueLookupContext)));
-                setSingleStoreLoadBalancingMode(SingleStoreLoadBalancingMode.none);
+                setLoadBalancingMode(SingleStoreLoadBalancingMode.none);
             }};
 
 			setMysql(new MysqlParametersSpec()

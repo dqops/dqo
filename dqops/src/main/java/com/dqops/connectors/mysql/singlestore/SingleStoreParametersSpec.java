@@ -29,7 +29,7 @@ public class SingleStoreParametersSpec extends BaseProviderParametersSpec {
 
     @CommandLine.Option(names = {"--single-store-load-balancing-mode"}, description = "Failover and Load-Balancing Mode for Single Store. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     @JsonPropertyDescription("Failover and Load-Balancing Modes for Single Store. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    private SingleStoreLoadBalancingMode singleStoreLoadBalancingMode;
+    private SingleStoreLoadBalancingMode loadBalancingMode;
 
     @CommandLine.Option(names = {"--single-store-host-descriptions"}, description = "Host descriptions")
     @JsonPropertyDescription("Host descriptions. Supports also a ${SINGLE_STORE_HOST_DESCRIPTIONS} configuration with a custom environment variable.")
@@ -39,17 +39,17 @@ public class SingleStoreParametersSpec extends BaseProviderParametersSpec {
      * Returns the failover and load-balancing Mode.
      * @return Single Store's failover and load-balancing Mode.
      */
-    public SingleStoreLoadBalancingMode getSingleStoreLoadBalancingMode() {
-        return singleStoreLoadBalancingMode;
+    public SingleStoreLoadBalancingMode getLoadBalancingMode() {
+        return loadBalancingMode;
     }
 
     /**
      * Sets the failover and load-balancing Mode.
-     * @param singleStoreLoadBalancingMode Single Store's failover and load-balancing Mode.
+     * @param loadBalancingMode Single Store's failover and load-balancing Mode.
      */
-    public void setSingleStoreLoadBalancingMode(SingleStoreLoadBalancingMode singleStoreLoadBalancingMode) {
-        setDirtyIf(!Objects.equals(this.singleStoreLoadBalancingMode, singleStoreLoadBalancingMode));
-        this.singleStoreLoadBalancingMode = singleStoreLoadBalancingMode;
+    public void setLoadBalancingMode(SingleStoreLoadBalancingMode loadBalancingMode) {
+        setDirtyIf(!Objects.equals(this.loadBalancingMode, loadBalancingMode));
+        this.loadBalancingMode = loadBalancingMode;
     }
 
     /**
@@ -96,7 +96,7 @@ public class SingleStoreParametersSpec extends BaseProviderParametersSpec {
      */
     public SingleStoreParametersSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
         SingleStoreParametersSpec cloned = this.deepClone();
-        cloned.singleStoreLoadBalancingMode = SingleStoreLoadBalancingMode.valueOf(secretValueProvider.expandValue(cloned.singleStoreLoadBalancingMode.toString(), lookupContext));
+        cloned.loadBalancingMode = SingleStoreLoadBalancingMode.valueOf(secretValueProvider.expandValue(cloned.loadBalancingMode.toString(), lookupContext));
         cloned.hostDescriptions = secretValueProvider.expandList(cloned.hostDescriptions, lookupContext);
 
         return cloned;
