@@ -16,14 +16,14 @@ import { reduceCounter } from '../../../redux/actions/job.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { JobApiClient } from '../../../services/apiClient';
 import clsx from 'clsx';
-import { IJob } from '../../../shared/constants';
+import { TJobDictionary } from '../../../shared/constants';
 
 const JobItem = ({
   job,
   notifnumber,
   canUserCancelJobs
 }: {
-  job: IJob;
+  job: TJobDictionary;
   notifnumber?: number;
   canUserCancelJobs?: boolean
 }) => {
@@ -105,7 +105,7 @@ const JobItem = ({
             {job.status === DqoJobHistoryEntryModelStatusEnum.running ? (
               <div className={clsx(canUserCancelJobs === false ? "pointer-events-none cursor-not-allowed" : "")}
                 onClick={() =>
-                  cancelJob(job.jobId.jobId ? Number(job.jobId?.jobId) : 0)
+                  cancelJob(job?.jobId?.jobId ? Number(job.jobId?.jobId) : 0)
                 }
               >
                 <SvgIcon name="canceljobs" />

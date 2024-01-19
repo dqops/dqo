@@ -26,6 +26,7 @@ import {
   ImportTablesQueueJobParameters
 } from '../../api';
 import moment from 'moment';
+import { TJobDictionary, TJobList } from '../../shared/constants';
 
 export interface IJobsState {
   jobs?: DqoJobQueueInitialSnapshotModel;
@@ -51,8 +52,7 @@ export interface IJobsState {
   isCronScheduled: boolean;
   isLicenseFree: boolean;
   userProfile: DqoUserProfileModel;
-  // multiCheckFilters?: IFilterTemplate,
-  // multiCheckSearchedChecks?: CheckTemplate[]
+  jobList : TJobDictionary[];
 }
 
 const initialState: IJobsState = {
@@ -75,14 +75,7 @@ const initialState: IJobsState = {
   isCronScheduled: true,
   isLicenseFree: false,
   userProfile: {},
-  // multiCheckFilters: {
-  //   connection : '',
-  //   schema : '',
-  //   activeTab: 'daily',
-  //   checkTarget: 'table',
-  //   checkTypes: CheckTypes.PROFILING
-  // },
-  // multiCheckSearchedChecks: [] 
+  jobList : []
 };
 
 const schemaReducer = (state = initialState, action: any) => {
@@ -93,14 +86,45 @@ const schemaReducer = (state = initialState, action: any) => {
         loading: true
       };
     case JOB_ACTION.GET_JOBS_SUCCESS: {
-      const job_dictionary_state: Record<string, DqoJobHistoryEntryModel> = {};
+      const job_dictionary_state: Record<string, TJobDictionary> = {};
+      const jobList : TJobList = {};
+      
       action.data.jobs.forEach((item: DqoJobHistoryEntryModel) => {
-        job_dictionary_state[item.jobId?.jobId || ''] = item;
+        if (item.jobId?.parentJobId?.jobId === undefined) {
+          job_dictionary_state[item.jobId?.jobId || ''] = 
+          {...item, childs: []}
+        } 
       });
+
+      action.data.jobs.forEach((item : DqoJobHistoryEntryModel) => {
+        if (item.jobId?.parentJobId?.jobId !== undefined) {
+          const jobIdKey = String(item.jobId.parentJobId.jobId);
+      
+          if (!job_dictionary_state[jobIdKey]) {
+            job_dictionary_state[jobIdKey] = { childs: [] };
+          }
+      
+          const currentState = { ...job_dictionary_state[jobIdKey] };
+
+          job_dictionary_state[jobIdKey] = {
+            ...currentState,
+            childs: [...currentState.childs, item],
+          };
+
+          if (!jobList[jobIdKey]) {
+            jobList[jobIdKey] = [];
+          }
+
+          jobList[jobIdKey].push(String(item.jobId.jobId) ?? '');
+        }
+      });
+      console.log(job_dictionary_state, jobList)
+
       return {
         ...state,
         loading: false,
         job_dictionary_state,
+        jobList: action.data.jobs,
         lastSequenceNumber: action.data.lastSequenceNumber,
         error: null
       };
@@ -145,7 +169,6 @@ const schemaReducer = (state = initialState, action: any) => {
               }
             }
           }
-          let shouldBreak = false;
           for (const key in obj) {
             if (
               (nowDate.diff(obj[key].statusChangedAt, 'minutes') > 30 &&
@@ -155,9 +178,6 @@ const schemaReducer = (state = initialState, action: any) => {
             ) {
               delete filteredObject[key];
             } else {
-              shouldBreak = true;
-            }
-            if (shouldBreak) {
               break;
             }
           }

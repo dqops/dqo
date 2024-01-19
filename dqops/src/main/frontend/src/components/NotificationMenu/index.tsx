@@ -10,14 +10,13 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { setCronScheduler, toggleMenu } from '../../redux/actions/job.actions';
-
 import { IError, useError} from '../../contexts/errrorContext';
 import JobItem from './JobItem';
 import ErrorItem from './ErrorItem';
-import moment from 'moment';
 import { JobApiClient } from '../../services/apiClient';
 import Switch from '../Switch';
 import clsx from 'clsx';
+import { DqoJobChangeModel, DqoJobHistoryEntryModel, DqoJobQueueInitialSnapshotModel } from '../../api';
 
 const NotificationMenu = () => {
   const { job_dictionary_state, isOpen, isCronScheduled, userProfile } = useSelector(
@@ -35,31 +34,21 @@ const NotificationMenu = () => {
     dispatch(setCronScheduler(bool));
   };
 
-  const getNotificationDate = (notification: any) => {
-    if (notification.type === 'job') {
-      return notification.item.jobId?.createdAt;
-    }
-    return notification.item.date;
-  };
-  
-
   useEffect(() => {
-    getData();
-  }, []);
+    const getIsCronSchedulerRunning = async () => {
+      const res = await JobApiClient.isCronSchedulerRunning();
+      scheduleCron(res.data);
+    };
+      getIsCronSchedulerRunning();
+    }, []);
+
   const [jobsData, errorsData, jobs] = useMemo(() => {
     const jobsData = Object.values(job_dictionary_state)
-      // .sort((a, b) => (b.jobId?.jobId || 0) - (a.jobId?.jobId || 0))
+      .reverse()
       .map((item) => ({ type: 'job', item }));
   
     const errorData = errors.map((item : any) => ({ type: 'error', item }));
-  
-    // jobsData.sort((a, b) => {
-    //   const date1 = getNotificationDate(a);
-    //   const date2 = getNotificationDate(b);
-  
-    //   return moment(date1).isBefore(moment(date2)) ? 1 : -1;
-    // });
-  
+
     const newJobArray = jobsData
       .filter((z) => z.item.jobId?.parentJobId?.jobId === undefined)
       .map((x) => ({
@@ -78,6 +67,7 @@ const NotificationMenu = () => {
           )
           .map((y) => y.item)
       }));
+
     const errorsData : IError[] = errorData.map((x: any) => ({
       message: x.item.message,
       name: x.item.name,
@@ -120,13 +110,6 @@ const NotificationMenu = () => {
     });
     return [jobsData, errorsData, updatedChildArray] as const;
   }, [isOpen]);
-  
-
-  const getData = async () => {
-    const res = await JobApiClient.isCronSchedulerRunning();
-
-    scheduleCron(res.data);
-  };
 
   const startCroner = async () => {
     await JobApiClient.startCronScheduler();

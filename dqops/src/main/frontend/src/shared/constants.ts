@@ -38,19 +38,11 @@ export interface IFilterTemplate {
   activeOffCheck?: boolean;
   selectedCheck?: CheckTemplate
 }
-export interface IJob {
-  errorMessage?: string | undefined;
-  jobId: {
-    parentJobId: any;
-    jobId: number | undefined;
-    createdAt: number | undefined;
-  };
-  jobType: string;
-  parameters: DqoJobEntryParametersModel | undefined;
-  status: DqoJobChangeModelStatusEnum | undefined;
-  statusChangedAt?: number | undefined;
+export type TJobDictionary =  DqoJobHistoryEntryModel & {
   childs: DqoJobHistoryEntryModel[];
 }
+
+export type TJobList = Record<string, string[]>;
 
 enum CheckTypes {
   MONITORING = 'monitoring',
