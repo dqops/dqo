@@ -4,7 +4,7 @@
 
 # partitioned
 
-The reference of YAML objects for the partitioned type of data quality checks.
+The reference of YAML objects for the partitioned type of data quality check.
 
 
 

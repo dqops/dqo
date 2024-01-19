@@ -1,15 +1,15 @@
 # Definition of a data quality rule
 Read this guide to understand what is a data quality rule in DQOps, and how it evaluates the data quality measures to detect data quality issues.
 
-## What are rules in DQOps?
+## What are the rules in DQOps?
 
 In DQOps, the data quality rule and the [data quality sensor](definition-of-data-quality-sensors.md) form the [data quality check](definition-of-data-quality-checks/index.md).
 
-Rule is a set of conditions against which sensor readouts are verified, described by a list of thresholds.
-A basic rule can simply score the most recent data quality result if the value is above or below particular value or
+The rule is a set of conditions against which sensor readouts are verified, described by a list of thresholds.
+A basic rule can simply score the most recent data quality result if the value is above or below a particular value or
 within the expected range. 
 
-Rules evaluate sensors results and assigns them severity levels. There are 3 severity levels in DQOps: warning, error and
+Rules evaluate sensors' results and assign them severity levels. There are 3 severity levels in DQOps: warning, error and
 fatal
 
 
@@ -18,7 +18,7 @@ fatal
 A standard data quality check on a table that counts the number of rows uses a simple "min_count" rule. For example when
 the error severity level is set to 10 and the table has fewer than 10 rows the data quality error will be raised. 
 
-Below is an example of Phyton script that defines classes and methods for min_count threshold rule.
+Below is an example of a Phyton script that defines classes and methods for min_count threshold rule.
 
 ``` py title="min_count.py"
 # rule specific parameters object, contains values received from the quality check threshold configuration
@@ -75,7 +75,7 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 Rules are divided into the following categories. A full description of each category and subcategory of rules is 
 available at the link.
 
-- moving averages:
+- [averages](../reference/rules/Averages.md):
     - [between percent moving average 7 days](../reference/rules/Averages.md#between-percent-moving-average-7-days)
     - [between percent moving average 30 days](../reference/rules/Averages.md#between-percent-moving-average-30-days)
     - [between percent moving average 60 days](../reference/rules/Averages.md#between-percent-moving-average-60-days)
@@ -83,7 +83,7 @@ available at the link.
     - [within percent moving average 7 days](../reference/rules/Averages.md#within-percent-moving-average-7-days)
     - [within percent moving average 30 days](../reference/rules/Averages.md#within-percent-moving-average-30-days)
     - [within percent moving average 60 days](../reference/rules/Averages.md#within-percent-moving-average-60-days)
-- change since last readout or a reference date:
+- [change since the last readout or a reference date](../reference/rules/Change.md):
     - [between change](../reference/rules/Change.md#between-change)
     - [between change 1 day](../reference/rules/Change.md#between-change-1-day)
     - [between change 7 days](../reference/rules/Change.md#between-change-7-days)
@@ -100,10 +100,16 @@ available at the link.
     - [change percent 1 day](../reference/rules/Change.md#change-percent-1-day)
     - [change percent 7 days](../reference/rules/Change.md#change-percent-7-days)
     - [change percent 30 days](../reference/rules/Change.md#change-percent-30-days)
-- compare the actual value (sensor readout) to an expected value:
+- [compare the actual value (sensor readout) to an expected value](../reference/rules/Comparison.md):
     - [between floats](../reference/rules/Comparison.md#between-floats)
     - [between ints](../reference/rules/Comparison.md#between-ints)
+    - [count between](../reference/rules/Comparison.md#count-between)
+    - [detected datatype equals](../reference/rules/Comparison.md#detected-datatype-equals)
+    - [diff percent](../reference/rules/Comparison.md#diff-percent)
     - [equals](../reference/rules/Comparison.md#equals)
+    - [equals 0](../reference/rules/Comparison.md#equals-0)
+    - [equals 1](../reference/rules/Comparison.md#equals-1)
+    - [equals integer](../reference/rules/Comparison.md#equals-integer)
     - [max](../reference/rules/Comparison.md#max)
     - [max count](../reference/rules/Comparison.md#max-count)
     - [max days](../reference/rules/Comparison.md#max-days)
@@ -114,7 +120,8 @@ available at the link.
     - [min count](../reference/rules/Comparison.md#min-count)
     - [min percent](../reference/rules/Comparison.md#min-percent)
     - [min value](../reference/rules/Comparison.md#min-value)
-- standard deviations using percentile:
+    - [value changed](../reference/rules/Comparison.md#value-changed)
+- [percentile](../reference/rules/Percentile.md):
     - [anomaly differencing percentile moving average](../reference/rules/Percentile.md#anomaly-differencing-percentile-moving-average)
     - [anomaly differencing percentile moving average 30 days](../reference/rules/Percentile.md#anomaly-differencing-percentile-moving-average-30-days)
     - [anomaly stationary percentile moving average](../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)
@@ -125,20 +132,19 @@ available at the link.
     - [percentile moving 7 days](../reference/rules/Percentile.md#percentile-moving-7-days)
     - [percentile moving 30 days](../reference/rules/Percentile.md#percentile-moving-30-days)
     - [percentile moving 60 days](../reference/rules/Percentile.md#percentile-moving-60-days)
-- standard deviation - stationary time series:
-    - [multiply moving stddev population 7 days](../reference/rules/Stdev.md#multiply-moving-stdev-7-days)
-    - [multiply moving stddev population 30 days](../reference/rules/Stdev.md#multiply-moving-stdev-30-days)
-    - [multiply moving stddev population 60 days](../reference/rules/Stdev.md#multiply-moving-stdev-60-days)
+- [standard deviation](../reference/rules/Stdev.md):
+    - [change multiply moving stddev population 7 days](../reference/rules/Stdev.md#change-multiply-moving-stdev-7-days)
+    - [change multiply moving stddev population 30 days](../reference/rules/Stdev.md#change-multiply-moving-stdev-30-days)
+    - [change multiply moving stddev population 60 days](../reference/rules/Stdev.md#change-multiply-moving-stdev-60-days)
+    - [change multiply moving stddev within 7 days](../reference/rules/Stdev.md#change-multiply-moving-stdev-within-7-days)
+    - [change multiply moving stddev within 30 days](../reference/rules/Stdev.md#change-multiply-moving-stdev-within-30-days)
+    - [change multiply moving stddev within 60 days](../reference/rules/Stdev.md#change-multiply-moving-stdev-within-60-days)
+    - [multiply moving stddev 7 days](../reference/rules/Stdev.md#multiply-moving-stdev-7-days)
+    - [multiply moving stddev 30 days](../reference/rules/Stdev.md#multiply-moving-stdev-30-days)
+    - [multiply moving stddev 60 days](../reference/rules/Stdev.md#multiply-moving-stdev-60-days)
     - [multiply moving stddev within 7 days](../reference/rules/Stdev.md#multiply-moving-stdev-within-7-days)
     - [multiply moving stddev within 30 days](../reference/rules/Stdev.md#multiply-moving-stdev-within-30-days)
     - [multiply moving stddev within 60 days](../reference/rules/Stdev.md#multiply-moving-stdev-within-60-days)
-- standard deviation - differencing time series:
-  - [change multiply moving stddev population 7 days](../reference/rules/Stdev.md#change-multiply-moving-stdev-7-days)
-  - [change multiply moving stddev population 30 days](../reference/rules/Stdev.md#change-multiply-moving-stdev-30-days)
-  - [change multiply moving stddev population 60 days](../reference/rules/Stdev.md#change-multiply-moving-stdev-60-days)
-  - [change multiply moving stddev within 7 days](../reference/rules/Stdev.md#change-multiply-moving-stdev-within-7-days)
-  - [change multiply moving stddev within 30 days](../reference/rules/Stdev.md#change-multiply-moving-stdev-within-30-days)
-  - [change multiply moving stddev within 60 days](../reference/rules/Stdev.md#change-multiply-moving-stdev-within-60-days)
 
 
 ## What's next

@@ -2,12 +2,12 @@
 Read this guide to understand how DQOps stores the connection parameters to monitored data sources, and how to manage credentials.
 
 ## Overview
-DQOps stores the configuration of data sources in YAML files. The files support auto-completion in Visual Studio Code, and can be versioned in Git.    
+DQOps stores the configuration of data sources in YAML files. The files support auto-completion in Visual Studio Code and can be versioned in Git.    
 
 !!! note "[`DQOps user home` folder](dqops-user-home-folder.md)"
 
     For the purpose of this guide, we will assume that DQOps was started in the current folder using the `python -m dqops` command.
-    All files mentioned in this guide will be relative to the current folder, referred as a [`$DQO_USER_HOME`](dqops-user-home-folder.md) in the examples below.
+    All files mentioned in this guide will be relative to the current folder, referred to as a [`$DQO_USER_HOME`](dqops-user-home-folder.md) in the examples below.
 
 
 ## DQOps YAML files structure
@@ -38,7 +38,7 @@ spec: # (3)!
     that describes the data source, and its connection parameters.
 
 The first line of DQOps configuration files has an optional link to a YAML schema file. The YAML schema files
-are used by text editors such as [Visual Studio Code for the code completion and schema validation](../integrations/visual-studio-code/index.md).
+are used by text editors such as [Visual Studio Code for code completion and schema validation](../integrations/visual-studio-code/index.md).
 
 The `kind` node identifies the type of DQOps file, and the `spec` node contains the specification, which is the real configuration.
 For detailed file reference, consult the reference of the *DQOps YAML files schema* in the [DQOps reference](../reference/index.md) section.
@@ -54,7 +54,7 @@ are listed below.
 
 
 ## Data sources
-The data sources can be registered in DQOps using the user interface, 
+The data sources can be registered in DQOps using the user interface
 or creating DQOps YAML *[.dqoconnection.yaml](../reference/yaml/ConnectionYaml.md#connectionyaml)* files directly in the data source folder.
 
 ### **Data sources folder**
@@ -78,7 +78,7 @@ $DQO_USER_HOME
 1.  The **sources** folder stores data sources as nested folders.
 2.  Each folder inside the **sources** folder is a connection name to a data source.
 3.  Each data source's folder contains a file [connection.dqoconnection.yaml](../reference/yaml/ConnectionYaml.md)
-    that specifies the connection parameters to the data source.
+    which specifies the connection parameters to the data source.
 
 The name of each child folder inside the **sources** folder is a connection name to a data source.
 Each data source's folder contains one file named [connection.dqoconnection.yaml](../reference/yaml/ConnectionYaml.md),
@@ -111,7 +111,7 @@ spec:
 Each [connection.dqoconnection.yaml](../reference/yaml/ConnectionYaml.md) must have two nodes filled:
 
 - `provider_type` enumeration stores the type of the data source.
-- *data_source_type* node (`postgresql` in this example) stores type-safe configuration for that data source, supporting
+- *data_source_type* node (`postgresql` in this example) stores the type-safe configuration for that data source, supporting
   code completion in [Visual Studio Code](../integrations/visual-studio-code/index.md).
 
 The full documentation of the `spec` element is provided in the
@@ -129,7 +129,7 @@ DQOps supports providing credentials from a separate location to avoid storing t
 in the source repository.
 
 ### **Referencing environment variables**
-Credentials provided to a DQOps instance using environment variables.
+Credentials are provided to a DQOps instance using environment variables.
 Environment variables are referenced using as `${ENVIRONMENT_VARIABLE_NAME}` values. 
 
 ``` { .yaml .annotate linenums="1" hl_lines="9-10" }
@@ -227,7 +227,7 @@ spec:
 
 
 ### **Data quality check scheduling**
-The DQOps CRON schedules for running each [type of data quality checks](definition-of-data-quality-checks/index.md#types-of-checks)
+The DQOps CRON schedules for running each [type of data quality check](definition-of-data-quality-checks/index.md#types-of-checks)
 is configured in the `schedules` section.
 
 ``` { .yaml .annotate linenums="1" hl_lines="8 10 12 14 16" }
@@ -331,7 +331,7 @@ spec:
 2.  The webhook url where DQOps POSTs [notifications](../reference/yaml/IncidentNotificationMessage.md) of new data quality incidents that were just detected.
 3.  The webhook url where DQOps POSTs [notifications](../reference/yaml/IncidentNotificationMessage.md) of data quality incidents that were reviewed and assigned for resolution.
 4.  The webhook url where DQOps POSTs [notifications](../reference/yaml/IncidentNotificationMessage.md) of data quality incidents that were resolved and the data quality checks can be run again to validate the fix.
-5.  The webhook url where DQOps POSTs [notifications](../reference/yaml/IncidentNotificationMessage.md) of data quality incidents that were muted, because the incident was identified as a low priority or out-of-scope.
+5.  The webhook url where DQOps POSTs [notifications](../reference/yaml/IncidentNotificationMessage.md) of data quality incidents that were muted because the incident was identified as a low priority or out-of-scope.
 
 
 The full documentation of the `incident_grouping.webhooks` element is provided in the

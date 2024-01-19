@@ -21,17 +21,17 @@ The data quality check is evaluated on a monitored table (or column) in three ph
   filled in a templated SQL query (called a data quality sensor) 
 
 
-- The generated SQL query is execute SQL query on the data source, capturing the data quality measure.
-  All data quality sensors in DQOps are expected to return a result column named *actual_value* as a
-  data measure that will be evaluated with data quality rules.
+- The generated SQL query is executed on the data source, capturing the data quality measure.
+  At is expected that all data quality sensors in DQOps will return a result column named *actual_value* as a data measure,
+  which will be evaluated with data quality rules.
 
 
 - The data quality metric (called *sensor readout* in DQOps) is passed to a [data quality rule](../definition-of-data-quality-rules.md) that is
-  a Python function that will decide if the measure (sensor readout) should be accepted, or the data quality
-  check should fail and generate a data quality issue at one of three severity levels: warning, error, fatal.
+  a Python function. The function determines if the measure (sensor readout) should be accepted or if the data quality
+  check should fail and generate a data quality issue at one of three severity levels: warning, error, or fatal.
   
-  The data quality measure (sensor readout) is passed up to tree data quality rules, because data quality rules
-  for warning, error and fatal severity levels use different parameters (thresholds).  
+  The data quality measure (sensor readout) is passed up to tree data quality rules because data quality rules
+  for warning, error, and fatal severity levels use different parameters (thresholds).  
 
 
 ## Configuring data quality checks
@@ -40,7 +40,7 @@ Data quality check definitions can be stored in the source code repository, and 
 pipeline or machine learning code. The folder structure where DQOps stores those YAML files is called `DQOps user home`
 and is documented in the [configuring checks](../configuring-data-quality-checks-and-rules.md) article.
 
-Below is an example of the YAML file showing sample configuration of a profiling column data quality check
+Below is an example of the YAML file showing a sample configuration of a profiling column data quality check
 [profile_nulls_percent](../../checks/column/nulls/nulls-percent.md#profile-nulls-percent).
 
 ``` { .yaml .annotate linenums="1" hl_lines="10-16" }
@@ -64,12 +64,12 @@ spec:
       - This is the column that is analyzed for data quality issues
 ```
 
-1.  The node that contains configuration of checks. In this example, those are [profiling checks](data-profiling-checks.md)
+1.  The node that contains configuration of checks. In this example, these are [profiling checks](data-profiling-checks.md)
     defined at a column level.
 
-2.  The name of the check category. Check categories are grouping similar checks.
+2.  The name of the check category. Check categories group similar checks.
 
-3.  The check name that is configured.
+3.  The name of the configured check.
 
 4.  The **[warning](#warning)** severity rule configuration.
 
@@ -79,7 +79,7 @@ spec:
 
 The `spec` section contains the details of the table, including the target schema and table name. 
 
-The `columns` section lists the columns in the table which has configured checks. In this example the column named 
+The `columns` section lists the columns in the table that has configured checks. In this example, the column named 
 `target_column` has a configured check `profile_nulls_percent`. This means that the sensor reads the percentage of null
 values in `target_column`. If the percentage exceeds a certain threshold, an error, warning, or fatal message will
 be raised.
@@ -88,19 +88,19 @@ The structure of the table configuration file is described in the [configuring c
 
 
 ## Issue severity levels
-Each data quality check supports configuring the alerting thresholds at three levels: *warning*, *error* and *fatal*.
+Each data quality check supports configuring the alerting thresholds at three levels: *warning*, *error*, and *fatal*.
 DQOps will pass the [sensor](../definition-of-data-quality-sensors.md) (the captured data quality metric, such as a percentage of null values)
 to all three [data quality rules](../definition-of-data-quality-rules.md), using different thresholds.
 If rules at multiple severity levels identify a data quality issue (the rule fails), DQOps picks the severity level
-of the most severe rule that failed in the order: *fatal*, *error*, *warning*.
+of the most severe rule that failed in the following order: *fatal*, *error*, and *warning*.
 
 The rule severity levels are described below.
 
 ### **Warning**
-A warning level alerting threshold raises warnings for less important data quality issues,
+The warning level alerting threshold raises warnings for less important data quality issues,
 usually anomalies or expected random or seasonal data quality issues. Warnings are
-not treated as data quality issues. Data quality checks that did not pass the warning alerting rule, but did pass the
-error and fatal alerting rules are still counted as passed data quality checks and do not reduce the
+not treated as data quality issues. Data quality checks that have not passed the warning alerting rule, but have passed the
+error and fatal alerting rules, are still counted as passed data quality checks and do not reduce the
 [data quality KPIs](../definition-of-data-quality-kpis.md) score. Warnings should be used to identify potential data
 quality issues that should be monitored, but the data producer should not take accountability for them.
 
@@ -117,7 +117,7 @@ For example, a percentage of data quality check monitoring null value may raise 
 
 ### **Fatal**
 The fatal severity level is the highest alerting threshold that should only be used to identify severe data quality issues.
-These issues should result in stopping the data pipelines before the issue spreads throughout the system. Fatal data
+These issues should result in stopping data pipelines before the issue spreads throughout the system. Fatal data
 quality issues are treated as failed data quality checks and reduce the [data quality KPIs](../definition-of-data-quality-kpis.md)
 score. The fatal threshold should be used with caution. It is mainly useful when the data pipeline can trigger the data
 quality check assessment and wait for the result. If any data quality check raises a fatal data quality issue, the data
@@ -141,14 +141,14 @@ The purpose of reporting data quality issues at different severity levels is sum
 In DQOps, data quality checks are divided into 3 types.
 
 ### **Profiling checks**
-[**Profiling checks**](data-profiling-checks.md) are designed for assessing the initial data quality score
+[**Profiling checks**](data-profiling-checks.md) are designed to assess the initial data quality score
 of a data source. Profiling checks are also useful for
 exploring and experimenting with various types of checks and determining the most suitable ones for regular data quality monitoring.
 
 
 ### **Monitoring checks**
 [**Monitoring checks**](data-observability-monitoring-checks.md) are standard checks that monitor the data quality of a
-table or column. They can also be referred as **Data Observability** checks.
+table or column. They can also be referred to as **Data Observability** checks.
 These checks capture a single data quality result for the entire table or column. There are two categories
 of monitoring checks: *daily* checks and *monthly* checks.
 
@@ -177,7 +177,7 @@ to measure the trustworthiness of the data source by calculating a [data quality
 
 
 ### **Time periods in SQL queries**
-The following example shows the SQL query for [PostgreSQL](../../data-sources/postgresql.md), that is generated by DQOps for
+The following example shows the SQL query for [PostgreSQL](../../data-sources/postgresql.md), which is generated by DQOps for
 the [daily_nulls_percent](../../checks/column/nulls/nulls-percent.md#daily-nulls-percent) data quality check that measures the percentage of rows with null values in a monitored column.
 This is an example of a daily [monitoring check](data-observability-monitoring-checks.md).
 
@@ -216,34 +216,34 @@ require that the result is returned as an `actual_value` result column.
 The remaining two columns that are returned by the query are:
 
  -  `time_period` returns the time period for which this data quality check result is valid. DQOps prefers to query the data source
-    for the time period, instead of relaying on the DQOps server's local time zone,
+    for the time period, instead of relying on the DQOps server's local time zone,
     in order to capture the time in the monitored database's local time zone. It is important for monitoring the quality of data sources
     across different time zones.
     Because this SQL query was generated for a daily [monitoring check](data-observability-monitoring-checks.md), the
     local system time is truncated to the beginning of the day by applying a *CAST as date* expression. 
 
 
- -  `time_period_utc` is the same value that is returned by the `time_period` query, but converted to a timestamp data type,
+ -  `time_period_utc` is the same value that is returned by the `time_period` query but converted to a timestamp data type,
     which stores an absolute time, including the time zone of the server.
 
 The time period captured from the monitored data source is truncated to the beginning of the time period for which the data quality
 result is valid. In the example above, the [daily_nulls_percent](../../checks/column/nulls/nulls-percent.md#daily-nulls-percent)
-that captures the end-of-day data quality status of the percentage of null values, will capture the result for the day when it was executed.
+that captures the end-of-day data quality status of the percentage of null values will capture the result for the day when it was executed.
 
 
 ### **Daily data quality status snapshots**
-Daily [monitoring checks](data-observability-monitoring-checks.md) are measuring the end-of-day data quality status.
+Daily [monitoring checks](data-observability-monitoring-checks.md) measures the end-of-day data quality status.
 The date for which the data quality status is valid is calculated by truncating the `time_period` to the beginning of the
 current day.
 
-In case that the data quality issue was detected in the morning, fixed during the day, and the fix was revalidated
+In case the data quality issue was detected in the morning, fixed during the day, and the fix was revalidated
 by running the data quality check again on the same day, DQOps will *forget* the previous data quality result (the failure),
 and will replace it with the most recent end-of-day data quality status.
 
 
 ### **Monthly data quality status snapshots**
-Monthly [monitoring checks](data-observability-monitoring-checks.md) are measuring the end-of-month data quality status.
-DQOps runs them daily, because the default [CRON schedule](../../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md) for executing
+Monthly [monitoring checks](data-observability-monitoring-checks.md) measure the end-of-month data quality status.
+DQOps runs them daily because the default [CRON schedule](../../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md) for executing
 monthly data quality monitoring checks is configured to run every day.  
 
 The SQL query generated for a similar, monthly data quality check
@@ -276,9 +276,9 @@ The difference in the query is only in the date truncation that was applied. The
 
 
 ### **Local vs UTC time**
-DQOps captures both the local time of the monitored data source, and an absolute time with the time zone.
+DQOps captures both the local time of the monitored data source and an absolute time with the time zone.
 The local time is returned from the data quality SQL query in the `time_period` result column, while the absolute time
-with a time zone is returned in the `time_zone_utc` column.
+with a time zone is returned to the `time_zone_utc` column.
 
 By capturing the time period as both a local time of the monitored database, and an absolute time with a time zone, DQOps can
 detect the time zone offset on the monitored database correctly, including even the daylight saving time.

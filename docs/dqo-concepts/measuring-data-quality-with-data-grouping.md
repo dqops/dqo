@@ -1,5 +1,5 @@
 # Data grouping
-This guide shows how DQOps uses a *GROUP BY* clause in SQL queries to analyze data quality of data coming from multiple sources, aggregated in one table.
+This guide shows how DQOps uses a *GROUP BY* clause in SQL queries to analyze the quality of data from multiple sources aggregated into a single table.
 
 ## How does data grouping work?
 
@@ -10,9 +10,9 @@ result in creating a data quality rule result that is valid (no data quality iss
 ranked at three severity levels: warning, error or fatal.
 
 A single data quality rule result for a whole table is not always the best solution. The data in the table is often coming
-from different data sources, different vendors or is loaded by different data pipelines. When the data in the table comes from
+from different data sources, different vendors, or is loaded by different data pipelines. When the data in the table comes from
 different sources, the source is usually identified by a value in dedicated discriminator columns. The typical discriminator
-columns are: country, business unit, cost center, vendor, data provider, supplier or subsidiary.
+columns are country, business unit, cost center, vendor, data provider, supplier, or subsidiary.
 
 In order to analyze each group of rows, DQOps runs SQL queries on the monitored data sources using a GROUP BY clause in the query.
 A data quality check that counts the percentage of null values in a column would return multiple values. 
@@ -54,7 +54,7 @@ for each data group returned by the query.
 
 In order to avoid storing too many data quality results in the DQOps Cloud Data Warehouse,
 DQOps captures only the first 1000 results. When the query returns more than 1000 rows, DQOps will
-cancel the query and returns ann error. The behavior can be changed using the
+cancel the query and return an error. The behavior can be changed using the
 *--dqo.sensor.limit.fail-on-sensor-readout-limit-exceeded=false* configuration parameter, which
 will disable the error. DQOps will compare only the first 1000 data groups between the tested table
 and the reference table, silently discarding the remaining rows (data groups).
@@ -96,7 +96,7 @@ The result set returned by the SQL query above is shown below.
 | 44.2%        | US               | WA               |
 
 
-DQOps supports setting of up to 9 different data grouping dimensions (levels).
+DQOps supports setting up to 9 different data grouping dimensions (levels).
 
 
 ## Configuring data grouping
@@ -138,20 +138,20 @@ spec:
 
 1.  The **default_grouping_name** field stores the name of the active data grouping configuration that is applied to data quality checks.
 
-2.  The **grouping** node is a dictionary of named data grouping configurations. One of the named configuration is selected
+2.  The **grouping** node is a dictionary of named data grouping configurations. One of the named configurations is selected
     in the **default_grouping_name** field.
 
 3.  The configuration of one example data grouping, named *group_by_country_and_state* in this example.
 
 4.  The configuration of the first column used for grouping.
 
-5.  The source field identifies the data source for data grouping. Supported values are: **column_value** when the grouping
+5.  The source field identifies the data source for data grouping. Supported values are **column_value** when the grouping
     value should be captured from the data in the monitored table, by adding a GROUP BY condition. Or **tag**, when a hardcoded
     value should be applied on all results.
 
 6.  The name of the column that is added to the GROUP BY clause for dynamic grouping by row values.
 
-7.  The configuration for the second grouping level. Additional grouping levels are: *level_2*, ..., *level_9*.
+7.  The configuration for the second grouping level. Additional grouping levels are *level_2*, ..., *level_9*.
 
 
 Each table can have multiple named configuration of data groupings that are defined in the **groupings** dictionary node.
@@ -213,18 +213,17 @@ spec:
 
 
 ## Grouping similar tables
-DQOps supports another scenario, when the data warehouse has similar tables (even with the same schema), that contain
-data from different data sources. 
-The data quality results captured from those tables could be tagged by the name of the data source, external vendor, or department.
+DQOps can support a scenario where the data warehouse has similar tables with the same schema that contain data from different data sources.
+In this case, the data quality results captured from those tables can be tagged by the name of the data source, external vendor, or department.
 
-When the results are tagged, the values are stored in the sensor readout and rule result tables, keeping the data group names.
+When the results are tagged, the values will be stored in the sensor readout and rule result tables, while keeping the data group names.
 The [data quality dashboards](types-of-data-quality-dashboards.md) in DQOps always have a filter
-for **data group**, allowing to deep-dive into data quality issues related to that source, or the data suppliers.
+for **data group**, which allows deep-diving into data quality issues related to that source, or the data suppliers.
 
 Tagging data quality results becomes even more important when combined with [data quality KPIs](definition-of-data-quality-kpis.md),
 because a separate data quality KPI score can be calculated for each data supplier, vendor, department, or any other data area.
 
-The tags are defined under the *level_1*, ..., *level_9* nodes as show below. 
+The tags are defined under the *level_1*, ..., *level_9* nodes as shown below. 
 
 ``` { .yaml .annotate linenums="1" hl_lines="11-12" }
 apiVersion: dqo/v1
@@ -280,7 +279,7 @@ spec:
 ```
 
 
-## Data grouping as time series
+## Data grouping as a time series
 
 DQOps treats all data quality sensor readouts (metrics) and all data quality check results (rule evaluation results)
 as time series. Suppose that a table contains data from two countries and each group of data is identified by
@@ -296,24 +295,24 @@ group of data (the country in this example) as a separate data quality incident.
 
 The data quality dashboards in DQOps have a configuration parameter to select the data grouping for which we want to
 find the most recent data quality issues or calculate the data quality KPI.
-The [data quality KPI](definition-of-data-quality-kpis.md) scores that is calculated for each data source (data grouping)
-simplify the root cause analysis by linking the data quality issue to a data source, a data group,
-an external data supplier, a data provider, or simply a separate data pipeline that has loaded invalid data.
+The [data quality KPI](definition-of-data-quality-kpis.md) scores calculated for each data source (data grouping)
+simplify the root cause analysis by linking the data quality issue to the data source, data group,
+external data supplier, data provider, or simply a separate data pipeline that has loaded incorrect data.
 
 
-## Configuring data grouping in UI
+## Configuring data grouping in the user interface
 
-In DQOps you can set up data grouping globally for all tables in the connection or individually for each table.
-You can set up data grouping in the **Data Sources** section by clicking at the connection or individual table in the tree and 
+In DQOps, you can set up data grouping globally for all tables in the connection or individually for each table.
+You can set up data grouping in the **Data Sources** section by clicking on the connection or individual table in the tree and 
 selecting **Data Grouping** tab.
 It is also important to mention that the configuration of data grouping on the connection level
 is only a template of the default grouping configuration that is copied to tables that are imported.
 When a table was already imported into DQOps, changing the configuration on the connection level has no effect.
 
-For more detailed information on setting up a data grouping, go to [Working with DQOps section](../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md).
+For more detailed information on setting up a data grouping, go to the [Working with DQOps section](../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md).
 
 
-## How DQOps stores data grouping results
+## How DQOps stores data grouping results?
 DQOps stores the data in Parquet files. The format of parquet files for the sensor readout ([.data/sensor_readouts/](../reference/parquetfiles/sensor_readouts.md))
 and the check results ([.data/check_results/](../reference/parquetfiles/check_results.md)) are documented in the reference section.
 
@@ -321,7 +320,7 @@ The columns that identify the data groups are:
 
 
 - **data_grouping_configuration** - the name of the data grouping configuration that is configured on the table level
-  and was used to run the data quality checks. When no grouping configuration was configured, the default grouping configuration
+  and was used to run the data quality checks. When no grouping configuration is configured, the default grouping configuration
   is named *default*.
 
 
@@ -335,23 +334,23 @@ The columns that identify the data groups are:
   the default data group name for a whole table is **all data**. 
 
 
-- **data_group_hash** - unique hash code (64 bit long integer) calculated by hashing the values of all grouping
+- **data_group_hash** - unique hash code (64-bit long integer) calculated by hashing the values of all grouping
   dimension columns *grouping_level_1*, *grouping_level_2*, ..., *grouping_level_9*. 
   The data group hash identifies each grouping. DQOps will calculate the same data group hash for the data quality sensor
   readouts and the data quality check results for every table, as long as all the *grouping_level_X* columns
-  contain the same data. When the data groupings from a source table (a table in the staging zone) shares the same
+  contain the same data. When the data groupings from a source table (a table in the staging zone) share the same
   data group hash as the downstream table, it is possible to perform data comparison across different tables and different
   data sources.
 
 
 - **time_series_id** - a unique identifier that identifies every time series of check results and sensor readouts
-  for each table, column, check and the data group. 
+  for each table, column, check, and data group. 
 
 
-## Integration of partitioned checks with data grouping
+## Integration of partition checks with data grouping
 [Partition checks](definition-of-data-quality-checks/partition-checks.md) can also analyze partitions with grouping rows
 by additional dimensions within each date partition.
-Because both partition checks and data grouping by columns depends on adding all columns to the **GROUP BY** clause,
+Because both partition checks and data grouping by columns depend on adding all columns to the **GROUP BY** clause,
 DQOps groups rows both by the date partitioning column and the columns used for data grouping.
 
 The following SQL query shows how DQOps applies grouping by the grouping column and the partition date.
@@ -377,7 +376,7 @@ GROUP BY grouping_level_1, time_period, time_period_utc
 ORDER BY grouping_level_1, time_period, time_period_utc
 ```
 
-The results of this query collect data quality scores for each day and country separately, and allows accurate
+The results of this query collect data quality scores for each day and country separately and allow accurate
 identification of the source of the data quality issue.
 
 | time_period    |     US |     UK |     DE |

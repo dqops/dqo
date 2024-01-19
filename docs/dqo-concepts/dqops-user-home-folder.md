@@ -69,9 +69,9 @@ $DQO_USER_HOME
 2.   Git ignore file that lists files and folders that should not be stored in Git.
      - The *[.localsettings.dqosettings.yaml](../reference/yaml/LocalSettingsYaml.md)* file is ignored because it contains
        the DQOps Cloud Pairing key
-     - The *.data* folder is ignored, because it contains Parquet data files that change frequently.
-     - The *.credentials* folder is ignored, because it contains secrets and passwords.
-     - The *.index* and *.logs* folders are ignored, because they are only required by a local DQOps instance.
+     - The *.data* folder is ignored because it contains Parquet data files that change frequently.
+     - The *.credentials* folder is ignored because it contains secrets and passwords.
+     - The *.index* and *.logs* folders are ignored because they are only required by a local DQOps instance.
 3.   [.localsettings.dqosettings.yaml](../reference/yaml/LocalSettingsYaml.md) file contains settings that are private
      for the current DQOps instance and should not be stored in the Git repository or shared with other DQOps instances.
      The most important parameters in the local settings file are a *DQOps Cloud Pairing Key* and a local instance key
@@ -222,7 +222,7 @@ The folder structure is not strict, but it is advised to follow the order:
 - the short name of the sensor
 
 DQOps uses the folder structure inside the *sensors* folder to identify data quality sensors.
-The sensor on the following example is named *column/nulls/null_count* according to the sensor's naming convention.
+The sensor in the following example is named *column/nulls/null_count* according to the sensor's naming convention.
 The highlighted lines show the minimum set of sensor's configuration files.
 
 ``` { .asc .annotate hl_lines="7 8 17" }
@@ -332,14 +332,14 @@ DQOps will detect changes to the *rules/requirements.txt* file on startup and wi
 Custom data quality checks in DQOps are simply a pair of a sensor and a rule.
 A check can use any combination of custom and built-in sensors and rules.
 
-The folder structure for custom data quality checks is strictly limited, because the folder name
+The folder structure for custom data quality checks is strictly limited because the folder name
 affects the location on the check editor screen in the DQOps user interface.
 The custom checks must be defined in a three-level deep folder structure.
 The folder names on the folder tree are:
 
 - The target object, must be *table* or *column*.
 
-- The target type of checks, must be one of *profiling*, *monitoring*, or *partitioned*.
+- The target type of data quality check, must be one of *profiling*, *monitoring*, or *partitioned*.
 
 - The name of an existing check category within the built-in check structure. The folder structure is shown within
   the reference of the data quality [checks](../checks/index.md) in this documentation.
