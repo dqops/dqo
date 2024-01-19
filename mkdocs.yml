@@ -16,7 +16,7 @@ nav:
       - What is a data quality check:
           - "dqo-concepts/definition-of-data-quality-checks/index.md"
           - Data profiling checks: "dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md"
-          - Data observability monitoring checks: "dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md"
+          - Data monitoring checks: "dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md"
           - Partition checks: "dqo-concepts/definition-of-data-quality-checks/partition-checks.md"
       - Configuring data sources: "dqo-concepts/configuring-data-sources.md"
       - Configuring table metadata: "dqo-concepts/configuring-table-metadata.md"
