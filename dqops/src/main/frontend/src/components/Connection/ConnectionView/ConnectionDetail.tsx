@@ -130,6 +130,8 @@ const ConnectionDetail = () => {
     getSharedCredentials()
   },[])
 
+  // todo: connection details do not implement all databases
+
   return (
     <div className={clsx("p-4",userProfile.can_manage_scheduler !== true ? "pointer-events-none cursor-not-allowed" : "")}>
       <ConnectionActionGroup
@@ -213,7 +215,7 @@ const ConnectionDetail = () => {
             />
           )
         }
-        {connectionBasic?.provider_type ===
+        {/* {connectionBasic?.provider_type ===
           ConnectionSpecProviderTypeEnum.mysql && (
             <MySQLConnection
               mysql={connectionBasic?.mysql}
@@ -221,7 +223,7 @@ const ConnectionDetail = () => {
               sharedCredentials = {sharedCredentials}
             />
           )
-        }
+        } */}
         {connectionBasic?.provider_type ===
           ConnectionSpecProviderTypeEnum.oracle && (
             <OracleConnection

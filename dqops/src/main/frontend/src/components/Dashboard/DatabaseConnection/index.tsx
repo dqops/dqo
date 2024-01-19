@@ -263,6 +263,8 @@ const DatabaseConnection = ({
         mysql={database.mysql}
         onChange={(mysql) => onChange({ ...database, mysql })}
         sharedCredentials={sharedCredentials}
+        nameOfDatabase={nameOfDatabase ? nameOfDatabase : ''}
+        onNameOfDatabaseChange={onNameOfDatabaseChange}
       />
     ),
     [ConnectionModelProviderTypeEnum.oracle]: (

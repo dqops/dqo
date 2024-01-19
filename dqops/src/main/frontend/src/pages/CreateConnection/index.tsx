@@ -8,6 +8,8 @@ import {
   BigQueryParametersSpecJobsCreateProjectEnum, 
   ConnectionModel, 
   ConnectionModelProviderTypeEnum,
+  MysqlParametersSpecMysqlEngineTypeEnum,
+  SingleStoreParametersSpecLoadBalancingModeEnum,
   TrinoParametersSpecAthenaAuthenticationModeEnum,
   TrinoParametersSpecTrinoEngineTypeEnum } from '../../api';
 import { BigQueryAuthenticationMode } from '../../shared/enums/bigquery.enum';
@@ -67,7 +69,13 @@ const CreateConnection = () => {
         break;
       }
       case ConnectionModelProviderTypeEnum.mysql: {
-        copiedDatabase.mysql =  {port: '3306'};
+        copiedDatabase.mysql = {
+          port: '3306',
+          mysql_engine_type: (nameOfDatabase?.toLowerCase() as MysqlParametersSpecMysqlEngineTypeEnum),
+          single_store_parameters_spec: {
+            load_balancing_mode: SingleStoreParametersSpecLoadBalancingModeEnum.none
+          }
+        };
         break;
       }
       case ConnectionModelProviderTypeEnum.oracle: {

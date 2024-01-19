@@ -65,8 +65,10 @@ const TrinoConnection = ({
         className="mb-4"
         value={ trino?.trino_engine_type || nameOfDatabase.toLowerCase() as TrinoParametersSpecTrinoEngineTypeEnum }
         onChange={(value) => { 
-          handleChange({ trino_engine_type: value, catalog: value === TrinoParametersSpecTrinoEngineTypeEnum.trino ? '' : 'awsdatacatalog' }),
-          value && onNameOfDatabaseChange(String(value).replace(/\w/, x => x.toUpperCase()))
+          handleChange({ 
+            trino_engine_type: value, 
+            catalog: value === TrinoParametersSpecTrinoEngineTypeEnum.trino ? '' : 'awsdatacatalog' }),
+            value && onNameOfDatabaseChange(String(value).replace(/\w/, x => x.toUpperCase()))
         }}
       />
       { trino?.trino_engine_type === TrinoParametersSpecTrinoEngineTypeEnum.trino && 
