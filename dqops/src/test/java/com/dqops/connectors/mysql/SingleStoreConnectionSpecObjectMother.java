@@ -65,13 +65,14 @@ public class SingleStoreConnectionSpecObjectMother {
         return connectionSpec;
     }
 
-
-    // todo: check below
     /**
-     * Returns the default schema used for a testable athena database. Tables are created in this schema.
+     * Returns the default schema used for a testable Single Store database. Tables are created in this schema.
      * @return Schema name.
      */
     public static String getSchemaName() {
-        return "default";
+        BeanFactory beanFactory = BeanFactoryObjectMother.getBeanFactory();
+        SecretValueProviderImpl secretValueProvider = beanFactory.getBean(SecretValueProviderImpl.class);
+        SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(null);
+        return secretValueProvider.expandValue("${SINGLE_STORE_DATABASE}", secretValueLookupContext);
     }
 }

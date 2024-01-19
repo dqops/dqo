@@ -21,6 +21,7 @@ import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.bigquery.BigQueryConnectionSpecObjectMother;
 import com.dqops.connectors.databricks.DatabricksConnectionSpecObjectMother;
 import com.dqops.connectors.mysql.MysqlConnectionSpecObjectMother;
+import com.dqops.connectors.mysql.SingleStoreConnectionSpecObjectMother;
 import com.dqops.connectors.oracle.OracleConnectionSpecObjectMother;
 import com.dqops.connectors.postgresql.PostgresqlConnectionSpecObjectMother;
 import com.dqops.connectors.presto.PrestoConnectionSpecObjectMother;
@@ -92,10 +93,11 @@ public class SampleTableMetadataObjectMother {
 
     /**
      * Returns the default schema (physical schema name) where tables are created in a testable database.
-     * @param providerType Provider type.
+     * @param connectionSpec Connection spec with set provider type.
      * @return Schema name.
      */
-    public static String getSchemaForProvider(ProviderType providerType) {
+    public static String getSchemaForProvider(ConnectionSpec connectionSpec) {
+        ProviderType providerType = connectionSpec.getProviderType();
         switch (providerType) {
             case bigquery:
                 return BigQueryConnectionSpecObjectMother.getDatasetName();
@@ -119,8 +121,14 @@ public class SampleTableMetadataObjectMother {
                 return TrinoConnectionSpecObjectMother.getSchemaName();
 
             case mysql:
-                return MysqlConnectionSpecObjectMother.getSchemaName();
-
+                switch(connectionSpec.getMysql().getMysqlEngineType()){
+                    case mysql:
+                        return MysqlConnectionSpecObjectMother.getSchemaName();
+                    case singlestore:
+                        return SingleStoreConnectionSpecObjectMother.getSchemaName();
+                    default:
+                        new RuntimeException("Given enum is not supported : " + connectionSpec.getMysql().getMysqlEngineType());
+                }
             case oracle:
                 return OracleConnectionSpecObjectMother.getSchemaName();
 
@@ -170,7 +178,7 @@ public class SampleTableMetadataObjectMother {
         String connectionName = getConnectionNameForProvider(providerType);
         SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(null);
         ConnectionSpec connectionSpec = connectionSpecRaw.expandAndTrim(SecretValueProviderObjectMother.getInstance(), secretValueLookupContext);
-        String targetSchema = getSchemaForProvider(providerType);
+        String targetSchema = getSchemaForProvider(connectionSpec);
         SampleTableFromCsv sampleTable = CsvSampleFilesObjectMother.getSampleTable(csvFileName);
         PhysicalTableName physicalTableName = new PhysicalTableName(targetSchema, sampleTable.getHashedTableName());
         TableSpec tableSpec = new TableSpec(physicalTableName);
