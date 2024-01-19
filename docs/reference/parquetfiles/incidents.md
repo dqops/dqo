@@ -17,29 +17,29 @@ The columns of this table are described below.
 
 | Column&nbsp;name | Description | Hive&nbsp;data&nbsp;type |
 |------------------|-------------|--------------------------|
- | id | The incident id (primary key), it is a UUID created from a hash of target affected by the incident (target_hash) and a first_seen_utc. This value identifies a single row. | STRING |
- | incident_hash | The hash of the incident. | BIGINT |
- | schema_name | The table schema. | STRING |
- | table_name | The table name. | STRING |
- | table_priority | The table priority. | INTEGER |
- | data_group_name | The data group name, it is a concatenated name of the data group dimension values, created from [grouping_level_1] / [grouping_level_2] / ... | STRING |
- | quality_dimension | The data quality dimension. | STRING |
- | check_category | The check category. | STRING |
- | check_type | The check type (profiling, checkpoint, partitioned). | STRING |
- | check_name | The check name. | STRING |
- | highest_severity | The highest data quality check result severity detected as part of this incident. The values are 0, 1, 2, 3 for none, warning, error and fatal severity alerts. | INTEGER |
- | minimum_severity | Minimum severity of data quality issues (data quality check results) that are included in the incident. It is copied from the incident configuration at a connection or table level at the time when the incident is first seen. The values are 0, 1, 2, 3 for none, warning, error and fatal severity alerts. | INTEGER |
- | first_seen | Stores the exact time when the incident was raised (seen) for the first time, as a UTC timestamp: first_seen. | TIMESTAMP |
- | last_seen | Stores the exact time when the incident was raised (seen) for the last time, as a UTC timestamp: last_seen. | TIMESTAMP |
- | incident_until | Stores the timestamp of the end of the incident when new issues will not be appended to this incident, as a UTC timestamp: incident_until. | TIMESTAMP |
- | failed_checks_count | Stores the number of checks that failed. | INTEGER |
- | issue_url | Stores the user provided url to an external ticket management platform that is tracking this incident. | STRING |
- | resolved_by | Stores the login of the user who resolved the incident. | STRING |
- | status | Stores the current status of the incident. The statuses are described in the {@link IncidentStatus IncidentStatus} enumeration. | STRING |
- | created_at | The timestamp when the row was created at. | TIMESTAMP |
- | updated_at | The timestamp when the row was updated at. | TIMESTAMP |
- | created_by | Stores the login of the user who created the incident by running a check. | STRING |
- | updated_by | The login of the user that updated the row. | STRING |
+ | <span class="no-wrap-code">`id`</span> | The incident id (primary key), it is a UUID created from a hash of target affected by the incident (target_hash) and a first_seen_utc. This value identifies a single row. | *STRING* |
+ | <span class="no-wrap-code">`incident_hash`</span> | The hash of the incident. | *BIGINT* |
+ | <span class="no-wrap-code">`schema_name`</span> | The table schema. | *STRING* |
+ | <span class="no-wrap-code">`table_name`</span> | The table name. | *STRING* |
+ | <span class="no-wrap-code">`table_priority`</span> | The table priority. | *INTEGER* |
+ | <span class="no-wrap-code">`data_group_name`</span> | The data group name, it is a concatenated name of the data group dimension values, created from [grouping_level_1] / [grouping_level_2] / ... | *STRING* |
+ | <span class="no-wrap-code">`quality_dimension`</span> | The data quality dimension. | *STRING* |
+ | <span class="no-wrap-code">`check_category`</span> | The check category. | *STRING* |
+ | <span class="no-wrap-code">`check_type`</span> | The check type (profiling, checkpoint, partitioned). | *STRING* |
+ | <span class="no-wrap-code">`check_name`</span> | The check name. | *STRING* |
+ | <span class="no-wrap-code">`highest_severity`</span> | The highest data quality check result severity detected as part of this incident. The values are 0, 1, 2, 3 for none, warning, error and fatal severity alerts. | *INTEGER* |
+ | <span class="no-wrap-code">`minimum_severity`</span> | Minimum severity of data quality issues (data quality check results) that are included in the incident. It is copied from the incident configuration at a connection or table level at the time when the incident is first seen. The values are 0, 1, 2, 3 for none, warning, error and fatal severity alerts. | *INTEGER* |
+ | <span class="no-wrap-code">`first_seen`</span> | Stores the exact time when the incident was raised (seen) for the first time, as a UTC timestamp: first_seen. | *TIMESTAMP* |
+ | <span class="no-wrap-code">`last_seen`</span> | Stores the exact time when the incident was raised (seen) for the last time, as a UTC timestamp: last_seen. | *TIMESTAMP* |
+ | <span class="no-wrap-code">`incident_until`</span> | Stores the timestamp of the end of the incident when new issues will not be appended to this incident, as a UTC timestamp: incident_until. | *TIMESTAMP* |
+ | <span class="no-wrap-code">`failed_checks_count`</span> | Stores the number of checks that failed. | *INTEGER* |
+ | <span class="no-wrap-code">`issue_url`</span> | Stores the user provided url to an external ticket management platform that is tracking this incident. | *STRING* |
+ | <span class="no-wrap-code">`resolved_by`</span> | Stores the login of the user who resolved the incident. | *STRING* |
+ | <span class="no-wrap-code">`status`</span> | Stores the current status of the incident. The statuses are described in the {@link IncidentStatus IncidentStatus} enumeration. | *STRING* |
+ | <span class="no-wrap-code">`created_at`</span> | The timestamp when the row was created at. | *TIMESTAMP* |
+ | <span class="no-wrap-code">`updated_at`</span> | The timestamp when the row was updated at. | *TIMESTAMP* |
+ | <span class="no-wrap-code">`created_by`</span> | Stores the login of the user who created the incident by running a check. | *STRING* |
+ | <span class="no-wrap-code">`updated_by`</span> | The login of the user that updated the row. | *STRING* |
 
 
 ## What's more
