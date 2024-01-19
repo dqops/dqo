@@ -16,6 +16,7 @@
 package com.dqops.connectors.mysql;
 
 import com.dqops.connectors.ConnectionProviderSpecificParameters;
+import com.dqops.connectors.mysql.singlestore.SingleStoreParametersSpec;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -26,6 +27,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import picocli.CommandLine;
 
 import java.util.Collections;
@@ -53,7 +56,7 @@ public class MysqlParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("MySQL port number. The default port is 3306. Supports also a ${MYSQL_PORT} configuration with a custom environment variable.")
     private String port;
 
-    @CommandLine.Option(names = {"--mysql-database"}, description = "MySQL database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @CommandLine.Option(names = {"--mysql-database", "--single-store-database"}, description = "MySQL database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     @JsonPropertyDescription("MySQL database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String database;
 
@@ -77,6 +80,15 @@ public class MysqlParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, String> properties;
+
+    // todo
+    @Getter
+    @Setter
+    private SingleStoreParametersSpec singleStoreParametersSpec;
+
+    @Getter
+    @Setter
+    private MysqlEngineType mysqlEngineType;
 
     /**
      * Returns the host name.
@@ -215,6 +227,23 @@ public class MysqlParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
+     * Returns the SingleStoreParametersSpec
+     * @return SingleStoreParametersSpec
+     */
+    public SingleStoreParametersSpec getSingleStoreParametersSpec() {
+        return singleStoreParametersSpec;
+    }
+
+    /**
+     * Sets a SingleStoreParametersSpec
+     * @param singleStoreParametersSpec SingleStoreParametersSpec
+     */
+    public void setSingleStoreParametersSpec(SingleStoreParametersSpec singleStoreParametersSpec) {
+        setDirtyIf(!Objects.equals(this.singleStoreParametersSpec, singleStoreParametersSpec));
+        this.singleStoreParametersSpec = singleStoreParametersSpec;
+    }
+
+    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -248,6 +277,8 @@ public class MysqlParametersSpec extends BaseProviderParametersSpec
         cloned.password = secretValueProvider.expandValue(cloned.password, lookupContext);
         cloned.options = secretValueProvider.expandValue(cloned.options, lookupContext);
         cloned.properties = secretValueProvider.expandProperties(cloned.properties, lookupContext);
+
+        cloned.singleStoreParametersSpec.expandAndTrim(secretValueProvider, lookupContext);
 
         return cloned;
     }

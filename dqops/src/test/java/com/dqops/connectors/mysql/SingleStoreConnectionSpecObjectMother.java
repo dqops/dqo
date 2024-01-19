@@ -13,23 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.connectors.trino;
+package com.dqops.connectors.mysql;
 
 import com.dqops.connectors.ProviderType;
+import com.dqops.connectors.mysql.singlestore.SingleStoreLoadBalancingMode;
+import com.dqops.connectors.mysql.singlestore.SingleStoreParametersSpec;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProviderImpl;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.utils.BeanFactoryObjectMother;
 import org.springframework.beans.factory.BeanFactory;
 
+import java.util.List;
+import java.util.Map;
+
 /**
- * Object mother for a testable Athena connection spec that provides access to the sandbox database.
+ * Object mother for a testable Single Store connection spec that provides access to the sandbox database.
  */
-public class AthenaConnectionSpecObjectMother {
+public class SingleStoreConnectionSpecObjectMother {
 
     /**
-     * Creates a default connection spec to athena database.
-     * @return Connection spec to a cloud environment.
+     * Creates a default connection spec to single store database.
+     * @return Connection spec to a cloud single store environment.
      */
     public static ConnectionSpec create() {
 
@@ -39,22 +44,29 @@ public class AthenaConnectionSpecObjectMother {
 
         ConnectionSpec connectionSpec = new ConnectionSpec()
         {{
-			setProviderType(ProviderType.trino);
+			setProviderType(ProviderType.mysql);
 
-			setTrino(new TrinoParametersSpec()
+            SingleStoreParametersSpec singleStoreParametersSpec = new SingleStoreParametersSpec(){{
+                setHostDescriptions(List.of(secretValueProvider.expandValue("${SINGLE_STORE_HOST_DESCRIPTIONS}", secretValueLookupContext)));
+                setSingleStoreLoadBalancingMode(SingleStoreLoadBalancingMode.none);
+            }};
+
+			setMysql(new MysqlParametersSpec()
             {{
-                setAthenaRegion("eu-central-1");
-                setCatalog("awsdatacatalog");
-                setAthenaWorkGroup("primary");
-                setAthenaOutputLocation("s3://dqops-athena-test/results/");
-//                setProperties(Map.of("CredentialsProvider","DefaultChain"));    // can only by used in the local environment
-                setTrinoEngineType(TrinoEngineType.athena);
+                setMysqlEngineType(MysqlEngineType.singlestore);
+                setSingleStoreParametersSpec(singleStoreParametersSpec);
+                setDatabase(secretValueProvider.expandValue("${SINGLE_STORE_DATABASE}", secretValueLookupContext));
+                setUser(secretValueProvider.expandValue("${SINGLE_STORE_USERNAME}", secretValueLookupContext));
+                setPassword(secretValueProvider.expandValue("${SINGLE_STORE_PASSWORD}", secretValueLookupContext));
+                setProperties(Map.of("useSsl", "true"));    // todo: to it as a field
             }});
         }};
 
         return connectionSpec;
     }
 
+
+    // todo: check below
     /**
      * Returns the default schema used for a testable athena database. Tables are created in this schema.
      * @return Schema name.

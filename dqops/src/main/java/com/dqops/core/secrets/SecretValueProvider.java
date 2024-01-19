@@ -15,6 +15,7 @@
  */
 package com.dqops.core.secrets;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,4 +37,13 @@ public interface SecretValueProvider {
      * @return Expanded properties.
      */
     Map<String, String> expandProperties(Map<String, String> properties, SecretValueLookupContext lookupContext);
+
+    /**
+     * Expands entries in a given list. Returns a cloned instance with all entry values expanded.
+     *
+     * @param list Entries list to expand.
+     * @param lookupContext Lookup context with the user home used to look up credentials.
+     * @return Expanded entries.
+     */
+    List<String> expandList(List<String> list, SecretValueLookupContext lookupContext);
 }

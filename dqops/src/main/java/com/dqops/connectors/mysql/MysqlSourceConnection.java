@@ -21,6 +21,7 @@ import com.dqops.connectors.SourceSchemaModel;
 import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
+import com.dqops.connectors.mysql.singlestore.SingleStoreSourceConnection;
 import com.dqops.core.jobqueue.JobCancellationToken;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
@@ -124,6 +125,15 @@ public class MysqlSourceConnection extends AbstractJdbcSourceConnection {
         HikariConfig hikariConfig = new HikariConfig();
         ConnectionSpec connectionSpec = this.getConnectionSpec();
         MysqlParametersSpec mysqlParametersSpec = connectionSpec.getMysql();
+
+        if(mysqlParametersSpec.getMysqlEngineType().equals(MysqlEngineType.singlestore)){
+            return SingleStoreSourceConnection.createHikariConfig(
+                    secretValueLookupContext,
+                    mysqlParametersSpec,
+                    this.getSecretValueProvider());
+        }
+
+        // todo: exttract below as a method, then above if might be a switch
 
         String host = this.getSecretValueProvider().expandValue(mysqlParametersSpec.getHost(), secretValueLookupContext);
         StringBuilder jdbcConnectionBuilder = new StringBuilder();

@@ -27,12 +27,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -130,5 +127,29 @@ public class SecretValueProviderImpl implements SecretValueProvider {
         }
 
         return Collections.unmodifiableMap(expanded);
+    }
+
+    /**
+     * Expands entries in a given list. Returns a cloned instance with all entry values expanded.
+     *
+     * @param list Entries list to expand.
+     * @param lookupContext Lookup context with the user home used to look up credentials.
+     * @return Expanded entries.
+     */
+    public List<String> expandList(List<String> list,
+                                   SecretValueLookupContext lookupContext){
+        if (list == null) {
+            return null;
+        }
+
+        if (list.size() == 0) {
+            return list;
+        }
+
+        List<String> expanded = new ArrayList<>();
+        for (String element : list) {
+            expanded.add(expandValue(element, lookupContext));
+        }
+        return Collections.synchronizedList(expanded);
     }
 }
