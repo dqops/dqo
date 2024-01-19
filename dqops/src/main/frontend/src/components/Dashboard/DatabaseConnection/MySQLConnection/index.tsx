@@ -92,10 +92,7 @@ const MySQLConnection = ({
     });
   };
 
-  // todo: variable icon on mysql screen
-  // todo: variable name of engine type on the screen
-
-  // todo: SectionWrapper title should be variable
+  // todo: selection of single store does not set the engine type - bug with nameOfDatabase
   return (
     <SectionWrapper title="MySQL connection parameters" className="mb-4">
       <Select

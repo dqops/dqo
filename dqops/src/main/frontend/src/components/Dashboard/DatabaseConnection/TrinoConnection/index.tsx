@@ -56,7 +56,6 @@ const TrinoConnection = ({
     });
   };
 
-  // todo: SectionWrapper title should be variable
   return (
     <SectionWrapper title="Trino connection parameters" className="mb-4">
       <Select
