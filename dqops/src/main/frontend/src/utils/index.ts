@@ -89,3 +89,43 @@ export const transformAllJobs = (jobs: DqoJobHistoryEntryModel[]): TJobDictionar
 export const transformJobsChanges = (jobs: DqoJobChangeModel): TJobDictionary[] => {
   return[]
 }  
+
+// case JOB_ACTION.GET_JOBS_SUCCESS: {
+//   const job_dictionary_state: Record<string, TJobDictionary> = {};
+//     const jobList : TJobList = {};
+// action.data.jobs.forEach((item: DqoJobHistoryEntryModel) => {
+  
+// const jobIdKey = String(item.jobId?.parentJobId?.jobId || item.jobId?.jobId || '');
+
+// if (item.jobId?.parentJobId?.jobId === undefined && !job_dictionary_state[jobIdKey]) {
+//   job_dictionary_state[jobIdKey] = { ...item, childs: [] };
+
+// } else {
+
+//   if (!job_dictionary_state[jobIdKey]) {
+//     job_dictionary_state[jobIdKey] = { childs: [] };
+//   }
+
+//   const currentState = { ...job_dictionary_state[jobIdKey] };
+
+//   job_dictionary_state[jobIdKey] = {
+//     ...currentState,
+//     childs: [...currentState.childs, item],
+//   };
+
+//   if (!jobList[jobIdKey]) {
+//     jobList[jobIdKey] = [];
+//   }
+
+//   jobList[jobIdKey].push(String(item?.jobId?.jobId) || '');
+// }});
+
+//   return {
+//     ...state,
+//     loading: false,
+//     job_dictionary_state,
+//     jobList: action.data.jobs,
+//     lastSequenceNumber: action.data.lastSequenceNumber,
+//     error: null
+//   };
+// }
