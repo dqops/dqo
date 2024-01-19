@@ -127,7 +127,7 @@ public class SampleTableMetadataObjectMother {
                     case singlestore:
                         return SingleStoreConnectionSpecObjectMother.getSchemaName();
                     default:
-                        new RuntimeException("Given enum is not supported : " + connectionSpec.getMysql().getMysqlEngineType());
+                        throw new RuntimeException("Given enum is not supported : " + connectionSpec.getMysql().getMysqlEngineType());
                 }
             case oracle:
                 return OracleConnectionSpecObjectMother.getSchemaName();

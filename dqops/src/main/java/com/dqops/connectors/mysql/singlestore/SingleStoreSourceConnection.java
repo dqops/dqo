@@ -45,7 +45,7 @@ public class SingleStoreSourceConnection {
                 break;
             case none: break;
             default:
-                new RuntimeException("Given enum is not supported : " + singleStoreParametersSpec.getLoadBalancingMode());
+                throw new RuntimeException("Given enum is not supported : " + singleStoreParametersSpec.getLoadBalancingMode());
         }
         jdbcConnectionBuilder.append("//");
 
