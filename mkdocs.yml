@@ -41,7 +41,7 @@ nav:
         - Null values: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-nulls-data-quality-issues.md'
         - Numeric values: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md'
         - Text patterns: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md'
-        - PII values: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-pii-data-quality-issues.md'
+        - PII values: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md'
         - Text values: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md'
         - Uniqueness and duplicates: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md'
 ########## END INCLUDE TYPES OF CHECKS REFERENCE

@@ -17,7 +17,7 @@ Measures the percent of not null values in a column. Raises a data quality excep
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_not_nulls_percent`</span>|[nulls](../../../dqo-concepts/types-of-data-quality-checks.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Completeness|[*not_null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_not_nulls_percent`</span>|[nulls](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-nulls-data-quality-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Completeness|[*not_null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -984,7 +984,7 @@ Measures the percent of not null values in a column. Raises a data quality excep
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_not_nulls_percent`</span>|[nulls](../../../dqo-concepts/types-of-data-quality-checks.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Completeness|[*not_null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_not_nulls_percent`</span>|[nulls](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-nulls-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Completeness|[*not_null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -1953,7 +1953,7 @@ Measures the percent of not null values in a column. Raises a data quality excep
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_not_nulls_percent`</span>|[nulls](../../../dqo-concepts/types-of-data-quality-checks.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Completeness|[*not_null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_not_nulls_percent`</span>|[nulls](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-nulls-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Completeness|[*not_null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -2922,7 +2922,7 @@ Measures the percent of not null values in a column. Raises a data quality excep
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_not_nulls_percent`</span>|[nulls](../../../dqo-concepts/types-of-data-quality-checks.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Completeness|[*not_null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_partition_not_nulls_percent`</span>|[nulls](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-nulls-data-quality-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Completeness|[*not_null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -3913,7 +3913,7 @@ Measures the percent of not null values in a column. Raises a data quality excep
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_not_nulls_percent`</span>|[nulls](../../../dqo-concepts/types-of-data-quality-checks.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Completeness|[*not_null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_partition_not_nulls_percent`</span>|[nulls](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-nulls-data-quality-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Completeness|[*not_null_percent*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 

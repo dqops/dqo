@@ -146,15 +146,21 @@ available at the link.
     - [multiply moving stddev within 30 days](../reference/rules/Stdev.md#multiply-moving-stdev-within-30-days)
     - [multiply moving stddev within 60 days](../reference/rules/Stdev.md#multiply-moving-stdev-within-60-days)
 
-## Configure rules in DQOps
 
+## Configure rules in UI
 You can easily configure rules in DQOps using the **Configuration** section of the user interface.
 
-Below is an example of screen with the rule definition and the Python code for the [percent moving average](../reference/rules/Averages.md#percent-moving-average) rule 
+### **Rule specification screen**
+Below is an example of screen with the rule definition for
+the [percent moving average](../reference/rules/Averages.md#percent-moving-average) rule.
 
+This screen is responsible for editing the specification files for a custom data quality rule
+stored in the [*$DQO_USER_HOME/checks/\*\*/\*.dqocheck.yaml*](../reference/yaml/RuleDefinitionYaml.md) files.
 
 ![Rule definition configuration](https://dqops.com/docs/images/concepts/rule-definition-configuration.png)
 
+### **Python code editor**
+The Python source code of the data quality rule is defined on the *Python code* tab.
 
 ![Rule Python code configuration](https://dqops.com/docs/images/concepts/rule-python-code-configuration.png)
 

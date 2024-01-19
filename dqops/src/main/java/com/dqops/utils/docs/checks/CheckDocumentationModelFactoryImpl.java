@@ -325,7 +325,11 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         checkDocumentationModel.setTarget(similarCheckModel.getCheckTarget().toString());
         String checkCategoryName = similarCheckModel.getCategory();
         checkDocumentationModel.setCategory(checkCategoryName);
-        checkDocumentationModel.setCategoryPageName(CheckCategoryDocumentationIndex.CATEGORY_FILE_NAMES.get(checkCategoryName));
+        String categoryPageName = CheckCategoryDocumentationIndex.CATEGORY_FILE_NAMES.get(checkCategoryName);
+        if (categoryPageName == null) {
+            categoryPageName =  "how-to-detect-" + checkCategoryName.replace('_', '-') + "-data-quality-issues.md";
+        }
+        checkDocumentationModel.setCategoryPageName(categoryPageName);
 
         ClassJavadoc checkClassJavadoc = RuntimeJavadoc.getJavadoc(checkModel.getCheckSpec().getClass());
         if (checkClassJavadoc != null) {

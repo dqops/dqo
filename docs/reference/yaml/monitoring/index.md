@@ -4,7 +4,7 @@
 
 # monitoring
 
-The reference of YAML objects for the monitoring type of data quality check.
+The reference of YAML objects for the monitoring type of data quality checks.
 
 
 

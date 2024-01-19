@@ -42,6 +42,7 @@ public class CheckCategoryDocumentationIndex {
         put("volume", "how-to-detect-data-volume-issues-and-changes.md");
         put("custom_sql", "how-to-detect-data-quality-issues-with-custom-sql.md");
         put("uniqueness", "how-to-detect-data-uniqueness-issues-and-duplicates.md");
+        put("pii", "how-to-detect-pii-values-and-sensitive-data.md");
     }};
 
     /**
