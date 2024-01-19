@@ -27,8 +27,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 import picocli.CommandLine;
 
 import java.util.Collections;
@@ -76,20 +74,18 @@ public class MysqlParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("SslMode MySQL connection parameter.")
     private MySqlSslMode sslmode;
 
+    @CommandLine.Option(names = {"--single-store-parameters-spec"}, description = "Single Store parameters spec.")
+    @JsonPropertyDescription("Single Store parameters spec.")
+    private SingleStoreParametersSpec singleStoreParametersSpec;
+
+    @CommandLine.Option(names = {"--mysql-engine"}, description = "MySQL engine type.")
+    @JsonPropertyDescription("MySQL engine type. Supports also a ${MYSQL_ENGINE} configuration with a custom environment variable.")
+    private MysqlEngineType mysqlEngineType;
+
     @CommandLine.Option(names = {"-M"}, description = "MySQL additional properties that are added to the JDBC connection string")
     @JsonPropertyDescription("A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, String> properties;
-
-    // todo
-    @Getter
-    @Setter
-    private SingleStoreParametersSpec singleStoreParametersSpec;
-
-    // todo
-    @Getter
-    @Setter
-    private MysqlEngineType mysqlEngineType;
 
     /**
      * Returns the host name.
@@ -244,6 +240,24 @@ public class MysqlParametersSpec extends BaseProviderParametersSpec
         this.singleStoreParametersSpec = singleStoreParametersSpec;
     }
 
+
+    /**
+     * Returns the MySQL engine type.
+     * @return MySQL engine type.
+     */
+    public MysqlEngineType getMysqlEngineType() {
+        return mysqlEngineType;
+    }
+
+    /**
+     * Sets a MySQL engine type.
+     * @param mysqlEngineType MySQL engine type.
+     */
+    public void setMysqlEngineType(MysqlEngineType mysqlEngineType) {
+        setDirtyIf(!Objects.equals(this.mysqlEngineType, mysqlEngineType));
+        this.mysqlEngineType = mysqlEngineType;
+    }
+
     /**
      * Returns the child map on the spec class with all fields.
      *
@@ -280,6 +294,7 @@ public class MysqlParametersSpec extends BaseProviderParametersSpec
         cloned.properties = secretValueProvider.expandProperties(cloned.properties, lookupContext);
 
         cloned.singleStoreParametersSpec.expandAndTrim(secretValueProvider, lookupContext);
+        cloned.mysqlEngineType = MysqlEngineType.valueOf(secretValueProvider.expandValue(cloned.mysqlEngineType.toString(), lookupContext));
 
         return cloned;
     }

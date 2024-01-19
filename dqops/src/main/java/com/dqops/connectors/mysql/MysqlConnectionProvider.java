@@ -96,6 +96,9 @@ public class MysqlConnectionProvider extends AbstractSqlConnectionProvider {
      */
     @Override
     public void promptForConnectionParameters(ConnectionSpec connectionSpec, boolean isHeadless, TerminalReader terminalReader, TerminalWriter terminalWriter) {
+
+        // todo: add support of single store from cli commands
+
         MysqlParametersSpec mysqlParametersSpec = connectionSpec.getMysql();
         if (mysqlParametersSpec == null) {
             mysqlParametersSpec = new MysqlParametersSpec();

@@ -21,7 +21,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class SingleStoreParametersSpec extends BaseProviderParametersSpec {
+public class SingleStoreParametersSpec extends BaseProviderParametersSpec { // todo: rename to SingleStoreDB
     private static final ChildHierarchyNodeFieldMapImpl<SingleStoreParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(BaseProviderParametersSpec.FIELDS) {
         {
         }
@@ -34,6 +34,10 @@ public class SingleStoreParametersSpec extends BaseProviderParametersSpec {
     @CommandLine.Option(names = {"--single-store-host-descriptions"}, description = "Host descriptions")
     @JsonPropertyDescription("Host descriptions. Supports also a ${SINGLE_STORE_HOST_DESCRIPTIONS} configuration with a custom environment variable.")
     private List<String> hostDescriptions;
+
+    @CommandLine.Option(names = {"--single-store-host-descriptions"}, description = "Force enables SSL/TLS on the connection.")
+    @JsonPropertyDescription("Force enables SSL/TLS on the connection. Supports also a ${SINGLE_STORE_USE_SSL} configuration with a custom environment variable.")
+    private boolean useSsl;
 
     /**
      * Returns the failover and load-balancing Mode.
@@ -68,6 +72,23 @@ public class SingleStoreParametersSpec extends BaseProviderParametersSpec {
     public void setHostDescriptions(List<String> hostDescriptions) {
         setDirtyIf(!Objects.equals(this.hostDescriptions, hostDescriptions));
         this.hostDescriptions = hostDescriptions;
+    }
+
+    /**
+     * Returns the flag to require SSL connection.
+     * @return True - require an SSL connection.
+     */
+    public boolean isUseSsl() {
+        return useSsl;
+    }
+
+    /**
+     * Sets a flag to require an SSL connection.
+     * @param useSsl True - ssl connection is required.
+     */
+    public void setUseSsl(boolean useSsl) {
+        setDirtyIf(!Objects.equals(this.useSsl, useSsl));
+        this.useSsl = useSsl;
     }
 
     /**
