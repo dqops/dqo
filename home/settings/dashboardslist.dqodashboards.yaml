@@ -1221,3 +1221,4 @@ spec:
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: all
+
