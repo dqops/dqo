@@ -6,6 +6,14 @@ The configuration of every monitored table is stored in [\*.dqotable.yaml](../re
 are stored in the *$DQO_USER_HOME/sources/{data_source_name}/* folder of the data source.
 The [\*.dqotable.yaml](../reference/yaml/TableYaml.md) files are placed directly in the folder, not organized into folders by the database schema name.
 
+!!! tip "Importing table metadata from the DQOps user interface"
+
+    If you are not interested in the details of configuring data sources and you want to use the user interface,
+    go back to the *getting started* section and read the 
+    [import metadata using the interface](../getting-started/add-data-source-connection.md#import-metadata-using-the-user-interface)
+    section.
+
+
 ## Table metadata files
 The location and schema of [.dqotable.yaml](../reference/yaml/TableYaml.md) files are described below.
 

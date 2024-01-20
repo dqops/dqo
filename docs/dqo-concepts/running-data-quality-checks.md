@@ -14,6 +14,12 @@ Data quality checks can be queued for execution from the [DQOps command-line she
 by running the [check run](../command-line-interface/check.md#dqo-check-run) command.
 It is the easiest way to understand how the data quality check targeting is used.
 
+!!! tip "Running data quality checks from the DQOps user interface"
+
+    Follow the [running data quality checks](../working-with-dqo/run-data-quality-checks.md) manual
+    to see how to use the user interface to configure and run the data quality checks. 
+
+
 ## Targeting data sources and tables
 The data quality checks are configured on tables in the [.dqotable.yaml](../reference/yaml/TableYaml.md) table
 specification files. The structure of a simplified *DQOps user home* folder with one data source *sales-dwh*

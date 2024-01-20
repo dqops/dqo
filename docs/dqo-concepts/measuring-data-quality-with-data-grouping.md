@@ -1,5 +1,20 @@
-# Data grouping
+# Detect data quality issues with data grouping
 This guide shows how DQOps uses a *GROUP BY* clause in SQL queries to analyze the quality of data from multiple sources aggregated into a single table.
+
+## Overview
+DQOps has a unique feature of detecting data quality issues for different data streams (we call them **data groups**), that are aggregated
+in a single table. If your tables aggregate data from different data sources, different vendors, platforms, departments, or countries,
+this concept guide shows how to configure DQOps to use a *GROUP BY* clause in SQL queries to detect data quality issues in each data group.
+
+If a data quality issue is detected for one data group (let's say it is a *country*), you can identify that *country*, 
+and follow up with the data owner from the *country* that provided corrupted data.
+
+!!! tip "Configuring data grouping from the DQOps user interface"
+
+    This guide describes the internals of data grouping, and how to configure it in DQOps YAML files.
+    Follow the [set up data grouping](../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md) manual
+    to see how to use the user interface to configure data grouping. 
+
 
 ## How does data grouping work?
 
@@ -7,7 +22,7 @@ When a new data source's metadata is imported into DQOps and the first data qual
 analyze the whole table. The data quality check will capture one metric (using a data quality sensor, that is an SQL query).
 Then, that single data quality sensor readout (the captured metric) is evaluated through the rule engine, which will
 result in creating a data quality rule result that is valid (no data quality issue detected) or is a data quality issue, 
-ranked at three severity levels: warning, error or fatal.
+ranked at three severity levels: *warning*, *error* or *fatal*.
 
 A single data quality rule result for a whole table is not always the best solution. The data in the table is often coming
 from different data sources, different vendors, or is loaded by different data pipelines. When the data in the table comes from

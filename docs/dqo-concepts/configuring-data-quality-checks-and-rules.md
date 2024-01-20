@@ -12,9 +12,16 @@ Read the [configuration of data sources](configuring-data-sources.md) to know ho
 The [concept of the table metadata in DQOps](configuring-table-metadata.md) describes how to manage
 the [.dqotable.yaml](../reference/yaml/TableYaml.md) table metadata files.
 
+!!! tip "Configuring data quality checks from the DQOps user interface"
+
+    Follow the [running data quality checks](../working-with-dqo/run-data-quality-checks.md) manual
+    to see how to use the user interface to configure the data quality checks. 
+
+
+### **YAML file structure**
 The following example of a [table metadata file](configuring-table-metadata.md#table-yaml-file-structure)
 shows the location of [data quality check](definition-of-data-quality-checks/index.md) nodes where the
-parameters for the data quality checks and data quality rules are defined.
+parameters for the **table-level** data quality checks and data quality rules are defined.
 
 ``` { .yaml .annotate linenums="1" hl_lines="11 14 16 19 21" }
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json

@@ -117,7 +117,7 @@ nav:
       - "working-with-dqo/index.md"
       - Daily monitoring of data quality: "working-with-dqo/daily-monitoring-of-data-quality.md"
       - Basic data statistics: "working-with-dqo/collecting-basic-data-statistics.md"
-      - Run data quality checks: "working-with-dqo/run-data-quality-checks.md"
+      - Running data quality checks: "working-with-dqo/run-data-quality-checks.md"
       - Review the data quality results on dashboards: "working-with-dqo/review-the-data-quality-results-on-dashboards.md"
       - Delete data quality results: "working-with-dqo/delete-data-quality-results.md"
       - Schedules:

@@ -2,6 +2,18 @@
 Read this guide to understand how DQOps stores the connection parameters to monitored data sources, and how to manage credentials.
 
 ## Overview
+This guide describes how DQOps stores the configuration of data sources in YAML files, and what configuration options are available.
+
+!!! tip "Adding data sources from the user interface"
+
+    If you are not interested in the details of the data source configuration, go back to the *getting started* section,
+    and read the guide of 
+    [adding a data source from the DQOps user interface](../getting-started/add-data-source-connection.md#add-bigquery-connection-using-the-user-interface),
+    or consult the documentation of each [data source](../data-sources/index.md), which also contains screenshots of configuration screens
+    for each supported database.
+
+
+## Data sources configuration
 DQOps stores the configuration of data sources in YAML files. The files support auto-completion in Visual Studio Code and can be versioned in Git.    
 
 !!! note "[`DQOps user home` folder](dqops-user-home-folder.md)"
@@ -10,7 +22,7 @@ DQOps stores the configuration of data sources in YAML files. The files support 
     All files mentioned in this guide will be relative to the current folder, referred to as a [`$DQO_USER_HOME`](dqops-user-home-folder.md) in the examples below.
 
 
-## DQOps YAML files structure
+### **DQOps YAML files structure**
 The structure of DQOps YAML configuration files is similar to the structure of Kubernetes specification files.
 Additionally, the first line references a YAML schema file that is used by Visual Studio Code for code completion,
 validation, and showing the documentation of checks. The concept of working with [YAML files](../integrations/visual-studio-code/index.md)
