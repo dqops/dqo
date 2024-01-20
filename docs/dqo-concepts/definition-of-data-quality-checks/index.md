@@ -131,9 +131,9 @@ The purpose of reporting data quality issues at different severity levels is sum
 
 | Alerting threshold  | Data quality check passed | Data quality KPI result is decreased | Data pipeline should be stopped |
 |---------------------|:-------------------------:|:------------------------------------:|:-------------------------------:|
-| **Warning**         |  :material-close-thick:   |                                      |                                 |
-| **Error** (default) |                           |        :material-close-thick:        |                                 |
-| **Fatal**           |                           |        :material-close-thick:        |     :material-close-thick:      |
+| **Warning**         |   :material-check-bold:   |                                      |                                 |
+| **Error** (default) |                           |        :material-check-bold:         |                                 |
+| **Fatal**           |                           |        :material-check-bold:         |      :material-check-bold:      |
 
 
 ## Types of checks
