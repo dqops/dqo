@@ -54,7 +54,7 @@ public class MysqlParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("MySQL port number. The default port is 3306. Supports also a ${MYSQL_PORT} configuration with a custom environment variable.")
     private String port;
 
-    @CommandLine.Option(names = {"--mysql-database", "--single-store-database"}, description = "MySQL database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @CommandLine.Option(names = {"--mysql-database"}, description = "MySQL database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     @JsonPropertyDescription("MySQL database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String database;
 
@@ -126,7 +126,14 @@ public class MysqlParametersSpec extends BaseProviderParametersSpec
      * @return Physical database name.
      */
     public String getDatabase() {
-        return database;
+        switch (mysqlEngineType){
+            case mysql:
+                return database;
+            case singlestore:
+                return "def";   // the catalog name, database and schema is the same thing for the single store db
+            default:
+                throw new RuntimeException("Given enum is not supported : " + mysqlEngineType);
+        }
     }
 
     /**

@@ -35,6 +35,10 @@ public class SingleStoreParametersSpec extends BaseProviderParametersSpec { // t
     @JsonPropertyDescription("Host descriptions. Supports also a ${SINGLE_STORE_HOST_DESCRIPTIONS} configuration with a custom environment variable.")
     private List<String> hostDescriptions;
 
+    @CommandLine.Option(names = {"--single-store-schema"}, description = "MySQL database/schema name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("Single Store database/schema name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    private String schema;
+
     @CommandLine.Option(names = {"--single-store-host-descriptions"}, description = "Force enables SSL/TLS on the connection.")
     @JsonPropertyDescription("Force enables SSL/TLS on the connection. Supports also a ${SINGLE_STORE_USE_SSL} configuration with a custom environment variable.")
     private boolean useSsl;
@@ -64,7 +68,6 @@ public class SingleStoreParametersSpec extends BaseProviderParametersSpec { // t
         return hostDescriptions;
     }
 
-
     /**
      * Sets the host descriptions.
      * @param hostDescriptions Host descriptions.
@@ -89,6 +92,23 @@ public class SingleStoreParametersSpec extends BaseProviderParametersSpec { // t
     public void setUseSsl(boolean useSsl) {
         setDirtyIf(!Objects.equals(this.useSsl, useSsl));
         this.useSsl = useSsl;
+    }
+
+    /**
+     * Returns a schema name.
+     * @return Schema name.
+     */
+    public String getSchema() {
+        return schema;
+    }
+
+    /**
+     * Sets a schema name.
+     * @param schema Schema name.
+     */
+    public void setSchema(String schema) {
+        setDirtyIf(!Objects.equals(this.schema, schema));
+        this.schema = schema;
     }
 
     /**
@@ -119,6 +139,7 @@ public class SingleStoreParametersSpec extends BaseProviderParametersSpec { // t
         SingleStoreParametersSpec cloned = this.deepClone();
         cloned.loadBalancingMode = SingleStoreLoadBalancingMode.valueOf(secretValueProvider.expandValue(cloned.loadBalancingMode.toString(), lookupContext));
         cloned.hostDescriptions = secretValueProvider.expandList(cloned.hostDescriptions, lookupContext);
+        cloned.schema = secretValueProvider.expandValue(cloned.schema, lookupContext);
 
         return cloned;
     }

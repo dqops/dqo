@@ -147,15 +147,27 @@ const MySQLConnection = ({
             single_store_parameters_spec: { host_descriptions: value.split(",") } 
           })}
         />
+        <FieldTypeInput
+          data={sharedCredentials}
+          label="Database/Schema"
+          className="mb-4"
+          value={mysql?.single_store_parameters_spec?.schema}
+          onChange={(value) => handleChange({ 
+            single_store_parameters_spec: { schema: value } 
+          })}
+        />
       </>
       }
-      <FieldTypeInput
-        data={sharedCredentials}
-        label="Database"
-        className="mb-4"
-        value={mysql?.database}
-        onChange={(value) => handleChange({ database: value })}
-      />
+
+      { mysql?.mysql_engine_type === MysqlParametersSpecMysqlEngineTypeEnum.mysql &&
+        <FieldTypeInput
+          data={sharedCredentials}
+          label="Database"
+          className="mb-4"
+          value={mysql?.database}
+          onChange={(value) => handleChange({ database: value })}
+        />
+      }
 
       <FieldTypeInput
         data={sharedCredentials}

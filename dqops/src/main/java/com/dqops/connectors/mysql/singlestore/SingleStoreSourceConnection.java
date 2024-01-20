@@ -62,11 +62,11 @@ public class SingleStoreSourceConnection {
 
         jdbcConnectionBuilder.append("/");
 
-        String database = secretValueProvider.expandValue(mysqlParametersSpec.getDatabase(), secretValueLookupContext);
-        if (!Strings.isNullOrEmpty(database)) {
-            jdbcConnectionBuilder.append(database);
+        String schema = secretValueProvider.expandValue(singleStoreParametersSpec.getSchema(), secretValueLookupContext);
+        if (!Strings.isNullOrEmpty(schema)) {
+            jdbcConnectionBuilder.append(schema);
         } else {
-            throw new ConnectorOperationFailedException("Cannot create a connection to MySQL, the database name is not provided");
+            throw new ConnectorOperationFailedException("Cannot create a connection to MySQL, the database/schema name is not provided");
         }
 
         String jdbcUrl = jdbcConnectionBuilder.toString();
