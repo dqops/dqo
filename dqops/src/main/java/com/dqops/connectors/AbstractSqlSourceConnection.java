@@ -15,6 +15,7 @@
  */
 package com.dqops.connectors;
 
+import com.dqops.connectors.mysql.MysqlEngineType;
 import com.dqops.core.jobqueue.JobCancellationToken;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
@@ -267,7 +268,13 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
         ConnectionProviderSpecificParameters providerSpecificConfiguration = this.getConnectionSpec().getProviderSpecificConfiguration();
 
         StringBuilder sqlBuilder = new StringBuilder();
-        sqlBuilder.append("SELECT * FROM ");
+
+        if(connectionSpec.getMysql().getMysqlEngineType().equals(MysqlEngineType.singlestore)){
+            sqlBuilder.append("SELECT TABLE_CATALOG,TABLE_SCHEMA,TABLE_NAME,COLUMN_NAME,ORDINAL_POSITION,COLUMN_DEFAULT,IS_NULLABLE,IS_SPARSE,DATA_TYPE,CHARACTER_MAXIMUM_LENGTH,CHARACTER_OCTET_LENGTH,NUMERIC_PRECISION,NUMERIC_SCALE,CHARACTER_SET_NAME,COLLATION_NAME,CAST(COLUMN_TYPE as CHAR(8192)),COLUMN_KEY,EXTRA,PRIVILEGES,COLUMN_COMMENT,DATETIME_PRECISION FROM ");
+        } else {
+            sqlBuilder.append("SELECT * FROM ");
+        }
+
         String databaseName = providerSpecificConfiguration.getDatabase();
         sqlBuilder.append(getInformationSchemaName());
         sqlBuilder.append(".COLUMNS ");
