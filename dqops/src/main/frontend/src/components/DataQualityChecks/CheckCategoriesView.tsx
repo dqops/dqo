@@ -72,7 +72,7 @@ const CheckCategoriesView = ({
     const res = await JobApiClient.runChecks(undefined, false, undefined, {
       check_search_filters: category?.run_checks_job_template,
       ...(checkTypes === CheckTypes.PARTITIONED && timeWindowFilter !== null
-        ? { timeWindowFilter }
+        ? { time_window_filter: timeWindowFilter }
         : {})
     });
     dispatch(

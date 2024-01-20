@@ -6,6 +6,8 @@ Read this guide to understand the purpose of data profiling data quality checks 
 In DQOps, the check is a data quality test, which consists of a [data quality sensor](../definition-of-data-quality-sensors.md) and a
 [data quality rule](../definition-of-data-quality-rules.md).
 
+![data profiling screen in DQOps](https://dqops.com/docs/images/concepts/types-of-data-quality-checks/table-profiling-checks-results-min.png)
+
 Profiling checks are useful for exploring and experimenting with various types of checks and determining the most suitable
 ones for regular data quality monitoring.
 

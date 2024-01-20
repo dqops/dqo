@@ -9,6 +9,10 @@ In DQOps, the check is a data quality test, which consists of a [data quality se
 Monitoring checks are standard checks that monitor the data quality of a table or column. There are two categories of 
 monitoring checks: daily checks and monthly checks.
 
+### **Daily monitoring checks**
+
+![daily monitoring data quality checks editor](https://dqops.com/docs/images/concepts/types-of-data-quality-checks/daily-monitoring-checks-editor-min.png)
+
 The daily monitoring checks store the most recent sensor readouts for each day when the data quality check was run. 
 This means that if you run a check several times a day only the most recent readout is stored. The previous readouts for 
 that day will be overwritten. 
@@ -32,6 +36,11 @@ If there is a change in the data on 2023-04-07, and we run the check again, the 
 |   **98.17%** | **2023-04-07** |
 
 The previous result for 2023-04-07 was deleted.
+
+### **Monthly monitoring checks**
+
+![monthly monitoring data quality checks editor](https://dqops.com/docs/images/concepts/types-of-data-quality-checks/monthly-monitoring-checks-editor-min.png)
+
 
 Similarly, the monthly monitoring checks store the most recent sensor readout for each month when the data quality check was run.
 For monthly monitoring checks, the original time_period of the result e.g. 2023-04-05T09:06:53.386Z is truncated to the 1st day of the month - 2023-04-01. 
