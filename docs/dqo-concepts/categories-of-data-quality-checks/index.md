@@ -30,6 +30,20 @@ The following table shows the most common data quality issues that are detected 
 | [Uniqueness and duplicates](how-to-detect-data-uniqueness-issues-and-duplicates.md)              | <span class="no-wrap-code">`uniqueness`</span>      | Detect duplicate values in columns. Ensure that values in columns are unique.                                                                                                    | [column-level](../../checks/column/uniqueness/index.md)                                                                |
 
 
+## Check categories in the user interface
+The [data quality check editor](../dqops-user-interface-overview.md#check-editor) shows data quality checks categories as collapsible sections.
+
+### **Table-level check editor**
+The categories of table-level checks are shown when opening the data quality check editor for a table.
+
+![table-level data quality check categories](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-level-data-quality-check-categories-min.png)
+
+### **Column-level check editor**
+The categories of column-level checks are shown when opening the data quality check editor for a column.
+
+![column-level data quality check categories](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/column-level-data-quality-check-categories-min.png)
+
+
 ## Referencing check categories in YAML files
 If you want to [configure data quality checks](../configuring-data-quality-checks-and-rules.md)
 directly in the DQOps YAML files, the categories are defined as YAML nodes below respective
