@@ -198,8 +198,12 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
             TableSpec tableSpec,
             TimeSeriesConfigurationSpec timeSeriesConfigurationSpec,
             TimeWindowFilterParameters userTimeWindowFilters) {
+        if (userTimeWindowFilters != null && userTimeWindowFilters.hasAnyParametersApplied()) {
+            return userTimeWindowFilters;
+        }
+
         if (timeSeriesConfigurationSpec.getMode() == TimeSeriesMode.current_time) {
-            return userTimeWindowFilters != null ? userTimeWindowFilters : new TimeWindowFilterParameters();
+            return new TimeWindowFilterParameters();
         }
 
         PartitionIncrementalTimeWindowSpec tableTimeWindowSpec = tableSpec.getIncrementalTimeWindow();
