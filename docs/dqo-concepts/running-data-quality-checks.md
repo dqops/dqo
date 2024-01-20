@@ -195,17 +195,17 @@ spec:
 
 In order to run only the [daily_row_count](../checks/table/volume/row-count.md#daily-row-count),
 without running the [monthly_row_count](../checks/table/volume/row-count.md#monthly-row-count),
-we can target it with a `--check=` parameter as shown in the following example.
+you can target it with a `--check=` parameter as shown in the following example.
 
 ``` { .asc .annotate }
 dqo> check run --connection=sales-dwh --full-table-name=public.fact_sales --check=daily_row_count(1)
 ```
 
-1. The name of the data quality check to run. Other check names are listed in the [Checks](../checks/index.md) reference.
+1. The name of the data quality check to run. The full list of supported data quality checks is listed in the [data quality checks reference](../checks/index.md).
 
 
 ## Targeting checks by type
-Instead of running checks one by one, we can run all checks from one type of check.
+Instead of running checks one by one, you can run all checks from one [type of data quality checks](definition-of-data-quality-checks/index.md#types-of-checks).
 
 ### **Running profiling checks**
 The next example *.dqotable.yaml* shows a mixture of *profiling* and *monitoring* checks. We want to run only *profiling* checks.
@@ -234,7 +234,7 @@ spec:
 ```
 
 The type of check is filtered using the `--check-type=` parameter. In order to run only
-[profiling checks](definition-of-data-quality-checks/data-profiling-checks.md), we will use the following command.
+[profiling checks](definition-of-data-quality-checks/data-profiling-checks.md), you can use the following command.
 
 ``` { .asc .annotate }
 dqo> check run --connection=sales-dwh --full-table-name=public.fact_sales --check-type=profiling(1)
@@ -244,10 +244,10 @@ dqo> check run --connection=sales-dwh --full-table-name=public.fact_sales --chec
 
 
 ### **Running monitoring checks**
-Instead of *profiling* checks, we can run only **monitoring** checks. If the time scale is not configured
+Instead of *profiling* checks, you can run only **monitoring** checks. If the time scale is not configured
 to select only *daily* or *monthly* checks, both types are run if they are configured.
 
-The following example highlights the group of checks that we want to run.
+The following example highlights the group of checks that you want to run.
 
 ``` { .yaml .annotate linenums="1" hl_lines="10-20" }
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -282,10 +282,10 @@ dqo> check run --connection=sales-dwh --full-table-name=public.fact_sales --chec
 
 
 ### **Running daily monitoring checks**
-We can limit running the checks only to the *daily monitoring* checks, by providing both the `--check-type=` parameter
+You can limit running the checks only to the *daily monitoring* checks, by providing both the `--check-type=` parameter
 and the `--time-scale=` parameter that targets only *daily* or *monthly* checks. 
 
-The following YAML example highlights the *daily monitoring* checks that we want to run.
+The following YAML example highlights the *daily monitoring* checks that you want to run.
 
 ``` { .yaml .annotate linenums="1" hl_lines="11-15" }
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -320,7 +320,7 @@ dqo> check run --connection=sales-dwh --full-table-name=public.fact_sales --chec
 
 ### **Running partitioned checks**
 Running [partitioned checks](definition-of-data-quality-checks/partition-checks.md) to analyze partitions is similar
-to running *monitoring* checks. We can also select the time scale.
+to running *monitoring* checks. You can also select the time scale (*daily* or *monthly*).
 
 The following example highlights the *partitioned* checks that will be run.
 
@@ -368,7 +368,7 @@ dqo> check run --connection=sales-dwh --full-table-name=public.fact_sales --chec
 1. Selects the *partitioned* checks.
 
 ### **Run all daily checks**
-DQOps supports any combination of targeting. For example, we can run only *daily* checks, which will
+DQOps supports any combination of targeting. For example, you can run only *daily* checks, which will
 target both *monitoring* and *partitioned* checks. Because the *profiling* checks are not using a time scale, they will be excluded.
 
 The following YAML example highlights the *daily* checks that will be run.
@@ -462,7 +462,7 @@ dqo> check run --connection=sales-dwh --full-table-name=public.fact_sales --chec
 
 
 ## Targeting a category of checks
-We can also run all checks in a category, skipping other categories. 
+You can also run all checks from a [data quality check category](types-of-data-quality-checks/index.md), skipping other categories. 
 
 !!! info "Filtering by category and check type"
 
@@ -471,8 +471,9 @@ We can also run all checks in a category, skipping other categories.
     a single check by its name, but the check type and optionally the check time scale should be specified to avoid
     running unexpected data quality checks.
 
-The following example shows both checks defined in the *nulls* and the *schema* category on a column.
-The highlighted section shows only the *schema* checks that we want to run on all columns.
+The following example shows both checks defined in the [*nulls*](types-of-data-quality-checks/how-to-detect-nulls-data-quality-issues.md)
+and the [*schema*](types-of-data-quality-checks/how-to-detect-table-schema-changes.md) category on a column.
+The highlighted section shows only the *schema* checks that you want to run on all columns.
 
 ``` { .yaml .annotate linenums="1" hl_lines="16-19 26-29" }
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -506,8 +507,8 @@ spec:
                 expected_value: 1
 ```
 
-We will use the `--category=schema` filter to run the *schema* checks. Additionally, following the note above,
-only *daily monitoring* checks will be run.
+We will use the `--category=schema` filter to run the [*schema* data quality checks](types-of-data-quality-checks/how-to-detect-table-schema-changes.md).
+Additionally, following the note above, only the *daily monitoring* checks will be run.
 
 ``` { .asc .annotate }
 dqo> check run --connection=sales-dwh --full-table-name=public.fact_sales --check-type=monitoring --time-scale=daily

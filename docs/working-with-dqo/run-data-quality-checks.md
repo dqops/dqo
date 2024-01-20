@@ -10,7 +10,7 @@ In DQOps there are two ways to activate and run data quality checks:
 
 To activate checks, you need to add a connection. You can learn [how to add connection here](../data-sources/index.md).
 
-For more information about [different categories of checks, see DQOps concepts section](../dqo-concepts/definition-of-data-quality-checks/index.md).
+For more information about [different types of checks, see DQOps concepts section](../dqo-concepts/definition-of-data-quality-checks/index.md).
 
 ## Run data quality checks using the user interface
 

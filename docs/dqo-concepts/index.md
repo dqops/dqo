@@ -1,7 +1,7 @@
 # DQOps key concepts overview
 Follow this guide to learn each concept of DQOps Data Quality Operations Center to start measuring data quality for data sources.
 
-## List of DQOps concepts
+## DQOps basic concepts
 These topics introduce the basic concepts of DQOps.
 
  - **[What is a data quality check](definition-of-data-quality-checks/index.md)**
@@ -105,7 +105,7 @@ These topics introduce the basic concepts of DQOps.
     that was captured by sensor (a result of an SQL query).
     The rule verifies if the `sensor readout` is valid or a data quality issue should be raised.
     For example, the [max_percent](../reference/rules/Comparison.md#max-percent) rule will verify if the result
-    of the [null_percent](../reference/sensors/column/nulls-column-sensors.md#null-percent) sensor is valid.
+    of the [null_percent](../reference/sensors/column/nulls-column-sensors.md#null-percent) sensor is acceptable.
 
 
  - **[Data quality KPIs](definition-of-data-quality-kpis.md)**
@@ -210,3 +210,61 @@ These topics introduce the basic concepts of DQOps.
     [data quality rules](definition-of-data-quality-rules.md), [data quality checks](definition-of-data-quality-checks/index.md),
     and how the data is [stored](data-storage-of-data-quality-results.md). Learn how execution errors are stored.
  
+
+## Other topics
+Check out the other areas of the DQOps documentation.
+
+ - **[Installing DQOps](../dqops-installation/index.md)**
+
+    Learn now to install DQOps using [pip](../dqops-installation/install-dqops-using-pip.md), [docker](../dqops-installation/run-dqops-as-docker-container.md),
+    or installing locally from a [release package](../dqops-installation/install-dqops-from-release-package.md).
+
+
+ - **[List of data sources](../data-sources/index.md)**
+
+    The list of supported data sources and how to register them in DQOps.
+
+
+ - **[DQOps use cases](../examples/index.md)**
+
+    Review a list of data quality use cases, and how to detect most common data quality issues with DQOps.
+    Each use case is a step-by-step guide, starting with the description of a problem, followed by the steps to configure
+    relevant data quality checks, and finally showing the data quality dashboards.
+
+
+ - **[Working with DQOps](../working-with-dqo/index.md)**
+
+    The remaining step-by-step manuals not included in the DQOps basic concepts guide.
+
+
+ - **[Integrations](../integrations/index.md)**
+
+    Find out how DQOps integrates with other systems. How to run [data quality checks in Apache Airflow](../integrations/airflow/index.md),
+    or how to send data quality incident notifications to [Slack](../integrations/slack/configuring-slack-notifications.md).
+
+
+ - **[Command-line interface](../command-line-interface/index.md)**
+
+    DQOps supports running commands directly from the [operating system shell](command-line-interface.md#integrating-dqops-into-shell-scripts),
+    or using the [DQOps integrated shell](command-line-interface.md). The [command-line interface](../command-line-interface/index.md)   
+    is a reference of all DQOps commands.
+
+
+ - **[REST API Python Client](../client/index.md)**
+
+    Using DQOps is not limited only to the [user interface](dqops-user-interface-overview.md), or the
+    [command-line shell](../command-line-interface/index.md). All operations such as [running data quality checks](../client/operations/jobs.md#run_checks)
+    are also supported from a DQOps Python client. The [REST API Python Client](../client/index.md) shows ready-to-use Python code samples.
+
+
+ - **[Data quality checks reference](../checks/index.md)**
+
+    The reference of all data quality checks that are included in DQOps. The reference of each data quality check has
+    a YAML configuration fragment, and examples of SQL queries for each data source.
+
+
+ - **[Reference](../reference/index.md)**
+
+    The full reference of all [data quality sensors](../reference/sensors/index.md), [data quality rules](../reference/rules/index.md),
+    [DQOps YAML files](../reference/yaml/index.md) and [DQOps Parquet schema](../reference/parquetfiles/index.md). 
+
