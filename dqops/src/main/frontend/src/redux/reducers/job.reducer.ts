@@ -147,9 +147,11 @@ const schemaReducer = (state = initialState, action: any) => {
       const filterObject = <T extends Record<string, TJobDictionary>>(
         obj: T
       ): Record<string, TJobDictionary> => {
-        const filteredObject: Record<string, TJobDictionary> =
-          Object.assign({}, obj);
+        const filteredObject: Record<string, TJobDictionary> =Object.assign({}, obj);
           const nowDate = moment();
+
+          //todo : use 2 pointers technique instead of 2 separate loops
+          //todo : manage deleting data from jobList if deleting from dictionary
 
           const typeOccurrences: Record<string, number> = {};
           const reversedKeys = Object.keys(filteredObject).reverse();
@@ -179,11 +181,7 @@ const schemaReducer = (state = initialState, action: any) => {
       
       jobChanges?.forEach((jobChange : DqoJobChangeModel) => {
         if (!jobChange.jobId?.jobId) return;
-        // todo: 
-        // updated existing parent -> 
-        // updated existing child ->
-        // new parent -> 
-        // new child -> 
+
 
         //new parent (list)
         if (jobChange.jobId.parentJobId?.jobId === undefined && !notFilteredList[jobChange.jobId?.jobId]) {
@@ -233,6 +231,7 @@ const schemaReducer = (state = initialState, action: any) => {
         else if (
           jobChange.jobId?.parentJobId?.jobId &&
           jobChange?.jobId?.jobId &&
+          //todo: make Record<Record to avoid finding child with .find arr func instead index it dict[parentId][childId] 
           not_filtered_job_dictionary_state[jobChange.jobId?.parentJobId?.jobId]?.childs?.find(
             (x) => x.jobId?.jobId === jobChange?.jobId?.jobId
           )
@@ -255,16 +254,16 @@ const schemaReducer = (state = initialState, action: any) => {
       });
       console.log(not_filtered_job_dictionary_state, notFilteredList)
 
-      const job_dictionary_state =
-        filterObject(not_filtered_job_dictionary_state) ??
-        not_filtered_job_dictionary_state;
+      const job_dictionary_state = filterObject(not_filtered_job_dictionary_state);
+
+      const jobList = filterObject(not_filtered_job_dictionary_state);
 
       return {
         ...state,
         loading: false,
         lastSequenceNumber: action.data.lastSequenceNumber,
         job_dictionary_state,
-        jobList: notFilteredList,
+        jobList,
         folderSynchronizationStatus: action.data.folderSynchronizationStatus,
         error: null
       };

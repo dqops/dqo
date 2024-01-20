@@ -61,34 +61,34 @@ export const getDetectedDatatype = (numberForFile: any) => {
   }
 };
 
-export const transformAllJobs = (jobs: DqoJobHistoryEntryModel[]): TJobDictionary[] => {
-  const jobsData = jobs.reverse().map((item) => ({ type: 'job', item }));
+// export const transformAllJobs = (jobs: DqoJobHistoryEntryModel[]): TJobDictionary[] => {
+//   const jobsData = jobs.reverse().map((item) => ({ type: 'job', item }));
   
-  const jobList = jobsData
-  .filter((z) => z.item.jobId?.parentJobId?.jobId === undefined)
-  .map((x) => ({
-    errorMessage: x.item.errorMessage,
-    jobId: {
-      jobId: x.item.jobId?.jobId,
-      createdAt: x.item.jobId?.createdAt
-    },
-    jobType: x.item.jobType,
-    parameters: x.item.parameters,
-    status: x.item.status,
-    statusChangedAt: x.item.statusChangedAt,
-    childs: jobsData
-      .filter(
-        (y) => y.item.jobId?.parentJobId?.jobId === x.item.jobId?.jobId
-      )
-      .map((y) => y.item)
-  }));
+//   const jobList = jobsData
+//   .filter((z) => z.item.jobId?.parentJobId?.jobId === undefined)
+//   .map((x) => ({
+//     errorMessage: x.item.errorMessage,
+//     jobId: {
+//       jobId: x.item.jobId?.jobId,
+//       createdAt: x.item.jobId?.createdAt
+//     },
+//     jobType: x.item.jobType,
+//     parameters: x.item.parameters,
+//     status: x.item.status,
+//     statusChangedAt: x.item.statusChangedAt,
+//     childs: jobsData
+//       .filter(
+//         (y) => y.item.jobId?.parentJobId?.jobId === x.item.jobId?.jobId
+//       )
+//       .map((y) => y.item)
+//   }));
   
-  return  []
-}
+//   return  []
+// }
 
-export const transformJobsChanges = (jobs: DqoJobChangeModel): TJobDictionary[] => {
-  return[]
-}  
+// export const transformJobsChanges = (jobs: DqoJobChangeModel): TJobDictionary[] => {
+//   return[]
+// }  
 
 // case JOB_ACTION.GET_JOBS_SUCCESS: {
 //   const job_dictionary_state: Record<string, TJobDictionary> = {};
