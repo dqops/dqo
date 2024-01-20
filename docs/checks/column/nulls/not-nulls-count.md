@@ -17,7 +17,7 @@ Detects empty columns. The default rule min_count&#x3D;1 verifies that the colum
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_not_nulls_count`</span>|[nulls](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-nulls-data-quality-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Completeness|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_not_nulls_count`</span>|[nulls](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-nulls-data-quality-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Completeness|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -872,7 +872,7 @@ Detects empty columns. The default rule min_count&#x3D;1 verifies that the colum
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_not_nulls_count`</span>|[nulls](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-nulls-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Completeness|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_not_nulls_count`</span>|[nulls](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-nulls-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Completeness|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -1729,7 +1729,7 @@ Detects columns that are empty and have no values (with the rule threshold min_c
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_not_nulls_count`</span>|[nulls](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-nulls-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Completeness|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_not_nulls_count`</span>|[nulls](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-nulls-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Completeness|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -2586,7 +2586,7 @@ Detects empty columns. The default rule min_count&#x3D;1 verifies that the colum
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_not_nulls_count`</span>|[nulls](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-nulls-data-quality-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Completeness|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_partition_not_nulls_count`</span>|[nulls](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-nulls-data-quality-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Completeness|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -3465,7 +3465,7 @@ Detects empty columns. The default rule min_count&#x3D;1 verifies that the colum
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_not_nulls_count`</span>|[nulls](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-nulls-data-quality-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Completeness|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_partition_not_nulls_count`</span>|[nulls](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-nulls-data-quality-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Completeness|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
 
 **Command-line examples**
 

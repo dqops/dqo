@@ -17,7 +17,7 @@ Verifies that the number of duplicate values in a column does not exceed the max
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_duplicate_count`</span>|[uniqueness](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Uniqueness|[*duplicate_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#duplicate-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_duplicate_count`</span>|[uniqueness](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Uniqueness|[*duplicate_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#duplicate-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -896,7 +896,7 @@ Verifies that the number of duplicate values in a column does not exceed the max
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_duplicate_count`</span>|[uniqueness](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Uniqueness|[*duplicate_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#duplicate-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_duplicate_count`</span>|[uniqueness](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Uniqueness|[*duplicate_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#duplicate-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -1777,7 +1777,7 @@ Verifies that the number of duplicate values in a column does not exceed the max
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_duplicate_count`</span>|[uniqueness](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Uniqueness|[*duplicate_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#duplicate-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_duplicate_count`</span>|[uniqueness](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Uniqueness|[*duplicate_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#duplicate-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -2658,7 +2658,7 @@ Verifies that the number of duplicate values in a column does not exceed the max
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_duplicate_count`</span>|[uniqueness](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Uniqueness|[*duplicate_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#duplicate-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_partition_duplicate_count`</span>|[uniqueness](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Uniqueness|[*duplicate_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#duplicate-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -3561,7 +3561,7 @@ Verifies that the number of duplicate values in a column does not exceed the max
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_duplicate_count`</span>|[uniqueness](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Uniqueness|[*duplicate_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#duplicate-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_partition_duplicate_count`</span>|[uniqueness](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Uniqueness|[*duplicate_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#duplicate-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 

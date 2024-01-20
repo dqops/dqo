@@ -63,7 +63,7 @@ These topics introduce the basic concepts of DQOps.
     are shown by Visual Studio Code and many other editors when editing DQOps YAML files.
     
 
- - **[Categories of checks](types-of-data-quality-checks/index.md)** 
+ - **[Categories of checks](categories-of-data-quality-checks/index.md)** 
 
     The most common data quality issues that are detected by DQOps are divided into **categories**.
     Read this section to learn what type of data quality problems are detected by DQOps out-of-the-box.

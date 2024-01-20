@@ -17,7 +17,7 @@ The check counts the number of text values in the column that are surrounded by 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_text_surrounded_by_whitespace`</span>|[text](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*text_surrounded_by_whitespace_count*](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
+|<span class="no-wrap-code">`profile_text_surrounded_by_whitespace`</span>|[text](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*text_surrounded_by_whitespace_count*](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
 
 **Command-line examples**
 
@@ -1464,7 +1464,7 @@ The check counts the number of text values in the column that are surrounded by 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_text_surrounded_by_whitespace`</span>|[text](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*text_surrounded_by_whitespace_count*](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
+|<span class="no-wrap-code">`daily_text_surrounded_by_whitespace`</span>|[text](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*text_surrounded_by_whitespace_count*](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
 
 **Command-line examples**
 
@@ -2913,7 +2913,7 @@ The check counts the number of text values in the column that are surrounded by 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_text_surrounded_by_whitespace`</span>|[text](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*text_surrounded_by_whitespace_count*](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
+|<span class="no-wrap-code">`monthly_text_surrounded_by_whitespace`</span>|[text](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*text_surrounded_by_whitespace_count*](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
 
 **Command-line examples**
 
@@ -4362,7 +4362,7 @@ The check counts the number of text values in the column that are surrounded by 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_text_surrounded_by_whitespace`</span>|[text](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*text_surrounded_by_whitespace_count*](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
+|<span class="no-wrap-code">`daily_partition_text_surrounded_by_whitespace`</span>|[text](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*text_surrounded_by_whitespace_count*](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
 
 **Command-line examples**
 
@@ -5833,7 +5833,7 @@ The check counts the number of text values in the column that are surrounded by 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_text_surrounded_by_whitespace`</span>|[text](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*text_surrounded_by_whitespace_count*](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
+|<span class="no-wrap-code">`monthly_partition_text_surrounded_by_whitespace`</span>|[text](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*text_surrounded_by_whitespace_count*](../../../reference/sensors/column/text-column-sensors.md#text-surrounded-by-whitespace-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)| |
 
 **Command-line examples**
 

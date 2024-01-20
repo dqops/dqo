@@ -108,13 +108,13 @@ public class CheckDocumentationGeneratorImpl implements CheckDocumentationGenera
         }
 
         Template checkCategoryTemplate = HandlebarsDocumentationUtilities.compileTemplate("checks/check_category_index");
-        DocumentationFolder typesOfChecksFolder = new DocumentationFolder("dqo-concepts/types-of-data-quality-checks");
+        DocumentationFolder typesOfChecksFolder = new DocumentationFolder("dqo-concepts/categories-of-data-quality-checks");
         typesOfChecksFolder.setLinkName("Categories of checks");
         typesOfChecksFolder.setDirectPath(projectRootPath.resolve("../docs")
                 .resolve(typesOfChecksFolder.getFolderName()).toAbsolutePath().normalize());
 
         DocumentationFolder currentTypesOfChecksFolder = currentRootFolder.getFolderByName("dqo-concepts")
-                .getFolderByName("types-of-data-quality-checks");
+                .getFolderByName("categories-of-data-quality-checks");
 
         DocumentationMarkdownFile newCategoryIndexFile = typesOfChecksFolder.addNestedFile("index.md");
         DocumentationMarkdownFile currentCategoryIndexFile = currentTypesOfChecksFolder.getFileByName("index.md");

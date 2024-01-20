@@ -18,7 +18,7 @@ Verifies that the total row count of the tested table matches the total row coun
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_total_row_count_match_percent`</span>|[accuracy](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-accuracy-data-quality-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Accuracy|[*total_row_count_match_percent*](../../../reference/sensors/table/accuracy-table-sensors.md#total-row-count-match-percent)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_total_row_count_match_percent`</span>|[accuracy](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-accuracy-data-quality-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Accuracy|[*total_row_count_match_percent*](../../../reference/sensors/table/accuracy-table-sensors.md#total-row-count-match-percent)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -489,7 +489,7 @@ Verifies the total ow count of a tested table and compares it to a row count of 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_total_row_count_match_percent`</span>|[accuracy](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-accuracy-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Accuracy|[*total_row_count_match_percent*](../../../reference/sensors/table/accuracy-table-sensors.md#total-row-count-match-percent)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_total_row_count_match_percent`</span>|[accuracy](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-accuracy-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Accuracy|[*total_row_count_match_percent*](../../../reference/sensors/table/accuracy-table-sensors.md#total-row-count-match-percent)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -961,7 +961,7 @@ Verifies the total row count of a tested table and compares it to a row count of
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_total_row_count_match_percent`</span>|[accuracy](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-accuracy-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Accuracy|[*total_row_count_match_percent*](../../../reference/sensors/table/accuracy-table-sensors.md#total-row-count-match-percent)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_total_row_count_match_percent`</span>|[accuracy](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-accuracy-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Accuracy|[*total_row_count_match_percent*](../../../reference/sensors/table/accuracy-table-sensors.md#total-row-count-match-percent)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 

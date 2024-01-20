@@ -17,7 +17,7 @@ Verifies that the percentage of true values in a column does not exceed the mini
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_true_percent`</span>|[bool](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Reasonableness|[*true_percent*](../../../reference/sensors/column/bool-column-sensors.md#true-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_true_percent`</span>|[bool](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Reasonableness|[*true_percent*](../../../reference/sensors/column/bool-column-sensors.md#true-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -1244,7 +1244,7 @@ Verifies that the percentage of true values in a column does not exceed the mini
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_true_percent`</span>|[bool](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Reasonableness|[*true_percent*](../../../reference/sensors/column/bool-column-sensors.md#true-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_true_percent`</span>|[bool](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Reasonableness|[*true_percent*](../../../reference/sensors/column/bool-column-sensors.md#true-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -2473,7 +2473,7 @@ Verifies that the percentage of true values in a column does not exceed the mini
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_true_percent`</span>|[bool](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Reasonableness|[*true_percent*](../../../reference/sensors/column/bool-column-sensors.md#true-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_true_percent`</span>|[bool](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Reasonableness|[*true_percent*](../../../reference/sensors/column/bool-column-sensors.md#true-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -3702,7 +3702,7 @@ Verifies that the percentage of true values in a column does not exceed the mini
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_true_percent`</span>|[bool](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Reasonableness|[*true_percent*](../../../reference/sensors/column/bool-column-sensors.md#true-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_partition_true_percent`</span>|[bool](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Reasonableness|[*true_percent*](../../../reference/sensors/column/bool-column-sensors.md#true-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -4953,7 +4953,7 @@ Verifies that the percentage of true values in a column does not exceed the mini
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_true_percent`</span>|[bool](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Reasonableness|[*true_percent*](../../../reference/sensors/column/bool-column-sensors.md#true-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_partition_true_percent`</span>|[bool](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Reasonableness|[*true_percent*](../../../reference/sensors/column/bool-column-sensors.md#true-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 

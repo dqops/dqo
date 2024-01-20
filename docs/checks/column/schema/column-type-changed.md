@@ -19,7 +19,7 @@ Checks the metadata of the monitored column and detects if the data type (includ
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_column_type_changed`</span>|[schema](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*column_type_hash*](../../../reference/sensors/column/schema-column-sensors.md#column-type-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_column_type_changed`</span>|[schema](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*column_type_hash*](../../../reference/sensors/column/schema-column-sensors.md#column-type-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -124,7 +124,7 @@ Checks the metadata of the monitored column and detects if the data type (includ
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_column_type_changed`</span>|[schema](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*column_type_hash*](../../../reference/sensors/column/schema-column-sensors.md#column-type-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_column_type_changed`</span>|[schema](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*column_type_hash*](../../../reference/sensors/column/schema-column-sensors.md#column-type-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -230,7 +230,7 @@ Checks the metadata of the monitored column and detects if the data type (includ
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_column_type_changed`</span>|[schema](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Consistency|[*column_type_hash*](../../../reference/sensors/column/schema-column-sensors.md#column-type-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_column_type_changed`</span>|[schema](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Consistency|[*column_type_hash*](../../../reference/sensors/column/schema-column-sensors.md#column-type-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|:material-check-bold:|
 
 **Command-line examples**
 

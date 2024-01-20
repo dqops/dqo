@@ -17,7 +17,7 @@ Verifies that the total row count of the tested table changes in a rate within a
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_row_count_anomaly`</span>|[volume](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*anomaly_differencing_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-differencing-percentile-moving-average)| |
+|<span class="no-wrap-code">`profile_row_count_anomaly`</span>|[volume](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*anomaly_differencing_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-differencing-percentile-moving-average)| |
 
 **Command-line examples**
 
@@ -824,7 +824,7 @@ Verifies that the total row count of the tested table changes in a rate within a
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_row_count_anomaly`</span>|[volume](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*anomaly_differencing_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-differencing-percentile-moving-average)| |
+|<span class="no-wrap-code">`daily_row_count_anomaly`</span>|[volume](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*anomaly_differencing_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-differencing-percentile-moving-average)| |
 
 **Command-line examples**
 
@@ -1633,7 +1633,7 @@ Verifies that the total row count of the tested table is within a percentile fro
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_row_count_anomaly`</span>|[volume](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Consistency|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*anomaly_stationary_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)| |
+|<span class="no-wrap-code">`daily_partition_row_count_anomaly`</span>|[volume](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Consistency|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*anomaly_stationary_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)| |
 
 **Command-line examples**
 

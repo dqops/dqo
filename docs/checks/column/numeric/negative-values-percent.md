@@ -17,7 +17,7 @@ Verifies that the percentage of negative values in a column does not exceed the 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_negative_values_percent`</span>|[numeric](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*negative_percent*](../../../reference/sensors/column/numeric-column-sensors.md#negative-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
+|<span class="no-wrap-code">`profile_negative_values_percent`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*negative_percent*](../../../reference/sensors/column/numeric-column-sensors.md#negative-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 
@@ -1204,7 +1204,7 @@ Verifies that the percentage of negative values in a column does not exceed the 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_negative_values_percent`</span>|[numeric](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*negative_percent*](../../../reference/sensors/column/numeric-column-sensors.md#negative-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
+|<span class="no-wrap-code">`daily_negative_values_percent`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*negative_percent*](../../../reference/sensors/column/numeric-column-sensors.md#negative-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 
@@ -2393,7 +2393,7 @@ Verifies that the percentage of negative values in a column does not exceed the 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_negative_values_percent`</span>|[numeric](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*negative_percent*](../../../reference/sensors/column/numeric-column-sensors.md#negative-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
+|<span class="no-wrap-code">`monthly_negative_values_percent`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*negative_percent*](../../../reference/sensors/column/numeric-column-sensors.md#negative-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 
@@ -3582,7 +3582,7 @@ Verifies that the percentage of negative values in a column does not exceed the 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_negative_values_percent`</span>|[numeric](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*negative_percent*](../../../reference/sensors/column/numeric-column-sensors.md#negative-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
+|<span class="no-wrap-code">`daily_partition_negative_values_percent`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*negative_percent*](../../../reference/sensors/column/numeric-column-sensors.md#negative-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 
@@ -4793,7 +4793,7 @@ Verifies that the percentage of negative values in a column does not exceed the 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_negative_values_percent`</span>|[numeric](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*negative_percent*](../../../reference/sensors/column/numeric-column-sensors.md#negative-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
+|<span class="no-wrap-code">`monthly_partition_negative_values_percent`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*negative_percent*](../../../reference/sensors/column/numeric-column-sensors.md#negative-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 

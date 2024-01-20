@@ -17,7 +17,7 @@ Verifies that the percentage of text values that are parsable to a boolean value
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_text_parsable_to_boolean_percent`</span>|[text](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*text_parsable_to_boolean_percent*](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-boolean-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+|<span class="no-wrap-code">`profile_text_parsable_to_boolean_percent`</span>|[text](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*text_parsable_to_boolean_percent*](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-boolean-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
@@ -1244,7 +1244,7 @@ Verifies that the percentage of text values that are parsable to a boolean value
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_text_parsable_to_boolean_percent`</span>|[text](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*text_parsable_to_boolean_percent*](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-boolean-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+|<span class="no-wrap-code">`daily_text_parsable_to_boolean_percent`</span>|[text](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*text_parsable_to_boolean_percent*](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-boolean-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
@@ -2473,7 +2473,7 @@ Verifies that the percentage of text values that are parsable to a boolean value
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_text_parsable_to_boolean_percent`</span>|[text](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*text_parsable_to_boolean_percent*](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-boolean-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+|<span class="no-wrap-code">`monthly_text_parsable_to_boolean_percent`</span>|[text](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*text_parsable_to_boolean_percent*](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-boolean-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
@@ -3702,7 +3702,7 @@ Verifies that the percentage of text values that are parsable to a boolean value
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_text_parsable_to_boolean_percent`</span>|[text](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*text_parsable_to_boolean_percent*](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-boolean-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+|<span class="no-wrap-code">`daily_partition_text_parsable_to_boolean_percent`</span>|[text](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*text_parsable_to_boolean_percent*](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-boolean-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
@@ -4953,7 +4953,7 @@ Verifies that the percentage of text values that are parsable to a boolean value
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_text_parsable_to_boolean_percent`</span>|[text](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*text_parsable_to_boolean_percent*](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-boolean-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+|<span class="no-wrap-code">`monthly_partition_text_parsable_to_boolean_percent`</span>|[text](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*text_parsable_to_boolean_percent*](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-boolean-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 

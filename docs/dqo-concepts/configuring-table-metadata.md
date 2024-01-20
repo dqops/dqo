@@ -88,7 +88,7 @@ spec: # (2)!
 The main nodes found created by default in the [.dqotable.yaml](../reference/yaml/TableYaml.md) file when a table is imported into DQOps are listed below.
 
 - `timestamp_columns` node stores the names of *date*, *datetime* or *timestamp* columns that are used for
-  [timeliness and freshness](types-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md) checks,
+  [timeliness and freshness](categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md) checks,
   and to configure the date column used for [partition checks](definition-of-data-quality-checks/partition-checks.md).
 
 - `incremental_time_window` node configures the time window for running [partition checks](definition-of-data-quality-checks/partition-checks.md)
