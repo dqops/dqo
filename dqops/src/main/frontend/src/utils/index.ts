@@ -1,7 +1,4 @@
 import moment from "moment/moment";
-import { TJobDictionary, TABLE_LEVEL_TABS } from "../shared/constants";
-import { CheckTypes } from "../shared/routes";
-import { DqoJobChangeModel, DqoJobHistoryEntryModel } from "../api";
 
 export const getDaysString = (value: string | number) => {
   const daysDiff = moment().diff(moment(value), 'day');
@@ -60,72 +57,3 @@ export const getDetectedDatatype = (numberForFile: any) => {
     return 'Mixed data type';
   }
 };
-
-// export const transformAllJobs = (jobs: DqoJobHistoryEntryModel[]): TJobDictionary[] => {
-//   const jobsData = jobs.reverse().map((item) => ({ type: 'job', item }));
-  
-//   const jobList = jobsData
-//   .filter((z) => z.item.jobId?.parentJobId?.jobId === undefined)
-//   .map((x) => ({
-//     errorMessage: x.item.errorMessage,
-//     jobId: {
-//       jobId: x.item.jobId?.jobId,
-//       createdAt: x.item.jobId?.createdAt
-//     },
-//     jobType: x.item.jobType,
-//     parameters: x.item.parameters,
-//     status: x.item.status,
-//     statusChangedAt: x.item.statusChangedAt,
-//     childs: jobsData
-//       .filter(
-//         (y) => y.item.jobId?.parentJobId?.jobId === x.item.jobId?.jobId
-//       )
-//       .map((y) => y.item)
-//   }));
-  
-//   return  []
-// }
-
-// export const transformJobsChanges = (jobs: DqoJobChangeModel): TJobDictionary[] => {
-//   return[]
-// }  
-
-// case JOB_ACTION.GET_JOBS_SUCCESS: {
-//   const job_dictionary_state: Record<string, TJobDictionary> = {};
-//     const jobList : TJobList = {};
-// action.data.jobs.forEach((item: DqoJobHistoryEntryModel) => {
-  
-// const jobIdKey = String(item.jobId?.parentJobId?.jobId || item.jobId?.jobId || '');
-
-// if (item.jobId?.parentJobId?.jobId === undefined && !job_dictionary_state[jobIdKey]) {
-//   job_dictionary_state[jobIdKey] = { ...item, childs: [] };
-
-// } else {
-
-//   if (!job_dictionary_state[jobIdKey]) {
-//     job_dictionary_state[jobIdKey] = { childs: [] };
-//   }
-
-//   const currentState = { ...job_dictionary_state[jobIdKey] };
-
-//   job_dictionary_state[jobIdKey] = {
-//     ...currentState,
-//     childs: [...currentState.childs, item],
-//   };
-
-//   if (!jobList[jobIdKey]) {
-//     jobList[jobIdKey] = [];
-//   }
-
-//   jobList[jobIdKey].push(String(item?.jobId?.jobId) || '');
-// }});
-
-//   return {
-//     ...state,
-//     loading: false,
-//     job_dictionary_state,
-//     jobList: action.data.jobs,
-//     lastSequenceNumber: action.data.lastSequenceNumber,
-//     error: null
-//   };
-// }

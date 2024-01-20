@@ -145,9 +145,11 @@ const schemaReducer = (state = initialState, action: any) => {
       const notFilteredList = Object.assign({}, state.jobList)
 
       const filterObject = <T extends Record<string, TJobDictionary>>(
-        obj: T
-      ): Record<string, TJobDictionary> => {
+        obj: T, 
+        list: Record<string, string[]>
+      ) => {
         const filteredObject: Record<string, TJobDictionary> =Object.assign({}, obj);
+        const filteredList: Record<string, string[]> =Object.assign({}, list);
           const nowDate = moment();
 
           //todo : use 2 pointers technique instead of 2 separate loops
@@ -161,6 +163,7 @@ const schemaReducer = (state = initialState, action: any) => {
               typeOccurrences[DqoJobHistoryEntryModelJobTypeEnum.synchronize_multiple_folders] = (typeOccurrences[DqoJobHistoryEntryModelJobTypeEnum.synchronize_multiple_folders] || 0) + 1;
               if (typeOccurrences[DqoJobHistoryEntryModelJobTypeEnum.synchronize_multiple_folders] > 1) {
                 delete filteredObject[key];
+                delete filteredList[key];
               }
             }
           }
@@ -172,11 +175,12 @@ const schemaReducer = (state = initialState, action: any) => {
               obj[key].status !== 'waiting') 
             ) {
               delete filteredObject[key];
+              delete filteredList[key];
             } else {
               break;
             }
           }
-        return filteredObject;
+        return {filteredObject, filteredList};
       };
       
       jobChanges?.forEach((jobChange : DqoJobChangeModel) => {
@@ -254,9 +258,7 @@ const schemaReducer = (state = initialState, action: any) => {
       });
       console.log(not_filtered_job_dictionary_state, notFilteredList)
 
-      const job_dictionary_state = filterObject(not_filtered_job_dictionary_state);
-
-      const jobList = filterObject(not_filtered_job_dictionary_state);
+      const {filteredObject: job_dictionary_state, filteredList: jobList} = filterObject(not_filtered_job_dictionary_state, notFilteredList);
 
       return {
         ...state,

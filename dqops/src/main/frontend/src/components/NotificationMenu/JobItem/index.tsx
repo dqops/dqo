@@ -3,7 +3,7 @@ import {
   DqoJobHistoryEntryModelJobTypeEnum,
   DqoJobHistoryEntryModelStatusEnum
 } from '../../../api';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import SvgIcon from '../../SvgIcon';
 import {
   Accordion,
@@ -17,22 +17,32 @@ import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { JobApiClient } from '../../../services/apiClient';
 import clsx from 'clsx';
 import { TJobDictionary } from '../../../shared/constants';
+import { IRootState } from '../../../redux/reducers';
+import { useSelector } from 'react-redux';
 
 const JobItem = ({
-  job,
+  jobId,
   notifnumber,
   canUserCancelJobs
 }: {
-  job: TJobDictionary;
+  jobId: string;
   notifnumber?: number;
   canUserCancelJobs?: boolean
 }) => {
   const dispatch = useActionDispatch();
 
+  const { job_dictionary_state } = useSelector(
+    (state: IRootState) => state.job || {}
+    );
+
   const [sizeOfNot, setSizeOfNot] = useState<number | undefined>(notifnumber);
   const reduceCount = () => {
     dispatch(reduceCounter(true, sizeOfNot));
   };
+  
+  const job = useMemo(() => {
+    return job_dictionary_state[jobId]
+  }, [jobId, job_dictionary_state])
 
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
@@ -67,7 +77,7 @@ const JobItem = ({
         return 'black';
     }
   };
-  const hasInvalidApiKeyError = job.childs.some((x) => x.errorMessage?.includes('dqocloud.accesskey'));
+  const hasInvalidApiKeyError = job?.childs?.some((x) => x.errorMessage?.includes('dqocloud.accesskey'));
 
   const renderStatus = () => {
     if (job.status === DqoJobHistoryEntryModelStatusEnum.succeeded) {
