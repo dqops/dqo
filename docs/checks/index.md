@@ -148,8 +148,6 @@ Assesses the freshness and staleness of data, as well as data ingestion delay an
 |[<span class="no-wrap-code">`profile_data_freshness`</span>](./table/timeliness/data-freshness.md#profile-data-freshness)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Calculates the number of days since the most recent event timestamp (freshness)|:material-check-bold:|
 |[<span class="no-wrap-code">`daily_data_freshness`</span>](./table/timeliness/data-freshness.md#daily-data-freshness)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Daily  calculating the number of days since the most recent event timestamp (freshness)|:material-check-bold:|
 |[<span class="no-wrap-code">`monthly_data_freshness`</span>](./table/timeliness/data-freshness.md#monthly-data-freshness)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Monthly monitoring calculating the number of days since the most recent event timestamp (freshness)|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_data_freshness`</span>](./table/timeliness/data-freshness.md#daily-partition-data-freshness)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Daily partitioned check calculating the number of days since the most recent event timestamp (freshness)|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_data_freshness`</span>](./table/timeliness/data-freshness.md#monthly-partition-data-freshness)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Monthly partitioned check calculating the number of days since the most recent event (freshness)|:material-check-bold:|
 
 
 
@@ -158,8 +156,6 @@ Assesses the freshness and staleness of data, as well as data ingestion delay an
 |[<span class="no-wrap-code">`profile_data_staleness`</span>](./table/timeliness/data-staleness.md#profile-data-staleness)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Calculates the time difference in days between the current date and the most recent data ingestion timestamp (staleness)| |
 |[<span class="no-wrap-code">`daily_data_staleness`</span>](./table/timeliness/data-staleness.md#daily-data-staleness)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Daily  calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)| |
 |[<span class="no-wrap-code">`monthly_data_staleness`</span>](./table/timeliness/data-staleness.md#monthly-data-staleness)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Monthly monitoring calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)| |
-|[<span class="no-wrap-code">`daily_partition_data_staleness`</span>](./table/timeliness/data-staleness.md#daily-partition-data-staleness)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Daily partitioned check calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)| |
-|[<span class="no-wrap-code">`monthly_partition_data_staleness`</span>](./table/timeliness/data-staleness.md#monthly-partition-data-staleness)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Monthly partitioned check calculating the time difference in days between the current date and the most recent data data ingestion timestamp (staleness)| |
 
 
 
@@ -175,8 +171,8 @@ Assesses the freshness and staleness of data, as well as data ingestion delay an
 
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`daily_partition_reload_lag`</span>](./table/timeliness/reload-lag.md#daily-partition-reload-lag)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Daily partitioned check calculating the longest time a row waited to be load| |
-|[<span class="no-wrap-code">`monthly_partition_reload_lag`</span>](./table/timeliness/reload-lag.md#monthly-partition-reload-lag)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Monthly partitioned check calculating the longest time a row waited to be load| |
+|[<span class="no-wrap-code">`daily_partition_reload_lag`</span>](./table/timeliness/reload-lag.md#daily-partition-reload-lag)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Daily partitioned check calculating the longest time a row waited to be loaded, it is the maximum difference in days between the ingestion timestamp and the event timestamp column on any row in the monitored partition| |
+|[<span class="no-wrap-code">`monthly_partition_reload_lag`</span>](./table/timeliness/reload-lag.md#monthly-partition-reload-lag)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Monthly partitioned check calculating the longest time a row waited to be loaded, it is the maximum difference in days between the ingestion timestamp and the event timestamp column on any row in the monitored partition| |
 
 
 
