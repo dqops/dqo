@@ -15,16 +15,20 @@
  */
 package com.dqops.metadata.sources;
 
+import com.dqops.core.jobqueue.jobs.table.ImportTablesResult;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
+import tech.tablesaw.api.Table;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -149,5 +153,15 @@ public class PartitionIncrementalTimeWindowSpec extends AbstractSpec {
     public PartitionIncrementalTimeWindowSpec deepClone() {
         PartitionIncrementalTimeWindowSpec cloned = (PartitionIncrementalTimeWindowSpec) super.deepClone();
         return cloned;
+    }
+
+    public static class PartitionIncrementalTimeWindowSpecSampleFactory implements SampleValueFactory<PartitionIncrementalTimeWindowSpec> {
+        @Override
+        public PartitionIncrementalTimeWindowSpec createSample() {
+            PartitionIncrementalTimeWindowSpec result = new PartitionIncrementalTimeWindowSpec();
+            result.dailyPartitioningIncludeToday = true;
+            result.monthlyPartitioningRecentMonths = null;
+            return result;
+        }
     }
 }

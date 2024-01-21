@@ -403,8 +403,7 @@ ImportTablesQueueJobResult(
 				),
 				incremental_time_window=PartitionIncrementalTimeWindowSpec(
 					daily_partitioning_recent_days=7,
-					daily_partitioning_include_today=False,
-					monthly_partitioning_recent_months=1,
+					daily_partitioning_include_today=True,
 					monthly_partitioning_include_current_month=False
 				),
 				groupings=DataGroupingConfigurationSpecMap(),
