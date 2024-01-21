@@ -5,6 +5,7 @@ Operations for managing custom data quality rule definitions in DQOps. The custo
 ___
 ## create_rule
 Creates (adds) a new custom rule given the rule definition.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/rules/create_rule.py) to see the source code on GitHub.
 
 
@@ -61,9 +62,9 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
 	request_body = RuleModel(
 		rule_name='sample_rule',
-		type=RuleRunnerType.python,
+		type=RuleRunnerType.PYTHON,
 		java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
-		mode=RuleTimeWindowMode.current_value,
+		mode=RuleTimeWindowMode.CURRENT_VALUE,
 		custom=False,
 		built_in=False,
 		can_edit=True
@@ -92,9 +93,9 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
 	request_body = RuleModel(
 		rule_name='sample_rule',
-		type=RuleRunnerType.python,
+		type=RuleRunnerType.PYTHON,
 		java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
-		mode=RuleTimeWindowMode.current_value,
+		mode=RuleTimeWindowMode.CURRENT_VALUE,
 		custom=False,
 		built_in=False,
 		can_edit=True
@@ -126,9 +127,9 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
 	request_body = RuleModel(
 		rule_name='sample_rule',
-		type=RuleRunnerType.python,
+		type=RuleRunnerType.PYTHON,
 		java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
-		mode=RuleTimeWindowMode.current_value,
+		mode=RuleTimeWindowMode.CURRENT_VALUE,
 		custom=False,
 		built_in=False,
 		can_edit=True
@@ -160,9 +161,9 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
 	request_body = RuleModel(
 		rule_name='sample_rule',
-		type=RuleRunnerType.python,
+		type=RuleRunnerType.PYTHON,
 		java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
-		mode=RuleTimeWindowMode.current_value,
+		mode=RuleTimeWindowMode.CURRENT_VALUE,
 		custom=False,
 		built_in=False,
 		can_edit=True
@@ -183,6 +184,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 ___
 ## delete_rule
 Deletes a custom rule definition
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/rules/delete_rule.py) to see the source code on GitHub.
 
 
@@ -220,7 +222,6 @@ http://localhost:8888/api/rules/{fullRuleName}
     from dqops import client
 	from dqops.client.api.rules import delete_rule
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
@@ -238,7 +239,6 @@ http://localhost:8888/api/rules/{fullRuleName}
     from dqops import client
 	from dqops.client.api.rules import delete_rule
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
@@ -255,7 +255,6 @@ http://localhost:8888/api/rules/{fullRuleName}
     ```python
     from dqops import client
 	from dqops.client.api.rules import delete_rule
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -276,7 +275,6 @@ http://localhost:8888/api/rules/{fullRuleName}
     ```python
     from dqops import client
 	from dqops.client.api.rules import delete_rule
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -299,6 +297,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 ___
 ## get_all_rules
 Returns a flat list of all rules available in DQOps, both built-in rules and user defined or customized rules.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/rules/get_all_rules.py) to see the source code on GitHub.
 
 
@@ -336,7 +335,6 @@ http://localhost:8888/api/rules
     from dqops import client
 	from dqops.client.api.rules import get_all_rules
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -354,7 +352,6 @@ http://localhost:8888/api/rules
     from dqops import client
 	from dqops.client.api.rules import get_all_rules
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -371,7 +368,6 @@ http://localhost:8888/api/rules
     ```python
     from dqops import client
 	from dqops.client.api.rules import get_all_rules
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -393,7 +389,6 @@ http://localhost:8888/api/rules
     from dqops import client
 	from dqops.client.api.rules import get_all_rules
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -411,33 +406,11 @@ http://localhost:8888/api/rules
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "rule_name" : "sample_rule",
-	  "full_rule_name" : "sample_target/sample_category/sample_rule",
-	  "custom" : false,
-	  "built_in" : true,
-	  "can_edit" : true
-	}, {
-	  "rule_name" : "sample_rule",
-	  "full_rule_name" : "sample_target/sample_category/sample_rule",
-	  "custom" : false,
-	  "built_in" : true,
-	  "can_edit" : true
-	}, {
-	  "rule_name" : "sample_rule",
-	  "full_rule_name" : "sample_target/sample_category/sample_rule",
-	  "custom" : false,
-	  "built_in" : true,
-	  "can_edit" : true
-	} ]
-    ```
-
 
 ___
 ## get_rule
 Returns a rule definition
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/rules/get_rule.py) to see the source code on GitHub.
 
 
@@ -482,7 +455,6 @@ http://localhost:8888/api/rules/{fullRuleName}
     from dqops import client
 	from dqops.client.api.rules import get_rule
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -501,7 +473,6 @@ http://localhost:8888/api/rules/{fullRuleName}
     from dqops import client
 	from dqops.client.api.rules import get_rule
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -519,7 +490,6 @@ http://localhost:8888/api/rules/{fullRuleName}
     ```python
     from dqops import client
 	from dqops.client.api.rules import get_rule
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -542,7 +512,6 @@ http://localhost:8888/api/rules/{fullRuleName}
     from dqops import client
 	from dqops.client.api.rules import get_rule
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -561,23 +530,11 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "rule_name" : "sample_rule",
-	  "type" : "python",
-	  "java_class_name" : "com.dqops.execution.rules.runners.python.PythonRuleRunner",
-	  "mode" : "current_value",
-	  "custom" : false,
-	  "built_in" : false,
-	  "can_edit" : true
-	}
-    ```
-
 
 ___
 ## get_rule_folder_tree
 Returns a tree of all rules available in DQOps, both built-in rules and user defined or customized rules.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/rules/get_rule_folder_tree.py) to see the source code on GitHub.
 
 
@@ -615,7 +572,6 @@ http://localhost:8888/api/definitions/rules
     from dqops import client
 	from dqops.client.api.rules import get_rule_folder_tree
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -633,7 +589,6 @@ http://localhost:8888/api/definitions/rules
     from dqops import client
 	from dqops.client.api.rules import get_rule_folder_tree
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -650,7 +605,6 @@ http://localhost:8888/api/definitions/rules
     ```python
     from dqops import client
 	from dqops.client.api.rules import get_rule_folder_tree
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -672,7 +626,6 @@ http://localhost:8888/api/definitions/rules
     from dqops import client
 	from dqops.client.api.rules import get_rule_folder_tree
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -690,66 +643,11 @@ http://localhost:8888/api/definitions/rules
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "rules" : [ {
-	    "rule_name" : "sample_rule",
-	    "full_rule_name" : "sample_target/sample_category/sample_rule",
-	    "custom" : false,
-	    "built_in" : true,
-	    "can_edit" : true
-	  }, {
-	    "rule_name" : "sample_rule_1",
-	    "full_rule_name" : "sample_target/sample_category/sample_rule_1",
-	    "custom" : false,
-	    "built_in" : true,
-	    "can_edit" : true
-	  }, {
-	    "rule_name" : "sample_rule_2",
-	    "full_rule_name" : "sample_target/sample_category/sample_rule_2",
-	    "custom" : false,
-	    "built_in" : true,
-	    "can_edit" : true
-	  }, {
-	    "rule_name" : "sample_rule_3",
-	    "full_rule_name" : "sample_target/sample_category/sample_rule_3",
-	    "custom" : false,
-	    "built_in" : true,
-	    "can_edit" : true
-	  } ],
-	  "all_rules" : [ {
-	    "rule_name" : "sample_rule",
-	    "full_rule_name" : "sample_target/sample_category/sample_rule",
-	    "custom" : false,
-	    "built_in" : true,
-	    "can_edit" : true
-	  }, {
-	    "rule_name" : "sample_rule_1",
-	    "full_rule_name" : "sample_target/sample_category/sample_rule_1",
-	    "custom" : false,
-	    "built_in" : true,
-	    "can_edit" : true
-	  }, {
-	    "rule_name" : "sample_rule_2",
-	    "full_rule_name" : "sample_target/sample_category/sample_rule_2",
-	    "custom" : false,
-	    "built_in" : true,
-	    "can_edit" : true
-	  }, {
-	    "rule_name" : "sample_rule_3",
-	    "full_rule_name" : "sample_target/sample_category/sample_rule_3",
-	    "custom" : false,
-	    "built_in" : true,
-	    "can_edit" : true
-	  } ]
-	}
-    ```
-
 
 ___
 ## update_rule
 Updates an existing rule, making a custom rule definition if it is not present
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/rules/update_rule.py) to see the source code on GitHub.
 
 
@@ -806,9 +704,9 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
 	request_body = RuleModel(
 		rule_name='sample_rule',
-		type=RuleRunnerType.python,
+		type=RuleRunnerType.PYTHON,
 		java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
-		mode=RuleTimeWindowMode.current_value,
+		mode=RuleTimeWindowMode.CURRENT_VALUE,
 		custom=False,
 		built_in=False,
 		can_edit=True
@@ -837,9 +735,9 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
 	request_body = RuleModel(
 		rule_name='sample_rule',
-		type=RuleRunnerType.python,
+		type=RuleRunnerType.PYTHON,
 		java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
-		mode=RuleTimeWindowMode.current_value,
+		mode=RuleTimeWindowMode.CURRENT_VALUE,
 		custom=False,
 		built_in=False,
 		can_edit=True
@@ -871,9 +769,9 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
 	request_body = RuleModel(
 		rule_name='sample_rule',
-		type=RuleRunnerType.python,
+		type=RuleRunnerType.PYTHON,
 		java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
-		mode=RuleTimeWindowMode.current_value,
+		mode=RuleTimeWindowMode.CURRENT_VALUE,
 		custom=False,
 		built_in=False,
 		can_edit=True
@@ -905,9 +803,9 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
 	request_body = RuleModel(
 		rule_name='sample_rule',
-		type=RuleRunnerType.python,
+		type=RuleRunnerType.PYTHON,
 		java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
-		mode=RuleTimeWindowMode.current_value,
+		mode=RuleTimeWindowMode.CURRENT_VALUE,
 		custom=False,
 		built_in=False,
 		can_edit=True

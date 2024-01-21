@@ -5,6 +5,7 @@ Operations for adding/updating/deleting the configuration of data sources manage
 ___
 ## bulk_activate_connection_checks
 Activates all named check on this connection in the locations specified by filter
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/bulk_activate_connection_checks.py) to see the source code on GitHub.
 
 
@@ -268,6 +269,7 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkac
 ___
 ## bulk_deactivate_connection_checks
 Deactivates (deletes) all named check on this connection in the locations specified by filter
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/bulk_deactivate_connection_checks.py) to see the source code on GitHub.
 
 
@@ -447,6 +449,7 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkde
 ___
 ## create_connection
 Creates a new connection
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/create_connection.py) to see the source code on GitHub.
 
 
@@ -507,18 +510,18 @@ http://localhost:8888/api/connections/{connectionName}
 	)
 	
 	request_body = ConnectionSpec(
-		provider_type=ProviderType.postgresql,
+		provider_type=ProviderType.POSTGRESQL,
 		postgresql=PostgresqlParametersSpec(
 			host='localhost',
 			port='5432',
 			database='db',
 			user='PASSWD',
-			sslmode=PostgresqlSslMode.disable
+			sslmode=PostgresqlSslMode.DISABLE
 		),
 		parallel_jobs_limit=4,
 		incident_grouping=ConnectionIncidentGroupingSpec(
-			grouping_level=IncidentGroupingLevel.table_dimension_category,
-			minimum_severity=MinimumGroupingSeverityLevel.warning,
+			grouping_level=IncidentGroupingLevel.TABLE_DIMENSION_CATEGORY,
+			minimum_severity=MinimumGroupingSeverityLevel.WARNING,
 			divide_by_data_groups=False,
 			max_incident_length_days=60,
 			mute_for_days=60,
@@ -553,18 +556,18 @@ http://localhost:8888/api/connections/{connectionName}
 	)
 	
 	request_body = ConnectionSpec(
-		provider_type=ProviderType.postgresql,
+		provider_type=ProviderType.POSTGRESQL,
 		postgresql=PostgresqlParametersSpec(
 			host='localhost',
 			port='5432',
 			database='db',
 			user='PASSWD',
-			sslmode=PostgresqlSslMode.disable
+			sslmode=PostgresqlSslMode.DISABLE
 		),
 		parallel_jobs_limit=4,
 		incident_grouping=ConnectionIncidentGroupingSpec(
-			grouping_level=IncidentGroupingLevel.table_dimension_category,
-			minimum_severity=MinimumGroupingSeverityLevel.warning,
+			grouping_level=IncidentGroupingLevel.TABLE_DIMENSION_CATEGORY,
+			minimum_severity=MinimumGroupingSeverityLevel.WARNING,
 			divide_by_data_groups=False,
 			max_incident_length_days=60,
 			mute_for_days=60,
@@ -602,18 +605,18 @@ http://localhost:8888/api/connections/{connectionName}
 	)
 	
 	request_body = ConnectionSpec(
-		provider_type=ProviderType.postgresql,
+		provider_type=ProviderType.POSTGRESQL,
 		postgresql=PostgresqlParametersSpec(
 			host='localhost',
 			port='5432',
 			database='db',
 			user='PASSWD',
-			sslmode=PostgresqlSslMode.disable
+			sslmode=PostgresqlSslMode.DISABLE
 		),
 		parallel_jobs_limit=4,
 		incident_grouping=ConnectionIncidentGroupingSpec(
-			grouping_level=IncidentGroupingLevel.table_dimension_category,
-			minimum_severity=MinimumGroupingSeverityLevel.warning,
+			grouping_level=IncidentGroupingLevel.TABLE_DIMENSION_CATEGORY,
+			minimum_severity=MinimumGroupingSeverityLevel.WARNING,
 			divide_by_data_groups=False,
 			max_incident_length_days=60,
 			mute_for_days=60,
@@ -651,18 +654,18 @@ http://localhost:8888/api/connections/{connectionName}
 	)
 	
 	request_body = ConnectionSpec(
-		provider_type=ProviderType.postgresql,
+		provider_type=ProviderType.POSTGRESQL,
 		postgresql=PostgresqlParametersSpec(
 			host='localhost',
 			port='5432',
 			database='db',
 			user='PASSWD',
-			sslmode=PostgresqlSslMode.disable
+			sslmode=PostgresqlSslMode.DISABLE
 		),
 		parallel_jobs_limit=4,
 		incident_grouping=ConnectionIncidentGroupingSpec(
-			grouping_level=IncidentGroupingLevel.table_dimension_category,
-			minimum_severity=MinimumGroupingSeverityLevel.warning,
+			grouping_level=IncidentGroupingLevel.TABLE_DIMENSION_CATEGORY,
+			minimum_severity=MinimumGroupingSeverityLevel.WARNING,
 			divide_by_data_groups=False,
 			max_incident_length_days=60,
 			mute_for_days=60,
@@ -685,6 +688,7 @@ http://localhost:8888/api/connections/{connectionName}
 ___
 ## create_connection_basic
 Creates a new connection given the basic information.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/create_connection_basic.py) to see the source code on GitHub.
 
 
@@ -746,41 +750,41 @@ http://localhost:8888/api/connections/{connectionName}/basic
 	request_body = ConnectionModel(
 		connection_name='sample_connection',
 		parallel_jobs_limit=4,
-		provider_type=ProviderType.postgresql,
+		provider_type=ProviderType.POSTGRESQL,
 		postgresql=PostgresqlParametersSpec(
 			host='localhost',
 			port='5432',
 			database='db',
 			user='PASSWD',
-			sslmode=PostgresqlSslMode.disable
+			sslmode=PostgresqlSslMode.DISABLE
 		),
-		run_checks_job_template=ConnectionModel(
+		run_checks_job_template=CheckSearchFilters(
 			connection='sample_connection',
 			enabled=True
 		),
-		run_profiling_checks_job_template=ConnectionModel(
-			check_type=CheckType.profiling,
+		run_profiling_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PROFILING,
 			connection='sample_connection',
 			enabled=True
 		),
-		run_monitoring_checks_job_template=ConnectionModel(
-			check_type=CheckType.monitoring,
+		run_monitoring_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.MONITORING,
 			connection='sample_connection',
 			enabled=True
 		),
-		run_partition_checks_job_template=ConnectionModel(
-			check_type=CheckType.partitioned,
+		run_partition_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PARTITIONED,
 			connection='sample_connection',
 			enabled=True
 		),
-		collect_statistics_job_template=ConnectionModel(
+		collect_statistics_job_template=StatisticsCollectorSearchFilters(
 			column_names=[
 			
 			],
 			connection='sample_connection',
 			enabled=True
 		),
-		data_clean_job_template=ConnectionModel(
+		data_clean_job_template=DeleteStoredDataQueueJobParameters(
 			connection='sample_connection',
 			delete_errors=True,
 			delete_statistics=True,
@@ -821,41 +825,41 @@ http://localhost:8888/api/connections/{connectionName}/basic
 	request_body = ConnectionModel(
 		connection_name='sample_connection',
 		parallel_jobs_limit=4,
-		provider_type=ProviderType.postgresql,
+		provider_type=ProviderType.POSTGRESQL,
 		postgresql=PostgresqlParametersSpec(
 			host='localhost',
 			port='5432',
 			database='db',
 			user='PASSWD',
-			sslmode=PostgresqlSslMode.disable
+			sslmode=PostgresqlSslMode.DISABLE
 		),
-		run_checks_job_template=ConnectionModel(
+		run_checks_job_template=CheckSearchFilters(
 			connection='sample_connection',
 			enabled=True
 		),
-		run_profiling_checks_job_template=ConnectionModel(
-			check_type=CheckType.profiling,
+		run_profiling_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PROFILING,
 			connection='sample_connection',
 			enabled=True
 		),
-		run_monitoring_checks_job_template=ConnectionModel(
-			check_type=CheckType.monitoring,
+		run_monitoring_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.MONITORING,
 			connection='sample_connection',
 			enabled=True
 		),
-		run_partition_checks_job_template=ConnectionModel(
-			check_type=CheckType.partitioned,
+		run_partition_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PARTITIONED,
 			connection='sample_connection',
 			enabled=True
 		),
-		collect_statistics_job_template=ConnectionModel(
+		collect_statistics_job_template=StatisticsCollectorSearchFilters(
 			column_names=[
 			
 			],
 			connection='sample_connection',
 			enabled=True
 		),
-		data_clean_job_template=ConnectionModel(
+		data_clean_job_template=DeleteStoredDataQueueJobParameters(
 			connection='sample_connection',
 			delete_errors=True,
 			delete_statistics=True,
@@ -899,41 +903,41 @@ http://localhost:8888/api/connections/{connectionName}/basic
 	request_body = ConnectionModel(
 		connection_name='sample_connection',
 		parallel_jobs_limit=4,
-		provider_type=ProviderType.postgresql,
+		provider_type=ProviderType.POSTGRESQL,
 		postgresql=PostgresqlParametersSpec(
 			host='localhost',
 			port='5432',
 			database='db',
 			user='PASSWD',
-			sslmode=PostgresqlSslMode.disable
+			sslmode=PostgresqlSslMode.DISABLE
 		),
-		run_checks_job_template=ConnectionModel(
+		run_checks_job_template=CheckSearchFilters(
 			connection='sample_connection',
 			enabled=True
 		),
-		run_profiling_checks_job_template=ConnectionModel(
-			check_type=CheckType.profiling,
+		run_profiling_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PROFILING,
 			connection='sample_connection',
 			enabled=True
 		),
-		run_monitoring_checks_job_template=ConnectionModel(
-			check_type=CheckType.monitoring,
+		run_monitoring_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.MONITORING,
 			connection='sample_connection',
 			enabled=True
 		),
-		run_partition_checks_job_template=ConnectionModel(
-			check_type=CheckType.partitioned,
+		run_partition_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PARTITIONED,
 			connection='sample_connection',
 			enabled=True
 		),
-		collect_statistics_job_template=ConnectionModel(
+		collect_statistics_job_template=StatisticsCollectorSearchFilters(
 			column_names=[
 			
 			],
 			connection='sample_connection',
 			enabled=True
 		),
-		data_clean_job_template=ConnectionModel(
+		data_clean_job_template=DeleteStoredDataQueueJobParameters(
 			connection='sample_connection',
 			delete_errors=True,
 			delete_statistics=True,
@@ -977,41 +981,41 @@ http://localhost:8888/api/connections/{connectionName}/basic
 	request_body = ConnectionModel(
 		connection_name='sample_connection',
 		parallel_jobs_limit=4,
-		provider_type=ProviderType.postgresql,
+		provider_type=ProviderType.POSTGRESQL,
 		postgresql=PostgresqlParametersSpec(
 			host='localhost',
 			port='5432',
 			database='db',
 			user='PASSWD',
-			sslmode=PostgresqlSslMode.disable
+			sslmode=PostgresqlSslMode.DISABLE
 		),
-		run_checks_job_template=ConnectionModel(
+		run_checks_job_template=CheckSearchFilters(
 			connection='sample_connection',
 			enabled=True
 		),
-		run_profiling_checks_job_template=ConnectionModel(
-			check_type=CheckType.profiling,
+		run_profiling_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PROFILING,
 			connection='sample_connection',
 			enabled=True
 		),
-		run_monitoring_checks_job_template=ConnectionModel(
-			check_type=CheckType.monitoring,
+		run_monitoring_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.MONITORING,
 			connection='sample_connection',
 			enabled=True
 		),
-		run_partition_checks_job_template=ConnectionModel(
-			check_type=CheckType.partitioned,
+		run_partition_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PARTITIONED,
 			connection='sample_connection',
 			enabled=True
 		),
-		collect_statistics_job_template=ConnectionModel(
+		collect_statistics_job_template=StatisticsCollectorSearchFilters(
 			column_names=[
 			
 			],
 			connection='sample_connection',
 			enabled=True
 		),
-		data_clean_job_template=ConnectionModel(
+		data_clean_job_template=DeleteStoredDataQueueJobParameters(
 			connection='sample_connection',
 			delete_errors=True,
 			delete_statistics=True,
@@ -1039,6 +1043,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
 ___
 ## delete_connection
 Deletes a connection
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/delete_connection.py) to see the source code on GitHub.
 
 
@@ -1083,7 +1088,6 @@ http://localhost:8888/api/connections/{connectionName}
     from dqops import client
 	from dqops.client.api.connections import delete_connection
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
@@ -1101,7 +1105,6 @@ http://localhost:8888/api/connections/{connectionName}
     from dqops import client
 	from dqops.client.api.connections import delete_connection
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
@@ -1118,7 +1121,6 @@ http://localhost:8888/api/connections/{connectionName}
     ```python
     from dqops import client
 	from dqops.client.api.connections import delete_connection
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -1140,7 +1142,6 @@ http://localhost:8888/api/connections/{connectionName}
     from dqops import client
 	from dqops.client.api.connections import delete_connection
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -1158,18 +1159,11 @@ http://localhost:8888/api/connections/{connectionName}
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "jobId" : 10832,
-	  "createdAt" : "2007-10-11T13:42:00Z"
-	}
-    ```
-
 
 ___
 ## get_all_connections
 Returns a list of connections (data sources)
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_all_connections.py) to see the source code on GitHub.
 
 
@@ -1207,7 +1201,6 @@ http://localhost:8888/api/connections
     from dqops import client
 	from dqops.client.api.connections import get_all_connections
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -1225,7 +1218,6 @@ http://localhost:8888/api/connections
     from dqops import client
 	from dqops.client.api.connections import get_all_connections
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -1242,7 +1234,6 @@ http://localhost:8888/api/connections
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_all_connections
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -1264,7 +1255,6 @@ http://localhost:8888/api/connections
     from dqops import client
 	from dqops.client.api.connections import get_all_connections
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -1282,153 +1272,11 @@ http://localhost:8888/api/connections
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "connection_name" : "sample_connection",
-	  "parallel_jobs_limit" : 4,
-	  "provider_type" : "postgresql",
-	  "postgresql" : {
-	    "host" : "localhost",
-	    "port" : "5432",
-	    "database" : "db",
-	    "user" : "PASSWD",
-	    "sslmode" : "disable"
-	  },
-	  "run_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true
-	  },
-	  "run_profiling_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true,
-	    "checkType" : "profiling"
-	  },
-	  "run_monitoring_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true,
-	    "checkType" : "monitoring"
-	  },
-	  "run_partition_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true,
-	    "checkType" : "partitioned"
-	  },
-	  "collect_statistics_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true,
-	    "columnNames" : [ ]
-	  },
-	  "data_clean_job_template" : {
-	    "connection" : "sample_connection",
-	    "deleteErrors" : true,
-	    "deleteStatistics" : true,
-	    "deleteCheckResults" : true,
-	    "deleteSensorReadouts" : true
-	  },
-	  "can_edit" : false,
-	  "can_collect_statistics" : true,
-	  "can_run_checks" : true,
-	  "can_delete_data" : true
-	}, {
-	  "connection_name" : "sample_connection",
-	  "parallel_jobs_limit" : 4,
-	  "provider_type" : "postgresql",
-	  "postgresql" : {
-	    "host" : "localhost",
-	    "port" : "5432",
-	    "database" : "db",
-	    "user" : "PASSWD",
-	    "sslmode" : "disable"
-	  },
-	  "run_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true
-	  },
-	  "run_profiling_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true,
-	    "checkType" : "profiling"
-	  },
-	  "run_monitoring_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true,
-	    "checkType" : "monitoring"
-	  },
-	  "run_partition_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true,
-	    "checkType" : "partitioned"
-	  },
-	  "collect_statistics_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true,
-	    "columnNames" : [ ]
-	  },
-	  "data_clean_job_template" : {
-	    "connection" : "sample_connection",
-	    "deleteErrors" : true,
-	    "deleteStatistics" : true,
-	    "deleteCheckResults" : true,
-	    "deleteSensorReadouts" : true
-	  },
-	  "can_edit" : false,
-	  "can_collect_statistics" : true,
-	  "can_run_checks" : true,
-	  "can_delete_data" : true
-	}, {
-	  "connection_name" : "sample_connection",
-	  "parallel_jobs_limit" : 4,
-	  "provider_type" : "postgresql",
-	  "postgresql" : {
-	    "host" : "localhost",
-	    "port" : "5432",
-	    "database" : "db",
-	    "user" : "PASSWD",
-	    "sslmode" : "disable"
-	  },
-	  "run_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true
-	  },
-	  "run_profiling_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true,
-	    "checkType" : "profiling"
-	  },
-	  "run_monitoring_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true,
-	    "checkType" : "monitoring"
-	  },
-	  "run_partition_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true,
-	    "checkType" : "partitioned"
-	  },
-	  "collect_statistics_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true,
-	    "columnNames" : [ ]
-	  },
-	  "data_clean_job_template" : {
-	    "connection" : "sample_connection",
-	    "deleteErrors" : true,
-	    "deleteStatistics" : true,
-	    "deleteCheckResults" : true,
-	    "deleteSensorReadouts" : true
-	  },
-	  "can_edit" : false,
-	  "can_collect_statistics" : true,
-	  "can_run_checks" : true,
-	  "can_delete_data" : true
-	} ]
-    ```
-
 
 ___
 ## get_connection
 Return the full details of a connection given the connection name
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection.py) to see the source code on GitHub.
 
 
@@ -1473,7 +1321,6 @@ http://localhost:8888/api/connections/{connectionName}
     from dqops import client
 	from dqops.client.api.connections import get_connection
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -1492,7 +1339,6 @@ http://localhost:8888/api/connections/{connectionName}
     from dqops import client
 	from dqops.client.api.connections import get_connection
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -1510,7 +1356,6 @@ http://localhost:8888/api/connections/{connectionName}
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_connection
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -1533,7 +1378,6 @@ http://localhost:8888/api/connections/{connectionName}
     from dqops import client
 	from dqops.client.api.connections import get_connection
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -1552,17 +1396,11 @@ http://localhost:8888/api/connections/{connectionName}
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "can_edit" : false
-	}
-    ```
-
 
 ___
 ## get_connection_basic
 Return the basic details of a connection given the connection name
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection_basic.py) to see the source code on GitHub.
 
 
@@ -1607,7 +1445,6 @@ http://localhost:8888/api/connections/{connectionName}/basic
     from dqops import client
 	from dqops.client.api.connections import get_connection_basic
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -1626,7 +1463,6 @@ http://localhost:8888/api/connections/{connectionName}/basic
     from dqops import client
 	from dqops.client.api.connections import get_connection_basic
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -1644,7 +1480,6 @@ http://localhost:8888/api/connections/{connectionName}/basic
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_connection_basic
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -1667,7 +1502,6 @@ http://localhost:8888/api/connections/{connectionName}/basic
     from dqops import client
 	from dqops.client.api.connections import get_connection_basic
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -1686,61 +1520,11 @@ http://localhost:8888/api/connections/{connectionName}/basic
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "connection_name" : "sample_connection",
-	  "parallel_jobs_limit" : 4,
-	  "provider_type" : "postgresql",
-	  "postgresql" : {
-	    "host" : "localhost",
-	    "port" : "5432",
-	    "database" : "db",
-	    "user" : "PASSWD",
-	    "sslmode" : "disable"
-	  },
-	  "run_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true
-	  },
-	  "run_profiling_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true,
-	    "checkType" : "profiling"
-	  },
-	  "run_monitoring_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true,
-	    "checkType" : "monitoring"
-	  },
-	  "run_partition_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true,
-	    "checkType" : "partitioned"
-	  },
-	  "collect_statistics_job_template" : {
-	    "connection" : "sample_connection",
-	    "enabled" : true,
-	    "columnNames" : [ ]
-	  },
-	  "data_clean_job_template" : {
-	    "connection" : "sample_connection",
-	    "deleteErrors" : true,
-	    "deleteStatistics" : true,
-	    "deleteCheckResults" : true,
-	    "deleteSensorReadouts" : true
-	  },
-	  "can_edit" : false,
-	  "can_collect_statistics" : true,
-	  "can_run_checks" : true,
-	  "can_delete_data" : true
-	}
-    ```
-
 
 ___
 ## get_connection_comments
 Return the comments for a connection
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection_comments.py) to see the source code on GitHub.
 
 
@@ -1785,7 +1569,6 @@ http://localhost:8888/api/connections/{connectionName}/comments
     from dqops import client
 	from dqops.client.api.connections import get_connection_comments
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -1804,7 +1587,6 @@ http://localhost:8888/api/connections/{connectionName}/comments
     from dqops import client
 	from dqops.client.api.connections import get_connection_comments
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -1822,7 +1604,6 @@ http://localhost:8888/api/connections/{connectionName}/comments
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_connection_comments
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -1845,7 +1626,6 @@ http://localhost:8888/api/connections/{connectionName}/comments
     from dqops import client
 	from dqops.client.api.connections import get_connection_comments
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -1864,27 +1644,11 @@ http://localhost:8888/api/connections/{connectionName}/comments
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "date" : "2007-12-03T10:15:30",
-	  "comment_by" : "sample_user",
-	  "comment" : "Sample comment"
-	}, {
-	  "date" : "2007-12-03T10:15:30",
-	  "comment_by" : "sample_user",
-	  "comment" : "Sample comment"
-	}, {
-	  "date" : "2007-12-03T10:15:30",
-	  "comment_by" : "sample_user",
-	  "comment" : "Sample comment"
-	} ]
-    ```
-
 
 ___
 ## get_connection_common_columns
 Finds common column names that are used on one or more tables. The list of columns is sorted in descending order by column name.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection_common_columns.py) to see the source code on GitHub.
 
 
@@ -1929,7 +1693,6 @@ http://localhost:8888/api/connections/{connectionName}/commoncolumns
     from dqops import client
 	from dqops.client.api.connections import get_connection_common_columns
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -1948,7 +1711,6 @@ http://localhost:8888/api/connections/{connectionName}/commoncolumns
     from dqops import client
 	from dqops.client.api.connections import get_connection_common_columns
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -1966,7 +1728,6 @@ http://localhost:8888/api/connections/{connectionName}/commoncolumns
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_connection_common_columns
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -1989,7 +1750,6 @@ http://localhost:8888/api/connections/{connectionName}/commoncolumns
     from dqops import client
 	from dqops.client.api.connections import get_connection_common_columns
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -2008,21 +1768,11 @@ http://localhost:8888/api/connections/{connectionName}/commoncolumns
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "tables_count" : 0
-	}, {
-	  "tables_count" : 0
-	}, {
-	  "tables_count" : 0
-	} ]
-    ```
-
 
 ___
 ## get_connection_default_grouping_configuration
 Return the default data grouping configuration for a connection
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection_default_grouping_configuration.py) to see the source code on GitHub.
 
 
@@ -2067,7 +1817,6 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
     from dqops import client
 	from dqops.client.api.connections import get_connection_default_grouping_configuration
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -2086,7 +1835,6 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
     from dqops import client
 	from dqops.client.api.connections import get_connection_default_grouping_configuration
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -2104,7 +1852,6 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_connection_default_grouping_configuration
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -2127,7 +1874,6 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
     from dqops import client
 	from dqops.client.api.connections import get_connection_default_grouping_configuration
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -2146,20 +1892,11 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "level_3" : {
-	    "source" : "column_value",
-	    "column" : "sample_column"
-	  }
-	}
-    ```
-
 
 ___
 ## get_connection_incident_grouping
 Retrieves the configuration of data quality incident grouping and incident notifications
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection_incident_grouping.py) to see the source code on GitHub.
 
 
@@ -2204,7 +1941,6 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
     from dqops import client
 	from dqops.client.api.connections import get_connection_incident_grouping
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -2223,7 +1959,6 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
     from dqops import client
 	from dqops.client.api.connections import get_connection_incident_grouping
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -2241,7 +1976,6 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_connection_incident_grouping
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -2264,7 +1998,6 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
     from dqops import client
 	from dqops.client.api.connections import get_connection_incident_grouping
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -2283,27 +2016,11 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "grouping_level" : "table_dimension",
-	  "minimum_severity" : "warning",
-	  "divide_by_data_groups" : true,
-	  "max_incident_length_days" : 60,
-	  "mute_for_days" : 60,
-	  "webhooks" : {
-	    "incident_opened_webhook_url" : "https://sample_url.com/opened",
-	    "incident_acknowledged_webhook_url" : "https://sample_url.com/acknowledged",
-	    "incident_resolved_webhook_url" : "https://sample_url.com/resolved",
-	    "incident_muted_webhook_url" : "https://sample_url.com/muted"
-	  }
-	}
-    ```
-
 
 ___
 ## get_connection_labels
 Return the labels for a connection
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection_labels.py) to see the source code on GitHub.
 
 
@@ -2348,7 +2065,6 @@ http://localhost:8888/api/connections/{connectionName}/labels
     from dqops import client
 	from dqops.client.api.connections import get_connection_labels
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -2367,7 +2083,6 @@ http://localhost:8888/api/connections/{connectionName}/labels
     from dqops import client
 	from dqops.client.api.connections import get_connection_labels
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -2385,7 +2100,6 @@ http://localhost:8888/api/connections/{connectionName}/labels
     ```python
     from dqops import client
 	from dqops.client.api.connections import get_connection_labels
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -2408,7 +2122,6 @@ http://localhost:8888/api/connections/{connectionName}/labels
     from dqops import client
 	from dqops.client.api.connections import get_connection_labels
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -2427,15 +2140,11 @@ http://localhost:8888/api/connections/{connectionName}/labels
 
 
 
-??? "Return value sample"
-    ```js
-    [ "sampleString_1", "sampleString_2", "sampleString_3" ]
-    ```
-
 
 ___
 ## get_connection_scheduling_group
 Return the schedule for a connection for a scheduling group
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/get_connection_scheduling_group.py) to see the source code on GitHub.
 
 
@@ -2564,17 +2273,11 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "cron_expression" : "0 12 1 * *"
-	}
-    ```
-
 
 ___
 ## update_connection
 Updates an existing connection
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/update_connection.py) to see the source code on GitHub.
 
 
@@ -2635,18 +2338,18 @@ http://localhost:8888/api/connections/{connectionName}
 	)
 	
 	request_body = ConnectionSpec(
-		provider_type=ProviderType.postgresql,
+		provider_type=ProviderType.POSTGRESQL,
 		postgresql=PostgresqlParametersSpec(
 			host='localhost',
 			port='5432',
 			database='db',
 			user='PASSWD',
-			sslmode=PostgresqlSslMode.disable
+			sslmode=PostgresqlSslMode.DISABLE
 		),
 		parallel_jobs_limit=4,
 		incident_grouping=ConnectionIncidentGroupingSpec(
-			grouping_level=IncidentGroupingLevel.table_dimension_category,
-			minimum_severity=MinimumGroupingSeverityLevel.warning,
+			grouping_level=IncidentGroupingLevel.TABLE_DIMENSION_CATEGORY,
+			minimum_severity=MinimumGroupingSeverityLevel.WARNING,
 			divide_by_data_groups=False,
 			max_incident_length_days=60,
 			mute_for_days=60,
@@ -2681,18 +2384,18 @@ http://localhost:8888/api/connections/{connectionName}
 	)
 	
 	request_body = ConnectionSpec(
-		provider_type=ProviderType.postgresql,
+		provider_type=ProviderType.POSTGRESQL,
 		postgresql=PostgresqlParametersSpec(
 			host='localhost',
 			port='5432',
 			database='db',
 			user='PASSWD',
-			sslmode=PostgresqlSslMode.disable
+			sslmode=PostgresqlSslMode.DISABLE
 		),
 		parallel_jobs_limit=4,
 		incident_grouping=ConnectionIncidentGroupingSpec(
-			grouping_level=IncidentGroupingLevel.table_dimension_category,
-			minimum_severity=MinimumGroupingSeverityLevel.warning,
+			grouping_level=IncidentGroupingLevel.TABLE_DIMENSION_CATEGORY,
+			minimum_severity=MinimumGroupingSeverityLevel.WARNING,
 			divide_by_data_groups=False,
 			max_incident_length_days=60,
 			mute_for_days=60,
@@ -2730,18 +2433,18 @@ http://localhost:8888/api/connections/{connectionName}
 	)
 	
 	request_body = ConnectionSpec(
-		provider_type=ProviderType.postgresql,
+		provider_type=ProviderType.POSTGRESQL,
 		postgresql=PostgresqlParametersSpec(
 			host='localhost',
 			port='5432',
 			database='db',
 			user='PASSWD',
-			sslmode=PostgresqlSslMode.disable
+			sslmode=PostgresqlSslMode.DISABLE
 		),
 		parallel_jobs_limit=4,
 		incident_grouping=ConnectionIncidentGroupingSpec(
-			grouping_level=IncidentGroupingLevel.table_dimension_category,
-			minimum_severity=MinimumGroupingSeverityLevel.warning,
+			grouping_level=IncidentGroupingLevel.TABLE_DIMENSION_CATEGORY,
+			minimum_severity=MinimumGroupingSeverityLevel.WARNING,
 			divide_by_data_groups=False,
 			max_incident_length_days=60,
 			mute_for_days=60,
@@ -2779,18 +2482,18 @@ http://localhost:8888/api/connections/{connectionName}
 	)
 	
 	request_body = ConnectionSpec(
-		provider_type=ProviderType.postgresql,
+		provider_type=ProviderType.POSTGRESQL,
 		postgresql=PostgresqlParametersSpec(
 			host='localhost',
 			port='5432',
 			database='db',
 			user='PASSWD',
-			sslmode=PostgresqlSslMode.disable
+			sslmode=PostgresqlSslMode.DISABLE
 		),
 		parallel_jobs_limit=4,
 		incident_grouping=ConnectionIncidentGroupingSpec(
-			grouping_level=IncidentGroupingLevel.table_dimension_category,
-			minimum_severity=MinimumGroupingSeverityLevel.warning,
+			grouping_level=IncidentGroupingLevel.TABLE_DIMENSION_CATEGORY,
+			minimum_severity=MinimumGroupingSeverityLevel.WARNING,
 			divide_by_data_groups=False,
 			max_incident_length_days=60,
 			mute_for_days=60,
@@ -2813,6 +2516,7 @@ http://localhost:8888/api/connections/{connectionName}
 ___
 ## update_connection_basic
 Updates the basic information of a connection
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/update_connection_basic.py) to see the source code on GitHub.
 
 
@@ -2874,41 +2578,41 @@ http://localhost:8888/api/connections/{connectionName}/basic
 	request_body = ConnectionModel(
 		connection_name='sample_connection',
 		parallel_jobs_limit=4,
-		provider_type=ProviderType.postgresql,
+		provider_type=ProviderType.POSTGRESQL,
 		postgresql=PostgresqlParametersSpec(
 			host='localhost',
 			port='5432',
 			database='db',
 			user='PASSWD',
-			sslmode=PostgresqlSslMode.disable
+			sslmode=PostgresqlSslMode.DISABLE
 		),
-		run_checks_job_template=ConnectionModel(
+		run_checks_job_template=CheckSearchFilters(
 			connection='sample_connection',
 			enabled=True
 		),
-		run_profiling_checks_job_template=ConnectionModel(
-			check_type=CheckType.profiling,
+		run_profiling_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PROFILING,
 			connection='sample_connection',
 			enabled=True
 		),
-		run_monitoring_checks_job_template=ConnectionModel(
-			check_type=CheckType.monitoring,
+		run_monitoring_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.MONITORING,
 			connection='sample_connection',
 			enabled=True
 		),
-		run_partition_checks_job_template=ConnectionModel(
-			check_type=CheckType.partitioned,
+		run_partition_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PARTITIONED,
 			connection='sample_connection',
 			enabled=True
 		),
-		collect_statistics_job_template=ConnectionModel(
+		collect_statistics_job_template=StatisticsCollectorSearchFilters(
 			column_names=[
 			
 			],
 			connection='sample_connection',
 			enabled=True
 		),
-		data_clean_job_template=ConnectionModel(
+		data_clean_job_template=DeleteStoredDataQueueJobParameters(
 			connection='sample_connection',
 			delete_errors=True,
 			delete_statistics=True,
@@ -2949,41 +2653,41 @@ http://localhost:8888/api/connections/{connectionName}/basic
 	request_body = ConnectionModel(
 		connection_name='sample_connection',
 		parallel_jobs_limit=4,
-		provider_type=ProviderType.postgresql,
+		provider_type=ProviderType.POSTGRESQL,
 		postgresql=PostgresqlParametersSpec(
 			host='localhost',
 			port='5432',
 			database='db',
 			user='PASSWD',
-			sslmode=PostgresqlSslMode.disable
+			sslmode=PostgresqlSslMode.DISABLE
 		),
-		run_checks_job_template=ConnectionModel(
+		run_checks_job_template=CheckSearchFilters(
 			connection='sample_connection',
 			enabled=True
 		),
-		run_profiling_checks_job_template=ConnectionModel(
-			check_type=CheckType.profiling,
+		run_profiling_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PROFILING,
 			connection='sample_connection',
 			enabled=True
 		),
-		run_monitoring_checks_job_template=ConnectionModel(
-			check_type=CheckType.monitoring,
+		run_monitoring_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.MONITORING,
 			connection='sample_connection',
 			enabled=True
 		),
-		run_partition_checks_job_template=ConnectionModel(
-			check_type=CheckType.partitioned,
+		run_partition_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PARTITIONED,
 			connection='sample_connection',
 			enabled=True
 		),
-		collect_statistics_job_template=ConnectionModel(
+		collect_statistics_job_template=StatisticsCollectorSearchFilters(
 			column_names=[
 			
 			],
 			connection='sample_connection',
 			enabled=True
 		),
-		data_clean_job_template=ConnectionModel(
+		data_clean_job_template=DeleteStoredDataQueueJobParameters(
 			connection='sample_connection',
 			delete_errors=True,
 			delete_statistics=True,
@@ -3027,41 +2731,41 @@ http://localhost:8888/api/connections/{connectionName}/basic
 	request_body = ConnectionModel(
 		connection_name='sample_connection',
 		parallel_jobs_limit=4,
-		provider_type=ProviderType.postgresql,
+		provider_type=ProviderType.POSTGRESQL,
 		postgresql=PostgresqlParametersSpec(
 			host='localhost',
 			port='5432',
 			database='db',
 			user='PASSWD',
-			sslmode=PostgresqlSslMode.disable
+			sslmode=PostgresqlSslMode.DISABLE
 		),
-		run_checks_job_template=ConnectionModel(
+		run_checks_job_template=CheckSearchFilters(
 			connection='sample_connection',
 			enabled=True
 		),
-		run_profiling_checks_job_template=ConnectionModel(
-			check_type=CheckType.profiling,
+		run_profiling_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PROFILING,
 			connection='sample_connection',
 			enabled=True
 		),
-		run_monitoring_checks_job_template=ConnectionModel(
-			check_type=CheckType.monitoring,
+		run_monitoring_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.MONITORING,
 			connection='sample_connection',
 			enabled=True
 		),
-		run_partition_checks_job_template=ConnectionModel(
-			check_type=CheckType.partitioned,
+		run_partition_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PARTITIONED,
 			connection='sample_connection',
 			enabled=True
 		),
-		collect_statistics_job_template=ConnectionModel(
+		collect_statistics_job_template=StatisticsCollectorSearchFilters(
 			column_names=[
 			
 			],
 			connection='sample_connection',
 			enabled=True
 		),
-		data_clean_job_template=ConnectionModel(
+		data_clean_job_template=DeleteStoredDataQueueJobParameters(
 			connection='sample_connection',
 			delete_errors=True,
 			delete_statistics=True,
@@ -3105,41 +2809,41 @@ http://localhost:8888/api/connections/{connectionName}/basic
 	request_body = ConnectionModel(
 		connection_name='sample_connection',
 		parallel_jobs_limit=4,
-		provider_type=ProviderType.postgresql,
+		provider_type=ProviderType.POSTGRESQL,
 		postgresql=PostgresqlParametersSpec(
 			host='localhost',
 			port='5432',
 			database='db',
 			user='PASSWD',
-			sslmode=PostgresqlSslMode.disable
+			sslmode=PostgresqlSslMode.DISABLE
 		),
-		run_checks_job_template=ConnectionModel(
+		run_checks_job_template=CheckSearchFilters(
 			connection='sample_connection',
 			enabled=True
 		),
-		run_profiling_checks_job_template=ConnectionModel(
-			check_type=CheckType.profiling,
+		run_profiling_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PROFILING,
 			connection='sample_connection',
 			enabled=True
 		),
-		run_monitoring_checks_job_template=ConnectionModel(
-			check_type=CheckType.monitoring,
+		run_monitoring_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.MONITORING,
 			connection='sample_connection',
 			enabled=True
 		),
-		run_partition_checks_job_template=ConnectionModel(
-			check_type=CheckType.partitioned,
+		run_partition_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PARTITIONED,
 			connection='sample_connection',
 			enabled=True
 		),
-		collect_statistics_job_template=ConnectionModel(
+		collect_statistics_job_template=StatisticsCollectorSearchFilters(
 			column_names=[
 			
 			],
 			connection='sample_connection',
 			enabled=True
 		),
-		data_clean_job_template=ConnectionModel(
+		data_clean_job_template=DeleteStoredDataQueueJobParameters(
 			connection='sample_connection',
 			delete_errors=True,
 			delete_statistics=True,
@@ -3167,6 +2871,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
 ___
 ## update_connection_comments
 Updates (replaces) the list of comments of a connection
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/update_connection_comments.py) to see the source code on GitHub.
 
 
@@ -3369,6 +3074,7 @@ http://localhost:8888/api/connections/{connectionName}/comments
 ___
 ## update_connection_default_grouping_configuration
 Updates the default data grouping connection of a connection
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/update_connection_default_grouping_configuration.py) to see the source code on GitHub.
 
 
@@ -3425,7 +3131,7 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
 	
 	request_body = DataGroupingConfigurationSpec(
 		level_3=DataGroupingDimensionSpec(
-			source=DataGroupingDimensionSource.column_value,
+			source=DataGroupingDimensionSource.COLUMN_VALUE,
 			column='sample_column'
 		)
 	)
@@ -3453,7 +3159,7 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
 	
 	request_body = DataGroupingConfigurationSpec(
 		level_3=DataGroupingDimensionSpec(
-			source=DataGroupingDimensionSource.column_value,
+			source=DataGroupingDimensionSource.COLUMN_VALUE,
 			column='sample_column'
 		)
 	)
@@ -3484,7 +3190,7 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
 	
 	request_body = DataGroupingConfigurationSpec(
 		level_3=DataGroupingDimensionSpec(
-			source=DataGroupingDimensionSource.column_value,
+			source=DataGroupingDimensionSource.COLUMN_VALUE,
 			column='sample_column'
 		)
 	)
@@ -3515,7 +3221,7 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
 	
 	request_body = DataGroupingConfigurationSpec(
 		level_3=DataGroupingDimensionSpec(
-			source=DataGroupingDimensionSource.column_value,
+			source=DataGroupingDimensionSource.COLUMN_VALUE,
 			column='sample_column'
 		)
 	)
@@ -3535,6 +3241,7 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
 ___
 ## update_connection_incident_grouping
 Updates (replaces) configuration of incident grouping and notifications on a connection (data source) level.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/update_connection_incident_grouping.py) to see the source code on GitHub.
 
 
@@ -3591,8 +3298,8 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 	)
 	
 	request_body = ConnectionIncidentGroupingSpec(
-		grouping_level=IncidentGroupingLevel.table_dimension,
-		minimum_severity=MinimumGroupingSeverityLevel.warning,
+		grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
+		minimum_severity=MinimumGroupingSeverityLevel.WARNING,
 		divide_by_data_groups=True,
 		max_incident_length_days=60,
 		mute_for_days=60,
@@ -3628,8 +3335,8 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 	)
 	
 	request_body = ConnectionIncidentGroupingSpec(
-		grouping_level=IncidentGroupingLevel.table_dimension,
-		minimum_severity=MinimumGroupingSeverityLevel.warning,
+		grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
+		minimum_severity=MinimumGroupingSeverityLevel.WARNING,
 		divide_by_data_groups=True,
 		max_incident_length_days=60,
 		mute_for_days=60,
@@ -3668,8 +3375,8 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 	)
 	
 	request_body = ConnectionIncidentGroupingSpec(
-		grouping_level=IncidentGroupingLevel.table_dimension,
-		minimum_severity=MinimumGroupingSeverityLevel.warning,
+		grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
+		minimum_severity=MinimumGroupingSeverityLevel.WARNING,
 		divide_by_data_groups=True,
 		max_incident_length_days=60,
 		mute_for_days=60,
@@ -3708,8 +3415,8 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 	)
 	
 	request_body = ConnectionIncidentGroupingSpec(
-		grouping_level=IncidentGroupingLevel.table_dimension,
-		minimum_severity=MinimumGroupingSeverityLevel.warning,
+		grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
+		minimum_severity=MinimumGroupingSeverityLevel.WARNING,
 		divide_by_data_groups=True,
 		max_incident_length_days=60,
 		mute_for_days=60,
@@ -3737,6 +3444,7 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 ___
 ## update_connection_labels
 Updates the list of labels of a connection
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/update_connection_labels.py) to see the source code on GitHub.
 
 
@@ -3784,7 +3492,6 @@ http://localhost:8888/api/connections/{connectionName}/labels
     from dqops import client
 	from dqops.client.api.connections import update_connection_labels
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
@@ -3809,7 +3516,6 @@ http://localhost:8888/api/connections/{connectionName}/labels
     from dqops import client
 	from dqops.client.api.connections import update_connection_labels
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
@@ -3833,7 +3539,6 @@ http://localhost:8888/api/connections/{connectionName}/labels
     ```python
     from dqops import client
 	from dqops.client.api.connections import update_connection_labels
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -3861,7 +3566,6 @@ http://localhost:8888/api/connections/{connectionName}/labels
     ```python
     from dqops import client
 	from dqops.client.api.connections import update_connection_labels
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -3891,6 +3595,7 @@ http://localhost:8888/api/connections/{connectionName}/labels
 ___
 ## update_connection_scheduling_group
 Updates the schedule of a connection for a scheduling group (named schedule for checks with a similar time series configuration)
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/update_connection_scheduling_group.py) to see the source code on GitHub.
 
 

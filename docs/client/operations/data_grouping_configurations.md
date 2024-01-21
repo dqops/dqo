@@ -5,6 +5,7 @@ Operations for managing the configuration of data groupings on a table level in 
 ___
 ## create_table_grouping_configuration
 Creates a new data grouping configuration on a table level
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/data_grouping_configurations/create_table_grouping_configuration.py) to see the source code on GitHub.
 
 
@@ -66,7 +67,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		data_grouping_configuration_name='sample_data_grouping',
 		spec=DataGroupingConfigurationSpec(
 			level_3=DataGroupingDimensionSpec(
-				source=DataGroupingDimensionSource.column_value,
+				source=DataGroupingDimensionSource.COLUMN_VALUE,
 				column='sample_column'
 			)
 		),
@@ -101,7 +102,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		data_grouping_configuration_name='sample_data_grouping',
 		spec=DataGroupingConfigurationSpec(
 			level_3=DataGroupingDimensionSpec(
-				source=DataGroupingDimensionSource.column_value,
+				source=DataGroupingDimensionSource.COLUMN_VALUE,
 				column='sample_column'
 			)
 		),
@@ -139,7 +140,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		data_grouping_configuration_name='sample_data_grouping',
 		spec=DataGroupingConfigurationSpec(
 			level_3=DataGroupingDimensionSpec(
-				source=DataGroupingDimensionSource.column_value,
+				source=DataGroupingDimensionSource.COLUMN_VALUE,
 				column='sample_column'
 			)
 		),
@@ -177,7 +178,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		data_grouping_configuration_name='sample_data_grouping',
 		spec=DataGroupingConfigurationSpec(
 			level_3=DataGroupingDimensionSpec(
-				source=DataGroupingDimensionSource.column_value,
+				source=DataGroupingDimensionSource.COLUMN_VALUE,
 				column='sample_column'
 			)
 		),
@@ -201,6 +202,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## delete_table_grouping_configuration
 Deletes a data grouping configuration from a table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/data_grouping_configurations/delete_table_grouping_configuration.py) to see the source code on GitHub.
 
 
@@ -241,7 +243,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import delete_table_grouping_configuration
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
@@ -262,7 +263,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import delete_table_grouping_configuration
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
@@ -282,7 +282,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import delete_table_grouping_configuration
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -306,7 +305,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import delete_table_grouping_configuration
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -332,6 +330,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## get_table_grouping_configuration
 Returns a model of the data grouping configuration
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/data_grouping_configurations/get_table_grouping_configuration.py) to see the source code on GitHub.
 
 
@@ -379,7 +378,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import get_table_grouping_configuration
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -401,7 +399,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import get_table_grouping_configuration
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -422,7 +419,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import get_table_grouping_configuration
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -448,7 +444,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import get_table_grouping_configuration
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -470,17 +465,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "can_edit" : false
-	}
-    ```
-
 
 ___
 ## get_table_grouping_configurations
 Returns the list of data grouping configurations on a table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/data_grouping_configurations/get_table_grouping_configurations.py) to see the source code on GitHub.
 
 
@@ -527,7 +516,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import get_table_grouping_configurations
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -548,7 +536,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import get_table_grouping_configurations
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -568,7 +555,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import get_table_grouping_configurations
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -593,7 +579,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import get_table_grouping_configurations
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -614,24 +599,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "default_data_grouping_configuration" : false,
-	  "can_edit" : false
-	}, {
-	  "default_data_grouping_configuration" : false,
-	  "can_edit" : false
-	}, {
-	  "default_data_grouping_configuration" : false,
-	  "can_edit" : false
-	} ]
-    ```
-
 
 ___
 ## set_table_default_grouping_configuration
 Sets a table&#x27;s grouping configuration as the default or disables data grouping
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/data_grouping_configurations/set_table_default_grouping_configuration.py) to see the source code on GitHub.
 
 
@@ -672,7 +644,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import set_table_default_grouping_configuration
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
@@ -692,7 +663,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import set_table_default_grouping_configuration
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
@@ -711,7 +681,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import set_table_default_grouping_configuration
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -734,7 +703,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import set_table_default_grouping_configuration
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -759,6 +727,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_table_grouping_configuration
 Updates a data grouping configuration according to the provided model
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/data_grouping_configurations/update_table_grouping_configuration.py) to see the source code on GitHub.
 
 
@@ -821,7 +790,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		data_grouping_configuration_name='sample_data_grouping',
 		spec=DataGroupingConfigurationSpec(
 			level_3=DataGroupingDimensionSpec(
-				source=DataGroupingDimensionSource.column_value,
+				source=DataGroupingDimensionSource.COLUMN_VALUE,
 				column='sample_column'
 			)
 		),
@@ -857,7 +826,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		data_grouping_configuration_name='sample_data_grouping',
 		spec=DataGroupingConfigurationSpec(
 			level_3=DataGroupingDimensionSpec(
-				source=DataGroupingDimensionSource.column_value,
+				source=DataGroupingDimensionSource.COLUMN_VALUE,
 				column='sample_column'
 			)
 		),
@@ -896,7 +865,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		data_grouping_configuration_name='sample_data_grouping',
 		spec=DataGroupingConfigurationSpec(
 			level_3=DataGroupingDimensionSpec(
-				source=DataGroupingDimensionSource.column_value,
+				source=DataGroupingDimensionSource.COLUMN_VALUE,
 				column='sample_column'
 			)
 		),
@@ -935,7 +904,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		data_grouping_configuration_name='sample_data_grouping',
 		spec=DataGroupingConfigurationSpec(
 			level_3=DataGroupingDimensionSpec(
-				source=DataGroupingDimensionSource.column_value,
+				source=DataGroupingDimensionSource.COLUMN_VALUE,
 				column='sample_column'
 			)
 		),

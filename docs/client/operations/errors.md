@@ -5,6 +5,7 @@ Operations that return the execution errors captured when data quality checks we
 ___
 ## get_column_monitoring_errors
 Returns errors related to the recent column level monitoring executions for the monitoring at a requested time scale
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/errors/get_column_monitoring_errors.py) to see the source code on GitHub.
 
 
@@ -155,21 +156,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "errorEntries" : [ ]
-	}, {
-	  "errorEntries" : [ ]
-	}, {
-	  "errorEntries" : [ ]
-	} ]
-    ```
-
 
 ___
 ## get_column_partitioned_errors
 Returns the errors related to the recent column level partitioned checks executions for a requested time scale
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/errors/get_column_partitioned_errors.py) to see the source code on GitHub.
 
 
@@ -320,21 +311,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "errorEntries" : [ ]
-	}, {
-	  "errorEntries" : [ ]
-	}, {
-	  "errorEntries" : [ ]
-	} ]
-    ```
-
 
 ___
 ## get_column_profiling_errors
 Returns the errors related to the recent check executions for all column level data quality profiling checks on a column
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/errors/get_column_profiling_errors.py) to see the source code on GitHub.
 
 
@@ -389,7 +370,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.errors import get_column_profiling_errors
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -411,7 +391,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.errors import get_column_profiling_errors
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -432,7 +411,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.errors import get_column_profiling_errors
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -458,7 +436,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.errors import get_column_profiling_errors
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -480,21 +457,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "errorEntries" : [ ]
-	}, {
-	  "errorEntries" : [ ]
-	}, {
-	  "errorEntries" : [ ]
-	} ]
-    ```
-
 
 ___
 ## get_table_monitoring_errors
 Returns the errors related to the most recent table level monitoring executions for the monitoring at a requested time scale
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/errors/get_table_monitoring_errors.py) to see the source code on GitHub.
 
 
@@ -640,21 +607,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "errorEntries" : [ ]
-	}, {
-	  "errorEntries" : [ ]
-	}, {
-	  "errorEntries" : [ ]
-	} ]
-    ```
-
 
 ___
 ## get_table_partitioned_errors
 Returns errors related to the recent table level partitioned checks executions for a requested time scale
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/errors/get_table_partitioned_errors.py) to see the source code on GitHub.
 
 
@@ -800,21 +757,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "errorEntries" : [ ]
-	}, {
-	  "errorEntries" : [ ]
-	}, {
-	  "errorEntries" : [ ]
-	} ]
-    ```
-
 
 ___
 ## get_table_profiling_errors
 Returns the errors related to the most recent check executions for all table level data quality profiling checks on a table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/errors/get_table_profiling_errors.py) to see the source code on GitHub.
 
 
@@ -868,7 +815,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.errors import get_table_profiling_errors
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -889,7 +835,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.errors import get_table_profiling_errors
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -909,7 +854,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.errors import get_table_profiling_errors
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -934,7 +878,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.errors import get_table_profiling_errors
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -954,16 +897,5 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-
-??? "Return value sample"
-    ```js
-    [ {
-	  "errorEntries" : [ ]
-	}, {
-	  "errorEntries" : [ ]
-	}, {
-	  "errorEntries" : [ ]
-	} ]
-    ```
 
 

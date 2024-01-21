@@ -5,6 +5,7 @@ Operations for managing shared credentials in DQOps. Credentials that are stored
 ___
 ## create_shared_credential
 Creates (adds) a new shared credential, which creates a file in the DQOps user&#x27;s home .credentials/ folder named as the credential and with the content that is provided in this call.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/shared_credentials/create_shared_credential.py) to see the source code on GitHub.
 
 
@@ -53,7 +54,7 @@ http://localhost:8888/api/credentials
 	
 	request_body = SharedCredentialModel(
 		credential_name='sample_credential',
-		type=CredentialType.text,
+		type=CredentialType.TEXT,
 		text_value='sample_credential_text_value'
 	)
 	
@@ -78,7 +79,7 @@ http://localhost:8888/api/credentials
 	
 	request_body = SharedCredentialModel(
 		credential_name='sample_credential',
-		type=CredentialType.text,
+		type=CredentialType.TEXT,
 		text_value='sample_credential_text_value'
 	)
 	
@@ -106,7 +107,7 @@ http://localhost:8888/api/credentials
 	
 	request_body = SharedCredentialModel(
 		credential_name='sample_credential',
-		type=CredentialType.text,
+		type=CredentialType.TEXT,
 		text_value='sample_credential_text_value'
 	)
 	
@@ -134,7 +135,7 @@ http://localhost:8888/api/credentials
 	
 	request_body = SharedCredentialModel(
 		credential_name='sample_credential',
-		type=CredentialType.text,
+		type=CredentialType.TEXT,
 		text_value='sample_credential_text_value'
 	)
 	
@@ -152,6 +153,7 @@ http://localhost:8888/api/credentials
 ___
 ## delete_shared_credential
 Deletes a shared credential file from the DQOps user&#x27;s home .credentials/ folder.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/shared_credentials/delete_shared_credential.py) to see the source code on GitHub.
 
 
@@ -189,7 +191,6 @@ http://localhost:8888/api/credentials/{credentialName}
     from dqops import client
 	from dqops.client.api.shared_credentials import delete_shared_credential
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
@@ -207,7 +208,6 @@ http://localhost:8888/api/credentials/{credentialName}
     from dqops import client
 	from dqops.client.api.shared_credentials import delete_shared_credential
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
@@ -224,7 +224,6 @@ http://localhost:8888/api/credentials/{credentialName}
     ```python
     from dqops import client
 	from dqops.client.api.shared_credentials import delete_shared_credential
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -245,7 +244,6 @@ http://localhost:8888/api/credentials/{credentialName}
     ```python
     from dqops import client
 	from dqops.client.api.shared_credentials import delete_shared_credential
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -268,6 +266,7 @@ http://localhost:8888/api/credentials/{credentialName}
 ___
 ## download_shared_credential
 Downloads a shared credential&#x27;s file
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/shared_credentials/download_shared_credential.py) to see the source code on GitHub.
 
 
@@ -305,7 +304,6 @@ http://localhost:8888/api/credentials/{credentialName}/download
     from dqops import client
 	from dqops.client.api.shared_credentials import download_shared_credential
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -324,7 +322,6 @@ http://localhost:8888/api/credentials/{credentialName}/download
     from dqops import client
 	from dqops.client.api.shared_credentials import download_shared_credential
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -342,7 +339,6 @@ http://localhost:8888/api/credentials/{credentialName}/download
     ```python
     from dqops import client
 	from dqops.client.api.shared_credentials import download_shared_credential
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -364,7 +360,6 @@ http://localhost:8888/api/credentials/{credentialName}/download
     ```python
     from dqops import client
 	from dqops.client.api.shared_credentials import download_shared_credential
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -388,6 +383,7 @@ http://localhost:8888/api/credentials/{credentialName}/download
 ___
 ## get_all_shared_credentials
 Returns a list of all shared credentials that are present in the DQOps user&#x27;s home .credentials/ folder..
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/shared_credentials/get_all_shared_credentials.py) to see the source code on GitHub.
 
 
@@ -425,7 +421,6 @@ http://localhost:8888/api/credentials
     from dqops import client
 	from dqops.client.api.shared_credentials import get_all_shared_credentials
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -443,7 +438,6 @@ http://localhost:8888/api/credentials
     from dqops import client
 	from dqops.client.api.shared_credentials import get_all_shared_credentials
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -460,7 +454,6 @@ http://localhost:8888/api/credentials
     ```python
     from dqops import client
 	from dqops.client.api.shared_credentials import get_all_shared_credentials
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -482,7 +475,6 @@ http://localhost:8888/api/credentials
     from dqops import client
 	from dqops.client.api.shared_credentials import get_all_shared_credentials
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -500,24 +492,11 @@ http://localhost:8888/api/credentials
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "can_edit" : false,
-	  "can_access_credential" : false
-	}, {
-	  "can_edit" : false,
-	  "can_access_credential" : false
-	}, {
-	  "can_edit" : false,
-	  "can_access_credential" : false
-	} ]
-    ```
-
 
 ___
 ## get_shared_credential
 Returns a shared credential content
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/shared_credentials/get_shared_credential.py) to see the source code on GitHub.
 
 
@@ -562,7 +541,6 @@ http://localhost:8888/api/credentials/{credentialName}
     from dqops import client
 	from dqops.client.api.shared_credentials import get_shared_credential
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -581,7 +559,6 @@ http://localhost:8888/api/credentials/{credentialName}
     from dqops import client
 	from dqops.client.api.shared_credentials import get_shared_credential
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -599,7 +576,6 @@ http://localhost:8888/api/credentials/{credentialName}
     ```python
     from dqops import client
 	from dqops.client.api.shared_credentials import get_shared_credential
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -622,7 +598,6 @@ http://localhost:8888/api/credentials/{credentialName}
     from dqops import client
 	from dqops.client.api.shared_credentials import get_shared_credential
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -641,19 +616,11 @@ http://localhost:8888/api/credentials/{credentialName}
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "credential_name" : "sample_credential",
-	  "type" : "text",
-	  "text_value" : "sample_credential_text_value"
-	}
-    ```
-
 
 ___
 ## update_shared_credential
 Updates an existing shared credential, replacing the credential&#x27;s file content.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/shared_credentials/update_shared_credential.py) to see the source code on GitHub.
 
 
@@ -709,7 +676,7 @@ http://localhost:8888/api/credential/{credentialName}
 	
 	request_body = SharedCredentialModel(
 		credential_name='sample_credential',
-		type=CredentialType.text,
+		type=CredentialType.TEXT,
 		text_value='sample_credential_text_value'
 	)
 	
@@ -735,7 +702,7 @@ http://localhost:8888/api/credential/{credentialName}
 	
 	request_body = SharedCredentialModel(
 		credential_name='sample_credential',
-		type=CredentialType.text,
+		type=CredentialType.TEXT,
 		text_value='sample_credential_text_value'
 	)
 	
@@ -764,7 +731,7 @@ http://localhost:8888/api/credential/{credentialName}
 	
 	request_body = SharedCredentialModel(
 		credential_name='sample_credential',
-		type=CredentialType.text,
+		type=CredentialType.TEXT,
 		text_value='sample_credential_text_value'
 	)
 	
@@ -793,7 +760,7 @@ http://localhost:8888/api/credential/{credentialName}
 	
 	request_body = SharedCredentialModel(
 		credential_name='sample_credential',
-		type=CredentialType.text,
+		type=CredentialType.TEXT,
 		text_value='sample_credential_text_value'
 	)
 	

@@ -5,6 +5,7 @@ Operations that returns the results of the most recent table comparison that was
 ___
 ## get_table_comparison_monitoring_results
 Retrieves the results of the most table comparison performed using the monitoring comparison checks.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparison_results/get_table_comparison_monitoring_results.py) to see the source code on GitHub.
 
 
@@ -148,18 +149,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "table_comparison_results" : { },
-	  "column_comparison_results" : { }
-	}
-    ```
-
 
 ___
 ## get_table_comparison_partitioned_results
 Retrieves the results of the most table comparison performed using the partitioned comparison checks, comparing days or months of data.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparison_results/get_table_comparison_partitioned_results.py) to see the source code on GitHub.
 
 
@@ -303,18 +297,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "table_comparison_results" : { },
-	  "column_comparison_results" : { }
-	}
-    ```
-
 
 ___
 ## get_table_comparison_profiling_results
 Retrieves the results of the most table comparison performed using the profiling checks comparison checks.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/table_comparison_results/get_table_comparison_profiling_results.py) to see the source code on GitHub.
 
 
@@ -362,7 +349,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.table_comparison_results import get_table_comparison_profiling_results
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -384,7 +370,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.table_comparison_results import get_table_comparison_profiling_results
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -405,7 +390,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.table_comparison_results import get_table_comparison_profiling_results
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -431,7 +415,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.table_comparison_results import get_table_comparison_profiling_results
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -452,13 +435,5 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-
-??? "Return value sample"
-    ```js
-    {
-	  "table_comparison_results" : { },
-	  "column_comparison_results" : { }
-	}
-    ```
 
 

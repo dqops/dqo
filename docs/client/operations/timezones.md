@@ -5,6 +5,7 @@ Operations for returning time zone names and codes supported by DQOps.
 ___
 ## get_available_zone_ids
 Returns a list of available time zone ids
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/timezones/get_available_zone_ids.py) to see the source code on GitHub.
 
 
@@ -42,7 +43,6 @@ http://localhost:8888/api/timezones
     from dqops import client
 	from dqops.client.api.timezones import get_available_zone_ids
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -60,7 +60,6 @@ http://localhost:8888/api/timezones
     from dqops import client
 	from dqops.client.api.timezones import get_available_zone_ids
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -77,7 +76,6 @@ http://localhost:8888/api/timezones
     ```python
     from dqops import client
 	from dqops.client.api.timezones import get_available_zone_ids
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -99,7 +97,6 @@ http://localhost:8888/api/timezones
     from dqops import client
 	from dqops.client.api.timezones import get_available_zone_ids
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -116,10 +113,5 @@ http://localhost:8888/api/timezones
 
 
 
-
-??? "Return value sample"
-    ```js
-    [ "sampleString_1", "sampleString_2", "sampleString_3" ]
-    ```
 
 

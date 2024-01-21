@@ -5,6 +5,7 @@ Operations for managing access for DQOps users in a multi-user installations. Us
 ___
 ## change_caller_password
 Changes the password of the calling user. When the user is identified by the DQOps local API key, it is the user whose email is stored in the DQOps API Key.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/users/change_caller_password.py) to see the source code on GitHub.
 
 
@@ -45,7 +46,6 @@ http://localhost:8888/api/mypassword
     from dqops import client
 	from dqops.client.api.users import change_caller_password
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
@@ -65,7 +65,6 @@ http://localhost:8888/api/mypassword
     from dqops import client
 	from dqops.client.api.users import change_caller_password
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
@@ -84,7 +83,6 @@ http://localhost:8888/api/mypassword
     ```python
     from dqops import client
 	from dqops.client.api.users import change_caller_password
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -107,7 +105,6 @@ http://localhost:8888/api/mypassword
     ```python
     from dqops import client
 	from dqops.client.api.users import change_caller_password
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -132,6 +129,7 @@ http://localhost:8888/api/mypassword
 ___
 ## change_user_password
 Changes the password of a user identified by the email.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/users/change_user_password.py) to see the source code on GitHub.
 
 
@@ -179,7 +177,6 @@ http://localhost:8888/api/users/{email}/password
     from dqops import client
 	from dqops.client.api.users import change_user_password
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
@@ -200,7 +197,6 @@ http://localhost:8888/api/users/{email}/password
     from dqops import client
 	from dqops.client.api.users import change_user_password
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
@@ -220,7 +216,6 @@ http://localhost:8888/api/users/{email}/password
     ```python
     from dqops import client
 	from dqops.client.api.users import change_user_password
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -244,7 +239,6 @@ http://localhost:8888/api/users/{email}/password
     ```python
     from dqops import client
 	from dqops.client.api.users import change_user_password
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -270,6 +264,7 @@ http://localhost:8888/api/users/{email}/password
 ___
 ## create_user
 Creates (adds) a new user to a multi-user account.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/users/create_user.py) to see the source code on GitHub.
 
 
@@ -413,6 +408,7 @@ http://localhost:8888/api/users
 ___
 ## delete_user
 Deletes a user from a multi-user account.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/users/delete_user.py) to see the source code on GitHub.
 
 
@@ -450,7 +446,6 @@ http://localhost:8888/api/users/{email}
     from dqops import client
 	from dqops.client.api.users import delete_user
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
@@ -468,7 +463,6 @@ http://localhost:8888/api/users/{email}
     from dqops import client
 	from dqops.client.api.users import delete_user
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
@@ -485,7 +479,6 @@ http://localhost:8888/api/users/{email}
     ```python
     from dqops import client
 	from dqops.client.api.users import delete_user
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -506,7 +499,6 @@ http://localhost:8888/api/users/{email}
     ```python
     from dqops import client
 	from dqops.client.api.users import delete_user
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -529,6 +521,7 @@ http://localhost:8888/api/users/{email}
 ___
 ## get_all_users
 Returns a list of all users.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/users/get_all_users.py) to see the source code on GitHub.
 
 
@@ -566,7 +559,6 @@ http://localhost:8888/api/users
     from dqops import client
 	from dqops.client.api.users import get_all_users
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -584,7 +576,6 @@ http://localhost:8888/api/users
     from dqops import client
 	from dqops.client.api.users import get_all_users
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -601,7 +592,6 @@ http://localhost:8888/api/users
     ```python
     from dqops import client
 	from dqops.client.api.users import get_all_users
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -623,7 +613,6 @@ http://localhost:8888/api/users
     from dqops import client
 	from dqops.client.api.users import get_all_users
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -641,24 +630,11 @@ http://localhost:8888/api/users
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "email" : "sample_user@mail.com",
-	  "accountRole" : "operator"
-	}, {
-	  "email" : "sample_user@mail.com",
-	  "accountRole" : "operator"
-	}, {
-	  "email" : "sample_user@mail.com",
-	  "accountRole" : "operator"
-	} ]
-    ```
-
 
 ___
 ## get_user
 Returns the user model that describes the role of a user identified by an email
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/users/get_user.py) to see the source code on GitHub.
 
 
@@ -703,7 +679,6 @@ http://localhost:8888/api/users/{email}
     from dqops import client
 	from dqops.client.api.users import get_user
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -722,7 +697,6 @@ http://localhost:8888/api/users/{email}
     from dqops import client
 	from dqops.client.api.users import get_user
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -740,7 +714,6 @@ http://localhost:8888/api/users/{email}
     ```python
     from dqops import client
 	from dqops.client.api.users import get_user
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -763,7 +736,6 @@ http://localhost:8888/api/users/{email}
     from dqops import client
 	from dqops.client.api.users import get_user
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -782,18 +754,11 @@ http://localhost:8888/api/users/{email}
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "email" : "sample_user@mail.com",
-	  "accountRole" : "operator"
-	}
-    ```
-
 
 ___
 ## update_user
 Updates a user in a multi-user account. The user&#x27;s email cannot be changed.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/users/update_user.py) to see the source code on GitHub.
 
 

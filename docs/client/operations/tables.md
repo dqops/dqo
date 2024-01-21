@@ -5,6 +5,7 @@ Operations related to manage the metadata of imported tables, and managing the c
 ___
 ## create_table
 Creates a new table (adds a table metadata)
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/create_table.py) to see the source code on GitHub.
 
 
@@ -44,7 +45,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"timestamp_columns\":{\"event_timestamp_column\":\"col1\",\"ingestion_timestamp_column\":\"col2\",\"partition_by_column\":\"col3\"},\"incremental_time_window\":{\"daily_partitioning_recent_days\":7,\"monthly_partitioning_recent_months\":1},\"profiling_checks\":{\"volume\":{\"profile_row_count\":{\"error\":{\"min_count\":1}}}},\"columns\":{}}"
+		"{\"timestamp_columns\":{\"event_timestamp_column\":\"col1\",\"ingestion_timestamp_column\":\"col2\",\"partition_by_column\":\"col3\"},\"incremental_time_window\":{\"daily_partitioning_recent_days\":7,\"daily_partitioning_include_today\":true},\"profiling_checks\":{\"volume\":{\"profile_row_count\":{\"error\":{\"min_count\":1}}}},\"columns\":{}}"
 	
     ```
 
@@ -80,8 +81,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		),
 		incremental_time_window=PartitionIncrementalTimeWindowSpec(
 			daily_partitioning_recent_days=7,
-			daily_partitioning_include_today=False,
-			monthly_partitioning_recent_months=1,
+			daily_partitioning_include_today=True,
 			monthly_partitioning_include_current_month=False
 		),
 		groupings=DataGroupingConfigurationSpecMap(),
@@ -144,8 +144,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		),
 		incremental_time_window=PartitionIncrementalTimeWindowSpec(
 			daily_partitioning_recent_days=7,
-			daily_partitioning_include_today=False,
-			monthly_partitioning_recent_months=1,
+			daily_partitioning_include_today=True,
 			monthly_partitioning_include_current_month=False
 		),
 		groupings=DataGroupingConfigurationSpecMap(),
@@ -211,8 +210,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		),
 		incremental_time_window=PartitionIncrementalTimeWindowSpec(
 			daily_partitioning_recent_days=7,
-			daily_partitioning_include_today=False,
-			monthly_partitioning_recent_months=1,
+			daily_partitioning_include_today=True,
 			monthly_partitioning_include_current_month=False
 		),
 		groupings=DataGroupingConfigurationSpecMap(),
@@ -278,8 +276,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		),
 		incremental_time_window=PartitionIncrementalTimeWindowSpec(
 			daily_partitioning_recent_days=7,
-			daily_partitioning_include_today=False,
-			monthly_partitioning_recent_months=1,
+			daily_partitioning_include_today=True,
 			monthly_partitioning_include_current_month=False
 		),
 		groupings=DataGroupingConfigurationSpecMap(),
@@ -317,6 +314,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## delete_table
 Deletes a table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/delete_table.py) to see the source code on GitHub.
 
 
@@ -363,7 +361,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import delete_table
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
@@ -383,7 +380,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import delete_table
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
@@ -402,7 +398,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.tables import delete_table
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -426,7 +421,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import delete_table
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -446,18 +440,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "jobId" : 10832,
-	  "createdAt" : "2007-10-11T13:42:00Z"
-	}
-    ```
-
 
 ___
 ## get_table
 Return the table specification
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table.py) to see the source code on GitHub.
 
 
@@ -504,7 +491,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -525,7 +511,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -545,7 +530,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.tables import get_table
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -570,7 +554,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -591,17 +574,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "can_edit" : false
-	}
-    ```
-
 
 ___
 ## get_table_basic
 Return the basic table information
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_basic.py) to see the source code on GitHub.
 
 
@@ -648,7 +625,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_basic
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -669,7 +645,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_basic
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -689,7 +664,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.tables import get_table_basic
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -714,7 +688,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_basic
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -735,59 +708,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "connection_name" : "sample_connection",
-	  "table_hash" : 2314522140819107818,
-	  "target" : {
-	    "schema_name" : "sample_schema",
-	    "table_name" : "sample_table"
-	  },
-	  "has_any_configured_checks" : true,
-	  "has_any_configured_profiling_checks" : true,
-	  "run_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true
-	  },
-	  "run_profiling_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true,
-	    "checkType" : "profiling"
-	  },
-	  "run_monitoring_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true,
-	    "checkType" : "monitoring"
-	  },
-	  "run_partition_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true,
-	    "checkType" : "partitioned"
-	  },
-	  "data_clean_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "deleteErrors" : true,
-	    "deleteStatistics" : true,
-	    "deleteCheckResults" : true,
-	    "deleteSensorReadouts" : true
-	  },
-	  "can_edit" : true,
-	  "can_collect_statistics" : true,
-	  "can_run_checks" : true,
-	  "can_delete_data" : true
-	}
-    ```
-
 
 ___
 ## get_table_columns_monitoring_checks_model
 Return a UI friendly model of configurations for column-level data quality monitoring checks on a table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_columns_monitoring_checks_model.py) to see the source code on GitHub.
 
 
@@ -933,27 +858,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "sensor_parameters" : [ ],
-	  "disabled" : false,
-	  "configured" : false
-	}, {
-	  "sensor_parameters" : [ ],
-	  "disabled" : false,
-	  "configured" : false
-	}, {
-	  "sensor_parameters" : [ ],
-	  "disabled" : false,
-	  "configured" : false
-	} ]
-    ```
-
 
 ___
 ## get_table_columns_partitioned_checks_model
 Return a UI friendly model of configurations for column-level data quality partitioned checks on a table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_columns_partitioned_checks_model.py) to see the source code on GitHub.
 
 
@@ -1099,27 +1008,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "sensor_parameters" : [ ],
-	  "disabled" : false,
-	  "configured" : false
-	}, {
-	  "sensor_parameters" : [ ],
-	  "disabled" : false,
-	  "configured" : false
-	}, {
-	  "sensor_parameters" : [ ],
-	  "disabled" : false,
-	  "configured" : false
-	} ]
-    ```
-
 
 ___
 ## get_table_columns_profiling_checks_model
 Return a UI friendly model of configurations for column-level data quality profiling checks on a table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_columns_profiling_checks_model.py) to see the source code on GitHub.
 
 
@@ -1173,7 +1066,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_columns_profiling_checks_model
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -1194,7 +1086,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_columns_profiling_checks_model
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -1214,7 +1105,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.tables import get_table_columns_profiling_checks_model
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -1239,7 +1129,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_columns_profiling_checks_model
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -1260,27 +1149,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "sensor_parameters" : [ ],
-	  "disabled" : false,
-	  "configured" : false
-	}, {
-	  "sensor_parameters" : [ ],
-	  "disabled" : false,
-	  "configured" : false
-	}, {
-	  "sensor_parameters" : [ ],
-	  "disabled" : false,
-	  "configured" : false
-	} ]
-    ```
-
 
 ___
 ## get_table_comments
 Return the list of comments added to a table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_comments.py) to see the source code on GitHub.
 
 
@@ -1327,7 +1200,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_comments
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -1348,7 +1220,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_comments
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -1368,7 +1239,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.tables import get_table_comments
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -1393,7 +1263,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_comments
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -1414,27 +1283,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "date" : "2007-12-03T10:15:30",
-	  "comment_by" : "sample_user",
-	  "comment" : "Sample comment"
-	}, {
-	  "date" : "2007-12-03T10:15:30",
-	  "comment_by" : "sample_user",
-	  "comment" : "Sample comment"
-	}, {
-	  "date" : "2007-12-03T10:15:30",
-	  "comment_by" : "sample_user",
-	  "comment" : "Sample comment"
-	} ]
-    ```
-
 
 ___
 ## get_table_daily_monitoring_checks
 Return the configuration of daily table level data quality monitoring on a table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_daily_monitoring_checks.py) to see the source code on GitHub.
 
 
@@ -1481,7 +1334,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_daily_monitoring_checks
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -1502,7 +1354,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_daily_monitoring_checks
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -1522,7 +1373,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.tables import get_table_daily_monitoring_checks
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -1547,7 +1397,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_daily_monitoring_checks
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -1568,23 +1417,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "volume" : {
-	    "daily_row_count" : {
-	      "error" : {
-	        "min_count" : 1
-	      }
-	    }
-	  }
-	}
-    ```
-
 
 ___
 ## get_table_daily_partitioned_checks
 Return the configuration of daily table level data quality partitioned checks on a table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_daily_partitioned_checks.py) to see the source code on GitHub.
 
 
@@ -1631,7 +1468,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_daily_partitioned_checks
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -1652,7 +1488,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_daily_partitioned_checks
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -1672,7 +1507,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.tables import get_table_daily_partitioned_checks
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -1697,7 +1531,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_daily_partitioned_checks
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -1718,23 +1551,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "volume" : {
-	    "daily_partition_row_count" : {
-	      "error" : {
-	        "min_count" : 1
-	      }
-	    }
-	  }
-	}
-    ```
-
 
 ___
 ## get_table_default_grouping_configuration
 Return the default data grouping configuration for a table.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_default_grouping_configuration.py) to see the source code on GitHub.
 
 
@@ -1781,7 +1602,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_default_grouping_configuration
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -1802,7 +1622,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_default_grouping_configuration
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -1822,7 +1641,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.tables import get_table_default_grouping_configuration
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -1847,7 +1665,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_default_grouping_configuration
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -1868,20 +1685,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "level_3" : {
-	    "source" : "column_value",
-	    "column" : "sample_column"
-	  }
-	}
-    ```
-
 
 ___
 ## get_table_incident_grouping
 Return the configuration of incident grouping on a table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_incident_grouping.py) to see the source code on GitHub.
 
 
@@ -1928,7 +1736,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_incident_grouping
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -1949,7 +1756,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_incident_grouping
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -1969,7 +1775,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.tables import get_table_incident_grouping
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -1994,7 +1799,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_incident_grouping
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -2015,20 +1819,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "grouping_level" : "table_dimension",
-	  "minimum_severity" : "warning",
-	  "divide_by_data_group" : true,
-	  "disabled" : false
-	}
-    ```
-
 
 ___
 ## get_table_labels
 Return the list of labels assigned to a table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_labels.py) to see the source code on GitHub.
 
 
@@ -2075,7 +1870,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_labels
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -2096,7 +1890,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_labels
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -2116,7 +1909,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.tables import get_table_labels
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -2141,7 +1933,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_labels
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -2162,15 +1953,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    [ "sampleString_1", "sampleString_2", "sampleString_3" ]
-    ```
-
 
 ___
 ## get_table_monitoring_checks_basic_model
 Return a simplistic UI friendly model of table level data quality monitoring on a table for a given time scale
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_monitoring_checks_basic_model.py) to see the source code on GitHub.
 
 
@@ -2309,50 +2096,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "checks" : [ {
-	    "check_category" : "sample_category_1",
-	    "check_name" : "sample_check_1",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_2",
-	    "check_name" : "sample_check_1",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_1",
-	    "check_name" : "sample_check_2",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_2",
-	    "check_name" : "sample_check_2",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_1",
-	    "check_name" : "sample_check_3",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_2",
-	    "check_name" : "sample_check_3",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  } ],
-	  "can_edit" : false,
-	  "can_run_checks" : true,
-	  "can_delete_data" : true
-	}
-    ```
-
 
 ___
 ## get_table_monitoring_checks_model
 Return a UI friendly model of configurations for table level data quality monitoring on a table for a given time scale
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_monitoring_checks_model.py) to see the source code on GitHub.
 
 
@@ -2491,38 +2239,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "categories" : [ {
-	    "category" : "sample_category",
-	    "help_text" : "Sample help text",
-	    "checks" : [ {
-	      "check_name" : "sample_check",
-	      "help_text" : "Sample help text",
-	      "sensor_parameters" : [ ],
-	      "sensor_name" : "sample_target/sample_category/sample_sensor",
-	      "quality_dimension" : "sample_quality_dimension",
-	      "supports_grouping" : false,
-	      "disabled" : false,
-	      "exclude_from_kpi" : false,
-	      "include_in_sla" : false,
-	      "configured" : false,
-	      "can_edit" : false,
-	      "can_run_checks" : false,
-	      "can_delete_data" : false
-	    } ]
-	  } ],
-	  "can_edit" : false,
-	  "can_run_checks" : false,
-	  "can_delete_data" : false
-	}
-    ```
-
 
 ___
 ## get_table_monitoring_checks_model_filter
 Return a UI friendly model of configurations for table level data quality monitoring on a table for a given time scale, filtered by category and check name.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_monitoring_checks_model_filter.py) to see the source code on GitHub.
 
 
@@ -2671,38 +2392,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "categories" : [ {
-	    "category" : "sample_category",
-	    "help_text" : "Sample help text",
-	    "checks" : [ {
-	      "check_name" : "sample_check",
-	      "help_text" : "Sample help text",
-	      "sensor_parameters" : [ ],
-	      "sensor_name" : "sample_target/sample_category/sample_sensor",
-	      "quality_dimension" : "sample_quality_dimension",
-	      "supports_grouping" : false,
-	      "disabled" : false,
-	      "exclude_from_kpi" : false,
-	      "include_in_sla" : false,
-	      "configured" : false,
-	      "can_edit" : false,
-	      "can_run_checks" : false,
-	      "can_delete_data" : false
-	    } ]
-	  } ],
-	  "can_edit" : false,
-	  "can_run_checks" : false,
-	  "can_delete_data" : false
-	}
-    ```
-
 
 ___
 ## get_table_monitoring_checks_monthly
 Return the configuration of monthly table level data quality monitoring on a table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_monitoring_checks_monthly.py) to see the source code on GitHub.
 
 
@@ -2749,7 +2443,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_monitoring_checks_monthly
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -2770,7 +2463,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_monitoring_checks_monthly
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -2790,7 +2482,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.tables import get_table_monitoring_checks_monthly
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -2815,7 +2506,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_monitoring_checks_monthly
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -2836,23 +2526,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "volume" : {
-	    "monthly_row_count" : {
-	      "error" : {
-	        "min_count" : 1
-	      }
-	    }
-	  }
-	}
-    ```
-
 
 ___
 ## get_table_monitoring_checks_templates
 Return available data quality checks on a requested table.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_monitoring_checks_templates.py) to see the source code on GitHub.
 
 
@@ -2993,21 +2671,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "sensor_parameters_definitions" : [ ]
-	}, {
-	  "sensor_parameters_definitions" : [ ]
-	}, {
-	  "sensor_parameters_definitions" : [ ]
-	} ]
-    ```
-
 
 ___
 ## get_table_partitioned_checks_basic_model
 Return a simplistic UI friendly model of table level data quality partitioned checks on a table for a given time scale
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_partitioned_checks_basic_model.py) to see the source code on GitHub.
 
 
@@ -3146,50 +2814,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "checks" : [ {
-	    "check_category" : "sample_category_1",
-	    "check_name" : "sample_check_1",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_2",
-	    "check_name" : "sample_check_1",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_1",
-	    "check_name" : "sample_check_2",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_2",
-	    "check_name" : "sample_check_2",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_1",
-	    "check_name" : "sample_check_3",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_2",
-	    "check_name" : "sample_check_3",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  } ],
-	  "can_edit" : false,
-	  "can_run_checks" : true,
-	  "can_delete_data" : true
-	}
-    ```
-
 
 ___
 ## get_table_partitioned_checks_model
 Return a UI friendly model of configurations for table level data quality partitioned checks on a table for a given time scale
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_partitioned_checks_model.py) to see the source code on GitHub.
 
 
@@ -3328,38 +2957,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "categories" : [ {
-	    "category" : "sample_category",
-	    "help_text" : "Sample help text",
-	    "checks" : [ {
-	      "check_name" : "sample_check",
-	      "help_text" : "Sample help text",
-	      "sensor_parameters" : [ ],
-	      "sensor_name" : "sample_target/sample_category/sample_sensor",
-	      "quality_dimension" : "sample_quality_dimension",
-	      "supports_grouping" : false,
-	      "disabled" : false,
-	      "exclude_from_kpi" : false,
-	      "include_in_sla" : false,
-	      "configured" : false,
-	      "can_edit" : false,
-	      "can_run_checks" : false,
-	      "can_delete_data" : false
-	    } ]
-	  } ],
-	  "can_edit" : false,
-	  "can_run_checks" : false,
-	  "can_delete_data" : false
-	}
-    ```
-
 
 ___
 ## get_table_partitioned_checks_model_filter
 Return a UI friendly model of configurations for table level data quality partitioned checks on a table for a given time scale, filtered by category and check name.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_partitioned_checks_model_filter.py) to see the source code on GitHub.
 
 
@@ -3508,38 +3110,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "categories" : [ {
-	    "category" : "sample_category",
-	    "help_text" : "Sample help text",
-	    "checks" : [ {
-	      "check_name" : "sample_check",
-	      "help_text" : "Sample help text",
-	      "sensor_parameters" : [ ],
-	      "sensor_name" : "sample_target/sample_category/sample_sensor",
-	      "quality_dimension" : "sample_quality_dimension",
-	      "supports_grouping" : false,
-	      "disabled" : false,
-	      "exclude_from_kpi" : false,
-	      "include_in_sla" : false,
-	      "configured" : false,
-	      "can_edit" : false,
-	      "can_run_checks" : false,
-	      "can_delete_data" : false
-	    } ]
-	  } ],
-	  "can_edit" : false,
-	  "can_run_checks" : false,
-	  "can_delete_data" : false
-	}
-    ```
-
 
 ___
 ## get_table_partitioned_checks_monthly
 Return the configuration of monthly table level data quality partitioned checks on a table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_partitioned_checks_monthly.py) to see the source code on GitHub.
 
 
@@ -3586,7 +3161,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_partitioned_checks_monthly
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -3607,7 +3181,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_partitioned_checks_monthly
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -3627,7 +3200,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.tables import get_table_partitioned_checks_monthly
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -3652,7 +3224,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_partitioned_checks_monthly
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -3673,23 +3244,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "volume" : {
-	    "monthly_partition_row_count" : {
-	      "error" : {
-	        "min_count" : 1
-	      }
-	    }
-	  }
-	}
-    ```
-
 
 ___
 ## get_table_partitioned_checks_templates
 Return available data quality checks on a requested table.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_partitioned_checks_templates.py) to see the source code on GitHub.
 
 
@@ -3830,21 +3389,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "sensor_parameters_definitions" : [ ]
-	}, {
-	  "sensor_parameters_definitions" : [ ]
-	}, {
-	  "sensor_parameters_definitions" : [ ]
-	} ]
-    ```
-
 
 ___
 ## get_table_partitioning
 Return the table partitioning information
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_partitioning.py) to see the source code on GitHub.
 
 
@@ -3891,7 +3440,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_partitioning
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -3912,7 +3460,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_partitioning
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -3932,7 +3479,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.tables import get_table_partitioning
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -3957,7 +3503,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_partitioning
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -3978,31 +3523,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "connection_name" : "sample_connection",
-	  "target" : {
-	    "schema_name" : "sample_schema",
-	    "table_name" : "sample_table"
-	  },
-	  "timestamp_columns" : {
-	    "event_timestamp_column" : "col1",
-	    "ingestion_timestamp_column" : "col2",
-	    "partition_by_column" : "col3"
-	  },
-	  "incremental_time_window" : {
-	    "daily_partitioning_recent_days" : 7,
-	    "monthly_partitioning_recent_months" : 1
-	  },
-	  "can_edit" : true
-	}
-    ```
-
 
 ___
 ## get_table_profiling_checks
 Return the configuration of table level data quality checks on a table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_profiling_checks.py) to see the source code on GitHub.
 
 
@@ -4049,7 +3574,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_profiling_checks
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -4070,7 +3594,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_profiling_checks
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -4090,7 +3613,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.tables import get_table_profiling_checks
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -4115,7 +3637,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_profiling_checks
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -4136,23 +3657,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "volume" : {
-	    "profile_row_count" : {
-	      "error" : {
-	        "min_count" : 1
-	      }
-	    }
-	  }
-	}
-    ```
-
 
 ___
 ## get_table_profiling_checks_basic_model
 Return a simplistic UI friendly model of all table level data quality profiling checks on a table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_profiling_checks_basic_model.py) to see the source code on GitHub.
 
 
@@ -4199,7 +3708,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_profiling_checks_basic_model
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -4220,7 +3728,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_profiling_checks_basic_model
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -4240,7 +3747,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.tables import get_table_profiling_checks_basic_model
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -4265,7 +3771,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_profiling_checks_basic_model
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -4286,50 +3791,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "checks" : [ {
-	    "check_category" : "sample_category_1",
-	    "check_name" : "sample_check_1",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_2",
-	    "check_name" : "sample_check_1",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_1",
-	    "check_name" : "sample_check_2",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_2",
-	    "check_name" : "sample_check_2",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_1",
-	    "check_name" : "sample_check_3",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_2",
-	    "check_name" : "sample_check_3",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  } ],
-	  "can_edit" : false,
-	  "can_run_checks" : true,
-	  "can_delete_data" : true
-	}
-    ```
-
 
 ___
 ## get_table_profiling_checks_model
 Return a UI friendly model of configurations for all table level data quality profiling checks on a table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_profiling_checks_model.py) to see the source code on GitHub.
 
 
@@ -4376,7 +3842,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_profiling_checks_model
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -4397,7 +3862,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_profiling_checks_model
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -4417,7 +3881,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.tables import get_table_profiling_checks_model
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -4442,7 +3905,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_profiling_checks_model
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -4463,38 +3925,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "categories" : [ {
-	    "category" : "sample_category",
-	    "help_text" : "Sample help text",
-	    "checks" : [ {
-	      "check_name" : "sample_check",
-	      "help_text" : "Sample help text",
-	      "sensor_parameters" : [ ],
-	      "sensor_name" : "sample_target/sample_category/sample_sensor",
-	      "quality_dimension" : "sample_quality_dimension",
-	      "supports_grouping" : false,
-	      "disabled" : false,
-	      "exclude_from_kpi" : false,
-	      "include_in_sla" : false,
-	      "configured" : false,
-	      "can_edit" : false,
-	      "can_run_checks" : false,
-	      "can_delete_data" : false
-	    } ]
-	  } ],
-	  "can_edit" : false,
-	  "can_run_checks" : false,
-	  "can_delete_data" : false
-	}
-    ```
-
 
 ___
 ## get_table_profiling_checks_model_filter
 Return a UI friendly model of configurations for all table level data quality profiling checks on a table passing a filter
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_profiling_checks_model_filter.py) to see the source code on GitHub.
 
 
@@ -4543,7 +3978,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_profiling_checks_model_filter
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -4566,7 +4000,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_profiling_checks_model_filter
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -4588,7 +4021,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.tables import get_table_profiling_checks_model_filter
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -4615,7 +4047,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_profiling_checks_model_filter
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -4638,38 +4069,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "categories" : [ {
-	    "category" : "sample_category",
-	    "help_text" : "Sample help text",
-	    "checks" : [ {
-	      "check_name" : "sample_check",
-	      "help_text" : "Sample help text",
-	      "sensor_parameters" : [ ],
-	      "sensor_name" : "sample_target/sample_category/sample_sensor",
-	      "quality_dimension" : "sample_quality_dimension",
-	      "supports_grouping" : false,
-	      "disabled" : false,
-	      "exclude_from_kpi" : false,
-	      "include_in_sla" : false,
-	      "configured" : false,
-	      "can_edit" : false,
-	      "can_run_checks" : false,
-	      "can_delete_data" : false
-	    } ]
-	  } ],
-	  "can_edit" : false,
-	  "can_run_checks" : false,
-	  "can_delete_data" : false
-	}
-    ```
-
 
 ___
 ## get_table_profiling_checks_templates
 Return available data quality checks on a requested table.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_profiling_checks_templates.py) to see the source code on GitHub.
 
 
@@ -4718,7 +4122,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_profiling_checks_templates
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -4739,7 +4142,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_profiling_checks_templates
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -4759,7 +4161,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.tables import get_table_profiling_checks_templates
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -4784,7 +4185,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_profiling_checks_templates
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -4805,21 +4205,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "sensor_parameters_definitions" : [ ]
-	}, {
-	  "sensor_parameters_definitions" : [ ]
-	}, {
-	  "sensor_parameters_definitions" : [ ]
-	} ]
-    ```
-
 
 ___
 ## get_table_scheduling_group_override
 Return the schedule override configuration for a table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_scheduling_group_override.py) to see the source code on GitHub.
 
 
@@ -4958,17 +4348,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "cron_expression" : "0 12 1 * *"
-	}
-    ```
-
 
 ___
 ## get_table_statistics
 Returns a list of the profiler (statistics) metrics on a chosen table captured during the most recent statistics collection.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_statistics.py) to see the source code on GitHub.
 
 
@@ -5015,7 +4399,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_statistics
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -5036,7 +4419,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_statistics
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -5056,7 +4438,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.tables import get_table_statistics
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -5081,7 +4462,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_table_statistics
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -5102,17 +4482,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "can_collect_statistics" : false
-	}
-    ```
-
 
 ___
 ## get_tables
 Returns a list of tables inside a connection/schema
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_tables.py) to see the source code on GitHub.
 
 
@@ -5158,7 +4532,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_tables
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -5178,7 +4551,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_tables
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -5197,7 +4569,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.tables import get_tables
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -5221,7 +4592,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import get_tables
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -5241,147 +4611,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "connection_name" : "sample_connection",
-	  "table_hash" : 2314522140819107818,
-	  "target" : {
-	    "schema_name" : "sample_schema",
-	    "table_name" : "sample_table"
-	  },
-	  "has_any_configured_checks" : true,
-	  "has_any_configured_profiling_checks" : true,
-	  "run_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true
-	  },
-	  "run_profiling_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true,
-	    "checkType" : "profiling"
-	  },
-	  "run_monitoring_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true,
-	    "checkType" : "monitoring"
-	  },
-	  "run_partition_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true,
-	    "checkType" : "partitioned"
-	  },
-	  "data_clean_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "deleteErrors" : true,
-	    "deleteStatistics" : true,
-	    "deleteCheckResults" : true,
-	    "deleteSensorReadouts" : true
-	  },
-	  "can_edit" : true,
-	  "can_collect_statistics" : true,
-	  "can_run_checks" : true,
-	  "can_delete_data" : true
-	}, {
-	  "connection_name" : "sample_connection",
-	  "table_hash" : 2314522140819107818,
-	  "target" : {
-	    "schema_name" : "sample_schema",
-	    "table_name" : "sample_table"
-	  },
-	  "has_any_configured_checks" : true,
-	  "has_any_configured_profiling_checks" : true,
-	  "run_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true
-	  },
-	  "run_profiling_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true,
-	    "checkType" : "profiling"
-	  },
-	  "run_monitoring_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true,
-	    "checkType" : "monitoring"
-	  },
-	  "run_partition_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true,
-	    "checkType" : "partitioned"
-	  },
-	  "data_clean_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "deleteErrors" : true,
-	    "deleteStatistics" : true,
-	    "deleteCheckResults" : true,
-	    "deleteSensorReadouts" : true
-	  },
-	  "can_edit" : true,
-	  "can_collect_statistics" : true,
-	  "can_run_checks" : true,
-	  "can_delete_data" : true
-	}, {
-	  "connection_name" : "sample_connection",
-	  "table_hash" : 2314522140819107818,
-	  "target" : {
-	    "schema_name" : "sample_schema",
-	    "table_name" : "sample_table"
-	  },
-	  "has_any_configured_checks" : true,
-	  "has_any_configured_profiling_checks" : true,
-	  "run_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true
-	  },
-	  "run_profiling_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true,
-	    "checkType" : "profiling"
-	  },
-	  "run_monitoring_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true,
-	    "checkType" : "monitoring"
-	  },
-	  "run_partition_checks_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true,
-	    "checkType" : "partitioned"
-	  },
-	  "data_clean_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "deleteErrors" : true,
-	    "deleteStatistics" : true,
-	    "deleteCheckResults" : true,
-	    "deleteSensorReadouts" : true
-	  },
-	  "can_edit" : true,
-	  "can_collect_statistics" : true,
-	  "can_run_checks" : true,
-	  "can_delete_data" : true
-	} ]
-    ```
-
 
 ___
 ## update_table
 Updates an existing table specification, changing all the fields
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table.py) to see the source code on GitHub.
 
 
@@ -5421,7 +4655,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"timestamp_columns\":{\"event_timestamp_column\":\"col1\",\"ingestion_timestamp_column\":\"col2\",\"partition_by_column\":\"col3\"},\"incremental_time_window\":{\"daily_partitioning_recent_days\":7,\"monthly_partitioning_recent_months\":1},\"profiling_checks\":{\"volume\":{\"profile_row_count\":{\"error\":{\"min_count\":1}}}},\"columns\":{}}"
+		"{\"timestamp_columns\":{\"event_timestamp_column\":\"col1\",\"ingestion_timestamp_column\":\"col2\",\"partition_by_column\":\"col3\"},\"incremental_time_window\":{\"daily_partitioning_recent_days\":7,\"daily_partitioning_include_today\":true},\"profiling_checks\":{\"volume\":{\"profile_row_count\":{\"error\":{\"min_count\":1}}}},\"columns\":{}}"
 	
     ```
 
@@ -5457,8 +4691,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		),
 		incremental_time_window=PartitionIncrementalTimeWindowSpec(
 			daily_partitioning_recent_days=7,
-			daily_partitioning_include_today=False,
-			monthly_partitioning_recent_months=1,
+			daily_partitioning_include_today=True,
 			monthly_partitioning_include_current_month=False
 		),
 		groupings=DataGroupingConfigurationSpecMap(),
@@ -5521,8 +4754,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		),
 		incremental_time_window=PartitionIncrementalTimeWindowSpec(
 			daily_partitioning_recent_days=7,
-			daily_partitioning_include_today=False,
-			monthly_partitioning_recent_months=1,
+			daily_partitioning_include_today=True,
 			monthly_partitioning_include_current_month=False
 		),
 		groupings=DataGroupingConfigurationSpecMap(),
@@ -5588,8 +4820,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		),
 		incremental_time_window=PartitionIncrementalTimeWindowSpec(
 			daily_partitioning_recent_days=7,
-			daily_partitioning_include_today=False,
-			monthly_partitioning_recent_months=1,
+			daily_partitioning_include_today=True,
 			monthly_partitioning_include_current_month=False
 		),
 		groupings=DataGroupingConfigurationSpecMap(),
@@ -5655,8 +4886,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		),
 		incremental_time_window=PartitionIncrementalTimeWindowSpec(
 			daily_partitioning_recent_days=7,
-			daily_partitioning_include_today=False,
-			monthly_partitioning_recent_months=1,
+			daily_partitioning_include_today=True,
 			monthly_partitioning_include_current_month=False
 		),
 		groupings=DataGroupingConfigurationSpecMap(),
@@ -5694,6 +4924,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_table_basic
 Updates the basic field of an existing table, changing only the most important fields.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_basic.py) to see the source code on GitHub.
 
 
@@ -5764,30 +4995,30 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		has_any_configured_monitoring_checks=False,
 		has_any_configured_partition_checks=False,
 		partitioning_configuration_missing=False,
-		run_checks_job_template=TableListModel(
+		run_checks_job_template=CheckSearchFilters(
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
-		run_profiling_checks_job_template=TableListModel(
-			check_type=CheckType.profiling,
+		run_profiling_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PROFILING,
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
-		run_monitoring_checks_job_template=TableListModel(
-			check_type=CheckType.monitoring,
+		run_monitoring_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.MONITORING,
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
-		run_partition_checks_job_template=TableListModel(
-			check_type=CheckType.partitioned,
+		run_partition_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PARTITIONED,
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
-		data_clean_job_template=TableListModel(
+		data_clean_job_template=DeleteStoredDataQueueJobParameters(
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
@@ -5838,30 +5069,30 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		has_any_configured_monitoring_checks=False,
 		has_any_configured_partition_checks=False,
 		partitioning_configuration_missing=False,
-		run_checks_job_template=TableListModel(
+		run_checks_job_template=CheckSearchFilters(
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
-		run_profiling_checks_job_template=TableListModel(
-			check_type=CheckType.profiling,
+		run_profiling_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PROFILING,
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
-		run_monitoring_checks_job_template=TableListModel(
-			check_type=CheckType.monitoring,
+		run_monitoring_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.MONITORING,
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
-		run_partition_checks_job_template=TableListModel(
-			check_type=CheckType.partitioned,
+		run_partition_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PARTITIONED,
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
-		data_clean_job_template=TableListModel(
+		data_clean_job_template=DeleteStoredDataQueueJobParameters(
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
@@ -5915,30 +5146,30 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		has_any_configured_monitoring_checks=False,
 		has_any_configured_partition_checks=False,
 		partitioning_configuration_missing=False,
-		run_checks_job_template=TableListModel(
+		run_checks_job_template=CheckSearchFilters(
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
-		run_profiling_checks_job_template=TableListModel(
-			check_type=CheckType.profiling,
+		run_profiling_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PROFILING,
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
-		run_monitoring_checks_job_template=TableListModel(
-			check_type=CheckType.monitoring,
+		run_monitoring_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.MONITORING,
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
-		run_partition_checks_job_template=TableListModel(
-			check_type=CheckType.partitioned,
+		run_partition_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PARTITIONED,
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
-		data_clean_job_template=TableListModel(
+		data_clean_job_template=DeleteStoredDataQueueJobParameters(
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
@@ -5992,30 +5223,30 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		has_any_configured_monitoring_checks=False,
 		has_any_configured_partition_checks=False,
 		partitioning_configuration_missing=False,
-		run_checks_job_template=TableListModel(
+		run_checks_job_template=CheckSearchFilters(
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
-		run_profiling_checks_job_template=TableListModel(
-			check_type=CheckType.profiling,
+		run_profiling_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PROFILING,
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
-		run_monitoring_checks_job_template=TableListModel(
-			check_type=CheckType.monitoring,
+		run_monitoring_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.MONITORING,
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
-		run_partition_checks_job_template=TableListModel(
-			check_type=CheckType.partitioned,
+		run_partition_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PARTITIONED,
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
-		data_clean_job_template=TableListModel(
+		data_clean_job_template=DeleteStoredDataQueueJobParameters(
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
@@ -6046,6 +5277,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_table_comments
 Updates the list of comments on an existing table.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_comments.py) to see the source code on GitHub.
 
 
@@ -6258,6 +5490,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_table_daily_monitoring_checks
 Updates the list of daily table level data quality monitoring on an existing table.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_daily_monitoring_checks.py) to see the source code on GitHub.
 
 
@@ -6470,6 +5703,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_table_default_grouping_configuration
 Updates the default data grouping configuration at a table level.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_default_grouping_configuration.py) to see the source code on GitHub.
 
 
@@ -6528,7 +5762,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
 	request_body = DataGroupingConfigurationSpec(
 		level_3=DataGroupingDimensionSpec(
-			source=DataGroupingDimensionSource.column_value,
+			source=DataGroupingDimensionSource.COLUMN_VALUE,
 			column='sample_column'
 		)
 	)
@@ -6558,7 +5792,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
 	request_body = DataGroupingConfigurationSpec(
 		level_3=DataGroupingDimensionSpec(
-			source=DataGroupingDimensionSource.column_value,
+			source=DataGroupingDimensionSource.COLUMN_VALUE,
 			column='sample_column'
 		)
 	)
@@ -6591,7 +5825,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
 	request_body = DataGroupingConfigurationSpec(
 		level_3=DataGroupingDimensionSpec(
-			source=DataGroupingDimensionSource.column_value,
+			source=DataGroupingDimensionSource.COLUMN_VALUE,
 			column='sample_column'
 		)
 	)
@@ -6624,7 +5858,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
 	request_body = DataGroupingConfigurationSpec(
 		level_3=DataGroupingDimensionSpec(
-			source=DataGroupingDimensionSource.column_value,
+			source=DataGroupingDimensionSource.COLUMN_VALUE,
 			column='sample_column'
 		)
 	)
@@ -6646,6 +5880,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_table_incident_grouping
 Updates the configuration of incident grouping on a table.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_incident_grouping.py) to see the source code on GitHub.
 
 
@@ -6703,8 +5938,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
 	request_body = TableIncidentGroupingSpec(
-		grouping_level=IncidentGroupingLevel.table_dimension,
-		minimum_severity=MinimumGroupingSeverityLevel.warning,
+		grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
+		minimum_severity=MinimumGroupingSeverityLevel.WARNING,
 		divide_by_data_group=True,
 		disabled=False
 	)
@@ -6733,8 +5968,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
 	request_body = TableIncidentGroupingSpec(
-		grouping_level=IncidentGroupingLevel.table_dimension,
-		minimum_severity=MinimumGroupingSeverityLevel.warning,
+		grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
+		minimum_severity=MinimumGroupingSeverityLevel.WARNING,
 		divide_by_data_group=True,
 		disabled=False
 	)
@@ -6766,8 +6001,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
 	request_body = TableIncidentGroupingSpec(
-		grouping_level=IncidentGroupingLevel.table_dimension,
-		minimum_severity=MinimumGroupingSeverityLevel.warning,
+		grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
+		minimum_severity=MinimumGroupingSeverityLevel.WARNING,
 		divide_by_data_group=True,
 		disabled=False
 	)
@@ -6799,8 +6034,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
 	request_body = TableIncidentGroupingSpec(
-		grouping_level=IncidentGroupingLevel.table_dimension,
-		minimum_severity=MinimumGroupingSeverityLevel.warning,
+		grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
+		minimum_severity=MinimumGroupingSeverityLevel.WARNING,
 		divide_by_data_group=True,
 		disabled=False
 	)
@@ -6822,6 +6057,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_table_labels
 Updates the list of assigned labels of an existing table.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_labels.py) to see the source code on GitHub.
 
 
@@ -6871,7 +6107,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import update_table_labels
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
@@ -6898,7 +6133,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.tables import update_table_labels
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
@@ -6924,7 +6158,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.tables import update_table_labels
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -6954,7 +6187,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.tables import update_table_labels
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -6986,6 +6218,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_table_monitoring_checks_model
 Updates the data quality monitoring from a model that contains a patch with changes.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_monitoring_checks_model.py) to see the source code on GitHub.
 
 
@@ -7275,6 +6508,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_table_monitoring_checks_monthly
 Updates the list of monthly table level data quality monitoring on an existing table.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_monitoring_checks_monthly.py) to see the source code on GitHub.
 
 
@@ -7487,6 +6721,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_table_partitioned_checks_daily
 Updates the list of daily table level data quality partitioned checks on an existing table.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_partitioned_checks_daily.py) to see the source code on GitHub.
 
 
@@ -7699,6 +6934,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_table_partitioned_checks_model
 Updates the data quality partitioned checks from a model that contains a patch with changes.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_partitioned_checks_model.py) to see the source code on GitHub.
 
 
@@ -7988,6 +7224,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_table_partitioned_checks_monthly
 Updates the list of monthly table level data quality partitioned checks on an existing table.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_partitioned_checks_monthly.py) to see the source code on GitHub.
 
 
@@ -8200,6 +7437,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_table_partitioning
 Updates the table partitioning configuration of an existing table.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_partitioning.py) to see the source code on GitHub.
 
 
@@ -8239,7 +7477,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"connection_name\":\"sample_connection\",\"target\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"timestamp_columns\":{\"event_timestamp_column\":\"col1\",\"ingestion_timestamp_column\":\"col2\",\"partition_by_column\":\"col3\"},\"incremental_time_window\":{\"daily_partitioning_recent_days\":7,\"monthly_partitioning_recent_months\":1},\"can_edit\":true}"
+		"{\"connection_name\":\"sample_connection\",\"target\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"timestamp_columns\":{\"event_timestamp_column\":\"col1\",\"ingestion_timestamp_column\":\"col2\",\"partition_by_column\":\"col3\"},\"incremental_time_window\":{\"daily_partitioning_recent_days\":7,\"daily_partitioning_include_today\":true},\"can_edit\":true}"
 	
     ```
 
@@ -8270,8 +7508,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		),
 		incremental_time_window=PartitionIncrementalTimeWindowSpec(
 			daily_partitioning_recent_days=7,
-			daily_partitioning_include_today=False,
-			monthly_partitioning_recent_months=1,
+			daily_partitioning_include_today=True,
 			monthly_partitioning_include_current_month=False
 		),
 		can_edit=True
@@ -8314,8 +7551,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		),
 		incremental_time_window=PartitionIncrementalTimeWindowSpec(
 			daily_partitioning_recent_days=7,
-			daily_partitioning_include_today=False,
-			monthly_partitioning_recent_months=1,
+			daily_partitioning_include_today=True,
 			monthly_partitioning_include_current_month=False
 		),
 		can_edit=True
@@ -8361,8 +7597,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		),
 		incremental_time_window=PartitionIncrementalTimeWindowSpec(
 			daily_partitioning_recent_days=7,
-			daily_partitioning_include_today=False,
-			monthly_partitioning_recent_months=1,
+			daily_partitioning_include_today=True,
 			monthly_partitioning_include_current_month=False
 		),
 		can_edit=True
@@ -8408,8 +7643,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		),
 		incremental_time_window=PartitionIncrementalTimeWindowSpec(
 			daily_partitioning_recent_days=7,
-			daily_partitioning_include_today=False,
-			monthly_partitioning_recent_months=1,
+			daily_partitioning_include_today=True,
 			monthly_partitioning_include_current_month=False
 		),
 		can_edit=True
@@ -8432,6 +7666,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_table_profiling_checks
 Updates the list of table level data quality profiling checks on an existing table.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_profiling_checks.py) to see the source code on GitHub.
 
 
@@ -8636,6 +7871,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_table_profiling_checks_model
 Updates the data quality profiling checks from a model that contains a patch with changes.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_profiling_checks_model.py) to see the source code on GitHub.
 
 
@@ -8916,6 +8152,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_table_scheduling_group_override
 Updates the overridden schedule configuration of an existing table for a named schedule group (named schedule for checks using the same time scale).
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_scheduling_group_override.py) to see the source code on GitHub.
 
 

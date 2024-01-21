@@ -1,4 +1,4 @@
-# 0.5.0
+# 1.0.0
 * Apache Spark connector
 * Databricks connector
 * Initial versions of Apache Trino and Presto connectors
@@ -7,3 +7,5 @@
 * Fixes in the UI - table status overview screen, filtering checks related to incidents
 * Support activating and deactivating multiple data quality checks from UI
 * Additional navigation screens for jumping between schemas and tables
+* COMPLETE DOCUMENTATION with examples
+

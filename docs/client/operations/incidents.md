@@ -5,6 +5,7 @@ Data quality incidents controller that supports reading and updating data qualit
 ___
 ## find_connection_incident_stats
 Returns a list of connection names with incident statistics - the count of recent open incidents.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/incidents/find_connection_incident_stats.py) to see the source code on GitHub.
 
 
@@ -42,7 +43,6 @@ http://localhost:8888/api/incidentstat
     from dqops import client
 	from dqops.client.api.incidents import find_connection_incident_stats
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -60,7 +60,6 @@ http://localhost:8888/api/incidentstat
     from dqops import client
 	from dqops.client.api.incidents import find_connection_incident_stats
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -77,7 +76,6 @@ http://localhost:8888/api/incidentstat
     ```python
     from dqops import client
 	from dqops.client.api.incidents import find_connection_incident_stats
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -99,7 +97,6 @@ http://localhost:8888/api/incidentstat
     from dqops import client
 	from dqops.client.api.incidents import find_connection_incident_stats
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -117,21 +114,11 @@ http://localhost:8888/api/incidentstat
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "openIncidents" : 0
-	}, {
-	  "openIncidents" : 0
-	}, {
-	  "openIncidents" : 0
-	} ]
-    ```
-
 
 ___
 ## find_recent_incidents_on_connection
 Returns a list of recent data quality incidents.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/incidents/find_recent_incidents_on_connection.py) to see the source code on GitHub.
 
 
@@ -269,33 +256,11 @@ http://localhost:8888/api/incidents/{connectionName}
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "year" : 0,
-	  "month" : 0,
-	  "highestSeverity" : 0,
-	  "minimumSeverity" : 0,
-	  "failedChecksCount" : 0
-	}, {
-	  "year" : 0,
-	  "month" : 0,
-	  "highestSeverity" : 0,
-	  "minimumSeverity" : 0,
-	  "failedChecksCount" : 0
-	}, {
-	  "year" : 0,
-	  "month" : 0,
-	  "highestSeverity" : 0,
-	  "minimumSeverity" : 0,
-	  "failedChecksCount" : 0
-	} ]
-    ```
-
 
 ___
 ## get_incident
 Return a single data quality incident&#x27;s details.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/incidents/get_incident.py) to see the source code on GitHub.
 
 
@@ -343,7 +308,6 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     from dqops import client
 	from dqops.client.api.incidents import get_incident
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -365,7 +329,6 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     from dqops import client
 	from dqops.client.api.incidents import get_incident
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -386,7 +349,6 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```python
     from dqops import client
 	from dqops.client.api.incidents import get_incident
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -412,7 +374,6 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     from dqops import client
 	from dqops.client.api.incidents import get_incident
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -434,21 +395,11 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "year" : 0,
-	  "month" : 0,
-	  "highestSeverity" : 0,
-	  "minimumSeverity" : 0,
-	  "failedChecksCount" : 0
-	}
-    ```
-
 
 ___
 ## get_incident_histogram
 Generates histograms of data quality issues for each day, returning the number of data quality issues on that day. The other histograms are by a column name and by a check name.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/incidents/get_incident_histogram.py) to see the source code on GitHub.
 
 
@@ -501,7 +452,6 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     from dqops import client
 	from dqops.client.api.incidents import get_incident_histogram
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -523,7 +473,6 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     from dqops import client
 	from dqops.client.api.incidents import get_incident_histogram
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -544,7 +493,6 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```python
     from dqops import client
 	from dqops.client.api.incidents import get_incident_histogram
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -570,7 +518,6 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     from dqops import client
 	from dqops.client.api.incidents import get_incident_histogram
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -592,22 +539,11 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "hasProfilingIssues" : false,
-	  "hasMonitoringIssues" : false,
-	  "hasPartitionedIssues" : false,
-	  "days" : { },
-	  "columns" : { },
-	  "checks" : { }
-	}
-    ```
-
 
 ___
 ## get_incident_issues
 Return a paged list of failed data quality check results that are related to an incident.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/incidents/get_incident_issues.py) to see the source code on GitHub.
 
 
@@ -759,96 +695,11 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "id" : "3854372",
-	  "checkHash" : 0,
-	  "checkCategory" : "sample_category",
-	  "checkName" : "sample_check",
-	  "checkDisplayName" : "sample_target/sample_category/sample_check",
-	  "checkType" : "profiling",
-	  "actualValue" : 100.0,
-	  "expectedValue" : 110.0,
-	  "warningLowerBound" : 105.0,
-	  "warningUpperBound" : 115.0,
-	  "errorLowerBound" : 95.0,
-	  "errorUpperBound" : 125.0,
-	  "fatalLowerBound" : 85.0,
-	  "fatalUpperBound" : 135.0,
-	  "severity" : 2,
-	  "columnName" : "sample_column",
-	  "dataGroup" : "sample_data_grouping",
-	  "durationMs" : 142,
-	  "executedAt" : "2023-10-01T14:00:00Z",
-	  "timeGradient" : "hour",
-	  "timePeriod" : "2023-10-01T14:00:00",
-	  "includeInKpi" : true,
-	  "includeInSla" : true,
-	  "provider" : "BigQuery",
-	  "qualityDimension" : "sample_quality_dimension",
-	  "sensorName" : "sample_target/sample_category/sample_sensor"
-	}, {
-	  "id" : "3854372",
-	  "checkHash" : 0,
-	  "checkCategory" : "sample_category",
-	  "checkName" : "sample_check",
-	  "checkDisplayName" : "sample_target/sample_category/sample_check",
-	  "checkType" : "profiling",
-	  "actualValue" : 100.0,
-	  "expectedValue" : 110.0,
-	  "warningLowerBound" : 105.0,
-	  "warningUpperBound" : 115.0,
-	  "errorLowerBound" : 95.0,
-	  "errorUpperBound" : 125.0,
-	  "fatalLowerBound" : 85.0,
-	  "fatalUpperBound" : 135.0,
-	  "severity" : 2,
-	  "columnName" : "sample_column",
-	  "dataGroup" : "sample_data_grouping",
-	  "durationMs" : 142,
-	  "executedAt" : "2023-10-01T14:00:00Z",
-	  "timeGradient" : "hour",
-	  "timePeriod" : "2023-10-01T14:00:00",
-	  "includeInKpi" : true,
-	  "includeInSla" : true,
-	  "provider" : "BigQuery",
-	  "qualityDimension" : "sample_quality_dimension",
-	  "sensorName" : "sample_target/sample_category/sample_sensor"
-	}, {
-	  "id" : "3854372",
-	  "checkHash" : 0,
-	  "checkCategory" : "sample_category",
-	  "checkName" : "sample_check",
-	  "checkDisplayName" : "sample_target/sample_category/sample_check",
-	  "checkType" : "profiling",
-	  "actualValue" : 100.0,
-	  "expectedValue" : 110.0,
-	  "warningLowerBound" : 105.0,
-	  "warningUpperBound" : 115.0,
-	  "errorLowerBound" : 95.0,
-	  "errorUpperBound" : 125.0,
-	  "fatalLowerBound" : 85.0,
-	  "fatalUpperBound" : 135.0,
-	  "severity" : 2,
-	  "columnName" : "sample_column",
-	  "dataGroup" : "sample_data_grouping",
-	  "durationMs" : 142,
-	  "executedAt" : "2023-10-01T14:00:00Z",
-	  "timeGradient" : "hour",
-	  "timePeriod" : "2023-10-01T14:00:00",
-	  "includeInKpi" : true,
-	  "includeInSla" : true,
-	  "provider" : "BigQuery",
-	  "qualityDimension" : "sample_quality_dimension",
-	  "sensorName" : "sample_target/sample_category/sample_sensor"
-	} ]
-    ```
-
 
 ___
 ## set_incident_issue_url
 Changes the incident&#x27;s issueUrl to a new status.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/incidents/set_incident_issue_url.py) to see the source code on GitHub.
 
 
@@ -890,7 +741,6 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     from dqops import client
 	from dqops.client.api.incidents import set_incident_issue_url
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
@@ -911,7 +761,6 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     from dqops import client
 	from dqops.client.api.incidents import set_incident_issue_url
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
@@ -931,7 +780,6 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```python
     from dqops import client
 	from dqops.client.api.incidents import set_incident_issue_url
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -955,7 +803,6 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```python
     from dqops import client
 	from dqops.client.api.incidents import set_incident_issue_url
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -981,6 +828,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 ___
 ## set_incident_status
 Changes the incident&#x27;s status to a new status.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/incidents/set_incident_status.py) to see the source code on GitHub.
 
 

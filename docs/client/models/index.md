@@ -197,6 +197,7 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*ImportTablesResult*](./jobs.md#importtablesresult)|Result object from the {@link ImportTablesQueueJob ImportTablesQueueJob} table import job that returns list of tables that have been imported.|
 |[*ImportTablesQueueJobResult*](./jobs.md#importtablesqueuejobresult)|Object returned from the operation that queues a &quot;import tables&quot; job. The result contains the job id that was started and optionally can also contain the result of importing tables if the operation was started with wait&#x3D;true parameter to wait for the &quot;import tables&quot; job to finish.|
 |[*RunChecksQueueJobResult*](./jobs.md#runchecksqueuejobresult)||
+|[*SpringErrorPayload*](./jobs.md#springerrorpayload)|Object mapped to the default spring error payload (key/values).|
 |[*SynchronizeMultipleFoldersQueueJobResult*](./jobs.md#synchronizemultiplefoldersqueuejobresult)|Object returned from the operation that queues a &quot;synchronize multiple folders&quot; job. The result contains the job id that was started and optionally can also contain the job finish status if the operation was started with wait&#x3D;true parameter to wait for the &quot;synchronize multiple folders&quot; job to finish.|
 
 

@@ -5,6 +5,7 @@ Operations for retrieving the list of data quality dashboards supported by DQOps
 ___
 ## get_all_dashboards
 Returns a list of root folders with dashboards
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_all_dashboards.py) to see the source code on GitHub.
 
 
@@ -42,7 +43,6 @@ http://localhost:8888/api/dashboards
     from dqops import client
 	from dqops.client.api.dashboards import get_all_dashboards
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -60,7 +60,6 @@ http://localhost:8888/api/dashboards
     from dqops import client
 	from dqops.client.api.dashboards import get_all_dashboards
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -77,7 +76,6 @@ http://localhost:8888/api/dashboards
     ```python
     from dqops import client
 	from dqops.client.api.dashboards import get_all_dashboards
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -99,7 +97,6 @@ http://localhost:8888/api/dashboards
     from dqops import client
 	from dqops.client.api.dashboards import get_all_dashboards
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -117,15 +114,11 @@ http://localhost:8888/api/dashboards
 
 
 
-??? "Return value sample"
-    ```js
-    [ { }, { }, { } ]
-    ```
-
 
 ___
 ## get_dashboard_level_1
 Returns a single dashboard in the tree of folder with a temporary authenticated url
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_dashboard_level_1.py) to see the source code on GitHub.
 
 
@@ -172,7 +165,6 @@ http://localhost:8888/api/dashboards/{folder}/{dashboardName}
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_1
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -192,7 +184,6 @@ http://localhost:8888/api/dashboards/{folder}/{dashboardName}
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_1
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -211,7 +202,6 @@ http://localhost:8888/api/dashboards/{folder}/{dashboardName}
     ```python
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_1
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -235,7 +225,6 @@ http://localhost:8888/api/dashboards/{folder}/{dashboardName}
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_1
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -255,15 +244,11 @@ http://localhost:8888/api/dashboards/{folder}/{dashboardName}
 
 
 
-??? "Return value sample"
-    ```js
-    { }
-    ```
-
 
 ___
 ## get_dashboard_level_2
 Returns a single dashboard in the tree of folders with a temporary authenticated url
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_dashboard_level_2.py) to see the source code on GitHub.
 
 
@@ -311,7 +296,6 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_2
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -332,7 +316,6 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_2
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -352,7 +335,6 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}
     ```python
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_2
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -377,7 +359,6 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_2
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -398,15 +379,11 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}
 
 
 
-??? "Return value sample"
-    ```js
-    { }
-    ```
-
 
 ___
 ## get_dashboard_level_3
 Returns a single dashboard in the tree of folders with a temporary authenticated url
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_dashboard_level_3.py) to see the source code on GitHub.
 
 
@@ -455,7 +432,6 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardNam
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_3
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -477,7 +453,6 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardNam
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_3
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -498,7 +473,6 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardNam
     ```python
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_3
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -524,7 +498,6 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardNam
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_3
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -546,15 +519,11 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardNam
 
 
 
-??? "Return value sample"
-    ```js
-    { }
-    ```
-
 
 ___
 ## get_dashboard_level_4
 Returns a single dashboard in the tree of folders with a temporary authenticated url
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_dashboard_level_4.py) to see the source code on GitHub.
 
 
@@ -604,7 +573,6 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{da
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_4
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -627,7 +595,6 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{da
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_4
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -649,7 +616,6 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{da
     ```python
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_4
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -676,7 +642,6 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{da
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_4
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -699,15 +664,11 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{da
 
 
 
-??? "Return value sample"
-    ```js
-    { }
-    ```
-
 
 ___
 ## get_dashboard_level_5
 Returns a single dashboard in the tree of folders with a temporary authenticated url
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_dashboard_level_5.py) to see the source code on GitHub.
 
 
@@ -758,7 +719,6 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{fo
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_5
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -782,7 +742,6 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{fo
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_5
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -805,7 +764,6 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{fo
     ```python
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_5
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -833,7 +791,6 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{fo
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_5
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -856,10 +813,5 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{fo
 
 
 
-
-??? "Return value sample"
-    ```js
-    { }
-    ```
 
 

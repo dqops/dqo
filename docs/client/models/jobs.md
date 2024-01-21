@@ -633,6 +633,25 @@ ___
 
 ___
 
+## SpringErrorPayload
+Object mapped to the default spring error payload (key/values).
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">`timestamp`</span>|Error timestamp as an epoch timestamp.|*long*|
+|<span class="no-wrap-code">`status`</span>|Optional status code.|*integer*|
+|<span class="no-wrap-code">`error`</span>|Error name.|*string*|
+|<span class="no-wrap-code">`exception`</span>|Optional exception.|*string*|
+|<span class="no-wrap-code">`message`</span>|Exception&#x27;s message.|*string*|
+|<span class="no-wrap-code">`path`</span>|Exception&#x27;s stack trace (optional).|*string*|
+
+
+___
+
 ## SynchronizeMultipleFoldersQueueJobResult
 Object returned from the operation that queues a &quot;synchronize multiple folders&quot; job. The result contains the job id that was started
  and optionally can also contain the job finish status if the operation was started with wait&#x3D;true parameter to wait for the &quot;synchronize multiple folders&quot; job to finish.

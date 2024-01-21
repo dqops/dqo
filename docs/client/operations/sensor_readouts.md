@@ -5,6 +5,7 @@ Operations that are retrieving the data quality sensor readouts of executed chec
 ___
 ## get_column_monitoring_sensor_readouts
 Returns a complete view of the sensor readouts for recent column level monitoring executions for the monitoring at a requested time scale
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensor_readouts/get_column_monitoring_sensor_readouts.py) to see the source code on GitHub.
 
 
@@ -155,21 +156,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "sensorReadoutEntries" : [ ]
-	}, {
-	  "sensorReadoutEntries" : [ ]
-	}, {
-	  "sensorReadoutEntries" : [ ]
-	} ]
-    ```
-
 
 ___
 ## get_column_partitioned_sensor_readouts
 Returns a view of the sensor readouts for recent column level partitioned checks executions for a requested time scale
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensor_readouts/get_column_partitioned_sensor_readouts.py) to see the source code on GitHub.
 
 
@@ -320,21 +311,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "sensorReadoutEntries" : [ ]
-	}, {
-	  "sensorReadoutEntries" : [ ]
-	}, {
-	  "sensorReadoutEntries" : [ ]
-	} ]
-    ```
-
 
 ___
 ## get_column_profiling_sensor_readouts
 Returns sensor results of the recent check executions for all column level data quality profiling checks on a column
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensor_readouts/get_column_profiling_sensor_readouts.py) to see the source code on GitHub.
 
 
@@ -389,7 +370,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.sensor_readouts import get_column_profiling_sensor_readouts
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -411,7 +391,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.sensor_readouts import get_column_profiling_sensor_readouts
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -432,7 +411,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.sensor_readouts import get_column_profiling_sensor_readouts
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -458,7 +436,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.sensor_readouts import get_column_profiling_sensor_readouts
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -480,21 +457,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "sensorReadoutEntries" : [ ]
-	}, {
-	  "sensorReadoutEntries" : [ ]
-	}, {
-	  "sensorReadoutEntries" : [ ]
-	} ]
-    ```
-
 
 ___
 ## get_table_monitoring_sensor_readouts
 Returns the complete results of the most recent table level monitoring executions for the monitoring at a requested time scale
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensor_readouts/get_table_monitoring_sensor_readouts.py) to see the source code on GitHub.
 
 
@@ -640,21 +607,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "sensorReadoutEntries" : [ ]
-	}, {
-	  "sensorReadoutEntries" : [ ]
-	}, {
-	  "sensorReadoutEntries" : [ ]
-	} ]
-    ```
-
 
 ___
 ## get_table_partitioned_sensor_readouts
 Returns a complete view of sensor readouts for recent table level partitioned checks executions for a requested time scale
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensor_readouts/get_table_partitioned_sensor_readouts.py) to see the source code on GitHub.
 
 
@@ -800,21 +757,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "sensorReadoutEntries" : [ ]
-	}, {
-	  "sensorReadoutEntries" : [ ]
-	}, {
-	  "sensorReadoutEntries" : [ ]
-	} ]
-    ```
-
 
 ___
 ## get_table_profiling_sensor_readouts
 Returns the complete results of the most recent check executions for all table level data quality profiling checks on a table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensor_readouts/get_table_profiling_sensor_readouts.py) to see the source code on GitHub.
 
 
@@ -868,7 +815,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.sensor_readouts import get_table_profiling_sensor_readouts
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -889,7 +835,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.sensor_readouts import get_table_profiling_sensor_readouts
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -909,7 +854,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.sensor_readouts import get_table_profiling_sensor_readouts
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -934,7 +878,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.sensor_readouts import get_table_profiling_sensor_readouts
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -954,16 +897,5 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-
-??? "Return value sample"
-    ```js
-    [ {
-	  "sensorReadoutEntries" : [ ]
-	}, {
-	  "sensorReadoutEntries" : [ ]
-	}, {
-	  "sensorReadoutEntries" : [ ]
-	} ]
-    ```
 
 
