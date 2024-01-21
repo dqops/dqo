@@ -13,7 +13,7 @@ Capturing an end-of-day (or end-of-month) status of the last execution of a data
 - tracking the data quality improvement day-by-day, and presenting the progress of data cleansing projects
   to stakeholders and business sponsors of the data quality initiative 
 
-Before activating a data quality  [**monitoring**](data-observability-monitoring-checks.md) check, the user should test
+Before activating a data quality  [**monitoring**](data-observability-monitoring-checks.md) check, you should test
 a [**profiling**](data-profiling-checks.md) version of the data quality check. Every [**monitoring**](data-observability-monitoring-checks.md) and
 [**partition**](partition-checks.md) data quality check has a **profiling** version, named as _profiling\_\*_.
 
