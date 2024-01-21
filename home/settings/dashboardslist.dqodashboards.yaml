@@ -442,17 +442,19 @@ spec:
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
-        - dashboard_name: KPIs - current vs previous month
-          url: https://lookerstudio.google.com/embed/reporting/f96d501c-7f2a-4b01-a504-3b0f0f472933/page/c5B8C
+        - dashboard_name: KPIs per months and days
+          standard: true
+          url: https://lookerstudio.google.com/embed/reporting/3f66761f-c23d-4213-9ffc-0a55c5f42291/page/p_9xvdtzxu0c
           width: 1400
-          height: 2800
+          height: 2000
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
-        - dashboard_name: KPIs per months and days
-          url: https://lookerstudio.google.com/embed/reporting/3f66761f-c23d-4213-9ffc-0a55c5f42291/page/c5B8C
+        - dashboard_name: KPIs - current vs previous month
+          standard: true
+          url: https://lookerstudio.google.com/embed/reporting/f96d501c-7f2a-4b01-a504-3b0f0f472933/page/c5B8C
           width: 1400
-          height: 2000
+          height: 2800
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
@@ -881,17 +883,19 @@ spec:
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned
-        - dashboard_name: KPIs - current vs previous month
-          url: https://lookerstudio.google.com/embed/reporting/f96d501c-7f2a-4b01-a504-3b0f0f472933/page/c5B8C
+        - dashboard_name: KPIs per months and days
+          standard: true
+          url: https://lookerstudio.google.com/embed/reporting/3f66761f-c23d-4213-9ffc-0a55c5f42291/page/p_9xvdtzxu0c
           width: 1400
-          height: 2800
+          height: 2000
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned
-        - dashboard_name: KPIs per months and days
-          url: https://lookerstudio.google.com/embed/reporting/3f66761f-c23d-4213-9ffc-0a55c5f42291/page/c5B8C
+        - dashboard_name: KPIs - current vs previous month
+          standard: true
+          url: https://lookerstudio.google.com/embed/reporting/f96d501c-7f2a-4b01-a504-3b0f0f472933/page/c5B8C
           width: 1400
-          height: 2000
+          height: 2800
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned

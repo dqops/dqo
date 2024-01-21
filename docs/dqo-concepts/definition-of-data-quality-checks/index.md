@@ -34,11 +34,32 @@ The data quality check is evaluated on a monitored table (or column) in three ph
   for warning, error, and fatal severity levels use different parameters (thresholds).  
 
 
-## Configuring data quality checks
-Data quality checks are defined as YAML files that support code completion in code editors, such as [Visual Studio Code](../../integrations/visual-studio-code/index.md).
+## Activating data quality checks
+
+### **DQOps user interface**
+Data quality checks are activated in the DQOps user interface on the [data quality check editor](../dqops-user-interface-overview.md#check-editor)
+screen shown below.
+The data quality check is activated by turning the green switch on the left to an *ON* position.
+The alerting thresholds for [data quality issue severity levels](#issue-severity-levels) are configured in the *Warning threshold*, 
+*Error threshold* and *Fatal threshold* columns.
+
+The following example shows a [daily_row_count](../../checks/table/volume/row-count.md#daily-row-count) data quality check that measures
+the row count captured for each day. It is a [*daily monitoring check*](data-observability-monitoring-checks.md#daily-monitoring-checks) type.
+The table in this example stores a list of all known countries recognized by the United Nations. The last known row count was 249 rows (countries).
+The configuration of alerting rules are:
+
+- raise a [*warning* severity data quality issue](#warning) when the row count (the number of countries) drops below **240**
+- raise an [*error* severity data quality issue](#error) when the row count (the number of countries) drops below **100**
+- raise a [*fatal* severity data quality issue](#fatal) when the table is empty, because the row count (the number of countries) is below **1**
+
+![data quality rule severity levels in DQOps check editor](https://dqops.com/docs/images/concepts/types-of-data-quality-checks/check_editor_rules-min.png)
+
+
+### **DQOps YAML files**
+Data quality checks are defined as [YAML files](../configuring-data-sources.md#dqops-yaml-file-example) that support code completion in code editors, such as [Visual Studio Code](../../integrations/visual-studio-code/index.md).
 Data quality check definitions can be stored in the source code repository, and versioned along with any other data
 pipeline or machine learning code. The folder structure where DQOps stores those YAML files is called `DQOps user home`
-and is documented in the [configuring checks](../configuring-data-quality-checks-and-rules.md) article.
+and is documented in the [configuring data quality checks](../configuring-data-quality-checks-and-rules.md) article.
 
 Below is an example of the YAML file showing a sample configuration of a profiling column data quality check
 [profile_nulls_percent](../../checks/column/nulls/nulls-percent.md#profile-nulls-percent).
@@ -88,10 +109,10 @@ The structure of the table configuration file is described in the [configuring c
 
 
 ## Issue severity levels
-Each data quality check supports configuring the alerting thresholds at three levels: *warning*, *error*, and *fatal*.
-DQOps will pass the [sensor](../definition-of-data-quality-sensors.md) (the captured data quality metric, such as a percentage of null values)
-to all three [data quality rules](../definition-of-data-quality-rules.md), using different thresholds.
-If rules at multiple severity levels identify a data quality issue (the rule fails), DQOps picks the severity level
+Each data quality check supports setting the alerting thresholds at three severity levels: *warning*, *error*, and *fatal*.
+DQOps evaluates the [sensor readout](../definition-of-data-quality-sensors.md) (the captured data quality metric, such as a percentage of null values)
+by three [data quality rules](../definition-of-data-quality-rules.md), using different alerting thresholds configured as *rule parameters*.
+If multiple rules at different severity levels identify a data quality issue (the rule fails), DQOps picks the severity level
 of the most severe rule that failed in the following order: *fatal*, *error*, and *warning*.
 
 The rule severity levels are described below.
@@ -326,7 +347,7 @@ unnecessary pressure on the data source caused by data quality monitoring.
 Please read the [monitoring data quality incrementally](../incremental-data-quality-monitoring.md) guide for details
 and additional use cases.
 
-## Define custom check in UI
+## Define custom check in DQOps user interface
 You can easily change the rules and sensor associated with the checks in DQOps
 using the **Configuration** section of the [user interface](../dqops-user-interface-overview.md).
 

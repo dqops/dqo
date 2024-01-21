@@ -12,11 +12,11 @@ a **profiling** version of the data quality check. Every [**monitoring**](data-o
 [**partition**](partition-checks.md) data quality check has a **profiling** version, named as _profiling\_\*_.
 
 ### **Summary**
-The following table summarizes the key concepts of *profiling* checks in DQOps.
+The following table summarizes the key concepts of *profiling* data quality checks in DQOps.
 
-| Check type      | Purpose                                                                                                                                                                                                                                                               | Time period truncation                                                                                                                        | Check name prefix |
-|-----------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------|-------------------|
-| **_profiling_** | Evaluate the initial data quality score of new tables.<br/>Experiment with DQOps data quality checks before activating [**monitoring**](data-observability-monitoring-checks.md) checks for measuring the [data quality KPIs](../definition-of-data-quality-kpis.md). | One data quality profiling result captured **per month**,<br/> when profiling is repeated in the same month, the previous result is replaced. | _profile\_\*_     |
+| Check type      | Purpose                                                                                                                                                                                                                                                               | Time period truncation                                                                                                                         | Check name prefix |
+|-----------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|-------------------|
+| **_profiling_** | Evaluate the initial data quality score of new tables.<br/>Experiment with DQOps data quality checks before activating [**monitoring**](data-observability-monitoring-checks.md) checks for measuring the [data quality KPIs](../definition-of-data-quality-kpis.md). | One data quality profiling result captured **per month**,<br/> when profiling is repeated in the same month, the previous result is replaced.  | _profile\_\*_     |
 
 
 ## Data profiling status checkpoints
@@ -83,8 +83,8 @@ Please review the samples in the [configuring table metadata](../configuring-tab
 
 
 ## What's next
-- Learn how to monitor data quality using the [monitoring checks](data-observability-monitoring-checks.md).
-- Learn how to analyze data quality of partitioned data using the [partition checks](partition-checks.md).
+- Learn how to monitor data quality using [monitoring checks](data-observability-monitoring-checks.md).
+- Learn how to analyze data quality of partitioned data using [partition checks](partition-checks.md).
 - Read the [configuring table-level profiling checks](../configuring-data-quality-checks-and-rules.md#table-level-profiling-checks) and
   [configuring column-level profiling checks](../configuring-data-quality-checks-and-rules.md#column-profiling-checks) to learn
   the details of configuring profiling checks in YAML files. 
