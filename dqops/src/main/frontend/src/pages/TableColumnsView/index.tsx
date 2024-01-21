@@ -225,6 +225,7 @@ const TableColumnsView = () => {
           setNumberOfSelected={setNumberOfSelected}
           statistics={statistics}
           onChangeSelectedColumns = {onChangeSelectedColumns}
+          refreshListFunc={fetchColumns}
         />
       </div>
     </ConnectionLayout>

@@ -24,7 +24,8 @@ const TableColumns = ({
   setLevelsData,
   setNumberOfSelected,
   statistics,
-  onChangeSelectedColumns
+  onChangeSelectedColumns,
+  refreshListFunc
 }: ITableColumnsProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedColumn, setSelectedColumn] = useState<ColumnStatisticsModel>();
@@ -245,6 +246,7 @@ const TableColumns = ({
           rewriteData={rewriteData}
           showDataStreamButtonFunc={showDataStreamButtonFunc}
           handleButtonClick={handleButtonClick}
+          refreshListFunc={refreshListFunc}
         />
       </table>
       <ConfirmDialog
