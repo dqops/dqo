@@ -36,4 +36,18 @@ public interface JobDataMapAdapter {
      * @return Deserialized monitoring schedule specification.
      */
     MonitoringScheduleSpec getSchedule(JobDataMap jobDataMap);
+
+    /**
+     * Sets the name of the data domain on which this job is executed. Selects the DQOps data domain specific user home.
+     * @param jobDataMap Data map to store the data domain name.
+     * @param dataDomain Data domain name to store.
+     */
+    void setDataDomain(JobDataMap jobDataMap, String dataDomain);
+
+    /**
+     * Retrieves the data domain name on which the job is executed. Selects the DQOps data domain specific user home.
+     * @param jobDataMap Job data map to retrieve the value.
+     * @return Data domain name.
+     */
+    String getDataDomain(JobDataMap jobDataMap);
 }

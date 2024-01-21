@@ -1,8 +1,11 @@
 # Collect statistics operator
+The documentation and code samples of capturing statistics using DQOps from data sources, and integrating statistics collection directly in Apache Airflow.
+
+## Overview
 
 The Airflow collect statistics operator **DqopsCollectStatisticsOperator** is used to gather statistics for existing tables in DQOps platform.
 
-You can learn more about [the basic data statistics here](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md).
+You can learn more about [the basic data statistics here](../../working-with-dqo/collecting-basic-data-statistics.md).
 
 ## Operator parameters
 
@@ -130,8 +133,8 @@ Status field is the DqoJobStatus enum, which have one of values:
 
 ## What's next
 
-- [Learn about run checks operator](run-checks-operator.md)
-- [Learn how to use run checks operator](run-checks-use-case.md)
-- [Learn about table import operator](table-import-operator.md)
-- [Learn about table status operator](table-status-operator.md)
-- [Learn about wait for job operator](wait-for-job-operator.md)
+- [Learn about run checks operator](./run-checks-operator.md)
+- [Learn how to use run checks operator](./run-checks-use-case.md)
+- [Learn about table import operator](./table-import-operator.md)
+- [Learn about table status operator](./table-status-operator.md)
+- [Learn about wait for job operator](./wait-for-job-operator.md)

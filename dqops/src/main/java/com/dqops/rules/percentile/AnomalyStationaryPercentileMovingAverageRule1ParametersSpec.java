@@ -15,10 +15,10 @@
  */
 package com.dqops.rules.percentile;
 
-import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
+import com.dqops.utils.reflection.RequiredField;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -48,14 +48,13 @@ public class AnomalyStationaryPercentileMovingAverageRule1ParametersSpec extends
             " The default is a time window of 90 periods (days, etc.), but at least 30 readouts must exist" +
             " to run the calculation. You can change the default value by modifying prediction_time_window parameter" +
             "in Definitions section.")
-    @SampleValues(values = "0.1")
-    private Double anomalyPercent;
+    @RequiredField
+    private Double anomalyPercent = 1.0;
 
     /**
      * Default constructor.
      */
     public AnomalyStationaryPercentileMovingAverageRule1ParametersSpec() {
-        this.anomalyPercent = 1.0;
     }
 
     /**

@@ -20,13 +20,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class LinkageStore<T> implements Map<T, Path> {
-    private final Map<T, Path> linkage = new HashMap<>();
+    private final Map<T, Path> linkage = new LinkedHashMap<>();
 
     @Override
     public int size() {

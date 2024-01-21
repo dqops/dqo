@@ -71,3 +71,4 @@ venv/
 .data/
 .logs/
 .index/
+/${project.basedir}

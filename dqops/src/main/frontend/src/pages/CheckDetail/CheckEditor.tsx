@@ -3,6 +3,7 @@ import { RuleListModel, SensorListModel } from '../../api';
 import { RulesApi, SensorsApi } from '../../services/apiClient';
 import Select from '../../components/Select';
 import Button from '../../components/Button';
+import Checkbox from '../../components/Checkbox';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../redux/actions/definition.actions';
 import { ROUTES } from '../../shared/routes';
@@ -17,7 +18,9 @@ interface CreateCheckProps {
   onChangeHelpText: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   custom: any;
   helpText?: string;
-  canEditDefinitions?: boolean
+  standard?: boolean;
+  onChangeStandard: (value: boolean) => void;
+  canEditDefinitions?: boolean;
 }
 
 const CheckEditor = ({
@@ -29,6 +32,8 @@ const CheckEditor = ({
   custom,
   helpText,
   onChangeHelpText,
+  standard,
+  onChangeStandard,
   canEditDefinitions
 }: CreateCheckProps) => {
   const [allSensors, setAllSensors] = useState<SensorListModel[]>();
@@ -124,6 +129,16 @@ const CheckEditor = ({
   };
       return (
         <div className="pt-10 pb-2 px-8 z-1">
+          <div className="pb-4 gap-2">
+            <Checkbox 
+              checked={standard}
+              onChange={(value: boolean) => { 
+                onChangeStandard(value); setIsUpdated(true);
+              }}
+              disabled={custom === false ? true : false}
+              label="Standard data quality check, always shown in the editor"
+            />
+          </div>
           <div className="pb-4 gap-2">
             Sensor Name:
             <div className="flex items-center gap-x-4 pt-2">

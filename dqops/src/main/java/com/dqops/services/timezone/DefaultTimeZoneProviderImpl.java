@@ -16,6 +16,8 @@
 package com.dqops.services.timezone;
 
 import com.dqops.core.configuration.DqoConfigurationProperties;
+import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.settings.LocalSettingsSpec;
@@ -40,6 +42,7 @@ public class DefaultTimeZoneProviderImpl implements DefaultTimeZoneProvider {
     private DqoConfigurationProperties dqoConfigurationProperties;
     private UserHomeContextFactory userHomeContextFactory;
     private SecretValueProvider secretValueProvider;
+    private final DqoUserPrincipalProvider dqoUserPrincipalProvider;
     private ZoneId cachedTimeZone;
 
     /**
@@ -47,14 +50,17 @@ public class DefaultTimeZoneProviderImpl implements DefaultTimeZoneProvider {
      * @param dqoConfigurationProperties DQOps configuration properties with the system provided time zone. The configuration object has a default value that is the local computer's time zone.
      * @param userHomeContextFactory User home context factory to read the time zone that was customized by the user.
      * @param secretValueProvider Secret value provider that will extract secrets in the user local settings (to support using environment variables or secret managers).
+     * @param dqoUserPrincipalProvider User principal provider for the default user.
      */
     @Autowired
     public DefaultTimeZoneProviderImpl(DqoConfigurationProperties dqoConfigurationProperties,
                                        UserHomeContextFactory userHomeContextFactory,
-                                       SecretValueProvider secretValueProvider) {
+                                       SecretValueProvider secretValueProvider,
+                                       DqoUserPrincipalProvider dqoUserPrincipalProvider) {
         this.dqoConfigurationProperties = dqoConfigurationProperties;
         this.userHomeContextFactory = userHomeContextFactory;
         this.secretValueProvider = secretValueProvider;
+        this.dqoUserPrincipalProvider = dqoUserPrincipalProvider;
     }
 
     /**
@@ -70,7 +76,8 @@ public class DefaultTimeZoneProviderImpl implements DefaultTimeZoneProvider {
             }
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory != null ? this.userHomeContextFactory.openLocalUserHome() : null;
+        UserDomainIdentity userIdentity = this.dqoUserPrincipalProvider.createUserPrincipalForAdministrator().getDataDomainIdentity();
+        UserHomeContext userHomeContext = this.userHomeContextFactory != null ? this.userHomeContextFactory.openLocalUserHome(userIdentity) : null;
         ZoneId defaultTimeZoneId = getDefaultTimeZoneId(userHomeContext);
 
         synchronized (this) {

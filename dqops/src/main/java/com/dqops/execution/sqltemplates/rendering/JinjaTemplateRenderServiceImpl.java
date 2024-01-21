@@ -66,6 +66,10 @@ public class JinjaTemplateRenderServiceImpl implements JinjaTemplateRenderServic
         JinjaTemplateRenderOutput output =
 				this.pythonCallerService.executePythonHomeScript(inputDto, evaluateTemplatesModule, JinjaTemplateRenderOutput.class);
 
+        if (output == null) {
+            return  null;
+        }
+
         if (output.getError() != null) {
             throw new PythonExecutionException("Quality check template failed to render, error: " + output.getError());
         }
@@ -91,7 +95,7 @@ public class JinjaTemplateRenderServiceImpl implements JinjaTemplateRenderServic
         inputDto.setTemplateLastModified(sensorFindResult.getSqlTemplateLastModified());
         inputDto.setHomeType(sensorFindResult.getHome());
         String relativePathToTemplate = sensorFindResult.getTemplateFilePath() != null ?
-                sensorFindResult.getTemplateFilePath().toString().replace('\\', '/')
+                sensorFindResult.getTemplateFilePath().toRelativePath().toString().replace('\\', '/')
                 : null;
         inputDto.setTemplateHomePath(relativePathToTemplate);
         Path userHomePhysicalPath = executionContext.getUserHomeContext().getHomeRoot().getPhysicalAbsolutePath();
@@ -109,6 +113,10 @@ public class JinjaTemplateRenderServiceImpl implements JinjaTemplateRenderServic
         progressListener.onBeforeSqlTemplateRender(new BeforeSqlTemplateRenderEvent(inputDto));
         JinjaTemplateRenderOutput output =
 				this.pythonCallerService.executePythonHomeScript(inputDto, evaluateTemplatesModule, JinjaTemplateRenderOutput.class);
+
+        if (output == null) {
+            return null;
+        }
 
         if (output.getError() != null) {
             progressListener.onSqlTemplateRendered(new SqlTemplateRenderedRenderedEvent(inputDto, output));

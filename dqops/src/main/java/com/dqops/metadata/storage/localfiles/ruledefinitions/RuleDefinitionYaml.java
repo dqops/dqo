@@ -18,15 +18,24 @@ package com.dqops.metadata.storage.localfiles.ruledefinitions;
 import com.dqops.core.filesystem.ApiVersion;
 import com.dqops.metadata.definitions.rules.RuleDefinitionSpec;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
+import com.dqops.utils.reflection.DefaultFieldValue;
 import com.dqops.utils.serialization.InvalidYamlStatusHolder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 /**
  * Custom rule specification that describes the configuration of a python module with the rule code (additional parameters).
  */
 public class RuleDefinitionYaml implements InvalidYamlStatusHolder {
+    @JsonPropertyDescription("DQOps YAML schema version")
+    @DefaultFieldValue(ApiVersion.CURRENT_API_VERSION)
     private String apiVersion = ApiVersion.CURRENT_API_VERSION;
-    private SpecificationKind kind = SpecificationKind.RULE;
+
+    @JsonPropertyDescription("File type")
+    @DefaultFieldValue("rule")
+    private SpecificationKind kind = SpecificationKind.rule;
+
+    @JsonPropertyDescription("Custom data quality rule specification object with definition of a custom rule")
     private RuleDefinitionSpec spec = new RuleDefinitionSpec();
 
     @JsonIgnore

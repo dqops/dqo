@@ -42,14 +42,11 @@ import java.util.Objects;
 public class ColumnDatetimeDailyMonitoringChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDatetimeDailyMonitoringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_date_match_format_percent", o -> o.dailyDateMatchFormatPercent);
             put("daily_date_values_in_future_percent", o -> o.dailyDateValuesInFuturePercent);
             put("daily_datetime_value_in_range_date_percent", o -> o.dailyDatetimeValueInRangeDatePercent);
+            put("daily_date_match_format_percent", o -> o.dailyDateMatchFormatPercent);
         }
     };
-
-    @JsonPropertyDescription("Verifies that the percentage of date values matching the given format in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily monitoring.")
-    private ColumnDatetimeDateMatchFormatPercentCheckSpec dailyDateMatchFormatPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of date values in future in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnDateValuesInFuturePercentCheckSpec dailyDateValuesInFuturePercent;
@@ -57,23 +54,8 @@ public class ColumnDatetimeDailyMonitoringChecksSpec extends AbstractCheckCatego
     @JsonPropertyDescription("Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnDatetimeValueInRangeDatePercentCheckSpec dailyDatetimeValueInRangeDatePercent;
 
-    /**
-     * Returns a date match format percentage check.
-     * @return Maximum date match format percentage check.
-     */
-    public ColumnDatetimeDateMatchFormatPercentCheckSpec getDailyDateMatchFormatPercent() {
-        return dailyDateMatchFormatPercent;
-    }
-
-    /**
-     * Sets a new definition of a date match format percentage check.
-     * @param dailyDateMatchFormatPercent Date match format percentage check.
-     */
-    public void setDailyDateMatchFormatPercent(ColumnDatetimeDateMatchFormatPercentCheckSpec dailyDateMatchFormatPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyDateMatchFormatPercent, dailyDateMatchFormatPercent));
-        this.dailyDateMatchFormatPercent = dailyDateMatchFormatPercent;
-        propagateHierarchyIdToField(dailyDateMatchFormatPercent, "daily_date_match_format_percent");
-    }
+    @JsonPropertyDescription("Verifies that the percentage of date values matching the given format in a text column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily monitoring.")
+    private ColumnDatetimeDateMatchFormatPercentCheckSpec dailyDateMatchFormatPercent;
 
     /**
      * Returns a date values in future percent check specification.
@@ -109,6 +91,24 @@ public class ColumnDatetimeDailyMonitoringChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyDatetimeValueInRangeDatePercent, dailyDatetimeValueInRangeDatePercent));
         this.dailyDatetimeValueInRangeDatePercent = dailyDatetimeValueInRangeDatePercent;
         propagateHierarchyIdToField(dailyDatetimeValueInRangeDatePercent, "daily_datetime_value_in_range_date_percent");
+    }
+
+    /**
+     * Returns a date match format percentage check.
+     * @return Maximum date match format percentage check.
+     */
+    public ColumnDatetimeDateMatchFormatPercentCheckSpec getDailyDateMatchFormatPercent() {
+        return dailyDateMatchFormatPercent;
+    }
+
+    /**
+     * Sets a new definition of a date match format percentage check.
+     * @param dailyDateMatchFormatPercent Date match format percentage check.
+     */
+    public void setDailyDateMatchFormatPercent(ColumnDatetimeDateMatchFormatPercentCheckSpec dailyDateMatchFormatPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyDateMatchFormatPercent, dailyDateMatchFormatPercent));
+        this.dailyDateMatchFormatPercent = dailyDateMatchFormatPercent;
+        propagateHierarchyIdToField(dailyDateMatchFormatPercent, "daily_date_match_format_percent");
     }
 
     /**

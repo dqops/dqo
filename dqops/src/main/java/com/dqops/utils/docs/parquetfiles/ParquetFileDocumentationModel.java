@@ -33,6 +33,10 @@ public class ParquetFileDocumentationModel {
      */
     private String parquetFileDescription;
     /**
+     * Parquet file class description.
+     */
+    private String parquetFileShortDescription;
+    /**
      * Details about each column occurring on this class.
      */
     private List<ParquetColumnDetailsDocumentationModel> parquetColumnDetailsDocumentationModels;

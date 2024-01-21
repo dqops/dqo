@@ -15,6 +15,7 @@
  */
 package com.dqops.data.checkresults.services;
 
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.checkresults.factory.CheckResultsColumnNames;
 import com.dqops.data.checkresults.models.CheckResultsFragmentFilter;
 import com.dqops.data.checkresults.snapshot.CheckResultsSnapshot;
@@ -46,27 +47,28 @@ public class CheckResultsDeleteServiceImpl implements CheckResultsDeleteService 
     /**
      * Deletes the results from a table, applying specific filters to get the fragment.
      * @param filter Filter for the result fragment that is of interest.
+     * @param userIdentity User identity that specifies the data domain.
      * @return Data delete operation summary.
      */
     @Override
-    public DeleteStoredDataResult deleteSelectedCheckResultsFragment(CheckResultsFragmentFilter filter) {
+    public DeleteStoredDataResult deleteSelectedCheckResultsFragment(CheckResultsFragmentFilter filter, UserDomainIdentity userIdentity) {
         Map<String, String> simpleConditions = filter.getColumnConditions();
-        Map<String, Set<String>> conditions = new HashMap<>();
+        Map<String, Set<String>> conditions = new LinkedHashMap<>();
         for (Map.Entry<String, String> kv: simpleConditions.entrySet()) {
             String columnName = kv.getKey();
             String columnValue = kv.getValue();
-            Set<String> wrappedValue = new HashSet<>(){{add(columnValue);}};
+            Set<String> wrappedValue = new LinkedHashSet<>(){{add(columnValue);}};
             conditions.put(columnName, wrappedValue);
         }
 
         if (filter.getColumnNames() != null && !filter.getColumnNames().isEmpty()) {
-            conditions.put(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME, new HashSet<>(filter.getColumnNames()));
+            conditions.put(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME, new LinkedHashSet<>(filter.getColumnNames()));
         }
 
         DeleteStoredDataResult deleteStoredDataResult = new DeleteStoredDataResult();
 
         FileStorageSettings fileStorageSettings = CheckResultsSnapshot.createCheckResultsStorageSettings();
-        List<String> connections = this.parquetPartitionMetadataService.listConnections(fileStorageSettings);
+        List<String> connections = this.parquetPartitionMetadataService.listConnections(fileStorageSettings, userIdentity);
         if (connections == null) {
             // No connections present.
             return deleteStoredDataResult;
@@ -78,7 +80,7 @@ public class CheckResultsDeleteServiceImpl implements CheckResultsDeleteService 
 
         for (String connectionName: filteredConnections) {
             List<PhysicalTableName> tables = this.parquetPartitionMetadataService.listTablesForConnection(
-                    connectionName, fileStorageSettings);
+                    connectionName, fileStorageSettings, userIdentity);
 
             if (tables == null) {
                 // No tables present for this connection.
@@ -96,7 +98,8 @@ public class CheckResultsDeleteServiceImpl implements CheckResultsDeleteService 
                             })
                     .map(tableName -> this.checkResultsSnapshotFactory.createSnapshot(
                             filter.getTableSearchFilters().getConnection(),
-                            tableName
+                            tableName,
+                            userIdentity
                     ))
                     .collect(Collectors.toList());
 

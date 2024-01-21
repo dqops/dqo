@@ -23,6 +23,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.nio.file.Path;
 import java.util.Objects;
 
 /**
@@ -78,6 +79,16 @@ public class SharedCredentialWrapperImpl extends AbstractPojoElementWrapper<Stri
     @JsonIgnore
     public String getObjectName() {
         return this.getCredentialName();
+    }
+
+    /**
+     * Extracts an absolute file path to the credential file. This method returns null if the credentials are not stored on the disk, but using an in-memory user home instance.
+     *
+     * @return Absolut path to the file or null when it is not possible to find the file.
+     */
+    @Override
+    public Path toAbsoluteFilePath() {
+        return null;
     }
 
     @Override

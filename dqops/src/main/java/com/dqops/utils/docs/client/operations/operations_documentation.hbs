@@ -1,51 +1,60 @@
-{{superiorDescription}}{{#with "  "}}{{.}}{{/with}}
+# DQOps REST API {{superiorClassSimpleName}} operations
+{{superiorDescription}}
 
 {{#each operationObjects}}
-___{{#with "  "}}{{.}}{{/with}}
-## {{operationPythonName}}{{#with "  "}}{{.}}{{/with}}
-{{operationDescription}}{{#with "  "}}{{.}}{{/with}}
-[Source code]({{clientSourceUrl}})
-{{#with "  "}}{{.}}{{/with}}
+___
+## {{operationPythonName}}
+{{operationDescription}}
+
+Follow the [link]({{clientSourceUrl}}) to see the source code on GitHub.
+
 
 **{{apiCallMethod}}**
 ```
-{{apiCallUrl}}{{#with "  "}}{{.}}{{/with}}
+{{apiCallUrl}}
 ```
 {{#if returnValueField}}
-**Return value**{{#with "  "}}{{.}}{{/with}}
-{{#with "  "}}{{.}}{{/with}}
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-{{#with returnValueField}}|{{render-type typeModel yamlFieldName}}|{{helpText}}|{{render-type typeModel}}|
+{{#with returnValueField}}|<span class="no-wrap-code">{{{render-type typeModel yamlFieldName}}}</span>|{{helpText}}|*{{render-type typeModel}}*|
 {{/with}}
 {{/if}}
 
 {{#if parametersFields}}
-**Parameters of this method are described below**{{#with "  "}}{{.}}{{/with}}
-{{#with "  "}}{{.}}{{/with}}
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-{{#each parametersFields}}|{{render-type typeModel yamlFieldName}}|{{helpText}}|{{render-type typeModel}}|{{checkmark required}}|
+{{#each parametersFields}}|<span class="no-wrap-code">{{{render-type typeModel yamlFieldName}}}</span>|{{helpText}}|*{{render-type typeModel}}*|{{checkmark required}}|
 {{/each}}
 {{/if}}
 
 {{#if requestBodyField}}
-**Request body**{{#with "  "}}{{.}}{{/with}}
-{{#with "  "}}{{.}}{{/with}}
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-{{#with requestBodyField}}|{{helpText}}|{{render-type typeModel}}|{{checkmark required}}|
+{{#with requestBodyField}}|{{helpText}}|*{{render-type typeModel}}*|{{checkmark required}}|
 {{/with}}
 {{/if}}
 
 {{#if usageExamples}}
-**Usage examples**{{#with "  "}}{{.}}{{/with}}
-{{#each usageExamples~}}
-=== "{{{executionMethod}}}"
-    {{#with "  "}}{{.}}{{/with}}
-    ```{{{executionCodeFormatting}}}
+**Usage examples**
+{{#each usageExamples}}
+=== "{{{executionMethod.navbarHeader}}}"
+
+    ```{{{executionMethod.codeFormatting}}}
     {{{renderedExample}}}
     ```
-{{/each~}}
+{{/each}}
+{{/if}}
+
+{{#if returnValueSample}}
+??? "Return value sample"
+    ```js
+    {{{returnValueSample}}}
+    ```
 {{/if}}
 {{/each}}

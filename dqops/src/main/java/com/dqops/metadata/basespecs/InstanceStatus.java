@@ -25,6 +25,11 @@ public enum InstanceStatus {
     NOT_TOUCHED,
 
     /**
+     * The object was requested in the getSpec operation, but is during loading.
+     */
+    LOAD_IN_PROGRESS,
+
+    /**
      * The object was added and will be written as a new file during flush.
      */
     ADDED,

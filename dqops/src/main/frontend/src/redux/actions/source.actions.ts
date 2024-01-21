@@ -23,7 +23,8 @@ import {
   SensorReadoutsListModel,
   CheckModel,
   CheckSearchFiltersCheckTypeEnum,
-  TableIncidentGroupingSpec
+  TableIncidentGroupingSpec,
+  CheckTemplate
 } from '../../api';
 import { Dispatch } from 'redux';
 import { AxiosResponse } from 'axios';
@@ -34,6 +35,7 @@ import {
   SensorReadoutsApi,
   TableApiClient
 } from '../../services/apiClient';
+import { IFilterTemplate } from '../../shared/constants';
 
 export const addFirstLevelTab = (checkType: CheckTypes, data: any) => ({
   type: SOURCE_ACTION.ADD_FIRST_LEVEL_TAB,
@@ -314,13 +316,7 @@ export const getCheckResults =
     const successCallback = (
       res: AxiosResponse<CheckResultsListModel[]>
     ) => {
-      const checks = [...res.data]
-
-    if (checks && checks[0] && checks[0].checkResultEntries && comparisonName && comparisonName.length > 0) {
-      checks[0].checkResultEntries = checks[0].checkResultEntries.filter(entry => entry.tableComparison === comparisonName);
-    }
-    
-    const filteredChecks = checks.filter((item) => item.checkName === checkName)
+      const filteredChecks = [...res.data]
 
       dispatch(
         getCheckResultsSuccess(
@@ -977,3 +973,28 @@ export const closeCheck = (
   activeTab,
   data: checkName
 });
+
+export const setMultiCheckFilters = (
+  checkType: CheckTypes,
+  activeTab: string,
+  multiCheckFilters: IFilterTemplate,
+  timeScale: 'daily' | 'monthly' | 'advanced'
+) => ({
+  type: SOURCE_ACTION.SET_MULTICHECK_FILTERS,
+  data: {[timeScale]: multiCheckFilters},
+  activeTab,
+  checkType,
+})
+
+export const setMultiCheckSearchedChecks = (
+  checkType: CheckTypes,
+  activeTab: string,
+  multiCheckSearchedChecks: CheckTemplate[],
+  timeScale: 'daily' | 'monthly' | 'advanced'
+) => ({
+  type: SOURCE_ACTION.SET_MULTICHECK_SEARCHED_CHECKS,
+  data: {[timeScale]: multiCheckSearchedChecks},
+  activeTab,
+  checkType,
+  timeScale 
+})

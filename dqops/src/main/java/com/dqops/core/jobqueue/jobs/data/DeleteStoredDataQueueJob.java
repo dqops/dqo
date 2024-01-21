@@ -21,6 +21,7 @@ import com.dqops.core.jobqueue.concurrency.JobConcurrencyConstraint;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyTarget;
 import com.dqops.core.jobqueue.monitoring.DqoJobEntryParametersModel;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.checkresults.models.CheckResultsFragmentFilter;
 import com.dqops.data.checkresults.services.CheckResultsDeleteService;
 import com.dqops.data.errors.models.ErrorsFragmentFilter;
@@ -167,21 +168,22 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataResult
         }
 
         DeleteStoredDataResult result = new DeleteStoredDataResult();
+        UserDomainIdentity userIdentity = this.getPrincipal().getDataDomainIdentity();
 
         if (this.deletionParameters.isDeleteErrors()) {
-            DeleteStoredDataResult errorsResult = this.errorsDeleteService.deleteSelectedErrorsFragment(this.getErrorsFragmentFilter());
+            DeleteStoredDataResult errorsResult = this.errorsDeleteService.deleteSelectedErrorsFragment(this.getErrorsFragmentFilter(), userIdentity);
             result.concat(errorsResult);
         }
         if (this.deletionParameters.isDeleteStatistics()) {
-            DeleteStoredDataResult statisticsResult = this.statisticsDeleteService.deleteSelectedStatisticsResultsFragment(this.getStatisticsResultsFragmentFilter());
+            DeleteStoredDataResult statisticsResult = this.statisticsDeleteService.deleteSelectedStatisticsResultsFragment(this.getStatisticsResultsFragmentFilter(), userIdentity);
             result.concat(statisticsResult);
         }
         if (this.deletionParameters.isDeleteCheckResults()) {
-            DeleteStoredDataResult checkResultsResult = this.checkResultsDeleteService.deleteSelectedCheckResultsFragment(this.getRuleResultsFragmentFilter());
+            DeleteStoredDataResult checkResultsResult = this.checkResultsDeleteService.deleteSelectedCheckResultsFragment(this.getRuleResultsFragmentFilter(), userIdentity);
             result.concat(checkResultsResult);
         }
         if (this.deletionParameters.isDeleteSensorReadouts()) {
-            DeleteStoredDataResult sensorReadoutsResult = this.sensorReadoutsDeleteService.deleteSelectedSensorReadoutsFragment(this.getSensorReadoutsFragmentFilter());
+            DeleteStoredDataResult sensorReadoutsResult = this.sensorReadoutsDeleteService.deleteSelectedSensorReadoutsFragment(this.getSensorReadoutsFragmentFilter(), userIdentity);
             result.concat(sensorReadoutsResult);
         }
 

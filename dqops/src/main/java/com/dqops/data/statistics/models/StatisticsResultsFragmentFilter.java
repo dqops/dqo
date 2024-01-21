@@ -20,10 +20,7 @@ import com.dqops.data.statistics.factory.StatisticsColumnNames;
 import lombok.Data;
 import org.apache.parquet.Strings;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Filter parameters for acquiring a fragment of statistics results.
@@ -43,7 +40,7 @@ public class StatisticsResultsFragmentFilter extends ParquetDataFragmentFilter {
      */
     @Override
     public Map<String, String> getColumnConditions() {
-        Map<String, String> result = new HashMap<>();
+        Map<String, String> result = new LinkedHashMap<>();
         if (!Strings.isNullOrEmpty(collectorCategory)) {
             result.put(StatisticsColumnNames.COLLECTOR_CATEGORY_COLUMN_NAME, collectorCategory);
         }

@@ -16,6 +16,7 @@
 package com.dqops.data.errors.services;
 
 import com.dqops.checks.AbstractRootChecksContainerSpec;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.errors.services.models.ErrorsListModel;
 
 /**
@@ -27,8 +28,10 @@ public interface ErrorsDataService {
      *
      * @param rootChecksContainerSpec Root checks container.
      * @param loadParameters          Load parameters.
+     * @param userDomainIdentity      User identity within the data domain.
      * @return Complete model of the errors.
      */
     ErrorsListModel[] readErrorsDetailed(AbstractRootChecksContainerSpec rootChecksContainerSpec,
-                                         ErrorsDetailedFilterParameters loadParameters);
+                                         ErrorsDetailedFilterParameters loadParameters,
+                                         UserDomainIdentity userDomainIdentity);
 }

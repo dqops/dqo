@@ -26,6 +26,21 @@ import java.util.List;
 @Data
 public class MainPageSensorDocumentationModel {
     /**
+     * File header.
+     */
+    private String header;
+
+    /**
+     * Description of the file.
+     */
+    private String helpText;
+
+    /**
+     * Targets in provided sensors.
+     */
+    private List<String> sensorTargets = new ArrayList<>();
+
+    /**
      * List of all sensors.
      */
     private List<SensorGroupedDocumentationModel> sensors = new ArrayList<>();

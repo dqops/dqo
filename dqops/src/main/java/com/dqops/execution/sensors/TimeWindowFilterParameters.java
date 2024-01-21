@@ -192,6 +192,24 @@ public class TimeWindowFilterParameters implements Cloneable {
     }
 
     /**
+     * Detects if any filter parameter is set, so the user did not send an empty filter object.
+     * If DQOps receives an empty time window, the default time window configured on the table is used.
+     * @return True when any filters are applied, false when it is an empty (dummy) filter, to be ignored.
+     */
+    public boolean hasAnyParametersApplied() {
+        return dailyPartitioningRecentDays != null ||
+                dailyPartitioningIncludeToday != null ||
+                monthlyPartitioningRecentMonths != null ||
+                monthlyPartitioningIncludeCurrentMonth != null ||
+                fromDate != null ||
+                fromDateTime != null ||
+                fromDateTimeOffset != null ||
+                toDate != null ||
+                toDateTime != null ||
+                toDateTimeOffset != null;
+    }
+
+    /**
      * Creates and returns a copy of this object (deep clone).
      */
     @Override

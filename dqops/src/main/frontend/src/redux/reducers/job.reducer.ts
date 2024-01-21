@@ -51,6 +51,8 @@ export interface IJobsState {
   isCronScheduled: boolean;
   isLicenseFree: boolean;
   userProfile: DqoUserProfileModel;
+  // multiCheckFilters?: IFilterTemplate,
+  // multiCheckSearchedChecks?: CheckTemplate[]
 }
 
 const initialState: IJobsState = {
@@ -72,7 +74,15 @@ const initialState: IJobsState = {
   advisorJobId: 0,
   isCronScheduled: true,
   isLicenseFree: false,
-  userProfile: {}
+  userProfile: {},
+  // multiCheckFilters: {
+  //   connection : '',
+  //   schema : '',
+  //   activeTab: 'daily',
+  //   checkTarget: 'table',
+  //   checkTypes: CheckTypes.PROFILING
+  // },
+  // multiCheckSearchedChecks: [] 
 };
 
 const schemaReducer = (state = initialState, action: any) => {

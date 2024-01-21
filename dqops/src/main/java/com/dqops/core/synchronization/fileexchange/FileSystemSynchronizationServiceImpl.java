@@ -23,6 +23,7 @@ import com.dqops.core.filesystem.metadata.FolderMetadata;
 import com.dqops.core.locks.AcquiredExclusiveWriteLock;
 import com.dqops.core.locks.AcquiredSharedReadLock;
 import com.dqops.core.locks.UserHomeLockManager;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.synchronization.contract.*;
 import com.dqops.core.synchronization.listeners.FileSystemSynchronizationListener;
 import com.dqops.core.synchronization.status.FolderSynchronizationStatus;
@@ -69,6 +70,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
      * @param local Source file system, the changes on the source (the local files) will overwrite changes in the target (remote DQOps Cloud or similar).
      * @param remote Target file system to send the changes in the source and download new changes.
      * @param dqoRoot User Home folder type to synchronize.
+     * @param userIdentity User identity, also specified the data domain.
      * @param synchronizationDirection File synchronization direction (full, download, upload).
      * @param apiKey API Key with the license limits.
      * @param synchronizationListener Synchronization listener that is informed about the progress.
@@ -77,6 +79,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
     public SynchronizationResult synchronize(FileSystemChangeSet local,
                                              FileSystemChangeSet remote,
                                              DqoRoot dqoRoot,
+                                             UserDomainIdentity userIdentity,
                                              FileSynchronizationDirection synchronizationDirection,
                                              DqoCloudApiKey apiKey,
                                              FileSystemSynchronizationListener synchronizationListener) {
@@ -88,7 +91,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
 
         assert Objects.equals(lastLocalFolderIndex.getRelativePath(), lastRemoteFolderIndex.getRelativePath());
 
-        synchronizationListener.onSynchronizationBegin(dqoRoot, localFileSystem, remoteFileSystem);
+        synchronizationListener.onSynchronizationBegin(dqoRoot, userIdentity, localFileSystem, remoteFileSystem);
 
         FileSystemSynchronizationOperations targetFileSystemSynchronizationOperations = remoteFileSystem.getFileSystemService();
         FileSystemSynchronizationRoot targetFileSystemRoot = remoteFileSystem.getFileSystemRoot();
@@ -106,11 +109,11 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
         FolderMetadata currentLocalFolderIndex;
 
         Collection<FileDifference> unsyncedTargetChanges;
-        Set<Path> synchronizedLocalChanges = new HashSet<>();
+        Set<Path> synchronizedLocalChanges = new LinkedHashSet<>();
         FolderMetadata newLocalFolderIndex = null;
 
-        this.synchronizationStatusTracker.changeFolderSynchronizationStatus(dqoRoot, FolderSynchronizationStatus.synchronizing);
-        try (AcquiredSharedReadLock acquiredSharedReadLock = this.userHomeLockManager.lockSharedRead(dqoRoot)) {
+        this.synchronizationStatusTracker.changeFolderSynchronizationStatus(dqoRoot, userIdentity.getDataDomainFolder(), FolderSynchronizationStatus.synchronizing);
+        try (AcquiredSharedReadLock acquiredSharedReadLock = this.userHomeLockManager.lockSharedRead(dqoRoot, userIdentity.getDataDomainFolder())) {
             assert local.getCurrentFileIndex().isEmpty() || local.getCurrentFileIndex().get().isFrozen();
             currentLocalFolderIndex = local.getCurrentFileIndex()
                     .orElseGet(() -> sourceFileSystemSynchronizationOperations.listFilesInFolder(
@@ -127,14 +130,15 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
                     targetTableModifiedPartitions.addModifications(localChanges);
 
                     // upload source (local) changes to the remote file system
-                    synchronizedLocalChanges = uploadLocalToRemoteAsync(dqoRoot, synchronizationListener, localFileSystem, remoteFileSystem, targetFileSystemSynchronizationOperations,
+                    synchronizedLocalChanges = uploadLocalToRemoteAsync(dqoRoot, userIdentity, synchronizationListener,
+                            localFileSystem, remoteFileSystem, targetFileSystemSynchronizationOperations,
                             targetFileSystemRoot, newTargetFolderIndex, sourceFileSystemSynchronizationOperations, sourceFileSystemRoot, localChanges)
                             .subscribeOn(Schedulers.parallel())
                             .block(Duration.ofSeconds(this.dqoCloudConfigurationProperties.getFileSynchronizationTimeLimitSeconds()));
                 }
             }
         }
-        this.synchronizationStatusTracker.changeFolderSynchronizationStatus(dqoRoot, FolderSynchronizationStatus.unchanged);
+        this.synchronizationStatusTracker.changeFolderSynchronizationStatus(dqoRoot, userIdentity.getDataDomainFolder(), FolderSynchronizationStatus.unchanged);
 
         Collection<FolderMetadata> emptyRemoteFolders =
                 (synchronizationDirection == FileSynchronizationDirection.full || synchronizationDirection == FileSynchronizationDirection.upload)
@@ -142,10 +146,11 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
         unsyncedTargetChanges = lastRemoteFolderIndex.findFileDifferences(currentTargetFolderIndex);
 
         if (unsyncedTargetChanges != null || emptyRemoteFolders != null) {
-            try (AcquiredExclusiveWriteLock acquiredExclusiveWriteLock = this.userHomeLockManager.lockExclusiveWrite(dqoRoot)) {
+            try (AcquiredExclusiveWriteLock acquiredExclusiveWriteLock = this.userHomeLockManager.lockExclusiveWrite(dqoRoot, userIdentity.getDataDomainFolder())) {
                 // download changes from the remote file system
                 if (unsyncedTargetChanges != null && (synchronizationDirection == FileSynchronizationDirection.full || synchronizationDirection == FileSynchronizationDirection.download)) {
-                    downloadRemoteToLocalAsync(dqoRoot, synchronizationListener, localFileSystem, remoteFileSystem, targetFileSystemSynchronizationOperations, targetFileSystemRoot,
+                    downloadRemoteToLocalAsync(dqoRoot, userIdentity, synchronizationListener, localFileSystem,
+                            remoteFileSystem, targetFileSystemSynchronizationOperations, targetFileSystemRoot,
                             sourceFileSystemSynchronizationOperations, sourceFileSystemRoot, unsyncedTargetChanges, synchronizedLocalChanges, newLocalFolderIndex)
                             .subscribeOn(Schedulers.parallel())
                             .block(Duration.ofSeconds(this.dqoCloudConfigurationProperties.getFileSynchronizationTimeLimitSeconds()));
@@ -195,7 +200,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
             }
         }
 
-        synchronizationListener.onSynchronizationFinished(dqoRoot, localFileSystem, remoteFileSystem);
+        synchronizationListener.onSynchronizationFinished(dqoRoot, userIdentity, localFileSystem, remoteFileSystem);
 
         return new SynchronizationResult(newLocalFolderIndex, newTargetFolderIndex, targetTableModifiedPartitions);
 //        return new SynchronizationResult(sourceFileIndexAfterChanges, targetFileIndexAfterChanges);
@@ -204,6 +209,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
     /**
      * Uploads local changes to DQOps Cloud (remote file system).
      * @param dqoRoot DQOps root type.
+     * @param userDomainIdentity Identity of the user who triggered synchronization and the data domain that is synchronized.
      * @param synchronizationListener Synchronization listener notified about the progress.
      * @param localFileSystem Source file system (local).
      * @param remoteFileSystem Target file system (remote, DQOps Cloud).
@@ -216,6 +222,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
      * @return Dictionary of changes that were uploaded and should be ignored during a reverse synchronization (we will override remote changes).
      */
     public Mono<Set<Path>> uploadLocalToRemoteAsync(DqoRoot dqoRoot,
+                                                    UserDomainIdentity userDomainIdentity,
                                                     FileSystemSynchronizationListener synchronizationListener,
                                                     SynchronizationRoot localFileSystem,
                                                     SynchronizationRoot remoteFileSystem,
@@ -225,7 +232,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
                                                     FileSystemSynchronizationOperations localFileSystemSynchronizationOperations,
                                                     FileSystemSynchronizationRoot localFileSystemRoot,
                                                     Collection<FileDifference> localChanges) {
-        Set<Path> synchronizedSourceChanges = Collections.synchronizedSet(new HashSet<>());
+        Set<Path> synchronizedSourceChanges = Collections.synchronizedSet(new LinkedHashSet<>());
 
         Mono<Set<Path>> monoResult = Flux.fromIterable(localChanges)
                 .flatMap((FileDifference localChange) -> {
@@ -249,7 +256,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
 
                     Mono<Void> finishedMono = fileExchangeOperationMono
                             .flatMap((FileMetadata uploadedFileMetadata) -> {
-                                synchronizationListener.onSourceChangeAppliedToTarget(dqoRoot, localFileSystem, remoteFileSystem, localChange);
+                                synchronizationListener.onSourceChangeAppliedToTarget(dqoRoot, userDomainIdentity, localFileSystem, remoteFileSystem, localChange);
                                 synchronizedSourceChanges.add(localChange.getRelativePath());
                                 newRemoteFolderIndex.applyChange(localChange.getRelativePath(),
                                         !uploadedFileMetadata.isDeleted() ? uploadedFileMetadata : null);
@@ -267,6 +274,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
     /**
      * Downloads remote changes to the local file system.
      * @param dqoRoot Root file system.
+     * @param userDomainIdentity Identity of the user who triggered synchronization and the data domain that is synchronized.
      * @param synchronizationListener Synchronization listener.
      * @param sourceFileSystem Source file system.
      * @param targetFileSystem Target file system.
@@ -279,6 +287,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
      * @param newLocalFolderIndex New source folder index to add changes.
      */
     public Mono<Void> downloadRemoteToLocalAsync(DqoRoot dqoRoot,
+                                                 UserDomainIdentity userDomainIdentity,
                                                  FileSystemSynchronizationListener synchronizationListener,
                                                  SynchronizationRoot sourceFileSystem, SynchronizationRoot targetFileSystem,
                                                  FileSystemSynchronizationOperations remoteFileSystemSynchronizationOperations,
@@ -315,7 +324,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
 
                     Mono<Void> finishedMono = fileExchangeOperationMono
                             .flatMap((FileMetadata downloadedFileMetadata) -> {
-                                synchronizationListener.onTargetChangeAppliedToSource(dqoRoot, sourceFileSystem, targetFileSystem, otherChange);
+                                synchronizationListener.onTargetChangeAppliedToSource(dqoRoot, userDomainIdentity, sourceFileSystem, targetFileSystem, otherChange);
                                 newLocalFolderIndex.applyChange(otherChange.getRelativePath(),
                                         !downloadedFileMetadata.isDeleted() ? downloadedFileMetadata : null);
                                 return Mono.empty();

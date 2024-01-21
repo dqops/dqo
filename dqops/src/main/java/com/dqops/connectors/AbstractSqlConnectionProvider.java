@@ -16,14 +16,12 @@
 package com.dqops.connectors;
 
 import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
-import com.dqops.utils.string.StringCheckUtility;
 
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 
 /**
  * Base class for connection providers that are using SQL.

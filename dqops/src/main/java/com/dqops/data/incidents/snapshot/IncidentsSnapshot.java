@@ -16,13 +16,13 @@
 package com.dqops.data.incidents.snapshot;
 
 import com.dqops.core.filesystem.BuiltInFolderNames;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.data.incidents.factory.IncidentsColumnNames;
 import com.dqops.data.storage.FileStorageSettings;
 import com.dqops.data.storage.ParquetPartitionStorageService;
 import com.dqops.data.storage.TableDataSnapshot;
 import com.dqops.data.storage.TablePartitioningPattern;
-import com.dqops.metadata.sources.PhysicalTableName;
 import tech.tablesaw.api.Table;
 
 /**
@@ -33,28 +33,32 @@ public class IncidentsSnapshot extends TableDataSnapshot {
 
     /**
      * Default constructor that creates a snapshot.
+     * @param userIdentity User identity that specifies the data domain.
      * @param connectionName Connection name.
      * @param storageService Backend storage service used to load missing data and save the results.
      * @param newResults Empty normalized table that will be appended with new incidents.
      */
-    public IncidentsSnapshot(String connectionName,
+    public IncidentsSnapshot(UserDomainIdentity userIdentity,
+                             String connectionName,
                              ParquetPartitionStorageService storageService,
                              Table newResults) {
-        super(connectionName, null, storageService, createIncidentsStorageSettings(), newResults);
+        super(userIdentity, connectionName, null, storageService, createIncidentsStorageSettings(), newResults);
     }
 
     /**
      * Creates a read-only incident results snapshot limited to a set of columns.
+     * @param userIdentity User identity that specifies the data domain.
      * @param connectionName Connection name.
      * @param storageService Backend storage service used to load missing data and save the results.
      * @param columnNames Column names that will be loaded.
      * @param tableResultsSample Empty table with the expected schema (columns).
      */
-    public IncidentsSnapshot(String connectionName,
+    public IncidentsSnapshot(UserDomainIdentity userIdentity,
+                             String connectionName,
                              ParquetPartitionStorageService storageService,
                              String[] columnNames,
                              Table tableResultsSample) {
-        super(connectionName, null, storageService, createIncidentsStorageSettings(), columnNames, tableResultsSample);
+        super(userIdentity, connectionName, null, storageService, createIncidentsStorageSettings(), columnNames, tableResultsSample);
     }
 
     /**

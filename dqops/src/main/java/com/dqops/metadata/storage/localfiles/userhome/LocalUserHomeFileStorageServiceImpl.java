@@ -61,115 +61,134 @@ public class LocalUserHomeFileStorageServiceImpl extends LocalFileStorageService
     }
 
     @Override
-    public boolean fileExists(HomeFilePath filePath) {
-        DqoRoot lockFolderScope = DqoRoot.fromHomeFolderPath(filePath.getFolder());
+    public boolean fileExists(HomeFilePath filePath, boolean useLocking) {
+        DqoRoot lockFolderScope = useLocking ? DqoRoot.fromHomeFolderPath(filePath.getFolder()) : null;
         if (lockFolderScope != null) {
-            try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(lockFolderScope)) {
-                return super.fileExists(filePath);
+            try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(lockFolderScope, filePath.getFolder().getDataDomain())) {
+                return super.fileExists(filePath, useLocking);
             }
         }
         else {
-            return super.fileExists(filePath);
+            return super.fileExists(filePath, useLocking);
         }
     }
 
     @Override
-    public boolean folderExists(HomeFolderPath folderPath) {
-        DqoRoot lockFolderScope = DqoRoot.fromHomeFolderPath(folderPath);
+    public boolean folderExists(HomeFolderPath folderPath, boolean useLocking) {
+        DqoRoot lockFolderScope = useLocking ? DqoRoot.fromHomeFolderPath(folderPath) : null;
         if (lockFolderScope != null) {
-            try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(lockFolderScope)) {
-                return super.folderExists(folderPath);
+            try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(lockFolderScope, folderPath.getDataDomain())) {
+                return super.folderExists(folderPath, useLocking);
             }
         }
         else {
-            return super.folderExists(folderPath);
+            return super.folderExists(folderPath, useLocking);
         }
     }
 
     @Override
-    public boolean tryDeleteFolder(HomeFolderPath folderPath) {
+    public boolean tryDeleteFolder(HomeFolderPath folderPath, boolean useLocking) {
         DqoRoot lockFolderScope = DqoRoot.fromHomeFolderPath(folderPath);
         if (lockFolderScope != null) {
-            try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(lockFolderScope)) {
-                return super.tryDeleteFolder(folderPath);
+            try {
+                if (useLocking) {
+                    try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(lockFolderScope, folderPath.getDataDomain())) {
+                        return super.tryDeleteFolder(folderPath, useLocking);
+                    }
+                } else {
+                    return super.tryDeleteFolder(folderPath, useLocking);
+                }
+            } finally {
+                this.synchronizationStatusTracker.changeFolderSynchronizationStatus(lockFolderScope, folderPath.getDataDomain(), FolderSynchronizationStatus.changed);
+            }
+        }
+        else {
+            return super.tryDeleteFolder(folderPath, useLocking);
+        }
+    }
+
+    @Override
+    public FileContent readFile(HomeFilePath filePath, boolean useLocking) {
+        DqoRoot lockFolderScope = useLocking ? DqoRoot.fromHomeFolderPath(filePath.getFolder()) : null;
+        if (lockFolderScope != null) {
+            try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(lockFolderScope, filePath.getFolder().getDataDomain())) {
+                return super.readFile(filePath, useLocking);
+            }
+        }
+        else {
+            return super.readFile(filePath, useLocking);
+        }
+    }
+
+    @Override
+    public void saveFile(HomeFilePath filePath, FileContent fileContent, boolean useLocking) {
+        DqoRoot lockFolderScope = useLocking ? DqoRoot.fromHomeFolderPath(filePath.getFolder()) : null;
+        if (lockFolderScope != null) {
+            try {
+                if (useLocking) {
+                    try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(lockFolderScope, filePath.getFolder().getDataDomain())) {
+                        super.saveFile(filePath, fileContent, useLocking);
+                    }
+                }
+                else {
+                    super.saveFile(filePath, fileContent, useLocking);
+                }
             }
             finally {
-                this.synchronizationStatusTracker.changeFolderSynchronizationStatus(lockFolderScope, FolderSynchronizationStatus.changed);
+                this.synchronizationStatusTracker.changeFolderSynchronizationStatus(lockFolderScope,
+                        filePath.getFolder().getDataDomain(), FolderSynchronizationStatus.changed);
             }
         }
         else {
-            return super.tryDeleteFolder(folderPath);
+            super.saveFile(filePath, fileContent, useLocking);
         }
     }
 
     @Override
-    public FileContent readFile(HomeFilePath filePath) {
+    public boolean deleteFile(HomeFilePath filePath, boolean useLocking) {
         DqoRoot lockFolderScope = DqoRoot.fromHomeFolderPath(filePath.getFolder());
         if (lockFolderScope != null) {
-            try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(lockFolderScope)) {
-                return super.readFile(filePath);
+            try {
+                if (useLocking) {
+                    try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(lockFolderScope, filePath.getFolder().getDataDomain())) {
+                        return super.deleteFile(filePath, useLocking);
+                    }
+                } else {
+                    return super.deleteFile(filePath, useLocking);
+                }
+            } finally {
+                this.synchronizationStatusTracker.changeFolderSynchronizationStatus(lockFolderScope,
+                        filePath.getFolder().getDataDomain(), FolderSynchronizationStatus.changed);
             }
         }
         else {
-            return super.readFile(filePath);
+            return super.deleteFile(filePath, useLocking);
         }
     }
 
     @Override
-    public void saveFile(HomeFilePath filePath, FileContent fileContent) {
-        DqoRoot lockFolderScope = DqoRoot.fromHomeFolderPath(filePath.getFolder());
+    public List<HomeFolderPath> listFolders(HomeFolderPath folderPath, boolean useLocking) {
+        DqoRoot lockFolderScope = useLocking ? DqoRoot.fromHomeFolderPath(folderPath) : null;
         if (lockFolderScope != null) {
-            try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(lockFolderScope)) {
-                super.saveFile(filePath, fileContent);
-            }
-            finally {
-                this.synchronizationStatusTracker.changeFolderSynchronizationStatus(lockFolderScope, FolderSynchronizationStatus.changed);
+            try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(lockFolderScope, folderPath.getDataDomain())) {
+                return super.listFolders(folderPath, useLocking);
             }
         }
         else {
-            super.saveFile(filePath, fileContent);
+            return super.listFolders(folderPath, useLocking);
         }
     }
 
     @Override
-    public boolean deleteFile(HomeFilePath filePath) {
-        DqoRoot lockFolderScope = DqoRoot.fromHomeFolderPath(filePath.getFolder());
+    public List<HomeFilePath> listFiles(HomeFolderPath folderPath, boolean useLocking) {
+        DqoRoot lockFolderScope = useLocking ? DqoRoot.fromHomeFolderPath(folderPath) : null;
         if (lockFolderScope != null) {
-            try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(lockFolderScope)) {
-                return super.deleteFile(filePath);
-            }
-            finally {
-                this.synchronizationStatusTracker.changeFolderSynchronizationStatus(lockFolderScope, FolderSynchronizationStatus.changed);
+            try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(lockFolderScope, folderPath.getDataDomain())) {
+                return super.listFiles(folderPath, useLocking);
             }
         }
         else {
-            return super.deleteFile(filePath);
-        }
-    }
-
-    @Override
-    public List<HomeFolderPath> listFolders(HomeFolderPath folderPath) {
-        DqoRoot lockFolderScope = DqoRoot.fromHomeFolderPath(folderPath);
-        if (lockFolderScope != null) {
-            try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(lockFolderScope)) {
-                return super.listFolders(folderPath);
-            }
-        }
-        else {
-            return super.listFolders(folderPath);
-        }
-    }
-
-    @Override
-    public List<HomeFilePath> listFiles(HomeFolderPath folderPath) {
-        DqoRoot lockFolderScope = DqoRoot.fromHomeFolderPath(folderPath);
-        if (lockFolderScope != null) {
-            try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(lockFolderScope)) {
-                return super.listFiles(folderPath);
-            }
-        }
-        else {
-            return super.listFiles(folderPath);
+            return super.listFiles(folderPath, useLocking);
         }
     }
 }

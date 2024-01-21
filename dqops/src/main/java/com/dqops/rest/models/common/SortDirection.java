@@ -16,7 +16,7 @@
 
 package com.dqops.rest.models.common;
 
-import com.dqops.utils.docs.SampleValueFactory;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 
 /**
  * REST api model sort direction.

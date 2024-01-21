@@ -23,9 +23,8 @@ import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.sensors.AbstractSensorParametersSpec;
 import com.dqops.services.check.matching.SimilarCheckModel;
-import com.dqops.services.check.matching.SimilarCheckSensorRuleKey;
-import com.dqops.utils.docs.SampleStringsRegistry;
-import com.dqops.utils.docs.SampleValueFactory;
+import com.dqops.utils.docs.generators.SampleStringsRegistry;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -34,6 +33,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +46,7 @@ import java.util.stream.Collectors;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "CheckModel", description = "Model that returns the form definition and the form data to edit a single data quality check.")
+@NoArgsConstructor
 public class CheckModel implements Cloneable {
     /**
      * Data quality check name that is used in YAML file. Identifies the data quality check.
@@ -103,6 +104,14 @@ public class CheckModel implements Cloneable {
     private boolean supportsGrouping;
 
     /**
+     * This is a standard data quality check that is always shown on the data quality checks editor screen.
+     * Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks.
+     */
+    @JsonPropertyDescription("This is a standard data quality check that is always shown on the data quality checks editor screen. Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean standard;
+
+    /**
      * Data grouping configuration for this check. When a data grouping configuration is assigned at a check level, it overrides the data grouping configuration from the table level.
      * Data grouping is configured in two cases:
      * (1) the data in the table should be analyzed with a GROUP BY condition, to analyze different groups of rows using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.
@@ -153,7 +162,7 @@ public class CheckModel implements Cloneable {
     /**
      * Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.
      */
-    @JsonPropertyDescription("Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.")
+    @JsonPropertyDescription("Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset.")
     private boolean includeInSla;
 
     /**
@@ -229,21 +238,6 @@ public class CheckModel implements Cloneable {
     @JsonPropertyDescription("The check hash code that identifies the check instance.")
     public Long getCheckHash() {
         return this.checkSpec != null && this.checkSpec.getHierarchyId() != null ? this.checkSpec.getHierarchyId().hashCode64() : null;
-    }
-
-    public CheckModel() {
-    }
-
-    /**
-     * Create a matching key with the sensor name and rule names. Used to match similar checks that are based on the same sensor and rules.
-     * @return Check sensor rule key.
-     */
-    public SimilarCheckSensorRuleKey createSimilarCheckMatchKey() {
-        return new SimilarCheckSensorRuleKey(
-                this.sensorName,
-                this.rule.getWarning() != null ? this.rule.getWarning().getRuleName() : null,
-                this.rule.getError() != null ? this.rule.getError().getRuleName() : null,
-                this.rule.getFatal() != null ? this.rule.getFatal().getRuleName() : null);
     }
 
     /**

@@ -4,5 +4,5 @@ kind: check
 spec:
   sensor_name: column/numeric/sum
   rule_name: change/change_percent_7_days
-  help_text: Verifies that the sum in a column changed in a fixed rate since last
+  help_text: Verifies that the sum in a column changed in a fixed rate since the last
     readout from last week.

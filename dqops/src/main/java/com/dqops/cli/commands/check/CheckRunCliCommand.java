@@ -24,7 +24,7 @@ import com.dqops.cli.commands.check.impl.CheckCliService;
 import com.dqops.cli.completion.completedcommands.ITableNameCommand;
 import com.dqops.cli.completion.completers.*;
 import com.dqops.cli.output.OutputFormatService;
-import com.dqops.cli.terminal.FileWritter;
+import com.dqops.cli.terminal.FileWriter;
 import com.dqops.cli.terminal.TablesawDatasetTableModel;
 import com.dqops.cli.terminal.TerminalTableWritter;
 import com.dqops.cli.terminal.TerminalWriter;
@@ -57,7 +57,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     private CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider;
     private JsonSerializer jsonSerializer;
     private OutputFormatService outputFormatService;
-    private FileWritter fileWritter;
+    private FileWriter fileWriter;
 
     public CheckRunCliCommand() {
     }
@@ -75,14 +75,14 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
                               CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider,
                               JsonSerializer jsonSerializer,
                               OutputFormatService outputFormatService,
-                              FileWritter fileWritter) {
+                              FileWriter fileWriter) {
         this.terminalWriter = terminalWriter;
         this.terminalTableWritter = terminalTableWritter;
         this.checkService = checkService;
         this.checkExecutionProgressListenerProvider = checkExecutionProgressListenerProvider;
         this.jsonSerializer = jsonSerializer;
         this.outputFormatService = outputFormatService;
-        this.fileWritter = fileWritter;
+        this.fileWriter = fileWriter;
     }
 
     @CommandLine.Option(names = {"-c", "--connection"}, description = "Connection name, supports patterns like 'conn*'",
@@ -119,6 +119,9 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
 
     @CommandLine.Option(names = {"-d", "--dummy"}, description = "Runs data quality check in a dummy mode, sensors are not executed on the target database, but the rest of the process is performed", defaultValue = "false")
     private boolean dummyRun;
+
+    @CommandLine.Option(names = {"-fe", "--fail-on-execution-errors"}, description = "Returns a command status code 4 (when called from the command line) if any execution errors were raised during the execution, the default value is true.", defaultValue = "true")
+    private boolean failOnExecutionErrors = true;
 
     @CommandLine.Option(names = {"-m", "--mode"}, description = "Reporting mode (silent, summary, info, debug)", defaultValue = "summary")
     private CheckRunReportingMode mode = CheckRunReportingMode.summary;
@@ -396,7 +399,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
                 case CSV: {
                     String csvContent = this.outputFormatService.tableToCsv(tablesawDatasetTableModel);
                     if (this.isWriteToFile()) {
-                        CliOperationStatus cliOperationStatus = this.fileWritter.writeStringToFile(csvContent);
+                        CliOperationStatus cliOperationStatus = this.fileWriter.writeStringToFile(csvContent);
                         this.terminalWriter.writeLine(cliOperationStatus.getMessage());
                     }
                     else {
@@ -407,7 +410,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
                 case JSON: {
                     String jsonContent = this.outputFormatService.tableToJson(tablesawDatasetTableModel);
                     if (this.isWriteToFile()) {
-                        CliOperationStatus cliOperationStatus = this.fileWritter.writeStringToFile(jsonContent);
+                        CliOperationStatus cliOperationStatus = this.fileWriter.writeStringToFile(jsonContent);
                         this.terminalWriter.writeLine(cliOperationStatus.getMessage());
                     }
                     else {
@@ -421,7 +424,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
                         tableBuilder.addInnerBorder(BorderStyle.oldschool);
                         tableBuilder.addHeaderBorder(BorderStyle.oldschool);
                         String renderedTable = tableBuilder.build().render(this.terminalWriter.getTerminalWidth() - 1);
-                        CliOperationStatus cliOperationStatus = this.fileWritter.writeStringToFile(renderedTable);
+                        CliOperationStatus cliOperationStatus = this.fileWriter.writeStringToFile(renderedTable);
                         this.terminalWriter.writeLine(cliOperationStatus.getMessage());
                     }
                     else {
@@ -439,6 +442,11 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
                     this.terminalWriter.writeLine(checkExecutionErrorSummary.getSummaryMessage());
                 }
             }
+        }
+
+        int executionErrorsCount = checkExecutionSummary.getTotalExecutionErrorsCount();
+        if (this.failOnExecutionErrors && executionErrorsCount > 0) {
+            return 4;
         }
 
         int fatalIssuesCount = checkExecutionSummary.getFatalSeverityIssuesCount();

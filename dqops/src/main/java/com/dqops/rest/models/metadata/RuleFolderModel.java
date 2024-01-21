@@ -15,6 +15,8 @@
  */
 package com.dqops.rest.models.metadata;
 
+import com.dqops.utils.docs.generators.SampleListUtility;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -23,6 +25,7 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import java.util.*;
+import java.util.function.Function;
 
 /**
  * Rule folder model that is returned by the REST API.
@@ -106,5 +109,23 @@ public class RuleFolderModel {
         }
 
         return allRules;
+    }
+
+    public static class RuleFolderModelSampleFactory implements SampleValueFactory<RuleFolderModel> {
+        @Override
+        public RuleFolderModel createSample() {
+            List<RuleListModel> ruleListModels = SampleListUtility.generateList(RuleListModel.class, 4,
+                    RuleListModel::getRuleName,
+                    (Function<String, String>) SampleListUtility.HelperMutators.ITERATE_STRING.getMutator(),
+                    RuleListModel::setRuleName,
+
+                    RuleListModel::getFullRuleName,
+                    (Function<String, String>) SampleListUtility.HelperMutators.ITERATE_STRING.getMutator(),
+                    RuleListModel::setFullRuleName
+            );
+            return new RuleFolderModel() {{
+                setRules(ruleListModels);
+            }};
+        }
     }
 }

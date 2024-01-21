@@ -15,6 +15,7 @@
  */
 package com.dqops.services.check.mapping.basicmodels;
 
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -55,5 +56,28 @@ public class CheckContainerListModel {
     private boolean canDeleteData;
 
     public CheckContainerListModel() {
+    }
+
+    public static class CheckContainerListModelSampleFactory implements SampleValueFactory<CheckContainerListModel> {
+        @Override
+        public CheckContainerListModel createSample() {
+            int checkCount = 3;
+            int checkCategoryCount = 2;
+            List<CheckListModel> checkListModels = new ArrayList<>(checkCount);
+            for (int i = 1; i <= checkCount; ++i) {
+                for (int j = 1; j <= checkCategoryCount; ++j) {
+                    CheckListModel checkListModel = new CheckListModel.CheckListModelSampleFactory().createSample();
+                    checkListModel.setCheckName(checkListModel.getCheckName() + "_" + i);
+                    checkListModel.setCheckCategory(checkListModel.getCheckCategory() + "_" + j);
+                    checkListModels.add(checkListModel);
+                }
+            }
+            return new CheckContainerListModel() {{
+                setChecks(checkListModels);
+                setCanRunChecks(true);
+                setCanEdit(false);
+                setCanDeleteData(true);
+            }};
+        }
     }
 }

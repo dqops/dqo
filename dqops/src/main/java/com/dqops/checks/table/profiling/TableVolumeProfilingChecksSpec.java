@@ -22,7 +22,7 @@ import com.dqops.checks.CheckType;
 import com.dqops.checks.table.checkspecs.volume.*;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.utils.docs.SampleValueFactory;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -43,10 +43,10 @@ public class TableVolumeProfilingChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableVolumeProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("profile_row_count", o -> o.profileRowCount);
-            put("profile_row_count_anomaly_differencing_30_days", o -> o.profileRowCountAnomalyDifferencing30Days);
-            put("profile_row_count_anomaly_differencing", o -> o.profileRowCountAnomalyDifferencing);
+            put("profile_row_count_anomaly", o -> o.profileRowCountAnomaly);
+
             put("profile_row_count_change", o -> o.profileRowCountChange);
-            put("profile_row_count_change_yesterday", o -> o.profileRowCountChangeYesterday);
+            put("profile_row_count_change_1_day", o -> o.profileRowCountChange1Day);
             put("profile_row_count_change_7_days", o -> o.profileRowCountChange7Days);
             put("profile_row_count_change_30_days", o -> o.profileRowCountChange30Days);
         }
@@ -57,27 +57,23 @@ public class TableVolumeProfilingChecksSpec extends AbstractCheckCategorySpec {
             "When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.")
     private TableRowCountCheckSpec profileRowCount;
 
-    @JsonProperty("profile_row_count_anomaly_differencing_30_days")
-    @JsonPropertyDescription("Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 30 days.")
-    private TableAnomalyDifferencingRowCount30DaysCheckSpec profileRowCountAnomalyDifferencing30Days;
-
-    @JsonProperty("profile_row_count_anomaly_differencing")
     @JsonPropertyDescription("Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 90 days.")
-    private TableAnomalyDifferencingRowCountCheckSpec profileRowCountAnomalyDifferencing;
+    private TableRowCountAnomalyDifferencingCheckSpec profileRowCountAnomaly;
 
     @JsonPropertyDescription("Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.")
-    private TableChangeRowCountCheckSpec profileRowCountChange;
+    private TableRowCountChangeCheckSpec profileRowCountChange;
 
+    @JsonProperty("profile_row_count_change_1_day")
     @JsonPropertyDescription("Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from yesterday. Allows for exact match to readouts from yesterday or past readouts lookup.")
-    private TableChangeRowCountSinceYesterdayCheckSpec profileRowCountChangeYesterday;
+    private TableRowCountChange1DayCheckSpec profileRowCountChange1Day;
 
     @JsonProperty("profile_row_count_change_7_days")
     @JsonPropertyDescription("Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last week. Allows for exact match to readouts from 7 days ago or past readouts lookup.")
-    private TableChangeRowCountSince7DaysCheckSpec profileRowCountChange7Days;
+    private TableRowCountChange7DaysCheckSpec profileRowCountChange7Days;
 
     @JsonProperty("profile_row_count_change_30_days")
     @JsonPropertyDescription("Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last month. Allows for exact match to readouts from 30 days ago or past readouts lookup.")
-    private TableChangeRowCountSince30DaysCheckSpec profileRowCountChange30Days;
+    private TableRowCountChange30DaysCheckSpec profileRowCountChange30Days;
 
     
     /**
@@ -99,46 +95,28 @@ public class TableVolumeProfilingChecksSpec extends AbstractCheckCategorySpec {
     }
 
     /**
-     * Returns the row count anomaly 30 days check.
-     * @return Row count anomaly 30 days check.
-     */
-    public TableAnomalyDifferencingRowCount30DaysCheckSpec getProfileRowCountAnomalyDifferencing30Days() {
-        return profileRowCountAnomalyDifferencing30Days;
-    }
-
-    /**
-     * Sets a new row count anomaly 30 days check.
-     * @param profileRowCountAnomalyDifferencing30Days Row count anomaly 30 days check.
-     */
-    public void setProfileRowCountAnomalyDifferencing30Days(TableAnomalyDifferencingRowCount30DaysCheckSpec profileRowCountAnomalyDifferencing30Days) {
-        this.setDirtyIf(!Objects.equals(this.profileRowCountAnomalyDifferencing30Days, profileRowCountAnomalyDifferencing30Days));
-        this.profileRowCountAnomalyDifferencing30Days = profileRowCountAnomalyDifferencing30Days;
-        propagateHierarchyIdToField(profileRowCountAnomalyDifferencing30Days, "profile_row_count_anomaly_differencing_30_days");
-    }
-
-    /**
      * Returns the row count anomaly 60 days check.
      * @return Row count anomaly 60 days check.
      */
-    public TableAnomalyDifferencingRowCountCheckSpec getProfileRowCountAnomalyDifferencing() {
-        return profileRowCountAnomalyDifferencing;
+    public TableRowCountAnomalyDifferencingCheckSpec getProfileRowCountAnomaly() {
+        return profileRowCountAnomaly;
     }
 
     /**
      * Sets a new row count anomaly 60 days check.
-     * @param profileRowCountAnomalyDifferencing Row count anomaly 60 days check.
+     * @param profileRowCountAnomaly Row count anomaly 60 days check.
      */
-    public void setProfileRowCountAnomalyDifferencing(TableAnomalyDifferencingRowCountCheckSpec profileRowCountAnomalyDifferencing) {
-        this.setDirtyIf(!Objects.equals(this.profileRowCountAnomalyDifferencing, profileRowCountAnomalyDifferencing));
-        this.profileRowCountAnomalyDifferencing = profileRowCountAnomalyDifferencing;
-        propagateHierarchyIdToField(profileRowCountAnomalyDifferencing, "profile_row_count_anomaly_differencing");
+    public void setProfileRowCountAnomaly(TableRowCountAnomalyDifferencingCheckSpec profileRowCountAnomaly) {
+        this.setDirtyIf(!Objects.equals(this.profileRowCountAnomaly, profileRowCountAnomaly));
+        this.profileRowCountAnomaly = profileRowCountAnomaly;
+        propagateHierarchyIdToField(profileRowCountAnomaly, "profile_row_count_anomaly");
     }
 
     /**
      * Returns the row count change check.
      * @return Row count change check.
      */
-    public TableChangeRowCountCheckSpec getProfileRowCountChange() {
+    public TableRowCountChangeCheckSpec getProfileRowCountChange() {
         return profileRowCountChange;
     }
 
@@ -146,7 +124,7 @@ public class TableVolumeProfilingChecksSpec extends AbstractCheckCategorySpec {
      * Sets a new row count change check.
      * @param profileRowCountChange Row count change check.
      */
-    public void setProfileRowCountChange(TableChangeRowCountCheckSpec profileRowCountChange) {
+    public void setProfileRowCountChange(TableRowCountChangeCheckSpec profileRowCountChange) {
         this.setDirtyIf(!Objects.equals(this.profileRowCountChange, profileRowCountChange));
         this.profileRowCountChange = profileRowCountChange;
         propagateHierarchyIdToField(profileRowCountChange, "profile_row_count_change");
@@ -156,25 +134,25 @@ public class TableVolumeProfilingChecksSpec extends AbstractCheckCategorySpec {
      * Returns the row count change since yesterday check.
      * @return Row count change since yesterday check.
      */
-    public TableChangeRowCountSinceYesterdayCheckSpec getProfileRowCountChangeYesterday() {
-        return profileRowCountChangeYesterday;
+    public TableRowCountChange1DayCheckSpec getProfileRowCountChange1Day() {
+        return profileRowCountChange1Day;
     }
 
     /**
      * Sets a new row count change since yesterday check.
-     * @param profileRowCountChangeYesterday Row count change since yesterday check.
+     * @param profileRowCountChange1Day Row count change since yesterday check.
      */
-    public void setProfileRowCountChangeYesterday(TableChangeRowCountSinceYesterdayCheckSpec profileRowCountChangeYesterday) {
-        this.setDirtyIf(!Objects.equals(this.profileRowCountChangeYesterday, profileRowCountChangeYesterday));
-        this.profileRowCountChangeYesterday = profileRowCountChangeYesterday;
-        propagateHierarchyIdToField(profileRowCountChangeYesterday, "profile_row_count_change_yesterday");
+    public void setProfileRowCountChange1Day(TableRowCountChange1DayCheckSpec profileRowCountChange1Day) {
+        this.setDirtyIf(!Objects.equals(this.profileRowCountChange1Day, profileRowCountChange1Day));
+        this.profileRowCountChange1Day = profileRowCountChange1Day;
+        propagateHierarchyIdToField(profileRowCountChange1Day, "profile_row_count_change_1_day");
     }
 
     /**
      * Returns the row count change since 7 days check.
      * @return Row count change since 7 days check.
      */
-    public TableChangeRowCountSince7DaysCheckSpec getProfileRowCountChange7Days() {
+    public TableRowCountChange7DaysCheckSpec getProfileRowCountChange7Days() {
         return profileRowCountChange7Days;
     }
 
@@ -182,7 +160,7 @@ public class TableVolumeProfilingChecksSpec extends AbstractCheckCategorySpec {
      * Sets a new row count change since 7 days check.
      * @param profileRowCountChange7Days Row count change since 7 days check.
      */
-    public void setProfileRowCountChange7Days(TableChangeRowCountSince7DaysCheckSpec profileRowCountChange7Days) {
+    public void setProfileRowCountChange7Days(TableRowCountChange7DaysCheckSpec profileRowCountChange7Days) {
         this.setDirtyIf(!Objects.equals(this.profileRowCountChange7Days, profileRowCountChange7Days));
         this.profileRowCountChange7Days = profileRowCountChange7Days;
         propagateHierarchyIdToField(profileRowCountChange7Days, "profile_row_count_change_7_days");
@@ -192,7 +170,7 @@ public class TableVolumeProfilingChecksSpec extends AbstractCheckCategorySpec {
      * Returns the row count change since 30 days check.
      * @return Row count change since 30 days check.
      */
-    public TableChangeRowCountSince30DaysCheckSpec getProfileRowCountChange30Days() {
+    public TableRowCountChange30DaysCheckSpec getProfileRowCountChange30Days() {
         return profileRowCountChange30Days;
     }
 
@@ -200,7 +178,7 @@ public class TableVolumeProfilingChecksSpec extends AbstractCheckCategorySpec {
      * Sets a new row count change since 30 days check.
      * @param profileRowCountChange30Days Row count change since 30 days check.
      */
-    public void setProfileRowCountChange30Days(TableChangeRowCountSince30DaysCheckSpec profileRowCountChange30Days) {
+    public void setProfileRowCountChange30Days(TableRowCountChange30DaysCheckSpec profileRowCountChange30Days) {
         this.setDirtyIf(!Objects.equals(this.profileRowCountChange30Days, profileRowCountChange30Days));
         this.profileRowCountChange30Days = profileRowCountChange30Days;
         propagateHierarchyIdToField(profileRowCountChange30Days, "profile_row_count_change_30_days");

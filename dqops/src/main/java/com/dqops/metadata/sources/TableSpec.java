@@ -39,8 +39,8 @@ import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.metadata.incidents.TableIncidentGroupingSpec;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.statistics.table.TableStatisticsCollectorsRootCategoriesSpec;
-import com.dqops.utils.docs.SampleStringsRegistry;
-import com.dqops.utils.docs.SampleValueFactory;
+import com.dqops.utils.docs.generators.SampleStringsRegistry;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.dqops.utils.serialization.InvalidYamlStatusHolder;
@@ -616,10 +616,32 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder {
     public AbstractRootChecksContainerSpec getTableCheckRootContainer(CheckType checkType,
                                                                       CheckTimeScale checkTimeScale,
                                                                       boolean attachCheckContainer) {
+        return getTableCheckRootContainer(checkType, checkTimeScale, attachCheckContainer, true);
+    }
+
+    /**
+     * Retrieves a non-null root check container for the requested category. Returns null when the check container is not present.
+     * Creates a new check root container object if there was no such object configured and referenced
+     * from the table specification.
+     * @param checkType Check type.
+     * @param checkTimeScale Time scale. Null value is accepted for profiling checks, for other time scale aware checks, the proper time scale is required.
+     * @param attachCheckContainer When the check container doesn't exist, should the newly created check container be attached to the table specification.
+     * @param createEmptyContainerWhenNull Creates a new check container instance when it is null.
+     * @return Newly created container root.
+     */
+    public AbstractRootChecksContainerSpec getTableCheckRootContainer(CheckType checkType,
+                                                                      CheckTimeScale checkTimeScale,
+                                                                      boolean attachCheckContainer,
+                                                                      boolean createEmptyContainerWhenNull) {
+
         switch (checkType) {
             case profiling: {
                 if (this.profilingChecks != null) {
                     return this.profilingChecks;
+                }
+
+                if (!createEmptyContainerWhenNull) {
+                    return null;
                 }
 
                 TableProfilingCheckCategoriesSpec tableProfilingCheckCategoriesSpec = new TableProfilingCheckCategoriesSpec();
@@ -633,6 +655,10 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder {
             case monitoring: {
                 TableMonitoringChecksSpec monitoringSpec = this.monitoringChecks;
                 if (monitoringSpec == null) {
+                    if (!createEmptyContainerWhenNull) {
+                        return null;
+                    }
+
                     monitoringSpec = new TableMonitoringChecksSpec();
                     monitoringSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "monitoring_checks"));
                     if (attachCheckContainer) {
@@ -646,6 +672,10 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder {
                             return monitoringSpec.getDaily();
                         }
 
+                        if (!createEmptyContainerWhenNull) {
+                            return null;
+                        }
+
                         TableDailyMonitoringCheckCategoriesSpec dailyMonitoringCategoriesSpec = new TableDailyMonitoringCheckCategoriesSpec();
                         dailyMonitoringCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(monitoringSpec.getHierarchyId(), "daily"));
                         if (attachCheckContainer) {
@@ -656,6 +686,10 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder {
                     case monthly: {
                         if (monitoringSpec.getMonthly() != null) {
                             return monitoringSpec.getMonthly();
+                        }
+
+                        if (!createEmptyContainerWhenNull) {
+                            return null;
                         }
 
                         TableMonthlyMonitoringCheckCategoriesSpec monthlyMonitoringCategoriesSpec = new TableMonthlyMonitoringCheckCategoriesSpec();
@@ -673,6 +707,10 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder {
             case partitioned: {
                 TablePartitionedChecksRootSpec partitionedChecksSpec = this.partitionedChecks;
                 if (partitionedChecksSpec == null) {
+                    if (!createEmptyContainerWhenNull) {
+                        return null;
+                    }
+
                     partitionedChecksSpec = new TablePartitionedChecksRootSpec();
                     partitionedChecksSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "partitioned_checks"));
                     if (attachCheckContainer) {
@@ -686,6 +724,10 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder {
                             return partitionedChecksSpec.getDaily();
                         }
 
+                        if (!createEmptyContainerWhenNull) {
+                            return null;
+                        }
+
                         TableDailyPartitionedCheckCategoriesSpec dailyPartitionedCategoriesSpec = new TableDailyPartitionedCheckCategoriesSpec();
                         dailyPartitionedCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(partitionedChecksSpec.getHierarchyId(), "daily"));
                         if (attachCheckContainer) {
@@ -696,6 +738,10 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder {
                     case monthly: {
                         if (partitionedChecksSpec.getMonthly() != null) {
                             return partitionedChecksSpec.getMonthly();
+                        }
+
+                        if (!createEmptyContainerWhenNull) {
+                            return null;
                         }
 
                         TableMonthlyPartitionedCheckCategoriesSpec monthlyPartitionedCategoriesSpec = new TableMonthlyPartitionedCheckCategoriesSpec();
@@ -980,6 +1026,7 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder {
                 setTimestampColumns(new TimestampColumnsSpec.TimestampColumnsSpecSampleFactory().createSample());
                 setProfilingChecks(new TableProfilingCheckCategoriesSpec.TableProfilingCheckCategoriesSpecSampleFactory().createSample());
                 setPhysicalTableName(PhysicalTableName.fromSchemaTableFilter(schemaTableName));
+                setIncrementalTimeWindow(new PartitionIncrementalTimeWindowSpec.PartitionIncrementalTimeWindowSpecSampleFactory().createSample());
             }};
         }
     }

@@ -6,8 +6,8 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.column_expected_numbers_in_use_count_check_spec import (
-        ColumnExpectedNumbersInUseCountCheckSpec,
+    from ..models.column_integer_in_range_percent_check_spec import (
+        ColumnIntegerInRangePercentCheckSpec,
     )
     from ..models.column_invalid_latitude_count_check_spec import (
         ColumnInvalidLatitudeCountCheckSpec,
@@ -29,8 +29,20 @@ if TYPE_CHECKING:
     from ..models.column_non_negative_percent_check_spec import (
         ColumnNonNegativePercentCheckSpec,
     )
-    from ..models.column_number_value_in_set_percent_check_spec import (
-        ColumnNumberValueInSetPercentCheckSpec,
+    from ..models.column_number_above_max_value_check_spec import (
+        ColumnNumberAboveMaxValueCheckSpec,
+    )
+    from ..models.column_number_above_max_value_percent_check_spec import (
+        ColumnNumberAboveMaxValuePercentCheckSpec,
+    )
+    from ..models.column_number_below_min_value_check_spec import (
+        ColumnNumberBelowMinValueCheckSpec,
+    )
+    from ..models.column_number_below_min_value_percent_check_spec import (
+        ColumnNumberBelowMinValuePercentCheckSpec,
+    )
+    from ..models.column_number_in_range_percent_check_spec import (
+        ColumnNumberInRangePercentCheckSpec,
     )
     from ..models.column_numeric_daily_monitoring_checks_spec_custom_checks import (
         ColumnNumericDailyMonitoringChecksSpecCustomChecks,
@@ -69,24 +81,6 @@ if TYPE_CHECKING:
     from ..models.column_valid_longitude_percent_check_spec import (
         ColumnValidLongitudePercentCheckSpec,
     )
-    from ..models.column_value_above_max_value_count_check_spec import (
-        ColumnValueAboveMaxValueCountCheckSpec,
-    )
-    from ..models.column_value_above_max_value_percent_check_spec import (
-        ColumnValueAboveMaxValuePercentCheckSpec,
-    )
-    from ..models.column_value_below_min_value_count_check_spec import (
-        ColumnValueBelowMinValueCountCheckSpec,
-    )
-    from ..models.column_value_below_min_value_percent_check_spec import (
-        ColumnValueBelowMinValuePercentCheckSpec,
-    )
-    from ..models.column_values_in_range_integers_percent_check_spec import (
-        ColumnValuesInRangeIntegersPercentCheckSpec,
-    )
-    from ..models.column_values_in_range_numeric_percent_check_spec import (
-        ColumnValuesInRangeNumericPercentCheckSpec,
-    )
 
 
 T = TypeVar("T", bound="ColumnNumericDailyMonitoringChecksSpec")
@@ -99,23 +93,20 @@ class ColumnNumericDailyMonitoringChecksSpec:
         custom_checks (Union[Unset, ColumnNumericDailyMonitoringChecksSpecCustomChecks]): Dictionary of additional
             custom checks within this category. The keys are check names defined in the definition section. The sensor
             parameters and rules should match the type of the configured sensor and rule for the custom check.
-        daily_negative_count (Union[Unset, ColumnNegativeCountCheckSpec]):
-        daily_negative_percent (Union[Unset, ColumnNegativePercentCheckSpec]):
-        daily_non_negative_count (Union[Unset, ColumnNonNegativeCountCheckSpec]):
-        daily_non_negative_percent (Union[Unset, ColumnNonNegativePercentCheckSpec]):
-        daily_expected_numbers_in_use_count (Union[Unset, ColumnExpectedNumbersInUseCountCheckSpec]):
-        daily_number_value_in_set_percent (Union[Unset, ColumnNumberValueInSetPercentCheckSpec]):
-        daily_values_in_range_numeric_percent (Union[Unset, ColumnValuesInRangeNumericPercentCheckSpec]):
-        daily_values_in_range_integers_percent (Union[Unset, ColumnValuesInRangeIntegersPercentCheckSpec]):
-        daily_value_below_min_value_count (Union[Unset, ColumnValueBelowMinValueCountCheckSpec]):
-        daily_value_below_min_value_percent (Union[Unset, ColumnValueBelowMinValuePercentCheckSpec]):
-        daily_value_above_max_value_count (Union[Unset, ColumnValueAboveMaxValueCountCheckSpec]):
-        daily_value_above_max_value_percent (Union[Unset, ColumnValueAboveMaxValuePercentCheckSpec]):
-        daily_max_in_range (Union[Unset, ColumnMaxInRangeCheckSpec]):
+        daily_number_below_min_value (Union[Unset, ColumnNumberBelowMinValueCheckSpec]):
+        daily_number_above_max_value (Union[Unset, ColumnNumberAboveMaxValueCheckSpec]):
+        daily_negative_values (Union[Unset, ColumnNegativeCountCheckSpec]):
+        daily_negative_values_percent (Union[Unset, ColumnNegativePercentCheckSpec]):
+        daily_number_below_min_value_percent (Union[Unset, ColumnNumberBelowMinValuePercentCheckSpec]):
+        daily_number_above_max_value_percent (Union[Unset, ColumnNumberAboveMaxValuePercentCheckSpec]):
+        daily_number_in_range_percent (Union[Unset, ColumnNumberInRangePercentCheckSpec]):
+        daily_integer_in_range_percent (Union[Unset, ColumnIntegerInRangePercentCheckSpec]):
         daily_min_in_range (Union[Unset, ColumnMinInRangeCheckSpec]):
+        daily_max_in_range (Union[Unset, ColumnMaxInRangeCheckSpec]):
+        daily_sum_in_range (Union[Unset, ColumnSumInRangeCheckSpec]):
         daily_mean_in_range (Union[Unset, ColumnMeanInRangeCheckSpec]):
-        daily_percentile_in_range (Union[Unset, ColumnPercentileInRangeCheckSpec]):
         daily_median_in_range (Union[Unset, ColumnMedianInRangeCheckSpec]):
+        daily_percentile_in_range (Union[Unset, ColumnPercentileInRangeCheckSpec]):
         daily_percentile_10_in_range (Union[Unset, ColumnPercentile10InRangeCheckSpec]):
         daily_percentile_25_in_range (Union[Unset, ColumnPercentile25InRangeCheckSpec]):
         daily_percentile_75_in_range (Union[Unset, ColumnPercentile75InRangeCheckSpec]):
@@ -124,51 +115,45 @@ class ColumnNumericDailyMonitoringChecksSpec:
         daily_population_stddev_in_range (Union[Unset, ColumnPopulationStddevInRangeCheckSpec]):
         daily_sample_variance_in_range (Union[Unset, ColumnSampleVarianceInRangeCheckSpec]):
         daily_population_variance_in_range (Union[Unset, ColumnPopulationVarianceInRangeCheckSpec]):
-        daily_sum_in_range (Union[Unset, ColumnSumInRangeCheckSpec]):
-        daily_invalid_latitude_count (Union[Unset, ColumnInvalidLatitudeCountCheckSpec]):
+        daily_invalid_latitude (Union[Unset, ColumnInvalidLatitudeCountCheckSpec]):
         daily_valid_latitude_percent (Union[Unset, ColumnValidLatitudePercentCheckSpec]):
-        daily_invalid_longitude_count (Union[Unset, ColumnInvalidLongitudeCountCheckSpec]):
+        daily_invalid_longitude (Union[Unset, ColumnInvalidLongitudeCountCheckSpec]):
         daily_valid_longitude_percent (Union[Unset, ColumnValidLongitudePercentCheckSpec]):
+        daily_non_negative_values (Union[Unset, ColumnNonNegativeCountCheckSpec]):
+        daily_non_negative_values_percent (Union[Unset, ColumnNonNegativePercentCheckSpec]):
     """
 
     custom_checks: Union[
         Unset, "ColumnNumericDailyMonitoringChecksSpecCustomChecks"
     ] = UNSET
-    daily_negative_count: Union[Unset, "ColumnNegativeCountCheckSpec"] = UNSET
-    daily_negative_percent: Union[Unset, "ColumnNegativePercentCheckSpec"] = UNSET
-    daily_non_negative_count: Union[Unset, "ColumnNonNegativeCountCheckSpec"] = UNSET
-    daily_non_negative_percent: Union[
-        Unset, "ColumnNonNegativePercentCheckSpec"
+    daily_number_below_min_value: Union[
+        Unset, "ColumnNumberBelowMinValueCheckSpec"
     ] = UNSET
-    daily_expected_numbers_in_use_count: Union[
-        Unset, "ColumnExpectedNumbersInUseCountCheckSpec"
+    daily_number_above_max_value: Union[
+        Unset, "ColumnNumberAboveMaxValueCheckSpec"
     ] = UNSET
-    daily_number_value_in_set_percent: Union[
-        Unset, "ColumnNumberValueInSetPercentCheckSpec"
+    daily_negative_values: Union[Unset, "ColumnNegativeCountCheckSpec"] = UNSET
+    daily_negative_values_percent: Union[
+        Unset, "ColumnNegativePercentCheckSpec"
     ] = UNSET
-    daily_values_in_range_numeric_percent: Union[
-        Unset, "ColumnValuesInRangeNumericPercentCheckSpec"
+    daily_number_below_min_value_percent: Union[
+        Unset, "ColumnNumberBelowMinValuePercentCheckSpec"
     ] = UNSET
-    daily_values_in_range_integers_percent: Union[
-        Unset, "ColumnValuesInRangeIntegersPercentCheckSpec"
+    daily_number_above_max_value_percent: Union[
+        Unset, "ColumnNumberAboveMaxValuePercentCheckSpec"
     ] = UNSET
-    daily_value_below_min_value_count: Union[
-        Unset, "ColumnValueBelowMinValueCountCheckSpec"
+    daily_number_in_range_percent: Union[
+        Unset, "ColumnNumberInRangePercentCheckSpec"
     ] = UNSET
-    daily_value_below_min_value_percent: Union[
-        Unset, "ColumnValueBelowMinValuePercentCheckSpec"
+    daily_integer_in_range_percent: Union[
+        Unset, "ColumnIntegerInRangePercentCheckSpec"
     ] = UNSET
-    daily_value_above_max_value_count: Union[
-        Unset, "ColumnValueAboveMaxValueCountCheckSpec"
-    ] = UNSET
-    daily_value_above_max_value_percent: Union[
-        Unset, "ColumnValueAboveMaxValuePercentCheckSpec"
-    ] = UNSET
-    daily_max_in_range: Union[Unset, "ColumnMaxInRangeCheckSpec"] = UNSET
     daily_min_in_range: Union[Unset, "ColumnMinInRangeCheckSpec"] = UNSET
+    daily_max_in_range: Union[Unset, "ColumnMaxInRangeCheckSpec"] = UNSET
+    daily_sum_in_range: Union[Unset, "ColumnSumInRangeCheckSpec"] = UNSET
     daily_mean_in_range: Union[Unset, "ColumnMeanInRangeCheckSpec"] = UNSET
-    daily_percentile_in_range: Union[Unset, "ColumnPercentileInRangeCheckSpec"] = UNSET
     daily_median_in_range: Union[Unset, "ColumnMedianInRangeCheckSpec"] = UNSET
+    daily_percentile_in_range: Union[Unset, "ColumnPercentileInRangeCheckSpec"] = UNSET
     daily_percentile_10_in_range: Union[
         Unset, "ColumnPercentile10InRangeCheckSpec"
     ] = UNSET
@@ -193,18 +178,19 @@ class ColumnNumericDailyMonitoringChecksSpec:
     daily_population_variance_in_range: Union[
         Unset, "ColumnPopulationVarianceInRangeCheckSpec"
     ] = UNSET
-    daily_sum_in_range: Union[Unset, "ColumnSumInRangeCheckSpec"] = UNSET
-    daily_invalid_latitude_count: Union[
-        Unset, "ColumnInvalidLatitudeCountCheckSpec"
-    ] = UNSET
+    daily_invalid_latitude: Union[Unset, "ColumnInvalidLatitudeCountCheckSpec"] = UNSET
     daily_valid_latitude_percent: Union[
         Unset, "ColumnValidLatitudePercentCheckSpec"
     ] = UNSET
-    daily_invalid_longitude_count: Union[
+    daily_invalid_longitude: Union[
         Unset, "ColumnInvalidLongitudeCountCheckSpec"
     ] = UNSET
     daily_valid_longitude_percent: Union[
         Unset, "ColumnValidLongitudePercentCheckSpec"
+    ] = UNSET
+    daily_non_negative_values: Union[Unset, "ColumnNonNegativeCountCheckSpec"] = UNSET
+    daily_non_negative_values_percent: Union[
+        Unset, "ColumnNonNegativePercentCheckSpec"
     ] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -213,89 +199,67 @@ class ColumnNumericDailyMonitoringChecksSpec:
         if not isinstance(self.custom_checks, Unset):
             custom_checks = self.custom_checks.to_dict()
 
-        daily_negative_count: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_negative_count, Unset):
-            daily_negative_count = self.daily_negative_count.to_dict()
+        daily_number_below_min_value: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_number_below_min_value, Unset):
+            daily_number_below_min_value = self.daily_number_below_min_value.to_dict()
 
-        daily_negative_percent: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_negative_percent, Unset):
-            daily_negative_percent = self.daily_negative_percent.to_dict()
+        daily_number_above_max_value: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_number_above_max_value, Unset):
+            daily_number_above_max_value = self.daily_number_above_max_value.to_dict()
 
-        daily_non_negative_count: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_non_negative_count, Unset):
-            daily_non_negative_count = self.daily_non_negative_count.to_dict()
+        daily_negative_values: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_negative_values, Unset):
+            daily_negative_values = self.daily_negative_values.to_dict()
 
-        daily_non_negative_percent: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_non_negative_percent, Unset):
-            daily_non_negative_percent = self.daily_non_negative_percent.to_dict()
+        daily_negative_values_percent: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_negative_values_percent, Unset):
+            daily_negative_values_percent = self.daily_negative_values_percent.to_dict()
 
-        daily_expected_numbers_in_use_count: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_expected_numbers_in_use_count, Unset):
-            daily_expected_numbers_in_use_count = (
-                self.daily_expected_numbers_in_use_count.to_dict()
+        daily_number_below_min_value_percent: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_number_below_min_value_percent, Unset):
+            daily_number_below_min_value_percent = (
+                self.daily_number_below_min_value_percent.to_dict()
             )
 
-        daily_number_value_in_set_percent: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_number_value_in_set_percent, Unset):
-            daily_number_value_in_set_percent = (
-                self.daily_number_value_in_set_percent.to_dict()
+        daily_number_above_max_value_percent: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_number_above_max_value_percent, Unset):
+            daily_number_above_max_value_percent = (
+                self.daily_number_above_max_value_percent.to_dict()
             )
 
-        daily_values_in_range_numeric_percent: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_values_in_range_numeric_percent, Unset):
-            daily_values_in_range_numeric_percent = (
-                self.daily_values_in_range_numeric_percent.to_dict()
-            )
+        daily_number_in_range_percent: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_number_in_range_percent, Unset):
+            daily_number_in_range_percent = self.daily_number_in_range_percent.to_dict()
 
-        daily_values_in_range_integers_percent: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_values_in_range_integers_percent, Unset):
-            daily_values_in_range_integers_percent = (
-                self.daily_values_in_range_integers_percent.to_dict()
+        daily_integer_in_range_percent: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_integer_in_range_percent, Unset):
+            daily_integer_in_range_percent = (
+                self.daily_integer_in_range_percent.to_dict()
             )
-
-        daily_value_below_min_value_count: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_value_below_min_value_count, Unset):
-            daily_value_below_min_value_count = (
-                self.daily_value_below_min_value_count.to_dict()
-            )
-
-        daily_value_below_min_value_percent: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_value_below_min_value_percent, Unset):
-            daily_value_below_min_value_percent = (
-                self.daily_value_below_min_value_percent.to_dict()
-            )
-
-        daily_value_above_max_value_count: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_value_above_max_value_count, Unset):
-            daily_value_above_max_value_count = (
-                self.daily_value_above_max_value_count.to_dict()
-            )
-
-        daily_value_above_max_value_percent: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_value_above_max_value_percent, Unset):
-            daily_value_above_max_value_percent = (
-                self.daily_value_above_max_value_percent.to_dict()
-            )
-
-        daily_max_in_range: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_max_in_range, Unset):
-            daily_max_in_range = self.daily_max_in_range.to_dict()
 
         daily_min_in_range: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_min_in_range, Unset):
             daily_min_in_range = self.daily_min_in_range.to_dict()
 
+        daily_max_in_range: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_max_in_range, Unset):
+            daily_max_in_range = self.daily_max_in_range.to_dict()
+
+        daily_sum_in_range: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_sum_in_range, Unset):
+            daily_sum_in_range = self.daily_sum_in_range.to_dict()
+
         daily_mean_in_range: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_mean_in_range, Unset):
             daily_mean_in_range = self.daily_mean_in_range.to_dict()
 
-        daily_percentile_in_range: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_percentile_in_range, Unset):
-            daily_percentile_in_range = self.daily_percentile_in_range.to_dict()
-
         daily_median_in_range: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_median_in_range, Unset):
             daily_median_in_range = self.daily_median_in_range.to_dict()
+
+        daily_percentile_in_range: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_percentile_in_range, Unset):
+            daily_percentile_in_range = self.daily_percentile_in_range.to_dict()
 
         daily_percentile_10_in_range: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_percentile_10_in_range, Unset):
@@ -335,81 +299,71 @@ class ColumnNumericDailyMonitoringChecksSpec:
                 self.daily_population_variance_in_range.to_dict()
             )
 
-        daily_sum_in_range: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_sum_in_range, Unset):
-            daily_sum_in_range = self.daily_sum_in_range.to_dict()
-
-        daily_invalid_latitude_count: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_invalid_latitude_count, Unset):
-            daily_invalid_latitude_count = self.daily_invalid_latitude_count.to_dict()
+        daily_invalid_latitude: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_invalid_latitude, Unset):
+            daily_invalid_latitude = self.daily_invalid_latitude.to_dict()
 
         daily_valid_latitude_percent: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_valid_latitude_percent, Unset):
             daily_valid_latitude_percent = self.daily_valid_latitude_percent.to_dict()
 
-        daily_invalid_longitude_count: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_invalid_longitude_count, Unset):
-            daily_invalid_longitude_count = self.daily_invalid_longitude_count.to_dict()
+        daily_invalid_longitude: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_invalid_longitude, Unset):
+            daily_invalid_longitude = self.daily_invalid_longitude.to_dict()
 
         daily_valid_longitude_percent: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_valid_longitude_percent, Unset):
             daily_valid_longitude_percent = self.daily_valid_longitude_percent.to_dict()
+
+        daily_non_negative_values: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_non_negative_values, Unset):
+            daily_non_negative_values = self.daily_non_negative_values.to_dict()
+
+        daily_non_negative_values_percent: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_non_negative_values_percent, Unset):
+            daily_non_negative_values_percent = (
+                self.daily_non_negative_values_percent.to_dict()
+            )
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
-        if daily_negative_count is not UNSET:
-            field_dict["daily_negative_count"] = daily_negative_count
-        if daily_negative_percent is not UNSET:
-            field_dict["daily_negative_percent"] = daily_negative_percent
-        if daily_non_negative_count is not UNSET:
-            field_dict["daily_non_negative_count"] = daily_non_negative_count
-        if daily_non_negative_percent is not UNSET:
-            field_dict["daily_non_negative_percent"] = daily_non_negative_percent
-        if daily_expected_numbers_in_use_count is not UNSET:
+        if daily_number_below_min_value is not UNSET:
+            field_dict["daily_number_below_min_value"] = daily_number_below_min_value
+        if daily_number_above_max_value is not UNSET:
+            field_dict["daily_number_above_max_value"] = daily_number_above_max_value
+        if daily_negative_values is not UNSET:
+            field_dict["daily_negative_values"] = daily_negative_values
+        if daily_negative_values_percent is not UNSET:
+            field_dict["daily_negative_values_percent"] = daily_negative_values_percent
+        if daily_number_below_min_value_percent is not UNSET:
             field_dict[
-                "daily_expected_numbers_in_use_count"
-            ] = daily_expected_numbers_in_use_count
-        if daily_number_value_in_set_percent is not UNSET:
+                "daily_number_below_min_value_percent"
+            ] = daily_number_below_min_value_percent
+        if daily_number_above_max_value_percent is not UNSET:
             field_dict[
-                "daily_number_value_in_set_percent"
-            ] = daily_number_value_in_set_percent
-        if daily_values_in_range_numeric_percent is not UNSET:
+                "daily_number_above_max_value_percent"
+            ] = daily_number_above_max_value_percent
+        if daily_number_in_range_percent is not UNSET:
+            field_dict["daily_number_in_range_percent"] = daily_number_in_range_percent
+        if daily_integer_in_range_percent is not UNSET:
             field_dict[
-                "daily_values_in_range_numeric_percent"
-            ] = daily_values_in_range_numeric_percent
-        if daily_values_in_range_integers_percent is not UNSET:
-            field_dict[
-                "daily_values_in_range_integers_percent"
-            ] = daily_values_in_range_integers_percent
-        if daily_value_below_min_value_count is not UNSET:
-            field_dict[
-                "daily_value_below_min_value_count"
-            ] = daily_value_below_min_value_count
-        if daily_value_below_min_value_percent is not UNSET:
-            field_dict[
-                "daily_value_below_min_value_percent"
-            ] = daily_value_below_min_value_percent
-        if daily_value_above_max_value_count is not UNSET:
-            field_dict[
-                "daily_value_above_max_value_count"
-            ] = daily_value_above_max_value_count
-        if daily_value_above_max_value_percent is not UNSET:
-            field_dict[
-                "daily_value_above_max_value_percent"
-            ] = daily_value_above_max_value_percent
-        if daily_max_in_range is not UNSET:
-            field_dict["daily_max_in_range"] = daily_max_in_range
+                "daily_integer_in_range_percent"
+            ] = daily_integer_in_range_percent
         if daily_min_in_range is not UNSET:
             field_dict["daily_min_in_range"] = daily_min_in_range
+        if daily_max_in_range is not UNSET:
+            field_dict["daily_max_in_range"] = daily_max_in_range
+        if daily_sum_in_range is not UNSET:
+            field_dict["daily_sum_in_range"] = daily_sum_in_range
         if daily_mean_in_range is not UNSET:
             field_dict["daily_mean_in_range"] = daily_mean_in_range
-        if daily_percentile_in_range is not UNSET:
-            field_dict["daily_percentile_in_range"] = daily_percentile_in_range
         if daily_median_in_range is not UNSET:
             field_dict["daily_median_in_range"] = daily_median_in_range
+        if daily_percentile_in_range is not UNSET:
+            field_dict["daily_percentile_in_range"] = daily_percentile_in_range
         if daily_percentile_10_in_range is not UNSET:
             field_dict["daily_percentile_10_in_range"] = daily_percentile_10_in_range
         if daily_percentile_25_in_range is not UNSET:
@@ -432,23 +386,27 @@ class ColumnNumericDailyMonitoringChecksSpec:
             field_dict[
                 "daily_population_variance_in_range"
             ] = daily_population_variance_in_range
-        if daily_sum_in_range is not UNSET:
-            field_dict["daily_sum_in_range"] = daily_sum_in_range
-        if daily_invalid_latitude_count is not UNSET:
-            field_dict["daily_invalid_latitude_count"] = daily_invalid_latitude_count
+        if daily_invalid_latitude is not UNSET:
+            field_dict["daily_invalid_latitude"] = daily_invalid_latitude
         if daily_valid_latitude_percent is not UNSET:
             field_dict["daily_valid_latitude_percent"] = daily_valid_latitude_percent
-        if daily_invalid_longitude_count is not UNSET:
-            field_dict["daily_invalid_longitude_count"] = daily_invalid_longitude_count
+        if daily_invalid_longitude is not UNSET:
+            field_dict["daily_invalid_longitude"] = daily_invalid_longitude
         if daily_valid_longitude_percent is not UNSET:
             field_dict["daily_valid_longitude_percent"] = daily_valid_longitude_percent
+        if daily_non_negative_values is not UNSET:
+            field_dict["daily_non_negative_values"] = daily_non_negative_values
+        if daily_non_negative_values_percent is not UNSET:
+            field_dict[
+                "daily_non_negative_values_percent"
+            ] = daily_non_negative_values_percent
 
         return field_dict
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.column_expected_numbers_in_use_count_check_spec import (
-            ColumnExpectedNumbersInUseCountCheckSpec,
+        from ..models.column_integer_in_range_percent_check_spec import (
+            ColumnIntegerInRangePercentCheckSpec,
         )
         from ..models.column_invalid_latitude_count_check_spec import (
             ColumnInvalidLatitudeCountCheckSpec,
@@ -474,8 +432,20 @@ class ColumnNumericDailyMonitoringChecksSpec:
         from ..models.column_non_negative_percent_check_spec import (
             ColumnNonNegativePercentCheckSpec,
         )
-        from ..models.column_number_value_in_set_percent_check_spec import (
-            ColumnNumberValueInSetPercentCheckSpec,
+        from ..models.column_number_above_max_value_check_spec import (
+            ColumnNumberAboveMaxValueCheckSpec,
+        )
+        from ..models.column_number_above_max_value_percent_check_spec import (
+            ColumnNumberAboveMaxValuePercentCheckSpec,
+        )
+        from ..models.column_number_below_min_value_check_spec import (
+            ColumnNumberBelowMinValueCheckSpec,
+        )
+        from ..models.column_number_below_min_value_percent_check_spec import (
+            ColumnNumberBelowMinValuePercentCheckSpec,
+        )
+        from ..models.column_number_in_range_percent_check_spec import (
+            ColumnNumberInRangePercentCheckSpec,
         )
         from ..models.column_numeric_daily_monitoring_checks_spec_custom_checks import (
             ColumnNumericDailyMonitoringChecksSpecCustomChecks,
@@ -514,24 +484,6 @@ class ColumnNumericDailyMonitoringChecksSpec:
         from ..models.column_valid_longitude_percent_check_spec import (
             ColumnValidLongitudePercentCheckSpec,
         )
-        from ..models.column_value_above_max_value_count_check_spec import (
-            ColumnValueAboveMaxValueCountCheckSpec,
-        )
-        from ..models.column_value_above_max_value_percent_check_spec import (
-            ColumnValueAboveMaxValuePercentCheckSpec,
-        )
-        from ..models.column_value_below_min_value_count_check_spec import (
-            ColumnValueBelowMinValueCountCheckSpec,
-        )
-        from ..models.column_value_below_min_value_percent_check_spec import (
-            ColumnValueBelowMinValuePercentCheckSpec,
-        )
-        from ..models.column_values_in_range_integers_percent_check_spec import (
-            ColumnValuesInRangeIntegersPercentCheckSpec,
-        )
-        from ..models.column_values_in_range_numeric_percent_check_spec import (
-            ColumnValuesInRangeNumericPercentCheckSpec,
-        )
 
         d = src_dict.copy()
         _custom_checks = d.pop("custom_checks", UNSET)
@@ -545,169 +497,94 @@ class ColumnNumericDailyMonitoringChecksSpec:
                 )
             )
 
-        _daily_negative_count = d.pop("daily_negative_count", UNSET)
-        daily_negative_count: Union[Unset, ColumnNegativeCountCheckSpec]
-        if isinstance(_daily_negative_count, Unset):
-            daily_negative_count = UNSET
+        _daily_number_below_min_value = d.pop("daily_number_below_min_value", UNSET)
+        daily_number_below_min_value: Union[Unset, ColumnNumberBelowMinValueCheckSpec]
+        if isinstance(_daily_number_below_min_value, Unset):
+            daily_number_below_min_value = UNSET
         else:
-            daily_negative_count = ColumnNegativeCountCheckSpec.from_dict(
-                _daily_negative_count
+            daily_number_below_min_value = ColumnNumberBelowMinValueCheckSpec.from_dict(
+                _daily_number_below_min_value
             )
 
-        _daily_negative_percent = d.pop("daily_negative_percent", UNSET)
-        daily_negative_percent: Union[Unset, ColumnNegativePercentCheckSpec]
-        if isinstance(_daily_negative_percent, Unset):
-            daily_negative_percent = UNSET
+        _daily_number_above_max_value = d.pop("daily_number_above_max_value", UNSET)
+        daily_number_above_max_value: Union[Unset, ColumnNumberAboveMaxValueCheckSpec]
+        if isinstance(_daily_number_above_max_value, Unset):
+            daily_number_above_max_value = UNSET
         else:
-            daily_negative_percent = ColumnNegativePercentCheckSpec.from_dict(
-                _daily_negative_percent
+            daily_number_above_max_value = ColumnNumberAboveMaxValueCheckSpec.from_dict(
+                _daily_number_above_max_value
             )
 
-        _daily_non_negative_count = d.pop("daily_non_negative_count", UNSET)
-        daily_non_negative_count: Union[Unset, ColumnNonNegativeCountCheckSpec]
-        if isinstance(_daily_non_negative_count, Unset):
-            daily_non_negative_count = UNSET
+        _daily_negative_values = d.pop("daily_negative_values", UNSET)
+        daily_negative_values: Union[Unset, ColumnNegativeCountCheckSpec]
+        if isinstance(_daily_negative_values, Unset):
+            daily_negative_values = UNSET
         else:
-            daily_non_negative_count = ColumnNonNegativeCountCheckSpec.from_dict(
-                _daily_non_negative_count
+            daily_negative_values = ColumnNegativeCountCheckSpec.from_dict(
+                _daily_negative_values
             )
 
-        _daily_non_negative_percent = d.pop("daily_non_negative_percent", UNSET)
-        daily_non_negative_percent: Union[Unset, ColumnNonNegativePercentCheckSpec]
-        if isinstance(_daily_non_negative_percent, Unset):
-            daily_non_negative_percent = UNSET
+        _daily_negative_values_percent = d.pop("daily_negative_values_percent", UNSET)
+        daily_negative_values_percent: Union[Unset, ColumnNegativePercentCheckSpec]
+        if isinstance(_daily_negative_values_percent, Unset):
+            daily_negative_values_percent = UNSET
         else:
-            daily_non_negative_percent = ColumnNonNegativePercentCheckSpec.from_dict(
-                _daily_non_negative_percent
+            daily_negative_values_percent = ColumnNegativePercentCheckSpec.from_dict(
+                _daily_negative_values_percent
             )
 
-        _daily_expected_numbers_in_use_count = d.pop(
-            "daily_expected_numbers_in_use_count", UNSET
+        _daily_number_below_min_value_percent = d.pop(
+            "daily_number_below_min_value_percent", UNSET
         )
-        daily_expected_numbers_in_use_count: Union[
-            Unset, ColumnExpectedNumbersInUseCountCheckSpec
+        daily_number_below_min_value_percent: Union[
+            Unset, ColumnNumberBelowMinValuePercentCheckSpec
         ]
-        if isinstance(_daily_expected_numbers_in_use_count, Unset):
-            daily_expected_numbers_in_use_count = UNSET
+        if isinstance(_daily_number_below_min_value_percent, Unset):
+            daily_number_below_min_value_percent = UNSET
         else:
-            daily_expected_numbers_in_use_count = (
-                ColumnExpectedNumbersInUseCountCheckSpec.from_dict(
-                    _daily_expected_numbers_in_use_count
+            daily_number_below_min_value_percent = (
+                ColumnNumberBelowMinValuePercentCheckSpec.from_dict(
+                    _daily_number_below_min_value_percent
                 )
             )
 
-        _daily_number_value_in_set_percent = d.pop(
-            "daily_number_value_in_set_percent", UNSET
+        _daily_number_above_max_value_percent = d.pop(
+            "daily_number_above_max_value_percent", UNSET
         )
-        daily_number_value_in_set_percent: Union[
-            Unset, ColumnNumberValueInSetPercentCheckSpec
+        daily_number_above_max_value_percent: Union[
+            Unset, ColumnNumberAboveMaxValuePercentCheckSpec
         ]
-        if isinstance(_daily_number_value_in_set_percent, Unset):
-            daily_number_value_in_set_percent = UNSET
+        if isinstance(_daily_number_above_max_value_percent, Unset):
+            daily_number_above_max_value_percent = UNSET
         else:
-            daily_number_value_in_set_percent = (
-                ColumnNumberValueInSetPercentCheckSpec.from_dict(
-                    _daily_number_value_in_set_percent
+            daily_number_above_max_value_percent = (
+                ColumnNumberAboveMaxValuePercentCheckSpec.from_dict(
+                    _daily_number_above_max_value_percent
                 )
             )
 
-        _daily_values_in_range_numeric_percent = d.pop(
-            "daily_values_in_range_numeric_percent", UNSET
-        )
-        daily_values_in_range_numeric_percent: Union[
-            Unset, ColumnValuesInRangeNumericPercentCheckSpec
-        ]
-        if isinstance(_daily_values_in_range_numeric_percent, Unset):
-            daily_values_in_range_numeric_percent = UNSET
+        _daily_number_in_range_percent = d.pop("daily_number_in_range_percent", UNSET)
+        daily_number_in_range_percent: Union[Unset, ColumnNumberInRangePercentCheckSpec]
+        if isinstance(_daily_number_in_range_percent, Unset):
+            daily_number_in_range_percent = UNSET
         else:
-            daily_values_in_range_numeric_percent = (
-                ColumnValuesInRangeNumericPercentCheckSpec.from_dict(
-                    _daily_values_in_range_numeric_percent
+            daily_number_in_range_percent = (
+                ColumnNumberInRangePercentCheckSpec.from_dict(
+                    _daily_number_in_range_percent
                 )
             )
 
-        _daily_values_in_range_integers_percent = d.pop(
-            "daily_values_in_range_integers_percent", UNSET
-        )
-        daily_values_in_range_integers_percent: Union[
-            Unset, ColumnValuesInRangeIntegersPercentCheckSpec
+        _daily_integer_in_range_percent = d.pop("daily_integer_in_range_percent", UNSET)
+        daily_integer_in_range_percent: Union[
+            Unset, ColumnIntegerInRangePercentCheckSpec
         ]
-        if isinstance(_daily_values_in_range_integers_percent, Unset):
-            daily_values_in_range_integers_percent = UNSET
+        if isinstance(_daily_integer_in_range_percent, Unset):
+            daily_integer_in_range_percent = UNSET
         else:
-            daily_values_in_range_integers_percent = (
-                ColumnValuesInRangeIntegersPercentCheckSpec.from_dict(
-                    _daily_values_in_range_integers_percent
+            daily_integer_in_range_percent = (
+                ColumnIntegerInRangePercentCheckSpec.from_dict(
+                    _daily_integer_in_range_percent
                 )
-            )
-
-        _daily_value_below_min_value_count = d.pop(
-            "daily_value_below_min_value_count", UNSET
-        )
-        daily_value_below_min_value_count: Union[
-            Unset, ColumnValueBelowMinValueCountCheckSpec
-        ]
-        if isinstance(_daily_value_below_min_value_count, Unset):
-            daily_value_below_min_value_count = UNSET
-        else:
-            daily_value_below_min_value_count = (
-                ColumnValueBelowMinValueCountCheckSpec.from_dict(
-                    _daily_value_below_min_value_count
-                )
-            )
-
-        _daily_value_below_min_value_percent = d.pop(
-            "daily_value_below_min_value_percent", UNSET
-        )
-        daily_value_below_min_value_percent: Union[
-            Unset, ColumnValueBelowMinValuePercentCheckSpec
-        ]
-        if isinstance(_daily_value_below_min_value_percent, Unset):
-            daily_value_below_min_value_percent = UNSET
-        else:
-            daily_value_below_min_value_percent = (
-                ColumnValueBelowMinValuePercentCheckSpec.from_dict(
-                    _daily_value_below_min_value_percent
-                )
-            )
-
-        _daily_value_above_max_value_count = d.pop(
-            "daily_value_above_max_value_count", UNSET
-        )
-        daily_value_above_max_value_count: Union[
-            Unset, ColumnValueAboveMaxValueCountCheckSpec
-        ]
-        if isinstance(_daily_value_above_max_value_count, Unset):
-            daily_value_above_max_value_count = UNSET
-        else:
-            daily_value_above_max_value_count = (
-                ColumnValueAboveMaxValueCountCheckSpec.from_dict(
-                    _daily_value_above_max_value_count
-                )
-            )
-
-        _daily_value_above_max_value_percent = d.pop(
-            "daily_value_above_max_value_percent", UNSET
-        )
-        daily_value_above_max_value_percent: Union[
-            Unset, ColumnValueAboveMaxValuePercentCheckSpec
-        ]
-        if isinstance(_daily_value_above_max_value_percent, Unset):
-            daily_value_above_max_value_percent = UNSET
-        else:
-            daily_value_above_max_value_percent = (
-                ColumnValueAboveMaxValuePercentCheckSpec.from_dict(
-                    _daily_value_above_max_value_percent
-                )
-            )
-
-        _daily_max_in_range = d.pop("daily_max_in_range", UNSET)
-        daily_max_in_range: Union[Unset, ColumnMaxInRangeCheckSpec]
-        if isinstance(_daily_max_in_range, Unset):
-            daily_max_in_range = UNSET
-        else:
-            daily_max_in_range = ColumnMaxInRangeCheckSpec.from_dict(
-                _daily_max_in_range
             )
 
         _daily_min_in_range = d.pop("daily_min_in_range", UNSET)
@@ -719,6 +596,24 @@ class ColumnNumericDailyMonitoringChecksSpec:
                 _daily_min_in_range
             )
 
+        _daily_max_in_range = d.pop("daily_max_in_range", UNSET)
+        daily_max_in_range: Union[Unset, ColumnMaxInRangeCheckSpec]
+        if isinstance(_daily_max_in_range, Unset):
+            daily_max_in_range = UNSET
+        else:
+            daily_max_in_range = ColumnMaxInRangeCheckSpec.from_dict(
+                _daily_max_in_range
+            )
+
+        _daily_sum_in_range = d.pop("daily_sum_in_range", UNSET)
+        daily_sum_in_range: Union[Unset, ColumnSumInRangeCheckSpec]
+        if isinstance(_daily_sum_in_range, Unset):
+            daily_sum_in_range = UNSET
+        else:
+            daily_sum_in_range = ColumnSumInRangeCheckSpec.from_dict(
+                _daily_sum_in_range
+            )
+
         _daily_mean_in_range = d.pop("daily_mean_in_range", UNSET)
         daily_mean_in_range: Union[Unset, ColumnMeanInRangeCheckSpec]
         if isinstance(_daily_mean_in_range, Unset):
@@ -728,15 +623,6 @@ class ColumnNumericDailyMonitoringChecksSpec:
                 _daily_mean_in_range
             )
 
-        _daily_percentile_in_range = d.pop("daily_percentile_in_range", UNSET)
-        daily_percentile_in_range: Union[Unset, ColumnPercentileInRangeCheckSpec]
-        if isinstance(_daily_percentile_in_range, Unset):
-            daily_percentile_in_range = UNSET
-        else:
-            daily_percentile_in_range = ColumnPercentileInRangeCheckSpec.from_dict(
-                _daily_percentile_in_range
-            )
-
         _daily_median_in_range = d.pop("daily_median_in_range", UNSET)
         daily_median_in_range: Union[Unset, ColumnMedianInRangeCheckSpec]
         if isinstance(_daily_median_in_range, Unset):
@@ -744,6 +630,15 @@ class ColumnNumericDailyMonitoringChecksSpec:
         else:
             daily_median_in_range = ColumnMedianInRangeCheckSpec.from_dict(
                 _daily_median_in_range
+            )
+
+        _daily_percentile_in_range = d.pop("daily_percentile_in_range", UNSET)
+        daily_percentile_in_range: Union[Unset, ColumnPercentileInRangeCheckSpec]
+        if isinstance(_daily_percentile_in_range, Unset):
+            daily_percentile_in_range = UNSET
+        else:
+            daily_percentile_in_range = ColumnPercentileInRangeCheckSpec.from_dict(
+                _daily_percentile_in_range
             )
 
         _daily_percentile_10_in_range = d.pop("daily_percentile_10_in_range", UNSET)
@@ -834,24 +729,13 @@ class ColumnNumericDailyMonitoringChecksSpec:
                 )
             )
 
-        _daily_sum_in_range = d.pop("daily_sum_in_range", UNSET)
-        daily_sum_in_range: Union[Unset, ColumnSumInRangeCheckSpec]
-        if isinstance(_daily_sum_in_range, Unset):
-            daily_sum_in_range = UNSET
+        _daily_invalid_latitude = d.pop("daily_invalid_latitude", UNSET)
+        daily_invalid_latitude: Union[Unset, ColumnInvalidLatitudeCountCheckSpec]
+        if isinstance(_daily_invalid_latitude, Unset):
+            daily_invalid_latitude = UNSET
         else:
-            daily_sum_in_range = ColumnSumInRangeCheckSpec.from_dict(
-                _daily_sum_in_range
-            )
-
-        _daily_invalid_latitude_count = d.pop("daily_invalid_latitude_count", UNSET)
-        daily_invalid_latitude_count: Union[Unset, ColumnInvalidLatitudeCountCheckSpec]
-        if isinstance(_daily_invalid_latitude_count, Unset):
-            daily_invalid_latitude_count = UNSET
-        else:
-            daily_invalid_latitude_count = (
-                ColumnInvalidLatitudeCountCheckSpec.from_dict(
-                    _daily_invalid_latitude_count
-                )
+            daily_invalid_latitude = ColumnInvalidLatitudeCountCheckSpec.from_dict(
+                _daily_invalid_latitude
             )
 
         _daily_valid_latitude_percent = d.pop("daily_valid_latitude_percent", UNSET)
@@ -865,17 +749,13 @@ class ColumnNumericDailyMonitoringChecksSpec:
                 )
             )
 
-        _daily_invalid_longitude_count = d.pop("daily_invalid_longitude_count", UNSET)
-        daily_invalid_longitude_count: Union[
-            Unset, ColumnInvalidLongitudeCountCheckSpec
-        ]
-        if isinstance(_daily_invalid_longitude_count, Unset):
-            daily_invalid_longitude_count = UNSET
+        _daily_invalid_longitude = d.pop("daily_invalid_longitude", UNSET)
+        daily_invalid_longitude: Union[Unset, ColumnInvalidLongitudeCountCheckSpec]
+        if isinstance(_daily_invalid_longitude, Unset):
+            daily_invalid_longitude = UNSET
         else:
-            daily_invalid_longitude_count = (
-                ColumnInvalidLongitudeCountCheckSpec.from_dict(
-                    _daily_invalid_longitude_count
-                )
+            daily_invalid_longitude = ColumnInvalidLongitudeCountCheckSpec.from_dict(
+                _daily_invalid_longitude
             )
 
         _daily_valid_longitude_percent = d.pop("daily_valid_longitude_percent", UNSET)
@@ -891,25 +771,46 @@ class ColumnNumericDailyMonitoringChecksSpec:
                 )
             )
 
+        _daily_non_negative_values = d.pop("daily_non_negative_values", UNSET)
+        daily_non_negative_values: Union[Unset, ColumnNonNegativeCountCheckSpec]
+        if isinstance(_daily_non_negative_values, Unset):
+            daily_non_negative_values = UNSET
+        else:
+            daily_non_negative_values = ColumnNonNegativeCountCheckSpec.from_dict(
+                _daily_non_negative_values
+            )
+
+        _daily_non_negative_values_percent = d.pop(
+            "daily_non_negative_values_percent", UNSET
+        )
+        daily_non_negative_values_percent: Union[
+            Unset, ColumnNonNegativePercentCheckSpec
+        ]
+        if isinstance(_daily_non_negative_values_percent, Unset):
+            daily_non_negative_values_percent = UNSET
+        else:
+            daily_non_negative_values_percent = (
+                ColumnNonNegativePercentCheckSpec.from_dict(
+                    _daily_non_negative_values_percent
+                )
+            )
+
         column_numeric_daily_monitoring_checks_spec = cls(
             custom_checks=custom_checks,
-            daily_negative_count=daily_negative_count,
-            daily_negative_percent=daily_negative_percent,
-            daily_non_negative_count=daily_non_negative_count,
-            daily_non_negative_percent=daily_non_negative_percent,
-            daily_expected_numbers_in_use_count=daily_expected_numbers_in_use_count,
-            daily_number_value_in_set_percent=daily_number_value_in_set_percent,
-            daily_values_in_range_numeric_percent=daily_values_in_range_numeric_percent,
-            daily_values_in_range_integers_percent=daily_values_in_range_integers_percent,
-            daily_value_below_min_value_count=daily_value_below_min_value_count,
-            daily_value_below_min_value_percent=daily_value_below_min_value_percent,
-            daily_value_above_max_value_count=daily_value_above_max_value_count,
-            daily_value_above_max_value_percent=daily_value_above_max_value_percent,
-            daily_max_in_range=daily_max_in_range,
+            daily_number_below_min_value=daily_number_below_min_value,
+            daily_number_above_max_value=daily_number_above_max_value,
+            daily_negative_values=daily_negative_values,
+            daily_negative_values_percent=daily_negative_values_percent,
+            daily_number_below_min_value_percent=daily_number_below_min_value_percent,
+            daily_number_above_max_value_percent=daily_number_above_max_value_percent,
+            daily_number_in_range_percent=daily_number_in_range_percent,
+            daily_integer_in_range_percent=daily_integer_in_range_percent,
             daily_min_in_range=daily_min_in_range,
+            daily_max_in_range=daily_max_in_range,
+            daily_sum_in_range=daily_sum_in_range,
             daily_mean_in_range=daily_mean_in_range,
-            daily_percentile_in_range=daily_percentile_in_range,
             daily_median_in_range=daily_median_in_range,
+            daily_percentile_in_range=daily_percentile_in_range,
             daily_percentile_10_in_range=daily_percentile_10_in_range,
             daily_percentile_25_in_range=daily_percentile_25_in_range,
             daily_percentile_75_in_range=daily_percentile_75_in_range,
@@ -918,11 +819,12 @@ class ColumnNumericDailyMonitoringChecksSpec:
             daily_population_stddev_in_range=daily_population_stddev_in_range,
             daily_sample_variance_in_range=daily_sample_variance_in_range,
             daily_population_variance_in_range=daily_population_variance_in_range,
-            daily_sum_in_range=daily_sum_in_range,
-            daily_invalid_latitude_count=daily_invalid_latitude_count,
+            daily_invalid_latitude=daily_invalid_latitude,
             daily_valid_latitude_percent=daily_valid_latitude_percent,
-            daily_invalid_longitude_count=daily_invalid_longitude_count,
+            daily_invalid_longitude=daily_invalid_longitude,
             daily_valid_longitude_percent=daily_valid_longitude_percent,
+            daily_non_negative_values=daily_non_negative_values,
+            daily_non_negative_values_percent=daily_non_negative_values_percent,
         )
 
         column_numeric_daily_monitoring_checks_spec.additional_properties = d

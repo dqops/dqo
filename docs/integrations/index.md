@@ -1,4 +1,4 @@
-# DQOps integration
+# DQOps integrations
 DQOps integrates with multiple tools, using both the REST API interface and by using file formats based on open standards.
 
 - **[Airflow](./airflow/index.md)**
@@ -13,7 +13,14 @@ DQOps integrates with multiple tools, using both the REST API interface and by u
     The [DQOps Python package](https://pypi.org/project/dqops/) is available on PyPI.
 
 
-- **[Looker Studio](./looker-studio/creating-custom-dashboards.md)**
+- **[Dbt](./dbt/index.md)**
+
+    DQOps provides examples of running data quality checks before and after Dbt asks using Apache Airflow.
+
+    Data quality checks can be executed on source tables before loading the data and after the data was loaded.
+
+
+- **[Looker Studio](./looker-studio/creating-custom-data-quality-dashboards.md)**
     
     Data Quality Dashboards are a fundamental way to communicate the current state of data quality
     to stakeholders. 
@@ -26,7 +33,7 @@ DQOps integrates with multiple tools, using both the REST API interface and by u
 
 - **[Slack](./slack/configuring-slack-notifications.md)**
 
-    Notifications of new or updated [data quality incidents](../working-with-dqo/incidents-and-notifications/incidents.md)
+    Notifications of new or updated [data quality incidents](../working-with-dqo/managing-data-quality-incidents-with-dqops.md)
     can be published to a Slack channel.
     DQOps also supports incident workflows, sending different messages to different channels.
     The notifications of new incidents can be sent to a data quality team, the data quality team evaluates the incidents
@@ -36,7 +43,7 @@ DQOps integrates with multiple tools, using both the REST API interface and by u
 
 - **[Visual Studio Code](./visual-studio-code/index.md)**
   
-    [YAML files](../dqo-concepts/checks/configuring-checks.md) used by DQOps to store the configuration of
+    [YAML files](../dqo-concepts/configuring-data-quality-checks-and-rules.md) used by DQOps to store the configuration of
     data sources and data quality checks are fully documented using a published YAML/JSON schema.
 
     By installing a Visual Studio Code extension for editing YAML files, code completion, inline help about
@@ -45,7 +52,7 @@ DQOps integrates with multiple tools, using both the REST API interface and by u
   
 - **[Webhooks](./webhooks/index.md)**
 
-    Any changes to the [data quality incidents](../working-with-dqo/incidents-and-notifications/incidents.md)
+    Any changes to the [data quality incidents](../working-with-dqo/managing-data-quality-incidents-with-dqops.md)
     can be also published by posting the [IncidentNotificationMessage](../reference/yaml/IncidentNotificationMessage.md)
     message to a third-party listener.
 

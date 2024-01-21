@@ -1,13 +1,17 @@
-# Notifications overview
+# Overview of notifications with webhooks
+This guide describes how to integrate DQOps with external ticketing systems or send data quality incident notifications, for example to Microsoft Teams.
+
+## Overview
 
 DQOps can send alert notifications whenever a new incident is created or modified.
 
-An incident aggregates data quality issues based on different categories such as a table, data quality, dimension, check category, or check type. Thanks to the issue grouping the number of notifications is reduced. 
-You can read [more about incidents and their configuration here](../../working-with-dqo/incidents-and-notifications/incidents.md).
+An incident aggregates data quality issues based on different categories such as a table, data quality, dimension, check category,
+or check type. Thanks to the issue grouping the number of notifications is reduced. 
+You can read [more about incidents and their configuration here](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md).
 
-Notifications allow you to monitor data in real-time and receive alerts when active data quality checks exceed alerting thresholds..
+Notifications allow you to monitor data in real-time and receive alerts when active data quality checks exceed alerting thresholds.
 
-A notification contains the most important information about an incident you may want to discover in order to resolve an issue.
+A notification contains the most important information about an incident you may want to review in order to resolve an issue.
 
 
 ## Configure notifications
@@ -102,8 +106,8 @@ Payload's text field is built with the use of the following data:
 - **Full table name**: concatenated field from schema and table name.
 - **Status**: One of four resolution statuses (open, acknowledged, resolved and muted).
 - **Datetimes of the incident**: UTC date times with offset specific to local user setup. Values of JSON fields firstSeen and lastSeen.
-- **Data quality dimension**: Name of the dimension. [Read more](../../dqo-concepts/data-quality-dimensions/data-quality-dimensions.md)
-- **Highest severity level**: A severity level from the data quality rule. [Read more](../../dqo-concepts/checks/index.md)
+- **Data quality dimension**: Name of the dimension. [Read more](../../dqo-concepts/data-quality-dimensions.md)
+- **Highest severity level**: A severity level from the data quality rule. [Read more](../../dqo-concepts/definition-of-data-quality-checks/index.md)
 - **Total data quality issues**: A value from failedChecksCount JSON field.
 - **Links**: Quick access links.
  
@@ -142,7 +146,7 @@ Below is the example of raw text message in the Markdown language which you can 
 > <http://localhost:8888/incidents/your_connection_name/2023/9/1 | **View in DQOps**>
 ```
 
-## External system linking
+## Linking incidents to external ticketing systems
 
 A notification has a special field called **issue URL**, which allows user to add an URL from an external ticketing system. 
 The issue URL can be added at any time. 
@@ -150,4 +154,6 @@ Adding an Issue URL to an incident provides easy access to the issue in the tick
 
 ## Next steps
 
-Now that you have learned about notifications, [set up Slack integration](../slack/configuring-slack-notifications.md) to receive them directly in Slack.
+- Now that you have learned about notifications, [set up Slack integration](../slack/configuring-slack-notifications.md) to receive them directly in Slack.
+- Learn how the [data quality incident workflow](../../dqo-concepts/grouping-data-quality-issues-to-incidents.md) is managed
+  by DQOps by grouping similar data quality issues into data quality incidents.

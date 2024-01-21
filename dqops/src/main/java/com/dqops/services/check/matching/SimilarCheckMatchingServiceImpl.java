@@ -17,28 +17,26 @@ package com.dqops.services.check.matching;
 
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.checks.column.monitoring.ColumnDailyMonitoringCheckCategoriesSpec;
+import com.dqops.checks.column.monitoring.ColumnMonitoringChecksRootSpec;
+import com.dqops.checks.column.monitoring.ColumnMonthlyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.column.partitioned.ColumnDailyPartitionedCheckCategoriesSpec;
 import com.dqops.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
 import com.dqops.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
-import com.dqops.checks.column.monitoring.ColumnDailyMonitoringCheckCategoriesSpec;
-import com.dqops.checks.column.monitoring.ColumnMonthlyMonitoringCheckCategoriesSpec;
-import com.dqops.checks.column.monitoring.ColumnMonitoringChecksRootSpec;
-import com.dqops.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
-import com.dqops.checks.table.partitioned.TableMonthlyPartitionedCheckCategoriesSpec;
-import com.dqops.checks.table.profiling.TableComparisonProfilingChecksSpec;
-import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.monitoring.TableDailyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.table.monitoring.TableMonthlyMonitoringCheckCategoriesSpec;
+import com.dqops.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
+import com.dqops.checks.table.partitioned.TableMonthlyPartitionedCheckCategoriesSpec;
+import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.connectors.ProviderType;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.sources.*;
-import com.dqops.metadata.userhome.UserHomeImpl;
-import com.dqops.metadata.sources.ColumnSpec;
-import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
+import com.dqops.metadata.userhome.UserHomeImpl;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -50,19 +48,24 @@ import java.util.Objects;
  */
 @Component
 public class SimilarCheckMatchingServiceImpl implements SimilarCheckMatchingService {
-    private SpecToModelCheckMappingService specToModelCheckMappingService;
-    private DqoHomeContextFactory dqoHomeContextFactory;
+    private final SpecToModelCheckMappingService specToModelCheckMappingService;
+    private final DqoHomeContextFactory dqoHomeContextFactory;
+    private final SimilarCheckGroupingKeyFactory similarCheckGroupingKeyFactory;
 
     /**
      * Creates a service given dependencies.
+     *
      * @param specToModelCheckMappingService Check specification to check model mapping service.
-     * @param dqoHomeContextFactory Returns the default DQOps home context.
+     * @param dqoHomeContextFactory          Returns the default DQOps home context.
+     * @param similarCheckGroupingKeyFactory Creates a key by which to separate checks into similar check groups.
      */
     @Autowired
     public SimilarCheckMatchingServiceImpl(SpecToModelCheckMappingService specToModelCheckMappingService,
-                                           DqoHomeContextFactory dqoHomeContextFactory) {
+                                           DqoHomeContextFactory dqoHomeContextFactory,
+                                           SimilarCheckGroupingKeyFactory similarCheckGroupingKeyFactory) {
         this.specToModelCheckMappingService = specToModelCheckMappingService;
         this.dqoHomeContextFactory = dqoHomeContextFactory;
+        this.similarCheckGroupingKeyFactory = similarCheckGroupingKeyFactory;
     }
 
     /**
@@ -132,7 +135,7 @@ public class SimilarCheckMatchingServiceImpl implements SimilarCheckMatchingServ
      */
     @Override
     public SimilarChecksContainer findSimilarTableChecks() {
-        UserHomeImpl userHome = new UserHomeImpl();
+        UserHomeImpl userHome = new UserHomeImpl(UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY);
         ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("<target_connection>");
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("<target_schema>", "<target_table>"));
         TableSpec tableSpec = createTableSpec(false);
@@ -146,27 +149,32 @@ public class SimilarCheckMatchingServiceImpl implements SimilarCheckMatchingServ
         ExecutionContext executionContext = new ExecutionContext(null, this.dqoHomeContextFactory.openLocalDqoHome());
 
         TableProfilingCheckCategoriesSpec profilingChecks = tableSpec.getProfilingChecks();
-        similarChecksContainer.appendAllChecks(this.specToModelCheckMappingService.createModel(profilingChecks,
-                checkSearchFilters, null, tableSpec, executionContext, ProviderType.bigquery, true),
+        similarChecksContainer.appendAllChecks(this.similarCheckGroupingKeyFactory,
+                this.specToModelCheckMappingService.createModel(profilingChecks,
+                        checkSearchFilters, null, tableSpec, executionContext, ProviderType.bigquery, true),
                 profilingChecks.getCheckTarget(), profilingChecks.getCheckType(), profilingChecks.getCheckTimeScale());
 
         TableDailyMonitoringCheckCategoriesSpec dailyMonitoring = Objects.requireNonNullElseGet(tableSpec.getMonitoringChecks().getDaily(), TableDailyMonitoringCheckCategoriesSpec::new);
-        similarChecksContainer.appendAllChecks(this.specToModelCheckMappingService.createModel(dailyMonitoring,
+        similarChecksContainer.appendAllChecks(this.similarCheckGroupingKeyFactory,
+                this.specToModelCheckMappingService.createModel(dailyMonitoring,
                         checkSearchFilters, null, tableSpec, executionContext, ProviderType.bigquery, true),
                 dailyMonitoring.getCheckTarget(), dailyMonitoring.getCheckType(), dailyMonitoring.getCheckTimeScale());
 
         TableMonthlyMonitoringCheckCategoriesSpec monthlyMonitoring = Objects.requireNonNullElseGet(tableSpec.getMonitoringChecks().getMonthly(), TableMonthlyMonitoringCheckCategoriesSpec::new);
-        similarChecksContainer.appendAllChecks(this.specToModelCheckMappingService.createModel(monthlyMonitoring,
+        similarChecksContainer.appendAllChecks(this.similarCheckGroupingKeyFactory,
+                this.specToModelCheckMappingService.createModel(monthlyMonitoring,
                         checkSearchFilters, null, tableSpec, executionContext, ProviderType.bigquery, true),
                 monthlyMonitoring.getCheckTarget(), monthlyMonitoring.getCheckType(), monthlyMonitoring.getCheckTimeScale());
 
         TableDailyPartitionedCheckCategoriesSpec dailyPartitioned = Objects.requireNonNullElseGet(tableSpec.getPartitionedChecks().getDaily(), TableDailyPartitionedCheckCategoriesSpec::new);
-        similarChecksContainer.appendAllChecks(this.specToModelCheckMappingService.createModel(dailyPartitioned,
+        similarChecksContainer.appendAllChecks(this.similarCheckGroupingKeyFactory,
+                this.specToModelCheckMappingService.createModel(dailyPartitioned,
                         checkSearchFilters, null, tableSpec, executionContext, ProviderType.bigquery, true),
                 dailyPartitioned.getCheckTarget(), dailyPartitioned.getCheckType(), dailyPartitioned.getCheckTimeScale());
 
         TableMonthlyPartitionedCheckCategoriesSpec monthlyPartitioned = Objects.requireNonNullElseGet(tableSpec.getPartitionedChecks().getMonthly(), TableMonthlyPartitionedCheckCategoriesSpec::new);
-        similarChecksContainer.appendAllChecks(this.specToModelCheckMappingService.createModel(monthlyPartitioned,
+        similarChecksContainer.appendAllChecks(this.similarCheckGroupingKeyFactory,
+                this.specToModelCheckMappingService.createModel(monthlyPartitioned,
                         checkSearchFilters, null, tableSpec, executionContext, ProviderType.bigquery, true),
                 monthlyPartitioned.getCheckTarget(), monthlyPartitioned.getCheckType(), monthlyPartitioned.getCheckTimeScale());
 
@@ -179,7 +187,7 @@ public class SimilarCheckMatchingServiceImpl implements SimilarCheckMatchingServ
      */
     @Override
     public SimilarChecksContainer findSimilarColumnChecks() {
-        UserHomeImpl userHome = new UserHomeImpl();
+        UserHomeImpl userHome = new UserHomeImpl(UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY);
         ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("<target_connection>");
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("<target_schema>", "<target_table>"));
         TableSpec tableSpec = createTableSpec(true);
@@ -195,29 +203,34 @@ public class SimilarCheckMatchingServiceImpl implements SimilarCheckMatchingServ
         ExecutionContext executionContext = new ExecutionContext(null, this.dqoHomeContextFactory.openLocalDqoHome());
 
         ColumnProfilingCheckCategoriesSpec profilingChecks = Objects.requireNonNullElseGet(columnSpec.getProfilingChecks(), ColumnProfilingCheckCategoriesSpec::new);
-        similarChecksContainer.appendAllChecks(this.specToModelCheckMappingService.createModel(profilingChecks,
+        similarChecksContainer.appendAllChecks(this.similarCheckGroupingKeyFactory,
+                this.specToModelCheckMappingService.createModel(profilingChecks,
                         checkSearchFilters, null, tableSpec, executionContext, ProviderType.bigquery, true),
                 profilingChecks.getCheckTarget(), profilingChecks.getCheckType(), profilingChecks.getCheckTimeScale());
 
         ColumnMonitoringChecksRootSpec monitoring = Objects.requireNonNullElseGet(columnSpec.getMonitoringChecks(), ColumnMonitoringChecksRootSpec::new);
         ColumnDailyMonitoringCheckCategoriesSpec dailyMonitoring = Objects.requireNonNullElseGet(monitoring.getDaily(), ColumnDailyMonitoringCheckCategoriesSpec::new);
-        similarChecksContainer.appendAllChecks(this.specToModelCheckMappingService.createModel(dailyMonitoring,
+        similarChecksContainer.appendAllChecks(this.similarCheckGroupingKeyFactory,
+                this.specToModelCheckMappingService.createModel(dailyMonitoring,
                         checkSearchFilters, null, tableSpec, executionContext, ProviderType.bigquery, true),
                 dailyMonitoring.getCheckTarget(), dailyMonitoring.getCheckType(), dailyMonitoring.getCheckTimeScale());
 
         ColumnMonthlyMonitoringCheckCategoriesSpec monthlyMonitoring = Objects.requireNonNullElseGet(monitoring.getMonthly(), ColumnMonthlyMonitoringCheckCategoriesSpec::new);
-        similarChecksContainer.appendAllChecks(this.specToModelCheckMappingService.createModel(monthlyMonitoring,
+        similarChecksContainer.appendAllChecks(this.similarCheckGroupingKeyFactory,
+                this.specToModelCheckMappingService.createModel(monthlyMonitoring,
                         checkSearchFilters, null, tableSpec, executionContext, ProviderType.bigquery, true),
                 monthlyMonitoring.getCheckTarget(), monthlyMonitoring.getCheckType(), monthlyMonitoring.getCheckTimeScale());
 
         ColumnPartitionedChecksRootSpec partitionedChecks = Objects.requireNonNullElseGet(columnSpec.getPartitionedChecks(), ColumnPartitionedChecksRootSpec::new);
         ColumnDailyPartitionedCheckCategoriesSpec dailyPartitioned = Objects.requireNonNullElseGet(partitionedChecks.getDaily(), ColumnDailyPartitionedCheckCategoriesSpec::new);
-        similarChecksContainer.appendAllChecks(this.specToModelCheckMappingService.createModel(dailyPartitioned,
+        similarChecksContainer.appendAllChecks(this.similarCheckGroupingKeyFactory,
+                this.specToModelCheckMappingService.createModel(dailyPartitioned,
                         checkSearchFilters, null, tableSpec, executionContext, ProviderType.bigquery, true),
                 dailyPartitioned.getCheckTarget(), dailyPartitioned.getCheckType(), dailyPartitioned.getCheckTimeScale());
 
         ColumnMonthlyPartitionedCheckCategoriesSpec monthlyPartitioned = Objects.requireNonNullElseGet(partitionedChecks.getMonthly(), ColumnMonthlyPartitionedCheckCategoriesSpec::new);
-        similarChecksContainer.appendAllChecks(this.specToModelCheckMappingService.createModel(monthlyPartitioned,
+        similarChecksContainer.appendAllChecks(this.similarCheckGroupingKeyFactory,
+                this.specToModelCheckMappingService.createModel(monthlyPartitioned,
                         checkSearchFilters, null, tableSpec, executionContext, ProviderType.bigquery, true),
                 dailyPartitioned.getCheckTarget(), monthlyPartitioned.getCheckType(), monthlyPartitioned.getCheckTimeScale());
 

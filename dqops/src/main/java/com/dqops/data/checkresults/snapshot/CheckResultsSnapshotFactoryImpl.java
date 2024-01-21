@@ -15,6 +15,7 @@
  */
 package com.dqops.data.checkresults.snapshot;
 
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.checkresults.factory.CheckResultsTableFactory;
 import com.dqops.data.storage.ParquetPartitionStorageService;
 import com.dqops.metadata.sources.PhysicalTableName;
@@ -46,12 +47,13 @@ public class CheckResultsSnapshotFactoryImpl implements CheckResultsSnapshotFact
      * Creates an empty snapshot that is connected to the check result storage service that will load requested months on demand.
      * @param connectionName Connection name.
      * @param physicalTableName Physical table name.
+     * @param userIdentity User identity that specifies the data domain.
      * @return Rule results snapshot connected to a storage service.
      */
     @Override
-    public CheckResultsSnapshot createSnapshot(String connectionName, PhysicalTableName physicalTableName) {
+    public CheckResultsSnapshot createSnapshot(String connectionName, PhysicalTableName physicalTableName, UserDomainIdentity userIdentity) {
         Table newRuleResults = this.checkResultsTableFactory.createEmptyCheckResultsTable("new_check_results");
-        return new CheckResultsSnapshot(connectionName, physicalTableName, this.storageService, newRuleResults);
+        return new CheckResultsSnapshot(userIdentity, connectionName, physicalTableName, this.storageService, newRuleResults);
     }
 
     /**
@@ -61,11 +63,12 @@ public class CheckResultsSnapshotFactoryImpl implements CheckResultsSnapshotFact
      * @param connectionName    Connection name.
      * @param physicalTableName Physical table name.
      * @param columnNames       Array of column names to load from parquet files. Other columns will not be loaded.
+     * @param userIdentity      User identity that specifies the data domain.
      * @return Rule result snapshot connected to a storage service.
      */
     @Override
-    public CheckResultsSnapshot createReadOnlySnapshot(String connectionName, PhysicalTableName physicalTableName, String[] columnNames) {
+    public CheckResultsSnapshot createReadOnlySnapshot(String connectionName, PhysicalTableName physicalTableName, String[] columnNames, UserDomainIdentity userIdentity) {
         Table templateRuleResults = this.checkResultsTableFactory.createEmptyCheckResultsTable("template_check_results");
-        return new CheckResultsSnapshot(connectionName, physicalTableName, this.storageService, columnNames, templateRuleResults);
+        return new CheckResultsSnapshot(userIdentity, connectionName, physicalTableName, this.storageService, columnNames, templateRuleResults);
     }
 }

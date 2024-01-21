@@ -183,6 +183,10 @@ public class DefaultProfilingTableObservabilityCheckSettingsSpec extends Abstrac
         if (this.schema != null && !this.schema.isDefault()) {
             this.getTableCheckCategories(targetTable).setSchema(this.schema.deepClone());
         }
+
+        if (this.getCustom() != null && !this.getCustom().isEmpty()) {
+            this.getTableCheckCategories(targetTable).setCustom(this.getCustom().deepClone());
+        }
     }
 
     /**

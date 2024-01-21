@@ -27,6 +27,8 @@ import picocli.CommandLine;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "sync", description = "Synchronize local data with DQOps Cloud", subcommands = {
+        CloudSyncEnableCliCommand.class,
+        CloudSyncDisableCliCommand.class,
         CloudSyncDataCliCommand.class,
         CloudSyncSourcesCliCommand.class,
         CloudSyncSensorsCliCommand.class,

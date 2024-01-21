@@ -55,7 +55,7 @@ import java.util.stream.Stream;
 @RestController
 @RequestMapping("/api/connections")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "Schemas", description = "Schema management")
+@Api(value = "Schemas", description = "Operations for listing imported schemas from monitored data sources. Also provides operations for activating and deactivating multiple checks at once.")
 public class SchemasController {
     private static final Logger LOG = LoggerFactory.getLogger(SchemasController.class);
     private final SchemaService schemaService;
@@ -88,7 +88,7 @@ public class SchemasController {
     public ResponseEntity<Flux<SchemaModel>> getSchemas(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -124,6 +124,7 @@ public class SchemasController {
      * @param checkName         (Optional) Filter on check name.
      * @param checkEnabled      (Optional) Filter on check enabled status.
      * @param checkConfigured   (Optional) Filter on check configured status.
+     * @param limit             The limit of results, the default value is 1000.
      * @return List of profiling check configurations on a requested schema.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/profiling/model", produces = "application/json")
@@ -158,8 +159,10 @@ public class SchemasController {
             @ApiParam(value = "Check enabled", required = false) @RequestParam(required = false)
             Optional<Boolean> checkEnabled,
             @ApiParam(value = "Check configured", required = false) @RequestParam(required = false)
-            Optional<Boolean> checkConfigured) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+            Optional<Boolean> checkConfigured,
+            @ApiParam(value = "Limit of results, the default value is 1000", required = false) @RequestParam(required = false)
+            Optional<Integer> limit) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         List<TableWrapper> tableWrappers = this.schemaService.getSchemaTables(userHome, connectionName, schemaName);
@@ -177,6 +180,7 @@ public class SchemasController {
                 checkName.orElse(null),
                 checkEnabled.orElse(null),
                 checkConfigured.orElse(null),
+                limit.orElse(1000),
                 principal
         );
 
@@ -196,6 +200,7 @@ public class SchemasController {
      * @param checkName         (Optional) Filter on check name.
      * @param checkEnabled      (Optional) Filter on check enabled status.
      * @param checkConfigured   (Optional) Filter on check configured status.
+     * @param limit             The limit of results, the default value is 1000.
      * @return UI friendly data quality monitoring check configuration list on a requested schema.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/monitoring/{timeScale}/model", produces = "application/json")
@@ -231,8 +236,10 @@ public class SchemasController {
             @ApiParam(value = "Check enabled", required = false) @RequestParam(required = false)
             Optional<Boolean> checkEnabled,
             @ApiParam(value = "Check configured", required = false) @RequestParam(required = false)
-            Optional<Boolean> checkConfigured) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+            Optional<Boolean> checkConfigured,
+            @ApiParam(value = "Limit of results, the default value is 1000", required = false) @RequestParam(required = false)
+            Optional<Integer> limit) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         List<TableWrapper> tableWrappers = this.schemaService.getSchemaTables(userHome, connectionName, schemaName);
@@ -250,6 +257,7 @@ public class SchemasController {
                 checkName.orElse(null),
                 checkEnabled.orElse(null),
                 checkConfigured.orElse(null),
+                limit.orElse(1000),
                 principal
         );
 
@@ -269,6 +277,7 @@ public class SchemasController {
      * @param checkName         (Optional) Filter on check name.
      * @param checkEnabled      (Optional) Filter on check enabled status.
      * @param checkConfigured   (Optional) Filter on check configured status.
+     * @param limit             The limit of results, the default value is 1000.
      * @return UI friendly data quality partitioned check configuration list on a requested schema.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/partitioned/{timeScale}/model", produces = "application/json")
@@ -304,8 +313,10 @@ public class SchemasController {
             @ApiParam(value = "Check enabled", required = false) @RequestParam(required = false)
             Optional<Boolean> checkEnabled,
             @ApiParam(value = "Check configured", required = false) @RequestParam(required = false)
-            Optional<Boolean> checkConfigured) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+            Optional<Boolean> checkConfigured,
+            @ApiParam(value = "Limit of results, the default value is 1000", required = false) @RequestParam(required = false)
+            Optional<Integer> limit) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         List<TableWrapper> tableWrappers = this.schemaService.getSchemaTables(userHome, connectionName, schemaName);
@@ -323,6 +334,7 @@ public class SchemasController {
                 checkName.orElse(null),
                 checkEnabled.orElse(null),
                 checkConfigured.orElse(null),
+                limit.orElse(1000),
                 principal
         );
 
@@ -358,13 +370,8 @@ public class SchemasController {
             @ApiParam(value = "Check target", required = false) @RequestParam(required = false) Optional<CheckTarget> checkTarget,
             @ApiParam(value = "Check category", required = false) @RequestParam(required = false) Optional<String> checkCategory,
             @ApiParam(value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
-
-        List<TableWrapper> tableWrappers = this.schemaService.getSchemaTables(userHome, connectionName, schemaName);
-        if (tableWrappers == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
 
         List<CheckTemplate> checkTemplates = this.schemaService.getCheckTemplates(
                 connectionName, schemaName, CheckType.profiling,
@@ -404,13 +411,8 @@ public class SchemasController {
             @ApiParam(value = "Check target", required = false) @RequestParam(required = false) Optional<CheckTarget> checkTarget,
             @ApiParam(value = "Check category", required = false) @RequestParam(required = false) Optional<String> checkCategory,
             @ApiParam(value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
-
-        List<TableWrapper> tableWrappers = this.schemaService.getSchemaTables(userHome, connectionName, schemaName);
-        if (tableWrappers == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
 
         List<CheckTemplate> checkTemplates = this.schemaService.getCheckTemplates(
                 connectionName, schemaName, CheckType.monitoring,
@@ -450,13 +452,8 @@ public class SchemasController {
             @ApiParam(value = "Check target", required = false) @RequestParam(required = false) Optional<CheckTarget> checkTarget,
             @ApiParam(value = "Check category", required = false) @RequestParam(required = false) Optional<String> checkCategory,
             @ApiParam(value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
-
-        List<TableWrapper> tableWrappers = this.schemaService.getSchemaTables(userHome, connectionName, schemaName);
-        if (tableWrappers == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
 
         List<CheckTemplate> checkTemplates = this.schemaService.getCheckTemplates(
                 connectionName, schemaName, CheckType.partitioned,

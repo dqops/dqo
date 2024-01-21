@@ -11,3 +11,4 @@ spec:
     help_text: Maximum accepted value for the percentage of difference between expected_value
       and actual_value returned by the sensor (inclusive).
     data_type: double
+    required: true

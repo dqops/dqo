@@ -7,14 +7,12 @@ import { IRootState } from '../../redux/reducers';
 import PageTabs from '../PageTabs';
 import { useHistory} from 'react-router-dom';
 import {
-  addFirstLevelTab,
   closeFirstLevelTab,
   setActiveFirstLevelTab
 } from '../../redux/actions/incidents.actions';
 import { TabOption } from '../PageTabs/tab';
 import ConfirmDialog from '../CustomTree/ConfirmDialog';
 import { useTree } from '../../contexts/treeContext';
-import { ROUTES } from '../../shared/routes';
 
 interface LayoutProps {
   children?: any;
@@ -51,29 +49,11 @@ const IncidentsLayout = ({ children }: LayoutProps) => {
   }, [pageTabs]);
 
   useEffect(() => {
-    if (activeTab && activeTab.length !== 0 && window.location.pathname !== '/incidents/' && window.location.pathname !== '/incidents') {
+    if (activeTab) {
+      dispatch(setActiveFirstLevelTab(activeTab));
       history.push(activeTab);
     }
   }, [activeTab]);
-
-  useEffect(() => {
-    if (window.location.pathname === '/incidents/' || window.location.pathname === '/incidents') {
-      const url = ROUTES.INCIDENT_CONNECTION('new-tab')
-      dispatch(addFirstLevelTab({
-        url,
-        value: '',
-        state: {
-          filters: {
-            openIncidents: true,
-            acknowledgedIncidents: true,
-            page: 1,
-            pageSize: 50
-          }
-        },
-        label: 'New Tab'
-      }))
-    }
-  }, [window.location]);
 
   return (
     <div

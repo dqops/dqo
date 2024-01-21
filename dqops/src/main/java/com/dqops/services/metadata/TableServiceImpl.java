@@ -129,7 +129,7 @@ public class TableServiceImpl implements TableService {
         checkSearchFilters.setCheckCategory(checkCategory);
         checkSearchFilters.setCheckName(checkName);
 
-        List<AllChecksModel> allChecksModels = this.allChecksModelFactory.fromCheckSearchFilters(checkSearchFilters, principal);
+        List<AllChecksModel> allChecksModels = this.allChecksModelFactory.findAllConfiguredAndPossibleChecks(checkSearchFilters, principal);
 
         CheckContainerTypeModel checkContainerTypeModel = new CheckContainerTypeModel(checkType, checkTimeScale);
 
@@ -142,7 +142,7 @@ public class TableServiceImpl implements TableService {
                 .flatMap(model -> model.getCategories().stream())
                 // For each category get check templates
                 .map(categoryModel -> {
-                    Map<String, CheckModel> checkNameToExampleCheck = new HashMap<>();
+                    Map<String, CheckModel> checkNameToExampleCheck = new LinkedHashMap<>();
                     for (CheckModel checkModel: categoryModel.getChecks()) {
                         if (!checkNameToExampleCheck.containsKey(checkModel.getCheckName())) {
                             checkNameToExampleCheck.put(checkModel.getCheckName(), checkModel);
@@ -169,6 +169,7 @@ public class TableServiceImpl implements TableService {
                                                                        String checkName,
                                                                        Boolean checkEnabled,
                                                                        Boolean checkConfigured,
+                                                                       int limit,
                                                                        DqoUserPrincipal principal) {
         CheckSearchFilters filters = new CheckSearchFilters();
         filters.setCheckType(checkContainerTypeModel.getCheckType());
@@ -183,7 +184,7 @@ public class TableServiceImpl implements TableService {
         filters.setEnabled(checkEnabled);
         filters.setCheckConfigured(checkConfigured);
 
-        return this.checkFlatConfigurationFactory.fromCheckSearchFilters(filters, principal);
+        return this.checkFlatConfigurationFactory.findAllCheckConfigurations(filters, principal, limit);
     }
 
     /**
@@ -199,7 +200,7 @@ public class TableServiceImpl implements TableService {
         List<PhysicalTableName> tableNameList = new LinkedList<>();
         tableNameList.add(tableName);
 
-        Map<String, Iterable<PhysicalTableName>> connectionToTableMapping = new HashMap<>();
+        Map<String, Iterable<PhysicalTableName>> connectionToTableMapping = new LinkedHashMap<>();
         connectionToTableMapping.put(connectionName, tableNameList);
         List<PushJobResult<DeleteStoredDataResult>> jobResultList = this.deleteTables(connectionToTableMapping, principal);
 
@@ -217,7 +218,7 @@ public class TableServiceImpl implements TableService {
     public List<PushJobResult<DeleteStoredDataResult>> deleteTables(
             Map<String, Iterable<PhysicalTableName>> connectionToTables,
             DqoUserPrincipal principal) {
-        UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         List<DeleteStoredDataQueueJobParameters> deleteStoredDataParameters = new ArrayList<>();

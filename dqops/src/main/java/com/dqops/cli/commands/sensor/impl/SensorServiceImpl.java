@@ -19,6 +19,8 @@ import com.dqops.cli.commands.CliOperationStatus;
 import com.dqops.cli.commands.SensorFileExtension;
 import com.dqops.cli.edit.EditorLaunchService;
 import com.dqops.connectors.ProviderType;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.metadata.basespecs.InstanceStatus;
 import com.dqops.metadata.dqohome.DqoHome;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContext;
@@ -39,19 +41,24 @@ public class SensorServiceImpl implements SensorService {
 	private final UserHomeContextFactory userHomeContextFactory;
 	private final DqoHomeContextFactory dqoHomeContextFactory;
 	private final EditorLaunchService editorLaunchService;
+	private final DqoUserPrincipalProvider dqoUserPrincipalProvider;
 
-	public SensorServiceImpl(UserHomeContextFactory userHomeContextFactory, DqoHomeContextFactory dqoHomeContextFactory,
-							 EditorLaunchService editorLaunchService) {
+	public SensorServiceImpl(UserHomeContextFactory userHomeContextFactory,
+							 DqoHomeContextFactory dqoHomeContextFactory,
+							 EditorLaunchService editorLaunchService,
+							 DqoUserPrincipalProvider dqoUserPrincipalProvider) {
 		this.userHomeContextFactory = userHomeContextFactory;
 		this.dqoHomeContextFactory = dqoHomeContextFactory;
 		this.editorLaunchService = editorLaunchService;
+		this.dqoUserPrincipalProvider = dqoUserPrincipalProvider;
 	}
 
 	@Override
 	public CliOperationStatus editTemplate(String sensorName, ProviderType provider, SensorFileExtension ext) {
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
-		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+		DqoUserPrincipal userPrincipalForAdministrator = this.dqoUserPrincipalProvider.getLocalUserPrincipal();
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipalForAdministrator.getDataDomainIdentity());
 		UserHome userHome = userHomeContext.getUserHome();
 
 		DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();

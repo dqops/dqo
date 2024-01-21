@@ -19,19 +19,22 @@ import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.checks.column.monitoring.acceptedvalues.ColumnAcceptedValuesMonthlyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.accuracy.ColumnAccuracyMonthlyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.anomaly.ColumnAnomalyMonthlyMonitoringChecksSpec;
+import com.dqops.checks.column.monitoring.blanks.ColumnBlanksMonthlyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.bool.ColumnBoolMonthlyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.comparison.ColumnComparisonMonthlyMonitoringChecksSpecMap;
+import com.dqops.checks.column.monitoring.customsql.ColumnCustomSqlMonthlyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.datatype.ColumnDatatypeMonthlyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.datetime.ColumnDatetimeMonthlyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.integrity.ColumnIntegrityMonthlyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.nulls.ColumnNullsMonthlyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.numeric.ColumnNumericMonthlyMonitoringChecksSpec;
+import com.dqops.checks.column.monitoring.patterns.ColumnPatternsMonthlyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.pii.ColumnPiiMonthlyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.schema.ColumnSchemaMonthlyMonitoringChecksSpec;
-import com.dqops.checks.column.monitoring.sql.ColumnSqlMonthlyMonitoringChecksSpec;
-import com.dqops.checks.column.monitoring.strings.ColumnStringsMonthlyMonitoringChecksSpec;
+import com.dqops.checks.column.monitoring.text.ColumnTextMonthlyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.uniqueness.ColumnUniquenessMonthlyMonitoringChecksSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -40,7 +43,7 @@ import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.metadata.timeseries.TimeSeriesMode;
-import com.dqops.utils.docs.SampleValueFactory;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -62,12 +65,15 @@ public class ColumnMonthlyMonitoringCheckCategoriesSpec extends AbstractRootChec
     public static final ChildHierarchyNodeFieldMapImpl<ColumnMonthlyMonitoringCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
             put("nulls", o -> o.nulls);
+            put("blanks", o -> o.blanks);
             put("numeric", o -> o.numeric);
-            put("strings", o -> o.strings);
+            put("text", o -> o.text);
+            put("patterns", o -> o.patterns);
             put("uniqueness", o -> o.uniqueness);
+            put("accepted_values", o -> o.acceptedValues);
             put("datetime", o -> o.datetime);
             put("pii", o -> o.pii);
-            put("sql", o -> o.sql);
+            put("custom_sql", o -> o.customSql);
             put("bool", o -> o.bool);
             put("integrity", o -> o.integrity);
             put("accuracy", o -> o.accuracy);
@@ -83,35 +89,50 @@ public class ColumnMonthlyMonitoringCheckCategoriesSpec extends AbstractRootChec
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNullsMonthlyMonitoringChecksSpec nulls;
 
-    @JsonPropertyDescription("Monthly monitoring checks of numeric in the column")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNumericMonthlyMonitoringChecksSpec numeric;
-
-    @JsonPropertyDescription("Monthly monitoring checks of strings in the column")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsMonthlyMonitoringChecksSpec strings;
-
     @JsonPropertyDescription("Monthly monitoring checks of uniqueness in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnUniquenessMonthlyMonitoringChecksSpec uniqueness;
 
-    @JsonPropertyDescription("Monthly monitoring checks of datetime in the column")
+    @JsonPropertyDescription("Configuration of accepted values checks on a column level")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnDatetimeMonthlyMonitoringChecksSpec datetime;
+    private ColumnAcceptedValuesMonthlyMonitoringChecksSpec acceptedValues;
+
+    @JsonPropertyDescription("Monthly monitoring checks of text values in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnTextMonthlyMonitoringChecksSpec text;
+
+    @JsonPropertyDescription("Configuration of column level checks that detect blank and whitespace values")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnBlanksMonthlyMonitoringChecksSpec blanks;
+
+    @JsonPropertyDescription("Monthly monitoring checks of pattern matching on a column level")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnPatternsMonthlyMonitoringChecksSpec patterns;
 
     @JsonPropertyDescription("Monthly monitoring checks of Personal Identifiable Information (PII) in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnPiiMonthlyMonitoringChecksSpec pii;
 
-    @JsonPropertyDescription("Monthly monitoring checks of custom SQL checks in the column")
+    @JsonPropertyDescription("Monthly monitoring checks of numeric values in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnSqlMonthlyMonitoringChecksSpec sql;
+    private ColumnNumericMonthlyMonitoringChecksSpec numeric;
+
+    @JsonPropertyDescription("Monthly monitoring checks of anomalies in numeric columns")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnAnomalyMonthlyMonitoringChecksSpec anomaly;
+
+    @JsonPropertyDescription("Monthly monitoring checks of datetime in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnDatetimeMonthlyMonitoringChecksSpec datetime;
 
     @JsonPropertyDescription("Monthly monitoring checks of booleans in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -128,15 +149,15 @@ public class ColumnMonthlyMonitoringCheckCategoriesSpec extends AbstractRootChec
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnAccuracyMonthlyMonitoringChecksSpec accuracy;
 
+    @JsonPropertyDescription("Monthly monitoring checks of custom SQL checks in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnCustomSqlMonthlyMonitoringChecksSpec customSql;
+
     @JsonPropertyDescription("Monthly monitoring checks of datatype in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnDatatypeMonthlyMonitoringChecksSpec datatype;
-
-    @JsonPropertyDescription("Monthly monitoring checks of anomaly in the column")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnAnomalyMonthlyMonitoringChecksSpec anomaly;
 
     @JsonPropertyDescription("Monthly monitoring column schema checks")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -162,9 +183,117 @@ public class ColumnMonthlyMonitoringCheckCategoriesSpec extends AbstractRootChec
      * @param nulls New nulls checks.
      */
     public void setNulls(ColumnNullsMonthlyMonitoringChecksSpec nulls) {
-		this.setDirtyIf(!Objects.equals(this.nulls, nulls));
+        this.setDirtyIf(!Objects.equals(this.nulls, nulls));
         this.nulls = nulls;
-		this.propagateHierarchyIdToField(nulls, "nulls");
+        this.propagateHierarchyIdToField(nulls, "nulls");
+    }
+
+    /**
+     * Returns the container of monitoring for standard data quality checks.
+     * @return Container of row standard data quality monitoring.
+     */
+    public ColumnUniquenessMonthlyMonitoringChecksSpec getUniqueness() {
+        return uniqueness;
+    }
+
+    /**
+     * Sets the container of uniqueness data quality checks (monitoring).
+     * @param uniqueness New uniqueness checks.
+     */
+    public void setUniqueness(ColumnUniquenessMonthlyMonitoringChecksSpec uniqueness) {
+        this.setDirtyIf(!Objects.equals(this.uniqueness, uniqueness));
+        this.uniqueness = uniqueness;
+        this.propagateHierarchyIdToField(uniqueness, "uniqueness");
+    }
+
+    /**
+     * Returns the accepted values check configuration on a column level.
+     * @return Accepted values check configuration.
+     */
+    public ColumnAcceptedValuesMonthlyMonitoringChecksSpec getAcceptedValues() {
+        return acceptedValues;
+    }
+
+    /**
+     * Sets the accepted values check configuration on a column level.
+     * @param acceptedValues New accepted values checks configuration.
+     */
+    public void setAcceptedValues(ColumnAcceptedValuesMonthlyMonitoringChecksSpec acceptedValues) {
+        this.setDirtyIf(!Objects.equals(this.acceptedValues, acceptedValues));
+        this.acceptedValues = acceptedValues;
+        this.propagateHierarchyIdToField(acceptedValues, "accepted_values");
+    }
+
+    /**
+     * Returns the container of monitoring for standard data quality checks.
+     * @return Container of row standard data quality monitoring.
+     */
+    public ColumnTextMonthlyMonitoringChecksSpec getText() {
+        return text;
+    }
+
+    /**
+     * Sets the container of strings data quality checks (monitoring).
+     * @param text New strings checks.
+     */
+    public void setText(ColumnTextMonthlyMonitoringChecksSpec text) {
+        this.setDirtyIf(!Objects.equals(this.text, text));
+        this.text = text;
+        this.propagateHierarchyIdToField(text, "text");
+    }
+
+    /**
+     * Returns the blanks check configuration on a column level.
+     * @return Blanks check configuration.
+     */
+    public ColumnBlanksMonthlyMonitoringChecksSpec getBlanks() {
+        return blanks;
+    }
+
+    /**
+     * Sets the blanks check configuration on a column level.
+     * @param blanks New blanks checks configuration.
+     */
+    public void setBlanks(ColumnBlanksMonthlyMonitoringChecksSpec blanks) {
+        this.setDirtyIf(!Objects.equals(this.blanks, blanks));
+        this.blanks = blanks;
+        this.propagateHierarchyIdToField(blanks, "blanks");
+    }
+
+    /**
+     * Returns the pattern match check configuration on a column level.
+     * @return Pattern match check configuration.
+     */
+    public ColumnPatternsMonthlyMonitoringChecksSpec getPatterns() {
+        return patterns;
+    }
+
+    /**
+     * Sets the pattern match check configuration on a column level.
+     * @param patterns New pattern match checks configuration.
+     */
+    public void setPatterns(ColumnPatternsMonthlyMonitoringChecksSpec patterns) {
+        this.setDirtyIf(!Objects.equals(this.patterns, patterns));
+        this.patterns = patterns;
+        this.propagateHierarchyIdToField(patterns, "patterns");
+    }
+
+    /**
+     * Returns the container of monitoring for standard data quality checks.
+     * @return Container of row standard data quality monitoring.
+     */
+    public ColumnPiiMonthlyMonitoringChecksSpec getPii() {
+        return pii;
+    }
+
+    /**
+     * Sets the container of Personal Identifiable Information (PII) data quality checks (monitoring).
+     * @param pii New Personal Identifiable Information (PII) checks.
+     */
+    public void setPii(ColumnPiiMonthlyMonitoringChecksSpec pii) {
+        this.setDirtyIf(!Objects.equals(this.pii, pii));
+        this.pii = pii;
+        this.propagateHierarchyIdToField(pii, "pii");
     }
 
     /**
@@ -187,38 +316,20 @@ public class ColumnMonthlyMonitoringCheckCategoriesSpec extends AbstractRootChec
 
     /**
      * Returns the container of monitoring for standard data quality checks.
-     * @return Container of row standard data quality monitoring.
+     * @return Container of anomaly data quality monitoring.
      */
-    public ColumnStringsMonthlyMonitoringChecksSpec getStrings() {
-        return strings;
+    public ColumnAnomalyMonthlyMonitoringChecksSpec getAnomaly() {
+        return anomaly;
     }
 
     /**
-     * Sets the container of strings data quality checks (monitoring).
-     * @param strings New strings checks.
+     * Sets the container of anomaly data quality checks (monitoring).
+     * @param anomaly New anomaly checks.
      */
-    public void setStrings(ColumnStringsMonthlyMonitoringChecksSpec strings) {
-        this.setDirtyIf(!Objects.equals(this.strings, strings));
-        this.strings = strings;
-        this.propagateHierarchyIdToField(strings, "strings");
-    }
-
-    /**
-     * Returns the container of monitoring for standard data quality checks.
-     * @return Container of row standard data quality monitoring.
-     */
-    public ColumnUniquenessMonthlyMonitoringChecksSpec getUniqueness() {
-        return uniqueness;
-    }
-
-    /**
-     * Sets the container of uniqueness data quality checks (monitoring).
-     * @param uniqueness New uniqueness checks.
-     */
-    public void setUniqueness(ColumnUniquenessMonthlyMonitoringChecksSpec uniqueness) {
-        this.setDirtyIf(!Objects.equals(this.uniqueness, uniqueness));
-        this.uniqueness = uniqueness;
-        this.propagateHierarchyIdToField(uniqueness, "uniqueness");
+    public void setAnomaly(ColumnAnomalyMonthlyMonitoringChecksSpec anomaly) {
+        this.setDirtyIf(!Objects.equals(this.anomaly, anomaly));
+        this.anomaly = anomaly;
+        this.propagateHierarchyIdToField(anomaly, "anomaly");
     }
 
     /**
@@ -237,42 +348,6 @@ public class ColumnMonthlyMonitoringCheckCategoriesSpec extends AbstractRootChec
         this.setDirtyIf(!Objects.equals(this.datetime, datetime));
         this.datetime = datetime;
         this.propagateHierarchyIdToField(datetime, "datetime");
-    }
-
-    /**
-     * Returns the container of monitoring for standard data quality checks.
-     * @return Container of row standard data quality monitoring.
-     */
-    public ColumnPiiMonthlyMonitoringChecksSpec getPii() {
-        return pii;
-    }
-
-    /**
-     * Sets the container of Personal Identifiable Information (PII) data quality checks (monitoring).
-     * @param pii New Personal Identifiable Information (PII) checks.
-     */
-    public void setPii(ColumnPiiMonthlyMonitoringChecksSpec pii) {
-        this.setDirtyIf(!Objects.equals(this.pii, pii));
-        this.pii = pii;
-        this.propagateHierarchyIdToField(pii, "pii");
-    }
-
-    /**
-     * Returns a container of custom SQL checks.
-     * @return Custom SQL checks.
-     */
-    public ColumnSqlMonthlyMonitoringChecksSpec getSql() {
-        return sql;
-    }
-
-    /**
-     * Sets a reference to a container with custom SQL checks.
-     * @param sql Custom SQL checks.
-     */
-    public void setSql(ColumnSqlMonthlyMonitoringChecksSpec sql) {
-        this.setDirtyIf(!Objects.equals(this.sql, sql));
-        this.sql = sql;
-        this.propagateHierarchyIdToField(sql, "sql");
     }
 
     /**
@@ -330,6 +405,24 @@ public class ColumnMonthlyMonitoringCheckCategoriesSpec extends AbstractRootChec
     }
 
     /**
+     * Returns the container of custom SQL checks that use custom SQL expressions in checks.
+     * @return Custom SQL checks.
+     */
+    public ColumnCustomSqlMonthlyMonitoringChecksSpec getCustomSql() {
+        return customSql;
+    }
+
+    /**
+     * Sets a reference to a container of custom SQL checks.
+     * @param customSql Custom SQL checks.
+     */
+    public void setCustomSql(ColumnCustomSqlMonthlyMonitoringChecksSpec customSql) {
+        this.setDirtyIf(!Objects.equals(this.customSql, customSql));
+        this.customSql = customSql;
+        this.propagateHierarchyIdToField(customSql, "custom_sql");
+    }
+
+    /**
      * Returns the container of monitoring for standard data quality checks.
      * @return Container of row standard data quality monitoring.
      */
@@ -348,25 +441,7 @@ public class ColumnMonthlyMonitoringCheckCategoriesSpec extends AbstractRootChec
     }
 
     /**
-     * Returns the container of monitoring for standard data quality checks.
-     * @return Container of anomaly data quality monitoring checks.
-     */
-    public ColumnAnomalyMonthlyMonitoringChecksSpec getAnomaly() {
-        return anomaly;
-    }
-
-    /**
-     * Sets the container of anomaly data quality checks (monitoring).
-     * @param anomaly New anomaly checks.
-     */
-    public void setAnomaly(ColumnAnomalyMonthlyMonitoringChecksSpec anomaly) {
-        this.setDirtyIf(!Objects.equals(this.anomaly, anomaly));
-        this.anomaly = anomaly;
-        this.propagateHierarchyIdToField(anomaly, "anomaly");
-    }
-
-    /**
-     * Returns the container of monthly monitoring column schema checks.
+     * Returns the container of daily monitoring column schema checks.
      * @return Container of column schema checks.
      */
     public ColumnSchemaMonthlyMonitoringChecksSpec getSchema() {
@@ -374,8 +449,8 @@ public class ColumnMonthlyMonitoringCheckCategoriesSpec extends AbstractRootChec
     }
 
     /**
-     * Sets a new container of column schema checks (monthly).
-     * @param schema Container of monthly monitoring column schema checks.
+     * Sets the container of daily monitoring schema checks.
+     * @param schema Container of schema checks.
      */
     public void setSchema(ColumnSchemaMonthlyMonitoringChecksSpec schema) {
         this.setDirtyIf(!Objects.equals(this.schema, schema));
@@ -402,6 +477,7 @@ public class ColumnMonthlyMonitoringCheckCategoriesSpec extends AbstractRootChec
         this.propagateHierarchyIdToField(comparisons, "comparisons");
     }
 
+    
     /**
      * Returns the child map on the spec class with all fields.
      *

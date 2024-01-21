@@ -18,7 +18,7 @@ package com.dqops.cli.commands.settings.editor;
 import com.dqops.cli.commands.BaseCommand;
 import com.dqops.cli.commands.CliOperationStatus;
 import com.dqops.cli.commands.ICommand;
-import com.dqops.cli.commands.settings.impl.SettingsService;
+import com.dqops.cli.commands.settings.impl.SettingsCliService;
 import com.dqops.cli.terminal.TerminalReader;
 import com.dqops.cli.terminal.TerminalWriter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ import picocli.CommandLine;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "show", header = "Show editor settings", description = "Display the current editor settings.")
 public class SettingsEditorShowCliCommand extends BaseCommand implements ICommand {
-	private SettingsService settingsService;
+	private SettingsCliService settingsCliService;
 	private TerminalReader terminalReader;
 	private TerminalWriter terminalWriter;
 
@@ -42,10 +42,10 @@ public class SettingsEditorShowCliCommand extends BaseCommand implements IComman
 	}
 
 	@Autowired
-	public SettingsEditorShowCliCommand(SettingsService settingsService,
-										  TerminalReader terminalReader,
-										  TerminalWriter terminalWriter) {
-		this.settingsService = settingsService;
+	public SettingsEditorShowCliCommand(SettingsCliService settingsCliService,
+                                        TerminalReader terminalReader,
+                                        TerminalWriter terminalWriter) {
+		this.settingsCliService = settingsCliService;
 		this.terminalReader = terminalReader;
 		this.terminalWriter = terminalWriter;
 	}
@@ -57,7 +57,7 @@ public class SettingsEditorShowCliCommand extends BaseCommand implements IComman
 	 */
 	@Override
 	public Integer call() throws Exception {
-		CliOperationStatus cliOperationStatus = this.settingsService.showSettingsEditor();
+		CliOperationStatus cliOperationStatus = this.settingsCliService.showSettingsEditor();
 		this.terminalWriter.writeLine(cliOperationStatus.getMessage());
 		return cliOperationStatus.isSuccess() ? 0 : -1;
 	}

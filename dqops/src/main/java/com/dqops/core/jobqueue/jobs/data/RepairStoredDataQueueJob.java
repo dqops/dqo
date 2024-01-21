@@ -21,6 +21,7 @@ import com.dqops.core.jobqueue.concurrency.JobConcurrencyConstraint;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyTarget;
 import com.dqops.core.jobqueue.monitoring.DqoJobEntryParametersModel;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.checkresults.snapshot.CheckResultsSnapshot;
 import com.dqops.data.errors.snapshot.ErrorsSnapshot;
 import com.dqops.data.readouts.snapshot.SensorReadoutsSnapshot;
@@ -82,19 +83,20 @@ public class RepairStoredDataQueueJob extends DqoQueueJob<RepairStoredDataQueueJ
         this.getPrincipal().throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
 
         RepairStoredDataQueueJobResult result = new RepairStoredDataQueueJobResult();
+        UserDomainIdentity userIdentity = this.getPrincipal().getDataDomainIdentity();
 
         if (this.repairParameters.isRepairErrors()) {
             // Load and ignore results to force automatic repair of corrupted data.
-            this.loadAndFixMonthlyPartitions(ErrorsSnapshot.createErrorsStorageSettings());
+            this.loadAndFixMonthlyPartitions(ErrorsSnapshot.createErrorsStorageSettings(), userIdentity);
         }
         if (this.repairParameters.isRepairStatistics()) {
-            this.loadAndFixMonthlyPartitions(StatisticsSnapshot.createStatisticsStorageSettings());
+            this.loadAndFixMonthlyPartitions(StatisticsSnapshot.createStatisticsStorageSettings(), userIdentity);
         }
         if (this.repairParameters.isRepairCheckResults()) {
-            this.loadAndFixMonthlyPartitions(CheckResultsSnapshot.createCheckResultsStorageSettings());
+            this.loadAndFixMonthlyPartitions(CheckResultsSnapshot.createCheckResultsStorageSettings(), userIdentity);
         }
         if (this.repairParameters.isRepairSensorReadouts()) {
-            this.loadAndFixMonthlyPartitions(SensorReadoutsSnapshot.createSensorReadoutsStorageSettings());
+            this.loadAndFixMonthlyPartitions(SensorReadoutsSnapshot.createSensorReadoutsStorageSettings(), userIdentity);
         }
 
         return result;
@@ -103,37 +105,41 @@ public class RepairStoredDataQueueJob extends DqoQueueJob<RepairStoredDataQueueJ
     /**
      * Load all partitions fitting the <code>repairParameters</code> for given storage settings.
      * @param fileStorageSettings File storage settings.
+     * @param userIdentity        User identity that specifies the data domain.
      * @return Map of loaded partitions for existing partition ids. All columns are loaded for the partitions.
      */
-    protected void loadAndFixMonthlyPartitions(FileStorageSettings fileStorageSettings) {
+    protected void loadAndFixMonthlyPartitions(FileStorageSettings fileStorageSettings, UserDomainIdentity userIdentity) {
         SearchPattern connectionSearchPattern = SearchPattern.create(false, this.repairParameters.getConnectionName());
         if (connectionSearchPattern.isWildcardSearchPattern()) {
-            List<String> connectionNamesList = this.parquetPartitionMetadataService.listConnections(fileStorageSettings);
+            List<String> connectionNamesList = this.parquetPartitionMetadataService.listConnections(fileStorageSettings, userIdentity);
             for (String connectionName : connectionNamesList) {
                 if (connectionSearchPattern.match(connectionName)) {
-                    loadAndFixMonthlyPartitions(fileStorageSettings, connectionName);
+                    loadAndFixMonthlyPartitions(fileStorageSettings, connectionName, userIdentity);
                 }
             }
         } else {
-            loadAndFixMonthlyPartitions(fileStorageSettings, this.repairParameters.getConnectionName());
+            loadAndFixMonthlyPartitions(fileStorageSettings, this.repairParameters.getConnectionName(), userIdentity);
         }
     }
 
     /**
      * Load all partitions fitting the <code>repairParameters</code> for given storage settings.
      * @param fileStorageSettings File storage settings.
+     * @param connectionName Connection name to fix.
+     * @param userIdentity User identity that specifies the data domain.
      * @return Map of loaded partitions for existing partition ids. All columns are loaded for the partitions.
      */
-    protected void loadAndFixMonthlyPartitions(FileStorageSettings fileStorageSettings, String connectionName) {
+    protected void loadAndFixMonthlyPartitions(FileStorageSettings fileStorageSettings, String connectionName, UserDomainIdentity userIdentity) {
         List<ParquetPartitionId> partitionIds;
         if (this.repairParameters.getSchemaTableName() == null) {
             partitionIds = this.parquetPartitionMetadataService.getStoredPartitionsIds(
-                    connectionName, fileStorageSettings);
+                    connectionName, fileStorageSettings, userIdentity);
         } else {
             partitionIds = this.parquetPartitionMetadataService.getStoredPartitionsIds(
                     connectionName,
                     PhysicalTableName.fromSchemaTableFilter(this.repairParameters.getSchemaTableName()),
-                    fileStorageSettings);
+                    fileStorageSettings,
+                    userIdentity);
         }
 
         if (partitionIds == null) {
@@ -143,13 +149,13 @@ public class RepairStoredDataQueueJob extends DqoQueueJob<RepairStoredDataQueueJ
         for (ParquetPartitionId partitionId: partitionIds) {
             // columnNames is null in order to force parquetPartitionStorageService to load all columns.
             LoadedMonthlyPartition loadedMonthlyPartition = this.parquetPartitionStorageService.loadPartition(
-                    partitionId, fileStorageSettings, null);
+                    partitionId, fileStorageSettings, null, userIdentity);
 
             if (loadedMonthlyPartition.getData() != null && loadedMonthlyPartition.getData().rowCount() != 0) {
                 TextColumn idColumn = loadedMonthlyPartition.getData().textColumn(fileStorageSettings.getIdStringColumnName());
                 if (idColumn.countUnique() != idColumn.size()) {
                     // duplicates found, removing the partition
-                    this.parquetPartitionStorageService.deletePartitionFile(loadedMonthlyPartition.getPartitionId(), fileStorageSettings);
+                    this.parquetPartitionStorageService.deletePartitionFile(loadedMonthlyPartition.getPartitionId(), fileStorageSettings, userIdentity);
                     log.warn("Parquet file with duplicate rows having the same ID was identified, the parquet file was removed: " + loadedMonthlyPartition.getPartitionId().toString());
                 }
             }

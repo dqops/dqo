@@ -1,64 +1,67 @@
+# DQOps REST API data_sources models reference
+The references of all objects used by [data_sources](../operations/data_sources.md) REST API operations are listed below.
 
-## ConnectionTestStatus  
-Tabular output format for printing the tabular results.  
-  
 
-**The structure of this object is described below**  
-  
+## ConnectionTestStatus
+Tabular output format for printing the tabular results.
+
+
+**The structure of this object is described below**
+
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
-|string|SUCCESS<br/>CONNECTION_ALREADY_EXISTS<br/>FAILURE<br/>|
+|string|SUCCESS<br/>FAILURE<br/>CONNECTION_ALREADY_EXISTS<br/>|
 
-___  
+___
 
-## ConnectionTestModel  
+## ConnectionTestModel
 Connection test status result model returned from REST API. Describes the status of testing a connection
- (opening a connection to verify if it usable, credentials are approved and the access was granted by the tested data source).  
-  
+ (opening a connection to verify if it usable, credentials are approved and the access was granted by the tested data source).
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[connection_test_result](#ConnectionTestStatus)|Connection test result|[ConnectionTestStatus](#ConnectionTestStatus)|
-|error_message|Optional error message when the status is not &quot;SUCCESS&quot;|string|
+|<span class="no-wrap-code">[`connection_test_result`](#connectionteststatus)</span>|Connection test result|*[ConnectionTestStatus](#connectionteststatus)*|
+|<span class="no-wrap-code">`error_message`</span>|Optional error message when the status is not &quot;SUCCESS&quot;|*string*|
 
 
-___  
+___
 
-## RemoteTableListModel  
-Remote table list model that is returned when a data source is introspected to retrieve the list of tables available in a data source.  
-  
+## RemoteTableListModel
+Remote table list model that is returned when a data source is introspected to retrieve the list of tables available in a data source.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|connection_name|Connection name.|string|
-|schema_name|Schema name.|string|
-|table_name|Table name.|string|
-|already_imported|A flag that tells if the table been already imported.|boolean|
+|<span class="no-wrap-code">`connection_name`</span>|Connection name.|*string*|
+|<span class="no-wrap-code">`schema_name`</span>|Schema name.|*string*|
+|<span class="no-wrap-code">`table_name`</span>|Table name.|*string*|
+|<span class="no-wrap-code">`already_imported`</span>|A flag that tells if the table been already imported.|*boolean*|
 
 
-___  
+___
 
-## SchemaRemoteModel  
-Schema model returned from REST API. Describes a schema on the source database with established connection.  
-  
+## SchemaRemoteModel
+Schema model returned from REST API. Describes a schema on the source database with established connection.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|connection_name|Connection name.|string|
-|schema_name|Schema name.|string|
-|already_imported|Has the schema been imported.|boolean|
-|[import_table_job_parameters](../jobs/#ImportTablesQueueJobParameters)|Job parameters for the import tables job that will import all tables from this schema.|[ImportTablesQueueJobParameters](../jobs/#ImportTablesQueueJobParameters)|
+|<span class="no-wrap-code">`connection_name`</span>|Connection name.|*string*|
+|<span class="no-wrap-code">`schema_name`</span>|Schema name.|*string*|
+|<span class="no-wrap-code">`already_imported`</span>|Has the schema been imported.|*boolean*|
+|<span class="no-wrap-code">[`import_table_job_parameters`](./jobs.md#importtablesqueuejobparameters)</span>|Job parameters for the import tables job that will import all tables from this schema.|*[ImportTablesQueueJobParameters](./jobs.md#importtablesqueuejobparameters)*|
 
 
-___  
+___
 

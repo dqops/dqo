@@ -1,0 +1,15 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/SensorDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: sensor
+spec:
+  fields:
+  - field_name: sql_condition
+    display_name: sql_condition
+    help_text: "SQL condition (expression) that returns true or false. The condition\
+      \ is evaluated for each row. The expression can use {table} placeholder that\
+      \ is replaced with a full table name."
+    data_type: string
+    display_hint: textarea
+    required: true
+    sample_values:
+    - SUM(col_total_impressions) > SUM(col_total_clicks)

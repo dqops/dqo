@@ -63,7 +63,7 @@ const AddColumnDialog = ({ open, onClose, node }: AddColumnDialogProps) => {
           </div>
           <div>
             <Input
-              label="SQL Expression for a calculated column"
+              label="SQL expression for a calculated column"
               value={sqlExpression}
               onChange={(e) => setSqlExpression(e.target.value)}
             />

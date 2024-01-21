@@ -120,7 +120,7 @@ const Select = ({
             <></> : 
             <SvgIcon
               name="chevron-down"
-              className="absolute transform top-1/2 -translate-y-2/4 right-2 w-4"
+              className="absolute right-2 w-4"
             />
             }   
           </div>

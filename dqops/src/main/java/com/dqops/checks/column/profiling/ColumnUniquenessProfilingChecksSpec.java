@@ -46,19 +46,18 @@ public class ColumnUniquenessProfilingChecksSpec extends AbstractCheckCategorySp
             put("profile_duplicate_count", o -> o.profileDuplicateCount);
             put("profile_duplicate_percent", o -> o.profileDuplicatePercent);
 
-            put("profile_anomaly_differencing_distinct_count_30_days", o -> o.profileAnomalyDifferencingDistinctCount30Days);
-            put("profile_anomaly_differencing_distinct_count", o -> o.profileAnomalyDifferencingDistinctCount);
-            put("profile_anomaly_stationary_distinct_percent_30_days", o -> o.profileAnomalyStationaryDistinctPercent30Days);
-            put("profile_anomaly_stationary_distinct_percent", o -> o.profileAnomalyStationaryDistinctPercent);
-            put("profile_change_distinct_count", o -> o.profileChangeDistinctCount);
-            put("profile_change_distinct_count_since_7_days", o -> o.profileChangeDistinctCountSince7Days);
-            put("profile_change_distinct_count_since_30_days", o -> o.profileChangeDistinctCountSince30Days);
-            put("profile_change_distinct_count_since_yesterday", o -> o.profileChangeDistinctCountSinceYesterday);
-            put("profile_change_distinct_percent", o -> o.profileChangeDistinctPercent);
-            put("profile_change_distinct_percent_since_7_days", o -> o.profileChangeDistinctPercentSince7Days);
-            put("profile_change_distinct_percent_since_30_days", o -> o.profileChangeDistinctPercentSince30Days);
-            put("profile_change_distinct_percent_since_yesterday", o -> o.profileChangeDistinctPercentSinceYesterday);
+            put("profile_distinct_count_anomaly", o -> o.profileDistinctCountAnomaly);
+            put("profile_distinct_percent_anomaly", o -> o.profileDistinctPercentAnomaly);
 
+            put("profile_distinct_count_change", o -> o.profileDistinctCountChange);
+            put("profile_distinct_count_change_1_day", o -> o.profileDistinctCountChange1Day);
+            put("profile_distinct_count_change_7_days", o -> o.profileDistinctCountChange7Days);
+            put("profile_distinct_count_change_30_days", o -> o.profileDistinctCountChange30Days);
+
+            put("profile_distinct_percent_change", o -> o.profileDistinctPercentChange);
+            put("profile_distinct_percent_change_1_day", o -> o.profileDistinctPercentChange1Day);
+            put("profile_distinct_percent_change_7_days", o -> o.profileDistinctPercentChange7Days);
+            put("profile_distinct_percent_change_30_days", o -> o.profileDistinctPercentChange30Days);
         }
     };
 
@@ -74,47 +73,42 @@ public class ColumnUniquenessProfilingChecksSpec extends AbstractCheckCategorySp
     @JsonPropertyDescription("Verifies that the percentage of duplicate values in a column does not exceed the maximum accepted percentage.")
     private ColumnDuplicatePercentCheckSpec profileDuplicatePercent;
 
-    @JsonProperty("profile_anomaly_differencing_distinct_count_30_days")
-    @JsonPropertyDescription("Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.")
-    private ColumnAnomalyDifferencingDistinctCount30DaysCheckSpec profileAnomalyDifferencingDistinctCount30Days;
-
     @JsonPropertyDescription("Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.")
-    private ColumnAnomalyDifferencingDistinctCountCheckSpec profileAnomalyDifferencingDistinctCount;
-
-    @JsonProperty("profile_anomaly_stationary_distinct_percent_30_days")
-    @JsonPropertyDescription("Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.")
-    private ColumnAnomalyStationaryDistinctPercent30DaysCheckSpec profileAnomalyStationaryDistinctPercent30Days;
+    private ColumnDistinctCountAnomalyDifferencingCheckSpec profileDistinctCountAnomaly;
 
     @JsonPropertyDescription("Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.")
-    private ColumnAnomalyStationaryDistinctPercentCheckSpec profileAnomalyStationaryDistinctPercent;
+    private ColumnDistinctPercentAnomalyStationaryCheckSpec profileDistinctPercentAnomaly;
 
     @JsonPropertyDescription("Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.")
-    private ColumnChangeDistinctCountCheckSpec profileChangeDistinctCount;
+    private ColumnDistinctCountChangeCheckSpec profileDistinctCountChange;
 
-    @JsonProperty("profile_change_distinct_count_since_7_days")
-    @JsonPropertyDescription("Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last week.")
-    private ColumnChangeDistinctCountSince7DaysCheckSpec profileChangeDistinctCountSince7Days;
-
-    @JsonProperty("profile_change_distinct_count_since_30_days")
-    @JsonPropertyDescription("Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last month.")
-    private ColumnChangeDistinctCountSince30DaysCheckSpec profileChangeDistinctCountSince30Days;
-
+    @JsonProperty("profile_distinct_count_change_1_day")
     @JsonPropertyDescription("Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from yesterday.")
-    private ColumnChangeDistinctCountSinceYesterdayCheckSpec profileChangeDistinctCountSinceYesterday;
+    private ColumnDistinctCountChange1DayCheckSpec profileDistinctCountChange1Day;
+
+    @JsonProperty("profile_distinct_count_change_7_days")
+    @JsonPropertyDescription("Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last week.")
+    private ColumnDistinctCountChange7DaysCheckSpec profileDistinctCountChange7Days;
+
+    @JsonProperty("profile_distinct_count_change_30_days")
+    @JsonPropertyDescription("Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last month.")
+    private ColumnDistinctCountChange30DaysCheckSpec profileDistinctCountChange30Days;
 
     @JsonPropertyDescription("Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout.")
-    private ColumnChangeDistinctPercentCheckSpec profileChangeDistinctPercent;
+    private ColumnDistinctPercentChangeCheckSpec profileDistinctPercentChange;
 
-    @JsonProperty("profile_change_distinct_percent_since_7_days")
-    @JsonPropertyDescription("Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last week.")
-    private ColumnChangeDistinctPercentSince7DaysCheckSpec profileChangeDistinctPercentSince7Days;
-
-    @JsonProperty("profile_change_distinct_percent_since_30_days")
-    @JsonPropertyDescription("Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last month.")
-    private ColumnChangeDistinctPercentSince30DaysCheckSpec profileChangeDistinctPercentSince30Days;
-
+    @JsonProperty("profile_distinct_percent_change_1_day")
     @JsonPropertyDescription("Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from yesterday.")
-    private ColumnChangeDistinctPercentSinceYesterdayCheckSpec profileChangeDistinctPercentSinceYesterday;
+    private ColumnDistinctPercentChange1DayCheckSpec profileDistinctPercentChange1Day;
+
+    @JsonProperty("profile_distinct_percent_change_7_days")
+    @JsonPropertyDescription("Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last week.")
+    private ColumnDistinctPercentChange7DaysCheckSpec profileDistinctPercentChange7Days;
+
+    @JsonProperty("profile_distinct_percent_change_30_days")
+    @JsonPropertyDescription("Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last month.")
+    private ColumnDistinctPercentChange30DaysCheckSpec profileDistinctPercentChange30Days;
+
 
     /**
      * Returns a distinct count check specification.
@@ -189,220 +183,185 @@ public class ColumnUniquenessProfilingChecksSpec extends AbstractCheckCategorySp
     }
 
     /**
-     * Returns a distinct count value anomaly 30 days check specification.
-     * @return Distinct count value anomaly 30 days check specification.
-     */
-    public ColumnAnomalyDifferencingDistinctCount30DaysCheckSpec getProfileAnomalyDifferencingDistinctCount30Days() {
-        return profileAnomalyDifferencingDistinctCount30Days;
-    }
-
-    /**
-     * Sets a new specification of a distinct count value anomaly 30 days check.
-     * @param profileAnomalyDifferencingDistinctCount30Days Distinct count value anomaly 30 days check specification.
-     */
-    public void setProfileAnomalyDifferencingDistinctCount30Days(ColumnAnomalyDifferencingDistinctCount30DaysCheckSpec profileAnomalyDifferencingDistinctCount30Days) {
-        this.setDirtyIf(!Objects.equals(this.profileAnomalyDifferencingDistinctCount30Days, profileAnomalyDifferencingDistinctCount30Days));
-        this.profileAnomalyDifferencingDistinctCount30Days = profileAnomalyDifferencingDistinctCount30Days;
-        propagateHierarchyIdToField(profileAnomalyDifferencingDistinctCount30Days, "profile_anomaly_differencing_distinct_count_30_days");
-    }
-
-    /**
      * Returns a distinct count value anomaly check specification.
      * @return Distinct count value anomaly check specification.
      */
-    public ColumnAnomalyDifferencingDistinctCountCheckSpec getProfileAnomalyDifferencingDistinctCount() {
-        return profileAnomalyDifferencingDistinctCount;
+    public ColumnDistinctCountAnomalyDifferencingCheckSpec getProfileDistinctCountAnomaly() {
+        return profileDistinctCountAnomaly;
     }
 
     /**
      * Sets a new specification of a distinct count value anomaly check.
-     * @param profileAnomalyDifferencingDistinctCount Distinct count value anomaly check specification.
+     * @param profileDistinctCountAnomaly Distinct count value anomaly check specification.
      */
-    public void setProfileAnomalyDifferencingDistinctCount(ColumnAnomalyDifferencingDistinctCountCheckSpec profileAnomalyDifferencingDistinctCount) {
-        this.setDirtyIf(!Objects.equals(this.profileAnomalyDifferencingDistinctCount, profileAnomalyDifferencingDistinctCount));
-        this.profileAnomalyDifferencingDistinctCount = profileAnomalyDifferencingDistinctCount;
-        propagateHierarchyIdToField(profileAnomalyDifferencingDistinctCount, "profile_anomaly_differencing_distinct_count");
-    }
-
-    /**
-     * Returns a distinct percent value anomaly 30 days check specification.
-     * @return Distinct percent value anomaly 30 days check specification.
-     */
-    public ColumnAnomalyStationaryDistinctPercent30DaysCheckSpec getProfileAnomalyStationaryDistinctPercent30Days() {
-        return profileAnomalyStationaryDistinctPercent30Days;
-    }
-
-    /**
-     * Sets a new specification of a distinct percent value anomaly 30 days check.
-     * @param profileAnomalyStationaryDistinctPercent30Days Distinct percent value anomaly 30 days check specification.
-     */
-    public void setProfileAnomalyStationaryDistinctPercent30Days(ColumnAnomalyStationaryDistinctPercent30DaysCheckSpec profileAnomalyStationaryDistinctPercent30Days) {
-        this.setDirtyIf(!Objects.equals(this.profileAnomalyStationaryDistinctPercent30Days, profileAnomalyStationaryDistinctPercent30Days));
-        this.profileAnomalyStationaryDistinctPercent30Days = profileAnomalyStationaryDistinctPercent30Days;
-        propagateHierarchyIdToField(profileAnomalyStationaryDistinctPercent30Days, "profile_anomaly_stationary_distinct_percent_30_days");
+    public void setProfileDistinctCountAnomaly(ColumnDistinctCountAnomalyDifferencingCheckSpec profileDistinctCountAnomaly) {
+        this.setDirtyIf(!Objects.equals(this.profileDistinctCountAnomaly, profileDistinctCountAnomaly));
+        this.profileDistinctCountAnomaly = profileDistinctCountAnomaly;
+        propagateHierarchyIdToField(profileDistinctCountAnomaly, "profile_distinct_count_anomaly");
     }
 
     /**
      * Returns a distinct percent value anomaly check specification.
      * @return Distinct percent value anomaly check specification.
      */
-    public ColumnAnomalyStationaryDistinctPercentCheckSpec getProfileAnomalyStationaryDistinctPercent() {
-        return profileAnomalyStationaryDistinctPercent;
+    public ColumnDistinctPercentAnomalyStationaryCheckSpec getProfileDistinctPercentAnomaly() {
+        return profileDistinctPercentAnomaly;
     }
 
     /**
      * Sets a new specification of a distinct percent value anomaly check.
-     * @param profileAnomalyStationaryDistinctPercent Distinct percent value anomaly check specification.
+     * @param profileDistinctPercentAnomaly Distinct percent value anomaly check specification.
      */
-    public void setProfileAnomalyStationaryDistinctPercent(ColumnAnomalyStationaryDistinctPercentCheckSpec profileAnomalyStationaryDistinctPercent) {
-        this.setDirtyIf(!Objects.equals(this.profileAnomalyStationaryDistinctPercent, profileAnomalyStationaryDistinctPercent));
-        this.profileAnomalyStationaryDistinctPercent = profileAnomalyStationaryDistinctPercent;
-        propagateHierarchyIdToField(profileAnomalyStationaryDistinctPercent, "profile_anomaly_stationary_distinct_percent");
+    public void setProfileDistinctPercentAnomaly(ColumnDistinctPercentAnomalyStationaryCheckSpec profileDistinctPercentAnomaly) {
+        this.setDirtyIf(!Objects.equals(this.profileDistinctPercentAnomaly, profileDistinctPercentAnomaly));
+        this.profileDistinctPercentAnomaly = profileDistinctPercentAnomaly;
+        propagateHierarchyIdToField(profileDistinctPercentAnomaly, "profile_distinct_percent_anomaly");
     }
 
     /**
      * Returns the distinct count value change check specification.
      * @return Distinct count value change check specification.
      */
-    public ColumnChangeDistinctCountCheckSpec getProfileChangeDistinctCount() {
-        return profileChangeDistinctCount;
+    public ColumnDistinctCountChangeCheckSpec getProfileDistinctCountChange() {
+        return profileDistinctCountChange;
     }
 
     /**
      * Sets a new specification of a distinct count value change check.
-     * @param profileChangeDistinctCount Distinct count value change check specification.
+     * @param profileDistinctCountChange Distinct count value change check specification.
      */
-    public void setProfileChangeDistinctCount(ColumnChangeDistinctCountCheckSpec profileChangeDistinctCount) {
-        this.setDirtyIf(!Objects.equals(this.profileChangeDistinctCount, profileChangeDistinctCount));
-        this.profileChangeDistinctCount = profileChangeDistinctCount;
-        propagateHierarchyIdToField(profileChangeDistinctCount, "profile_change_distinct_count");
-    }
-
-    /**
-     * Returns the distinct count value change since 7 days check specification.
-     * @return Distinct count value change since 7 days check specification.
-     */
-    public ColumnChangeDistinctCountSince7DaysCheckSpec getProfileChangeDistinctCountSince7Days() {
-        return profileChangeDistinctCountSince7Days;
-    }
-
-    /**
-     * Sets a new specification of a distinct count value change since 7 days check.
-     * @param profileChangeDistinctCountSince7Days Distinct count value change since 7 days check specification.
-     */
-    public void setProfileChangeDistinctCountSince7Days(ColumnChangeDistinctCountSince7DaysCheckSpec profileChangeDistinctCountSince7Days) {
-        this.setDirtyIf(!Objects.equals(this.profileChangeDistinctCountSince7Days, profileChangeDistinctCountSince7Days));
-        this.profileChangeDistinctCountSince7Days = profileChangeDistinctCountSince7Days;
-        propagateHierarchyIdToField(profileChangeDistinctCountSince7Days, "profile_change_distinct_count_since_7_days");
-    }
-
-    /**
-     * Returns the distinct count value change since 30 days check specification.
-     * @return Distinct count value change since 30 days check specification.
-     */
-    public ColumnChangeDistinctCountSince30DaysCheckSpec getProfileChangeDistinctCountSince30Days() {
-        return profileChangeDistinctCountSince30Days;
-    }
-
-    /**
-     * Sets a new specification of a distinct count value change since 30 days check.
-     * @param profileChangeDistinctCountSince30Days Distinct count value change since 30 days check specification.
-     */
-    public void setProfileChangeDistinctCountSince30Days(ColumnChangeDistinctCountSince30DaysCheckSpec profileChangeDistinctCountSince30Days) {
-        this.setDirtyIf(!Objects.equals(this.profileChangeDistinctCountSince30Days, profileChangeDistinctCountSince30Days));
-        this.profileChangeDistinctCountSince30Days = profileChangeDistinctCountSince30Days;
-        propagateHierarchyIdToField(profileChangeDistinctCountSince30Days, "profile_change_distinct_count_since_30_days");
+    public void setProfileDistinctCountChange(ColumnDistinctCountChangeCheckSpec profileDistinctCountChange) {
+        this.setDirtyIf(!Objects.equals(this.profileDistinctCountChange, profileDistinctCountChange));
+        this.profileDistinctCountChange = profileDistinctCountChange;
+        propagateHierarchyIdToField(profileDistinctCountChange, "profile_distinct_count_change");
     }
 
     /**
      * Returns the distinct count value change since yesterday check specification.
      * @return Distinct count value change since yesterday check specification.
      */
-    public ColumnChangeDistinctCountSinceYesterdayCheckSpec getProfileChangeDistinctCountSinceYesterday() {
-        return profileChangeDistinctCountSinceYesterday;
+    public ColumnDistinctCountChange1DayCheckSpec getProfileDistinctCountChange1Day() {
+        return profileDistinctCountChange1Day;
     }
 
     /**
      * Sets a new specification of a distinct count value change since yesterday check .
-     * @param profileChangeDistinctCountSinceYesterday Distinct count value change since yesterday check specification.
+     * @param profileDistinctCountChange1Day Distinct count value change since yesterday check specification.
      */
-    public void setProfileChangeDistinctCountSinceYesterday(ColumnChangeDistinctCountSinceYesterdayCheckSpec profileChangeDistinctCountSinceYesterday) {
-        this.setDirtyIf(!Objects.equals(this.profileChangeDistinctCountSinceYesterday, profileChangeDistinctCountSinceYesterday));
-        this.profileChangeDistinctCountSinceYesterday = profileChangeDistinctCountSinceYesterday;
-        propagateHierarchyIdToField(profileChangeDistinctCountSinceYesterday, "profile_change_distinct_count_since_yesterday");
+    public void setProfileDistinctCountChange1Day(ColumnDistinctCountChange1DayCheckSpec profileDistinctCountChange1Day) {
+        this.setDirtyIf(!Objects.equals(this.profileDistinctCountChange1Day, profileDistinctCountChange1Day));
+        this.profileDistinctCountChange1Day = profileDistinctCountChange1Day;
+        propagateHierarchyIdToField(profileDistinctCountChange1Day, "profile_distinct_count_change_1_day");
+    }
+
+    /**
+     * Returns the distinct count value change since 7 days check specification.
+     * @return Distinct count value change since 7 days check specification.
+     */
+    public ColumnDistinctCountChange7DaysCheckSpec getProfileDistinctCountChange7Days() {
+        return profileDistinctCountChange7Days;
+    }
+
+    /**
+     * Sets a new specification of a distinct count value change since 7 days check.
+     * @param profileDistinctCountChange7Days Distinct count value change since 7 days check specification.
+     */
+    public void setProfileDistinctCountChange7Days(ColumnDistinctCountChange7DaysCheckSpec profileDistinctCountChange7Days) {
+        this.setDirtyIf(!Objects.equals(this.profileDistinctCountChange7Days, profileDistinctCountChange7Days));
+        this.profileDistinctCountChange7Days = profileDistinctCountChange7Days;
+        propagateHierarchyIdToField(profileDistinctCountChange7Days, "profile_distinct_count_change_7_days");
+    }
+
+    /**
+     * Returns the distinct count value change since 30 days check specification.
+     * @return Distinct count value change since 30 days check specification.
+     */
+    public ColumnDistinctCountChange30DaysCheckSpec getProfileDistinctCountChange30Days() {
+        return profileDistinctCountChange30Days;
+    }
+
+    /**
+     * Sets a new specification of a distinct count value change since 30 days check.
+     * @param profileDistinctCountChange30Days Distinct count value change since 30 days check specification.
+     */
+    public void setProfileDistinctCountChange30Days(ColumnDistinctCountChange30DaysCheckSpec profileDistinctCountChange30Days) {
+        this.setDirtyIf(!Objects.equals(this.profileDistinctCountChange30Days, profileDistinctCountChange30Days));
+        this.profileDistinctCountChange30Days = profileDistinctCountChange30Days;
+        propagateHierarchyIdToField(profileDistinctCountChange30Days, "profile_distinct_count_change_30_days");
     }
 
     /**
      * Returns the distinct percent value change check specification.
      * @return Distinct percent value change check specification.
      */
-    public ColumnChangeDistinctPercentCheckSpec getProfileChangeDistinctPercent() {
-        return profileChangeDistinctPercent;
+    public ColumnDistinctPercentChangeCheckSpec getProfileDistinctPercentChange() {
+        return profileDistinctPercentChange;
     }
 
     /**
      * Sets a new specification of a distinct percent value change check.
-     * @param profileChangeDistinctPercent Distinct percent value change check specification.
+     * @param profileDistinctPercentChange Distinct percent value change check specification.
      */
-    public void setProfileChangeDistinctPercent(ColumnChangeDistinctPercentCheckSpec profileChangeDistinctPercent) {
-        this.setDirtyIf(!Objects.equals(this.profileChangeDistinctPercent, profileChangeDistinctPercent));
-        this.profileChangeDistinctPercent = profileChangeDistinctPercent;
-        propagateHierarchyIdToField(profileChangeDistinctPercent, "profile_change_distinct_percent");
-    }
-
-    /**
-     * Returns the distinct percent value change since 7 days check specification.
-     * @return Distinct count percent change since 7 days check specification.
-     */
-    public ColumnChangeDistinctPercentSince7DaysCheckSpec getProfileChangeDistinctPercentSince7Days() {
-        return profileChangeDistinctPercentSince7Days;
-    }
-
-    /**
-     * Sets a new specification of a distinct count percent change since 7 days check.
-     * @param profileChangeDistinctPercentSince7Days Distinct count percent change since 7 days check specification.
-     */
-    public void setProfileChangeDistinctPercentSince7Days(ColumnChangeDistinctPercentSince7DaysCheckSpec profileChangeDistinctPercentSince7Days) {
-        this.setDirtyIf(!Objects.equals(this.profileChangeDistinctPercentSince7Days, profileChangeDistinctPercentSince7Days));
-        this.profileChangeDistinctPercentSince7Days = profileChangeDistinctPercentSince7Days;
-        propagateHierarchyIdToField(profileChangeDistinctPercentSince7Days, "profile_change_distinct_percent_since_7_days");
-    }
-
-    /**
-     * Returns the distinct percent value change since 30 days check specification.
-     * @return Distinct count percent change since 30 days check specification.
-     */
-    public ColumnChangeDistinctPercentSince30DaysCheckSpec getProfileChangeDistinctPercentSince30Days() {
-        return profileChangeDistinctPercentSince30Days;
-    }
-
-    /**
-     * Sets a new specification of a distinct count percent change since 30 days check specification.
-     * @param profileChangeDistinctPercentSince30Days Distinct count percent change since 30 days check specification.
-     */
-    public void setProfileChangeDistinctPercentSince30Days(ColumnChangeDistinctPercentSince30DaysCheckSpec profileChangeDistinctPercentSince30Days) {
-        this.setDirtyIf(!Objects.equals(this.profileChangeDistinctPercentSince30Days, profileChangeDistinctPercentSince30Days));
-        this.profileChangeDistinctPercentSince30Days = profileChangeDistinctPercentSince30Days;
-        propagateHierarchyIdToField(profileChangeDistinctPercentSince30Days, "profile_change_distinct_percent_since_30_days");
+    public void setProfileDistinctPercentChange(ColumnDistinctPercentChangeCheckSpec profileDistinctPercentChange) {
+        this.setDirtyIf(!Objects.equals(this.profileDistinctPercentChange, profileDistinctPercentChange));
+        this.profileDistinctPercentChange = profileDistinctPercentChange;
+        propagateHierarchyIdToField(profileDistinctPercentChange, "profile_distinct_percent_change");
     }
 
     /**
      * Returns the distinct percent value change since yesterday check specification.
      * @return Distinct count percent change since yesterday check specification.
      */
-    public ColumnChangeDistinctPercentSinceYesterdayCheckSpec getProfileChangeDistinctPercentSinceYesterday() {
-        return profileChangeDistinctPercentSinceYesterday;
+    public ColumnDistinctPercentChange1DayCheckSpec getProfileDistinctPercentChange1Day() {
+        return profileDistinctPercentChange1Day;
     }
 
     /**
      * Sets a new specification of a distinct count percent change since yesterday check specification.
-     * @param profileChangeDistinctPercentSinceYesterday Distinct count percent change since yesterday check specification.
+     * @param profileDistinctPercentChange1Day Distinct count percent change since yesterday check specification.
      */
-    public void setProfileChangeDistinctPercentSinceYesterday(ColumnChangeDistinctPercentSinceYesterdayCheckSpec profileChangeDistinctPercentSinceYesterday) {
-        this.setDirtyIf(!Objects.equals(this.profileChangeDistinctPercentSinceYesterday, profileChangeDistinctPercentSinceYesterday));
-        this.profileChangeDistinctPercentSinceYesterday = profileChangeDistinctPercentSinceYesterday;
-        propagateHierarchyIdToField(profileChangeDistinctPercentSinceYesterday, "profile_change_distinct_percent_since_yesterday");
+    public void setProfileDistinctPercentChange1Day(ColumnDistinctPercentChange1DayCheckSpec profileDistinctPercentChange1Day) {
+        this.setDirtyIf(!Objects.equals(this.profileDistinctPercentChange1Day, profileDistinctPercentChange1Day));
+        this.profileDistinctPercentChange1Day = profileDistinctPercentChange1Day;
+        propagateHierarchyIdToField(profileDistinctPercentChange1Day, "profile_distinct_percent_change_1_day");
     }
+
+    /**
+     * Returns the distinct percent value change since 7 days check specification.
+     * @return Distinct count percent change since 7 days check specification.
+     */
+    public ColumnDistinctPercentChange7DaysCheckSpec getProfileDistinctPercentChange7Days() {
+        return profileDistinctPercentChange7Days;
+    }
+
+    /**
+     * Sets a new specification of a distinct count percent change since 7 days check.
+     * @param profileDistinctPercentChange7Days Distinct count percent change since 7 days check specification.
+     */
+    public void setProfileDistinctPercentChange7Days(ColumnDistinctPercentChange7DaysCheckSpec profileDistinctPercentChange7Days) {
+        this.setDirtyIf(!Objects.equals(this.profileDistinctPercentChange7Days, profileDistinctPercentChange7Days));
+        this.profileDistinctPercentChange7Days = profileDistinctPercentChange7Days;
+        propagateHierarchyIdToField(profileDistinctPercentChange7Days, "profile_distinct_percent_change_7_days");
+    }
+
+    /**
+     * Returns the distinct percent value change since 30 days check specification.
+     * @return Distinct count percent change since 30 days check specification.
+     */
+    public ColumnDistinctPercentChange30DaysCheckSpec getProfileDistinctPercentChange30Days() {
+        return profileDistinctPercentChange30Days;
+    }
+
+    /**
+     * Sets a new specification of a distinct count percent change since 30 days check specification.
+     * @param profileDistinctPercentChange30Days Distinct count percent change since 30 days check specification.
+     */
+    public void setProfileDistinctPercentChange30Days(ColumnDistinctPercentChange30DaysCheckSpec profileDistinctPercentChange30Days) {
+        this.setDirtyIf(!Objects.equals(this.profileDistinctPercentChange30Days, profileDistinctPercentChange30Days));
+        this.profileDistinctPercentChange30Days = profileDistinctPercentChange30Days;
+        propagateHierarchyIdToField(profileDistinctPercentChange30Days, "profile_distinct_percent_change_30_days");
+    }
+
 
     /**
      * Returns the child map on the spec class with all fields.

@@ -40,7 +40,7 @@ import java.util.Arrays;
 
 /**
  * Service that parses datasets with results returned by a sensor query.
- * Detects column types (data stream level columns), describes the metadata of the result. Also fixes missing information, adds a data_stream_hash column with a hash of all data stream levels.
+ * Detects column types (data group level columns), describes the metadata of the result. Also fixes missing information, adds a data_group_hash column with a hash of all data grouping levels.
  */
 @Service
 public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNormalizationService {
@@ -272,7 +272,7 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         sortedNormalizedTable.addColumns(updatedByColumn);
 
         DateTimeColumn sortedTimePeriodColumn = (DateTimeColumn) sortedNormalizedTable.column(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
-        TextColumn idColumn = this.commonNormalizationService.createRowIdColumnAndUpdateIndexes(sortedDataStreamHashColumn, sortedTimePeriodColumn, checkHash, tableHash,
+        TextColumn idColumn = this.commonNormalizationService.createRowIdColumn(sortedDataStreamHashColumn, sortedTimePeriodColumn, checkHash, tableHash,
                 columnHash != null ? columnHash.longValue() : 0L, resultsRowCount);
         sortedNormalizedTable.insertColumn(0, idColumn);
 

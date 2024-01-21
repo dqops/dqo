@@ -27,7 +27,7 @@ const FieldTypeInput = ({ className, label, value, name, maskingType, onChange, 
       value: 'env',
     },
     // {
-    //   label: '${credential: CREDENTIAL}',
+    //   label: '${credential://CREDENTIAL}',
     //   value: 'credential'
     // }
   ];
@@ -60,12 +60,29 @@ const FieldTypeInput = ({ className, label, value, name, maskingType, onChange, 
     if (textType === 'env') {
       return '${' + text + '}';
     }
+    if (textType === 'credential') {
+      return '${credential://' + text + '}';
+    }
     return text;
   };
 
   useEffect(() => {
-    if (!value) return;
+    if (value === undefined){
+      return; 
+    }
+
+    if (value.startsWith('${credential://') && value.endsWith('}')) {
+      const credentialName = value.substring('${credential://'.length, value.length - 1);
+      setText(credentialName);
+      setType('credential');
+    } else if (value.startsWith('${') && value.endsWith('}')) {
+      const environmentVariableName = value.substring('${'.length, value.length - 1);
+      setText(environmentVariableName);
+      setType('env');
+    } else {
       setText(value);
+      setType('text');
+    }
   }, [value]);
 
   const inputType = maskingType === 'password' && type !== 'env'
@@ -76,7 +93,7 @@ const FieldTypeInput = ({ className, label, value, name, maskingType, onChange, 
       <div>{label}</div>
       <div className="flex items-end space-x-3">
         <div className="flex-1 flex space-x-1 items-center">
-          {(type === 'env' || type === 'credential') && <div>{'${'} {type === 'credential' ? 'credential: ' : ''}</div>}
+          {(type === 'env' || type === 'credential') && <div>{'${'} {type === 'credential' ? 'credential://' : ''}</div>}
           <div className="flex-1">
            {type === 'credential' ? 
            <SelectInput 
@@ -91,7 +108,7 @@ const FieldTypeInput = ({ className, label, value, name, maskingType, onChange, 
           {(type === 'env' || type === 'credential') && <div>{'}'}</div>}
         </div>
         <Select options={[...options, { 
-        label: '${credential: CREDENTIAL}',
+        label: '${credential://secret_name}',
         value: 'credential'
         }]}
       value={type} onChange={onChangeType} disabled={disabled} placeholder=""/>

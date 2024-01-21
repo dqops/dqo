@@ -22,7 +22,7 @@ import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.metadata.timeseries.TimeSeriesMode;
-import com.dqops.utils.docs.SampleValueFactory;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -46,7 +46,7 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
             put("volume", o -> o.volume);
             put("timeliness", o -> o.timeliness);
             put("accuracy", o -> o.accuracy);
-            put("sql", o -> o.sql);
+            put("custom_sql", o -> o.customSql);
             put("availability", o -> o.availability);
             put("schema", o -> o.schema);
             put("comparisons", o -> o.comparisons);
@@ -76,7 +76,7 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
     @JsonPropertyDescription("Configuration of data quality checks that are evaluating custom SQL conditions and aggregated expressions.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableSqlProfilingChecksSpec sql;
+    private TableCustomSqlProfilingChecksSpec customSql;
 
     @JsonPropertyDescription("Configuration of the table availability data quality checks on a table level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -168,18 +168,18 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
      * Returns a container of custom sql checks.
      * @return Custom sql checks.
      */
-    public TableSqlProfilingChecksSpec getSql() {
-        return sql;
+    public TableCustomSqlProfilingChecksSpec getCustomSql() {
+        return customSql;
     }
 
     /**
      * Sets a reference to a custom sql checks container.
-     * @param sql Custom sql checks.
+     * @param customSql Custom sql checks.
      */
-    public void setSql(TableSqlProfilingChecksSpec sql) {
-        this.setDirtyIf(!Objects.equals(this.sql, sql));
-        this.sql = sql;
-        this.propagateHierarchyIdToField(sql, "sql");
+    public void setCustomSql(TableCustomSqlProfilingChecksSpec customSql) {
+        this.setDirtyIf(!Objects.equals(this.customSql, customSql));
+        this.customSql = customSql;
+        this.propagateHierarchyIdToField(customSql, "custom_sql");
     }
 
     /**
@@ -314,6 +314,7 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
         public TableProfilingCheckCategoriesSpec createSample() {
             return new TableProfilingCheckCategoriesSpec() {{
                 setVolume(new TableVolumeProfilingChecksSpec.TableVolumeProfilingChecksSpecSampleFactory().createSample());
+                setComparisons(null);
             }};
         }
     }

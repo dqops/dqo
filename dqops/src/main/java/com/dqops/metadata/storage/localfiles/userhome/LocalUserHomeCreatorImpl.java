@@ -26,6 +26,10 @@ import com.dqops.core.configuration.DqoUserConfigurationProperties;
 import com.dqops.core.filesystem.BuiltInFolderNames;
 import com.dqops.core.filesystem.localfiles.HomeLocationFindService;
 import com.dqops.core.filesystem.localfiles.LocalFileSystemException;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
+import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.core.principal.UserDomainIdentityFactory;
 import com.dqops.core.scheduler.defaults.DefaultSchedulesProvider;
 import com.dqops.metadata.dashboards.DashboardsFolderListSpec;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
@@ -37,6 +41,8 @@ import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.core.rolling.RollingFileAppender;
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
 import ch.qos.logback.core.util.FileSize;
+import com.dqops.metadata.storage.localfiles.credentials.DefaultCloudCredentialFileContent;
+import com.dqops.metadata.storage.localfiles.credentials.DefaultCloudCredentialFileNames;
 import com.dqops.metadata.storage.localfiles.dashboards.DashboardYaml;
 import com.dqops.metadata.storage.localfiles.defaultschedules.DefaultSchedulesYaml;
 import com.dqops.metadata.storage.localfiles.defaultobservabilitychecks.DefaultObservabilityChecksYaml;
@@ -74,6 +80,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
     private YamlSerializer yamlSerializer;
     private DefaultSchedulesProvider defaultSchedulesProvider;
     private DefaultObservabilityCheckSettingsFactory defaultObservabilityCheckSettingsFactory;
+    private UserDomainIdentityFactory userDomainIdentityFactory;
 
     /**
      * Default constructor called by the IoC container.
@@ -88,6 +95,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
      * @param yamlSerializer Yaml serializer.
      * @param defaultSchedulesProvider Default cron schedules provider.
      * @param defaultObservabilityCheckSettingsFactory Factory that creates the initial configuration of data observability checks.
+     * @param userDomainIdentityFactory User data domain identity factory.
      */
     @Autowired
     public LocalUserHomeCreatorImpl(HomeLocationFindService homeLocationFindService,
@@ -99,7 +107,8 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
                                     DqoInstanceConfigurationProperties dqoInstanceConfigurationProperties,
                                     YamlSerializer yamlSerializer,
                                     DefaultSchedulesProvider defaultSchedulesProvider,
-                                    DefaultObservabilityCheckSettingsFactory defaultObservabilityCheckSettingsFactory) {
+                                    DefaultObservabilityCheckSettingsFactory defaultObservabilityCheckSettingsFactory,
+                                    UserDomainIdentityFactory userDomainIdentityFactory) {
         this.homeLocationFindService = homeLocationFindService;
         this.userHomeContextFactory = userHomeContextFactory;
         this.terminalFactory = terminalFactory;
@@ -110,6 +119,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
         this.yamlSerializer = yamlSerializer;
         this.defaultSchedulesProvider = defaultSchedulesProvider;
         this.defaultObservabilityCheckSettingsFactory = defaultObservabilityCheckSettingsFactory;
+        this.userDomainIdentityFactory = userDomainIdentityFactory;
     }
 
     /**
@@ -267,9 +277,35 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
                 Files.writeString(defaultNotificaitonWebhooksPath, defaultWebhooks);
             }
 
-            Path rulesRequirementTxtPath = userHomePath.resolve("rules/requirements.txt");
+            Path rulesRequirementTxtPath = userHomePath.resolve(BuiltInFolderNames.RULES).resolve("requirements.txt");
             if (!Files.exists(rulesRequirementTxtPath)) {
                 Files.writeString(rulesRequirementTxtPath, "# packages in this file are installed when DQOps starts\n");
+            }
+
+            if (this.userConfigurationProperties.isInitializeDefaultCloudCredentials()) {
+                Path defaultGcpCredentialsPath = userHomeMarkerPath.resolve(BuiltInFolderNames.CREDENTIALS)
+                        .resolve(DefaultCloudCredentialFileNames.GCP_APPLICATION_DEFAULT_CREDENTIALS_JSON_NAME);
+                if (!Files.exists(defaultGcpCredentialsPath)) {
+                    Files.writeString(defaultGcpCredentialsPath, DefaultCloudCredentialFileContent.GCP_APPLICATION_DEFAULT_CREDENTIALS_JSON_INITIAL_CONTENT);
+                }
+
+                Path defaultAwsCredentialsPath = userHomeMarkerPath.resolve(BuiltInFolderNames.CREDENTIALS)
+                        .resolve(DefaultCloudCredentialFileNames.AWS_DEFAULT_CREDENTIALS_NAME);
+                if (!Files.exists(defaultAwsCredentialsPath)) {
+                    Files.writeString(defaultAwsCredentialsPath, DefaultCloudCredentialFileContent.AWS_DEFAULT_CREDENTIALS_INITIAL_CONTENT);
+                }
+
+                Path defaultAwsConfigPath = userHomeMarkerPath.resolve(BuiltInFolderNames.CREDENTIALS)
+                        .resolve(DefaultCloudCredentialFileNames.AWS_DEFAULT_CONFIG_NAME);
+                if (!Files.exists(defaultAwsConfigPath)) {
+                    Files.writeString(defaultAwsConfigPath, DefaultCloudCredentialFileContent.AWS_DEFAULT_CONFIG_INITIAL_CONTENT);
+                }
+
+                Path defaultAzureCredentialsPath = userHomeMarkerPath.resolve(BuiltInFolderNames.CREDENTIALS)
+                        .resolve(DefaultCloudCredentialFileNames.AZURE_DEFAULT_CREDENTIALS_NAME);
+                if (!Files.exists(defaultAzureCredentialsPath)) {
+                    Files.writeString(defaultAzureCredentialsPath, DefaultCloudCredentialFileContent.AZURE_DEFAULT_CREDENTIALS_INITIAL_CONTENT);
+                }
             }
         }
         catch (Exception ex) {
@@ -352,7 +388,8 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
      * Applies missing default observability check configuration when it is not configured.
      */
     public void applyDefaultConfigurationWhenMissing() {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserDomainIdentity rootDataDomainAdminIdentity = this.userDomainIdentityFactory.createDataDomainAdminIdentity(this.userConfigurationProperties.getDefaultDataDomain());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(rootDataDomainAdminIdentity);
         UserHome userHome = userHomeContext.getUserHome();
         LocalSettingsSpec localSettingsSpec = userHome.getSettings().getSpec();
         if (localSettingsSpec != null &&

@@ -1,38 +1,61 @@
+# Data quality {{replace category "_" " "}} sensors
+All [data quality sensors](/docs/dqo-concepts/definition-of-data-quality-sensors.md) in the **{{replace category "_" " "}}** category supported by DQOps are listed below. Those sensors are measured on a {{target}} level.
+
+---
+
 {{#each collectedSensors}}
-## **{{replace sensorName "_" " "}}**
-**Full sensor name**
-```
-{{fullSensorName}}
-```
-**Description**{{#with "  "}}{{.}}{{/with}}
+## {{replace sensorName "_" " "}}
 {{sensorParametersJavaDoc}}
+
+**Sensor summary**
+
+The {{replace sensorName "_" " "}} sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| {{target}} | {{category}} | <span class="no-wrap-code">`{{fullSensorName}}`</span> | [*sensors/{{target}}/{{category}}*](https://github.com/dqops/dqo/tree/develop/home/sensors/{{target}}/{{category}}/) |
+
 {{#if definition.spec.fields}}
-**Parameters**{{#with "  "}}{{.}}{{/with}}
-{{#with "  "}}{{.}}{{/with}}
+**Sensor parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-{{#each definition.spec.fields}}|{{displayName}}|{{helpText}}|{{replace dataType "_type" ""}}|{{#if required}}Yes{{else}} {{/if}}|{{#each allowedValues}}{{this}}<br/>{{/each}}|
+{{#each definition.spec.fields}}|<span class="no-wrap-code">`{{displayName}}`</span>|{{helpText}}|*{{replace dataType "_type" ""}}*|{{checkmark required}}|{{#each allowedValues}}*{{this}}*<br/>{{/each}}|
 {{/each}}
 {{else}}
 {{/if}}
+
 {{#if definition.spec.parameters}}
-**Additional sensor definition parameters**{{#with "  "}}{{.}}{{/with}}
-{{#with "  "}}{{.}}{{/with}}
+**Additional sensor definition parameters**
+
+The additional parameters that can be passed to the sensor are shown below.
+
 | Parameters name | Value |
 |-----------------|-------|
-{{#each definition.spec.parameters}}|{{@key}}|{{this}}|
+{{#each definition.spec.parameters}}|*{{@key}}*|{{this}}|
 {{/each}}
 {{else}}
 {{/if}}
-**SQL Template (Jinja2)**{{#with "  "}}{{.}}{{/with}}
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
 {{#each sqlTemplates~}}
 === "{{@key.providerTypeDisplayName}}"
-    {{#with "  "}}{{.}}{{/with}}
+
     ```sql+jinja
     {{#each this~}}
     {{{.}}}
     {{/each~}}
     ```
 {{/each~}}
+
 ___
+
+
 {{/each}}
+
+## What's next
+- Learn how the [data quality sensors](/docs/dqo-concepts/definition-of-data-quality-sensors.md) are defined in DQOps and what is the definition of all Jinja2 macros used in the templates
+- Understand how DQOps [runs data quality checks](/docs/dqo-concepts/architecture/data-quality-check-execution-flow.md), rendering templates to SQL queries

@@ -4,15 +4,6 @@ from .all_checks_patch_parameters import AllChecksPatchParameters
 from .all_checks_patch_parameters_selected_tables_to_columns import (
     AllChecksPatchParametersSelectedTablesToColumns,
 )
-from .anomaly_differencing_percentile_moving_average_30_days_rule_01_parameters_spec import (
-    AnomalyDifferencingPercentileMovingAverage30DaysRule01ParametersSpec,
-)
-from .anomaly_differencing_percentile_moving_average_30_days_rule_1_parameters_spec import (
-    AnomalyDifferencingPercentileMovingAverage30DaysRule1ParametersSpec,
-)
-from .anomaly_differencing_percentile_moving_average_30_days_rule_05_parameters_spec import (
-    AnomalyDifferencingPercentileMovingAverage30DaysRule05ParametersSpec,
-)
 from .anomaly_differencing_percentile_moving_average_rule_01_parameters_spec import (
     AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec,
 )
@@ -21,15 +12,6 @@ from .anomaly_differencing_percentile_moving_average_rule_1_parameters_spec impo
 )
 from .anomaly_differencing_percentile_moving_average_rule_05_parameters_spec import (
     AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec,
-)
-from .anomaly_stationary_percentile_moving_average_30_days_rule_01_parameters_spec import (
-    AnomalyStationaryPercentileMovingAverage30DaysRule01ParametersSpec,
-)
-from .anomaly_stationary_percentile_moving_average_30_days_rule_1_parameters_spec import (
-    AnomalyStationaryPercentileMovingAverage30DaysRule1ParametersSpec,
-)
-from .anomaly_stationary_percentile_moving_average_30_days_rule_05_parameters_spec import (
-    AnomalyStationaryPercentileMovingAverage30DaysRule05ParametersSpec,
 )
 from .anomaly_stationary_percentile_moving_average_rule_01_parameters_spec import (
     AnomalyStationaryPercentileMovingAverageRule01ParametersSpec,
@@ -40,14 +22,15 @@ from .anomaly_stationary_percentile_moving_average_rule_1_parameters_spec import
 from .anomaly_stationary_percentile_moving_average_rule_05_parameters_spec import (
     AnomalyStationaryPercentileMovingAverageRule05ParametersSpec,
 )
+from .athena_authentication_mode import AthenaAuthenticationMode
 from .authenticated_dashboard_model import AuthenticatedDashboardModel
 from .between_floats_rule_parameters_spec import BetweenFloatsRuleParametersSpec
 from .big_query_authentication_mode import BigQueryAuthenticationMode
 from .big_query_jobs_create_project import BigQueryJobsCreateProject
 from .big_query_parameters_spec import BigQueryParametersSpec
-from .bulk_check_disable_parameters import BulkCheckDisableParameters
-from .bulk_check_disable_parameters_selected_tables_to_columns import (
-    BulkCheckDisableParametersSelectedTablesToColumns,
+from .bulk_check_deactivate_parameters import BulkCheckDeactivateParameters
+from .bulk_check_deactivate_parameters_selected_tables_to_columns import (
+    BulkCheckDeactivateParametersSelectedTablesToColumns,
 )
 from .change_percent_1_day_rule_10_parameters_spec import (
     ChangePercent1DayRule10ParametersSpec,
@@ -111,29 +94,50 @@ from .collect_statistics_on_table_queue_job_parameters import (
 from .collect_statistics_queue_job_parameters import CollectStatisticsQueueJobParameters
 from .collect_statistics_queue_job_result import CollectStatisticsQueueJobResult
 from .collect_statistics_result import CollectStatisticsResult
+from .column_accepted_values_daily_monitoring_checks_spec import (
+    ColumnAcceptedValuesDailyMonitoringChecksSpec,
+)
+from .column_accepted_values_daily_monitoring_checks_spec_custom_checks import (
+    ColumnAcceptedValuesDailyMonitoringChecksSpecCustomChecks,
+)
+from .column_accepted_values_daily_partitioned_checks_spec import (
+    ColumnAcceptedValuesDailyPartitionedChecksSpec,
+)
+from .column_accepted_values_daily_partitioned_checks_spec_custom_checks import (
+    ColumnAcceptedValuesDailyPartitionedChecksSpecCustomChecks,
+)
+from .column_accepted_values_monthly_monitoring_checks_spec import (
+    ColumnAcceptedValuesMonthlyMonitoringChecksSpec,
+)
+from .column_accepted_values_monthly_monitoring_checks_spec_custom_checks import (
+    ColumnAcceptedValuesMonthlyMonitoringChecksSpecCustomChecks,
+)
+from .column_accepted_values_monthly_partitioned_checks_spec import (
+    ColumnAcceptedValuesMonthlyPartitionedChecksSpec,
+)
+from .column_accepted_values_monthly_partitioned_checks_spec_custom_checks import (
+    ColumnAcceptedValuesMonthlyPartitionedChecksSpecCustomChecks,
+)
+from .column_accepted_values_profiling_checks_spec import (
+    ColumnAcceptedValuesProfilingChecksSpec,
+)
+from .column_accepted_values_profiling_checks_spec_custom_checks import (
+    ColumnAcceptedValuesProfilingChecksSpecCustomChecks,
+)
+from .column_accepted_values_text_found_in_set_percent_sensor_parameters_spec import (
+    ColumnAcceptedValuesTextFoundInSetPercentSensorParametersSpec,
+)
 from .column_accuracy_daily_monitoring_checks_spec import (
     ColumnAccuracyDailyMonitoringChecksSpec,
 )
 from .column_accuracy_daily_monitoring_checks_spec_custom_checks import (
     ColumnAccuracyDailyMonitoringChecksSpecCustomChecks,
 )
-from .column_accuracy_daily_partitioned_checks_spec import (
-    ColumnAccuracyDailyPartitionedChecksSpec,
-)
-from .column_accuracy_daily_partitioned_checks_spec_custom_checks import (
-    ColumnAccuracyDailyPartitionedChecksSpecCustomChecks,
-)
 from .column_accuracy_monthly_monitoring_checks_spec import (
     ColumnAccuracyMonthlyMonitoringChecksSpec,
 )
 from .column_accuracy_monthly_monitoring_checks_spec_custom_checks import (
     ColumnAccuracyMonthlyMonitoringChecksSpecCustomChecks,
-)
-from .column_accuracy_monthly_partitioned_checks_spec import (
-    ColumnAccuracyMonthlyPartitionedChecksSpec,
-)
-from .column_accuracy_monthly_partitioned_checks_spec_custom_checks import (
-    ColumnAccuracyMonthlyPartitionedChecksSpecCustomChecks,
 )
 from .column_accuracy_profiling_checks_spec import ColumnAccuracyProfilingChecksSpec
 from .column_accuracy_profiling_checks_spec_custom_checks import (
@@ -181,18 +185,6 @@ from .column_anomaly_daily_partitioned_checks_spec import (
 from .column_anomaly_daily_partitioned_checks_spec_custom_checks import (
     ColumnAnomalyDailyPartitionedChecksSpecCustomChecks,
 )
-from .column_anomaly_differencing_distinct_count_30_days_check_spec import (
-    ColumnAnomalyDifferencingDistinctCount30DaysCheckSpec,
-)
-from .column_anomaly_differencing_distinct_count_check_spec import (
-    ColumnAnomalyDifferencingDistinctCountCheckSpec,
-)
-from .column_anomaly_differencing_sum_30_days_check_spec import (
-    ColumnAnomalyDifferencingSum30DaysCheckSpec,
-)
-from .column_anomaly_differencing_sum_check_spec import (
-    ColumnAnomalyDifferencingSumCheckSpec,
-)
 from .column_anomaly_monthly_monitoring_checks_spec import (
     ColumnAnomalyMonthlyMonitoringChecksSpec,
 )
@@ -209,41 +201,69 @@ from .column_anomaly_profiling_checks_spec import ColumnAnomalyProfilingChecksSp
 from .column_anomaly_profiling_checks_spec_custom_checks import (
     ColumnAnomalyProfilingChecksSpecCustomChecks,
 )
-from .column_anomaly_stationary_distinct_percent_30_days_check_spec import (
-    ColumnAnomalyStationaryDistinctPercent30DaysCheckSpec,
+from .column_blanks_blank_null_placeholder_text_count_sensor_parameters_spec import (
+    ColumnBlanksBlankNullPlaceholderTextCountSensorParametersSpec,
 )
-from .column_anomaly_stationary_distinct_percent_check_spec import (
-    ColumnAnomalyStationaryDistinctPercentCheckSpec,
+from .column_blanks_blank_null_placeholder_text_percent_sensor_parameters_spec import (
+    ColumnBlanksBlankNullPlaceholderTextPercentSensorParametersSpec,
 )
-from .column_anomaly_stationary_mean_30_days_check_spec import (
-    ColumnAnomalyStationaryMean30DaysCheckSpec,
+from .column_blanks_daily_monitoring_checks_spec import (
+    ColumnBlanksDailyMonitoringChecksSpec,
 )
-from .column_anomaly_stationary_mean_check_spec import (
-    ColumnAnomalyStationaryMeanCheckSpec,
+from .column_blanks_daily_monitoring_checks_spec_custom_checks import (
+    ColumnBlanksDailyMonitoringChecksSpecCustomChecks,
 )
-from .column_anomaly_stationary_median_30_days_check_spec import (
-    ColumnAnomalyStationaryMedian30DaysCheckSpec,
+from .column_blanks_daily_partitioned_checks_spec import (
+    ColumnBlanksDailyPartitionedChecksSpec,
 )
-from .column_anomaly_stationary_median_check_spec import (
-    ColumnAnomalyStationaryMedianCheckSpec,
+from .column_blanks_daily_partitioned_checks_spec_custom_checks import (
+    ColumnBlanksDailyPartitionedChecksSpecCustomChecks,
 )
-from .column_anomaly_stationary_null_percent_30_days_check_spec import (
-    ColumnAnomalyStationaryNullPercent30DaysCheckSpec,
+from .column_blanks_empty_text_count_sensor_parameters_spec import (
+    ColumnBlanksEmptyTextCountSensorParametersSpec,
 )
-from .column_anomaly_stationary_null_percent_check_spec import (
-    ColumnAnomalyStationaryNullPercentCheckSpec,
+from .column_blanks_empty_text_found_check_spec import (
+    ColumnBlanksEmptyTextFoundCheckSpec,
 )
-from .column_anomaly_stationary_partition_distinct_count_30_days_check_spec import (
-    ColumnAnomalyStationaryPartitionDistinctCount30DaysCheckSpec,
+from .column_blanks_empty_text_percent_check_spec import (
+    ColumnBlanksEmptyTextPercentCheckSpec,
 )
-from .column_anomaly_stationary_partition_distinct_count_check_spec import (
-    ColumnAnomalyStationaryPartitionDistinctCountCheckSpec,
+from .column_blanks_empty_text_percent_sensor_parameters_spec import (
+    ColumnBlanksEmptyTextPercentSensorParametersSpec,
 )
-from .column_anomaly_stationary_partition_sum_30_days_check_spec import (
-    ColumnAnomalyStationaryPartitionSum30DaysCheckSpec,
+from .column_blanks_monthly_monitoring_checks_spec import (
+    ColumnBlanksMonthlyMonitoringChecksSpec,
 )
-from .column_anomaly_stationary_partition_sum_check_spec import (
-    ColumnAnomalyStationaryPartitionSumCheckSpec,
+from .column_blanks_monthly_monitoring_checks_spec_custom_checks import (
+    ColumnBlanksMonthlyMonitoringChecksSpecCustomChecks,
+)
+from .column_blanks_monthly_partitioned_checks_spec import (
+    ColumnBlanksMonthlyPartitionedChecksSpec,
+)
+from .column_blanks_monthly_partitioned_checks_spec_custom_checks import (
+    ColumnBlanksMonthlyPartitionedChecksSpecCustomChecks,
+)
+from .column_blanks_null_placeholder_text_found_check_spec import (
+    ColumnBlanksNullPlaceholderTextFoundCheckSpec,
+)
+from .column_blanks_null_placeholder_text_percent_check_spec import (
+    ColumnBlanksNullPlaceholderTextPercentCheckSpec,
+)
+from .column_blanks_profiling_checks_spec import ColumnBlanksProfilingChecksSpec
+from .column_blanks_profiling_checks_spec_custom_checks import (
+    ColumnBlanksProfilingChecksSpecCustomChecks,
+)
+from .column_blanks_whitespace_text_count_sensor_parameters_spec import (
+    ColumnBlanksWhitespaceTextCountSensorParametersSpec,
+)
+from .column_blanks_whitespace_text_found_check_spec import (
+    ColumnBlanksWhitespaceTextFoundCheckSpec,
+)
+from .column_blanks_whitespace_text_percent_check_spec import (
+    ColumnBlanksWhitespaceTextPercentCheckSpec,
+)
+from .column_blanks_whitespace_text_percent_sensor_parameters_spec import (
+    ColumnBlanksWhitespaceTextPercentSensorParametersSpec,
 )
 from .column_bool_daily_monitoring_checks_spec import (
     ColumnBoolDailyMonitoringChecksSpec,
@@ -278,68 +298,6 @@ from .column_bool_profiling_checks_spec_custom_checks import (
 )
 from .column_bool_true_percent_sensor_parameters_spec import (
     ColumnBoolTruePercentSensorParametersSpec,
-)
-from .column_change_distinct_count_check_spec import ColumnChangeDistinctCountCheckSpec
-from .column_change_distinct_count_since_7_days_check_spec import (
-    ColumnChangeDistinctCountSince7DaysCheckSpec,
-)
-from .column_change_distinct_count_since_30_days_check_spec import (
-    ColumnChangeDistinctCountSince30DaysCheckSpec,
-)
-from .column_change_distinct_count_since_yesterday_check_spec import (
-    ColumnChangeDistinctCountSinceYesterdayCheckSpec,
-)
-from .column_change_distinct_percent_check_spec import (
-    ColumnChangeDistinctPercentCheckSpec,
-)
-from .column_change_distinct_percent_since_7_days_check_spec import (
-    ColumnChangeDistinctPercentSince7DaysCheckSpec,
-)
-from .column_change_distinct_percent_since_30_days_check_spec import (
-    ColumnChangeDistinctPercentSince30DaysCheckSpec,
-)
-from .column_change_distinct_percent_since_yesterday_check_spec import (
-    ColumnChangeDistinctPercentSinceYesterdayCheckSpec,
-)
-from .column_change_mean_check_spec import ColumnChangeMeanCheckSpec
-from .column_change_mean_since_7_days_check_spec import (
-    ColumnChangeMeanSince7DaysCheckSpec,
-)
-from .column_change_mean_since_30_days_check_spec import (
-    ColumnChangeMeanSince30DaysCheckSpec,
-)
-from .column_change_mean_since_yesterday_check_spec import (
-    ColumnChangeMeanSinceYesterdayCheckSpec,
-)
-from .column_change_median_check_spec import ColumnChangeMedianCheckSpec
-from .column_change_median_since_7_days_check_spec import (
-    ColumnChangeMedianSince7DaysCheckSpec,
-)
-from .column_change_median_since_30_days_check_spec import (
-    ColumnChangeMedianSince30DaysCheckSpec,
-)
-from .column_change_median_since_yesterday_check_spec import (
-    ColumnChangeMedianSinceYesterdayCheckSpec,
-)
-from .column_change_null_percent_check_spec import ColumnChangeNullPercentCheckSpec
-from .column_change_null_percent_since_7_days_check_spec import (
-    ColumnChangeNullPercentSince7DaysCheckSpec,
-)
-from .column_change_null_percent_since_30_days_check_spec import (
-    ColumnChangeNullPercentSince30DaysCheckSpec,
-)
-from .column_change_null_percent_since_yesterday_check_spec import (
-    ColumnChangeNullPercentSinceYesterdayCheckSpec,
-)
-from .column_change_sum_check_spec import ColumnChangeSumCheckSpec
-from .column_change_sum_since_7_days_check_spec import (
-    ColumnChangeSumSince7DaysCheckSpec,
-)
-from .column_change_sum_since_30_days_check_spec import (
-    ColumnChangeSumSince30DaysCheckSpec,
-)
-from .column_change_sum_since_yesterday_check_spec import (
-    ColumnChangeSumSinceYesterdayCheckSpec,
 )
 from .column_column_exists_sensor_parameters_spec import (
     ColumnColumnExistsSensorParametersSpec,
@@ -391,6 +349,34 @@ from .column_current_data_quality_status_model import (
 )
 from .column_current_data_quality_status_model_checks import (
     ColumnCurrentDataQualityStatusModelChecks,
+)
+from .column_custom_sql_daily_monitoring_checks_spec import (
+    ColumnCustomSqlDailyMonitoringChecksSpec,
+)
+from .column_custom_sql_daily_monitoring_checks_spec_custom_checks import (
+    ColumnCustomSqlDailyMonitoringChecksSpecCustomChecks,
+)
+from .column_custom_sql_daily_partitioned_checks_spec import (
+    ColumnCustomSqlDailyPartitionedChecksSpec,
+)
+from .column_custom_sql_daily_partitioned_checks_spec_custom_checks import (
+    ColumnCustomSqlDailyPartitionedChecksSpecCustomChecks,
+)
+from .column_custom_sql_monthly_monitoring_checks_spec import (
+    ColumnCustomSqlMonthlyMonitoringChecksSpec,
+)
+from .column_custom_sql_monthly_monitoring_checks_spec_custom_checks import (
+    ColumnCustomSqlMonthlyMonitoringChecksSpecCustomChecks,
+)
+from .column_custom_sql_monthly_partitioned_checks_spec import (
+    ColumnCustomSqlMonthlyPartitionedChecksSpec,
+)
+from .column_custom_sql_monthly_partitioned_checks_spec_custom_checks import (
+    ColumnCustomSqlMonthlyPartitionedChecksSpecCustomChecks,
+)
+from .column_custom_sql_profiling_checks_spec import ColumnCustomSqlProfilingChecksSpec
+from .column_custom_sql_profiling_checks_spec_custom_checks import (
+    ColumnCustomSqlProfilingChecksSpecCustomChecks,
 )
 from .column_daily_monitoring_check_categories_spec import (
     ColumnDailyMonitoringCheckCategoriesSpec,
@@ -444,9 +430,6 @@ from .column_datatype_string_datatype_changed_check_spec import (
 from .column_datatype_string_datatype_detect_sensor_parameters_spec import (
     ColumnDatatypeStringDatatypeDetectSensorParametersSpec,
 )
-from .column_datatype_string_datatype_detected_check_spec import (
-    ColumnDatatypeStringDatatypeDetectedCheckSpec,
-)
 from .column_date_values_in_future_percent_check_spec import (
     ColumnDateValuesInFuturePercentCheckSpec,
 )
@@ -493,20 +476,57 @@ from .column_datetime_value_in_range_date_percent_check_spec import (
 from .column_datetime_value_in_range_date_percent_sensor_parameters_spec import (
     ColumnDatetimeValueInRangeDatePercentSensorParametersSpec,
 )
+from .column_detected_datatype_in_text_check_spec import (
+    ColumnDetectedDatatypeInTextCheckSpec,
+)
+from .column_distinct_count_anomaly_differencing_check_spec import (
+    ColumnDistinctCountAnomalyDifferencingCheckSpec,
+)
+from .column_distinct_count_anomaly_stationary_partition_check_spec import (
+    ColumnDistinctCountAnomalyStationaryPartitionCheckSpec,
+)
+from .column_distinct_count_change_1_day_check_spec import (
+    ColumnDistinctCountChange1DayCheckSpec,
+)
+from .column_distinct_count_change_7_days_check_spec import (
+    ColumnDistinctCountChange7DaysCheckSpec,
+)
+from .column_distinct_count_change_30_days_check_spec import (
+    ColumnDistinctCountChange30DaysCheckSpec,
+)
+from .column_distinct_count_change_check_spec import ColumnDistinctCountChangeCheckSpec
 from .column_distinct_count_check_spec import ColumnDistinctCountCheckSpec
+from .column_distinct_percent_anomaly_stationary_check_spec import (
+    ColumnDistinctPercentAnomalyStationaryCheckSpec,
+)
+from .column_distinct_percent_change_1_day_check_spec import (
+    ColumnDistinctPercentChange1DayCheckSpec,
+)
+from .column_distinct_percent_change_7_days_check_spec import (
+    ColumnDistinctPercentChange7DaysCheckSpec,
+)
+from .column_distinct_percent_change_30_days_check_spec import (
+    ColumnDistinctPercentChange30DaysCheckSpec,
+)
+from .column_distinct_percent_change_check_spec import (
+    ColumnDistinctPercentChangeCheckSpec,
+)
 from .column_distinct_percent_check_spec import ColumnDistinctPercentCheckSpec
 from .column_duplicate_count_check_spec import ColumnDuplicateCountCheckSpec
 from .column_duplicate_percent_check_spec import ColumnDuplicatePercentCheckSpec
 from .column_expected_numbers_in_use_count_check_spec import (
     ColumnExpectedNumbersInUseCountCheckSpec,
 )
-from .column_expected_strings_in_top_values_count_check_spec import (
-    ColumnExpectedStringsInTopValuesCountCheckSpec,
+from .column_expected_text_values_in_use_count_check_spec import (
+    ColumnExpectedTextValuesInUseCountCheckSpec,
 )
-from .column_expected_strings_in_use_count_check_spec import (
-    ColumnExpectedStringsInUseCountCheckSpec,
+from .column_expected_texts_in_top_values_count_check_spec import (
+    ColumnExpectedTextsInTopValuesCountCheckSpec,
 )
 from .column_false_percent_check_spec import ColumnFalsePercentCheckSpec
+from .column_integer_in_range_percent_check_spec import (
+    ColumnIntegerInRangePercentCheckSpec,
+)
 from .column_integrity_daily_monitoring_checks_spec import (
     ColumnIntegrityDailyMonitoringChecksSpec,
 )
@@ -525,11 +545,11 @@ from .column_integrity_foreign_key_match_percent_check_spec import (
 from .column_integrity_foreign_key_match_percent_sensor_parameters_spec import (
     ColumnIntegrityForeignKeyMatchPercentSensorParametersSpec,
 )
-from .column_integrity_foreign_key_not_match_count_check_spec import (
-    ColumnIntegrityForeignKeyNotMatchCountCheckSpec,
-)
 from .column_integrity_foreign_key_not_match_count_sensor_parameters_spec import (
     ColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec,
+)
+from .column_integrity_lookup_key_not_found_count_check_spec import (
+    ColumnIntegrityLookupKeyNotFoundCountCheckSpec,
 )
 from .column_integrity_monthly_monitoring_checks_spec import (
     ColumnIntegrityMonthlyMonitoringChecksSpec,
@@ -547,15 +567,41 @@ from .column_integrity_profiling_checks_spec import ColumnIntegrityProfilingChec
 from .column_integrity_profiling_checks_spec_custom_checks import (
     ColumnIntegrityProfilingChecksSpecCustomChecks,
 )
+from .column_invalid_email_format_found_check_spec import (
+    ColumnInvalidEmailFormatFoundCheckSpec,
+)
+from .column_invalid_ip_4_address_format_found_check_spec import (
+    ColumnInvalidIp4AddressFormatFoundCheckSpec,
+)
+from .column_invalid_ip_6_address_format_found_check_spec import (
+    ColumnInvalidIp6AddressFormatFoundCheckSpec,
+)
 from .column_invalid_latitude_count_check_spec import (
     ColumnInvalidLatitudeCountCheckSpec,
 )
 from .column_invalid_longitude_count_check_spec import (
     ColumnInvalidLongitudeCountCheckSpec,
 )
+from .column_invalid_uuid_format_found_check_spec import (
+    ColumnInvalidUuidFormatFoundCheckSpec,
+)
 from .column_list_model import ColumnListModel
 from .column_max_in_range_check_spec import ColumnMaxInRangeCheckSpec
+from .column_mean_anomaly_stationary_check_spec import (
+    ColumnMeanAnomalyStationaryCheckSpec,
+)
+from .column_mean_change_1_day_check_spec import ColumnMeanChange1DayCheckSpec
+from .column_mean_change_7_days_check_spec import ColumnMeanChange7DaysCheckSpec
+from .column_mean_change_30_days_check_spec import ColumnMeanChange30DaysCheckSpec
+from .column_mean_change_check_spec import ColumnMeanChangeCheckSpec
 from .column_mean_in_range_check_spec import ColumnMeanInRangeCheckSpec
+from .column_median_anomaly_stationary_check_spec import (
+    ColumnMedianAnomalyStationaryCheckSpec,
+)
+from .column_median_change_1_day_check_spec import ColumnMedianChange1DayCheckSpec
+from .column_median_change_7_days_check_spec import ColumnMedianChange7DaysCheckSpec
+from .column_median_change_30_days_check_spec import ColumnMedianChange30DaysCheckSpec
+from .column_median_change_check_spec import ColumnMedianChangeCheckSpec
 from .column_median_in_range_check_spec import ColumnMedianInRangeCheckSpec
 from .column_min_in_range_check_spec import ColumnMinInRangeCheckSpec
 from .column_model import ColumnModel
@@ -584,6 +630,19 @@ from .column_non_negative_count_check_spec import ColumnNonNegativeCountCheckSpe
 from .column_non_negative_percent_check_spec import ColumnNonNegativePercentCheckSpec
 from .column_not_nulls_count_check_spec import ColumnNotNullsCountCheckSpec
 from .column_not_nulls_percent_check_spec import ColumnNotNullsPercentCheckSpec
+from .column_null_percent_anomaly_stationary_check_spec import (
+    ColumnNullPercentAnomalyStationaryCheckSpec,
+)
+from .column_null_percent_change_1_day_check_spec import (
+    ColumnNullPercentChange1DayCheckSpec,
+)
+from .column_null_percent_change_7_days_check_spec import (
+    ColumnNullPercentChange7DaysCheckSpec,
+)
+from .column_null_percent_change_30_days_check_spec import (
+    ColumnNullPercentChange30DaysCheckSpec,
+)
+from .column_null_percent_change_check_spec import ColumnNullPercentChangeCheckSpec
 from .column_nulls_count_check_spec import ColumnNullsCountCheckSpec
 from .column_nulls_daily_monitoring_checks_spec import (
     ColumnNullsDailyMonitoringChecksSpec,
@@ -639,8 +698,19 @@ from .column_nulls_profiling_checks_spec_custom_checks import (
     ColumnNullsProfilingChecksSpecCustomChecks,
 )
 from .column_nulls_statistics_collectors_spec import ColumnNullsStatisticsCollectorsSpec
-from .column_number_value_in_set_percent_check_spec import (
-    ColumnNumberValueInSetPercentCheckSpec,
+from .column_number_above_max_value_check_spec import ColumnNumberAboveMaxValueCheckSpec
+from .column_number_above_max_value_percent_check_spec import (
+    ColumnNumberAboveMaxValuePercentCheckSpec,
+)
+from .column_number_below_min_value_check_spec import ColumnNumberBelowMinValueCheckSpec
+from .column_number_below_min_value_percent_check_spec import (
+    ColumnNumberBelowMinValuePercentCheckSpec,
+)
+from .column_number_found_in_set_percent_check_spec import (
+    ColumnNumberFoundInSetPercentCheckSpec,
+)
+from .column_number_in_range_percent_check_spec import (
+    ColumnNumberInRangePercentCheckSpec,
 )
 from .column_numeric_daily_monitoring_checks_spec import (
     ColumnNumericDailyMonitoringChecksSpec,
@@ -656,6 +726,9 @@ from .column_numeric_daily_partitioned_checks_spec_custom_checks import (
 )
 from .column_numeric_expected_numbers_in_use_count_sensor_parameters_spec import (
     ColumnNumericExpectedNumbersInUseCountSensorParametersSpec,
+)
+from .column_numeric_integer_in_range_percent_sensor_parameters_spec import (
+    ColumnNumericIntegerInRangePercentSensorParametersSpec,
 )
 from .column_numeric_invalid_latitude_count_sensor_parameters_spec import (
     ColumnNumericInvalidLatitudeCountSensorParametersSpec,
@@ -699,8 +772,23 @@ from .column_numeric_non_negative_count_sensor_parameters_spec import (
 from .column_numeric_non_negative_percent_sensor_parameters_spec import (
     ColumnNumericNonNegativePercentSensorParametersSpec,
 )
-from .column_numeric_number_value_in_set_percent_sensor_parameters_spec import (
-    ColumnNumericNumberValueInSetPercentSensorParametersSpec,
+from .column_numeric_number_above_max_value_count_sensor_parameters_spec import (
+    ColumnNumericNumberAboveMaxValueCountSensorParametersSpec,
+)
+from .column_numeric_number_above_max_value_percent_sensor_parameters_spec import (
+    ColumnNumericNumberAboveMaxValuePercentSensorParametersSpec,
+)
+from .column_numeric_number_below_min_value_count_sensor_parameters_spec import (
+    ColumnNumericNumberBelowMinValueCountSensorParametersSpec,
+)
+from .column_numeric_number_below_min_value_percent_sensor_parameters_spec import (
+    ColumnNumericNumberBelowMinValuePercentSensorParametersSpec,
+)
+from .column_numeric_number_found_in_set_percent_sensor_parameters_spec import (
+    ColumnNumericNumberFoundInSetPercentSensorParametersSpec,
+)
+from .column_numeric_number_in_range_percent_sensor_parameters_spec import (
+    ColumnNumericNumberInRangePercentSensorParametersSpec,
 )
 from .column_numeric_percentile_10_sensor_parameters_spec import (
     ColumnNumericPercentile10SensorParametersSpec,
@@ -742,25 +830,65 @@ from .column_numeric_valid_latitude_percent_sensor_parameters_spec import (
 from .column_numeric_valid_longitude_percent_sensor_parameters_spec import (
     ColumnNumericValidLongitudePercentSensorParametersSpec,
 )
-from .column_numeric_value_above_max_value_count_sensor_parameters_spec import (
-    ColumnNumericValueAboveMaxValueCountSensorParametersSpec,
-)
-from .column_numeric_value_above_max_value_percent_sensor_parameters_spec import (
-    ColumnNumericValueAboveMaxValuePercentSensorParametersSpec,
-)
-from .column_numeric_value_below_min_value_count_sensor_parameters_spec import (
-    ColumnNumericValueBelowMinValueCountSensorParametersSpec,
-)
-from .column_numeric_value_below_min_value_percent_sensor_parameters_spec import (
-    ColumnNumericValueBelowMinValuePercentSensorParametersSpec,
-)
-from .column_numeric_values_in_range_integers_percent_sensor_parameters_spec import (
-    ColumnNumericValuesInRangeIntegersPercentSensorParametersSpec,
-)
-from .column_numeric_values_in_range_numeric_percent_sensor_parameters_spec import (
-    ColumnNumericValuesInRangeNumericPercentSensorParametersSpec,
-)
 from .column_partitioned_checks_root_spec import ColumnPartitionedChecksRootSpec
+from .column_patterns_daily_monitoring_checks_spec import (
+    ColumnPatternsDailyMonitoringChecksSpec,
+)
+from .column_patterns_daily_monitoring_checks_spec_custom_checks import (
+    ColumnPatternsDailyMonitoringChecksSpecCustomChecks,
+)
+from .column_patterns_daily_partitioned_checks_spec import (
+    ColumnPatternsDailyPartitionedChecksSpec,
+)
+from .column_patterns_daily_partitioned_checks_spec_custom_checks import (
+    ColumnPatternsDailyPartitionedChecksSpecCustomChecks,
+)
+from .column_patterns_invalid_email_format_count_sensor_parameters_spec import (
+    ColumnPatternsInvalidEmailFormatCountSensorParametersSpec,
+)
+from .column_patterns_invalid_ip_4_address_format_count_sensor_parameters_spec import (
+    ColumnPatternsInvalidIp4AddressFormatCountSensorParametersSpec,
+)
+from .column_patterns_invalid_ip_6_address_format_count_sensor_parameters_spec import (
+    ColumnPatternsInvalidIp6AddressFormatCountSensorParametersSpec,
+)
+from .column_patterns_invalid_uuid_format_count_sensor_parameters_spec import (
+    ColumnPatternsInvalidUuidFormatCountSensorParametersSpec,
+)
+from .column_patterns_monthly_monitoring_checks_spec import (
+    ColumnPatternsMonthlyMonitoringChecksSpec,
+)
+from .column_patterns_monthly_monitoring_checks_spec_custom_checks import (
+    ColumnPatternsMonthlyMonitoringChecksSpecCustomChecks,
+)
+from .column_patterns_monthly_partitioned_checks_spec import (
+    ColumnPatternsMonthlyPartitionedChecksSpec,
+)
+from .column_patterns_monthly_partitioned_checks_spec_custom_checks import (
+    ColumnPatternsMonthlyPartitionedChecksSpecCustomChecks,
+)
+from .column_patterns_profiling_checks_spec import ColumnPatternsProfilingChecksSpec
+from .column_patterns_profiling_checks_spec_custom_checks import (
+    ColumnPatternsProfilingChecksSpecCustomChecks,
+)
+from .column_patterns_text_matching_date_pattern_percent_sensor_parameters_spec import (
+    ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpec,
+)
+from .column_patterns_text_matching_name_pattern_percent_sensor_parameters_spec import (
+    ColumnPatternsTextMatchingNamePatternPercentSensorParametersSpec,
+)
+from .column_patterns_text_not_matching_date_pattern_count_sensor_parameters_spec import (
+    ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpec,
+)
+from .column_patterns_text_not_matching_regex_count_sensor_parameters_spec import (
+    ColumnPatternsTextNotMatchingRegexCountSensorParametersSpec,
+)
+from .column_patterns_texts_matching_regex_percent_sensor_parameters_spec import (
+    ColumnPatternsTextsMatchingRegexPercentSensorParametersSpec,
+)
+from .column_patterns_valid_uuid_format_percent_sensor_parameters_spec import (
+    ColumnPatternsValidUuidFormatPercentSensorParametersSpec,
+)
 from .column_percentile_10_in_range_check_spec import ColumnPercentile10InRangeCheckSpec
 from .column_percentile_25_in_range_check_spec import ColumnPercentile25InRangeCheckSpec
 from .column_percentile_75_in_range_check_spec import ColumnPercentile75InRangeCheckSpec
@@ -886,13 +1014,13 @@ from .column_schema_profiling_checks_spec_custom_checks import (
 )
 from .column_schema_type_changed_check_spec import ColumnSchemaTypeChangedCheckSpec
 from .column_spec import ColumnSpec
-from .column_sql_aggregate_expr_check_spec import ColumnSqlAggregateExprCheckSpec
+from .column_sql_aggregate_expression_check_spec import (
+    ColumnSqlAggregateExpressionCheckSpec,
+)
 from .column_sql_aggregated_expression_sensor_parameters_spec import (
     ColumnSqlAggregatedExpressionSensorParametersSpec,
 )
-from .column_sql_condition_failed_count_check_spec import (
-    ColumnSqlConditionFailedCountCheckSpec,
-)
+from .column_sql_condition_failed_check_spec import ColumnSqlConditionFailedCheckSpec
 from .column_sql_condition_failed_count_sensor_parameters_spec import (
     ColumnSqlConditionFailedCountSensorParametersSpec,
 )
@@ -902,274 +1030,176 @@ from .column_sql_condition_passed_percent_check_spec import (
 from .column_sql_condition_passed_percent_sensor_parameters_spec import (
     ColumnSqlConditionPassedPercentSensorParametersSpec,
 )
-from .column_sql_daily_monitoring_checks_spec import ColumnSqlDailyMonitoringChecksSpec
-from .column_sql_daily_monitoring_checks_spec_custom_checks import (
-    ColumnSqlDailyMonitoringChecksSpecCustomChecks,
-)
-from .column_sql_daily_partitioned_checks_spec import (
-    ColumnSqlDailyPartitionedChecksSpec,
-)
-from .column_sql_daily_partitioned_checks_spec_custom_checks import (
-    ColumnSqlDailyPartitionedChecksSpecCustomChecks,
-)
-from .column_sql_monthly_monitoring_checks_spec import (
-    ColumnSqlMonthlyMonitoringChecksSpec,
-)
-from .column_sql_monthly_monitoring_checks_spec_custom_checks import (
-    ColumnSqlMonthlyMonitoringChecksSpecCustomChecks,
-)
-from .column_sql_monthly_partitioned_checks_spec import (
-    ColumnSqlMonthlyPartitionedChecksSpec,
-)
-from .column_sql_monthly_partitioned_checks_spec_custom_checks import (
-    ColumnSqlMonthlyPartitionedChecksSpecCustomChecks,
-)
-from .column_sql_profiling_checks_spec import ColumnSqlProfilingChecksSpec
-from .column_sql_profiling_checks_spec_custom_checks import (
-    ColumnSqlProfilingChecksSpecCustomChecks,
-)
 from .column_statistics_collectors_root_categories_spec import (
     ColumnStatisticsCollectorsRootCategoriesSpec,
 )
 from .column_statistics_model import ColumnStatisticsModel
-from .column_string_boolean_placeholder_percent_check_spec import (
-    ColumnStringBooleanPlaceholderPercentCheckSpec,
+from .column_strings_expected_text_values_in_use_count_sensor_parameters_spec import (
+    ColumnStringsExpectedTextValuesInUseCountSensorParametersSpec,
 )
-from .column_string_empty_count_check_spec import ColumnStringEmptyCountCheckSpec
-from .column_string_empty_percent_check_spec import ColumnStringEmptyPercentCheckSpec
-from .column_string_invalid_email_count_check_spec import (
-    ColumnStringInvalidEmailCountCheckSpec,
+from .column_strings_expected_texts_in_top_values_count_sensor_parameters_spec import (
+    ColumnStringsExpectedTextsInTopValuesCountSensorParametersSpec,
 )
-from .column_string_invalid_ip_4_address_count_check_spec import (
-    ColumnStringInvalidIp4AddressCountCheckSpec,
+from .column_sum_anomaly_differencing_check_spec import (
+    ColumnSumAnomalyDifferencingCheckSpec,
 )
-from .column_string_invalid_ip_6_address_count_check_spec import (
-    ColumnStringInvalidIp6AddressCountCheckSpec,
+from .column_sum_anomaly_stationary_partition_check_spec import (
+    ColumnSumAnomalyStationaryPartitionCheckSpec,
 )
-from .column_string_invalid_uuid_count_check_spec import (
-    ColumnStringInvalidUuidCountCheckSpec,
-)
-from .column_string_length_above_max_length_count_check_spec import (
-    ColumnStringLengthAboveMaxLengthCountCheckSpec,
-)
-from .column_string_length_above_max_length_percent_check_spec import (
-    ColumnStringLengthAboveMaxLengthPercentCheckSpec,
-)
-from .column_string_length_below_min_length_count_check_spec import (
-    ColumnStringLengthBelowMinLengthCountCheckSpec,
-)
-from .column_string_length_below_min_length_percent_check_spec import (
-    ColumnStringLengthBelowMinLengthPercentCheckSpec,
-)
-from .column_string_length_in_range_percent_check_spec import (
-    ColumnStringLengthInRangePercentCheckSpec,
-)
-from .column_string_match_date_regex_percent_check_spec import (
-    ColumnStringMatchDateRegexPercentCheckSpec,
-)
-from .column_string_match_name_regex_percent_check_spec import (
-    ColumnStringMatchNameRegexPercentCheckSpec,
-)
-from .column_string_match_regex_percent_check_spec import (
-    ColumnStringMatchRegexPercentCheckSpec,
-)
-from .column_string_max_length_check_spec import ColumnStringMaxLengthCheckSpec
-from .column_string_mean_length_check_spec import ColumnStringMeanLengthCheckSpec
-from .column_string_min_length_check_spec import ColumnStringMinLengthCheckSpec
-from .column_string_not_match_date_regex_count_check_spec import (
-    ColumnStringNotMatchDateRegexCountCheckSpec,
-)
-from .column_string_not_match_regex_count_check_spec import (
-    ColumnStringNotMatchRegexCountCheckSpec,
-)
-from .column_string_null_placeholder_count_check_spec import (
-    ColumnStringNullPlaceholderCountCheckSpec,
-)
-from .column_string_null_placeholder_percent_check_spec import (
-    ColumnStringNullPlaceholderPercentCheckSpec,
-)
-from .column_string_parsable_to_float_percent_check_spec import (
-    ColumnStringParsableToFloatPercentCheckSpec,
-)
-from .column_string_parsable_to_integer_percent_check_spec import (
-    ColumnStringParsableToIntegerPercentCheckSpec,
-)
-from .column_string_surrounded_by_whitespace_count_check_spec import (
-    ColumnStringSurroundedByWhitespaceCountCheckSpec,
-)
-from .column_string_surrounded_by_whitespace_percent_check_spec import (
-    ColumnStringSurroundedByWhitespacePercentCheckSpec,
-)
-from .column_string_valid_country_code_percent_check_spec import (
-    ColumnStringValidCountryCodePercentCheckSpec,
-)
-from .column_string_valid_currency_code_percent_check_spec import (
-    ColumnStringValidCurrencyCodePercentCheckSpec,
-)
-from .column_string_valid_dates_percent_check_spec import (
-    ColumnStringValidDatesPercentCheckSpec,
-)
-from .column_string_valid_uuid_percent_check_spec import (
-    ColumnStringValidUuidPercentCheckSpec,
-)
-from .column_string_value_in_set_percent_check_spec import (
-    ColumnStringValueInSetPercentCheckSpec,
-)
-from .column_string_whitespace_count_check_spec import (
-    ColumnStringWhitespaceCountCheckSpec,
-)
-from .column_string_whitespace_percent_check_spec import (
-    ColumnStringWhitespacePercentCheckSpec,
-)
-from .column_strings_daily_monitoring_checks_spec import (
-    ColumnStringsDailyMonitoringChecksSpec,
-)
-from .column_strings_daily_monitoring_checks_spec_custom_checks import (
-    ColumnStringsDailyMonitoringChecksSpecCustomChecks,
-)
-from .column_strings_daily_partitioned_checks_spec import (
-    ColumnStringsDailyPartitionedChecksSpec,
-)
-from .column_strings_daily_partitioned_checks_spec_custom_checks import (
-    ColumnStringsDailyPartitionedChecksSpecCustomChecks,
-)
-from .column_strings_expected_strings_in_top_values_count_sensor_parameters_spec import (
-    ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpec,
-)
-from .column_strings_expected_strings_in_use_count_sensor_parameters_spec import (
-    ColumnStringsExpectedStringsInUseCountSensorParametersSpec,
-)
-from .column_strings_monthly_monitoring_checks_spec import (
-    ColumnStringsMonthlyMonitoringChecksSpec,
-)
-from .column_strings_monthly_monitoring_checks_spec_custom_checks import (
-    ColumnStringsMonthlyMonitoringChecksSpecCustomChecks,
-)
-from .column_strings_monthly_partitioned_checks_spec import (
-    ColumnStringsMonthlyPartitionedChecksSpec,
-)
-from .column_strings_monthly_partitioned_checks_spec_custom_checks import (
-    ColumnStringsMonthlyPartitionedChecksSpecCustomChecks,
-)
-from .column_strings_profiling_checks_spec import ColumnStringsProfilingChecksSpec
-from .column_strings_profiling_checks_spec_custom_checks import (
-    ColumnStringsProfilingChecksSpecCustomChecks,
-)
-from .column_strings_statistics_collectors_spec import (
-    ColumnStringsStatisticsCollectorsSpec,
-)
-from .column_strings_string_boolean_placeholder_percent_sensor_parameters_spec import (
-    ColumnStringsStringBooleanPlaceholderPercentSensorParametersSpec,
-)
-from .column_strings_string_datatype_detect_statistics_collector_spec import (
-    ColumnStringsStringDatatypeDetectStatisticsCollectorSpec,
-)
-from .column_strings_string_empty_count_sensor_parameters_spec import (
-    ColumnStringsStringEmptyCountSensorParametersSpec,
-)
-from .column_strings_string_empty_percent_sensor_parameters_spec import (
-    ColumnStringsStringEmptyPercentSensorParametersSpec,
-)
-from .column_strings_string_invalid_email_count_sensor_parameters_spec import (
-    ColumnStringsStringInvalidEmailCountSensorParametersSpec,
-)
-from .column_strings_string_invalid_ip_4_address_count_sensor_parameters_spec import (
-    ColumnStringsStringInvalidIp4AddressCountSensorParametersSpec,
-)
-from .column_strings_string_invalid_ip_6_address_count_sensor_parameters_spec import (
-    ColumnStringsStringInvalidIp6AddressCountSensorParametersSpec,
-)
-from .column_strings_string_invalid_uuid_count_sensor_parameters_spec import (
-    ColumnStringsStringInvalidUuidCountSensorParametersSpec,
-)
-from .column_strings_string_length_above_max_length_count_sensor_parameters_spec import (
-    ColumnStringsStringLengthAboveMaxLengthCountSensorParametersSpec,
-)
-from .column_strings_string_length_above_max_length_percent_sensor_parameters_spec import (
-    ColumnStringsStringLengthAboveMaxLengthPercentSensorParametersSpec,
-)
-from .column_strings_string_length_below_min_length_count_sensor_parameters_spec import (
-    ColumnStringsStringLengthBelowMinLengthCountSensorParametersSpec,
-)
-from .column_strings_string_length_below_min_length_percent_sensor_parameters_spec import (
-    ColumnStringsStringLengthBelowMinLengthPercentSensorParametersSpec,
-)
-from .column_strings_string_length_in_range_percent_sensor_parameters_spec import (
-    ColumnStringsStringLengthInRangePercentSensorParametersSpec,
-)
-from .column_strings_string_match_date_regex_percent_sensor_parameters_spec import (
-    ColumnStringsStringMatchDateRegexPercentSensorParametersSpec,
-)
-from .column_strings_string_match_name_regex_percent_sensor_parameters_spec import (
-    ColumnStringsStringMatchNameRegexPercentSensorParametersSpec,
-)
-from .column_strings_string_match_regex_percent_sensor_parameters_spec import (
-    ColumnStringsStringMatchRegexPercentSensorParametersSpec,
-)
-from .column_strings_string_max_length_sensor_parameters_spec import (
-    ColumnStringsStringMaxLengthSensorParametersSpec,
-)
-from .column_strings_string_max_length_statistics_collector_spec import (
-    ColumnStringsStringMaxLengthStatisticsCollectorSpec,
-)
-from .column_strings_string_mean_length_sensor_parameters_spec import (
-    ColumnStringsStringMeanLengthSensorParametersSpec,
-)
-from .column_strings_string_mean_length_statistics_collector_spec import (
-    ColumnStringsStringMeanLengthStatisticsCollectorSpec,
-)
-from .column_strings_string_min_length_sensor_parameters_spec import (
-    ColumnStringsStringMinLengthSensorParametersSpec,
-)
-from .column_strings_string_min_length_statistics_collector_spec import (
-    ColumnStringsStringMinLengthStatisticsCollectorSpec,
-)
-from .column_strings_string_not_match_date_regex_count_sensor_parameters_spec import (
-    ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec,
-)
-from .column_strings_string_not_match_regex_count_sensor_parameters_spec import (
-    ColumnStringsStringNotMatchRegexCountSensorParametersSpec,
-)
-from .column_strings_string_null_placeholder_count_sensor_parameters_spec import (
-    ColumnStringsStringNullPlaceholderCountSensorParametersSpec,
-)
-from .column_strings_string_null_placeholder_percent_sensor_parameters_spec import (
-    ColumnStringsStringNullPlaceholderPercentSensorParametersSpec,
-)
-from .column_strings_string_parsable_to_float_percent_sensor_parameters_spec import (
-    ColumnStringsStringParsableToFloatPercentSensorParametersSpec,
-)
-from .column_strings_string_parsable_to_integer_percent_sensor_parameters_spec import (
-    ColumnStringsStringParsableToIntegerPercentSensorParametersSpec,
-)
-from .column_strings_string_surrounded_by_whitespace_count_sensor_parameters_spec import (
-    ColumnStringsStringSurroundedByWhitespaceCountSensorParametersSpec,
-)
-from .column_strings_string_surrounded_by_whitespace_percent_sensor_parameters_spec import (
-    ColumnStringsStringSurroundedByWhitespacePercentSensorParametersSpec,
-)
-from .column_strings_string_valid_country_code_percent_sensor_parameters_spec import (
-    ColumnStringsStringValidCountryCodePercentSensorParametersSpec,
-)
-from .column_strings_string_valid_currency_code_percent_sensor_parameters_spec import (
-    ColumnStringsStringValidCurrencyCodePercentSensorParametersSpec,
-)
-from .column_strings_string_valid_date_percent_sensor_parameters_spec import (
-    ColumnStringsStringValidDatePercentSensorParametersSpec,
-)
-from .column_strings_string_valid_uuid_percent_sensor_parameters_spec import (
-    ColumnStringsStringValidUuidPercentSensorParametersSpec,
-)
-from .column_strings_string_value_in_set_percent_sensor_parameters_spec import (
-    ColumnStringsStringValueInSetPercentSensorParametersSpec,
-)
-from .column_strings_string_whitespace_count_sensor_parameters_spec import (
-    ColumnStringsStringWhitespaceCountSensorParametersSpec,
-)
-from .column_strings_string_whitespace_percent_sensor_parameters_spec import (
-    ColumnStringsStringWhitespacePercentSensorParametersSpec,
-)
+from .column_sum_change_1_day_check_spec import ColumnSumChange1DayCheckSpec
+from .column_sum_change_7_days_check_spec import ColumnSumChange7DaysCheckSpec
+from .column_sum_change_30_days_check_spec import ColumnSumChange30DaysCheckSpec
+from .column_sum_change_check_spec import ColumnSumChangeCheckSpec
 from .column_sum_in_range_check_spec import ColumnSumInRangeCheckSpec
+from .column_text_daily_monitoring_checks_spec import (
+    ColumnTextDailyMonitoringChecksSpec,
+)
+from .column_text_daily_monitoring_checks_spec_custom_checks import (
+    ColumnTextDailyMonitoringChecksSpecCustomChecks,
+)
+from .column_text_daily_partitioned_checks_spec import (
+    ColumnTextDailyPartitionedChecksSpec,
+)
+from .column_text_daily_partitioned_checks_spec_custom_checks import (
+    ColumnTextDailyPartitionedChecksSpecCustomChecks,
+)
+from .column_text_found_in_set_percent_check_spec import (
+    ColumnTextFoundInSetPercentCheckSpec,
+)
+from .column_text_length_above_max_length_check_spec import (
+    ColumnTextLengthAboveMaxLengthCheckSpec,
+)
+from .column_text_length_above_max_length_percent_check_spec import (
+    ColumnTextLengthAboveMaxLengthPercentCheckSpec,
+)
+from .column_text_length_below_min_length_check_spec import (
+    ColumnTextLengthBelowMinLengthCheckSpec,
+)
+from .column_text_length_below_min_length_percent_check_spec import (
+    ColumnTextLengthBelowMinLengthPercentCheckSpec,
+)
+from .column_text_length_in_range_percent_check_spec import (
+    ColumnTextLengthInRangePercentCheckSpec,
+)
+from .column_text_matching_date_pattern_percent_check_spec import (
+    ColumnTextMatchingDatePatternPercentCheckSpec,
+)
+from .column_text_matching_name_pattern_percent_check_spec import (
+    ColumnTextMatchingNamePatternPercentCheckSpec,
+)
+from .column_text_max_length_check_spec import ColumnTextMaxLengthCheckSpec
+from .column_text_mean_length_check_spec import ColumnTextMeanLengthCheckSpec
+from .column_text_min_length_check_spec import ColumnTextMinLengthCheckSpec
+from .column_text_monthly_monitoring_checks_spec import (
+    ColumnTextMonthlyMonitoringChecksSpec,
+)
+from .column_text_monthly_monitoring_checks_spec_custom_checks import (
+    ColumnTextMonthlyMonitoringChecksSpecCustomChecks,
+)
+from .column_text_monthly_partitioned_checks_spec import (
+    ColumnTextMonthlyPartitionedChecksSpec,
+)
+from .column_text_monthly_partitioned_checks_spec_custom_checks import (
+    ColumnTextMonthlyPartitionedChecksSpecCustomChecks,
+)
+from .column_text_not_matching_date_pattern_found_check_spec import (
+    ColumnTextNotMatchingDatePatternFoundCheckSpec,
+)
+from .column_text_not_matching_regex_found_check_spec import (
+    ColumnTextNotMatchingRegexFoundCheckSpec,
+)
+from .column_text_parsable_to_boolean_percent_check_spec import (
+    ColumnTextParsableToBooleanPercentCheckSpec,
+)
+from .column_text_parsable_to_date_percent_check_spec import (
+    ColumnTextParsableToDatePercentCheckSpec,
+)
+from .column_text_parsable_to_float_percent_check_spec import (
+    ColumnTextParsableToFloatPercentCheckSpec,
+)
+from .column_text_parsable_to_integer_percent_check_spec import (
+    ColumnTextParsableToIntegerPercentCheckSpec,
+)
+from .column_text_profiling_checks_spec import ColumnTextProfilingChecksSpec
+from .column_text_profiling_checks_spec_custom_checks import (
+    ColumnTextProfilingChecksSpecCustomChecks,
+)
+from .column_text_statistics_collectors_spec import ColumnTextStatisticsCollectorsSpec
+from .column_text_surrounded_by_whitespace_check_spec import (
+    ColumnTextSurroundedByWhitespaceCheckSpec,
+)
+from .column_text_surrounded_by_whitespace_percent_check_spec import (
+    ColumnTextSurroundedByWhitespacePercentCheckSpec,
+)
+from .column_text_text_datatype_detect_statistics_collector_spec import (
+    ColumnTextTextDatatypeDetectStatisticsCollectorSpec,
+)
+from .column_text_text_length_above_max_length_count_sensor_parameters_spec import (
+    ColumnTextTextLengthAboveMaxLengthCountSensorParametersSpec,
+)
+from .column_text_text_length_above_max_length_percent_sensor_parameters_spec import (
+    ColumnTextTextLengthAboveMaxLengthPercentSensorParametersSpec,
+)
+from .column_text_text_length_below_min_length_count_sensor_parameters_spec import (
+    ColumnTextTextLengthBelowMinLengthCountSensorParametersSpec,
+)
+from .column_text_text_length_below_min_length_percent_sensor_parameters_spec import (
+    ColumnTextTextLengthBelowMinLengthPercentSensorParametersSpec,
+)
+from .column_text_text_length_in_range_percent_sensor_parameters_spec import (
+    ColumnTextTextLengthInRangePercentSensorParametersSpec,
+)
+from .column_text_text_max_length_sensor_parameters_spec import (
+    ColumnTextTextMaxLengthSensorParametersSpec,
+)
+from .column_text_text_max_length_statistics_collector_spec import (
+    ColumnTextTextMaxLengthStatisticsCollectorSpec,
+)
+from .column_text_text_mean_length_sensor_parameters_spec import (
+    ColumnTextTextMeanLengthSensorParametersSpec,
+)
+from .column_text_text_mean_length_statistics_collector_spec import (
+    ColumnTextTextMeanLengthStatisticsCollectorSpec,
+)
+from .column_text_text_min_length_sensor_parameters_spec import (
+    ColumnTextTextMinLengthSensorParametersSpec,
+)
+from .column_text_text_min_length_statistics_collector_spec import (
+    ColumnTextTextMinLengthStatisticsCollectorSpec,
+)
+from .column_text_text_parsable_to_boolean_percent_sensor_parameters_spec import (
+    ColumnTextTextParsableToBooleanPercentSensorParametersSpec,
+)
+from .column_text_text_parsable_to_date_percent_sensor_parameters_spec import (
+    ColumnTextTextParsableToDatePercentSensorParametersSpec,
+)
+from .column_text_text_parsable_to_float_percent_sensor_parameters_spec import (
+    ColumnTextTextParsableToFloatPercentSensorParametersSpec,
+)
+from .column_text_text_parsable_to_integer_percent_sensor_parameters_spec import (
+    ColumnTextTextParsableToIntegerPercentSensorParametersSpec,
+)
+from .column_text_text_surrounded_by_whitespace_count_sensor_parameters_spec import (
+    ColumnTextTextSurroundedByWhitespaceCountSensorParametersSpec,
+)
+from .column_text_text_surrounded_by_whitespace_percent_sensor_parameters_spec import (
+    ColumnTextTextSurroundedByWhitespacePercentSensorParametersSpec,
+)
+from .column_text_text_valid_country_code_percent_sensor_parameters_spec import (
+    ColumnTextTextValidCountryCodePercentSensorParametersSpec,
+)
+from .column_text_text_valid_currency_code_percent_sensor_parameters_spec import (
+    ColumnTextTextValidCurrencyCodePercentSensorParametersSpec,
+)
+from .column_text_valid_country_code_percent_check_spec import (
+    ColumnTextValidCountryCodePercentCheckSpec,
+)
+from .column_text_valid_currency_code_percent_check_spec import (
+    ColumnTextValidCurrencyCodePercentCheckSpec,
+)
+from .column_texts_matching_regex_percent_check_spec import (
+    ColumnTextsMatchingRegexPercentCheckSpec,
+)
 from .column_true_percent_check_spec import ColumnTruePercentCheckSpec
 from .column_type_snapshot_spec import ColumnTypeSnapshotSpec
 from .column_uniqueness_daily_monitoring_checks_spec import (
@@ -1233,23 +1263,8 @@ from .column_valid_latitude_percent_check_spec import (
 from .column_valid_longitude_percent_check_spec import (
     ColumnValidLongitudePercentCheckSpec,
 )
-from .column_value_above_max_value_count_check_spec import (
-    ColumnValueAboveMaxValueCountCheckSpec,
-)
-from .column_value_above_max_value_percent_check_spec import (
-    ColumnValueAboveMaxValuePercentCheckSpec,
-)
-from .column_value_below_min_value_count_check_spec import (
-    ColumnValueBelowMinValueCountCheckSpec,
-)
-from .column_value_below_min_value_percent_check_spec import (
-    ColumnValueBelowMinValuePercentCheckSpec,
-)
-from .column_values_in_range_integers_percent_check_spec import (
-    ColumnValuesInRangeIntegersPercentCheckSpec,
-)
-from .column_values_in_range_numeric_percent_check_spec import (
-    ColumnValuesInRangeNumericPercentCheckSpec,
+from .column_valid_uuid_format_percent_check_spec import (
+    ColumnValidUuidFormatPercentCheckSpec,
 )
 from .comment_spec import CommentSpec
 from .common_column_model import CommonColumnModel
@@ -1261,6 +1276,7 @@ from .connection_spec import ConnectionSpec
 from .connection_specification_model import ConnectionSpecificationModel
 from .connection_test_model import ConnectionTestModel
 from .connection_test_status import ConnectionTestStatus
+from .count_between_rule_parameters_spec import CountBetweenRuleParametersSpec
 from .credential_type import CredentialType
 from .custom_check_spec import CustomCheckSpec
 from .custom_rule_parameters_spec import CustomRuleParametersSpec
@@ -1277,7 +1293,8 @@ from .data_grouping_configuration_trimmed_model import (
 )
 from .data_grouping_dimension_source import DataGroupingDimensionSource
 from .data_grouping_dimension_spec import DataGroupingDimensionSpec
-from .datatype_equals_rule_parameters_spec import DatatypeEqualsRuleParametersSpec
+from .databricks_parameters_spec import DatabricksParametersSpec
+from .databricks_parameters_spec_properties import DatabricksParametersSpecProperties
 from .datetime_built_in_date_formats import DatetimeBuiltInDateFormats
 from .default_schedules_spec import DefaultSchedulesSpec
 from .delete_stored_data_queue_job_parameters import DeleteStoredDataQueueJobParameters
@@ -1285,6 +1302,10 @@ from .delete_stored_data_queue_job_result import DeleteStoredDataQueueJobResult
 from .delete_stored_data_result import DeleteStoredDataResult
 from .delete_stored_data_result_partition_results import (
     DeleteStoredDataResultPartitionResults,
+)
+from .detected_datatype_category import DetectedDatatypeCategory
+from .detected_datatype_equals_rule_parameters_spec import (
+    DetectedDatatypeEqualsRuleParametersSpec,
 )
 from .display_hint import DisplayHint
 from .dqo_cloud_user_model import DqoCloudUserModel
@@ -1309,7 +1330,7 @@ from .dqo_user_role import DqoUserRole
 from .duration import Duration
 from .effective_schedule_level_model import EffectiveScheduleLevelModel
 from .effective_schedule_model import EffectiveScheduleModel
-from .equals_integer_1_rule_parameters_spec import EqualsInteger1RuleParametersSpec
+from .equals_1_rule_parameters_spec import Equals1RuleParametersSpec
 from .equals_integer_rule_parameters_spec import EqualsIntegerRuleParametersSpec
 from .error_entry_model import ErrorEntryModel
 from .errors_list_model import ErrorsListModel
@@ -1335,9 +1356,9 @@ from .incident_sort_order import IncidentSortOrder
 from .incident_status import IncidentStatus
 from .incident_webhook_notifications_spec import IncidentWebhookNotificationsSpec
 from .incidents_per_connection_model import IncidentsPerConnectionModel
-from .max_count_rule_0_parameters_spec import MaxCountRule0ParametersSpec
-from .max_count_rule_10_parameters_spec import MaxCountRule10ParametersSpec
-from .max_count_rule_15_parameters_spec import MaxCountRule15ParametersSpec
+from .max_count_rule_0_error_parameters_spec import MaxCountRule0ErrorParametersSpec
+from .max_count_rule_0_warning_parameters_spec import MaxCountRule0WarningParametersSpec
+from .max_count_rule_100_parameters_spec import MaxCountRule100ParametersSpec
 from .max_days_rule_1_parameters_spec import MaxDaysRule1ParametersSpec
 from .max_days_rule_2_parameters_spec import MaxDaysRule2ParametersSpec
 from .max_days_rule_7_parameters_spec import MaxDaysRule7ParametersSpec
@@ -1347,27 +1368,25 @@ from .max_diff_percent_rule_5_parameters_spec import MaxDiffPercentRule5Paramete
 from .max_failures_rule_0_parameters_spec import MaxFailuresRule0ParametersSpec
 from .max_failures_rule_5_parameters_spec import MaxFailuresRule5ParametersSpec
 from .max_failures_rule_10_parameters_spec import MaxFailuresRule10ParametersSpec
-from .max_missing_rule_0_parameters_spec import MaxMissingRule0ParametersSpec
-from .max_missing_rule_1_parameters_spec import MaxMissingRule1ParametersSpec
+from .max_missing_rule_0_error_parameters_spec import MaxMissingRule0ErrorParametersSpec
+from .max_missing_rule_0_warning_parameters_spec import (
+    MaxMissingRule0WarningParametersSpec,
+)
 from .max_missing_rule_2_parameters_spec import MaxMissingRule2ParametersSpec
-from .max_percent_rule_0_parameters_spec import MaxPercentRule0ParametersSpec
-from .max_percent_rule_1_parameters_spec import MaxPercentRule1ParametersSpec
-from .max_percent_rule_2_parameters_spec import MaxPercentRule2ParametersSpec
+from .max_percent_rule_0_error_parameters_spec import MaxPercentRule0ErrorParametersSpec
+from .max_percent_rule_0_warning_parameters_spec import (
+    MaxPercentRule0WarningParametersSpec,
+)
 from .max_percent_rule_5_parameters_spec import MaxPercentRule5ParametersSpec
-from .max_percent_rule_95_parameters_spec import MaxPercentRule95ParametersSpec
-from .max_percent_rule_99_parameters_spec import MaxPercentRule99ParametersSpec
-from .max_percent_rule_100_parameters_spec import MaxPercentRule100ParametersSpec
 from .max_value_rule_parameters_spec import MaxValueRuleParametersSpec
-from .min_count_rule_0_parameters_spec import MinCountRule0ParametersSpec
 from .min_count_rule_1_parameters_spec import MinCountRule1ParametersSpec
-from .min_count_rule_fatal_parameters_spec import MinCountRuleFatalParametersSpec
-from .min_count_rule_warning_parameters_spec import MinCountRuleWarningParametersSpec
-from .min_percent_rule_0_parameters_spec import MinPercentRule0ParametersSpec
-from .min_percent_rule_2_parameters_spec import MinPercentRule2ParametersSpec
-from .min_percent_rule_5_parameters_spec import MinPercentRule5ParametersSpec
 from .min_percent_rule_95_parameters_spec import MinPercentRule95ParametersSpec
-from .min_percent_rule_99_parameters_spec import MinPercentRule99ParametersSpec
-from .min_percent_rule_100_parameters_spec import MinPercentRule100ParametersSpec
+from .min_percent_rule_100_error_parameters_spec import (
+    MinPercentRule100ErrorParametersSpec,
+)
+from .min_percent_rule_100_warning_parameters_spec import (
+    MinPercentRule100WarningParametersSpec,
+)
 from .min_value_rule_parameters_spec import MinValueRuleParametersSpec
 from .minimum_grouping_severity_level import MinimumGroupingSeverityLevel
 from .monitoring_schedule_spec import MonitoringScheduleSpec
@@ -1392,6 +1411,8 @@ from .physical_table_name import PhysicalTableName
 from .postgresql_parameters_spec import PostgresqlParametersSpec
 from .postgresql_parameters_spec_properties import PostgresqlParametersSpecProperties
 from .postgresql_ssl_mode import PostgresqlSslMode
+from .presto_parameters_spec import PrestoParametersSpec
+from .presto_parameters_spec_properties import PrestoParametersSpecProperties
 from .profiling_time_period import ProfilingTimePeriod
 from .provider_sensor_definition_spec import ProviderSensorDefinitionSpec
 from .provider_sensor_definition_spec_parameters import (
@@ -1438,7 +1459,10 @@ from .similar_check_model import SimilarCheckModel
 from .snowflake_parameters_spec import SnowflakeParametersSpec
 from .snowflake_parameters_spec_properties import SnowflakeParametersSpecProperties
 from .sort_direction import SortDirection
+from .spark_parameters_spec import SparkParametersSpec
+from .spark_parameters_spec_properties import SparkParametersSpecProperties
 from .spring_error_payload import SpringErrorPayload
+from .sql_server_authentication_mode import SqlServerAuthenticationMode
 from .sql_server_parameters_spec import SqlServerParametersSpec
 from .sql_server_parameters_spec_properties import SqlServerParametersSpecProperties
 from .statistics_collector_search_filters import StatisticsCollectorSearchFilters
@@ -1447,7 +1471,6 @@ from .statistics_data_scope import StatisticsDataScope
 from .statistics_metric_model import StatisticsMetricModel
 from .statistics_metric_model_result import StatisticsMetricModelResult
 from .statistics_result_data_type import StatisticsResultDataType
-from .strings_built_in_date_formats import StringsBuiltInDateFormats
 from .synchronize_multiple_folders_dqo_queue_job_parameters import (
     SynchronizeMultipleFoldersDqoQueueJobParameters,
 )
@@ -1480,18 +1503,6 @@ from .table_accuracy_total_row_count_match_percent_check_spec import (
 from .table_accuracy_total_row_count_match_percent_sensor_parameters_spec import (
     TableAccuracyTotalRowCountMatchPercentSensorParametersSpec,
 )
-from .table_anomaly_differencing_row_count_30_days_check_spec import (
-    TableAnomalyDifferencingRowCount30DaysCheckSpec,
-)
-from .table_anomaly_differencing_row_count_check_spec import (
-    TableAnomalyDifferencingRowCountCheckSpec,
-)
-from .table_anomaly_stationary_partition_row_count_30_days_check_spec import (
-    TableAnomalyStationaryPartitionRowCount30DaysCheckSpec,
-)
-from .table_anomaly_stationary_partition_row_count_check_spec import (
-    TableAnomalyStationaryPartitionRowCountCheckSpec,
-)
 from .table_availability_check_spec import TableAvailabilityCheckSpec
 from .table_availability_daily_monitoring_checks_spec import (
     TableAvailabilityDailyMonitoringChecksSpec,
@@ -1513,16 +1524,6 @@ from .table_availability_profiling_checks_spec_custom_checks import (
 )
 from .table_availability_sensor_parameters_spec import (
     TableAvailabilitySensorParametersSpec,
-)
-from .table_change_row_count_check_spec import TableChangeRowCountCheckSpec
-from .table_change_row_count_since_7_days_check_spec import (
-    TableChangeRowCountSince7DaysCheckSpec,
-)
-from .table_change_row_count_since_30_days_check_spec import (
-    TableChangeRowCountSince30DaysCheckSpec,
-)
-from .table_change_row_count_since_yesterday_check_spec import (
-    TableChangeRowCountSinceYesterdayCheckSpec,
 )
 from .table_column_count_sensor_parameters_spec import (
     TableColumnCountSensorParametersSpec,
@@ -1598,6 +1599,34 @@ from .table_current_data_quality_status_model_checks import (
 from .table_current_data_quality_status_model_columns import (
     TableCurrentDataQualityStatusModelColumns,
 )
+from .table_custom_sql_daily_monitoring_checks_spec import (
+    TableCustomSqlDailyMonitoringChecksSpec,
+)
+from .table_custom_sql_daily_monitoring_checks_spec_custom_checks import (
+    TableCustomSqlDailyMonitoringChecksSpecCustomChecks,
+)
+from .table_custom_sql_daily_partitioned_checks_spec import (
+    TableCustomSqlDailyPartitionedChecksSpec,
+)
+from .table_custom_sql_daily_partitioned_checks_spec_custom_checks import (
+    TableCustomSqlDailyPartitionedChecksSpecCustomChecks,
+)
+from .table_custom_sql_monthly_monitoring_checks_spec import (
+    TableCustomSqlMonthlyMonitoringChecksSpec,
+)
+from .table_custom_sql_monthly_monitoring_checks_spec_custom_checks import (
+    TableCustomSqlMonthlyMonitoringChecksSpecCustomChecks,
+)
+from .table_custom_sql_monthly_partitioned_checks_spec import (
+    TableCustomSqlMonthlyPartitionedChecksSpec,
+)
+from .table_custom_sql_monthly_partitioned_checks_spec_custom_checks import (
+    TableCustomSqlMonthlyPartitionedChecksSpecCustomChecks,
+)
+from .table_custom_sql_profiling_checks_spec import TableCustomSqlProfilingChecksSpec
+from .table_custom_sql_profiling_checks_spec_custom_checks import (
+    TableCustomSqlProfilingChecksSpecCustomChecks,
+)
 from .table_daily_monitoring_check_categories_spec import (
     TableDailyMonitoringCheckCategoriesSpec,
 )
@@ -1652,6 +1681,18 @@ from .table_profiling_check_categories_spec_comparisons import (
 from .table_profiling_check_categories_spec_custom import (
     TableProfilingCheckCategoriesSpecCustom,
 )
+from .table_row_count_anomaly_differencing_check_spec import (
+    TableRowCountAnomalyDifferencingCheckSpec,
+)
+from .table_row_count_anomaly_stationary_partition_check_spec import (
+    TableRowCountAnomalyStationaryPartitionCheckSpec,
+)
+from .table_row_count_change_1_day_check_spec import TableRowCountChange1DayCheckSpec
+from .table_row_count_change_7_days_check_spec import TableRowCountChange7DaysCheckSpec
+from .table_row_count_change_30_days_check_spec import (
+    TableRowCountChange30DaysCheckSpec,
+)
+from .table_row_count_change_check_spec import TableRowCountChangeCheckSpec
 from .table_row_count_check_spec import TableRowCountCheckSpec
 from .table_schema_column_count_changed_check_spec import (
     TableSchemaColumnCountChangedCheckSpec,
@@ -1690,13 +1731,13 @@ from .table_spec import TableSpec
 from .table_spec_columns import TableSpecColumns
 from .table_spec_groupings import TableSpecGroupings
 from .table_spec_table_comparisons import TableSpecTableComparisons
-from .table_sql_aggregate_expr_check_spec import TableSqlAggregateExprCheckSpec
+from .table_sql_aggregate_expression_check_spec import (
+    TableSqlAggregateExpressionCheckSpec,
+)
 from .table_sql_aggregated_expression_sensor_parameters_spec import (
     TableSqlAggregatedExpressionSensorParametersSpec,
 )
-from .table_sql_condition_failed_count_check_spec import (
-    TableSqlConditionFailedCountCheckSpec,
-)
+from .table_sql_condition_failed_check_spec import TableSqlConditionFailedCheckSpec
 from .table_sql_condition_failed_count_sensor_parameters_spec import (
     TableSqlConditionFailedCountSensorParametersSpec,
 )
@@ -1705,30 +1746,6 @@ from .table_sql_condition_passed_percent_check_spec import (
 )
 from .table_sql_condition_passed_percent_sensor_parameters_spec import (
     TableSqlConditionPassedPercentSensorParametersSpec,
-)
-from .table_sql_daily_monitoring_checks_spec import TableSqlDailyMonitoringChecksSpec
-from .table_sql_daily_monitoring_checks_spec_custom_checks import (
-    TableSqlDailyMonitoringChecksSpecCustomChecks,
-)
-from .table_sql_daily_partitioned_checks_spec import TableSqlDailyPartitionedChecksSpec
-from .table_sql_daily_partitioned_checks_spec_custom_checks import (
-    TableSqlDailyPartitionedChecksSpecCustomChecks,
-)
-from .table_sql_monthly_monitoring_checks_spec import (
-    TableSqlMonthlyMonitoringChecksSpec,
-)
-from .table_sql_monthly_monitoring_checks_spec_custom_checks import (
-    TableSqlMonthlyMonitoringChecksSpecCustomChecks,
-)
-from .table_sql_monthly_partitioned_checks_spec import (
-    TableSqlMonthlyPartitionedChecksSpec,
-)
-from .table_sql_monthly_partitioned_checks_spec_custom_checks import (
-    TableSqlMonthlyPartitionedChecksSpecCustomChecks,
-)
-from .table_sql_profiling_checks_spec import TableSqlProfilingChecksSpec
-from .table_sql_profiling_checks_spec_custom_checks import (
-    TableSqlProfilingChecksSpecCustomChecks,
 )
 from .table_statistics_collectors_root_categories_spec import (
     TableStatisticsCollectorsRootCategoriesSpec,
@@ -1810,32 +1827,32 @@ from .table_volume_row_count_statistics_collector_spec import (
 )
 from .table_volume_statistics_collectors_spec import TableVolumeStatisticsCollectorsSpec
 from .temporal_unit import TemporalUnit
+from .text_built_in_date_formats import TextBuiltInDateFormats
+from .time_period_gradient import TimePeriodGradient
 from .time_window_filter_parameters import TimeWindowFilterParameters
 from .timestamp_columns_spec import TimestampColumnsSpec
-from .value_changed_parameters_spec import ValueChangedParametersSpec
+from .trino_engine_type import TrinoEngineType
+from .trino_parameters_spec import TrinoParametersSpec
+from .trino_parameters_spec_properties import TrinoParametersSpecProperties
+from .value_changed_rule_parameters_spec import ValueChangedRuleParametersSpec
 
 __all__ = (
     "AllChecksPatchParameters",
     "AllChecksPatchParametersSelectedTablesToColumns",
-    "AnomalyDifferencingPercentileMovingAverage30DaysRule01ParametersSpec",
-    "AnomalyDifferencingPercentileMovingAverage30DaysRule05ParametersSpec",
-    "AnomalyDifferencingPercentileMovingAverage30DaysRule1ParametersSpec",
     "AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec",
     "AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec",
     "AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec",
-    "AnomalyStationaryPercentileMovingAverage30DaysRule01ParametersSpec",
-    "AnomalyStationaryPercentileMovingAverage30DaysRule05ParametersSpec",
-    "AnomalyStationaryPercentileMovingAverage30DaysRule1ParametersSpec",
     "AnomalyStationaryPercentileMovingAverageRule01ParametersSpec",
     "AnomalyStationaryPercentileMovingAverageRule05ParametersSpec",
     "AnomalyStationaryPercentileMovingAverageRule1ParametersSpec",
+    "AthenaAuthenticationMode",
     "AuthenticatedDashboardModel",
     "BetweenFloatsRuleParametersSpec",
     "BigQueryAuthenticationMode",
     "BigQueryJobsCreateProject",
     "BigQueryParametersSpec",
-    "BulkCheckDisableParameters",
-    "BulkCheckDisableParametersSelectedTablesToColumns",
+    "BulkCheckDeactivateParameters",
+    "BulkCheckDeactivateParametersSelectedTablesToColumns",
     "ChangePercent1DayRule10ParametersSpec",
     "ChangePercent1DayRule20ParametersSpec",
     "ChangePercent1DayRule50ParametersSpec",
@@ -1876,14 +1893,21 @@ __all__ = (
     "CollectStatisticsQueueJobParameters",
     "CollectStatisticsQueueJobResult",
     "CollectStatisticsResult",
+    "ColumnAcceptedValuesDailyMonitoringChecksSpec",
+    "ColumnAcceptedValuesDailyMonitoringChecksSpecCustomChecks",
+    "ColumnAcceptedValuesDailyPartitionedChecksSpec",
+    "ColumnAcceptedValuesDailyPartitionedChecksSpecCustomChecks",
+    "ColumnAcceptedValuesMonthlyMonitoringChecksSpec",
+    "ColumnAcceptedValuesMonthlyMonitoringChecksSpecCustomChecks",
+    "ColumnAcceptedValuesMonthlyPartitionedChecksSpec",
+    "ColumnAcceptedValuesMonthlyPartitionedChecksSpecCustomChecks",
+    "ColumnAcceptedValuesProfilingChecksSpec",
+    "ColumnAcceptedValuesProfilingChecksSpecCustomChecks",
+    "ColumnAcceptedValuesTextFoundInSetPercentSensorParametersSpec",
     "ColumnAccuracyDailyMonitoringChecksSpec",
     "ColumnAccuracyDailyMonitoringChecksSpecCustomChecks",
-    "ColumnAccuracyDailyPartitionedChecksSpec",
-    "ColumnAccuracyDailyPartitionedChecksSpecCustomChecks",
     "ColumnAccuracyMonthlyMonitoringChecksSpec",
     "ColumnAccuracyMonthlyMonitoringChecksSpecCustomChecks",
-    "ColumnAccuracyMonthlyPartitionedChecksSpec",
-    "ColumnAccuracyMonthlyPartitionedChecksSpecCustomChecks",
     "ColumnAccuracyProfilingChecksSpec",
     "ColumnAccuracyProfilingChecksSpecCustomChecks",
     "ColumnAccuracyTotalAverageMatchPercentCheckSpec",
@@ -1900,28 +1924,34 @@ __all__ = (
     "ColumnAnomalyDailyMonitoringChecksSpecCustomChecks",
     "ColumnAnomalyDailyPartitionedChecksSpec",
     "ColumnAnomalyDailyPartitionedChecksSpecCustomChecks",
-    "ColumnAnomalyDifferencingDistinctCount30DaysCheckSpec",
-    "ColumnAnomalyDifferencingDistinctCountCheckSpec",
-    "ColumnAnomalyDifferencingSum30DaysCheckSpec",
-    "ColumnAnomalyDifferencingSumCheckSpec",
     "ColumnAnomalyMonthlyMonitoringChecksSpec",
     "ColumnAnomalyMonthlyMonitoringChecksSpecCustomChecks",
     "ColumnAnomalyMonthlyPartitionedChecksSpec",
     "ColumnAnomalyMonthlyPartitionedChecksSpecCustomChecks",
     "ColumnAnomalyProfilingChecksSpec",
     "ColumnAnomalyProfilingChecksSpecCustomChecks",
-    "ColumnAnomalyStationaryDistinctPercent30DaysCheckSpec",
-    "ColumnAnomalyStationaryDistinctPercentCheckSpec",
-    "ColumnAnomalyStationaryMean30DaysCheckSpec",
-    "ColumnAnomalyStationaryMeanCheckSpec",
-    "ColumnAnomalyStationaryMedian30DaysCheckSpec",
-    "ColumnAnomalyStationaryMedianCheckSpec",
-    "ColumnAnomalyStationaryNullPercent30DaysCheckSpec",
-    "ColumnAnomalyStationaryNullPercentCheckSpec",
-    "ColumnAnomalyStationaryPartitionDistinctCount30DaysCheckSpec",
-    "ColumnAnomalyStationaryPartitionDistinctCountCheckSpec",
-    "ColumnAnomalyStationaryPartitionSum30DaysCheckSpec",
-    "ColumnAnomalyStationaryPartitionSumCheckSpec",
+    "ColumnBlanksBlankNullPlaceholderTextCountSensorParametersSpec",
+    "ColumnBlanksBlankNullPlaceholderTextPercentSensorParametersSpec",
+    "ColumnBlanksDailyMonitoringChecksSpec",
+    "ColumnBlanksDailyMonitoringChecksSpecCustomChecks",
+    "ColumnBlanksDailyPartitionedChecksSpec",
+    "ColumnBlanksDailyPartitionedChecksSpecCustomChecks",
+    "ColumnBlanksEmptyTextCountSensorParametersSpec",
+    "ColumnBlanksEmptyTextFoundCheckSpec",
+    "ColumnBlanksEmptyTextPercentCheckSpec",
+    "ColumnBlanksEmptyTextPercentSensorParametersSpec",
+    "ColumnBlanksMonthlyMonitoringChecksSpec",
+    "ColumnBlanksMonthlyMonitoringChecksSpecCustomChecks",
+    "ColumnBlanksMonthlyPartitionedChecksSpec",
+    "ColumnBlanksMonthlyPartitionedChecksSpecCustomChecks",
+    "ColumnBlanksNullPlaceholderTextFoundCheckSpec",
+    "ColumnBlanksNullPlaceholderTextPercentCheckSpec",
+    "ColumnBlanksProfilingChecksSpec",
+    "ColumnBlanksProfilingChecksSpecCustomChecks",
+    "ColumnBlanksWhitespaceTextCountSensorParametersSpec",
+    "ColumnBlanksWhitespaceTextFoundCheckSpec",
+    "ColumnBlanksWhitespaceTextPercentCheckSpec",
+    "ColumnBlanksWhitespaceTextPercentSensorParametersSpec",
     "ColumnBoolDailyMonitoringChecksSpec",
     "ColumnBoolDailyMonitoringChecksSpecCustomChecks",
     "ColumnBoolDailyPartitionedChecksSpec",
@@ -1934,30 +1964,6 @@ __all__ = (
     "ColumnBoolProfilingChecksSpec",
     "ColumnBoolProfilingChecksSpecCustomChecks",
     "ColumnBoolTruePercentSensorParametersSpec",
-    "ColumnChangeDistinctCountCheckSpec",
-    "ColumnChangeDistinctCountSince30DaysCheckSpec",
-    "ColumnChangeDistinctCountSince7DaysCheckSpec",
-    "ColumnChangeDistinctCountSinceYesterdayCheckSpec",
-    "ColumnChangeDistinctPercentCheckSpec",
-    "ColumnChangeDistinctPercentSince30DaysCheckSpec",
-    "ColumnChangeDistinctPercentSince7DaysCheckSpec",
-    "ColumnChangeDistinctPercentSinceYesterdayCheckSpec",
-    "ColumnChangeMeanCheckSpec",
-    "ColumnChangeMeanSince30DaysCheckSpec",
-    "ColumnChangeMeanSince7DaysCheckSpec",
-    "ColumnChangeMeanSinceYesterdayCheckSpec",
-    "ColumnChangeMedianCheckSpec",
-    "ColumnChangeMedianSince30DaysCheckSpec",
-    "ColumnChangeMedianSince7DaysCheckSpec",
-    "ColumnChangeMedianSinceYesterdayCheckSpec",
-    "ColumnChangeNullPercentCheckSpec",
-    "ColumnChangeNullPercentSince30DaysCheckSpec",
-    "ColumnChangeNullPercentSince7DaysCheckSpec",
-    "ColumnChangeNullPercentSinceYesterdayCheckSpec",
-    "ColumnChangeSumCheckSpec",
-    "ColumnChangeSumSince30DaysCheckSpec",
-    "ColumnChangeSumSince7DaysCheckSpec",
-    "ColumnChangeSumSinceYesterdayCheckSpec",
     "ColumnColumnExistsSensorParametersSpec",
     "ColumnColumnTypeHashSensorParametersSpec",
     "ColumnComparisonDailyMonitoringChecksSpec",
@@ -1979,6 +1985,16 @@ __all__ = (
     "ColumnComparisonSumMatchCheckSpec",
     "ColumnCurrentDataQualityStatusModel",
     "ColumnCurrentDataQualityStatusModelChecks",
+    "ColumnCustomSqlDailyMonitoringChecksSpec",
+    "ColumnCustomSqlDailyMonitoringChecksSpecCustomChecks",
+    "ColumnCustomSqlDailyPartitionedChecksSpec",
+    "ColumnCustomSqlDailyPartitionedChecksSpecCustomChecks",
+    "ColumnCustomSqlMonthlyMonitoringChecksSpec",
+    "ColumnCustomSqlMonthlyMonitoringChecksSpecCustomChecks",
+    "ColumnCustomSqlMonthlyPartitionedChecksSpec",
+    "ColumnCustomSqlMonthlyPartitionedChecksSpecCustomChecks",
+    "ColumnCustomSqlProfilingChecksSpec",
+    "ColumnCustomSqlProfilingChecksSpecCustomChecks",
     "ColumnDailyMonitoringCheckCategoriesSpec",
     "ColumnDailyMonitoringCheckCategoriesSpecComparisons",
     "ColumnDailyMonitoringCheckCategoriesSpecCustom",
@@ -1996,7 +2012,6 @@ __all__ = (
     "ColumnDatatypeProfilingChecksSpec",
     "ColumnDatatypeProfilingChecksSpecCustomChecks",
     "ColumnDatatypeStringDatatypeChangedCheckSpec",
-    "ColumnDatatypeStringDatatypeDetectedCheckSpec",
     "ColumnDatatypeStringDatatypeDetectSensorParametersSpec",
     "ColumnDatetimeDailyMonitoringChecksSpec",
     "ColumnDatetimeDailyMonitoringChecksSpecCustomChecks",
@@ -2014,33 +2029,60 @@ __all__ = (
     "ColumnDatetimeValueInRangeDatePercentCheckSpec",
     "ColumnDatetimeValueInRangeDatePercentSensorParametersSpec",
     "ColumnDateValuesInFuturePercentCheckSpec",
+    "ColumnDetectedDatatypeInTextCheckSpec",
+    "ColumnDistinctCountAnomalyDifferencingCheckSpec",
+    "ColumnDistinctCountAnomalyStationaryPartitionCheckSpec",
+    "ColumnDistinctCountChange1DayCheckSpec",
+    "ColumnDistinctCountChange30DaysCheckSpec",
+    "ColumnDistinctCountChange7DaysCheckSpec",
+    "ColumnDistinctCountChangeCheckSpec",
     "ColumnDistinctCountCheckSpec",
+    "ColumnDistinctPercentAnomalyStationaryCheckSpec",
+    "ColumnDistinctPercentChange1DayCheckSpec",
+    "ColumnDistinctPercentChange30DaysCheckSpec",
+    "ColumnDistinctPercentChange7DaysCheckSpec",
+    "ColumnDistinctPercentChangeCheckSpec",
     "ColumnDistinctPercentCheckSpec",
     "ColumnDuplicateCountCheckSpec",
     "ColumnDuplicatePercentCheckSpec",
     "ColumnExpectedNumbersInUseCountCheckSpec",
-    "ColumnExpectedStringsInTopValuesCountCheckSpec",
-    "ColumnExpectedStringsInUseCountCheckSpec",
+    "ColumnExpectedTextsInTopValuesCountCheckSpec",
+    "ColumnExpectedTextValuesInUseCountCheckSpec",
     "ColumnFalsePercentCheckSpec",
+    "ColumnIntegerInRangePercentCheckSpec",
     "ColumnIntegrityDailyMonitoringChecksSpec",
     "ColumnIntegrityDailyMonitoringChecksSpecCustomChecks",
     "ColumnIntegrityDailyPartitionedChecksSpec",
     "ColumnIntegrityDailyPartitionedChecksSpecCustomChecks",
     "ColumnIntegrityForeignKeyMatchPercentCheckSpec",
     "ColumnIntegrityForeignKeyMatchPercentSensorParametersSpec",
-    "ColumnIntegrityForeignKeyNotMatchCountCheckSpec",
     "ColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec",
+    "ColumnIntegrityLookupKeyNotFoundCountCheckSpec",
     "ColumnIntegrityMonthlyMonitoringChecksSpec",
     "ColumnIntegrityMonthlyMonitoringChecksSpecCustomChecks",
     "ColumnIntegrityMonthlyPartitionedChecksSpec",
     "ColumnIntegrityMonthlyPartitionedChecksSpecCustomChecks",
     "ColumnIntegrityProfilingChecksSpec",
     "ColumnIntegrityProfilingChecksSpecCustomChecks",
+    "ColumnInvalidEmailFormatFoundCheckSpec",
+    "ColumnInvalidIp4AddressFormatFoundCheckSpec",
+    "ColumnInvalidIp6AddressFormatFoundCheckSpec",
     "ColumnInvalidLatitudeCountCheckSpec",
     "ColumnInvalidLongitudeCountCheckSpec",
+    "ColumnInvalidUuidFormatFoundCheckSpec",
     "ColumnListModel",
     "ColumnMaxInRangeCheckSpec",
+    "ColumnMeanAnomalyStationaryCheckSpec",
+    "ColumnMeanChange1DayCheckSpec",
+    "ColumnMeanChange30DaysCheckSpec",
+    "ColumnMeanChange7DaysCheckSpec",
+    "ColumnMeanChangeCheckSpec",
     "ColumnMeanInRangeCheckSpec",
+    "ColumnMedianAnomalyStationaryCheckSpec",
+    "ColumnMedianChange1DayCheckSpec",
+    "ColumnMedianChange30DaysCheckSpec",
+    "ColumnMedianChange7DaysCheckSpec",
+    "ColumnMedianChangeCheckSpec",
     "ColumnMedianInRangeCheckSpec",
     "ColumnMinInRangeCheckSpec",
     "ColumnModel",
@@ -2057,6 +2099,11 @@ __all__ = (
     "ColumnNonNegativePercentCheckSpec",
     "ColumnNotNullsCountCheckSpec",
     "ColumnNotNullsPercentCheckSpec",
+    "ColumnNullPercentAnomalyStationaryCheckSpec",
+    "ColumnNullPercentChange1DayCheckSpec",
+    "ColumnNullPercentChange30DaysCheckSpec",
+    "ColumnNullPercentChange7DaysCheckSpec",
+    "ColumnNullPercentChangeCheckSpec",
     "ColumnNullsCountCheckSpec",
     "ColumnNullsDailyMonitoringChecksSpec",
     "ColumnNullsDailyMonitoringChecksSpecCustomChecks",
@@ -2078,12 +2125,18 @@ __all__ = (
     "ColumnNullsProfilingChecksSpec",
     "ColumnNullsProfilingChecksSpecCustomChecks",
     "ColumnNullsStatisticsCollectorsSpec",
-    "ColumnNumberValueInSetPercentCheckSpec",
+    "ColumnNumberAboveMaxValueCheckSpec",
+    "ColumnNumberAboveMaxValuePercentCheckSpec",
+    "ColumnNumberBelowMinValueCheckSpec",
+    "ColumnNumberBelowMinValuePercentCheckSpec",
+    "ColumnNumberFoundInSetPercentCheckSpec",
+    "ColumnNumberInRangePercentCheckSpec",
     "ColumnNumericDailyMonitoringChecksSpec",
     "ColumnNumericDailyMonitoringChecksSpecCustomChecks",
     "ColumnNumericDailyPartitionedChecksSpec",
     "ColumnNumericDailyPartitionedChecksSpecCustomChecks",
     "ColumnNumericExpectedNumbersInUseCountSensorParametersSpec",
+    "ColumnNumericIntegerInRangePercentSensorParametersSpec",
     "ColumnNumericInvalidLatitudeCountSensorParametersSpec",
     "ColumnNumericInvalidLongitudeCountSensorParametersSpec",
     "ColumnNumericMaxSensorParametersSpec",
@@ -2098,7 +2151,12 @@ __all__ = (
     "ColumnNumericNegativePercentSensorParametersSpec",
     "ColumnNumericNonNegativeCountSensorParametersSpec",
     "ColumnNumericNonNegativePercentSensorParametersSpec",
-    "ColumnNumericNumberValueInSetPercentSensorParametersSpec",
+    "ColumnNumericNumberAboveMaxValueCountSensorParametersSpec",
+    "ColumnNumericNumberAboveMaxValuePercentSensorParametersSpec",
+    "ColumnNumericNumberBelowMinValueCountSensorParametersSpec",
+    "ColumnNumericNumberBelowMinValuePercentSensorParametersSpec",
+    "ColumnNumericNumberFoundInSetPercentSensorParametersSpec",
+    "ColumnNumericNumberInRangePercentSensorParametersSpec",
     "ColumnNumericPercentile10SensorParametersSpec",
     "ColumnNumericPercentile25SensorParametersSpec",
     "ColumnNumericPercentile75SensorParametersSpec",
@@ -2113,13 +2171,27 @@ __all__ = (
     "ColumnNumericSumSensorParametersSpec",
     "ColumnNumericValidLatitudePercentSensorParametersSpec",
     "ColumnNumericValidLongitudePercentSensorParametersSpec",
-    "ColumnNumericValueAboveMaxValueCountSensorParametersSpec",
-    "ColumnNumericValueAboveMaxValuePercentSensorParametersSpec",
-    "ColumnNumericValueBelowMinValueCountSensorParametersSpec",
-    "ColumnNumericValueBelowMinValuePercentSensorParametersSpec",
-    "ColumnNumericValuesInRangeIntegersPercentSensorParametersSpec",
-    "ColumnNumericValuesInRangeNumericPercentSensorParametersSpec",
     "ColumnPartitionedChecksRootSpec",
+    "ColumnPatternsDailyMonitoringChecksSpec",
+    "ColumnPatternsDailyMonitoringChecksSpecCustomChecks",
+    "ColumnPatternsDailyPartitionedChecksSpec",
+    "ColumnPatternsDailyPartitionedChecksSpecCustomChecks",
+    "ColumnPatternsInvalidEmailFormatCountSensorParametersSpec",
+    "ColumnPatternsInvalidIp4AddressFormatCountSensorParametersSpec",
+    "ColumnPatternsInvalidIp6AddressFormatCountSensorParametersSpec",
+    "ColumnPatternsInvalidUuidFormatCountSensorParametersSpec",
+    "ColumnPatternsMonthlyMonitoringChecksSpec",
+    "ColumnPatternsMonthlyMonitoringChecksSpecCustomChecks",
+    "ColumnPatternsMonthlyPartitionedChecksSpec",
+    "ColumnPatternsMonthlyPartitionedChecksSpecCustomChecks",
+    "ColumnPatternsProfilingChecksSpec",
+    "ColumnPatternsProfilingChecksSpecCustomChecks",
+    "ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpec",
+    "ColumnPatternsTextMatchingNamePatternPercentSensorParametersSpec",
+    "ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpec",
+    "ColumnPatternsTextNotMatchingRegexCountSensorParametersSpec",
+    "ColumnPatternsTextsMatchingRegexPercentSensorParametersSpec",
+    "ColumnPatternsValidUuidFormatPercentSensorParametersSpec",
     "ColumnPercentile10InRangeCheckSpec",
     "ColumnPercentile25InRangeCheckSpec",
     "ColumnPercentile75InRangeCheckSpec",
@@ -2172,107 +2244,75 @@ __all__ = (
     "ColumnSchemaTypeChangedCheckSpec",
     "ColumnSpec",
     "ColumnSqlAggregatedExpressionSensorParametersSpec",
-    "ColumnSqlAggregateExprCheckSpec",
-    "ColumnSqlConditionFailedCountCheckSpec",
+    "ColumnSqlAggregateExpressionCheckSpec",
+    "ColumnSqlConditionFailedCheckSpec",
     "ColumnSqlConditionFailedCountSensorParametersSpec",
     "ColumnSqlConditionPassedPercentCheckSpec",
     "ColumnSqlConditionPassedPercentSensorParametersSpec",
-    "ColumnSqlDailyMonitoringChecksSpec",
-    "ColumnSqlDailyMonitoringChecksSpecCustomChecks",
-    "ColumnSqlDailyPartitionedChecksSpec",
-    "ColumnSqlDailyPartitionedChecksSpecCustomChecks",
-    "ColumnSqlMonthlyMonitoringChecksSpec",
-    "ColumnSqlMonthlyMonitoringChecksSpecCustomChecks",
-    "ColumnSqlMonthlyPartitionedChecksSpec",
-    "ColumnSqlMonthlyPartitionedChecksSpecCustomChecks",
-    "ColumnSqlProfilingChecksSpec",
-    "ColumnSqlProfilingChecksSpecCustomChecks",
     "ColumnStatisticsCollectorsRootCategoriesSpec",
     "ColumnStatisticsModel",
-    "ColumnStringBooleanPlaceholderPercentCheckSpec",
-    "ColumnStringEmptyCountCheckSpec",
-    "ColumnStringEmptyPercentCheckSpec",
-    "ColumnStringInvalidEmailCountCheckSpec",
-    "ColumnStringInvalidIp4AddressCountCheckSpec",
-    "ColumnStringInvalidIp6AddressCountCheckSpec",
-    "ColumnStringInvalidUuidCountCheckSpec",
-    "ColumnStringLengthAboveMaxLengthCountCheckSpec",
-    "ColumnStringLengthAboveMaxLengthPercentCheckSpec",
-    "ColumnStringLengthBelowMinLengthCountCheckSpec",
-    "ColumnStringLengthBelowMinLengthPercentCheckSpec",
-    "ColumnStringLengthInRangePercentCheckSpec",
-    "ColumnStringMatchDateRegexPercentCheckSpec",
-    "ColumnStringMatchNameRegexPercentCheckSpec",
-    "ColumnStringMatchRegexPercentCheckSpec",
-    "ColumnStringMaxLengthCheckSpec",
-    "ColumnStringMeanLengthCheckSpec",
-    "ColumnStringMinLengthCheckSpec",
-    "ColumnStringNotMatchDateRegexCountCheckSpec",
-    "ColumnStringNotMatchRegexCountCheckSpec",
-    "ColumnStringNullPlaceholderCountCheckSpec",
-    "ColumnStringNullPlaceholderPercentCheckSpec",
-    "ColumnStringParsableToFloatPercentCheckSpec",
-    "ColumnStringParsableToIntegerPercentCheckSpec",
-    "ColumnStringsDailyMonitoringChecksSpec",
-    "ColumnStringsDailyMonitoringChecksSpecCustomChecks",
-    "ColumnStringsDailyPartitionedChecksSpec",
-    "ColumnStringsDailyPartitionedChecksSpecCustomChecks",
-    "ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpec",
-    "ColumnStringsExpectedStringsInUseCountSensorParametersSpec",
-    "ColumnStringsMonthlyMonitoringChecksSpec",
-    "ColumnStringsMonthlyMonitoringChecksSpecCustomChecks",
-    "ColumnStringsMonthlyPartitionedChecksSpec",
-    "ColumnStringsMonthlyPartitionedChecksSpecCustomChecks",
-    "ColumnStringsProfilingChecksSpec",
-    "ColumnStringsProfilingChecksSpecCustomChecks",
-    "ColumnStringsStatisticsCollectorsSpec",
-    "ColumnStringsStringBooleanPlaceholderPercentSensorParametersSpec",
-    "ColumnStringsStringDatatypeDetectStatisticsCollectorSpec",
-    "ColumnStringsStringEmptyCountSensorParametersSpec",
-    "ColumnStringsStringEmptyPercentSensorParametersSpec",
-    "ColumnStringsStringInvalidEmailCountSensorParametersSpec",
-    "ColumnStringsStringInvalidIp4AddressCountSensorParametersSpec",
-    "ColumnStringsStringInvalidIp6AddressCountSensorParametersSpec",
-    "ColumnStringsStringInvalidUuidCountSensorParametersSpec",
-    "ColumnStringsStringLengthAboveMaxLengthCountSensorParametersSpec",
-    "ColumnStringsStringLengthAboveMaxLengthPercentSensorParametersSpec",
-    "ColumnStringsStringLengthBelowMinLengthCountSensorParametersSpec",
-    "ColumnStringsStringLengthBelowMinLengthPercentSensorParametersSpec",
-    "ColumnStringsStringLengthInRangePercentSensorParametersSpec",
-    "ColumnStringsStringMatchDateRegexPercentSensorParametersSpec",
-    "ColumnStringsStringMatchNameRegexPercentSensorParametersSpec",
-    "ColumnStringsStringMatchRegexPercentSensorParametersSpec",
-    "ColumnStringsStringMaxLengthSensorParametersSpec",
-    "ColumnStringsStringMaxLengthStatisticsCollectorSpec",
-    "ColumnStringsStringMeanLengthSensorParametersSpec",
-    "ColumnStringsStringMeanLengthStatisticsCollectorSpec",
-    "ColumnStringsStringMinLengthSensorParametersSpec",
-    "ColumnStringsStringMinLengthStatisticsCollectorSpec",
-    "ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec",
-    "ColumnStringsStringNotMatchRegexCountSensorParametersSpec",
-    "ColumnStringsStringNullPlaceholderCountSensorParametersSpec",
-    "ColumnStringsStringNullPlaceholderPercentSensorParametersSpec",
-    "ColumnStringsStringParsableToFloatPercentSensorParametersSpec",
-    "ColumnStringsStringParsableToIntegerPercentSensorParametersSpec",
-    "ColumnStringsStringSurroundedByWhitespaceCountSensorParametersSpec",
-    "ColumnStringsStringSurroundedByWhitespacePercentSensorParametersSpec",
-    "ColumnStringsStringValidCountryCodePercentSensorParametersSpec",
-    "ColumnStringsStringValidCurrencyCodePercentSensorParametersSpec",
-    "ColumnStringsStringValidDatePercentSensorParametersSpec",
-    "ColumnStringsStringValidUuidPercentSensorParametersSpec",
-    "ColumnStringsStringValueInSetPercentSensorParametersSpec",
-    "ColumnStringsStringWhitespaceCountSensorParametersSpec",
-    "ColumnStringsStringWhitespacePercentSensorParametersSpec",
-    "ColumnStringSurroundedByWhitespaceCountCheckSpec",
-    "ColumnStringSurroundedByWhitespacePercentCheckSpec",
-    "ColumnStringValidCountryCodePercentCheckSpec",
-    "ColumnStringValidCurrencyCodePercentCheckSpec",
-    "ColumnStringValidDatesPercentCheckSpec",
-    "ColumnStringValidUuidPercentCheckSpec",
-    "ColumnStringValueInSetPercentCheckSpec",
-    "ColumnStringWhitespaceCountCheckSpec",
-    "ColumnStringWhitespacePercentCheckSpec",
+    "ColumnStringsExpectedTextsInTopValuesCountSensorParametersSpec",
+    "ColumnStringsExpectedTextValuesInUseCountSensorParametersSpec",
+    "ColumnSumAnomalyDifferencingCheckSpec",
+    "ColumnSumAnomalyStationaryPartitionCheckSpec",
+    "ColumnSumChange1DayCheckSpec",
+    "ColumnSumChange30DaysCheckSpec",
+    "ColumnSumChange7DaysCheckSpec",
+    "ColumnSumChangeCheckSpec",
     "ColumnSumInRangeCheckSpec",
+    "ColumnTextDailyMonitoringChecksSpec",
+    "ColumnTextDailyMonitoringChecksSpecCustomChecks",
+    "ColumnTextDailyPartitionedChecksSpec",
+    "ColumnTextDailyPartitionedChecksSpecCustomChecks",
+    "ColumnTextFoundInSetPercentCheckSpec",
+    "ColumnTextLengthAboveMaxLengthCheckSpec",
+    "ColumnTextLengthAboveMaxLengthPercentCheckSpec",
+    "ColumnTextLengthBelowMinLengthCheckSpec",
+    "ColumnTextLengthBelowMinLengthPercentCheckSpec",
+    "ColumnTextLengthInRangePercentCheckSpec",
+    "ColumnTextMatchingDatePatternPercentCheckSpec",
+    "ColumnTextMatchingNamePatternPercentCheckSpec",
+    "ColumnTextMaxLengthCheckSpec",
+    "ColumnTextMeanLengthCheckSpec",
+    "ColumnTextMinLengthCheckSpec",
+    "ColumnTextMonthlyMonitoringChecksSpec",
+    "ColumnTextMonthlyMonitoringChecksSpecCustomChecks",
+    "ColumnTextMonthlyPartitionedChecksSpec",
+    "ColumnTextMonthlyPartitionedChecksSpecCustomChecks",
+    "ColumnTextNotMatchingDatePatternFoundCheckSpec",
+    "ColumnTextNotMatchingRegexFoundCheckSpec",
+    "ColumnTextParsableToBooleanPercentCheckSpec",
+    "ColumnTextParsableToDatePercentCheckSpec",
+    "ColumnTextParsableToFloatPercentCheckSpec",
+    "ColumnTextParsableToIntegerPercentCheckSpec",
+    "ColumnTextProfilingChecksSpec",
+    "ColumnTextProfilingChecksSpecCustomChecks",
+    "ColumnTextsMatchingRegexPercentCheckSpec",
+    "ColumnTextStatisticsCollectorsSpec",
+    "ColumnTextSurroundedByWhitespaceCheckSpec",
+    "ColumnTextSurroundedByWhitespacePercentCheckSpec",
+    "ColumnTextTextDatatypeDetectStatisticsCollectorSpec",
+    "ColumnTextTextLengthAboveMaxLengthCountSensorParametersSpec",
+    "ColumnTextTextLengthAboveMaxLengthPercentSensorParametersSpec",
+    "ColumnTextTextLengthBelowMinLengthCountSensorParametersSpec",
+    "ColumnTextTextLengthBelowMinLengthPercentSensorParametersSpec",
+    "ColumnTextTextLengthInRangePercentSensorParametersSpec",
+    "ColumnTextTextMaxLengthSensorParametersSpec",
+    "ColumnTextTextMaxLengthStatisticsCollectorSpec",
+    "ColumnTextTextMeanLengthSensorParametersSpec",
+    "ColumnTextTextMeanLengthStatisticsCollectorSpec",
+    "ColumnTextTextMinLengthSensorParametersSpec",
+    "ColumnTextTextMinLengthStatisticsCollectorSpec",
+    "ColumnTextTextParsableToBooleanPercentSensorParametersSpec",
+    "ColumnTextTextParsableToDatePercentSensorParametersSpec",
+    "ColumnTextTextParsableToFloatPercentSensorParametersSpec",
+    "ColumnTextTextParsableToIntegerPercentSensorParametersSpec",
+    "ColumnTextTextSurroundedByWhitespaceCountSensorParametersSpec",
+    "ColumnTextTextSurroundedByWhitespacePercentSensorParametersSpec",
+    "ColumnTextTextValidCountryCodePercentSensorParametersSpec",
+    "ColumnTextTextValidCurrencyCodePercentSensorParametersSpec",
+    "ColumnTextValidCountryCodePercentCheckSpec",
+    "ColumnTextValidCurrencyCodePercentCheckSpec",
     "ColumnTruePercentCheckSpec",
     "ColumnTypeSnapshotSpec",
     "ColumnUniquenessDailyMonitoringChecksSpec",
@@ -2296,12 +2336,7 @@ __all__ = (
     "ColumnUniquenessStatisticsCollectorsSpec",
     "ColumnValidLatitudePercentCheckSpec",
     "ColumnValidLongitudePercentCheckSpec",
-    "ColumnValueAboveMaxValueCountCheckSpec",
-    "ColumnValueAboveMaxValuePercentCheckSpec",
-    "ColumnValueBelowMinValueCountCheckSpec",
-    "ColumnValueBelowMinValuePercentCheckSpec",
-    "ColumnValuesInRangeIntegersPercentCheckSpec",
-    "ColumnValuesInRangeNumericPercentCheckSpec",
+    "ColumnValidUuidFormatPercentCheckSpec",
     "CommentSpec",
     "CommonColumnModel",
     "CompareThresholdsModel",
@@ -2312,6 +2347,7 @@ __all__ = (
     "ConnectionSpecificationModel",
     "ConnectionTestModel",
     "ConnectionTestStatus",
+    "CountBetweenRuleParametersSpec",
     "CredentialType",
     "CustomCheckSpec",
     "CustomRuleParametersSpec",
@@ -2319,6 +2355,8 @@ __all__ = (
     "DashboardsFolderSpec",
     "DashboardSpec",
     "DashboardSpecParameters",
+    "DatabricksParametersSpec",
+    "DatabricksParametersSpecProperties",
     "DataDeleteResultPartition",
     "DataGroupingConfigurationListModel",
     "DataGroupingConfigurationModel",
@@ -2326,13 +2364,14 @@ __all__ = (
     "DataGroupingConfigurationTrimmedModel",
     "DataGroupingDimensionSource",
     "DataGroupingDimensionSpec",
-    "DatatypeEqualsRuleParametersSpec",
     "DatetimeBuiltInDateFormats",
     "DefaultSchedulesSpec",
     "DeleteStoredDataQueueJobParameters",
     "DeleteStoredDataQueueJobResult",
     "DeleteStoredDataResult",
     "DeleteStoredDataResultPartitionResults",
+    "DetectedDatatypeCategory",
+    "DetectedDatatypeEqualsRuleParametersSpec",
     "DisplayHint",
     "DqoCloudUserModel",
     "DqoJobChangeModel",
@@ -2352,7 +2391,7 @@ __all__ = (
     "Duration",
     "EffectiveScheduleLevelModel",
     "EffectiveScheduleModel",
-    "EqualsInteger1RuleParametersSpec",
+    "Equals1RuleParametersSpec",
     "EqualsIntegerRuleParametersSpec",
     "ErrorEntryModel",
     "ErrorsListModel",
@@ -2378,9 +2417,9 @@ __all__ = (
     "IncidentsPerConnectionModel",
     "IncidentStatus",
     "IncidentWebhookNotificationsSpec",
-    "MaxCountRule0ParametersSpec",
-    "MaxCountRule10ParametersSpec",
-    "MaxCountRule15ParametersSpec",
+    "MaxCountRule0ErrorParametersSpec",
+    "MaxCountRule0WarningParametersSpec",
+    "MaxCountRule100ParametersSpec",
     "MaxDaysRule1ParametersSpec",
     "MaxDaysRule2ParametersSpec",
     "MaxDaysRule7ParametersSpec",
@@ -2390,28 +2429,18 @@ __all__ = (
     "MaxFailuresRule0ParametersSpec",
     "MaxFailuresRule10ParametersSpec",
     "MaxFailuresRule5ParametersSpec",
-    "MaxMissingRule0ParametersSpec",
-    "MaxMissingRule1ParametersSpec",
+    "MaxMissingRule0ErrorParametersSpec",
+    "MaxMissingRule0WarningParametersSpec",
     "MaxMissingRule2ParametersSpec",
-    "MaxPercentRule0ParametersSpec",
-    "MaxPercentRule100ParametersSpec",
-    "MaxPercentRule1ParametersSpec",
-    "MaxPercentRule2ParametersSpec",
+    "MaxPercentRule0ErrorParametersSpec",
+    "MaxPercentRule0WarningParametersSpec",
     "MaxPercentRule5ParametersSpec",
-    "MaxPercentRule95ParametersSpec",
-    "MaxPercentRule99ParametersSpec",
     "MaxValueRuleParametersSpec",
-    "MinCountRule0ParametersSpec",
     "MinCountRule1ParametersSpec",
-    "MinCountRuleFatalParametersSpec",
-    "MinCountRuleWarningParametersSpec",
     "MinimumGroupingSeverityLevel",
-    "MinPercentRule0ParametersSpec",
-    "MinPercentRule100ParametersSpec",
-    "MinPercentRule2ParametersSpec",
-    "MinPercentRule5ParametersSpec",
+    "MinPercentRule100ErrorParametersSpec",
+    "MinPercentRule100WarningParametersSpec",
     "MinPercentRule95ParametersSpec",
-    "MinPercentRule99ParametersSpec",
     "MinValueRuleParametersSpec",
     "MonitoringScheduleSpec",
     "Mono",
@@ -2433,6 +2462,8 @@ __all__ = (
     "PostgresqlParametersSpec",
     "PostgresqlParametersSpecProperties",
     "PostgresqlSslMode",
+    "PrestoParametersSpec",
+    "PrestoParametersSpecProperties",
     "ProfilingTimePeriod",
     "ProviderSensorDefinitionSpec",
     "ProviderSensorDefinitionSpecParameters",
@@ -2477,7 +2508,10 @@ __all__ = (
     "SnowflakeParametersSpec",
     "SnowflakeParametersSpecProperties",
     "SortDirection",
+    "SparkParametersSpec",
+    "SparkParametersSpecProperties",
     "SpringErrorPayload",
+    "SqlServerAuthenticationMode",
     "SqlServerParametersSpec",
     "SqlServerParametersSpecProperties",
     "StatisticsCollectorSearchFilters",
@@ -2486,7 +2520,6 @@ __all__ = (
     "StatisticsMetricModel",
     "StatisticsMetricModelResult",
     "StatisticsResultDataType",
-    "StringsBuiltInDateFormats",
     "SynchronizeMultipleFoldersDqoQueueJobParameters",
     "SynchronizeMultipleFoldersQueueJobResult",
     "SynchronizeRootFolderDqoQueueJobParameters",
@@ -2499,10 +2532,6 @@ __all__ = (
     "TableAccuracyProfilingChecksSpecCustomChecks",
     "TableAccuracyTotalRowCountMatchPercentCheckSpec",
     "TableAccuracyTotalRowCountMatchPercentSensorParametersSpec",
-    "TableAnomalyDifferencingRowCount30DaysCheckSpec",
-    "TableAnomalyDifferencingRowCountCheckSpec",
-    "TableAnomalyStationaryPartitionRowCount30DaysCheckSpec",
-    "TableAnomalyStationaryPartitionRowCountCheckSpec",
     "TableAvailabilityCheckSpec",
     "TableAvailabilityDailyMonitoringChecksSpec",
     "TableAvailabilityDailyMonitoringChecksSpecCustomChecks",
@@ -2511,10 +2540,6 @@ __all__ = (
     "TableAvailabilityProfilingChecksSpec",
     "TableAvailabilityProfilingChecksSpecCustomChecks",
     "TableAvailabilitySensorParametersSpec",
-    "TableChangeRowCountCheckSpec",
-    "TableChangeRowCountSince30DaysCheckSpec",
-    "TableChangeRowCountSince7DaysCheckSpec",
-    "TableChangeRowCountSinceYesterdayCheckSpec",
     "TableColumnCountSensorParametersSpec",
     "TableColumnListOrderedHashSensorParametersSpec",
     "TableColumnListUnorderedHashSensorParametersSpec",
@@ -2545,6 +2570,16 @@ __all__ = (
     "TableCurrentDataQualityStatusModel",
     "TableCurrentDataQualityStatusModelChecks",
     "TableCurrentDataQualityStatusModelColumns",
+    "TableCustomSqlDailyMonitoringChecksSpec",
+    "TableCustomSqlDailyMonitoringChecksSpecCustomChecks",
+    "TableCustomSqlDailyPartitionedChecksSpec",
+    "TableCustomSqlDailyPartitionedChecksSpecCustomChecks",
+    "TableCustomSqlMonthlyMonitoringChecksSpec",
+    "TableCustomSqlMonthlyMonitoringChecksSpecCustomChecks",
+    "TableCustomSqlMonthlyPartitionedChecksSpec",
+    "TableCustomSqlMonthlyPartitionedChecksSpecCustomChecks",
+    "TableCustomSqlProfilingChecksSpec",
+    "TableCustomSqlProfilingChecksSpecCustomChecks",
     "TableDailyMonitoringCheckCategoriesSpec",
     "TableDailyMonitoringCheckCategoriesSpecComparisons",
     "TableDailyMonitoringCheckCategoriesSpecCustom",
@@ -2571,6 +2606,12 @@ __all__ = (
     "TableProfilingCheckCategoriesSpec",
     "TableProfilingCheckCategoriesSpecComparisons",
     "TableProfilingCheckCategoriesSpecCustom",
+    "TableRowCountAnomalyDifferencingCheckSpec",
+    "TableRowCountAnomalyStationaryPartitionCheckSpec",
+    "TableRowCountChange1DayCheckSpec",
+    "TableRowCountChange30DaysCheckSpec",
+    "TableRowCountChange7DaysCheckSpec",
+    "TableRowCountChangeCheckSpec",
     "TableRowCountCheckSpec",
     "TableSchemaColumnCountChangedCheckSpec",
     "TableSchemaColumnCountCheckSpec",
@@ -2590,21 +2631,11 @@ __all__ = (
     "TableSpecGroupings",
     "TableSpecTableComparisons",
     "TableSqlAggregatedExpressionSensorParametersSpec",
-    "TableSqlAggregateExprCheckSpec",
-    "TableSqlConditionFailedCountCheckSpec",
+    "TableSqlAggregateExpressionCheckSpec",
+    "TableSqlConditionFailedCheckSpec",
     "TableSqlConditionFailedCountSensorParametersSpec",
     "TableSqlConditionPassedPercentCheckSpec",
     "TableSqlConditionPassedPercentSensorParametersSpec",
-    "TableSqlDailyMonitoringChecksSpec",
-    "TableSqlDailyMonitoringChecksSpecCustomChecks",
-    "TableSqlDailyPartitionedChecksSpec",
-    "TableSqlDailyPartitionedChecksSpecCustomChecks",
-    "TableSqlMonthlyMonitoringChecksSpec",
-    "TableSqlMonthlyMonitoringChecksSpecCustomChecks",
-    "TableSqlMonthlyPartitionedChecksSpec",
-    "TableSqlMonthlyPartitionedChecksSpecCustomChecks",
-    "TableSqlProfilingChecksSpec",
-    "TableSqlProfilingChecksSpecCustomChecks",
     "TableStatisticsCollectorsRootCategoriesSpec",
     "TableStatisticsModel",
     "TableTimelinessDailyMonitoringChecksSpec",
@@ -2635,7 +2666,12 @@ __all__ = (
     "TableVolumeRowCountStatisticsCollectorSpec",
     "TableVolumeStatisticsCollectorsSpec",
     "TemporalUnit",
+    "TextBuiltInDateFormats",
+    "TimePeriodGradient",
     "TimestampColumnsSpec",
     "TimeWindowFilterParameters",
-    "ValueChangedParametersSpec",
+    "TrinoEngineType",
+    "TrinoParametersSpec",
+    "TrinoParametersSpecProperties",
+    "ValueChangedRuleParametersSpec",
 )

@@ -23,6 +23,7 @@ import com.dqops.checks.defaults.DefaultProfilingObservabilityCheckSettingsSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.bigquery.BigQueryConnectionSpecObjectMother;
+import com.dqops.core.configuration.DqoUserConfigurationPropertiesObjectMother;
 import com.dqops.core.scheduler.quartz.*;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.rules.finder.RuleDefinitionFindServiceImpl;
@@ -40,6 +41,7 @@ import com.dqops.services.check.mapping.models.CheckContainerModel;
 import com.dqops.services.check.mapping.models.CheckModel;
 import com.dqops.services.check.mapping.basicmodels.CheckContainerListModel;
 import com.dqops.services.check.mapping.basicmodels.CheckListModel;
+import com.dqops.services.check.mapping.models.QualityCategoryModel;
 import com.dqops.services.check.mapping.utils.CheckContainerListModelUtility;
 import com.dqops.services.check.matching.SimilarCheckCacheImpl;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
@@ -52,6 +54,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.AbstractMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -66,7 +70,7 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
     void setUp() {
         DefaultTimeZoneProvider defaultTimeZoneProvider = DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider();
         TriggerFactory triggerFactory = new TriggerFactoryImpl(
-                new JobDataMapAdapterImpl(JsonSerializerObjectMother.getDefault()),
+                new JobDataMapAdapterImpl(JsonSerializerObjectMother.getDefault(), DqoUserConfigurationPropertiesObjectMother.createDefaultUserConfiguration()),
                 defaultTimeZoneProvider);
         
         SchedulesUtilityService schedulesUtilityService = new SchedulesUtilityServiceImpl(
@@ -120,14 +124,36 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
                 this.bigQueryConnectionSpec, this.tableSpec, this.executionContext, ProviderType.bigquery, true);
 
         Assertions.assertNotNull(uiModel);
-        Assertions.assertEquals(13, uiModel.getCategories().size());
+        Assertions.assertEquals(16, uiModel.getCategories().size());
     }
 
-    private Map.Entry<Iterable<String>, Iterable<String>> extractCheckNamesFromUIModels(
+    @Test
+    void createUiModel_whenEmptyColumnChecksModelGivenAndGeneratingForOnlyOneCheck_thenCreatesUiModel() {
+        ColumnProfilingCheckCategoriesSpec columnCheckCategoriesSpec = new ColumnProfilingCheckCategoriesSpec();
+        CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
+        checkSearchFilters.setCheckCategory("text");
+        checkSearchFilters.setCheckName("profile_text_max_length");
+        CheckContainerModel uiModel = this.sut.createModel(columnCheckCategoriesSpec, checkSearchFilters,
+                this.bigQueryConnectionSpec, this.tableSpec, this.executionContext, ProviderType.bigquery, true);
+
+        Assertions.assertNotNull(uiModel);
+        Assertions.assertEquals(1, uiModel.getCategories().size());
+        QualityCategoryModel categoryModel = uiModel.getCategories().get(0);
+        Assertions.assertEquals("text", categoryModel.getCategory());
+        Assertions.assertEquals(1, categoryModel.getChecks().size());
+        CheckModel checkModel = categoryModel.getChecks().get(0);
+        Assertions.assertEquals("profile_text_max_length", checkModel.getCheckName());
+        Assertions.assertNotNull(checkModel.getRule().getWarning());
+        Assertions.assertNotNull(checkModel.getRule().getError());
+        Assertions.assertNotNull(checkModel.getRule().getFatal());
+        Assertions.assertEquals(1, checkModel.getRule().getError().getRuleParameters().size());
+    }
+
+    private Map.Entry<List<String>, List<String>> extractCheckNamesFromUIModels(
             CheckContainerModel uiModel,
             CheckContainerListModel uiBasicModel) {
 
-        Iterable<String> checksModel =
+        List<String> checksModel =
                 uiModel.getCategories().stream()
                         .flatMap(
                                 uiQualityCategoryModel ->
@@ -136,7 +162,7 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
                                                 .map(CheckModel::getCheckName)
                         ).sorted().collect(Collectors.toList());
 
-        Iterable<String> checksBasicModel =
+        List<String> checksBasicModel =
                 uiBasicModel.getChecks().stream()
                         .map(CheckListModel::getCheckName)
                         .sorted().collect(Collectors.toList());
@@ -152,11 +178,14 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
         CheckContainerListModel uiBasicModel = this.sut.createBasicModel(tableCheckCategoriesSpec, this.executionContext, ProviderType.bigquery, true);
 
         Assertions.assertNotNull(uiBasicModel);
-        Assertions.assertEquals(6, CheckContainerListModelUtility.getCheckCategoryNames(uiBasicModel).size());
+        Assertions.assertEquals(5, CheckContainerListModelUtility.getCheckCategoryNames(uiBasicModel).size());
 
-        Map.Entry<Iterable<String>, Iterable<String>> names = extractCheckNamesFromUIModels(uiModel, uiBasicModel);
+        Map.Entry<List<String>, List<String>> names = extractCheckNamesFromUIModels(uiModel, uiBasicModel);
+        HashSet<String> allCheckNames = new HashSet<>(names.getKey());
 
-        Assertions.assertIterableEquals(names.getKey(), names.getValue());
+        names.getValue().forEach(basicCheckName -> {
+            Assertions.assertTrue(allCheckNames.contains(basicCheckName));
+        });
     }
 
     @Test
@@ -167,11 +196,14 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
         CheckContainerListModel uiBasicModel = this.sut.createBasicModel(columnCheckCategoriesSpec, this.executionContext, ProviderType.bigquery, true);
 
         Assertions.assertNotNull(uiBasicModel);
-        Assertions.assertEquals(13, CheckContainerListModelUtility.getCheckCategoryNames(uiBasicModel).size());
+        Assertions.assertEquals(16, CheckContainerListModelUtility.getCheckCategoryNames(uiBasicModel).size());
 
-        Map.Entry<Iterable<String>, Iterable<String>> names = extractCheckNamesFromUIModels(uiModel, uiBasicModel);
+        Map.Entry<List<String>, List<String>> names = extractCheckNamesFromUIModels(uiModel, uiBasicModel);
+        HashSet<String> allCheckNames = new HashSet<>(names.getKey());
 
-        Assertions.assertIterableEquals(names.getKey(), names.getValue());
+        names.getValue().forEach(basicCheckName -> {
+            Assertions.assertTrue(allCheckNames.contains(basicCheckName));
+        });
     }
 
     @Test

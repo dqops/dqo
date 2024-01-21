@@ -18,18 +18,18 @@ package com.dqops.utils.docs.client.operations;
 import com.dqops.metadata.fields.ParameterDataType;
 import com.dqops.utils.docs.DocumentationReflectionService;
 import com.dqops.utils.docs.DocumentationReflectionServiceImpl;
-import com.dqops.utils.docs.LinkageStore;
-import com.dqops.utils.docs.TypeModel;
-import com.dqops.utils.docs.client.ComponentReflectionService;
-import com.dqops.utils.docs.client.ComponentReflectionServiceImpl;
 import com.dqops.utils.docs.client.OpenApiUtils;
 import com.dqops.utils.docs.client.apimodel.ComponentModel;
 import com.dqops.utils.docs.client.apimodel.ControllerModel;
 import com.dqops.utils.docs.client.apimodel.OpenAPIModel;
 import com.dqops.utils.docs.client.apimodel.OperationModel;
-import com.dqops.utils.reflection.ObjectDataType;
+import com.dqops.utils.docs.client.operations.examples.serialization.PythonSerializer;
+import com.dqops.utils.docs.client.operations.examples.serialization.PythonSerializerImpl;
+import com.dqops.utils.docs.generators.GeneratorUtility;
+import com.dqops.utils.docs.generators.ParsedSampleObjectFactoryImpl;
+import com.dqops.utils.docs.generators.TypeModel;
 import com.dqops.utils.reflection.ReflectionServiceImpl;
-import com.google.common.base.CaseFormat;
+import com.dqops.utils.string.StringCaseFormat;
 import com.google.inject.internal.MoreTypes;
 import io.swagger.v3.oas.models.media.ArraySchema;
 import io.swagger.v3.oas.models.media.MapSchema;
@@ -41,13 +41,12 @@ import io.swagger.v3.oas.models.parameters.RequestBody;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 
 import java.lang.reflect.Type;
-import java.nio.file.Path;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class OperationsDocumentationModelFactoryImpl implements OperationsDocumentationModelFactory {
-    private static final Map<String, ParameterDataType> KNOWN_DATA_TYPES = new HashMap<>() {{
+    private static final Map<String, ParameterDataType> KNOWN_DATA_TYPES = new LinkedHashMap<>() {{
         put("string", ParameterDataType.string_type);
         put("integer", ParameterDataType.long_type);
         put("number", ParameterDataType.double_type);
@@ -55,7 +54,7 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
         put("array", ParameterDataType.string_list_type);
     }};
 
-    private static final Map<String, Class<?>> KNOWN_CLASSES = new HashMap<>() {{
+    private static final Map<String, Class<?>> KNOWN_CLASSES = new LinkedHashMap<>() {{
         put("string", String.class);
         put("integer", Long.class);
         put("number", Double.class);
@@ -65,6 +64,7 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
     private static final String clientApiSourceBaseUrl = "https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/";
 
     private final DocumentationReflectionService documentationReflectionService = new DocumentationReflectionServiceImpl(new ReflectionServiceImpl());
+    private final PythonSerializer pythonSerializer = new PythonSerializerImpl(new ParsedSampleObjectFactoryImpl(documentationReflectionService));
 
     @Override
     public List<OperationsSuperiorObjectDocumentationModel> createDocumentationForOperations(OpenAPIModel openAPIModel) {
@@ -102,7 +102,7 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
     }
 
     private String getObjectSimpleName(String name) {
-        return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, name);
+        return StringCaseFormat.UPPER_CAMEL.to(StringCaseFormat.LOWER_UNDERSCORE_SEPARATE_NUMBER, name);
     }
 
     /**
@@ -191,6 +191,14 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
             returnParameterModel.setTypeModel(returnParameterTypeModel);
 
             operationsOperationDocumentationModel.setReturnValueField(returnParameterModel);
+
+            String sampleReturnValueJson = GeneratorUtility.generateJsonSampleFromTypeModel(returnParameterTypeModel, true);
+            sampleReturnValueJson = sampleReturnValueJson.replace(System.lineSeparator(), "\n\t");
+            operationsOperationDocumentationModel.setReturnValueSampleJson(sampleReturnValueJson);
+
+            Object sampleReturnValue = GeneratorUtility.generateSampleFromTypeModel(returnParameterTypeModel);
+            String sampleReturnValuePython = pythonSerializer.serializePrettyPrint(sampleReturnValue);
+            operationsOperationDocumentationModel.setReturnValueSamplePython(sampleReturnValuePython);
         }
 
         return operationsOperationDocumentationModel;
@@ -235,17 +243,6 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
         }
 
         return documentationReflectionService.getObjectsTypeModel(type, linkAccessor);
-    }
-
-    private TypeModel getTypeModelForParameterDataType(String parameterType) {
-        ParameterDataType parameterDataType = KNOWN_DATA_TYPES.getOrDefault(parameterType, ParameterDataType.object_type);
-        TypeModel typeModel = new TypeModel();
-        typeModel.setDataType(parameterDataType);
-        if (parameterDataType == ParameterDataType.object_type) {
-            typeModel.setObjectDataType(ObjectDataType.object_type);
-        }
-        typeModel.setClassNameUsedOnTheField(parameterType);
-        return typeModel;
     }
 }
 

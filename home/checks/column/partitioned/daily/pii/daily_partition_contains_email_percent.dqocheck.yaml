@@ -5,5 +5,6 @@ spec:
   sensor_name: column/pii/contains_email_percent
   rule_name: comparison/max_percent
   help_text: Verifies that the percentage of rows that contains emails in a column
-    does not exceed the minimum accepted percentage. Creates a separate data quality
-    check (and an alert) for each daily partition.
+    does not exceed the minimum accepted percentage. Stores a separate data quality
+    check result for each daily partition.
+  standard: true

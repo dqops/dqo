@@ -18,6 +18,7 @@ package com.dqops.connectors;
 import lombok.EqualsAndHashCode;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -26,7 +27,7 @@ import java.util.Map;
 @EqualsAndHashCode(callSuper = false)
 public class SourceSchemaModel {
     private String schemaName;
-    private Map<String, Object> properties = new HashMap<>();
+    private Map<String, Object> properties = new LinkedHashMap<>();
 
     /**
      * Default constructor.

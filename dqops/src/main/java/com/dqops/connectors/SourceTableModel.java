@@ -19,6 +19,7 @@ import com.dqops.metadata.sources.PhysicalTableName;
 import lombok.EqualsAndHashCode;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -28,7 +29,7 @@ import java.util.Map;
 public class SourceTableModel {
     private String schemaName;
     private PhysicalTableName tableName;
-    private Map<String, Object> properties = new HashMap<>();
+    private Map<String, Object> properties = new LinkedHashMap<>();
 
     /**
      * Default (empty) constructor.

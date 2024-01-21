@@ -1,6 +1,9 @@
 # Percentage of valid UUID
+This sample shows how to use data quality checks to detect the percentage of valid UUID values in a column and view the results on data quality dashboards.
 
-Verifies that the percentage of valid UUID values in a column does not fall below the minimum accepted percentage.
+## Overview
+
+The following example shows how to verify that the percentage of valid UUID values in a column does not fall below the minimum accepted percentage.
 
 **PROBLEM**
 
@@ -10,7 +13,7 @@ We want to verify the percent of valid UUID on `uuid` column does not fall below
 
 **SOLUTION**
 
-We will verify the data using monitoring [string_valid_uuid_percent](../../checks/column/strings/string-valid-uuid-percent.md) column check.
+We will verify the data using monitoring [valid_uuid_format_percent](../../checks/column/patterns/valid-uuid-format-percent.md) column check.
 Our goal is to verify that the percent of valid UUID values in a `uuid` column does not fall below the set threshold.
 
 In this example, we will set three minimum percent thresholds levels for the check:
@@ -19,11 +22,11 @@ In this example, we will set three minimum percent thresholds levels for the che
 - error: 98
 - fatal: 95
 
-If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
 **VALUE**
 
-If the percentage of valid UUID values fall below 99, a warning alert will be triggered.
+If the percentage of valid UUID values fall below 99%, a warning alert will be triggered.
 
 ## Data structure
 
@@ -52,63 +55,86 @@ The `uuid ` column of interest contains both valid and invalid UUID values.
 | **26b5daf8-925b-11ed-a1eb-0242ac120002**  | 1      | 1/11/2023 |
 | **26b5c8b0925b11eda1eb0242ac120002**      | 1      | 1/11/2023 |
 
-## Running the checks in the example and evaluating the results using the user interface
+## Run the example using the user interface
 
-The detailed explanation of how to run the example is described [here](../#running-the-examples).
+A detailed explanation of [how to start DQOps platform and run the example is described here](../index.md#running-the-use-cases).
 
-To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
+### **Navigate to a list of checks**
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-string-valid-uuid-percent-checks.png)
+To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/dqops-user-interface-overview.md):
+
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-string-valid-uuid-percent-checks1.png)
 
 1. Go to the **Monitoring** section.
 
-   The Monitoring Checks section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
+    The **Monitoring Checks** section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
 
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
 
-   On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../working-with-dqo/adding-data-source-connection/index.md).
+    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../data-sources/index.md).
 
 
-3. Select the **Monitoring Checks** tab.
+3. Select the **Daily checks** tab.
 
-   In this tab you can find a list of data quality checks.
-
-
-4. Run the enabled check using the **Run check** button.
-
-   You can also run all checks for the check category using the **Run check** button located at the end of the row with the name of the check group.
-
-   ![Run check](https://dqops.com/docs/images/examples/daily-string-valid-uuid-percent-run-checks.png)
+    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../dqo-concepts/dqops-user-interface-overview.md#check-editor).
 
 
-5. Access the results by clicking the **Results** button.
+### **Run checks**
 
-   Within the Results window, you will see three categories: **Sensor readouts**, **Check results**, and **Execution errors**. The Sensor readouts category
-   displays the values obtained by the sensors from the data source. The Check results category shows the severity level
-   that result from the verification of sensor readouts by set rule thresholds. The Execution errors category displays any error
-   that occurred during the check's execution.
+Run the activated check using the **Run check** button.
 
-   ![Check details](https://dqops.com/docs/images/examples/daily-string-valid-uuid-percent-checks-details.png)
+You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
+
+![Run check](https://dqops.com/docs/images/examples/daily-string-valid-uuid-percent-run-checks1.png)
 
 
-6. Review the results which should be similar to the one below.
-   
-    The actual value in this example is 75, which is below the minimum threshold level set in the warning (100.0%).
-    The check gives a fatal error (notice the red square on the left of the name of the check).
+### **View detailed check results**
 
-    ![String-valid-uuid-percent check results](https://dqops.com/docs/images/examples/daily-string-valid-uuid-percent-checks-result.png)
+Access the detailed results by clicking the **Results** button. The results should be similar to the one below.
 
-7. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
+![valid_uuid_format_percent check results](https://dqops.com/docs/images/examples/daily-string-valid-uuid-percent-checks-result1.png)
 
-    Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
+Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
+The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
+The Sensor readouts category displays the values obtained by the sensors from the data source.
+The Execution errors category displays any error that occurred during the check's execution.
 
-8. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
-   go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
+The actual value in this example is 75%, which is below the minimum threshold level set in the warning (100.0%).
+The check gives a fatal error (notice the red square to the left of the check name).
 
-    Below you can see the results displayed on the Issue severity status per check and day dashboard showing results by connections, schemas, tables, columns and highest issue severity per check and day of month.
 
-    ![String-valid-uuid-percent check results on Issue severity status per check and day dashboard](https://dqops.com/docs/images/examples/daily-string-valid-uuid-percent-checks-result-on-issue-severity-status-per-check-and-day-dashboard.png)
+### **Synchronize the results with the cloud account**
+
+Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner
+of the user interface.
+
+Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
+
+### **Review the results on the data quality dashboards**
+
+To review the results on the [data quality dashboards](../../working-with-dqo/review-the-data-quality-results-on-dashboards.md)
+go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.  
+
+Below you can see the results displayed on the **Current data quality checks results** dashboard located in the Check results group. This dashboard 
+displays all executed checks run on tables and columns and allows reviewing their set parameters, as well as actual and expected values.
+
+This dashboard allows filtering data by:
+    
+* time window (from last 7 days to last 6 months)
+* connection,
+* schema,
+* data group,
+* data quality dimension,
+* check category,
+* stages,
+* priorities,
+* table,
+* column,
+* check name,
+* issue severity.
+
+![valid_uuid_format_percent check results on Current data quality checks results dashboard](https://dqops.com/docs/images/examples/daily-string-valid-uuid-percent-checks-result-on-current-results-dashboard.png)
 
 ## YAML configuration file
 
@@ -120,9 +146,9 @@ In this example, we have set three minimum percent thresholds levels for the che
 - error: 98
 - fatal: 95
 
-The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_string_valid_uuid_percent` check is configured.
+The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_valid_uuid_format_percent` check is configured.
 
-If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
 ```yaml hl_lines="8-21"
 apiVersion: dqo/v1
@@ -138,8 +164,8 @@ spec:
         nullable: true
       monitoring_checks:
         daily:
-          strings:
-            daily_string_valid_uuid_percent:
+          patterns:
+            daily_valid_uuid_format_percent:
               warning:
                 min_percent: 99.0
               error:
@@ -152,15 +178,16 @@ spec:
         nullable: true
 ```
 
-## Running the checks in the example and evaluating the results using DQOps Shell
+## Run the checks in the example using the DQOps Shell
 
-The detailed explanation of how to run the example is described [here](../#running-the-examples).
+A detailed explanation of [how to start DQOps platform and run the example is described here](../index.md#running-the-use-cases).
 
 To execute the check prepared in the example, run the following command in DQOps Shell:
 
 ``` 
 check run
 ```
+
 Review the results which should be similar to the one below.
 The percent of valid UUID values in the `uuid` column is below 95 and the check raised fatal error.
 
@@ -172,8 +199,10 @@ Check evaluation summary per table:
 |valid_uuid_percent|dqo_ai_test_data.uuid_test_7014625119307825231|1     |1             |0            |0       |0     |1           |0               |
 +------------------+----------------------------------------------+------+--------------+-------------+--------+------+------------+----------------+
 ```
+
 For a more detailed insight of how the check is run, you can initiate the check in debug mode by executing the
 following command:
+
 ```
 check run --mode=debug
 ```
@@ -203,12 +232,12 @@ ORDER BY time_period, time_period_utc
 **************************************************
 ```
 
-You can also see the results returned by the sensor. The actual value in this example is 75, which is below the minimum 
-threshold level set in the warning (99).
+You can also see the results returned by the sensor. The actual value in this example is 75%, which is below the minimum 
+threshold level set in the warning (99%).
 
 ```
 **************************************************
-Finished executing a sensor for a check string_valid_uuid_percent on the table dqo_ai_test_data.uuid_test_7014625119307825231 using a sensor definition column/strings/string_valid_uuid_percent, sensor result count: 1
+Finished executing a sensor for a check valid_uuid_format_percent on the table dqo_ai_test_data.uuid_test_7014625119307825231 using a sensor definition column/patterns/valid_uuid_format_percent, sensor result count: 1
 
 Results returned by the sensor:
 +------------+------------------------+------------------------+
@@ -218,10 +247,15 @@ Results returned by the sensor:
 +------------+------------------------+------------------------+
 **************************************************
 ```
+
+In this example, we have demonstrated how to use DQOps to verify the validity of data in a column.
+By using the [valid_uuid_format_percent](../../checks/column/patterns/valid-uuid-format-percent.md) column check, we can monitor that
+the percentage of valid UUID values in a column does not fall below the minimum accepted percentage. If it does, you will get a warning, error or fatal results.
+
 ## Next steps
 
-- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
-- For details on the [string_valid_uuid_percent check used in this example, go to the check details section](../../checks/column/strings/string-valid-uuid-percent.md).
-- You might be interested in another validity check that [evaluates that ensures that the percentage of rows containing valid currency codes does not exceed set thresholds](../data-validity/percentage-of-values-that-contains-usa-zipcode.md).
-- With DQOps, you can easily customize when the checks are run at the level of the entire connection, table, or individual check. [Learn more about how to set schedules here](../../working-with-dqo/schedules/index.md). 
-- DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) and [Slack notifications](../../integrations/slack/configuring-slack-notifications.md).
+- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../dqops-installation/install-dqops-using-pip.md) or [run DQOps as a Docker container](../../dqops-installation/run-dqops-as-docker-container.md).
+- For details on the [valid_uuid_format_percent check used in this example, go to the check details section](../../checks/column/patterns/valid-uuid-format-percent.md).
+- You might be interested in another validity check that [evaluates that ensures that the percentage of rows containing valid currency codes does not exceed set thresholds](./percentage-of-values-that-contains-usa-zipcode.md).
+- With DQOps, you can easily customize when the checks are run at the level of the entire connection, table, or individual check. [Learn more about how to set schedules here](../../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md). 
+- DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md) and [Slack notifications](../../integrations/slack/configuring-slack-notifications.md).

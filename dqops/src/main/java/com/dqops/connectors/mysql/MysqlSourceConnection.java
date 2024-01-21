@@ -15,17 +15,17 @@
  */
 package com.dqops.connectors.mysql;
 
-import com.dqops.connectors.*;
+import com.dqops.connectors.ConnectionProviderSpecificParameters;
+import com.dqops.connectors.ConnectorOperationFailedException;
+import com.dqops.connectors.SourceSchemaModel;
+import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
-import com.dqops.connectors.jdbc.JdbcQueryFailedException;
-import com.dqops.core.jobqueue.JobCancellationListenerHandle;
 import com.dqops.core.jobqueue.JobCancellationToken;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.PhysicalTableName;
-import com.dqops.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,13 +33,11 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.Table;
-import tech.tablesaw.columns.Column;
 
 import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Properties;
 
 /**
@@ -179,51 +177,18 @@ public class MysqlSourceConnection extends AbstractJdbcSourceConnection {
     }
 
     /**
-     * Executes a provider specific SQL that returns a query. For example a SELECT statement or any other SQL text that also returns rows.
-     *
-     * @param sqlQueryStatement       SQL statement that returns a row set.
-     * @param jobCancellationToken    Job cancellation token, enables cancelling a running query.
-     * @param maxRows                 Maximum rows limit.
-     * @param failWhenMaxRowsExceeded Throws an exception if the maximum number of rows is exceeded.
+     * Creates the tablesaw's Table from the ResultSet for the query execution
+     * @param results               ResultSet object that contains the data produced by a query
+     * @param sqlQueryStatement     SQL statement that returns a row set.
      * @return Tabular result captured from the query.
+     * @throws SQLException
      */
     @Override
-    public Table executeQuery(String sqlQueryStatement, JobCancellationToken jobCancellationToken, Integer maxRows, boolean failWhenMaxRowsExceeded) {
-        try {
-            try (Statement statement = this.getJdbcConnection().createStatement()) {
-                if (maxRows != null) {
-                    statement.setMaxRows(failWhenMaxRowsExceeded ? maxRows + 1 : maxRows);
-                }
-
-                try (JobCancellationListenerHandle cancellationListenerHandle =
-                             jobCancellationToken.registerCancellationListener(
-                                     cancellationToken -> RunSilently.run(statement::cancel))) {
-                    try (ResultSet results = statement.executeQuery(sqlQueryStatement)) {
-                        try (MysqlResultSet mysqlResultSet = new MysqlResultSet(results)) {
-                            Table resultTable = Table.read().db(mysqlResultSet, sqlQueryStatement);
-                            if (maxRows != null && resultTable.rowCount() > maxRows) {
-                                throw new RowCountLimitExceededException(maxRows);
-                            }
-
-                            for (Column<?> column : resultTable.columns()) {
-                                if (column.name() != null) {
-                                    column.setName(column.name().toLowerCase(Locale.ROOT));
-                                }
-                            }
-                            return resultTable;
-                        }
-                    }
-                }
-                finally {
-                    jobCancellationToken.throwIfCancelled();
-                }
-            }
-        }
-        catch (Exception ex) {
-            String connectionName = this.getConnectionSpec().getConnectionName();
-            throw new JdbcQueryFailedException(
-                    String.format("SQL query failed: %s, connection: %s, SQL: %s", ex.getMessage(), connectionName, sqlQueryStatement),
-                    ex, sqlQueryStatement, connectionName);
+    protected Table rawTableResultFromResultSet(ResultSet results, String sqlQueryStatement) throws SQLException {
+        try (MysqlResultSet mysqlResultSet = new MysqlResultSet(results)) {
+            Table resultTable = Table.read().db(mysqlResultSet, sqlQueryStatement);
+            return resultTable;
         }
     }
+
 }

@@ -4,4 +4,6 @@ kind: check
 spec:
   sensor_name: table/availability/table_availability
   rule_name: comparison/max_failures
-  help_text: Verifies availability of the table in a database using a simple row count.
+  help_text: Verifies availability of a table in a monitored database using a simple
+    query.
+  standard: true

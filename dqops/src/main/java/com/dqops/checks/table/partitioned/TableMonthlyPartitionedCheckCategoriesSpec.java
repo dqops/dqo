@@ -20,7 +20,7 @@ import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.table.partitioned.comparison.TableComparisonMonthlyPartitionedChecksSpecMap;
-import com.dqops.checks.table.partitioned.sql.TableSqlMonthlyPartitionedChecksSpec;
+import com.dqops.checks.table.partitioned.customsql.TableCustomSqlMonthlyPartitionedChecksSpec;
 import com.dqops.checks.table.partitioned.timeliness.TableTimelinessMonthlyPartitionedChecksSpec;
 import com.dqops.checks.table.partitioned.volume.TableVolumeMonthlyPartitionedChecksSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -30,7 +30,7 @@ import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.metadata.timeseries.TimeSeriesMode;
-import com.dqops.utils.docs.SampleValueFactory;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -53,7 +53,7 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
         {
             put("volume", o -> o.volume);
             put("timeliness", o -> o.timeliness);
-            put("sql", o -> o.sql);
+            put("custom_sql", o -> o.customSql);
             put("comparisons", o -> o.comparisons);
 
             // accuracy checks are not supported on partitioned checks yet, but we support comparisons
@@ -73,7 +73,7 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
     @JsonPropertyDescription("Custom SQL monthly partitioned data quality checks that verify the quality of every month of data separately")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableSqlMonthlyPartitionedChecksSpec sql;
+    private TableCustomSqlMonthlyPartitionedChecksSpec customSql;
 
     @JsonPropertyDescription("Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -121,18 +121,18 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
      * Returns the container of custom SQL checks.
      * @return Custom sql checks.
      */
-    public TableSqlMonthlyPartitionedChecksSpec getSql() {
-        return sql;
+    public TableCustomSqlMonthlyPartitionedChecksSpec getCustomSql() {
+        return customSql;
     }
 
     /**
      * Sets a reference to a container of custom SQL checks.
-     * @param sql Container of custom SQL checks.
+     * @param customSql Container of custom SQL checks.
      */
-    public void setSql(TableSqlMonthlyPartitionedChecksSpec sql) {
-        this.setDirtyIf(!Objects.equals(this.sql, sql));
-        this.sql = sql;
-        this.propagateHierarchyIdToField(sql, "sql");
+    public void setCustomSql(TableCustomSqlMonthlyPartitionedChecksSpec customSql) {
+        this.setDirtyIf(!Objects.equals(this.customSql, customSql));
+        this.customSql = customSql;
+        this.propagateHierarchyIdToField(customSql, "custom_sql");
     }
 
     /**

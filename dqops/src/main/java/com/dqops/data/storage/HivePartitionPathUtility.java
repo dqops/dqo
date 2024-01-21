@@ -15,7 +15,10 @@
  */
 package com.dqops.data.storage;
 
+import com.dqops.core.filesystem.BuiltInFolderNames;
+import com.dqops.core.filesystem.virtual.FileNameSanitizer;
 import com.dqops.metadata.sources.PhysicalTableName;
+import org.apache.parquet.Strings;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -46,6 +49,13 @@ public class HivePartitionPathUtility {
     public static String makeHivePartitionPath(ParquetPartitionId partitionId) {
         // TODO: HivePartitionPaths should be refactored from the ground-up, to make easily serializable and deserializable.
         StringBuilder stringBuilder = new StringBuilder();
+
+        if (!Strings.isNullOrEmpty(partitionId.getDataDomain())) {
+            stringBuilder.append(BuiltInFolderNames.DATA_DOMAINS);
+            stringBuilder.append('/');
+            stringBuilder.append(FileNameSanitizer.encodeForFileSystem(partitionId.getDataDomain()));
+            stringBuilder.append('/');
+        }
 
         String connectionName = partitionId.getConnectionName();
         if (connectionName == null) {

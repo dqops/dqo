@@ -35,10 +35,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.Row;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Big query connection.
@@ -213,7 +210,7 @@ public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
             List<TableSpec> tableSpecs = new ArrayList<>();
             String sql = buildListColumnsSql(schemaName, tableNames);
             tech.tablesaw.api.Table tableResult = this.bigQuerySqlRunner.executeQuery(this, sql, null, false);
-            HashMap<String, TableSpec> tablesByTableName = new HashMap<>();
+            HashMap<String, TableSpec> tablesByTableName = new LinkedHashMap<>();
 
             for (Row colRow : tableResult) {
                 String physicalTableName = colRow.getString("table_name");

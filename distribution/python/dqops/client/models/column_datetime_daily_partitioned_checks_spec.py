@@ -30,17 +30,14 @@ class ColumnDatetimeDailyPartitionedChecksSpec:
         custom_checks (Union[Unset, ColumnDatetimeDailyPartitionedChecksSpecCustomChecks]): Dictionary of additional
             custom checks within this category. The keys are check names defined in the definition section. The sensor
             parameters and rules should match the type of the configured sensor and rule for the custom check.
-        daily_partition_date_match_format_percent (Union[Unset, ColumnDatetimeDateMatchFormatPercentCheckSpec]):
         daily_partition_date_values_in_future_percent (Union[Unset, ColumnDateValuesInFuturePercentCheckSpec]):
         daily_partition_datetime_value_in_range_date_percent (Union[Unset,
             ColumnDatetimeValueInRangeDatePercentCheckSpec]):
+        daily_partition_date_match_format_percent (Union[Unset, ColumnDatetimeDateMatchFormatPercentCheckSpec]):
     """
 
     custom_checks: Union[
         Unset, "ColumnDatetimeDailyPartitionedChecksSpecCustomChecks"
-    ] = UNSET
-    daily_partition_date_match_format_percent: Union[
-        Unset, "ColumnDatetimeDateMatchFormatPercentCheckSpec"
     ] = UNSET
     daily_partition_date_values_in_future_percent: Union[
         Unset, "ColumnDateValuesInFuturePercentCheckSpec"
@@ -48,18 +45,15 @@ class ColumnDatetimeDailyPartitionedChecksSpec:
     daily_partition_datetime_value_in_range_date_percent: Union[
         Unset, "ColumnDatetimeValueInRangeDatePercentCheckSpec"
     ] = UNSET
+    daily_partition_date_match_format_percent: Union[
+        Unset, "ColumnDatetimeDateMatchFormatPercentCheckSpec"
+    ] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         custom_checks: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.custom_checks, Unset):
             custom_checks = self.custom_checks.to_dict()
-
-        daily_partition_date_match_format_percent: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_partition_date_match_format_percent, Unset):
-            daily_partition_date_match_format_percent = (
-                self.daily_partition_date_match_format_percent.to_dict()
-            )
 
         daily_partition_date_values_in_future_percent: Union[
             Unset, Dict[str, Any]
@@ -79,15 +73,17 @@ class ColumnDatetimeDailyPartitionedChecksSpec:
                 self.daily_partition_datetime_value_in_range_date_percent.to_dict()
             )
 
+        daily_partition_date_match_format_percent: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_partition_date_match_format_percent, Unset):
+            daily_partition_date_match_format_percent = (
+                self.daily_partition_date_match_format_percent.to_dict()
+            )
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
-        if daily_partition_date_match_format_percent is not UNSET:
-            field_dict[
-                "daily_partition_date_match_format_percent"
-            ] = daily_partition_date_match_format_percent
         if daily_partition_date_values_in_future_percent is not UNSET:
             field_dict[
                 "daily_partition_date_values_in_future_percent"
@@ -96,6 +92,10 @@ class ColumnDatetimeDailyPartitionedChecksSpec:
             field_dict[
                 "daily_partition_datetime_value_in_range_date_percent"
             ] = daily_partition_datetime_value_in_range_date_percent
+        if daily_partition_date_match_format_percent is not UNSET:
+            field_dict[
+                "daily_partition_date_match_format_percent"
+            ] = daily_partition_date_match_format_percent
 
         return field_dict
 
@@ -125,21 +125,6 @@ class ColumnDatetimeDailyPartitionedChecksSpec:
             custom_checks = (
                 ColumnDatetimeDailyPartitionedChecksSpecCustomChecks.from_dict(
                     _custom_checks
-                )
-            )
-
-        _daily_partition_date_match_format_percent = d.pop(
-            "daily_partition_date_match_format_percent", UNSET
-        )
-        daily_partition_date_match_format_percent: Union[
-            Unset, ColumnDatetimeDateMatchFormatPercentCheckSpec
-        ]
-        if isinstance(_daily_partition_date_match_format_percent, Unset):
-            daily_partition_date_match_format_percent = UNSET
-        else:
-            daily_partition_date_match_format_percent = (
-                ColumnDatetimeDateMatchFormatPercentCheckSpec.from_dict(
-                    _daily_partition_date_match_format_percent
                 )
             )
 
@@ -173,11 +158,26 @@ class ColumnDatetimeDailyPartitionedChecksSpec:
                 )
             )
 
+        _daily_partition_date_match_format_percent = d.pop(
+            "daily_partition_date_match_format_percent", UNSET
+        )
+        daily_partition_date_match_format_percent: Union[
+            Unset, ColumnDatetimeDateMatchFormatPercentCheckSpec
+        ]
+        if isinstance(_daily_partition_date_match_format_percent, Unset):
+            daily_partition_date_match_format_percent = UNSET
+        else:
+            daily_partition_date_match_format_percent = (
+                ColumnDatetimeDateMatchFormatPercentCheckSpec.from_dict(
+                    _daily_partition_date_match_format_percent
+                )
+            )
+
         column_datetime_daily_partitioned_checks_spec = cls(
             custom_checks=custom_checks,
-            daily_partition_date_match_format_percent=daily_partition_date_match_format_percent,
             daily_partition_date_values_in_future_percent=daily_partition_date_values_in_future_percent,
             daily_partition_datetime_value_in_range_date_percent=daily_partition_datetime_value_in_range_date_percent,
+            daily_partition_date_match_format_percent=daily_partition_date_match_format_percent,
         )
 
         column_datetime_daily_partitioned_checks_spec.additional_properties = d

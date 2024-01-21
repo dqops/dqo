@@ -33,7 +33,8 @@ class OracleParametersSpec:
             a ${ORACLE_OPTIONS} configuration with a custom environment variable.
         initialization_sql (Union[Unset, str]): Custom SQL that is executed after connecting to Oracle. This SQL script
             can configure the default language, for example: alter session set NLS_DATE_FORMAT='YYYY-DD-MM HH24:MI:SS'
-        properties (Union[Unset, OracleParametersSpecProperties]):
+        properties (Union[Unset, OracleParametersSpecProperties]): A dictionary of custom JDBC parameters that are added
+            to the JDBC connection string, a key/value dictionary.
     """
 
     host: Union[Unset, str] = UNSET

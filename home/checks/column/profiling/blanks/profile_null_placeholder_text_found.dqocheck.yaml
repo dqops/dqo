@@ -1,0 +1,9 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: column/blanks/null_placeholder_text_count
+  rule_name: comparison/max_count
+  help_text: Verifies that the number of null placeholders in a column does not exceed
+    the maximum accepted count.
+  standard: true

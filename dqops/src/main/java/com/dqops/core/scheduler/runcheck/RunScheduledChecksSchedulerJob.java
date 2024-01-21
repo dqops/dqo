@@ -17,7 +17,7 @@ package com.dqops.core.scheduler.runcheck;
 
 import com.dqops.core.jobqueue.DqoQueueJobFactory;
 import com.dqops.core.jobqueue.ParentDqoJobQueue;
-import com.dqops.core.principal.DqoCloudApiKeyPrincipalProvider;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.scheduler.quartz.JobDataMapAdapter;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
@@ -38,7 +38,7 @@ public class RunScheduledChecksSchedulerJob implements Job, InterruptableJob {
     private JobDataMapAdapter jobDataMapAdapter;
     private DqoQueueJobFactory dqoQueueJobFactory;
     private ParentDqoJobQueue dqoJobQueue;
-    private DqoCloudApiKeyPrincipalProvider principalProvider;
+    private DqoUserPrincipalProvider principalProvider;
     private volatile RunScheduledChecksDqoJob runScheduledChecksJob;
 
     /**
@@ -52,7 +52,7 @@ public class RunScheduledChecksSchedulerJob implements Job, InterruptableJob {
     public RunScheduledChecksSchedulerJob(JobDataMapAdapter jobDataMapAdapter,
                                           DqoQueueJobFactory dqoQueueJobFactory,
                                           ParentDqoJobQueue dqoJobQueue,
-                                          DqoCloudApiKeyPrincipalProvider principalProvider) {
+                                          DqoUserPrincipalProvider principalProvider) {
         this.jobDataMapAdapter = jobDataMapAdapter;
         this.dqoQueueJobFactory = dqoQueueJobFactory;
         this.dqoJobQueue = dqoJobQueue;
@@ -71,7 +71,7 @@ public class RunScheduledChecksSchedulerJob implements Job, InterruptableJob {
         try {
             this.runScheduledChecksJob = this.dqoQueueJobFactory.createRunScheduledChecksJob();
             this.runScheduledChecksJob.setCronSchedule(runChecksCronSchedule);
-            DqoUserPrincipal principal = this.principalProvider.createUserPrincipal();
+            DqoUserPrincipal principal = this.principalProvider.getLocalUserPrincipal(); // TODO: user identity must be passed to the job, or at least the user identity, so we can get the principal
             this.dqoJobQueue.pushJob(this.runScheduledChecksJob, principal);
 
             this.runScheduledChecksJob.waitForStarted();  // the job scheduler starts the jobs one by one, but they are pushed to the job queue and parallelized there

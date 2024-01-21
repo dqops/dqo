@@ -16,7 +16,12 @@
 
 package com.dqops.data.checkresults.services.models.currentstatus;
 
+import com.dqops.data.checkresults.services.models.CheckResultStatus;
 import com.dqops.rules.RuleSeverityLevel;
+import com.dqops.utils.docs.generators.SampleListUtility;
+import com.dqops.utils.docs.generators.SampleMapUtility;
+import com.dqops.utils.docs.generators.SampleStringsRegistry;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -25,8 +30,11 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import java.time.Instant;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoField;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 
 /**
  * The column validity status. It is a summary of the results of the most recently executed data quality checks on the column.
@@ -128,6 +136,50 @@ public class ColumnCurrentDataQualityStatusModel implements CurrentDataQualitySt
                     this.highestHistoricalSeverity.getSeverity() < checkStatusModel.getHighestHistoricalSeverity().getSeverity()) {
                 this.highestHistoricalSeverity = checkStatusModel.getHighestHistoricalSeverity();
             }
+        }
+    }
+
+
+    public static class ColumnCurrentDataQualityStatusModelSampleFactory implements SampleValueFactory<ColumnCurrentDataQualityStatusModel> {
+        @Override
+        public ColumnCurrentDataQualityStatusModel createSample() {
+            List<String> sampleChecksKeys = SampleListUtility.generateStringList(SampleStringsRegistry.getCheckName(), 3);
+
+            int currentSeverityLimit = CheckResultStatus.fromSeverity(CheckResultStatus.error.getSeverity() + 1).getSeverity();
+            List<CheckCurrentDataQualityStatusModel> sampleChecksValues = SampleListUtility.generateList(CheckCurrentDataQualityStatusModel.class, 3,
+                CheckCurrentDataQualityStatusModel::getLastExecutedAt,
+                lastExecutedAt -> lastExecutedAt.plus(
+                        Math.abs(new Random(Integer.toUnsignedLong(
+                                lastExecutedAt.atZone(ZoneId.systemDefault()).getMinute())).nextInt()) % 120,
+                        ChronoUnit.MINUTES),
+                CheckCurrentDataQualityStatusModel::setLastExecutedAt,
+
+                CheckCurrentDataQualityStatusModel::getCurrentSeverity,
+                severity -> CheckResultStatus.fromSeverity(
+                        Math.abs(new Random(Integer.toUnsignedLong(
+                                severity.getSeverity())).nextInt()) % currentSeverityLimit),
+                CheckCurrentDataQualityStatusModel::setCurrentSeverity);
+
+            Map<String, CheckCurrentDataQualityStatusModel> sampleChecks = SampleMapUtility.generateMap(sampleChecksKeys, sampleChecksValues);
+            Instant checkAggregatedLastExecutedAt = Collections.max(sampleChecksValues,
+                    Comparator.comparing(CheckCurrentDataQualityStatusModel::getLastExecutedAt)).getLastExecutedAt();
+            int executedChecksAggregate = sampleChecksValues.size();
+            int validResultsAggregate = (int) sampleChecksValues.stream().filter(c -> c.getCurrentSeverity() == CheckResultStatus.valid).count();
+            int warningResults = (int) sampleChecksValues.stream().filter(c -> c.getCurrentSeverity() == CheckResultStatus.warning).count();
+            int errorResults = (int) sampleChecksValues.stream().filter(c -> c.getCurrentSeverity() == CheckResultStatus.error).count();
+
+            ColumnCurrentDataQualityStatusModel result = new ColumnCurrentDataQualityStatusModel() {{
+                setLastCheckExecutedAt(checkAggregatedLastExecutedAt);
+                setExecutedChecks(executedChecksAggregate);
+                setValidResults(validResultsAggregate);
+                setWarnings(warningResults);
+                setErrors(errorResults);
+                setFatals(0);
+                setExecutionErrors(0);
+                setChecks(sampleChecks);
+            }};
+            result.calculateHighestCurrentAndHistoricSeverity();
+            return result;
         }
     }
 }

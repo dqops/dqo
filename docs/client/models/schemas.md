@@ -1,27 +1,43 @@
+# DQOps REST API schemas models reference
+The references of all objects used by [schemas](../operations/schemas.md) REST API operations are listed below.
 
-## SchemaModel  
-Schema model that is returned by the REST API. Describes a single unique schema name.  
-  
 
-**The structure of this object is described below**  
-  
+## CheckTarget
+Enumeration of targets where the check is applied. It is one of &quot;table&quot; or &quot;column&quot;.
+
+
+**The structure of this object is described below**
+
+
+|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
+|-----------|-------------|
+|string|table<br/>column<br/>|
+
+___
+
+## SchemaModel
+Schema model that is returned by the REST API. Describes a single unique schema name.
+
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|connection_name|Connection name.|string|
-|schema_name|Schema name.|string|
-|[run_checks_job_template](../#CheckSearchFilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run all checks within this schema.|[CheckSearchFilters](../#CheckSearchFilters)|
-|[run_profiling_checks_job_template](../#CheckSearchFilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run profiling checks within this schema.|[CheckSearchFilters](../#CheckSearchFilters)|
-|[run_monitoring_checks_job_template](../#CheckSearchFilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run monitoring checks within this schema.|[CheckSearchFilters](../#CheckSearchFilters)|
-|[run_partition_checks_job_template](../#CheckSearchFilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run partition partitioned checks within this schema.|[CheckSearchFilters](../#CheckSearchFilters)|
-|[collect_statistics_job_template](../#StatisticsCollectorSearchFilters)|Configured parameters for the &quot;collect statistics&quot; job that should be pushed to the job queue in order to run all statistics collectors within this schema.|[StatisticsCollectorSearchFilters](../#StatisticsCollectorSearchFilters)|
-|[import_table_job_parameters](../jobs/#ImportTablesQueueJobParameters)|Job parameters for the import tables job that will import all tables from this schema.|[ImportTablesQueueJobParameters](../jobs/#ImportTablesQueueJobParameters)|
-|[data_clean_job_template](../#DeleteStoredDataQueueJobParameters)|Configured parameters for the &quot;data clean&quot; job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this schema.|[DeleteStoredDataQueueJobParameters](../#DeleteStoredDataQueueJobParameters)|
-|can_edit|Boolean flag that decides if the current user can update or delete the schema.|boolean|
-|can_collect_statistics|Boolean flag that decides if the current user can collect statistics.|boolean|
-|can_run_checks|Boolean flag that decides if the current user can run checks.|boolean|
-|can_delete_data|Boolean flag that decides if the current user can delete data (results).|boolean|
+|<span class="no-wrap-code">`connection_name`</span>|Connection name.|*string*|
+|<span class="no-wrap-code">`schema_name`</span>|Schema name.|*string*|
+|<span class="no-wrap-code">[`run_checks_job_template`](./common.md#checksearchfilters)</span>|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run all checks within this schema.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
+|<span class="no-wrap-code">[`run_profiling_checks_job_template`](./common.md#checksearchfilters)</span>|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run profiling checks within this schema.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
+|<span class="no-wrap-code">[`run_monitoring_checks_job_template`](./common.md#checksearchfilters)</span>|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run monitoring checks within this schema.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
+|<span class="no-wrap-code">[`run_partition_checks_job_template`](./common.md#checksearchfilters)</span>|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run partition partitioned checks within this schema.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
+|<span class="no-wrap-code">[`collect_statistics_job_template`](./jobs.md#statisticscollectorsearchfilters)</span>|Configured parameters for the &quot;collect statistics&quot; job that should be pushed to the job queue in order to run all statistics collectors within this schema.|*[StatisticsCollectorSearchFilters](./jobs.md#statisticscollectorsearchfilters)*|
+|<span class="no-wrap-code">[`import_table_job_parameters`](./jobs.md#importtablesqueuejobparameters)</span>|Job parameters for the import tables job that will import all tables from this schema.|*[ImportTablesQueueJobParameters](./jobs.md#importtablesqueuejobparameters)*|
+|<span class="no-wrap-code">[`data_clean_job_template`](./jobs.md#deletestoreddataqueuejobparameters)</span>|Configured parameters for the &quot;data clean&quot; job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this schema.|*[DeleteStoredDataQueueJobParameters](./jobs.md#deletestoreddataqueuejobparameters)*|
+|<span class="no-wrap-code">`can_edit`</span>|Boolean flag that decides if the current user can update or delete the schema.|*boolean*|
+|<span class="no-wrap-code">`can_collect_statistics`</span>|Boolean flag that decides if the current user can collect statistics.|*boolean*|
+|<span class="no-wrap-code">`can_run_checks`</span>|Boolean flag that decides if the current user can run checks.|*boolean*|
+|<span class="no-wrap-code">`can_delete_data`</span>|Boolean flag that decides if the current user can delete data (results).|*boolean*|
 
 
-___  
+___
 

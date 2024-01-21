@@ -17,13 +17,14 @@ package com.dqops.data.readouts.snapshot;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
  * Dictionary of identified time series in the historic sensor readout results.
  */
 public class SensorReadoutsTimeSeriesMap {
-    private final Map<SensorReadoutTimeSeriesKey, SensorReadoutsTimeSeriesData> entries = new HashMap<>();
+    private final Map<SensorReadoutTimeSeriesKey, SensorReadoutsTimeSeriesData> entries = new LinkedHashMap<>();
     private LocalDate firstLoadedMonth;
     private LocalDate lastLoadedMonth;
 

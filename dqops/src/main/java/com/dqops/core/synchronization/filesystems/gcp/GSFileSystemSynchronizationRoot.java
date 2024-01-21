@@ -15,6 +15,7 @@
  */
 package com.dqops.core.synchronization.filesystems.gcp;
 
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.core.synchronization.contract.FileSystemSynchronizationRoot;
 import com.google.cloud.storage.Storage;
@@ -28,6 +29,7 @@ public class GSFileSystemSynchronizationRoot extends FileSystemSynchronizationRo
     private final Storage storage;
     private final String bucketName;
     private final DqoRoot rootType;
+    private final UserDomainIdentity userIdentity;
 
     /**
      * Creates a root file system.
@@ -35,12 +37,14 @@ public class GSFileSystemSynchronizationRoot extends FileSystemSynchronizationRo
      * @param rootPath Root file system path. The path is just relative to the bucket. The path may be null if the root is the root folder of the bucket.
      * @param storage Configured google storage service with credentials.
      * @param bucketName Bucket name.
+     * @param userIdentity User identity of the user initiating synchronization, with the data domain.
      */
-    public GSFileSystemSynchronizationRoot(Path rootPath, Storage storage, String bucketName, DqoRoot rootType) {
+    public GSFileSystemSynchronizationRoot(Path rootPath, Storage storage, String bucketName, DqoRoot rootType, UserDomainIdentity userIdentity) {
         super(rootPath);
         this.storage = storage;
         this.bucketName = bucketName;
         this.rootType = rootType;
+        this.userIdentity = userIdentity;
     }
 
     /**
@@ -65,5 +69,13 @@ public class GSFileSystemSynchronizationRoot extends FileSystemSynchronizationRo
      */
     public DqoRoot getRootType() {
         return rootType;
+    }
+
+    /**
+     * Returns the user identity of the user who manages the instance, specifies the data domain that is synchronized.
+     * @return User identity with the data domain.
+     */
+    public UserDomainIdentity getUserIdentity() {
+        return userIdentity;
     }
 }

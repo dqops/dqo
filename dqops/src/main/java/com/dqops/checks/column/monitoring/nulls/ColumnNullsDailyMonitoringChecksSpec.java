@@ -22,7 +22,7 @@ import com.dqops.checks.CheckType;
 import com.dqops.checks.column.checkspecs.nulls.*;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.utils.docs.SampleValueFactory;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -45,51 +45,47 @@ public class ColumnNullsDailyMonitoringChecksSpec extends AbstractCheckCategoryS
             put("daily_nulls_count", o -> o.dailyNullsCount);
             put("daily_nulls_percent", o -> o.dailyNullsPercent);
 
-            put("daily_nulls_percent_anomaly_stationary_30_days", o ->o.dailyNullsPercentAnomalyStationary30Days);
-            put("daily_nulls_percent_anomaly_stationary", o ->o.dailyNullsPercentAnomalyStationary);
-
-            put("daily_nulls_percent_change", o ->o.dailyNullsPercentChange);
-            put("daily_nulls_percent_change_yesterday", o ->o.dailyNullsPercentChangeYesterday);
-            put("daily_nulls_percent_change_7_days", o ->o.dailyNullsPercentChange7Days);
-            put("daily_nulls_percent_change_30_days", o ->o.dailyNullsPercentChange30Days);
-            
             put("daily_not_nulls_count", o -> o.dailyNotNullsCount);
             put("daily_not_nulls_percent", o -> o.dailyNotNullsPercent);
+
+            put("daily_nulls_percent_anomaly", o ->o.dailyNullsPercentAnomaly);
+
+            put("daily_nulls_percent_change", o ->o.dailyNullsPercentChange);
+            put("daily_nulls_percent_change_1_day", o ->o.dailyNullsPercentChange1Day);
+            put("daily_nulls_percent_change_7_days", o ->o.dailyNullsPercentChange7Days);
+            put("daily_nulls_percent_change_30_days", o ->o.dailyNullsPercentChange30Days);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnNullsCountCheckSpec dailyNullsCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of nulls in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Measures the percent of null values in a column. Raises a data quality exception when the percentage of null values is above the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnNullsPercentCheckSpec dailyNullsPercent;
 
-    @JsonProperty("daily_nulls_percent_anomaly_stationary_30_days")
-    @JsonPropertyDescription("Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 30 days.")
-    private ColumnAnomalyStationaryNullPercent30DaysCheckSpec dailyNullsPercentAnomalyStationary30Days;
-
-    @JsonPropertyDescription("Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 90 days.")
-    private ColumnAnomalyStationaryNullPercentCheckSpec dailyNullsPercentAnomalyStationary;
-
-    @JsonPropertyDescription("Verifies that the null percent value in a column changed in a fixed rate since last readout.")
-    private ColumnChangeNullPercentCheckSpec dailyNullsPercentChange;
-
-    @JsonPropertyDescription("Verifies that the null percent value in a column changed in a fixed rate since last readout from yesterday.")
-    private ColumnChangeNullPercentSinceYesterdayCheckSpec dailyNullsPercentChangeYesterday;
-
-    @JsonProperty("daily_nulls_percent_change_7_days")
-    @JsonPropertyDescription("Verifies that the null percent value in a column changed in a fixed rate since last readout from last week.")
-    private ColumnChangeNullPercentSince7DaysCheckSpec dailyNullsPercentChange7Days;
-
-    @JsonProperty("daily_nulls_percent_change_30_days")
-    @JsonPropertyDescription("Verifies that the null percent value in a column changed in a fixed rate since last readout from last month.")
-    private ColumnChangeNullPercentSince30DaysCheckSpec dailyNullsPercentChange30Days;
-
-    @JsonPropertyDescription("Verifies that the number of not null values in a column does not fall below the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Detects empty columns. The default rule min_count=1 verifies that the column has any values. Verifies that the number of not null values in a column does not exceed the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnNotNullsCountCheckSpec dailyNotNullsCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of not nulls in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Measures the percent of not null values in a column. Raises a data quality exception when the percentage of not null values is below a minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnNotNullsPercentCheckSpec dailyNotNullsPercent;
+
+    @JsonPropertyDescription("Verifies that the null percent value in a column changes in a rate within a percentile boundary during the last 90 days.")
+    private ColumnNullPercentAnomalyStationaryCheckSpec dailyNullsPercentAnomaly;
+
+    @JsonPropertyDescription("Verifies that the null percent value in a column changed in a fixed rate since the last readout.")
+    private ColumnNullPercentChangeCheckSpec dailyNullsPercentChange;
+
+    @JsonProperty("daily_nulls_percent_change_1_day")
+    @JsonPropertyDescription("Verifies that the null percent value in a column changed in a fixed rate since the last readout from yesterday.")
+    private ColumnNullPercentChange1DayCheckSpec dailyNullsPercentChange1Day;
+
+    @JsonProperty("daily_nulls_percent_change_7_days")
+    @JsonPropertyDescription("Verifies that the null percent value in a column changed in a fixed rate since the last readout from the last week.")
+    private ColumnNullPercentChange7DaysCheckSpec dailyNullsPercentChange7Days;
+
+    @JsonProperty("daily_nulls_percent_change_30_days")
+    @JsonPropertyDescription("Verifies that the null percent value in a column changed in a fixed rate since the last readout from the last month.")
+    private ColumnNullPercentChange30DaysCheckSpec dailyNullsPercentChange30Days;
 
     /**
      * Returns nulls count check specification.
@@ -128,114 +124,6 @@ public class ColumnNullsDailyMonitoringChecksSpec extends AbstractCheckCategoryS
     }
 
     /**
-     * Returns a null percent value anomaly 30 days check specification.
-     * @return Null percent value anomaly 30 days check specification.
-     */
-    public ColumnAnomalyStationaryNullPercent30DaysCheckSpec getDailyNullsPercentAnomalyStationary30Days() {
-        return dailyNullsPercentAnomalyStationary30Days;
-    }
-
-    /**
-     * Sets a new specification of a null percent value anomaly 30 days check.
-     * @param dailyNullsPercentAnomalyStationary30Days Null percent value anomaly 30 days check specification.
-     */
-    public void setDailyNullsPercentAnomalyStationary30Days(ColumnAnomalyStationaryNullPercent30DaysCheckSpec dailyNullsPercentAnomalyStationary30Days) {
-        this.setDirtyIf(!Objects.equals(this.dailyNullsPercentAnomalyStationary30Days, dailyNullsPercentAnomalyStationary30Days));
-        this.dailyNullsPercentAnomalyStationary30Days = dailyNullsPercentAnomalyStationary30Days;
-        propagateHierarchyIdToField(dailyNullsPercentAnomalyStationary30Days, "daily_nulls_percent_anomaly_stationary_30_days");
-    }
-
-    /**
-     * Returns a null percent value anomaly 90 days check specification.
-     * @return Null percent value anomaly 90 days check specification.
-     */
-    public ColumnAnomalyStationaryNullPercentCheckSpec getDailyNullsPercentAnomalyStationary() {
-        return dailyNullsPercentAnomalyStationary;
-    }
-
-    /**
-     * Sets a new specification of a null percent value anomaly 90 days check.
-     * @param dailyNullsPercentAnomalyStationary Null percent value anomaly 90 days check specification.
-     */
-    public void setDailyNullsPercentAnomalyStationary(ColumnAnomalyStationaryNullPercentCheckSpec dailyNullsPercentAnomalyStationary) {
-        this.setDirtyIf(!Objects.equals(this.dailyNullsPercentAnomalyStationary, dailyNullsPercentAnomalyStationary));
-        this.dailyNullsPercentAnomalyStationary = dailyNullsPercentAnomalyStationary;
-        propagateHierarchyIdToField(dailyNullsPercentAnomalyStationary, "daily_nulls_percent_anomaly_stationary");
-    }
-
-    /**
-     * Returns the null percent value change check.
-     * @return Null percent value change check.
-     */
-    public ColumnChangeNullPercentCheckSpec getDailyNullsPercentChange() {
-        return dailyNullsPercentChange;
-    }
-
-    /**
-     * Sets a new null percent value change check.
-     * @param dailyNullsPercentChange Null percent value change check.
-     */
-    public void setDailyNullsPercentChange(ColumnChangeNullPercentCheckSpec dailyNullsPercentChange) {
-        this.setDirtyIf(!Objects.equals(this.dailyNullsPercentChange, dailyNullsPercentChange));
-        this.dailyNullsPercentChange = dailyNullsPercentChange;
-        propagateHierarchyIdToField(dailyNullsPercentChange, "daily_nulls_percent_change");
-    }
-
-    /**
-     * Returns the null percent value change yesterday check.
-     * @return Null percent value change yesterday check.
-     */
-    public ColumnChangeNullPercentSinceYesterdayCheckSpec getDailyNullsPercentChangeYesterday() {
-        return dailyNullsPercentChangeYesterday;
-    }
-
-    /**
-     * Sets a new null percent value change yesterday check.
-     * @param dailyNullsPercentChangeYesterday Null percent value change yesterday check.
-     */
-    public void setDailyNullsPercentChangeYesterday(ColumnChangeNullPercentSinceYesterdayCheckSpec dailyNullsPercentChangeYesterday) {
-        this.setDirtyIf(!Objects.equals(this.dailyNullsPercentChangeYesterday, dailyNullsPercentChangeYesterday));
-        this.dailyNullsPercentChangeYesterday = dailyNullsPercentChangeYesterday;
-        propagateHierarchyIdToField(dailyNullsPercentChangeYesterday, "daily_nulls_percent_change_yesterday");
-    }
-
-    /**
-     * Returns the null percent value change 7 days check.
-     * @return Null percent value change 7 days check.
-     */
-    public ColumnChangeNullPercentSince7DaysCheckSpec getDailyNullsPercentChange7Days() {
-        return dailyNullsPercentChange7Days;
-    }
-
-    /**
-     * Sets a new null percent value change 7 days check.
-     * @param dailyNullsPercentChange7Days Null percent value change 7 days check.
-     */
-    public void setDailyNullsPercentChange7Days(ColumnChangeNullPercentSince7DaysCheckSpec dailyNullsPercentChange7Days) {
-        this.setDirtyIf(!Objects.equals(this.dailyNullsPercentChange7Days, dailyNullsPercentChange7Days));
-        this.dailyNullsPercentChange7Days = dailyNullsPercentChange7Days;
-        propagateHierarchyIdToField(dailyNullsPercentChange7Days, "daily_nulls_percent_change_7_days");
-    }
-
-    /**
-     * Returns the null percent value change 30 days check.
-     * @return Null percent value change 30 days check.
-     */
-    public ColumnChangeNullPercentSince30DaysCheckSpec getDailyNullsPercentChange30Days() {
-        return dailyNullsPercentChange30Days;
-    }
-
-    /**
-     * Sets a new null percent value change 30 days check.
-     * @param dailyNullsPercentChange30Days Null percent value change 30 days check.
-     */
-    public void setDailyNullsPercentChange30Days(ColumnChangeNullPercentSince30DaysCheckSpec dailyNullsPercentChange30Days) {
-        this.setDirtyIf(!Objects.equals(this.dailyNullsPercentChange30Days, dailyNullsPercentChange30Days));
-        this.dailyNullsPercentChange30Days = dailyNullsPercentChange30Days;
-        propagateHierarchyIdToField(dailyNullsPercentChange30Days, "daily_nulls_percent_change_30_days");
-    }
-    
-    /**
      * Returns not nulls count check specification.
      * @return Not nulls count check specification.
      */
@@ -271,6 +159,96 @@ public class ColumnNullsDailyMonitoringChecksSpec extends AbstractCheckCategoryS
         propagateHierarchyIdToField(dailyNotNullsPercent, "daily_not_nulls_percent");
     }
 
+    /**
+     * Returns a null percent value anomaly 90 days check specification.
+     * @return Null percent value anomaly 90 days check specification.
+     */
+    public ColumnNullPercentAnomalyStationaryCheckSpec getDailyNullsPercentAnomaly() {
+        return dailyNullsPercentAnomaly;
+    }
+
+    /**
+     * Sets a new specification of a null percent value anomaly 90 days check.
+     * @param dailyNullsPercentAnomaly Null percent value anomaly 90 days check specification.
+     */
+    public void setDailyNullsPercentAnomaly(ColumnNullPercentAnomalyStationaryCheckSpec dailyNullsPercentAnomaly) {
+        this.setDirtyIf(!Objects.equals(this.dailyNullsPercentAnomaly, dailyNullsPercentAnomaly));
+        this.dailyNullsPercentAnomaly = dailyNullsPercentAnomaly;
+        propagateHierarchyIdToField(dailyNullsPercentAnomaly, "daily_nulls_percent_anomaly");
+    }
+
+    /**
+     * Returns the null percent value change check.
+     * @return Null percent value change check.
+     */
+    public ColumnNullPercentChangeCheckSpec getDailyNullsPercentChange() {
+        return dailyNullsPercentChange;
+    }
+
+    /**
+     * Sets a new null percent value change check.
+     * @param dailyNullsPercentChange Null percent value change check.
+     */
+    public void setDailyNullsPercentChange(ColumnNullPercentChangeCheckSpec dailyNullsPercentChange) {
+        this.setDirtyIf(!Objects.equals(this.dailyNullsPercentChange, dailyNullsPercentChange));
+        this.dailyNullsPercentChange = dailyNullsPercentChange;
+        propagateHierarchyIdToField(dailyNullsPercentChange, "daily_nulls_percent_change");
+    }
+
+    /**
+     * Returns the null percent value change yesterday check.
+     * @return Null percent value change yesterday check.
+     */
+    public ColumnNullPercentChange1DayCheckSpec getDailyNullsPercentChange1Day() {
+        return dailyNullsPercentChange1Day;
+    }
+
+    /**
+     * Sets a new null percent value change yesterday check.
+     * @param dailyNullsPercentChange1Day Null percent value change yesterday check.
+     */
+    public void setDailyNullsPercentChange1Day(ColumnNullPercentChange1DayCheckSpec dailyNullsPercentChange1Day) {
+        this.setDirtyIf(!Objects.equals(this.dailyNullsPercentChange1Day, dailyNullsPercentChange1Day));
+        this.dailyNullsPercentChange1Day = dailyNullsPercentChange1Day;
+        propagateHierarchyIdToField(dailyNullsPercentChange1Day, "daily_nulls_percent_change_1_day");
+    }
+
+    /**
+     * Returns the null percent value change 7 days check.
+     * @return Null percent value change 7 days check.
+     */
+    public ColumnNullPercentChange7DaysCheckSpec getDailyNullsPercentChange7Days() {
+        return dailyNullsPercentChange7Days;
+    }
+
+    /**
+     * Sets a new null percent value change 7 days check.
+     * @param dailyNullsPercentChange7Days Null percent value change 7 days check.
+     */
+    public void setDailyNullsPercentChange7Days(ColumnNullPercentChange7DaysCheckSpec dailyNullsPercentChange7Days) {
+        this.setDirtyIf(!Objects.equals(this.dailyNullsPercentChange7Days, dailyNullsPercentChange7Days));
+        this.dailyNullsPercentChange7Days = dailyNullsPercentChange7Days;
+        propagateHierarchyIdToField(dailyNullsPercentChange7Days, "daily_nulls_percent_change_7_days");
+    }
+
+    /**
+     * Returns the null percent value change 30 days check.
+     * @return Null percent value change 30 days check.
+     */
+    public ColumnNullPercentChange30DaysCheckSpec getDailyNullsPercentChange30Days() {
+        return dailyNullsPercentChange30Days;
+    }
+
+    /**
+     * Sets a new null percent value change 30 days check.
+     * @param dailyNullsPercentChange30Days Null percent value change 30 days check.
+     */
+    public void setDailyNullsPercentChange30Days(ColumnNullPercentChange30DaysCheckSpec dailyNullsPercentChange30Days) {
+        this.setDirtyIf(!Objects.equals(this.dailyNullsPercentChange30Days, dailyNullsPercentChange30Days));
+        this.dailyNullsPercentChange30Days = dailyNullsPercentChange30Days;
+        propagateHierarchyIdToField(dailyNullsPercentChange30Days, "daily_nulls_percent_change_30_days");
+    }
+    
     /**
      * Returns the child map on the spec class with all fields.
      *

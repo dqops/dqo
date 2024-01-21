@@ -40,7 +40,7 @@ public class FileObservabilityCheckWrapperImpl extends DefaultObservabilityCheck
     @Override
     public DefaultObservabilityChecksSpec getSpec() {
         DefaultObservabilityChecksSpec spec = super.getSpec();
-        if (spec == null && this.getStatus() == InstanceStatus.NOT_TOUCHED) {
+        if (spec == null && this.getStatus() == InstanceStatus.LOAD_IN_PROGRESS) {
             FileTreeNode fileNode = this.settingsFolderNode.getChildFileByFileName(SpecFileNames.DEFAULT_OBSERVABILITY_CHECKS_SPEC_FILE_NAME_YAML);
             if (fileNode != null) {
                 FileContent fileContent = fileNode.getContent();
@@ -50,8 +50,8 @@ public class FileObservabilityCheckWrapperImpl extends DefaultObservabilityCheck
                 if (deserializedSpec == null) {
                     DefaultObservabilityChecksYaml deserialized = this.yamlSerializer.deserialize(textContent, DefaultObservabilityChecksYaml.class, fileNode.getPhysicalAbsolutePath());
                     deserializedSpec = deserialized.getSpec();
-                    if (deserialized.getKind() != SpecificationKind.DEFAULT_CHECKS) {
-                        log.info("Invalid specification kind, found: " + deserialized.getKind() + ", but expected: " + SpecificationKind.DEFAULT_CHECKS);
+                    if (deserialized.getKind() != SpecificationKind.default_checks) {
+                        log.info("Invalid specification kind, found: " + deserialized.getKind() + ", but expected: " + SpecificationKind.default_checks);
 //                        throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
                     }
                     if (deserializedSpec != null) {
@@ -98,6 +98,8 @@ public class FileObservabilityCheckWrapperImpl extends DefaultObservabilityCheck
             case ADDED:
                 this.settingsFolderNode.addChildFile(fileNameWithExt, newFileContent);
                 this.getSpec().clearDirty(true);
+                break;
+
             case MODIFIED:
                 FileTreeNode modifiedFileNode = this.settingsFolderNode.getChildFileByFileName(fileNameWithExt);
                 if (modifiedFileNode != null) {
@@ -108,6 +110,7 @@ public class FileObservabilityCheckWrapperImpl extends DefaultObservabilityCheck
                 }
                 this.getSpec().clearDirty(true);
                 break;
+
             case TO_BE_DELETED:
                 this.settingsFolderNode.deleteChildFile(fileNameWithExt);
                 break;

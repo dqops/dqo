@@ -37,8 +37,8 @@ class ColumnPiiProfilingChecksSpec:
             within this category. The keys are check names defined in the definition section. The sensor parameters and
             rules should match the type of the configured sensor and rule for the custom check.
         profile_contains_usa_phone_percent (Union[Unset, ColumnPiiContainsUsaPhonePercentCheckSpec]):
-        profile_contains_usa_zipcode_percent (Union[Unset, ColumnPiiContainsUsaZipcodePercentCheckSpec]):
         profile_contains_email_percent (Union[Unset, ColumnPiiContainsEmailPercentCheckSpec]):
+        profile_contains_usa_zipcode_percent (Union[Unset, ColumnPiiContainsUsaZipcodePercentCheckSpec]):
         profile_contains_ip4_percent (Union[Unset, ColumnPiiContainsIp4PercentCheckSpec]):
         profile_contains_ip6_percent (Union[Unset, ColumnPiiContainsIp6PercentCheckSpec]):
     """
@@ -47,11 +47,11 @@ class ColumnPiiProfilingChecksSpec:
     profile_contains_usa_phone_percent: Union[
         Unset, "ColumnPiiContainsUsaPhonePercentCheckSpec"
     ] = UNSET
-    profile_contains_usa_zipcode_percent: Union[
-        Unset, "ColumnPiiContainsUsaZipcodePercentCheckSpec"
-    ] = UNSET
     profile_contains_email_percent: Union[
         Unset, "ColumnPiiContainsEmailPercentCheckSpec"
+    ] = UNSET
+    profile_contains_usa_zipcode_percent: Union[
+        Unset, "ColumnPiiContainsUsaZipcodePercentCheckSpec"
     ] = UNSET
     profile_contains_ip4_percent: Union[
         Unset, "ColumnPiiContainsIp4PercentCheckSpec"
@@ -72,16 +72,16 @@ class ColumnPiiProfilingChecksSpec:
                 self.profile_contains_usa_phone_percent.to_dict()
             )
 
-        profile_contains_usa_zipcode_percent: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.profile_contains_usa_zipcode_percent, Unset):
-            profile_contains_usa_zipcode_percent = (
-                self.profile_contains_usa_zipcode_percent.to_dict()
-            )
-
         profile_contains_email_percent: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.profile_contains_email_percent, Unset):
             profile_contains_email_percent = (
                 self.profile_contains_email_percent.to_dict()
+            )
+
+        profile_contains_usa_zipcode_percent: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_contains_usa_zipcode_percent, Unset):
+            profile_contains_usa_zipcode_percent = (
+                self.profile_contains_usa_zipcode_percent.to_dict()
             )
 
         profile_contains_ip4_percent: Union[Unset, Dict[str, Any]] = UNSET
@@ -101,14 +101,14 @@ class ColumnPiiProfilingChecksSpec:
             field_dict[
                 "profile_contains_usa_phone_percent"
             ] = profile_contains_usa_phone_percent
-        if profile_contains_usa_zipcode_percent is not UNSET:
-            field_dict[
-                "profile_contains_usa_zipcode_percent"
-            ] = profile_contains_usa_zipcode_percent
         if profile_contains_email_percent is not UNSET:
             field_dict[
                 "profile_contains_email_percent"
             ] = profile_contains_email_percent
+        if profile_contains_usa_zipcode_percent is not UNSET:
+            field_dict[
+                "profile_contains_usa_zipcode_percent"
+            ] = profile_contains_usa_zipcode_percent
         if profile_contains_ip4_percent is not UNSET:
             field_dict["profile_contains_ip4_percent"] = profile_contains_ip4_percent
         if profile_contains_ip6_percent is not UNSET:
@@ -162,6 +162,19 @@ class ColumnPiiProfilingChecksSpec:
                 )
             )
 
+        _profile_contains_email_percent = d.pop("profile_contains_email_percent", UNSET)
+        profile_contains_email_percent: Union[
+            Unset, ColumnPiiContainsEmailPercentCheckSpec
+        ]
+        if isinstance(_profile_contains_email_percent, Unset):
+            profile_contains_email_percent = UNSET
+        else:
+            profile_contains_email_percent = (
+                ColumnPiiContainsEmailPercentCheckSpec.from_dict(
+                    _profile_contains_email_percent
+                )
+            )
+
         _profile_contains_usa_zipcode_percent = d.pop(
             "profile_contains_usa_zipcode_percent", UNSET
         )
@@ -174,19 +187,6 @@ class ColumnPiiProfilingChecksSpec:
             profile_contains_usa_zipcode_percent = (
                 ColumnPiiContainsUsaZipcodePercentCheckSpec.from_dict(
                     _profile_contains_usa_zipcode_percent
-                )
-            )
-
-        _profile_contains_email_percent = d.pop("profile_contains_email_percent", UNSET)
-        profile_contains_email_percent: Union[
-            Unset, ColumnPiiContainsEmailPercentCheckSpec
-        ]
-        if isinstance(_profile_contains_email_percent, Unset):
-            profile_contains_email_percent = UNSET
-        else:
-            profile_contains_email_percent = (
-                ColumnPiiContainsEmailPercentCheckSpec.from_dict(
-                    _profile_contains_email_percent
                 )
             )
 
@@ -215,8 +215,8 @@ class ColumnPiiProfilingChecksSpec:
         column_pii_profiling_checks_spec = cls(
             custom_checks=custom_checks,
             profile_contains_usa_phone_percent=profile_contains_usa_phone_percent,
-            profile_contains_usa_zipcode_percent=profile_contains_usa_zipcode_percent,
             profile_contains_email_percent=profile_contains_email_percent,
+            profile_contains_usa_zipcode_percent=profile_contains_usa_zipcode_percent,
             profile_contains_ip4_percent=profile_contains_ip4_percent,
             profile_contains_ip6_percent=profile_contains_ip6_percent,
         )

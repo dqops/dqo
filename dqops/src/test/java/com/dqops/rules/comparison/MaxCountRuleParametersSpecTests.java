@@ -25,11 +25,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 public class MaxCountRuleParametersSpecTests extends BaseTest {
-    private MaxCountRule0ParametersSpec sut;
+    private MaxCountRule0WarningParametersSpec sut;
 
     @BeforeEach
     void setUp() {
-        this.sut = new MaxCountRule0ParametersSpec();
+        this.sut = new MaxCountRule0WarningParametersSpec();
     }
 
     @Test

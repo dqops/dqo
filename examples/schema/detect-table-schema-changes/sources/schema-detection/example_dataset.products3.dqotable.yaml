@@ -1,0 +1,42 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  incremental_time_window:
+    daily_partitioning_recent_days: 7
+    monthly_partitioning_recent_months: 1
+  monitoring_checks:
+    daily:
+      schema:
+        daily_column_count:
+          error:
+            expected_value: 5
+        daily_column_count_changed:
+          error: {}
+        daily_column_list_changed:
+          error: {}
+        daily_column_list_or_order_changed:
+          error: {}
+        daily_column_types_changed:
+          error: {}
+  columns:
+    product_id:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+    name:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+    price:
+      type_snapshot:
+        column_type: FLOAT64
+        nullable: true
+    date_created:
+      type_snapshot:
+        column_type: DATETIME
+        nullable: true
+    date_updated:
+      type_snapshot:
+        column_type: DATETIME
+        nullable: true

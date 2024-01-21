@@ -4,7 +4,9 @@ import {
   CheckContainerModel,
   CheckContainerModelEffectiveScheduleEnabledStatusEnum,
   CheckModel,
-  EffectiveScheduleModelScheduleLevelEnum
+  EffectiveScheduleModelScheduleLevelEnum,
+  QualityCategoryModel,
+  CheckSearchFiltersCheckTypeEnum
 } from '../../api';
 import { useTree } from '../../contexts/treeContext';
 import clsx from 'clsx';
@@ -19,6 +21,8 @@ import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import Button from '../Button';
 import Select from '../Select';
 import { RUN_CHECK_TIME_WINDOW_FILTERS } from '../../shared/constants';
+import { useSelector } from 'react-redux';
+import { getFirstLevelActiveTab } from '../../redux/selectors';
 
 interface IDataQualityChecksProps {
   checksUI?: CheckContainerModel;
@@ -29,6 +33,7 @@ interface IDataQualityChecksProps {
   onUpdate: () => void;
   loading?: boolean;
   isDefaultEditing?: boolean;
+  isFiltered?: boolean;
 }
 
 const DataQualityChecks = ({
@@ -39,7 +44,8 @@ const DataQualityChecks = ({
   getCheckOverview,
   onUpdate,
   loading,
-  isDefaultEditing
+  isDefaultEditing,
+  isFiltered
 }: IDataQualityChecksProps) => {
   const {
     checkTypes,
@@ -65,7 +71,10 @@ const DataQualityChecks = ({
   );
   const [mode, setMode] = useState<string>();
   const [copyUI, setCopyUI] = useState<CheckContainerModel>();
+  const [showAdvanced, setShowAdvanced] = useState<boolean>(isFiltered === true);
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
+  
   const { sidebarWidth } = useTree();
   const handleChangeDataGrouping = (
     check: CheckModel,
@@ -93,7 +102,7 @@ const DataQualityChecks = ({
 
   useEffect(() => {
     getCheckOverview();
-  }, [checkTypes, connection, schema, table, column, timePartitioned]);
+  }, [checkTypes, connection, schema, table, column, timePartitioned, firstLevelActiveTab]);
 
   const goToSchedule = () => {
     if (
@@ -299,6 +308,46 @@ const DataQualityChecks = ({
       value: item
     })
   );
+  const getCustomCategoryBasedOnResults = () => {
+    const checkResultCopy = [...checkResultsOverview];
+    const missingCategory = checkResultCopy.filter(
+      (obj1) =>
+        checksUI.categories &&
+        !checksUI.categories.find(
+          (obj2) =>
+          obj1.checkCategory + '/' + obj1.comparisonName === obj2.category ||
+          obj1.checkCategory === obj2.category 
+        )
+    );
+
+    const customCategory: CheckResultsOverviewDataModel[] = missingCategory.map((x) => ({
+      ...x, checkCategory: x.comparisonName ? x.checkCategory + '/' + x.comparisonName : x.checkCategory
+    }));
+
+    const groupedArray = customCategory.reduce((acc : QualityCategoryModel[], obj) => {
+      const existingCategory = acc.find(item => item.category === obj.checkCategory);
+      
+      if (existingCategory && existingCategory.checks) {
+        existingCategory.checks.push({ check_name: obj.checkName, check_hash: obj.checkHash,
+          run_checks_job_template: {
+            checkType: checkTypes as CheckSearchFiltersCheckTypeEnum,
+            timeScale: tab || timePartitioned
+           } });
+      } else {
+        acc.push({ category: obj.checkCategory, comparison_name: obj.comparisonName, checks: [
+       {check_name: obj.checkName, 
+        check_hash: obj.checkHash,
+        run_checks_job_template: {
+         checkType: checkTypes as CheckSearchFiltersCheckTypeEnum,
+         timeScale: tab || timePartitioned
+        }, 
+      }]});
+    }
+    
+      return acc;
+    }, []);
+    return groupedArray ?? [];
+  };
 
   return (
     <div
@@ -308,82 +357,85 @@ const DataQualityChecks = ({
         minWidth: '100%'
       }}
     >
-      <div className="flex items-center text-sm mb-3 gap-6">
-        {isDefaultEditing !== true &&
-        <div className="flex items-center space-x-1 gap-x-4">
-          <div className="flex items-center space-x-1">
-            <span>Scheduling status:</span>
-            <span>
-              {checksUI?.effective_schedule_enabled_status
-                ?.replaceAll('_', ' ')
-                .split(' ')
-                .map((item) => item.charAt(0).toUpperCase() + item.slice(1))
-                .join(' ')}
-            </span>
-          </div>
-          {checksUI.effective_schedule_enabled_status !==
-          CheckContainerModelEffectiveScheduleEnabledStatusEnum.not_configured ? (
-            <div className="flex items-center gap-x-4">
-              <div className="flex items-center space-x-1">
-                <span>Scheduling configured at:</span>
-                <a className="underline cursor-pointer" onClick={goToSchedule}>
-                  {checksUI?.effective_schedule?.schedule_level}
-                </a>
-              </div>
-              <div className="flex items-center space-x-1">
-                <span>Effective cron expression:</span>
-                <span>{checksUI?.effective_schedule?.cron_expression}</span>
-              </div>
-            </div>
-          ) : (
-            <div className="text-red-500">
-              Warning: Data Quality Checks will not be scheduled, please
-              configure the scheduling
-            </div>
-          )}
-          {checksUI?.effective_schedule?.cron_expression && (
+      <div className="flex items-center text-sm my-3 gap-6">
+        {isDefaultEditing !== true && (
+          <div className="flex items-center space-x-1 gap-x-4">
             <div className="flex items-center space-x-1">
-              <span>Next execution at:</span>
+              <span>Scheduling status:</span>
               <span>
-                {moment(checksUI?.effective_schedule?.time_of_execution).format(
-                  'MMM, DD YYYY HH:mm'
-                )}
+                {checksUI?.effective_schedule_enabled_status
+                  ?.replaceAll('_', ' ')
+                  .split(' ')
+                  .map((item) => item.charAt(0).toUpperCase() + item.slice(1))
+                  .join(' ')}
               </span>
             </div>
-          )}
-        </div>
-        }
-        {isDefaultEditing !== true && 
-        <div className="flex items-center justify-between">
-          <span className='pr-2'>Schedule configuration: </span>
-          <a className="underline cursor-pointer" onClick={goToScheduleTab}>
-            {checksUI?.effective_schedule?.schedule_group}
-          </a>
+            {checksUI.effective_schedule_enabled_status !==
+            CheckContainerModelEffectiveScheduleEnabledStatusEnum.not_configured ? (
+              <div className="flex items-center gap-x-4">
+                <div className="flex items-center space-x-1">
+                  <span>Scheduling configured at:</span>
+                  <a
+                    className="underline cursor-pointer"
+                    onClick={goToSchedule}
+                  >
+                    {checksUI?.effective_schedule?.schedule_level}
+                  </a>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <span>Effective cron expression:</span>
+                  <span>{checksUI?.effective_schedule?.cron_expression}</span>
+                </div>
+              </div>
+            ) : (
+              <div className="text-red-500">
+                Warning: Data Quality Checks will not be scheduled, please
+                configure the scheduling
+              </div>
+            )}
+            {checksUI?.effective_schedule?.cron_expression && (
+              <div className="flex items-center space-x-1">
+                <span>Next execution at:</span>
+                <span>
+                  {moment(
+                    checksUI?.effective_schedule?.time_of_execution
+                  ).format('MMM, DD YYYY HH:mm')}
+                </span>
+              </div>
+            )}
+          </div>
+        )}
+        {isDefaultEditing !== true && (
+          <div className="flex items-center justify-between">
+            <span className="pr-2">Schedule configuration: </span>
+            <a className="underline cursor-pointer" onClick={goToScheduleTab}>
+              {checksUI?.effective_schedule?.schedule_group}
+            </a>
 
-          {checksUI?.effective_schedule_enabled_status ===
-            CheckContainerModelEffectiveScheduleEnabledStatusEnum.not_configured && (
-            <div className="flex items-center gap-x-4">
-              <Button
-                label="Configure a schedule for the connection"
-                color="primary"
-                variant="outlined"
-                onClick={goToConnectionSchedule}
-                className="px-1 py-1"
-                textSize="sm"
-              />
+            {checksUI?.effective_schedule_enabled_status ===
+              CheckContainerModelEffectiveScheduleEnabledStatusEnum.not_configured && (
+              <div className="flex items-center gap-x-4">
+                <Button
+                  label="Configure a schedule for the connection"
+                  color="primary"
+                  variant="outlined"
+                  onClick={goToConnectionSchedule}
+                  className="px-1 py-1"
+                  textSize="sm"
+                />
 
-              <Button
-                label="Configure a schedule for the table"
-                color="primary"
-                variant="outlined"
-                onClick={goToTableSchedule}
-                className="px-1 py-1"
-                textSize="sm"
-              />
-            </div>
-          )}
-        </div>
-        }
+                <Button
+                  label="Configure a schedule for the table"
+                  color="primary"
+                  variant="outlined"
+                  onClick={goToTableSchedule}
+                  className="px-1 py-1"
+                  textSize="sm"
+                />
+              </div>
+            )}
+          </div>
+        )}
       </div>
       {checkTypes === CheckTypes.PARTITIONED && (
         <div className="flex items-center mb-3 gap-6">
@@ -427,9 +479,13 @@ const DataQualityChecks = ({
           setCopyUI={setCopyUI}
           onUpdate={onUpdate}
           isDefaultEditing={isDefaultEditing}
+          showAdvanced={showAdvanced}
+          setShowAdvanced={setShowAdvanced}
+          isFiltered = {isFiltered}
         />
         <tbody>
-          {checksUI?.categories.map((category, index) => (
+          {
+            (checksUI?.categories ?? []).map((category, index) => (
             <CheckCategoriesView
               key={index}
               category={category}
@@ -446,8 +502,32 @@ const DataQualityChecks = ({
                 (item) => item.category === category.category
               )}
               isDefaultEditing={isDefaultEditing}
+              showAdvanced={showAdvanced}
+              isFiltered= {isFiltered}
             />
           ))}
+          {isFiltered !== true &&
+          getCustomCategoryBasedOnResults().map((category, index) => (
+          <CheckCategoriesView
+              key={index}
+              category={category}
+              checkResultsOverview={checkResultsOverview}
+              timeWindowFilter={RUN_CHECK_TIME_WINDOW_FILTERS[timeWindow]}
+              handleChangeDataGroupingConfiguration={(check, jIndex) =>
+                handleChangeDataGrouping(check, index, jIndex)
+              }
+              onUpdate={onUpdate}
+              getCheckOverview={getCheckOverview}
+              mode={mode}
+              changeCopyUI={changeCopyUI}
+              copyCategory={copyUI?.categories?.find(
+                (item) => item.category === category.category
+              )}
+              isDefaultEditing={isDefaultEditing}
+              showAdvanced={showAdvanced}
+              isAlreadyDeleted = {true}
+            />
+            ))}
         </tbody>
       </table>
     </div>

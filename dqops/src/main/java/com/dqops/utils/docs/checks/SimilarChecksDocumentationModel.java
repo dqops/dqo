@@ -15,8 +15,6 @@
  */
 package com.dqops.utils.docs.checks;
 
-import com.dqops.utils.docs.rules.RuleDocumentationModel;
-import com.dqops.utils.docs.sensors.SensorDocumentationModel;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -27,16 +25,6 @@ import java.util.List;
  */
 @Data
 public class SimilarChecksDocumentationModel {
-    /**
-     * Sensor documentation model.
-     */
-    private SensorDocumentationModel sensor;
-
-    /**
-     * Rule documentation model.
-     */
-    private RuleDocumentationModel rule;
-
     /**
      * Check description extracted from the JavaDoc comment for the whole check definition class.
      */
@@ -53,9 +41,19 @@ public class SimilarChecksDocumentationModel {
     private String category;
 
     /**
-     * Check name inside the category. It is usually the name of the experiment check.
+     * Similar check root name (e.g. daily_partition_row_count -> row_count).
      */
     private String primaryCheckName;
+
+    /**
+     * True for standard data quality checks, false for advanced.
+     */
+    private boolean standard;
+
+    /**
+     * The name of the data quality dimension from the primary check class.
+     */
+    private String qualityDimension;
 
     /**
      * List of all similar checks.

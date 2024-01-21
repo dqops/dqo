@@ -59,6 +59,9 @@ public abstract class AbstractElementWrapper<K, V extends DirtyStatus & Hierarch
      * @return Model object.
      */
     public V getSpec() {
+        if (this.status == InstanceStatus.NOT_TOUCHED) {
+            this.status = InstanceStatus.LOAD_IN_PROGRESS;
+        }
         return spec;
     }
 
@@ -72,13 +75,13 @@ public abstract class AbstractElementWrapper<K, V extends DirtyStatus & Hierarch
 			setDirty();
         }
 
-        if (this.status == InstanceStatus.NOT_TOUCHED) {
+        if (this.status == InstanceStatus.LOAD_IN_PROGRESS) { // the specification was set when being loaded
             this.status = InstanceStatus.UNCHANGED;
             if (spec != null) {
                 spec.clearDirty(false);
             }
         } else {
-            if (this.spec == null && spec != null && (this.status == InstanceStatus.UNCHANGED || this.status == InstanceStatus.DELETED)) {
+            if (this.spec == null && spec != null && (this.status == InstanceStatus.UNCHANGED || this.status == InstanceStatus.DELETED || this.status == InstanceStatus.NOT_TOUCHED)) {
                 this.status = InstanceStatus.ADDED;
             } else if (this.spec != null) {
                 if (this.status == InstanceStatus.ADDED) {
@@ -120,7 +123,7 @@ public abstract class AbstractElementWrapper<K, V extends DirtyStatus & Hierarch
             return;
         }
 
-        if (this.status == InstanceStatus.UNCHANGED || this.status == InstanceStatus.NOT_TOUCHED) {
+        if (this.status == InstanceStatus.UNCHANGED || this.status == InstanceStatus.NOT_TOUCHED || this.status == InstanceStatus.LOAD_IN_PROGRESS) {
 			this.status = InstanceStatus.MODIFIED;
 			this.setDirty();
         }
@@ -148,11 +151,11 @@ public abstract class AbstractElementWrapper<K, V extends DirtyStatus & Hierarch
      * this method and perform a store specific serialization.
      */
     public void flush() {
-        if (this.status == InstanceStatus.NOT_TOUCHED) {
+        if (this.status == InstanceStatus.NOT_TOUCHED || this.status == InstanceStatus.LOAD_IN_PROGRESS) {
             return;
         }
 
-        if (this.spec != null && this.spec.isDirty() && this.status == InstanceStatus.UNCHANGED) {
+        if (this.spec != null && this.spec.isDirty() && (this.status == InstanceStatus.UNCHANGED || this.status == InstanceStatus.ADDED)) {
 			this.setStatus(InstanceStatus.MODIFIED);
 			this.clearDirty(true);
         }

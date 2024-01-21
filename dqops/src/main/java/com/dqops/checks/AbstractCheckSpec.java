@@ -77,7 +77,7 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean excludeFromKpi;
 
-    @JsonPropertyDescription("Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.")
+    @JsonPropertyDescription("Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean includeInSla;
 
@@ -377,7 +377,7 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
 
     /**
      * Returns the data quality check name (YAML compliant) that is used as a field name on a check category class.
-     * @return Check category name, for example "row_count", etc.
+     * @return Check category name, for example, "row_count", etc.
      */
     @JsonIgnore
     public String getCheckName() {
@@ -401,6 +401,16 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
         }
 
         return Objects.equals(hierarchyId.get(hierarchyId.size() - 3), AbstractComparisonCheckCategorySpecMap.COMPARISONS_CATEGORY_NAME);
+    }
+
+    /**
+     * Returns true if this is a standard data quality check that is always shown on the data quality checks editor screen.
+     * Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks.
+     * @return True when it is a standard check, false when it is an advanced check. The default value is 'false' (all checks are non-standard, advanced checks).
+     */
+    @JsonIgnore
+    public boolean isStandard() {
+        return false;
     }
 
     /**

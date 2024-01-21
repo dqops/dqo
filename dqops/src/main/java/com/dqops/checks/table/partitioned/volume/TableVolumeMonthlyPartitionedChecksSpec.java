@@ -19,11 +19,11 @@ import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
-import com.dqops.checks.table.checkspecs.volume.TableChangeRowCountCheckSpec;
+import com.dqops.checks.table.checkspecs.volume.TableRowCountChangeCheckSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.utils.docs.SampleValueFactory;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -59,7 +59,7 @@ public class TableVolumeMonthlyPartitionedChecksSpec extends AbstractCheckCatego
     @JsonPropertyDescription("Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableChangeRowCountCheckSpec monthlyPartitionRowCountChange;
+    private TableRowCountChangeCheckSpec monthlyPartitionRowCountChange;
 
     /**
      * Returns the minimum row count check configuration.
@@ -83,7 +83,7 @@ public class TableVolumeMonthlyPartitionedChecksSpec extends AbstractCheckCatego
      * Returns the row count change check.
      * @return Row count change check.
      */
-    public TableChangeRowCountCheckSpec getMonthlyPartitionRowCountChange() {
+    public TableRowCountChangeCheckSpec getMonthlyPartitionRowCountChange() {
         return monthlyPartitionRowCountChange;
     }
 
@@ -91,7 +91,7 @@ public class TableVolumeMonthlyPartitionedChecksSpec extends AbstractCheckCatego
      * Sets a new row count change check.
      * @param monthlyPartitionRowCountChange Row count change check.
      */
-    public void setMonthlyPartitionRowCountChange(TableChangeRowCountCheckSpec monthlyPartitionRowCountChange) {
+    public void setMonthlyPartitionRowCountChange(TableRowCountChangeCheckSpec monthlyPartitionRowCountChange) {
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionRowCountChange, monthlyPartitionRowCountChange));
         this.monthlyPartitionRowCountChange = monthlyPartitionRowCountChange;
         propagateHierarchyIdToField(monthlyPartitionRowCountChange, "monthly_partition_row_count_change");

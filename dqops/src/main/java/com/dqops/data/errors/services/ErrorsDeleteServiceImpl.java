@@ -15,6 +15,7 @@
  */
 package com.dqops.data.errors.services;
 
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.errors.factory.ErrorsColumnNames;
 import com.dqops.data.errors.models.ErrorsFragmentFilter;
 import com.dqops.data.errors.snapshot.ErrorsSnapshot;
@@ -46,27 +47,28 @@ public class ErrorsDeleteServiceImpl implements ErrorsDeleteService {
     /**
      * Deletes the errors from a table, applying specific filters to get the fragment (if necessary).
      * @param filter Filter for the errors fragment that is of interest.
+     * @param userIdentity User identity that specifies the data domain.
      * @return Data delete operation summary.
      */
     @Override
-    public DeleteStoredDataResult deleteSelectedErrorsFragment(ErrorsFragmentFilter filter) {
+    public DeleteStoredDataResult deleteSelectedErrorsFragment(ErrorsFragmentFilter filter, UserDomainIdentity userIdentity) {
         Map<String, String> simpleConditions = filter.getColumnConditions();
-        Map<String, Set<String>> conditions = new HashMap<>();
+        Map<String, Set<String>> conditions = new LinkedHashMap<>();
         for (Map.Entry<String, String> kv: simpleConditions.entrySet()) {
             String columnName = kv.getKey();
             String columnValue = kv.getValue();
-            Set<String> wrappedValue = new HashSet<>(){{add(columnValue);}};
+            Set<String> wrappedValue = new LinkedHashSet<>(){{add(columnValue);}};
             conditions.put(columnName, wrappedValue);
         }
 
         if (filter.getColumnNames() != null && !filter.getColumnNames().isEmpty()) {
-            conditions.put(ErrorsColumnNames.COLUMN_NAME_COLUMN_NAME, new HashSet<>(filter.getColumnNames()));
+            conditions.put(ErrorsColumnNames.COLUMN_NAME_COLUMN_NAME, new LinkedHashSet<>(filter.getColumnNames()));
         }
 
         DeleteStoredDataResult deleteStoredDataResult = new DeleteStoredDataResult();
 
         FileStorageSettings fileStorageSettings = ErrorsSnapshot.createErrorsStorageSettings();
-        List<String> connections = this.parquetPartitionMetadataService.listConnections(fileStorageSettings);
+        List<String> connections = this.parquetPartitionMetadataService.listConnections(fileStorageSettings, userIdentity);
         if (connections == null) {
             // No connections present.
             return deleteStoredDataResult;
@@ -78,7 +80,7 @@ public class ErrorsDeleteServiceImpl implements ErrorsDeleteService {
 
         for (String connectionName: filteredConnections) {
             List<PhysicalTableName> tables = this.parquetPartitionMetadataService.listTablesForConnection(
-                    connectionName, fileStorageSettings);
+                    connectionName, fileStorageSettings, userIdentity);
 
             if (tables == null) {
                 // No tables present for this connection.
@@ -96,7 +98,8 @@ public class ErrorsDeleteServiceImpl implements ErrorsDeleteService {
                             })
                     .map(tableName -> this.errorsSnapshotFactory.createSnapshot(
                             filter.getTableSearchFilters().getConnection(),
-                            tableName
+                            tableName,
+                            userIdentity
                     ))
                     .collect(Collectors.toList());
 

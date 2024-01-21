@@ -23,6 +23,7 @@ import com.dqops.core.jobqueue.concurrency.JobConcurrencyConstraint;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyTarget;
 import com.dqops.core.jobqueue.monitoring.DqoJobEntryParametersModel;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.execution.checks.CheckExecutionService;
@@ -81,7 +82,8 @@ public class RunChecksOnTableQueueJob extends DqoQueueJob<CheckExecutionSummary>
     public CheckExecutionSummary onExecute(DqoJobExecutionContext jobExecutionContext) {
         this.getPrincipal().throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
 
-        ExecutionContext executionContext = this.executionContextFactory.create();
+        UserDomainIdentity userDomainIdentity = this.getPrincipal().getDataDomainIdentity();
+        ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
         CheckExecutionSummary checkExecutionSummary = this.checkExecutionService.executeSelectedChecksOnTable(
                 executionContext,
                 this.parameters.getConnection(),
@@ -120,7 +122,7 @@ public class RunChecksOnTableQueueJob extends DqoQueueJob<CheckExecutionSummary>
     public JobConcurrencyConstraint[] getConcurrencyConstraints() {
         Integer maxJobsPerConnection = this.parameters.getMaxJobsPerConnection();
 
-        if (maxJobsPerConnection == null) {
+        if (maxJobsPerConnection == null || maxJobsPerConnection <= 0) {
             return null; // no limits
         }
 

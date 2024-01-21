@@ -31,6 +31,16 @@ public class CliRootCommandDocumentationModel {
     private String rootCommandName;
 
     /**
+     * The header of the root command.
+     */
+    private String rootCommandHeader;
+
+    /**
+     * The description of the root command.
+     */
+    private String rootCommandDescription;
+
+    /**
      * List of commands.
      */
     private List<CliCommandDocumentationModel> commands = new ArrayList<>();

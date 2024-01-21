@@ -16,3 +16,4 @@ spec:
       \ failed when a sensor query fails due to a connection error, missing or corrupted\
       \ table."
     data_type: long
+    required: true

@@ -6,4 +6,4 @@ spec:
   rule_name: comparison/max_percent
   help_text: Verifies that the percentage of rows that contains IP4 address values
     in a column does not fall below the minimum accepted percentage. Stores the most
-    recent row count for each month when the data quality check was evaluated.
+    recent check result for each month when the data quality check was evaluated.

@@ -53,7 +53,7 @@ public class CheckDefinitionDefaultSpecUpdateServiceImpl implements CheckDefinit
         DqoHome dqoHome = dqoHomeContext.getDqoHome();
         CheckDefinitionList dqoHomeChecksList = dqoHome.getChecks();
 
-        HashSet<String> foundChecks = new HashSet<>();
+        Set<String> foundChecks = new LinkedHashSet<>();
         ArrayList<SimilarChecksGroup> allCheckGroups = new ArrayList<>();
         SimilarChecksContainer similarTableChecks = this.similarCheckMatchingService.findSimilarTableChecks();
         allCheckGroups.addAll(similarTableChecks.getSimilarCheckGroups());
@@ -71,12 +71,14 @@ public class CheckDefinitionDefaultSpecUpdateServiceImpl implements CheckDefinit
                 String sensorName = checkModel.getSensorName();
                 String ruleName = checkModel.getRule().getError().getRuleName();
                 String helpText = checkModel.getHelpText();
+                boolean isStandard = checkModel.isStandard();
 
                 CheckDefinitionWrapper checkDefinitionWrapper = dqoHomeChecksList.getByObjectName(fullCheckName, true);
                 if (checkDefinitionWrapper != null) {
                     checkDefinitionWrapper.getSpec().setSensorName(sensorName);
                     checkDefinitionWrapper.getSpec().setRuleName(ruleName);
                     checkDefinitionWrapper.getSpec().setHelpText(helpText);
+                    checkDefinitionWrapper.getSpec().setStandard(isStandard);
                 } else {
                     CheckDefinitionSpec checkDefinitionSpec = new CheckDefinitionSpec(sensorName, ruleName, helpText);
                     checkDefinitionWrapper = dqoHomeChecksList.createAndAddNew(fullCheckName);

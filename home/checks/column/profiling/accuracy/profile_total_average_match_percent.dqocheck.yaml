@@ -7,3 +7,4 @@ spec:
   help_text: Verifies that the percentage of difference in total average of a column
     in a table and total average of a column of another table does not exceed the
     set number.
+  standard: true

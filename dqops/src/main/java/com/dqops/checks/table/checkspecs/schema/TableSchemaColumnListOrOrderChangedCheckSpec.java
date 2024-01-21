@@ -19,7 +19,7 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.rules.comparison.ValueChangedParametersSpec;
+import com.dqops.rules.comparison.ValueChangedRuleParametersSpec;
 import com.dqops.sensors.table.schema.TableColumnListOrderedHashSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -32,14 +32,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Table-level check that detects if the list of columns and the order of columns have changed since the last time the check was run.
+ * A table-level check that detects if the list of columns and the order of columns have changed since the last time the check was run.
  * This check will retrieve the metadata of a tested table and calculate a hash of the column names. The hash will depend on the order of columns.
  * A data quality issue will be detected if new columns were added, columns that existed during the previous test were dropped or the columns were reordered.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableSchemaColumnListOrOrderChangedCheckSpec extends AbstractCheckSpec<TableColumnListOrderedHashSensorParametersSpec, ValueChangedParametersSpec, ValueChangedParametersSpec, ValueChangedParametersSpec> {
+public class TableSchemaColumnListOrOrderChangedCheckSpec extends AbstractCheckSpec<TableColumnListOrderedHashSensorParametersSpec, ValueChangedRuleParametersSpec, ValueChangedRuleParametersSpec, ValueChangedRuleParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<TableSchemaColumnListOrOrderChangedCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -53,17 +53,17 @@ public class TableSchemaColumnListOrOrderChangedCheckSpec extends AbstractCheckS
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ValueChangedParametersSpec warning;
+    private ValueChangedRuleParametersSpec warning;
 
-    @JsonPropertyDescription("Default alerting threshold for a row count that raises a data quality error (alert)")
+    @JsonPropertyDescription("Default alerting thresholdthat raises a data quality issue at an error severity level")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ValueChangedParametersSpec error;
+    private ValueChangedRuleParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ValueChangedParametersSpec fatal;
+    private ValueChangedRuleParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -90,7 +90,7 @@ public class TableSchemaColumnListOrOrderChangedCheckSpec extends AbstractCheckS
      * @return Warning severity rule parameters.
      */
     @Override
-    public ValueChangedParametersSpec getWarning() {
+    public ValueChangedRuleParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -98,7 +98,7 @@ public class TableSchemaColumnListOrOrderChangedCheckSpec extends AbstractCheckS
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(ValueChangedParametersSpec warning) {
+    public void setWarning(ValueChangedRuleParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -110,7 +110,7 @@ public class TableSchemaColumnListOrOrderChangedCheckSpec extends AbstractCheckS
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public ValueChangedParametersSpec getError() {
+    public ValueChangedRuleParametersSpec getError() {
         return this.error;
     }
 
@@ -118,7 +118,7 @@ public class TableSchemaColumnListOrOrderChangedCheckSpec extends AbstractCheckS
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(ValueChangedParametersSpec error) {
+    public void setError(ValueChangedRuleParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -130,7 +130,7 @@ public class TableSchemaColumnListOrOrderChangedCheckSpec extends AbstractCheckS
      * @return Fatal severity rule parameters.
      */
     @Override
-    public ValueChangedParametersSpec getFatal() {
+    public ValueChangedRuleParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -138,7 +138,7 @@ public class TableSchemaColumnListOrOrderChangedCheckSpec extends AbstractCheckS
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(ValueChangedParametersSpec fatal) {
+    public void setFatal(ValueChangedRuleParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");

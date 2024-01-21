@@ -18,7 +18,7 @@ package com.dqops.cli.commands.settings.apikey;
 import com.dqops.cli.commands.BaseCommand;
 import com.dqops.cli.commands.CliOperationStatus;
 import com.dqops.cli.commands.ICommand;
-import com.dqops.cli.commands.settings.impl.SettingsService;
+import com.dqops.cli.commands.settings.impl.SettingsCliService;
 import com.dqops.cli.terminal.TerminalReader;
 import com.dqops.cli.terminal.TerminalWriter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ import picocli.CommandLine;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "remove", header = "Remove API key", description = "Remove the API key used for accessing external services.")
 public class SettingsApiKeyRemoveCliCommand extends BaseCommand implements ICommand {
-	private SettingsService settingsService;
+	private SettingsCliService settingsCliService;
 	private TerminalReader terminalReader;
 	private TerminalWriter terminalWriter;
 
@@ -42,10 +42,10 @@ public class SettingsApiKeyRemoveCliCommand extends BaseCommand implements IComm
 	}
 
 	@Autowired
-	public SettingsApiKeyRemoveCliCommand(SettingsService settingsService,
-									   TerminalReader terminalReader,
-									   TerminalWriter terminalWriter) {
-		this.settingsService = settingsService;
+	public SettingsApiKeyRemoveCliCommand(SettingsCliService settingsCliService,
+                                          TerminalReader terminalReader,
+                                          TerminalWriter terminalWriter) {
+		this.settingsCliService = settingsCliService;
 		this.terminalReader = terminalReader;
 		this.terminalWriter = terminalWriter;
 	}
@@ -57,7 +57,7 @@ public class SettingsApiKeyRemoveCliCommand extends BaseCommand implements IComm
 	 */
 	@Override
 	public Integer call() throws Exception {
-		CliOperationStatus cliOperationStatus = this.settingsService.removeApiKey();
+		CliOperationStatus cliOperationStatus = this.settingsCliService.removeApiKey();
 		this.terminalWriter.writeLine(cliOperationStatus.getMessage());
 		return cliOperationStatus.isSuccess() ? 0 : -1;
 	}

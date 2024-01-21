@@ -17,7 +17,7 @@ package com.dqops.bigquery.sensors.column.integrity;
 
 import com.dqops.bigquery.BaseBigQueryIntegrationTest;
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.column.checkspecs.integrity.ColumnIntegrityForeignKeyNotMatchCountCheckSpec;
+import com.dqops.checks.column.checkspecs.integrity.ColumnIntegrityLookupKeyNotFoundCountCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
@@ -38,7 +38,7 @@ import tech.tablesaw.api.Table;
 public class BigQueryColumnIntegrityForeignKeyNotMatchCountSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
     private ColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnIntegrityForeignKeyNotMatchCountCheckSpec checkSpec;
+    private ColumnIntegrityLookupKeyNotFoundCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
     private SampleTableMetadata sampleTableMetadataForeign;
 
@@ -50,7 +50,7 @@ public class BigQueryColumnIntegrityForeignKeyNotMatchCountSensorParametersSpecI
         IntegrationTestSampleDataObjectMother.ensureTableExists(this.sampleTableMetadataForeign);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new ColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec();
-        this.checkSpec = new ColumnIntegrityForeignKeyNotMatchCountCheckSpec();
+        this.checkSpec = new ColumnIntegrityLookupKeyNotFoundCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

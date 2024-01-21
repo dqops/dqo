@@ -193,13 +193,19 @@ public class DqoUserProfileModel {
     private boolean canManageAndViewSharedCredentials;
 
     /**
+     * User can change his own password in DQOps Cloud, because the DQOps Cloud Pairing API Key is valid and synchronization is enabled.
+     */
+    @JsonPropertyDescription("User can change his own password in DQOps Cloud, because the DQOps Cloud Pairing API Key is valid and synchronization is enabled.")
+    private boolean canChangeOwnPassword;
+
+    /**
      * Creates a user profile model from the API key.
      * @param dqoCloudApiKey DQOps Cloud api key.
      * @return User profile.
      */
     public static DqoUserProfileModel fromApiKeyAndPrincipal(DqoCloudApiKey dqoCloudApiKey, DqoUserPrincipal principal) {
         DqoUserProfileModel model = new DqoUserProfileModel() {{
-            setUser(principal.getName());
+            setUser(principal.getDataDomainIdentity().getUserName());
             setAccountRole(principal.getAccountRole());
             setCanManageAccount(principal.hasPrivilege(DqoPermissionGrantedAuthorities.MANAGE_ACCOUNT));
             setCanViewAnyObject(principal.hasPrivilege(DqoPermissionGrantedAuthorities.VIEW));
@@ -230,12 +236,42 @@ public class DqoUserProfileModel {
             model.setConnectionTablesLimit(dqoCloudApiKey.getApiKeyPayload().getLimits().get(DqoCloudLimit.CONNECTION_TABLES_LIMIT));
             model.setTablesLimit(dqoCloudApiKey.getApiKeyPayload().getLimits().get(DqoCloudLimit.TABLES_LIMIT));
             model.setJobsLimit(dqoCloudApiKey.getApiKeyPayload().getLimits().get(DqoCloudLimit.JOBS_LIMIT));
+            model.setCanChangeOwnPassword(true);
         } else {
             model.setTenant("Standalone");
             model.setLicenseType(DqoCloudLicenseType.FREE.name());
             model.setJobsLimit(1);
+            model.setCanChangeOwnPassword(false);
         }
 
         return model;
+    }
+
+    /**
+     * Creates a user's profile model for FREE user, not authenticated to DQOps Cloud.
+     * @return Empty profile.
+     */
+    public static DqoUserProfileModel createFreeUserModel() {
+        return new DqoUserProfileModel() {{
+            setAccountRole(DqoUserRole.ADMIN);
+            setCanManageAccount(false);
+            setCanViewAnyObject(true);
+            setCanManageScheduler(true);
+            setCanCancelJobs(true);
+            setCanRunChecks(true);
+            setCanDeleteData(true);
+            setCanCollectStatistics(true);
+            setCanManageDataSources(true);
+            setCanSynchronize(false);
+            setCanEditComments(true);
+            setCanEditLabels(true);
+            setCanManageDefinitions(true);
+            setCanCompareTables(true);
+            setCanManageUsers(false);
+            setCanManageAndViewSharedCredentials(true);
+            setTenant("Standalone");
+            setLicenseType(DqoCloudLicenseType.FREE.name());
+            setJobsLimit(1);
+        }};
     }
 }

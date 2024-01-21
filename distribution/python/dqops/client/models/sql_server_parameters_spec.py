@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
+from ..models.sql_server_authentication_mode import SqlServerAuthenticationMode
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -33,7 +34,9 @@ class SqlServerParametersSpec:
             also a ${SQLSERVER_OPTIONS} configuration with a custom environment variable.
         disable_encryption (Union[Unset, bool]): Disable SSL encryption parameter. The default value is false. You may
             need to disable encryption when SQL Server is started in Docker.
-        properties (Union[Unset, SqlServerParametersSpecProperties]):
+        authentication_mode (Union[Unset, SqlServerAuthenticationMode]):
+        properties (Union[Unset, SqlServerParametersSpecProperties]): A dictionary of custom JDBC parameters that are
+            added to the JDBC connection string, a key/value dictionary.
     """
 
     host: Union[Unset, str] = UNSET
@@ -43,6 +46,7 @@ class SqlServerParametersSpec:
     password: Union[Unset, str] = UNSET
     options: Union[Unset, str] = UNSET
     disable_encryption: Union[Unset, bool] = UNSET
+    authentication_mode: Union[Unset, SqlServerAuthenticationMode] = UNSET
     properties: Union[Unset, "SqlServerParametersSpecProperties"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -54,6 +58,10 @@ class SqlServerParametersSpec:
         password = self.password
         options = self.options
         disable_encryption = self.disable_encryption
+        authentication_mode: Union[Unset, str] = UNSET
+        if not isinstance(self.authentication_mode, Unset):
+            authentication_mode = self.authentication_mode.value
+
         properties: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.properties, Unset):
             properties = self.properties.to_dict()
@@ -75,6 +83,8 @@ class SqlServerParametersSpec:
             field_dict["options"] = options
         if disable_encryption is not UNSET:
             field_dict["disable_encryption"] = disable_encryption
+        if authentication_mode is not UNSET:
+            field_dict["authentication_mode"] = authentication_mode
         if properties is not UNSET:
             field_dict["properties"] = properties
 
@@ -101,6 +111,13 @@ class SqlServerParametersSpec:
 
         disable_encryption = d.pop("disable_encryption", UNSET)
 
+        _authentication_mode = d.pop("authentication_mode", UNSET)
+        authentication_mode: Union[Unset, SqlServerAuthenticationMode]
+        if isinstance(_authentication_mode, Unset):
+            authentication_mode = UNSET
+        else:
+            authentication_mode = SqlServerAuthenticationMode(_authentication_mode)
+
         _properties = d.pop("properties", UNSET)
         properties: Union[Unset, SqlServerParametersSpecProperties]
         if isinstance(_properties, Unset):
@@ -116,6 +133,7 @@ class SqlServerParametersSpec:
             password=password,
             options=options,
             disable_encryption=disable_encryption,
+            authentication_mode=authentication_mode,
             properties=properties,
         )
 

@@ -38,10 +38,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -106,9 +103,7 @@ public class SchemaServiceImpl implements SchemaService {
                                                  String checkCategory,
                                                  String checkName,
                                                  DqoUserPrincipal principal) {
-        if (Strings.isNullOrEmpty(connectionName)
-                || Strings.isNullOrEmpty(schemaName)
-                || checkType == null) {
+        if (Strings.isNullOrEmpty(connectionName) || checkType == null) {
             // Connection name, schema name and check type have to be provided.
             return null;
         }
@@ -119,33 +114,36 @@ public class SchemaServiceImpl implements SchemaService {
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
         checkSearchFilters.setConnection(connectionName);
-        checkSearchFilters.setFullTableName(schemaName + ".*");
         checkSearchFilters.setCheckType(checkType);
         checkSearchFilters.setTimeScale(checkTimeScale);
         // Filtering by checkTarget has to be done apart from these filters.
         checkSearchFilters.setCheckCategory(checkCategory);
         checkSearchFilters.setCheckName(checkName);
 
-        List<AllChecksModel> allChecksModels = this.allChecksModelFactory.fromCheckSearchFilters(checkSearchFilters, principal);
+        AllChecksModel allChecksModel = this.allChecksModelFactory.createTemplatedCheckModelsAvailableOnConnection(
+                connectionName, schemaName, checkSearchFilters, principal);
 
-        Stream<CheckContainerModel> columnCheckContainers = allChecksModels.stream()
-                .map(AllChecksModel::getColumnChecksModel)
-                .flatMap(model -> model.getTableColumnChecksModels().stream())
+        List<CheckContainerModel> columnCheckContainers = allChecksModel.getColumnChecksModel()
+                .getTableColumnChecksModels().stream()
                 .flatMap(model -> model.getColumnChecksModels().stream())
-                .flatMap(model -> model.getCheckContainers().values().stream());
-        Stream<CheckContainerModel> tableCheckContainers = allChecksModels.stream()
-                .map(AllChecksModel::getTableChecksModel)
-                .flatMap(model -> model.getSchemaTableChecksModels().stream())
+                .flatMap(model -> model.getCheckContainers().values().stream())
+                .collect(Collectors.toList());
+        List<CheckContainerModel> tableCheckContainers = allChecksModel.getTableChecksModel()
+                .getSchemaTableChecksModels().stream()
                 .flatMap(model -> model.getTableChecksModels().stream())
-                .flatMap(model -> model.getCheckContainers().values().stream());
+                .flatMap(model -> model.getCheckContainers().values().stream())
+                .collect(Collectors.toList());
 
         CheckContainerTypeModel checkContainerTypeModel = new CheckContainerTypeModel(checkType, checkTimeScale);
 
-        Stream<CheckTemplate> checkTemplates;
+        List<CheckTemplate> checkTemplates;
         if (checkTarget == null) {
+            List<CheckTemplate> columnTemplates = this.getCheckTemplatesFromCheckContainers(columnCheckContainers, checkContainerTypeModel, CheckTarget.column);
+            List<CheckTemplate> tableTemplates = this.getCheckTemplatesFromCheckContainers(tableCheckContainers, checkContainerTypeModel, CheckTarget.table);
             checkTemplates = Stream.concat(
-                    this.getCheckTemplatesFromCheckContainers(columnCheckContainers, checkContainerTypeModel, CheckTarget.column),
-                    this.getCheckTemplatesFromCheckContainers(tableCheckContainers, checkContainerTypeModel, CheckTarget.table));
+                    columnTemplates.stream(),
+                    tableTemplates.stream())
+                    .collect(Collectors.toList());
         } else {
             switch (checkTarget) {
                 case column:
@@ -159,7 +157,7 @@ public class SchemaServiceImpl implements SchemaService {
             }
         }
 
-        return checkTemplates.collect(Collectors.toList());
+        return checkTemplates;
     }
 
     /**
@@ -175,6 +173,7 @@ public class SchemaServiceImpl implements SchemaService {
      * @param checkName         (Optional) Filter on check name.
      * @param checkEnabled      (Optional) Filter on check enabled status.
      * @param checkConfigured   (Optional) Filter on check configured status.
+     * @param limit             Result limit.
      * @param principal         User principal.
      * @return UI friendly data quality profiling check configuration list on a requested schema.
      */
@@ -190,6 +189,7 @@ public class SchemaServiceImpl implements SchemaService {
                                                                         String checkName,
                                                                         Boolean checkEnabled,
                                                                         Boolean checkConfigured,
+                                                                        int limit,
                                                                         DqoUserPrincipal principal) {
         String tableSearchPattern = PhysicalTableName.fromSchemaTableFilter(
                 new PhysicalTableName(schemaName, Optional.ofNullable(tableNamePattern).orElse(""))
@@ -209,7 +209,7 @@ public class SchemaServiceImpl implements SchemaService {
         filters.setEnabled(checkEnabled);
         filters.setCheckConfigured(checkConfigured);
 
-        return this.checkFlatConfigurationFactory.fromCheckSearchFilters(filters, principal);
+        return this.checkFlatConfigurationFactory.findAllCheckConfigurations(filters, principal, limit);
     }
 
     /**
@@ -220,14 +220,19 @@ public class SchemaServiceImpl implements SchemaService {
      * @param checkContainerType Check container type specifying the source of the base stream.
      * @return Stream of check templates modelling the checks that are present in the base stream.
      */
-    protected Stream<CheckTemplate> getCheckTemplatesFromCheckContainers(Stream<CheckContainerModel> checkContainers,
+    protected List<CheckTemplate> getCheckTemplatesFromCheckContainers(Collection<CheckContainerModel> checkContainers,
                                                                          CheckContainerTypeModel checkContainerType,
                                                                          CheckTarget checkTarget) {
-        return checkContainers
+        List<QualityCategoryModel> categoryContainers = checkContainers
+                .stream()
                 .flatMap(model -> model.getCategories().stream())
+                .collect(Collectors.toList());
+
+        List<CheckTemplate> allTemplates = categoryContainers
+                .stream()
                 .map(categoryModel -> {
-                    Map<String, CheckModel> checkNameToExampleCheck = new HashMap<>();
-                    for (CheckModel checkModel: categoryModel.getChecks()) {
+                    Map<String, CheckModel> checkNameToExampleCheck = new LinkedHashMap<>();
+                    for (CheckModel checkModel : categoryModel.getChecks()) {
                         if (!checkNameToExampleCheck.containsKey(checkModel.getCheckName())) {
                             checkNameToExampleCheck.put(checkModel.getCheckName(), checkModel);
                         }
@@ -238,8 +243,9 @@ public class SchemaServiceImpl implements SchemaService {
                                     uiCheckModel, categoryModel.getCategory(), checkContainerType, checkTarget)
                             );
                 })
-                .reduce(Stream.empty(), Stream::concat);
+                .reduce(Stream.empty(), Stream::concat)
+                .collect(Collectors.toList());
+
+        return allTemplates;
     }
-
-
 }

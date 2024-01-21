@@ -16,7 +16,7 @@
 package com.dqops.data.incidents.factory;
 
 
-import com.dqops.utils.docs.SampleValueFactory;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**

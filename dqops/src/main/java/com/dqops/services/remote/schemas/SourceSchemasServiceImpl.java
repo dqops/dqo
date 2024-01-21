@@ -17,6 +17,7 @@ package com.dqops.services.remote.schemas;
 
 import com.dqops.connectors.*;
 import com.dqops.core.jobqueue.jobs.table.ImportTablesQueueJobParameters;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.ConnectionList;
@@ -56,10 +57,11 @@ public class SourceSchemasServiceImpl implements SourceSchemasService {
     /**
      * Returns a list of schemas for local connection.
      * @param connectionName     Connection name.
+     * @param principal          Calling user principal.
      * @return Schema list acquired remotely. Null in case of object not found.
      */
-    public List<SchemaRemoteModel> showSchemas(String connectionName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+    public List<SchemaRemoteModel> showSchemas(String connectionName, DqoUserPrincipal principal) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();

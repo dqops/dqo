@@ -18,6 +18,7 @@ package com.dqops.data.local;
 import com.dqops.BaseTest;
 import com.dqops.core.configuration.DqoUserConfigurationProperties;
 import com.dqops.core.configuration.DqoUserConfigurationPropertiesObjectMother;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.utils.BeanFactoryObjectMother;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,7 +38,7 @@ public class LocalDqoUserHomePathProviderTest extends BaseTest {
 
     @Test
     void getLocalUserHomePath_whenRetrieved_thenReturnsUserHomePath() {
-        Path userHomePath = this.sut.getLocalUserHomePath();
+        Path userHomePath = this.sut.getLocalUserHomePath(UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY);
         DqoUserConfigurationProperties dqoUserConfigurationProperties = DqoUserConfigurationPropertiesObjectMother.createDefaultUserConfiguration();
         String expected = dqoUserConfigurationProperties.getHome().replace('\\', '/');
         Assertions.assertEquals(expected, userHomePath.toString().replace('\\', '/'));

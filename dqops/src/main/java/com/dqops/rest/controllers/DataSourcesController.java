@@ -100,7 +100,7 @@ public class DataSourcesController {
         connectionModel.copyToConnectionSpecification(connectionSpec);
         Boolean verifyNameUniquenessValue = verifyNameUniqueness.orElse(true);
 
-        connectionTestModel = sourceConnectionsService.testConnection(connectionModel.getConnectionName(), connectionSpec, verifyNameUniquenessValue);
+        connectionTestModel = sourceConnectionsService.testConnection(principal, connectionModel.getConnectionName(), connectionSpec, verifyNameUniquenessValue);
         return new ResponseEntity<>(Mono.just(connectionTestModel), HttpStatus.OK);
     }
 
@@ -129,7 +129,7 @@ public class DataSourcesController {
             @ApiParam("Connection name") @PathVariable String connectionName) {
         List<SchemaRemoteModel> result;
         try {
-            result = sourceSchemasService.showSchemas(connectionName);
+            result = sourceSchemasService.showSchemas(connectionName, principal);
         }
         catch (SourceSchemasServiceException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
@@ -169,7 +169,7 @@ public class DataSourcesController {
             @ApiParam("Schema name") @PathVariable String schemaName) {
         List<RemoteTableListModel> result;
         try {
-            result = sourceTablesService.showTablesOnRemoteSchema(connectionName, schemaName);
+            result = sourceTablesService.showTablesOnRemoteSchema(connectionName, schemaName, principal);
         }
         catch (SourceTablesServiceException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);

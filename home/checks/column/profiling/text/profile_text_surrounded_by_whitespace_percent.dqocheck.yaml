@@ -1,0 +1,8 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: column/text/text_surrounded_by_whitespace_percent
+  rule_name: comparison/max_percent
+  help_text: Verifies that the percentage of text values that are surrounded by whitespace
+    characters in a column does not exceed the maximum accepted percentage

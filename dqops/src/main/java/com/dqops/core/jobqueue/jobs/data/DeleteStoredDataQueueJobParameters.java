@@ -16,7 +16,7 @@
 package com.dqops.core.jobqueue.jobs.data;
 
 import com.dqops.metadata.search.CheckSearchFilters;
-import com.dqops.utils.docs.SampleValueFactory;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import lombok.Data;

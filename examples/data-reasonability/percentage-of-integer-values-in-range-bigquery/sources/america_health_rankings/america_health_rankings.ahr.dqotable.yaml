@@ -33,7 +33,7 @@ spec:
       monitoring_checks:
         daily:
           numeric:
-            daily_values_in_range_numeric_percent:
+            daily_number_in_range_percent:
               parameters:
                 min_value: 0.0
                 max_value: 1000000.0

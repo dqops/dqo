@@ -180,12 +180,12 @@ export const DefinitionTree = () => {
     );
   };
 
-  const openSharedCredentailsFirstLevelTab = () => {
+  const openSharedCredentialsFirstLevelTab = () => {
     dispatch(
       addFirstLevelTab({
-        url: ROUTES.SHARED_CREDENTAILS_LIST_DETAIL(),
-        value: ROUTES.SHARED_CREDENTAILS_LIST_DETAIL_VALUE(),
-        label: 'Shared credentails'
+        url: ROUTES.SHARED_CREDENTIALS_LIST_DETAIL(),
+        value: ROUTES.SHARED_CREDENTIALS_LIST_DETAIL_VALUE(),
+        label: 'Shared credentials'
       })
     );
   };
@@ -688,7 +688,7 @@ export const DefinitionTree = () => {
         </div>
       </div>
       <div
-        onClick={openSharedCredentailsFirstLevelTab}
+        onClick={openSharedCredentialsFirstLevelTab}
         className="cursor-pointer flex space-x-1 items-center mb-1 h-5  hover:bg-gray-300"
       >
         <SvgIcon name="definitionsrules" className="w-4 h-4 min-w-4 " />

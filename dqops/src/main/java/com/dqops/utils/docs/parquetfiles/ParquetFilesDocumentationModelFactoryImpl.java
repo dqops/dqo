@@ -142,6 +142,7 @@ public class ParquetFilesDocumentationModelFactoryImpl implements ParquetFilesDo
             if (classJavadoc.getComment() != null) {
                 String formattedClassComment = commentFormatter.format(classJavadoc.getComment());
                 parquetFileDocumentationModel.setParquetFileDescription(formattedClassComment);
+                parquetFileDocumentationModel.setParquetFileShortDescription(getShortDescription(formattedClassComment));
             }
             while (classWithDetails != null) {
                 for (Field field : classWithDetails.getDeclaredFields()) {
@@ -162,6 +163,11 @@ public class ParquetFilesDocumentationModelFactoryImpl implements ParquetFilesDo
             }
         }
         return columnsDescriptions;
+    }
+
+    private String getShortDescription(String description) {
+        String[] splitDescription = description.split("\\.");
+        return splitDescription[0] + ".";
     }
 }
 

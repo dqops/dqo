@@ -20,7 +20,7 @@ import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.column.checkspecs.integrity.ColumnIntegrityForeignKeyMatchPercentCheckSpec;
-import com.dqops.checks.column.checkspecs.integrity.ColumnIntegrityForeignKeyNotMatchCountCheckSpec;
+import com.dqops.checks.column.checkspecs.integrity.ColumnIntegrityLookupKeyNotFoundCountCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -41,53 +41,53 @@ import java.util.Objects;
 public class ColumnIntegrityMonthlyMonitoringChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnIntegrityMonthlyMonitoringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("monthly_foreign_key_not_match_count", o -> o.monthlyForeignKeyNotMatchCount);
-            put("monthly_foreign_key_match_percent", o -> o.monthlyForeignKeyMatchPercent);
+            put("monthly_lookup_key_not_found", o -> o.monthlyLookupKeyNotFound);
+            put("monthly_lookup_key_found_percent", o -> o.monthlyLookupKeyFoundPercent);
 
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnIntegrityForeignKeyNotMatchCountCheckSpec monthlyForeignKeyNotMatchCount;
+    @JsonPropertyDescription("Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores the most recent check result for each month when the data quality check was evaluated.")
+    private ColumnIntegrityLookupKeyNotFoundCountCheckSpec monthlyLookupKeyNotFound;
 
-    @JsonPropertyDescription("Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnIntegrityForeignKeyMatchPercentCheckSpec monthlyForeignKeyMatchPercent;
+    @JsonPropertyDescription("Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Stores the most recent check result for each month when the data quality check was evaluated.")
+    private ColumnIntegrityForeignKeyMatchPercentCheckSpec monthlyLookupKeyFoundPercent;
 
 
     /**
      * Returns an integrity value not match count check specification.
      * @return Integrity value not match count check specification.
      */
-    public ColumnIntegrityForeignKeyNotMatchCountCheckSpec getMonthlyForeignKeyNotMatchCount() {
-        return monthlyForeignKeyNotMatchCount;
+    public ColumnIntegrityLookupKeyNotFoundCountCheckSpec getMonthlyLookupKeyNotFound() {
+        return monthlyLookupKeyNotFound;
     }
 
     /**
      * Sets a new definition of an integrity value not match count check.
-     * @param monthlyForeignKeyNotMatchCount Integrity value not match count check specification.
+     * @param monthlyLookupKeyNotFound Integrity value not match count check specification.
      */
-    public void setMonthlyForeignKeyNotMatchCount(ColumnIntegrityForeignKeyNotMatchCountCheckSpec monthlyForeignKeyNotMatchCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyForeignKeyNotMatchCount, monthlyForeignKeyNotMatchCount));
-        this.monthlyForeignKeyNotMatchCount = monthlyForeignKeyNotMatchCount;
-        propagateHierarchyIdToField(monthlyForeignKeyNotMatchCount, "monthly_foreign_key_not_match_count");
+    public void setMonthlyLookupKeyNotFound(ColumnIntegrityLookupKeyNotFoundCountCheckSpec monthlyLookupKeyNotFound) {
+        this.setDirtyIf(!Objects.equals(this.monthlyLookupKeyNotFound, monthlyLookupKeyNotFound));
+        this.monthlyLookupKeyNotFound = monthlyLookupKeyNotFound;
+        propagateHierarchyIdToField(monthlyLookupKeyNotFound, "monthly_lookup_key_not_found");
     }
 
     /**
      * Returns an integrity value match percent check specification.
      * @return Integrity value match percent check specification.
      */
-    public ColumnIntegrityForeignKeyMatchPercentCheckSpec getMonthlyForeignKeyMatchPercent() {
-        return monthlyForeignKeyMatchPercent;
+    public ColumnIntegrityForeignKeyMatchPercentCheckSpec getMonthlyLookupKeyFoundPercent() {
+        return monthlyLookupKeyFoundPercent;
     }
 
     /**
      * Sets a new definition of an integrity value match percent check.
-     * @param monthlyForeignKeyMatchPercent Integrity value match percent check specification.
+     * @param monthlyLookupKeyFoundPercent Integrity value match percent check specification.
      */
-    public void setMonthlyForeignKeyMatchPercent(ColumnIntegrityForeignKeyMatchPercentCheckSpec monthlyForeignKeyMatchPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyForeignKeyMatchPercent, monthlyForeignKeyMatchPercent));
-        this.monthlyForeignKeyMatchPercent = monthlyForeignKeyMatchPercent;
-        propagateHierarchyIdToField(monthlyForeignKeyMatchPercent, "monthly_foreign_key_match_percent");
+    public void setMonthlyLookupKeyFoundPercent(ColumnIntegrityForeignKeyMatchPercentCheckSpec monthlyLookupKeyFoundPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyLookupKeyFoundPercent, monthlyLookupKeyFoundPercent));
+        this.monthlyLookupKeyFoundPercent = monthlyLookupKeyFoundPercent;
+        propagateHierarchyIdToField(monthlyLookupKeyFoundPercent, "monthly_lookup_key_found_percent");
     }
 
     /**

@@ -1,152 +1,139 @@
-# Checks/column/anomaly
+# column level anomaly data quality checks
 
-**This is a list of anomaly column checks in DQOps and a brief description of what they do.**
-
-
+This is a list of anomaly column data quality checks supported by DQOps and a brief description of what data quality issued they detect.
 
 
 
-## **anomaly**  
+
+
+## **anomaly**
 Detects anomalous (unexpected) changes and outliers in the time series of data quality results collected over a period of time.
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_mean_anomaly_stationary_30_days](./column/anomaly/mean-anomaly-stationary-30-days/#profile-mean-anomaly-stationary-30-days)|profiling|Verifies that the mean value in a column changes in a rate within a percentile boundary during last 30 days.|
-|[daily_mean_anomaly_stationary_30_days](./column/anomaly/mean-anomaly-stationary-30-days/#daily-mean-anomaly-stationary-30-days)|monitoring|Verifies that the mean value in a column changes in a rate within a percentile boundary during last 30 days.|
-|[daily_partition_mean_anomaly_stationary_30_days](./column/anomaly/mean-anomaly-stationary-30-days/#daily-partition-mean-anomaly-stationary-30-days)|partitioned|Verifies that the mean value in a column is within a percentile from measurements made during the last 30 days.|
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_sum_anomaly`</span>](./sum-anomaly.md#profile-sum-anomaly)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the sum in a column changes in a rate within a percentile boundary during the last 90 days.|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_sum_anomaly`</span>](./sum-anomaly.md#daily-sum-anomaly)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the sum in a column changes in a rate within a percentile boundary during the last 90 days.|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_partition_sum_anomaly`</span>](./sum-anomaly.md#daily-partition-sum-anomaly)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the sum in a column is within a percentile from measurements made during the last 90 days.|:material-check-bold:|
 
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_mean_anomaly_stationary](./column/anomaly/mean-anomaly-stationary/#profile-mean-anomaly-stationary)|profiling|Verifies that the mean value in a column changes in a rate within a percentile boundary during last 90 days.|
-|[daily_mean_anomaly_stationary](./column/anomaly/mean-anomaly-stationary/#daily-mean-anomaly-stationary)|monitoring|Verifies that the mean value in a column changes in a rate within a percentile boundary during last 90 days.|
-|[daily_partition_mean_anomaly_stationary](./column/anomaly/mean-anomaly-stationary/#daily-partition-mean-anomaly-stationary)|partitioned|Verifies that the mean value in a column is within a percentile from measurements made during the last 90 days.|
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_mean_anomaly`</span>](./mean-anomaly.md#profile-mean-anomaly)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the mean value in a column changes in a rate within a percentile boundary during the last 90 days.|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_mean_anomaly`</span>](./mean-anomaly.md#daily-mean-anomaly)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the mean value in a column changes in a rate within a percentile boundary during the last 90 days.|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_partition_mean_anomaly`</span>](./mean-anomaly.md#daily-partition-mean-anomaly)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the mean value in a column is within a percentile from measurements made during the last 90 days.|:material-check-bold:|
 
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_median_anomaly_stationary_30_days](./column/anomaly/median-anomaly-stationary-30-days/#profile-median-anomaly-stationary-30-days)|profiling|Verifies that the median in a column changes in a rate within a percentile boundary during last 30 days.|
-|[daily_median_anomaly_stationary_30_days](./column/anomaly/median-anomaly-stationary-30-days/#daily-median-anomaly-stationary-30-days)|monitoring|Verifies that the median in a column changes in a rate within a percentile boundary during last 30 days.|
-|[daily_partition_median_anomaly_stationary_30_days](./column/anomaly/median-anomaly-stationary-30-days/#daily-partition-median-anomaly-stationary-30-days)|partitioned|Verifies that the median in a column is within a percentile from measurements made during the last 30 days.|
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_median_anomaly`</span>](./median-anomaly.md#profile-median-anomaly)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the median in a column changes in a rate within a percentile boundary during the last 90 days.| |
+|[<span class="no-wrap-code">`daily_median_anomaly`</span>](./median-anomaly.md#daily-median-anomaly)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the median in a column changes in a rate within a percentile boundary during the last 90 days.| |
+|[<span class="no-wrap-code">`daily_partition_median_anomaly`</span>](./median-anomaly.md#daily-partition-median-anomaly)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the median in a column is within a percentile from measurements made during the last 90 days.| |
 
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_median_anomaly_stationary](./column/anomaly/median-anomaly-stationary/#profile-median-anomaly-stationary)|profiling|Verifies that the median in a column changes in a rate within a percentile boundary during last 90 days.|
-|[daily_median_anomaly_stationary](./column/anomaly/median-anomaly-stationary/#daily-median-anomaly-stationary)|monitoring|Verifies that the median in a column changes in a rate within a percentile boundary during last 90 days.|
-|[daily_partition_median_anomaly_stationary](./column/anomaly/median-anomaly-stationary/#daily-partition-median-anomaly-stationary)|partitioned|Verifies that the median in a column is within a percentile from measurements made during the last 90 days.|
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_mean_change`</span>](./mean-change.md#profile-mean-change)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the mean value in a column changed in a fixed rate since the last readout.| |
+|[<span class="no-wrap-code">`daily_mean_change`</span>](./mean-change.md#daily-mean-change)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the mean value in a column changed in a fixed rate since the last readout.| |
+|[<span class="no-wrap-code">`monthly_mean_change`</span>](./mean-change.md#monthly-mean-change)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the mean value in a column changed in a fixed rate since the last readout.| |
+|[<span class="no-wrap-code">`daily_partition_mean_change`</span>](./mean-change.md#daily-partition-mean-change)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the mean value in a column changed in a fixed rate since last readout.| |
+|[<span class="no-wrap-code">`monthly_partition_mean_change`</span>](./mean-change.md#monthly-partition-mean-change)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the mean value in a column changed in a fixed rate since the last readout.| |
 
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_sum_anomaly_differencing_30_days](./column/anomaly/sum-anomaly-differencing-30-days/#profile-sum-anomaly-differencing-30-days)|profiling|Verifies that the sum in a column changes in a rate within a percentile boundary during last 30 days.|
-|[daily_sum_anomaly_differencing_30_days](./column/anomaly/sum-anomaly-differencing-30-days/#daily-sum-anomaly-differencing-30-days)|monitoring|Verifies that the sum in a column changes in a rate within a percentile boundary during last 30 days.|
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_mean_change_1_day`</span>](./mean-change-1-day.md#profile-mean-change-1-day)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the mean value in a column changed in a fixed rate since the last readout from yesterday.| |
+|[<span class="no-wrap-code">`daily_mean_change_1_day`</span>](./mean-change-1-day.md#daily-mean-change-1-day)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the mean value in a column changed in a fixed rate since last readout from yesterday.| |
+|[<span class="no-wrap-code">`daily_partition_mean_change_1_day`</span>](./mean-change-1-day.md#daily-partition-mean-change-1-day)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the mean value in a column changed in a fixed rate since the last readout from yesterday.| |
 
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_sum_anomaly_differencing](./column/anomaly/sum-anomaly-differencing/#profile-sum-anomaly-differencing)|profiling|Verifies that the sum in a column changes in a rate within a percentile boundary during last 90 days.|
-|[daily_sum_anomaly_differencing](./column/anomaly/sum-anomaly-differencing/#daily-sum-anomaly-differencing)|monitoring|Verifies that the sum in a column changes in a rate within a percentile boundary during last 90 days.|
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_mean_change_7_days`</span>](./mean-change-7-days.md#profile-mean-change-7-days)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the mean value in a column changed in a fixed rate since the last readout from the last week.| |
+|[<span class="no-wrap-code">`daily_mean_change_7_days`</span>](./mean-change-7-days.md#daily-mean-change-7-days)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the mean value in a column changed in a fixed rate since last readout from last week.| |
+|[<span class="no-wrap-code">`daily_partition_mean_change_7_days`</span>](./mean-change-7-days.md#daily-partition-mean-change-7-days)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the mean value in a column changed in a fixed rate since the last readout from the last week.| |
 
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_mean_change](./column/anomaly/mean-change/#profile-mean-change)|profiling|Verifies that the mean value in a column changed in a fixed rate since last readout.|
-|[daily_mean_change](./column/anomaly/mean-change/#daily-mean-change)|monitoring|Verifies that the mean value in a column changed in a fixed rate since last readout.|
-|[monthly_mean_change](./column/anomaly/mean-change/#monthly-mean-change)|monitoring|Verifies that the mean value in a column changed in a fixed rate since last readout.|
-|[daily_partition_mean_change](./column/anomaly/mean-change/#daily-partition-mean-change)|partitioned|Verifies that the mean value in a column changed in a fixed rate since last readout.|
-|[monthly_partition_mean_change](./column/anomaly/mean-change/#monthly-partition-mean-change)|partitioned|Verifies that the mean value in a column changed in a fixed rate since last readout.|
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_mean_change_30_days`</span>](./mean-change-30-days.md#profile-mean-change-30-days)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the mean value in a column changed in a fixed rate since the last readout from the last month.| |
+|[<span class="no-wrap-code">`daily_mean_change_30_days`</span>](./mean-change-30-days.md#daily-mean-change-30-days)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the mean value in a column changed in a fixed rate since last readout from last month.| |
+|[<span class="no-wrap-code">`daily_partition_mean_change_30_days`</span>](./mean-change-30-days.md#daily-partition-mean-change-30-days)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the mean value in a column changed in a fixed rate since the last readout from the last month.| |
 
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_mean_change_yesterday](./column/anomaly/mean-change-yesterday/#profile-mean-change-yesterday)|profiling|Verifies that the mean value in a column changed in a fixed rate since last readout from yesterday.|
-|[daily_mean_change_yesterday](./column/anomaly/mean-change-yesterday/#daily-mean-change-yesterday)|monitoring|Verifies that the mean value in a column changed in a fixed rate since last readout from yesterday.|
-|[daily_partition_mean_change_yesterday](./column/anomaly/mean-change-yesterday/#daily-partition-mean-change-yesterday)|partitioned|Verifies that the mean value in a column changed in a fixed rate since last readout from yesterday.|
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_median_change`</span>](./median-change.md#profile-median-change)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the median in a column changed in a fixed rate since the last readout.| |
+|[<span class="no-wrap-code">`daily_median_change`</span>](./median-change.md#daily-median-change)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the median in a column changed in a fixed rate since the last readout.| |
+|[<span class="no-wrap-code">`monthly_median_change`</span>](./median-change.md#monthly-median-change)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the median in a column changed in a fixed rate since the last readout.| |
+|[<span class="no-wrap-code">`daily_partition_median_change`</span>](./median-change.md#daily-partition-median-change)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the median in a column changed in a fixed rate since the last readout.| |
+|[<span class="no-wrap-code">`monthly_partition_median_change`</span>](./median-change.md#monthly-partition-median-change)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the median in a column changed in a fixed rate since the last readout.| |
 
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_mean_change_7_days](./column/anomaly/mean-change-7-days/#profile-mean-change-7-days)|profiling|Verifies that the mean value in a column changed in a fixed rate since last readout from last week.|
-|[daily_mean_change_7_days](./column/anomaly/mean-change-7-days/#daily-mean-change-7-days)|monitoring|Verifies that the mean value in a column changed in a fixed rate since last readout from last week.|
-|[daily_partition_mean_change_7_days](./column/anomaly/mean-change-7-days/#daily-partition-mean-change-7-days)|partitioned|Verifies that the mean value in a column changed in a fixed rate since last readout from last week.|
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_median_change_1_day`</span>](./median-change-1-day.md#profile-median-change-1-day)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the median in a column changed in a fixed rate since the last readout from yesterday.| |
+|[<span class="no-wrap-code">`daily_median_change_1_day`</span>](./median-change-1-day.md#daily-median-change-1-day)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the median in a column changed in a fixed rate since the last readout from yesterday.| |
+|[<span class="no-wrap-code">`daily_partition_median_change_1_day`</span>](./median-change-1-day.md#daily-partition-median-change-1-day)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the median in a column changed in a fixed rate since the last readout from yesterday.| |
 
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_mean_change_30_days](./column/anomaly/mean-change-30-days/#profile-mean-change-30-days)|profiling|Verifies that the mean value in a column changed in a fixed rate since last readout from last month.|
-|[daily_mean_change_30_days](./column/anomaly/mean-change-30-days/#daily-mean-change-30-days)|monitoring|Verifies that the mean value in a column changed in a fixed rate since last readout from last month.|
-|[daily_partition_mean_change_30_days](./column/anomaly/mean-change-30-days/#daily-partition-mean-change-30-days)|partitioned|Verifies that the mean value in a column changed in a fixed rate since last readout from last month.|
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_median_change_7_days`</span>](./median-change-7-days.md#profile-median-change-7-days)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the median in a column changed in a fixed rate since the last readout from the last week.| |
+|[<span class="no-wrap-code">`daily_median_change_7_days`</span>](./median-change-7-days.md#daily-median-change-7-days)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the median in a column changed in a fixed rate since the last readout from the last week.| |
+|[<span class="no-wrap-code">`daily_partition_median_change_7_days`</span>](./median-change-7-days.md#daily-partition-median-change-7-days)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the median in a column changed in a fixed rate since the last readout from the last week.| |
 
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_median_change](./column/anomaly/median-change/#profile-median-change)|profiling|Verifies that the median in a column changed in a fixed rate since last readout.|
-|[daily_median_change](./column/anomaly/median-change/#daily-median-change)|monitoring|Verifies that the median in a column changed in a fixed rate since last readout.|
-|[monthly_median_change](./column/anomaly/median-change/#monthly-median-change)|monitoring|Verifies that the median in a column changed in a fixed rate since last readout.|
-|[daily_partition_median_change](./column/anomaly/median-change/#daily-partition-median-change)|partitioned|Verifies that the median in a column changed in a fixed rate since last readout.|
-|[monthly_partition_median_change](./column/anomaly/median-change/#monthly-partition-median-change)|partitioned|Verifies that the median in a column changed in a fixed rate since last readout.|
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_median_change_30_days`</span>](./median-change-30-days.md#profile-median-change-30-days)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the median in a column changed in a fixed rate since the last readout from the last month.| |
+|[<span class="no-wrap-code">`daily_median_change_30_days`</span>](./median-change-30-days.md#daily-median-change-30-days)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the median in a column changed in a fixed rate since the last readout from the last month.| |
+|[<span class="no-wrap-code">`daily_partition_median_change_30_days`</span>](./median-change-30-days.md#daily-partition-median-change-30-days)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the median in a column changed in a fixed rate since the last readout from the last month.| |
 
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_median_change_yesterday](./column/anomaly/median-change-yesterday/#profile-median-change-yesterday)|profiling|Verifies that the median in a column changed in a fixed rate since last readout from yesterday.|
-|[daily_median_change_yesterday](./column/anomaly/median-change-yesterday/#daily-median-change-yesterday)|monitoring|Verifies that the median in a column changed in a fixed rate since last readout from yesterday.|
-|[daily_partition_median_change_yesterday](./column/anomaly/median-change-yesterday/#daily-partition-median-change-yesterday)|partitioned|Verifies that the median in a column changed in a fixed rate since last readout from yesterday.|
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_sum_change`</span>](./sum-change.md#profile-sum-change)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the sum in a column changed in a fixed rate since the last readout.| |
+|[<span class="no-wrap-code">`daily_sum_change`</span>](./sum-change.md#daily-sum-change)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the sum in a column changed in a fixed rate since the last readout.| |
+|[<span class="no-wrap-code">`monthly_sum_change`</span>](./sum-change.md#monthly-sum-change)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the sum in a column changed in a fixed rate since the last readout.| |
+|[<span class="no-wrap-code">`daily_partition_sum_change`</span>](./sum-change.md#daily-partition-sum-change)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the sum in a column changed in a fixed rate since the last readout.| |
+|[<span class="no-wrap-code">`monthly_partition_sum_change`</span>](./sum-change.md#monthly-partition-sum-change)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the sum in a column changed in a fixed rate since the last readout.| |
 
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_median_change_7_days](./column/anomaly/median-change-7-days/#profile-median-change-7-days)|profiling|Verifies that the median in a column changed in a fixed rate since last readout from last week.|
-|[daily_median_change_7_days](./column/anomaly/median-change-7-days/#daily-median-change-7-days)|monitoring|Verifies that the median in a column changed in a fixed rate since last readout from last week.|
-|[daily_partition_median_change_7_days](./column/anomaly/median-change-7-days/#daily-partition-median-change-7-days)|partitioned|Verifies that the median in a column changed in a fixed rate since last readout from last week.|
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_sum_change_1_day`</span>](./sum-change-1-day.md#profile-sum-change-1-day)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the sum in a column changed in a fixed rate since the last readout from yesterday.| |
+|[<span class="no-wrap-code">`daily_sum_change_1_day`</span>](./sum-change-1-day.md#daily-sum-change-1-day)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the sum in a column changed in a fixed rate since the last readout from yesterday.| |
+|[<span class="no-wrap-code">`daily_partition_sum_change_1_day`</span>](./sum-change-1-day.md#daily-partition-sum-change-1-day)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the sum in a column changed in a fixed rate since the last readout from yesterday.| |
 
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_median_change_30_days](./column/anomaly/median-change-30-days/#profile-median-change-30-days)|profiling|Verifies that the median in a column changed in a fixed rate since last readout from last month.|
-|[daily_median_change_30_days](./column/anomaly/median-change-30-days/#daily-median-change-30-days)|monitoring|Verifies that the median in a column changed in a fixed rate since last readout from last month.|
-|[daily_partition_median_change_30_days](./column/anomaly/median-change-30-days/#daily-partition-median-change-30-days)|partitioned|Verifies that the median in a column changed in a fixed rate since last readout from last month.|
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_sum_change_7_days`</span>](./sum-change-7-days.md#profile-sum-change-7-days)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the sum in a column changed in a fixed rate since the last readout from last week.| |
+|[<span class="no-wrap-code">`daily_sum_change_7_days`</span>](./sum-change-7-days.md#daily-sum-change-7-days)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the sum in a column changed in a fixed rate since the last readout from the last week.| |
+|[<span class="no-wrap-code">`daily_partition_sum_change_7_days`</span>](./sum-change-7-days.md#daily-partition-sum-change-7-days)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the sum in a column changed in a fixed rate since the last readout from the last week.| |
 
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_sum_change](./column/anomaly/sum-change/#profile-sum-change)|profiling|Verifies that the sum in a column changed in a fixed rate since last readout.|
-|[daily_sum_change](./column/anomaly/sum-change/#daily-sum-change)|monitoring|Verifies that the sum in a column changed in a fixed rate since last readout.|
-|[monthly_sum_change](./column/anomaly/sum-change/#monthly-sum-change)|monitoring|Verifies that the sum in a column changed in a fixed rate since last readout.|
-|[daily_partition_sum_change](./column/anomaly/sum-change/#daily-partition-sum-change)|partitioned|Verifies that the sum in a column changed in a fixed rate since last readout.|
-|[monthly_partition_sum_change](./column/anomaly/sum-change/#monthly-partition-sum-change)|partitioned|Verifies that the sum in a column changed in a fixed rate since last readout.|
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_sum_change_30_days`</span>](./sum-change-30-days.md#profile-sum-change-30-days)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the sum in a column changed in a fixed rate since the last readout from last month.| |
+|[<span class="no-wrap-code">`daily_sum_change_30_days`</span>](./sum-change-30-days.md#daily-sum-change-30-days)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the sum in a column changed in a fixed rate since the last readout from the last month.| |
+|[<span class="no-wrap-code">`daily_partition_sum_change_30_days`</span>](./sum-change-30-days.md#daily-partition-sum-change-30-days)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the sum in a column changed in a fixed rate since the last readout from the last month.| |
 
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_sum_change_yesterday](./column/anomaly/sum-change-yesterday/#profile-sum-change-yesterday)|profiling|Verifies that the sum in a column changed in a fixed rate since last readout from yesterday.|
-|[daily_sum_change_yesterday](./column/anomaly/sum-change-yesterday/#daily-sum-change-yesterday)|monitoring|Verifies that the sum in a column changed in a fixed rate since last readout from yesterday.|
-|[daily_partition_sum_change_yesterday](./column/anomaly/sum-change-yesterday/#daily-partition-sum-change-yesterday)|partitioned|Verifies that the sum in a column changed in a fixed rate since last readout from yesterday.|
-
-
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_sum_change_7_days](./column/anomaly/sum-change-7-days/#profile-sum-change-7-days)|profiling|Verifies that the sum in a column changed in a fixed rate since last readout from last week.|
-|[daily_sum_change_7_days](./column/anomaly/sum-change-7-days/#daily-sum-change-7-days)|monitoring|Verifies that the sum in a column changed in a fixed rate since last readout from last week.|
-|[daily_partition_sum_change_7_days](./column/anomaly/sum-change-7-days/#daily-partition-sum-change-7-days)|partitioned|Verifies that the sum in a column changed in a fixed rate since last readout from last week.|
-
-
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_sum_change_30_days](./column/anomaly/sum-change-30-days/#profile-sum-change-30-days)|profiling|Verifies that the sum in a column changed in a fixed rate since last readout from last month.|
-|[daily_sum_change_30_days](./column/anomaly/sum-change-30-days/#daily-sum-change-30-days)|monitoring|Verifies that the sum in a column changed in a fixed rate since last readout from last month.|
-|[daily_partition_sum_change_30_days](./column/anomaly/sum-change-30-days/#daily-partition-sum-change-30-days)|partitioned|Verifies that the sum in a column changed in a fixed rate since last readout from last month.|
-
-
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[daily_partition_sum_anomaly_stationary_30_days](./column/anomaly/sum-anomaly-stationary-30-days/#daily-partition-sum-anomaly-stationary-30-days)|partitioned|Verifies that the sum in a column is within a percentile from measurements made during the last 30 days.|
-
-
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[daily_partition_sum_anomaly_stationary](./column/anomaly/sum-anomaly-stationary/#daily-partition-sum-anomaly-stationary)|partitioned|Verifies that the sum in a column is within a percentile from measurements made during the last 90 days.|
 
 
 

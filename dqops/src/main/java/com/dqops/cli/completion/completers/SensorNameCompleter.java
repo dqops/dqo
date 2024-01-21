@@ -28,10 +28,7 @@ import com.dqops.metadata.userhome.UserHome;
 import com.dqops.utils.StaticBeanFactory;
 import org.springframework.beans.factory.BeanFactory;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.*;
 
 /**
  * Sensor list CLI parameter autocompletion source that should be applied on CLI command parameters
@@ -60,7 +57,7 @@ public class SensorNameCompleter implements Iterable<String> {
 
 						SensorDefinitionList userHomeSensors = userHome.getSensors();
 						SensorDefinitionList localDqoSensors = dqoHome.getSensors();
-						HashSet<String> sensorNames = new HashSet<>();
+						Set<String> sensorNames = new LinkedHashSet<>();
 
 						for (SensorDefinitionWrapper sensor : userHomeSensors) {
 							sensorNames.add(sensor.getName());

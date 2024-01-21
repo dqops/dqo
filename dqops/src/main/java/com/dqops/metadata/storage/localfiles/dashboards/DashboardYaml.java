@@ -18,15 +18,24 @@ package com.dqops.metadata.storage.localfiles.dashboards;
 import com.dqops.core.filesystem.ApiVersion;
 import com.dqops.metadata.dashboards.DashboardsFolderListSpec;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
+import com.dqops.utils.reflection.DefaultFieldValue;
 import com.dqops.utils.serialization.InvalidYamlStatusHolder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 /**
  * Data quality dashboard definition YAML schema for a data quality dashboards list specification.
  */
 public class DashboardYaml implements InvalidYamlStatusHolder {
+    @JsonPropertyDescription("DQOps YAML schema version")
+    @DefaultFieldValue(ApiVersion.CURRENT_API_VERSION)
     private String apiVersion = ApiVersion.CURRENT_API_VERSION;
-    private SpecificationKind kind = SpecificationKind.DASHBOARDS;
+
+    @JsonPropertyDescription("File type")
+    @DefaultFieldValue("dashboards")
+    private SpecificationKind kind = SpecificationKind.dashboards;
+
+    @JsonPropertyDescription("The data quality dashboards folder tree with the definition of custom dashboards")
     private DashboardsFolderListSpec spec = new DashboardsFolderListSpec();
 
     @JsonIgnore

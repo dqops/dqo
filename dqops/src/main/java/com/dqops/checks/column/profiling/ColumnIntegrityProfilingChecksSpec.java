@@ -20,7 +20,7 @@ import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.column.checkspecs.integrity.ColumnIntegrityForeignKeyMatchPercentCheckSpec;
-import com.dqops.checks.column.checkspecs.integrity.ColumnIntegrityForeignKeyNotMatchCountCheckSpec;
+import com.dqops.checks.column.checkspecs.integrity.ColumnIntegrityLookupKeyNotFoundCountCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -41,51 +41,51 @@ import java.util.Objects;
 public class ColumnIntegrityProfilingChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnIntegrityProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("profile_foreign_key_not_match_count", o -> o.profileForeignKeyNotMatchCount);
-            put("profile_foreign_key_match_percent", o -> o.profileForeignKeyMatchPercent);
+            put("profile_lookup_key_not_found", o -> o.profileLookupKeyNotFound);
+            put("profile_lookup_key_found_percent", o -> o.profileLookupKeyFoundPercent);
         }
     };
 
     @JsonPropertyDescription("Verifies that the number of values in a column that does not match values in another table column does not exceed the set count.")
-    private ColumnIntegrityForeignKeyNotMatchCountCheckSpec profileForeignKeyNotMatchCount;
+    private ColumnIntegrityLookupKeyNotFoundCountCheckSpec profileLookupKeyNotFound;
 
     @JsonPropertyDescription("Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count.")
-    private ColumnIntegrityForeignKeyMatchPercentCheckSpec profileForeignKeyMatchPercent;
+    private ColumnIntegrityForeignKeyMatchPercentCheckSpec profileLookupKeyFoundPercent;
 
     /**
      * Returns an integrity value not match count check specification.
      * @return Integrity value not match count check specification.
      */
-    public ColumnIntegrityForeignKeyNotMatchCountCheckSpec getProfileForeignKeyNotMatchCount() {
-        return profileForeignKeyNotMatchCount;
+    public ColumnIntegrityLookupKeyNotFoundCountCheckSpec getProfileLookupKeyNotFound() {
+        return profileLookupKeyNotFound;
     }
 
     /**
      * Sets integrity value not match count check specification.
-     * @param profileForeignKeyNotMatchCount Integrity value not match count check specification.
+     * @param profileLookupKeyNotFound Integrity value not match count check specification.
      */
-    public void setProfileForeignKeyNotMatchCount(ColumnIntegrityForeignKeyNotMatchCountCheckSpec profileForeignKeyNotMatchCount) {
-        this.setDirtyIf(!Objects.equals(this.profileForeignKeyNotMatchCount, profileForeignKeyNotMatchCount));
-        this.profileForeignKeyNotMatchCount = profileForeignKeyNotMatchCount;
-        propagateHierarchyIdToField(profileForeignKeyNotMatchCount, "profile_foreign_key_not_match_count");
+    public void setProfileLookupKeyNotFound(ColumnIntegrityLookupKeyNotFoundCountCheckSpec profileLookupKeyNotFound) {
+        this.setDirtyIf(!Objects.equals(this.profileLookupKeyNotFound, profileLookupKeyNotFound));
+        this.profileLookupKeyNotFound = profileLookupKeyNotFound;
+        propagateHierarchyIdToField(profileLookupKeyNotFound, "profile_lookup_key_not_found");
     }
 
     /**
      * Returns an integrity value match percent check specification.
      * @return Integrity value match percent check specification.
      */
-    public ColumnIntegrityForeignKeyMatchPercentCheckSpec getProfileForeignKeyMatchPercent() {
-        return profileForeignKeyMatchPercent;
+    public ColumnIntegrityForeignKeyMatchPercentCheckSpec getProfileLookupKeyFoundPercent() {
+        return profileLookupKeyFoundPercent;
     }
 
     /**
      * Sets integrity value match percent check specification.
-     * @param profileForeignKeyMatchPercent Integrity value match percent check specification.
+     * @param profileLookupKeyFoundPercent Integrity value match percent check specification.
      */
-    public void setProfileForeignKeyMatchPercent(ColumnIntegrityForeignKeyMatchPercentCheckSpec profileForeignKeyMatchPercent) {
-        this.setDirtyIf(!Objects.equals(this.profileForeignKeyMatchPercent, profileForeignKeyMatchPercent));
-        this.profileForeignKeyMatchPercent = profileForeignKeyMatchPercent;
-        propagateHierarchyIdToField(profileForeignKeyMatchPercent, "profile_foreign_key_match_percent");
+    public void setProfileLookupKeyFoundPercent(ColumnIntegrityForeignKeyMatchPercentCheckSpec profileLookupKeyFoundPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileLookupKeyFoundPercent, profileLookupKeyFoundPercent));
+        this.profileLookupKeyFoundPercent = profileLookupKeyFoundPercent;
+        propagateHierarchyIdToField(profileLookupKeyFoundPercent, "profile_lookup_key_found_percent");
     }
 
     /**

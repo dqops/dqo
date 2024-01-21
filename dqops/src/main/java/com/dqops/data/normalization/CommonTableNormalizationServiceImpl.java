@@ -135,7 +135,7 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
     }
 
     /**
-     * Creates and calculates a data_stream_hash column from all grouping_level_X columns (grouping_level_1, grouping_level_2, ..., grouping_level_9).
+     * Creates and calculates a data_group_hash column from all grouping_level_X columns (grouping_level_1, grouping_level_2, ..., grouping_level_9).
      * @param dataGroupingLevelColumns Array of data stream level columns.
      * @param dataGroupingConfigurationSpec Data grouping configuration used to decide which data grouping dimension levels are configured and will be included in the data group hash.
      * @param rowCount Count of rows to process.
@@ -255,12 +255,12 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
      * @return ID column, filled with values.
      */
     @Override
-    public TextColumn createRowIdColumnAndUpdateIndexes(LongColumn sortedDataGroupingHashColumn,
-                                                        DateTimeColumn sortedTimePeriodColumn,
-                                                        long checkHash,
-                                                        long tableHash,
-                                                        long columnHash,
-                                                        int rowCount) {
+    public TextColumn createRowIdColumn(LongColumn sortedDataGroupingHashColumn,
+                                        DateTimeColumn sortedTimePeriodColumn,
+                                        long checkHash,
+                                        long tableHash,
+                                        long columnHash,
+                                        int rowCount) {
         TextColumn idColumn = TextColumn.create(CommonColumnNames.ID_COLUMN_NAME, rowCount);
 
         for (int i = 0; i < rowCount ; i++) {
@@ -268,6 +268,38 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
             long timePeriodLong = sortedTimePeriodColumn.getLongInternal(i);
             long timePeriodHashed = Hashing.farmHashFingerprint64().hashLong(timePeriodLong).asLong();
             UUID uuid = new UUID(checkHash ^ timePeriodHashed, dataGroupingHash ^ tableHash ^ columnHash ^ ~timePeriodHashed);
+            String idString = uuid.toString();
+            idColumn.set(i, idString);
+        }
+
+        return idColumn;
+    }
+
+    /**
+     * Creates and fills the "id" column by combining hashes for the error table.
+     *
+     * @param sortedDataGroupingHashColumn Data grouping hashes column.
+     * @param errorMessageColumn           Error message column.
+     * @param checkHash                    Check hash value.
+     * @param tableHash                    Table hash value.
+     * @param columnHash                   Column hash value (or 0L when the check is not on a column level).
+     * @param rowCount                     Row count.
+     * @return ID column, filled with values.
+     */
+    @Override
+    public TextColumn createErrorRowIdColumn(LongColumn sortedDataGroupingHashColumn,
+                                             TextColumn errorMessageColumn,
+                                             long checkHash,
+                                             long tableHash,
+                                             long columnHash,
+                                             int rowCount) {
+        TextColumn idColumn = TextColumn.create(CommonColumnNames.ID_COLUMN_NAME, rowCount);
+
+        for (int i = 0; i < rowCount ; i++) {
+            Long dataGroupingHash = sortedDataGroupingHashColumn.get(i);
+            String errorMessage = errorMessageColumn.getString(i);
+            long errorMessageHash = errorMessage != null ? Hashing.farmHashFingerprint64().hashString(errorMessage, StandardCharsets.UTF_8).asLong() : 0L;
+            UUID uuid = new UUID(checkHash ^ errorMessageHash, dataGroupingHash ^ tableHash ^ columnHash ^ ~errorMessageHash);
             String idString = uuid.toString();
             idColumn.set(i, idString);
         }
@@ -288,15 +320,15 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
      * @return ID column, filled with values.
      */
     @Override
-    public TextColumn createRowIdColumnAndUpdateIndexes(LongColumn sortedDataGroupingHashColumn,
-                                                        InstantColumn sortedTimePeriodColumn,
-                                                        IntColumn sampleIndexColumn,
-                                                        long checkHash,
-                                                        long tableHash,
-                                                        long columnHash,
-                                                        int rowCount) {
+    public TextColumn createRowIdColumn(LongColumn sortedDataGroupingHashColumn,
+                                        InstantColumn sortedTimePeriodColumn,
+                                        IntColumn sampleIndexColumn,
+                                        long checkHash,
+                                        long tableHash,
+                                        long columnHash,
+                                        int rowCount) {
         TextColumn idColumn = TextColumn.create(CommonColumnNames.ID_COLUMN_NAME, rowCount);
-        Map<UUID, Integer> idsGenerated = new HashMap<>();
+        Map<UUID, Integer> idsGenerated = new LinkedHashMap<>();
 
         for (int i = 0; i < rowCount ; i++) {
             Long dataGroupingHash = sortedDataGroupingHashColumn.get(i);

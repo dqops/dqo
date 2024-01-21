@@ -20,8 +20,8 @@ from typing import Sequence
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
 
-# class ValueChangedRuleParametersSpec:
-#     value_changed: int
+class ValueChangedRuleParametersSpec:
+    pass
 
 
 class HistoricDataPoint:
@@ -39,7 +39,7 @@ class RuleTimeWindowSettingsSpec:
 # rule execution parameters, contains the sensor value (actual_value) and the rule parameters
 class RuleExecutionRunParameters:
     actual_value: float
-#     parameters: ValueChangedRuleParametersSpec
+    parameters: ValueChangedRuleParametersSpec
     time_period_local: datetime
     previous_readouts: Sequence[HistoricDataPoint]
     time_window: RuleTimeWindowSettingsSpec

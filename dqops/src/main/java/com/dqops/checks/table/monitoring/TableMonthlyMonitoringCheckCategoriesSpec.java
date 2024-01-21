@@ -23,7 +23,7 @@ import com.dqops.checks.table.monitoring.accuracy.TableAccuracyMonthlyMonitoring
 import com.dqops.checks.table.monitoring.availability.TableAvailabilityMonthlyMonitoringChecksSpec;
 import com.dqops.checks.table.monitoring.comparison.TableComparisonMonthlyMonitoringChecksSpecMap;
 import com.dqops.checks.table.monitoring.schema.TableSchemaMonthlyMonitoringChecksSpec;
-import com.dqops.checks.table.monitoring.sql.TableSqlMonthlyMonitoringChecksSpec;
+import com.dqops.checks.table.monitoring.customsql.TableCustomSqlMonthlyMonitoringChecksSpec;
 import com.dqops.checks.table.monitoring.timeliness.TableTimelinessMonthlyMonitoringChecksSpec;
 import com.dqops.checks.table.monitoring.volume.TableVolumeMonthlyMonitoringChecksSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -33,7 +33,7 @@ import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.metadata.timeseries.TimeSeriesMode;
-import com.dqops.utils.docs.SampleValueFactory;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -57,7 +57,7 @@ public class TableMonthlyMonitoringCheckCategoriesSpec extends AbstractRootCheck
             put("volume", o -> o.volume);
             put("timeliness", o -> o.timeliness);
             put("accuracy", o -> o.accuracy);
-            put("sql", o -> o.sql);
+            put("custom_sql", o -> o.customSql);
             put("availability", o -> o.availability);
             put("schema", o -> o.schema);
             put("comparisons", o -> o.comparisons);
@@ -82,7 +82,7 @@ public class TableMonthlyMonitoringCheckCategoriesSpec extends AbstractRootCheck
     @JsonPropertyDescription("Monthly monitoring of custom SQL checks")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableSqlMonthlyMonitoringChecksSpec sql;
+    private TableCustomSqlMonthlyMonitoringChecksSpec customSql;
 
     @JsonPropertyDescription("Daily partitioned availability checks")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -157,18 +157,18 @@ public class TableMonthlyMonitoringCheckCategoriesSpec extends AbstractRootCheck
      * Returns a container of custom sql monitoring.
      * @return Container of custom sql monitoring.
      */
-    public TableSqlMonthlyMonitoringChecksSpec getSql() {
-        return sql;
+    public TableCustomSqlMonthlyMonitoringChecksSpec getCustomSql() {
+        return customSql;
     }
 
     /**
      * Sets a reference to a container of custom sql monitoring.
-     * @param sql Custom sql monitoring.
+     * @param customSql Custom sql monitoring.
      */
-    public void setSql(TableSqlMonthlyMonitoringChecksSpec sql) {
-        this.setDirtyIf(!Objects.equals(this.sql, sql));
-        this.sql = sql;
-        this.propagateHierarchyIdToField(sql, "sql");
+    public void setCustomSql(TableCustomSqlMonthlyMonitoringChecksSpec customSql) {
+        this.setDirtyIf(!Objects.equals(this.customSql, customSql));
+        this.customSql = customSql;
+        this.propagateHierarchyIdToField(customSql, "custom_sql");
     }
 
     /**

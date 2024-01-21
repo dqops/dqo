@@ -15,7 +15,15 @@
  */
 package com.dqops.data.checkresults.services.models;
 
+import com.dqops.checks.CheckType;
+import com.dqops.connectors.ProviderType;
 import com.dqops.metadata.search.StringPatternComparer;
+import com.dqops.metadata.timeseries.TimePeriodGradient;
+import com.dqops.rest.models.metadata.RuleListModel;
+import com.dqops.rules.RuleSeverityLevel;
+import com.dqops.utils.docs.generators.SampleLongsRegistry;
+import com.dqops.utils.docs.generators.SampleStringsRegistry;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -36,64 +44,65 @@ import java.util.NoSuchElementException;
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 @Data
 public class CheckResultEntryModel {
-    @JsonPropertyDescription("Check result ID.")
+    @JsonPropertyDescription("Check result primary key")
     String id;
 
-    @JsonPropertyDescription("Check hash.")
+    @JsonPropertyDescription("Check hash, do not set a value when writing results to DQOps")
     private long checkHash;
-    @JsonPropertyDescription("Check category name.")
+    @JsonPropertyDescription("Check category name")
     private String checkCategory;
-    @JsonPropertyDescription("Check name.")
+    @JsonPropertyDescription("Check name")
     private String checkName;
-    @JsonPropertyDescription("Check display name.")
+    @JsonPropertyDescription("Check display name")
     private String checkDisplayName;
-    @JsonPropertyDescription("Check type.")
-    private String checkType;
+    @JsonPropertyDescription("Check type")
+    private CheckType checkType;
 
-    @JsonPropertyDescription("Actual value.")
+    @JsonPropertyDescription("Actual value")
     Double actualValue;
-    @JsonPropertyDescription("Expected value.")
+    @JsonPropertyDescription("Expected value")
     Double expectedValue;
-    @JsonPropertyDescription("Warning lower bound.")
+    @JsonPropertyDescription("Warning lower bound")
     Double warningLowerBound;
-    @JsonPropertyDescription("Warning upper bound.")
+    @JsonPropertyDescription("Warning upper bound")
     Double warningUpperBound;
-    @JsonPropertyDescription("Error lower bound.")
+    @JsonPropertyDescription("Error lower bound")
     Double errorLowerBound;
-    @JsonPropertyDescription("Error upper bound.")
+    @JsonPropertyDescription("Error upper bound")
     Double errorUpperBound;
-    @JsonPropertyDescription("Fatal lower bound.")
+    @JsonPropertyDescription("Fatal lower bound")
     Double fatalLowerBound;
-    @JsonPropertyDescription("Fatal upper bound.")
+    @JsonPropertyDescription("Fatal upper bound")
     Double fatalUpperBound;
-    @JsonPropertyDescription("Severity.")
+    @JsonPropertyDescription("Issue severity, 0 - valid, 1 - warning, 2 - error, 3 - fatal")
     Integer severity;
 
-    @JsonPropertyDescription("Column name.")
+    @JsonPropertyDescription("Column name")
     String columnName;
-    @JsonPropertyDescription("Data group.")
+    @JsonPropertyDescription("Data group name")
     String dataGroup;
 
-    @JsonPropertyDescription("Duration (ms).")
+    @JsonPropertyDescription("Duration (ms)")
     Integer durationMs;
-    @JsonPropertyDescription("Executed at.")
+    @JsonPropertyDescription("Executed at timestamp")
     Instant executedAt;
-    @JsonPropertyDescription("Time gradient.")
-    String timeGradient;
-    @JsonPropertyDescription("Time period.")
+    @JsonPropertyDescription("Time gradient")
+    TimePeriodGradient timeGradient;
+    @JsonPropertyDescription("Time period")
     LocalDateTime timePeriod;
 
-    @JsonPropertyDescription("Include in KPI.")
+    @JsonPropertyDescription("Include in KPI")
     Boolean includeInKpi;
-    @JsonPropertyDescription("Include in SLA.")
+    @JsonPropertyDescription("Include in SLA")
     Boolean includeInSla;
-    @JsonPropertyDescription("Provider.")
+
+    @JsonPropertyDescription("Provider name")
     String provider;
-    @JsonPropertyDescription("Quality dimension.")
+    @JsonPropertyDescription("Data quality dimension")
     String qualityDimension;
-    @JsonPropertyDescription("Sensor name.")
+    @JsonPropertyDescription("Sensor name")
     String sensorName;
-    @JsonPropertyDescription("Table comparison name.")
+    @JsonPropertyDescription("Table comparison name")
     String tableComparison;
 
     /**
@@ -121,10 +130,10 @@ public class CheckResultEntryModel {
         return StringPatternComparer.matchSearchPattern(this.checkDisplayName, filter) ||
                 StringPatternComparer.matchSearchPattern(this.columnName, filter) ||
                 StringPatternComparer.matchSearchPattern(this.dataGroup, filter) ||
-                StringPatternComparer.matchSearchPattern(this.timeGradient, filter) ||
+                StringPatternComparer.matchSearchPattern(this.timeGradient != null ? this.timeGradient.toString() : null, filter) ||
                 StringPatternComparer.matchSearchPattern(this.qualityDimension, filter) ||
                 StringPatternComparer.matchSearchPattern(this.checkCategory, filter) ||
-                StringPatternComparer.matchSearchPattern(this.checkType, filter) ||
+                StringPatternComparer.matchSearchPattern(this.checkType != null ? this.checkType.getDisplayName() : null, filter) ||
                 StringPatternComparer.matchSearchPattern(this.checkName, filter) ||
                 StringPatternComparer.matchSearchPattern(this.sensorName, filter);
     }
@@ -168,6 +177,44 @@ public class CheckResultEntryModel {
                 return Comparator.comparing(o -> o.sensorName, Comparator.nullsFirst(Comparator.naturalOrder()));
             default:
                 throw new NoSuchElementException("Unsupported sort order on: " + sortOrder);
+        }
+    }
+
+    public static class CheckResultEntryModelSampleFactory implements SampleValueFactory<CheckResultEntryModel> {
+        @Override
+        public CheckResultEntryModel createSample() {
+            return new CheckResultEntryModel() {{
+                setId(Long.toString(SampleLongsRegistry.getSequenceNumber()));
+                setCheckCategory(SampleStringsRegistry.getCategoryName());
+                setCheckName(SampleStringsRegistry.getCheckName());
+                setCheckDisplayName(SampleStringsRegistry.getFullCheckName());
+                setCheckType(CheckType.profiling);
+
+                setActualValue(100d);
+                setExpectedValue(110d);
+                setWarningLowerBound(105d);
+                setWarningUpperBound(115d);
+                setErrorLowerBound(95d);
+                setErrorUpperBound(125d);
+                setFatalLowerBound(85d);
+                setFatalUpperBound(135d);
+                setSeverity(RuleSeverityLevel.error.getSeverity());
+
+                setColumnName(SampleStringsRegistry.getColumnName());
+                setDataGroup(SampleStringsRegistry.getDataGrouping());
+
+                setDurationMs(142);
+                setExecutedAt(Instant.parse("2023-10-01T14:00:00.00Z"));
+                setTimeGradient(TimePeriodGradient.hour);
+                setTimePeriod(LocalDateTime.of(2023, 10, 1, 14, 0, 0));
+
+                setIncludeInKpi(true);
+                setIncludeInSla(true);
+
+                setProvider(ProviderType.bigquery.getDisplayName());
+                setQualityDimension(SampleStringsRegistry.getQualityDimension());
+                setSensorName(SampleStringsRegistry.getFullSensorName());
+            }};
         }
     }
 }

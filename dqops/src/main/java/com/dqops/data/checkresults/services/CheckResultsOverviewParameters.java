@@ -50,6 +50,18 @@ public class CheckResultsOverviewParameters {
     private LocalDate endMonth = LocalDate.now();
 
     /**
+     * Optional filter on the check category name.
+     */
+    @JsonPropertyDescription("Optional filter on the check category name.")
+    private String category;
+
+    /**
+     * Optional filter on the check name.
+     */
+    @JsonPropertyDescription("Optional filter on the check name.")
+    private String checkName;
+
+    /**
      * Returns the check overview parameters for a given number of months.
      * @param months Number of months. 0 for the current month only. 1 for current and previous month (to capture one full month).
      * @param resultsCount The maximum number of months to load, because loading starts at the most recent month and goes back. If there are no data for the current month and we requested 1 month, DQOps will load earlier months.

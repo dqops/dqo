@@ -52,6 +52,10 @@ public class LocalSettingsSpec extends AbstractSpec implements InvalidYamlStatus
 	@JsonPropertyDescription("Api key")
 	private String apiKey;
 
+	@JsonPropertyDescription("Disable synchronization with DQOps cloud")
+	@JsonInclude(JsonInclude.Include.NON_DEFAULT)
+	private boolean disableCloudSync;
+
 	@JsonPropertyDescription("DQOps instance signature key used to sign keys. This should be a Base64 encoded binary key at a 32 bytes length.")
 	private String instanceSignatureKey;
 
@@ -61,6 +65,19 @@ public class LocalSettingsSpec extends AbstractSpec implements InvalidYamlStatus
 
 	@JsonIgnore
 	private String yamlParsingError;
+
+	/**
+	 * Default constructor.
+	 */
+	public LocalSettingsSpec() {
+	}
+
+	/**
+	 * Editor name constructor.
+	 */
+	public LocalSettingsSpec(String editorName) {
+		this.editorName = editorName;
+	}
 
 	/**
 	 * Sets a value that indicates that the YAML file deserialized into this object has a parsing error.
@@ -82,18 +99,6 @@ public class LocalSettingsSpec extends AbstractSpec implements InvalidYamlStatus
 		return this.yamlParsingError;
 	}
 
-	/**
-	 * Default constructor.
-	 */
-	public LocalSettingsSpec() {
-	}
-
-	/**
-	 * Editor name constructor.
-	 */
-	public LocalSettingsSpec(String editorName) {
-		this.editorName = editorName;
-	}
 
 	/**
 	 * Returns an editor name.
@@ -144,6 +149,23 @@ public class LocalSettingsSpec extends AbstractSpec implements InvalidYamlStatus
 	public void setApiKey(String apiKey) {
 		setDirtyIf(!Objects.equals(this.apiKey, apiKey));
 		this.apiKey = apiKey;
+	}
+
+	/**
+	 * Retrieves the flag in synchronization with DQOps cloud is disabled.
+	 * @return True when synchronization with DQOps cloud is disabled.
+	 */
+	public boolean isDisableCloudSync() {
+		return disableCloudSync;
+	}
+
+	/**
+	 * Sets a flag to disable synchronization with DQOps cloud.
+	 * @param disableCloudSync Disable synchronization with DQOps cloud.
+	 */
+	public void setDisableCloudSync(boolean disableCloudSync) {
+		setDirtyIf(this.disableCloudSync != disableCloudSync);
+		this.disableCloudSync = disableCloudSync;
 	}
 
 	/**

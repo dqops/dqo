@@ -7,3 +7,4 @@ spec:
   help_text: Verifies that the percentage of rows that contains emails in a column
     does not exceed the minimum accepted percentage. Stores the most recent captured
     value for each day when the data quality check was evaluated.
+  standard: true

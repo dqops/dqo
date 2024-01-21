@@ -19,6 +19,7 @@ import com.dqops.cloud.rest.api.TenantDataWarehouseApi;
 import com.dqops.cloud.rest.handler.ApiClient;
 import com.dqops.cloud.rest.model.RefreshTableRequest;
 import com.dqops.core.dqocloud.client.DqoCloudApiClientFactory;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.core.synchronization.fileexchange.TargetTableModifiedPartitions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -33,7 +35,7 @@ import java.util.Map;
  */
 @Component
 public class DqoCloudWarehouseServiceImpl implements DqoCloudWarehouseService {
-    private static final Map<DqoRoot, RefreshTableRequest.TableEnum> ROOT_TABLE_REQUEST_MAPPING = new HashMap<>() {{
+    private static final Map<DqoRoot, RefreshTableRequest.TableEnum> ROOT_TABLE_REQUEST_MAPPING = new LinkedHashMap<>() {{
         put(DqoRoot.data_sensor_readouts, RefreshTableRequest.TableEnum.SENSOR_READOUTS);
         put(DqoRoot.data_check_results, RefreshTableRequest.TableEnum.CHECK_RESULTS);
         put(DqoRoot.data_errors, RefreshTableRequest.TableEnum.ERRORS);
@@ -55,30 +57,35 @@ public class DqoCloudWarehouseServiceImpl implements DqoCloudWarehouseService {
     /**
      * Refreshes a target table, sending additional information with the list of modified connections, tables and months that should be refreshed.
      * @param targetTableModifiedPartitions Target table modified partitions. Identifies the target table and lists all unique connections, tables, dates of the month to be refreshed.
+     * @param userIdentity User identity that identifies the target data domain.
      */
     @Override
-    public void refreshNativeTable(TargetTableModifiedPartitions targetTableModifiedPartitions) {
+    public void refreshNativeTable(TargetTableModifiedPartitions targetTableModifiedPartitions, UserDomainIdentity userIdentity) {
         RefreshTableRequest.TableEnum targetTableParameter = ROOT_TABLE_REQUEST_MAPPING.get(targetTableModifiedPartitions.getTargetTable());
         if (targetTableParameter == null) {
             return; // this target is not stored in the data warehouse, it could be the "sources" folder with yaml files, etc.
         }
 
-        ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient();
+        ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userIdentity);
         TenantDataWarehouseApi tenantDataWarehouseApi = new TenantDataWarehouseApi(authenticatedClient);
 
         RefreshTableRequest refreshTableRequest = new RefreshTableRequest();
         refreshTableRequest.setTable(targetTableParameter);
 
-        if (targetTableModifiedPartitions.getAffectedConnections().size() > 0) {
+        if (!targetTableModifiedPartitions.getAffectedConnections().isEmpty()) {
             refreshTableRequest.setConnections(new ArrayList<>(targetTableModifiedPartitions.getAffectedConnections()));
         }
 
-        if (targetTableModifiedPartitions.getAffectedTables().size() > 0) {
+        if (!targetTableModifiedPartitions.getAffectedTables().isEmpty()) {
             refreshTableRequest.setTables(new ArrayList<>(targetTableModifiedPartitions.getAffectedTables()));
         }
 
-        if (targetTableModifiedPartitions.getAffectedMonths().size() > 0) {
+        if (!targetTableModifiedPartitions.getAffectedMonths().isEmpty()) {
             refreshTableRequest.setMonths(new ArrayList<>(targetTableModifiedPartitions.getAffectedMonths()));
+        }
+
+        if (!targetTableModifiedPartitions.getAffectedPartitions().isEmpty()) {
+            refreshTableRequest.setPartitions(new ArrayList<>(targetTableModifiedPartitions.getAffectedPartitions()));
         }
 
         tenantDataWarehouseApi.refreshNativeTable(refreshTableRequest);

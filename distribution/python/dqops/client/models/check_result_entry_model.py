@@ -5,6 +5,8 @@ from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 from dateutil.parser import isoparse
 
+from ..models.check_type import CheckType
+from ..models.time_period_gradient import TimePeriodGradient
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="CheckResultEntryModel")
@@ -14,33 +16,33 @@ T = TypeVar("T", bound="CheckResultEntryModel")
 class CheckResultEntryModel:
     """
     Attributes:
-        id (Union[Unset, str]): Check result ID.
-        check_hash (Union[Unset, int]): Check hash.
-        check_category (Union[Unset, str]): Check category name.
-        check_name (Union[Unset, str]): Check name.
-        check_display_name (Union[Unset, str]): Check display name.
-        check_type (Union[Unset, str]): Check type.
-        actual_value (Union[Unset, float]): Actual value.
-        expected_value (Union[Unset, float]): Expected value.
-        warning_lower_bound (Union[Unset, float]): Warning lower bound.
-        warning_upper_bound (Union[Unset, float]): Warning upper bound.
-        error_lower_bound (Union[Unset, float]): Error lower bound.
-        error_upper_bound (Union[Unset, float]): Error upper bound.
-        fatal_lower_bound (Union[Unset, float]): Fatal lower bound.
-        fatal_upper_bound (Union[Unset, float]): Fatal upper bound.
-        severity (Union[Unset, int]): Severity.
-        column_name (Union[Unset, str]): Column name.
-        data_group (Union[Unset, str]): Data group.
-        duration_ms (Union[Unset, int]): Duration (ms).
-        executed_at (Union[Unset, int]): Executed at.
-        time_gradient (Union[Unset, str]): Time gradient.
-        time_period (Union[Unset, datetime.datetime]): Time period.
-        include_in_kpi (Union[Unset, bool]): Include in KPI.
-        include_in_sla (Union[Unset, bool]): Include in SLA.
-        provider (Union[Unset, str]): Provider.
-        quality_dimension (Union[Unset, str]): Quality dimension.
-        sensor_name (Union[Unset, str]): Sensor name.
-        table_comparison (Union[Unset, str]): Table comparison name.
+        id (Union[Unset, str]): Check result primary key
+        check_hash (Union[Unset, int]): Check hash, do not set a value when writing results to DQOps
+        check_category (Union[Unset, str]): Check category name
+        check_name (Union[Unset, str]): Check name
+        check_display_name (Union[Unset, str]): Check display name
+        check_type (Union[Unset, CheckType]):
+        actual_value (Union[Unset, float]): Actual value
+        expected_value (Union[Unset, float]): Expected value
+        warning_lower_bound (Union[Unset, float]): Warning lower bound
+        warning_upper_bound (Union[Unset, float]): Warning upper bound
+        error_lower_bound (Union[Unset, float]): Error lower bound
+        error_upper_bound (Union[Unset, float]): Error upper bound
+        fatal_lower_bound (Union[Unset, float]): Fatal lower bound
+        fatal_upper_bound (Union[Unset, float]): Fatal upper bound
+        severity (Union[Unset, int]): Issue severity, 0 - valid, 1 - warning, 2 - error, 3 - fatal
+        column_name (Union[Unset, str]): Column name
+        data_group (Union[Unset, str]): Data group name
+        duration_ms (Union[Unset, int]): Duration (ms)
+        executed_at (Union[Unset, int]): Executed at timestamp
+        time_gradient (Union[Unset, TimePeriodGradient]):
+        time_period (Union[Unset, datetime.datetime]): Time period
+        include_in_kpi (Union[Unset, bool]): Include in KPI
+        include_in_sla (Union[Unset, bool]): Include in SLA
+        provider (Union[Unset, str]): Provider name
+        quality_dimension (Union[Unset, str]): Data quality dimension
+        sensor_name (Union[Unset, str]): Sensor name
+        table_comparison (Union[Unset, str]): Table comparison name
     """
 
     id: Union[Unset, str] = UNSET
@@ -48,7 +50,7 @@ class CheckResultEntryModel:
     check_category: Union[Unset, str] = UNSET
     check_name: Union[Unset, str] = UNSET
     check_display_name: Union[Unset, str] = UNSET
-    check_type: Union[Unset, str] = UNSET
+    check_type: Union[Unset, CheckType] = UNSET
     actual_value: Union[Unset, float] = UNSET
     expected_value: Union[Unset, float] = UNSET
     warning_lower_bound: Union[Unset, float] = UNSET
@@ -62,7 +64,7 @@ class CheckResultEntryModel:
     data_group: Union[Unset, str] = UNSET
     duration_ms: Union[Unset, int] = UNSET
     executed_at: Union[Unset, int] = UNSET
-    time_gradient: Union[Unset, str] = UNSET
+    time_gradient: Union[Unset, TimePeriodGradient] = UNSET
     time_period: Union[Unset, datetime.datetime] = UNSET
     include_in_kpi: Union[Unset, bool] = UNSET
     include_in_sla: Union[Unset, bool] = UNSET
@@ -78,7 +80,10 @@ class CheckResultEntryModel:
         check_category = self.check_category
         check_name = self.check_name
         check_display_name = self.check_display_name
-        check_type = self.check_type
+        check_type: Union[Unset, str] = UNSET
+        if not isinstance(self.check_type, Unset):
+            check_type = self.check_type.value
+
         actual_value = self.actual_value
         expected_value = self.expected_value
         warning_lower_bound = self.warning_lower_bound
@@ -92,7 +97,10 @@ class CheckResultEntryModel:
         data_group = self.data_group
         duration_ms = self.duration_ms
         executed_at = self.executed_at
-        time_gradient = self.time_gradient
+        time_gradient: Union[Unset, str] = UNSET
+        if not isinstance(self.time_gradient, Unset):
+            time_gradient = self.time_gradient.value
+
         time_period: Union[Unset, str] = UNSET
         if not isinstance(self.time_period, Unset):
             time_period = self.time_period.isoformat()
@@ -177,7 +185,12 @@ class CheckResultEntryModel:
 
         check_display_name = d.pop("checkDisplayName", UNSET)
 
-        check_type = d.pop("checkType", UNSET)
+        _check_type = d.pop("checkType", UNSET)
+        check_type: Union[Unset, CheckType]
+        if isinstance(_check_type, Unset):
+            check_type = UNSET
+        else:
+            check_type = CheckType(_check_type)
 
         actual_value = d.pop("actualValue", UNSET)
 
@@ -205,7 +218,12 @@ class CheckResultEntryModel:
 
         executed_at = d.pop("executedAt", UNSET)
 
-        time_gradient = d.pop("timeGradient", UNSET)
+        _time_gradient = d.pop("timeGradient", UNSET)
+        time_gradient: Union[Unset, TimePeriodGradient]
+        if isinstance(_time_gradient, Unset):
+            time_gradient = UNSET
+        else:
+            time_gradient = TimePeriodGradient(_time_gradient)
 
         _time_period = d.pop("timePeriod", UNSET)
         time_period: Union[Unset, datetime.datetime]

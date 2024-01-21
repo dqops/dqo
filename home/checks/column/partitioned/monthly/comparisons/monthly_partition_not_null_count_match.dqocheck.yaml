@@ -9,3 +9,4 @@ spec:
     a column in the reference table. The difference must be below defined percentage
     thresholds. Compares each monthly partition (each month of data) between the compared
     table and the reference table (the source of truth).
+  standard: true

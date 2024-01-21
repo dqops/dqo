@@ -1,90 +1,93 @@
-# Checks/column/nulls
+# column level nulls data quality checks
 
-**This is a list of nulls column checks in DQOps and a brief description of what they do.**
-
-
+This is a list of nulls column data quality checks supported by DQOps and a brief description of what data quality issued they detect.
 
 
 
-## **nulls**  
+
+
+## **nulls**
 Checks for the presence of null or missing values in a column.
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_nulls_count](./column/nulls/nulls-count/#profile-nulls-count)|profiling|Verifies that the number of null values in a column does not exceed the maximum accepted count.|
-|[daily_nulls_count](./column/nulls/nulls-count/#daily-nulls-count)|monitoring|Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.|
-|[monthly_nulls_count](./column/nulls/nulls-count/#monthly-nulls-count)|monitoring|Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_nulls_count](./column/nulls/nulls-count/#daily-partition-nulls-count)|partitioned|Verifies that the number of null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_nulls_count](./column/nulls/nulls-count/#monthly-partition-nulls-count)|partitioned|Verifies that the number of null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each monthly partition.|
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_nulls_count`</span>](./nulls-count.md#profile-nulls-count)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count.|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_nulls_count`</span>](./nulls-count.md#daily-nulls-count)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
+|[<span class="no-wrap-code">`monthly_nulls_count`</span>](./nulls-count.md#monthly-nulls-count)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores the most recent count check result for each month when the data quality check was evaluated.|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_partition_nulls_count`</span>](./nulls-count.md#daily-partition-nulls-count)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
+|[<span class="no-wrap-code">`monthly_partition_nulls_count`</span>](./nulls-count.md#monthly-partition-nulls-count)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
 
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_nulls_percent](./column/nulls/nulls-percent/#profile-nulls-percent)|profiling|Verifies that the percent of null values in a column does not exceed the maximum accepted percentage.|
-|[daily_nulls_percent](./column/nulls/nulls-percent/#daily-nulls-percent)|monitoring|Verifies that the percentage of nulls in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.|
-|[monthly_nulls_percent](./column/nulls/nulls-percent/#monthly-nulls-percent)|monitoring|Verifies that the percentage of null values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_nulls_percent](./column/nulls/nulls-percent/#daily-partition-nulls-percent)|partitioned|Verifies that the percentage of null values in a column does not exceed the set percentage. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_nulls_percent](./column/nulls/nulls-percent/#monthly-partition-nulls-percent)|partitioned|Verifies that the percentage of null values in a column does not exceed the set percentage. Creates a separate data quality check (and an alert) for each monthly partition.|
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_nulls_percent`</span>](./nulls-percent.md#profile-nulls-percent)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Measures the percent of null values in a column. Raises a data quality exception when the percentage of null values is above the minimum accepted percentage.| |
+|[<span class="no-wrap-code">`daily_nulls_percent`</span>](./nulls-percent.md#daily-nulls-percent)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Measures the percent of null values in a column. Raises a data quality exception when the percentage of null values is above the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.| |
+|[<span class="no-wrap-code">`monthly_nulls_percent`</span>](./nulls-percent.md#monthly-nulls-percent)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Measures the percent of null values in a column. Raises a data quality exception when the percentage of null values is above the minimum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.| |
+|[<span class="no-wrap-code">`daily_partition_nulls_percent`</span>](./nulls-percent.md#daily-partition-nulls-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Measures the percent of null values in a column. Raises a data quality exception when the percentage of null values is above the minimum accepted percentage. Stores a separate data quality check result for each daily partition.| |
+|[<span class="no-wrap-code">`monthly_partition_nulls_percent`</span>](./nulls-percent.md#monthly-partition-nulls-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Measures the percent of null values in a column. Raises a data quality exception when the percentage of null values is above the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.| |
 
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_nulls_percent_anomaly_stationary_30_days](./column/nulls/nulls-percent-anomaly-stationary-30-days/#profile-nulls-percent-anomaly-stationary-30-days)|profiling|Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 30 days.|
-|[daily_nulls_percent_anomaly_stationary_30_days](./column/nulls/nulls-percent-anomaly-stationary-30-days/#daily-nulls-percent-anomaly-stationary-30-days)|monitoring|Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 30 days.|
-|[daily_partition_nulls_percent_anomaly_stationary_30_days](./column/nulls/nulls-percent-anomaly-stationary-30-days/#daily-partition-nulls-percent-anomaly-stationary-30-days)|partitioned|Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 30 days.|
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_not_nulls_count`</span>](./not-nulls-count.md#profile-not-nulls-count)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Detects empty columns. The default rule min_count&#x3D;1 verifies that the column has any values. Verifies that the number of not null values in a column does not exceed the minimum accepted count.|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_not_nulls_count`</span>](./not-nulls-count.md#daily-not-nulls-count)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Detects empty columns. The default rule min_count&#x3D;1 verifies that the column has any values. Verifies that the number of not null values in a column does not exceed the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
+|[<span class="no-wrap-code">`monthly_not_nulls_count`</span>](./not-nulls-count.md#monthly-not-nulls-count)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Detects columns that are empty and have no values (with the rule threshold min_count&#x3D;1). Verifies that the number of not null values in a column does not exceed the minimum accepted count. Stores the most recent check result for each month when the data quality check was evaluated.|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_partition_not_nulls_count`</span>](./not-nulls-count.md#daily-partition-not-nulls-count)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Detects empty columns. The default rule min_count&#x3D;1 verifies that the column has any values. Verifies that the number of not null values in a column does not exceed the minimum accepted count. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
+|[<span class="no-wrap-code">`monthly_partition_not_nulls_count`</span>](./not-nulls-count.md#monthly-partition-not-nulls-count)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Detects empty columns. The default rule min_count&#x3D;1 verifies that the column has any values. Verifies that the number of not null values in a column does not exceed the minimum accepted count. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
 
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_nulls_percent_anomaly_stationary](./column/nulls/nulls-percent-anomaly-stationary/#profile-nulls-percent-anomaly-stationary)|profiling|Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 90 days.|
-|[daily_nulls_percent_anomaly_stationary](./column/nulls/nulls-percent-anomaly-stationary/#daily-nulls-percent-anomaly-stationary)|monitoring|Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 90 days.|
-|[daily_partition_nulls_percent_anomaly_stationary](./column/nulls/nulls-percent-anomaly-stationary/#daily-partition-nulls-percent-anomaly-stationary)|partitioned|Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 90 days.|
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_not_nulls_percent`</span>](./not-nulls-percent.md#profile-not-nulls-percent)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Measures the percent of not null values in a column. Raises a data quality exception when the percentage of not null values is below a minimum accepted percentage.|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_not_nulls_percent`</span>](./not-nulls-percent.md#daily-not-nulls-percent)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Measures the percent of not null values in a column. Raises a data quality exception when the percentage of not null values is below a minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
+|[<span class="no-wrap-code">`monthly_not_nulls_percent`</span>](./not-nulls-percent.md#monthly-not-nulls-percent)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Measures the percent of not null values in a column. Raises a data quality exception when the percentage of not null values is below a minimum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_partition_not_nulls_percent`</span>](./not-nulls-percent.md#daily-partition-not-nulls-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Measures the percent of not null values in a column. Raises a data quality exception when the percentage of not null values is below a minimum accepted percentage. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
+|[<span class="no-wrap-code">`monthly_partition_not_nulls_percent`</span>](./not-nulls-percent.md#monthly-partition-not-nulls-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Measures the percent of not null values in a column. Raises a data quality exception when the percentage of not null values is below a minimum accepted percentage. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
 
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_nulls_percent_change](./column/nulls/nulls-percent-change/#profile-nulls-percent-change)|profiling|Verifies that the null percent value in a column changed in a fixed rate since last readout.|
-|[daily_nulls_percent_change](./column/nulls/nulls-percent-change/#daily-nulls-percent-change)|monitoring|Verifies that the null percent value in a column changed in a fixed rate since last readout.|
-|[daily_partition_nulls_percent_change](./column/nulls/nulls-percent-change/#daily-partition-nulls-percent-change)|partitioned|Verifies that the null percent value in a column changed in a fixed rate since last readout.|
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_nulls_percent_anomaly`</span>](./nulls-percent-anomaly.md#profile-nulls-percent-anomaly)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 90 days.| |
+|[<span class="no-wrap-code">`daily_nulls_percent_anomaly`</span>](./nulls-percent-anomaly.md#daily-nulls-percent-anomaly)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the null percent value in a column changes in a rate within a percentile boundary during the last 90 days.| |
+|[<span class="no-wrap-code">`daily_partition_nulls_percent_anomaly`</span>](./nulls-percent-anomaly.md#daily-partition-nulls-percent-anomaly)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 90 days.| |
 
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_nulls_percent_change_yesterday](./column/nulls/nulls-percent-change-yesterday/#profile-nulls-percent-change-yesterday)|profiling|Verifies that the null percent value in a column changed in a fixed rate since last readout from yesterday.|
-|[daily_nulls_percent_change_yesterday](./column/nulls/nulls-percent-change-yesterday/#daily-nulls-percent-change-yesterday)|monitoring|Verifies that the null percent value in a column changed in a fixed rate since last readout from yesterday.|
-|[daily_partition_nulls_percent_change_yesterday](./column/nulls/nulls-percent-change-yesterday/#daily-partition-nulls-percent-change-yesterday)|partitioned|Verifies that the null percent value in a column changed in a fixed rate since last readout from yesterday.|
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_nulls_percent_change`</span>](./nulls-percent-change.md#profile-nulls-percent-change)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the null percent value in a column changed in a fixed rate since last readout.| |
+|[<span class="no-wrap-code">`daily_nulls_percent_change`</span>](./nulls-percent-change.md#daily-nulls-percent-change)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the null percent value in a column changed in a fixed rate since the last readout.| |
+|[<span class="no-wrap-code">`daily_partition_nulls_percent_change`</span>](./nulls-percent-change.md#daily-partition-nulls-percent-change)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the null percent value in a column changed in a fixed rate since last readout.| |
 
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_nulls_percent_change_7_days](./column/nulls/nulls-percent-change-7-days/#profile-nulls-percent-change-7-days)|profiling|Verifies that the null percent value in a column changed in a fixed rate since last readout from last week.|
-|[daily_nulls_percent_change_7_days](./column/nulls/nulls-percent-change-7-days/#daily-nulls-percent-change-7-days)|monitoring|Verifies that the null percent value in a column changed in a fixed rate since last readout from last week.|
-|[daily_partition_nulls_percent_change_7_days](./column/nulls/nulls-percent-change-7-days/#daily-partition-nulls-percent-change-7-days)|partitioned|Verifies that the null percent value in a column changed in a fixed rate since last readout from last week.|
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_nulls_percent_change_1_day`</span>](./nulls-percent-change-1-day.md#profile-nulls-percent-change-1-day)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the null percent value in a column changed in a fixed rate since last readout from yesterday.| |
+|[<span class="no-wrap-code">`daily_nulls_percent_change_1_day`</span>](./nulls-percent-change-1-day.md#daily-nulls-percent-change-1-day)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the null percent value in a column changed in a fixed rate since the last readout from yesterday.| |
+|[<span class="no-wrap-code">`daily_partition_nulls_percent_change_1_day`</span>](./nulls-percent-change-1-day.md#daily-partition-nulls-percent-change-1-day)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the null percent value in a column changed in a fixed rate since the last readout from yesterday.| |
 
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_nulls_percent_change_30_days](./column/nulls/nulls-percent-change-30-days/#profile-nulls-percent-change-30-days)|profiling|Verifies that the null percent value in a column changed in a fixed rate since last readout from last month.|
-|[daily_nulls_percent_change_30_days](./column/nulls/nulls-percent-change-30-days/#daily-nulls-percent-change-30-days)|monitoring|Verifies that the null percent value in a column changed in a fixed rate since last readout from last month.|
-|[daily_partition_nulls_percent_change_30_days](./column/nulls/nulls-percent-change-30-days/#daily-partition-nulls-percent-change-30-days)|partitioned|Verifies that the null percent value in a column changed in a fixed rate since last readout from last month.|
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_nulls_percent_change_7_days`</span>](./nulls-percent-change-7-days.md#profile-nulls-percent-change-7-days)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the null percent value in a column changed in a fixed rate since last readout from last week.| |
+|[<span class="no-wrap-code">`daily_nulls_percent_change_7_days`</span>](./nulls-percent-change-7-days.md#daily-nulls-percent-change-7-days)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the null percent value in a column changed in a fixed rate since the last readout from the last week.| |
+|[<span class="no-wrap-code">`daily_partition_nulls_percent_change_7_days`</span>](./nulls-percent-change-7-days.md#daily-partition-nulls-percent-change-7-days)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the null percent value in a column changed in a fixed rate since the last readout from the last week.| |
 
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_not_nulls_count](./column/nulls/not-nulls-count/#profile-not-nulls-count)|profiling|Verifies that the number of not null values in a column does not exceed the minimum accepted count.|
-|[daily_not_nulls_count](./column/nulls/not-nulls-count/#daily-not-nulls-count)|monitoring|Verifies that the number of not null values in a column does not fall below the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.|
-|[monthly_not_nulls_count](./column/nulls/not-nulls-count/#monthly-not-nulls-count)|monitoring|Verifies that the number of not null values in a column does not fall below the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_not_nulls_count](./column/nulls/not-nulls-count/#daily-partition-not-nulls-count)|partitioned|Verifies that the number of not null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_not_nulls_count](./column/nulls/not-nulls-count/#monthly-partition-not-nulls-count)|partitioned|Verifies that the number of not null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each monthly partition.|
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_nulls_percent_change_30_days`</span>](./nulls-percent-change-30-days.md#profile-nulls-percent-change-30-days)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the null percent value in a column changed in a fixed rate since last readout from last month.| |
+|[<span class="no-wrap-code">`daily_nulls_percent_change_30_days`</span>](./nulls-percent-change-30-days.md#daily-nulls-percent-change-30-days)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the null percent value in a column changed in a fixed rate since the last readout from the last month.| |
+|[<span class="no-wrap-code">`daily_partition_nulls_percent_change_30_days`</span>](./nulls-percent-change-30-days.md#daily-partition-nulls-percent-change-30-days)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the null percent value in a column changed in a fixed rate since the last readout from the last month.| |
 
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_not_nulls_percent](./column/nulls/not-nulls-percent/#profile-not-nulls-percent)|profiling|Verifies that the percent of not null values in a column does not exceed the minimum accepted percentage.|
-|[daily_not_nulls_percent](./column/nulls/not-nulls-percent/#daily-not-nulls-percent)|monitoring|Verifies that the percentage of not nulls in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.|
-|[monthly_not_nulls_percent](./column/nulls/not-nulls-percent/#monthly-not-nulls-percent)|monitoring|Verifies that the percentage of not nulls in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_not_nulls_percent](./column/nulls/not-nulls-percent/#daily-partition-not-nulls-percent)|partitioned|Verifies that the percentage of not null values in a column does not exceed the set percentage. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_not_nulls_percent](./column/nulls/not-nulls-percent/#monthly-partition-not-nulls-percent)|partitioned|Verifies that the percentage of not null values in a column does not exceed the set percentage. Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 

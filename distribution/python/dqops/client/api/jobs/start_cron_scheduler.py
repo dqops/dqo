@@ -5,7 +5,7 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.mono_void import MonoVoid
+from ...models.spring_error_payload import SpringErrorPayload
 from ...types import Response
 
 
@@ -20,11 +20,11 @@ def _get_kwargs() -> Dict[str, Any]:
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[MonoVoid]:
-    if response.status_code == HTTPStatus.OK:
-        response_200 = MonoVoid.from_dict(response.json())
+) -> Optional[SpringErrorPayload]:
+    if response.status_code == HTTPStatus.INTERNAL_SERVER_ERROR:
+        response_500 = SpringErrorPayload.from_dict(response.json())
 
-        return response_200
+        return response_500
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -33,7 +33,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[MonoVoid]:
+) -> Response[SpringErrorPayload]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -45,7 +45,7 @@ def _build_response(
 def sync_detailed(
     *,
     client: AuthenticatedClient,
-) -> Response[MonoVoid]:
+) -> Response[SpringErrorPayload]:
     """startCronScheduler
 
      Starts the job scheduler that runs monitoring jobs that are scheduled by assigning cron expressions.
@@ -55,7 +55,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[MonoVoid]
+        Response[SpringErrorPayload]
     """
 
     kwargs = _get_kwargs()
@@ -70,7 +70,7 @@ def sync_detailed(
 def sync(
     *,
     client: AuthenticatedClient,
-) -> Optional[MonoVoid]:
+) -> Optional[SpringErrorPayload]:
     """startCronScheduler
 
      Starts the job scheduler that runs monitoring jobs that are scheduled by assigning cron expressions.
@@ -80,7 +80,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        MonoVoid
+        SpringErrorPayload
     """
 
     return sync_detailed(
@@ -91,7 +91,7 @@ def sync(
 async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
-) -> Response[MonoVoid]:
+) -> Response[SpringErrorPayload]:
     """startCronScheduler
 
      Starts the job scheduler that runs monitoring jobs that are scheduled by assigning cron expressions.
@@ -101,7 +101,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[MonoVoid]
+        Response[SpringErrorPayload]
     """
 
     kwargs = _get_kwargs()
@@ -114,7 +114,7 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: AuthenticatedClient,
-) -> Optional[MonoVoid]:
+) -> Optional[SpringErrorPayload]:
     """startCronScheduler
 
      Starts the job scheduler that runs monitoring jobs that are scheduled by assigning cron expressions.
@@ -124,7 +124,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        MonoVoid
+        SpringErrorPayload
     """
 
     return (

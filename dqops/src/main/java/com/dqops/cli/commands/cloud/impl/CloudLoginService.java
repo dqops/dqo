@@ -24,4 +24,14 @@ public interface CloudLoginService {
      * @return True when the api key was retrieved, false when there was an error.
      */
     boolean logInToDqoCloud();
+
+    /**
+     * Enables synchronization with DQOps Cloud.
+     */
+    void enableCloudSync();
+
+    /**
+     * Disable synchronization with DQOps Cloud.
+     */
+    void disableCloudSync();
 }

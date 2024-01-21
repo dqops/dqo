@@ -18,6 +18,7 @@ package com.dqops.rest.controllers;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.metadata.definitions.checks.CheckDefinitionList;
+import com.dqops.metadata.definitions.checks.CheckDefinitionSpec;
 import com.dqops.metadata.definitions.checks.CheckDefinitionWrapper;
 import com.dqops.metadata.dqohome.DqoHome;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContext;
@@ -51,7 +52,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "Checks", description = "Data quality check definition management")
+@Api(value = "Checks", description = "Data quality check definition management operations for adding/removing/changing custom data quality checks.")
 public class ChecksController {
     private DqoHomeContextFactory dqoHomeContextFactory;
     private UserHomeContextFactory userHomeContextFactory;
@@ -117,7 +118,7 @@ public class ChecksController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
         CheckDefinitionWrapper userCheckDefinitionWrapper = userHome.getChecks().getByObjectName(fullCheckName, true);
 
@@ -172,7 +173,7 @@ public class ChecksController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.BAD_REQUEST);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         CheckDefinitionList userCheckDefinitionList = userHome.getChecks();
@@ -218,7 +219,7 @@ public class ChecksController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
         CheckDefinitionList userCheckDefinitionList = userHome.getChecks();
         CheckDefinitionWrapper existingUserCheckDefinitionWrapper = userCheckDefinitionList.getByObjectName(fullCheckName, true);
@@ -245,12 +246,14 @@ public class ChecksController {
             }
         }
 
+        CheckDefinitionSpec newCheckDefinitionSpec = checkDefinitionModel.toCheckDefinitionSpec();
         if (existingUserCheckDefinitionWrapper == null) {
             CheckDefinitionWrapper checkDefinitionWrapper = userCheckDefinitionList.createAndAddNew(fullCheckName);
-            checkDefinitionWrapper.setSpec(checkDefinitionModel.toCheckDefinitionSpec());
+            checkDefinitionWrapper.setSpec(newCheckDefinitionSpec);
         }
         else {
-            existingUserCheckDefinitionWrapper.setSpec(checkDefinitionModel.toCheckDefinitionSpec());
+            CheckDefinitionSpec oldCheckDefinitionSpec = existingUserCheckDefinitionWrapper.getSpec();  // loading
+            existingUserCheckDefinitionWrapper.setSpec(newCheckDefinitionSpec);
         }
 
         userHomeContext.flush();
@@ -283,7 +286,7 @@ public class ChecksController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         CheckDefinitionList userCheckDefinitionList = userHome.getChecks();
@@ -333,24 +336,26 @@ public class ChecksController {
         DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
         DqoHome dqoHome = dqoHomeContext.getDqoHome();
         List<CheckDefinitionWrapper> checkDefinitionWrapperListDqoHome = new ArrayList<>(dqoHome.getChecks().toList());
-        checkDefinitionWrapperListDqoHome.sort(Comparator.comparing(rw -> rw.getCheckName()));
-        Set<String> builtInCheckNames = checkDefinitionWrapperListDqoHome.stream().map(rw -> rw.getCheckName()).collect(Collectors.toSet());
+        checkDefinitionWrapperListDqoHome.sort(Comparator.comparing((CheckDefinitionWrapper rw) -> !rw.getSpec().isStandard())
+                        .thenComparing(rw -> rw.getCheckName()));
+        List<String> builtInCheckNames = checkDefinitionWrapperListDqoHome.stream().map(rw -> rw.getCheckName()).collect(Collectors.toList());
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
         List<CheckDefinitionWrapper> checkDefinitionWrapperListUserHome = new ArrayList<>(userHome.getChecks().toList());
-        checkDefinitionWrapperListUserHome.sort(Comparator.comparing(rw -> rw.getCheckName()));
-        Set<String> customCheckNames = checkDefinitionWrapperListUserHome.stream().map(rw -> rw.getCheckName()).collect(Collectors.toSet());
+        checkDefinitionWrapperListUserHome.sort(Comparator.comparing((CheckDefinitionWrapper rw) -> !rw.getSpec().isStandard())
+                .thenComparing(rw -> rw.getCheckName()));
+        List<String> customCheckNames = checkDefinitionWrapperListUserHome.stream().map(rw -> rw.getCheckName()).collect(Collectors.toList());
         boolean canEditDefinitions = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
-
-        for (CheckDefinitionWrapper checkDefinitionWrapperUserHome : checkDefinitionWrapperListUserHome) {
-            String checkNameUserHome = checkDefinitionWrapperUserHome.getCheckName();
-            checkDefinitionFolderModel.addCheck(checkNameUserHome, true, builtInCheckNames.contains(checkNameUserHome), canEditDefinitions, checkDefinitionWrapperUserHome.getSpec().getYamlParsingError());
-        }
 
         for (CheckDefinitionWrapper checkDefinitionWrapperDqoHome : checkDefinitionWrapperListDqoHome) {
             String checkNameDqoHome = checkDefinitionWrapperDqoHome.getCheckName();
             checkDefinitionFolderModel.addCheck(checkNameDqoHome, customCheckNames.contains(checkNameDqoHome), true, canEditDefinitions, checkDefinitionWrapperDqoHome.getSpec().getYamlParsingError());
+        }
+
+        for (CheckDefinitionWrapper checkDefinitionWrapperUserHome : checkDefinitionWrapperListUserHome) {
+            String checkNameUserHome = checkDefinitionWrapperUserHome.getCheckName();
+            checkDefinitionFolderModel.addCheck(checkNameUserHome, true, builtInCheckNames.contains(checkNameUserHome), canEditDefinitions, checkDefinitionWrapperUserHome.getSpec().getYamlParsingError());
         }
 
         checkDefinitionFolderModel.addFolderIfMissing("table/profiling/custom");

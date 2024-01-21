@@ -5,5 +5,5 @@ spec:
   sensor_name: column/numeric/sample_stddev
   rule_name: comparison/between_floats
   help_text: Verifies that the sample standard deviation of all values in a column
-    is not outside the set range. Creates a separate data quality check (and an alert)
+    is not outside the expected range. Stores a separate data quality check result
     for each daily partition.

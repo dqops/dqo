@@ -8,3 +8,4 @@ spec:
     \ the column count of the reference table. Only one comparison result is returned,\
     \ without data grouping. Stores the most recent captured value for each month\
     \ when the data quality check was evaluated."
+  standard: true

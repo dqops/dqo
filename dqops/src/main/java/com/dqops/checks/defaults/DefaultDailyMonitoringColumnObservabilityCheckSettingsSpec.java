@@ -30,7 +30,7 @@ import com.dqops.checks.column.monitoring.nulls.ColumnNullsDailyMonitoringChecks
 import com.dqops.checks.column.monitoring.numeric.ColumnNumericDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.pii.ColumnPiiDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.schema.ColumnSchemaDailyMonitoringChecksSpec;
-import com.dqops.checks.column.monitoring.strings.ColumnStringsDailyMonitoringChecksSpec;
+import com.dqops.checks.column.monitoring.text.ColumnTextDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.uniqueness.ColumnUniquenessDailyMonitoringChecksSpec;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.connectors.DataTypeCategory;
@@ -65,7 +65,7 @@ public class DefaultDailyMonitoringColumnObservabilityCheckSettingsSpec extends 
         {
             put("nulls", o -> o.nulls);
             put("numeric", o -> o.numeric);
-            put("strings", o -> o.strings);
+            put("text", o -> o.text);
             put("uniqueness", o -> o.uniqueness);
             put("datetime", o -> o.datetime);
             put("pii", o -> o.pii);
@@ -89,7 +89,7 @@ public class DefaultDailyMonitoringColumnObservabilityCheckSettingsSpec extends 
     @JsonPropertyDescription("The default configuration of strings checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsDailyMonitoringChecksSpec strings;
+    private ColumnTextDailyMonitoringChecksSpec text;
 
     @JsonPropertyDescription("The default configuration of uniqueness checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -167,18 +167,18 @@ public class DefaultDailyMonitoringColumnObservabilityCheckSettingsSpec extends 
      * Returns the strings check configuration on a column level.
      * @return Strings check configuration.
      */
-    public ColumnStringsDailyMonitoringChecksSpec getStrings() {
-        return strings;
+    public ColumnTextDailyMonitoringChecksSpec getText() {
+        return text;
     }
 
     /**
      * Sets the string check configuration on a column level.
-     * @param strings New string checks configuration.
+     * @param text New string checks configuration.
      */
-    public void setStrings(ColumnStringsDailyMonitoringChecksSpec strings) {
-        this.setDirtyIf(!Objects.equals(this.strings, strings));
-        this.strings = strings;
-        this.propagateHierarchyIdToField(strings, "strings");
+    public void setText(ColumnTextDailyMonitoringChecksSpec text) {
+        this.setDirtyIf(!Objects.equals(this.text, text));
+        this.text = text;
+        this.propagateHierarchyIdToField(text, "text");
     }
 
     /**
@@ -367,8 +367,8 @@ public class DefaultDailyMonitoringColumnObservabilityCheckSettingsSpec extends 
             this.getColumnCheckCategories(targetColumn).setNumeric(this.numeric.deepClone());
         }
 
-        if (this.strings != null && !this.strings.isDefault() && dataTypeCategory == DataTypeCategory.string) {
-            this.getColumnCheckCategories(targetColumn).setStrings(this.strings.deepClone());
+        if (this.text != null && !this.text.isDefault() && dataTypeCategory == DataTypeCategory.string) {
+            this.getColumnCheckCategories(targetColumn).setText(this.text.deepClone());
         }
 
         if (this.uniqueness != null && !this.uniqueness.isDefault()) {
@@ -397,6 +397,10 @@ public class DefaultDailyMonitoringColumnObservabilityCheckSettingsSpec extends 
 
         if (this.schema != null && !this.schema.isDefault()) {
             this.getColumnCheckCategories(targetColumn).setSchema(this.schema.deepClone());
+        }
+
+        if (this.getCustom() != null && !this.getCustom().isEmpty()) {
+            this.getColumnCheckCategories(targetColumn).setCustom(this.getCustom().deepClone());
         }
     }
 

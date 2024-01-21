@@ -14,7 +14,11 @@ import { Pagination } from '../../components/Pagination';
 import moment from 'moment';
 import useDebounce from '../../hooks/useDebounce';
 import { IncidentIssueFilter } from '../../redux/reducers/incidents.reducer';
-import { IncidentIssueHistogramModel, IncidentModel, IncidentModelStatusEnum } from '../../api';
+import {
+  IncidentIssueHistogramModel,
+  IncidentModel,
+  IncidentModelStatusEnum
+} from '../../api';
 import Select from '../../components/Select';
 import { IncidentsApi } from '../../services/apiClient';
 import { IconButton, Tooltip } from '@material-tailwind/react';
@@ -26,7 +30,10 @@ import IncidentNavigation from './IncidentNavigation';
 import Button from '../../components/Button';
 import { HistogramChart } from './HistogramChart';
 import SectionWrapper from '../../components/Dashboard/SectionWrapper';
-import { addFirstLevelTab, addFirstLevelTab as addSourceFirstLevelTab } from '../../redux/actions/source.actions';
+import {
+  addFirstLevelTab,
+  addFirstLevelTab as addSourceFirstLevelTab
+} from '../../redux/actions/source.actions';
 import { CheckTypes, ROUTES } from '../../shared/routes';
 
 const statusOptions = [
@@ -97,7 +104,8 @@ export const IncidentDetail = () => {
     filters = {}
   } = useSelector(getFirstLevelIncidentsState);
   const history = useHistory();
-  const { histograms}: { histograms: IncidentIssueHistogramModel } = useSelector(getFirstLevelIncidentsState);
+  const { histograms }: { histograms: IncidentIssueHistogramModel } =
+    useSelector(getFirstLevelIncidentsState);
   useEffect(() => {
     IncidentsApi.getIncident(connection, year, month, incidentId).then(
       (res) => {
@@ -222,15 +230,30 @@ export const IncidentDetail = () => {
   const tableQualityStatusOptions: Array<{
     checkType: CheckTypes;
     timeScale?: 'daily' | 'monthly';
-    show?: boolean
+    show?: boolean;
   }> = histograms && [
     { checkType: CheckTypes.PROFILING, show: histograms?.hasProfilingIssues },
-    { checkType: CheckTypes.PARTITIONED, timeScale: 'daily', show: histograms?.hasPartitionedIssues },
-    { checkType: CheckTypes.PARTITIONED, timeScale: 'monthly', show: histograms?.hasPartitionedIssues },
-    { checkType: CheckTypes.MONITORING, timeScale: 'daily', show: histograms?.hasMonitoringIssues },
-    { checkType: CheckTypes.MONITORING, timeScale: 'monthly', show: histograms?.hasMonitoringIssues }
+    {
+      checkType: CheckTypes.PARTITIONED,
+      timeScale: 'daily',
+      show: histograms?.hasPartitionedIssues
+    },
+    {
+      checkType: CheckTypes.PARTITIONED,
+      timeScale: 'monthly',
+      show: histograms?.hasPartitionedIssues
+    },
+    {
+      checkType: CheckTypes.MONITORING,
+      timeScale: 'daily',
+      show: histograms?.hasMonitoringIssues
+    },
+    {
+      checkType: CheckTypes.MONITORING,
+      timeScale: 'monthly',
+      show: histograms?.hasMonitoringIssues
+    }
   ];
-  
 
   const routeTableQualityStatus = (
     checkType: CheckTypes,
@@ -247,7 +270,7 @@ export const IncidentDetail = () => {
             schema,
             table,
             `table-quality-status${
-              timeScale !== undefined ? ('-' + timeScale) : ''
+              timeScale !== undefined ? '-' + timeScale : ''
             }`
           ),
           value: ROUTES.TABLE_LEVEL_VALUE(checkType, connection, schema, table),
@@ -262,7 +285,7 @@ export const IncidentDetail = () => {
           schema,
           table,
           `table-quality-status${
-            timeScale !== undefined ? ('-' + timeScale) : ''
+            timeScale !== undefined ? '-' + timeScale : ''
           }`
         )
       );
@@ -272,7 +295,6 @@ export const IncidentDetail = () => {
       <div className="flex items-center">
         <Button
           label={checkType + ' ' + (timeScale !== undefined ? timeScale : '')}
-          
           variant="text"
           onClick={redirectTableQualityStatus}
           className="m-0 p-0 px-1 text-black font-bold"
@@ -294,9 +316,9 @@ export const IncidentDetail = () => {
             </div>
           </div>
           <div className="flex space-x-3">
-            {tableQualityStatusOptions?.filter((y) => y.show).map((x) =>
-              routeTableQualityStatus(x.checkType, x.timeScale)
-            )}
+            {tableQualityStatusOptions
+              ?.filter((y) => y.show)
+              .map((x) => routeTableQualityStatus(x.checkType, x.timeScale))}
             <Button
               label="Configure table notification"
               color="primary"
@@ -446,14 +468,14 @@ export const IncidentDetail = () => {
                             : incidentDetail?.issueUrl}
                         </Tooltip>
                       </a>
-                      <IconButton
-                        color="teal"
-                        size="sm"
-                        onClick={() => () => setOpen(true)}
-                        className="!shadow-none"
-                      >
-                        <SvgIcon name="edit" className="w-4" />
-                      </IconButton>
+                    <IconButton
+                      color="teal"
+                      size="sm"
+                      onClick={() => setOpen(true)}
+                      className="!shadow-none"
+                    >
+                      <SvgIcon name="edit" className="w-4" />
+                    </IconButton>
                     </div>
                   ) : (
                     <IconButton
@@ -503,7 +525,7 @@ export const IncidentDetail = () => {
           </SectionWrapper>
         </div>
 
-        <HistogramChart onChangeFilter={onChangeFilter} />
+        <HistogramChart onChangeFilter={onChangeFilter} days={filters.days} />
         <div className="px-4 ">
           <div
             className="py-3 mb-5 overflow-auto"

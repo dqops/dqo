@@ -21,10 +21,7 @@ import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
 import lombok.Data;
 import org.apache.parquet.Strings;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Filter parameters for acquiring a fragment of errors.
@@ -46,7 +43,7 @@ public class ErrorsFragmentFilter extends ParquetDataFragmentFilter {
      */
     @Override
     public Map<String, String> getColumnConditions() {
-        Map<String, String> result = new HashMap<>();
+        Map<String, String> result = new LinkedHashMap<>();
         if (!Strings.isNullOrEmpty(checkCategory)) {
             result.put(ErrorsColumnNames.CHECK_CATEGORY_COLUMN_NAME, checkCategory);
         }

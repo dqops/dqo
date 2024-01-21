@@ -15,6 +15,7 @@
  */
 package com.dqops.core.dqocloud.apikey;
 
+import com.dqops.core.principal.UserDomainIdentity;
 import org.apache.commons.codec.DecoderException;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,9 +27,18 @@ import org.jetbrains.annotations.NotNull;
 public interface DqoCloudApiKeyProvider {
     /**
      * Returns the api key for the DQOps Cloud.
+     * @param userIdentity User identity, used to find the data domain name for which we need the DQOps Cloud synchronization key.
      * @return DQOps Cloud api key or null when the key was not yet configured.
      */
-    DqoCloudApiKey getApiKey();
+    DqoCloudApiKey getApiKey(UserDomainIdentity userIdentity);
+
+    /**
+     * Checks if the synchronization with DQOps Cloud is intentionally disabled (by running a `dqo cloud sync disable` command), so the returned api key was null,
+     * but in fact an api key is present.
+     * @param userIdentity User identity, used to find the data domain name for which we need the DQOps Cloud synchronization key.
+     * @return True when the api key was intentionally disabled.
+     */
+    boolean isCloudSynchronizationDisabled(UserDomainIdentity userIdentity);
 
     /**
      * Invalidates the cached api key.

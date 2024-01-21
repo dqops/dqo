@@ -15,6 +15,7 @@
  */
 package com.dqops.core.synchronization.filesystems.dqocloud;
 
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.core.synchronization.contract.SynchronizationRoot;
 
@@ -25,7 +26,8 @@ public interface DqoCloudRemoteFileSystemServiceFactory {
     /**
      * Creates a remote file system that accesses a remote DQOps Cloud bucket to read and write the tenant's data.
      * @param rootType Root type.
+     * @param userIdentity User identity that identifies the data domain that will be synchronized.
      * @return DQOps Cloud remote file system.
      */
-    SynchronizationRoot createRemoteDqoCloudFSRW(DqoRoot rootType);
+    SynchronizationRoot createRemoteDqoCloudFSRW(DqoRoot rootType, UserDomainIdentity userIdentity);
 }

@@ -18,7 +18,7 @@ package com.dqops.cli.commands.settings.apikey;
 import com.dqops.cli.commands.BaseCommand;
 import com.dqops.cli.commands.CliOperationStatus;
 import com.dqops.cli.commands.ICommand;
-import com.dqops.cli.commands.settings.impl.SettingsService;
+import com.dqops.cli.commands.settings.impl.SettingsCliService;
 import com.dqops.cli.terminal.TerminalReader;
 import com.dqops.cli.terminal.TerminalWriter;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
@@ -36,7 +36,7 @@ import picocli.CommandLine;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "set", header = "Set API key", description = "Set the API key used for accessing external services. This key is used to authenticate requests to the service.")
 public class SettingsApiKeySetCliCommand extends BaseCommand implements ICommand {
-	private SettingsService settingsService;
+	private SettingsCliService settingsCliService;
 	private TerminalReader terminalReader;
 	private TerminalWriter terminalWriter;
 	private DqoCloudApiKeyProvider apiKeyProvider;
@@ -45,11 +45,11 @@ public class SettingsApiKeySetCliCommand extends BaseCommand implements ICommand
 	}
 
 	@Autowired
-	public SettingsApiKeySetCliCommand(SettingsService settingsService,
-									   TerminalReader terminalReader,
-									   TerminalWriter terminalWriter,
-									   DqoCloudApiKeyProvider apiKeyProvider) {
-		this.settingsService = settingsService;
+	public SettingsApiKeySetCliCommand(SettingsCliService settingsCliService,
+                                       TerminalReader terminalReader,
+                                       TerminalWriter terminalWriter,
+                                       DqoCloudApiKeyProvider apiKeyProvider) {
+		this.settingsCliService = settingsCliService;
 		this.terminalReader = terminalReader;
 		this.terminalWriter = terminalWriter;
 		this.apiKeyProvider = apiKeyProvider;
@@ -86,7 +86,7 @@ public class SettingsApiKeySetCliCommand extends BaseCommand implements ICommand
 			return -1;
 		}
 
-		CliOperationStatus cliOperationStatus = this.settingsService.setApiKey(key);
+		CliOperationStatus cliOperationStatus = this.settingsCliService.setApiKey(key);
 		this.terminalWriter.writeLine(cliOperationStatus.getMessage());
 		return cliOperationStatus.isSuccess() ? 0 : -1;
 	}

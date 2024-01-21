@@ -20,6 +20,7 @@ import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.core.configuration.DqoIncidentsConfigurationProperties;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.checkresults.factory.CheckResultsColumnNames;
 import com.dqops.data.checkresults.services.models.*;
 import com.dqops.data.checkresults.services.models.currentstatus.*;
@@ -85,24 +86,36 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
      * Retrieves the overall status of the recent check executions for the given root checks container (group of checks).
      * @param rootChecksContainerSpec Root checks container.
      * @param loadParameters Load parameters.
+     * @param userDomainIdentity User identity with the data domain.
      * @return Overview of the check recent results.
      */
     @Override
     public CheckResultsOverviewDataModel[] readMostRecentCheckStatuses(AbstractRootChecksContainerSpec rootChecksContainerSpec,
-                                                                       CheckResultsOverviewParameters loadParameters) {
+                                                                       CheckResultsOverviewParameters loadParameters,
+                                                                       UserDomainIdentity userDomainIdentity) {
         Map<Long, CheckResultsOverviewDataModel> resultMap = new LinkedHashMap<>();
         HierarchyId checksContainerHierarchyId = rootChecksContainerSpec.getHierarchyId();
         String connectionName = checksContainerHierarchyId.getConnectionName();
         PhysicalTableName physicalTableName = checksContainerHierarchyId.getPhysicalTableName();
 
-        Table ruleResultsTable = loadRuleResults(loadParameters, connectionName, physicalTableName);
-        Table errorsTable = loadErrorsNormalizedToResults(loadParameters, connectionName, physicalTableName);
+        Table ruleResultsTable = loadRuleResults(loadParameters, connectionName, physicalTableName, userDomainIdentity);
+        Table errorsTable = loadErrorsNormalizedToResults(loadParameters, connectionName, physicalTableName, userDomainIdentity);
         Table combinedTable = errorsTable != null ?
-                (ruleResultsTable != null ? errorsTable.append(ruleResultsTable) : errorsTable) :
+                (ruleResultsTable != null ? errorsTable.copy().append(ruleResultsTable) : errorsTable) :
                 ruleResultsTable;
 
         if (combinedTable == null) {
             return new CheckResultsOverviewDataModel[0]; // empty array
+        }
+
+        if (!Strings.isNullOrEmpty(loadParameters.getCheckName())) {
+            TextColumn checkNameColumn = combinedTable.textColumn(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME);
+            combinedTable = combinedTable.where(checkNameColumn.isEqualTo(loadParameters.getCheckName()));
+        }
+
+        if (!Strings.isNullOrEmpty(loadParameters.getCategory())) {
+            TextColumn categoryColumn = combinedTable.textColumn(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
+            combinedTable = combinedTable.where(categoryColumn.isEqualTo(loadParameters.getCategory()));
         }
 
         Table filteredTable = filterTableToRootChecksContainer(rootChecksContainerSpec, combinedTable);
@@ -164,6 +177,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
      * @param checkType Check type.
      * @param timeScale Optional check scale (daily, monthly) for monitoring and partitioned checks.
      * @param tableComparisonConfigurationName Table comparison configuration name.
+     * @param userDomainIdentity User identity with the data domain.
      * @return Returns the summary information about the table comparison.
      */
     @Override
@@ -171,12 +185,13 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                                                                             PhysicalTableName physicalTableName,
                                                                             CheckType checkType,
                                                                             CheckTimeScale timeScale,
-                                                                            String tableComparisonConfigurationName) {
+                                                                            String tableComparisonConfigurationName,
+                                                                            UserDomainIdentity userDomainIdentity) {
         TableComparisonResultsModel result = new TableComparisonResultsModel();
         CheckResultsOverviewParameters checkResultsLoadParameters = CheckResultsOverviewParameters.createForRecentMonths(2, 1);
 
-        Table ruleResultsTable = loadRuleResults(checkResultsLoadParameters, connectionName, physicalTableName);
-        Table errorsTable = loadErrorsNormalizedToResults(checkResultsLoadParameters, connectionName, physicalTableName);
+        Table ruleResultsTable = loadRuleResults(checkResultsLoadParameters, connectionName, physicalTableName, userDomainIdentity);
+        Table errorsTable = loadErrorsNormalizedToResults(checkResultsLoadParameters, connectionName, physicalTableName, userDomainIdentity);
         Table combinedTable = errorsTable != null ?
                 (ruleResultsTable != null ? errorsTable.append(ruleResultsTable) : errorsTable) :
                 ruleResultsTable;
@@ -214,17 +229,19 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
      *
      * @param rootChecksContainerSpec Root checks container.
      * @param loadParameters          Load parameters.
+     * @param userDomainIdentity      User identity with the data domain.
      * @return Detailed model of the check results.
      */
     @Override
     public CheckResultsListModel[] readCheckStatusesDetailed(AbstractRootChecksContainerSpec rootChecksContainerSpec,
-                                                             CheckResultsDetailedFilterParameters loadParameters) {
+                                                             CheckResultsDetailedFilterParameters loadParameters,
+                                                             UserDomainIdentity userDomainIdentity) {
         Map<Long, CheckResultsListModel> resultMap = new LinkedHashMap<>();
         HierarchyId checksContainerHierarchyId = rootChecksContainerSpec.getHierarchyId();
         String connectionName = checksContainerHierarchyId.getConnectionName();
         PhysicalTableName physicalTableName = checksContainerHierarchyId.getPhysicalTableName();
 
-        Table ruleResultsTable = loadRecentRuleResults(loadParameters, connectionName, physicalTableName);
+        Table ruleResultsTable = loadRecentRuleResults(loadParameters, connectionName, physicalTableName, userDomainIdentity);
         if (ruleResultsTable == null || ruleResultsTable.isEmpty()) {
             return new CheckResultsListModel[0]; // empty array
         }
@@ -323,14 +340,14 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         String checkDisplayName = row.getString(SensorReadoutsColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME);
         Long checkHash = row.getLong(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
         String checkName = row.getString(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME);
-        String checkType = row.getString(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME);
+        String checkTypeString = row.getString(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME);
 
         String columnName = TableRowUtility.getSanitizedStringValue(row, SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME);
         String dataGroupName = row.getString(SensorReadoutsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
 
         Integer durationMs = row.getInt(SensorReadoutsColumnNames.DURATION_MS_COLUMN_NAME);
         Instant executedAt = row.getInstant(SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME);
-        String timeGradient = row.getString(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME);
+        String timeGradientString = row.getString(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME);
         LocalDateTime timePeriod = row.getDateTime(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
 
         Boolean includeInKpi = row.getBoolean(CheckResultsColumnNames.INCLUDE_IN_KPI_COLUMN_NAME);
@@ -356,7 +373,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             setCheckCategory(checkCategory);
             setCheckName(checkName);
             setCheckHash(checkHash);
-            setCheckType(checkType);
+            setCheckType(CheckType.fromString(checkTypeString));
             setCheckDisplayName(checkDisplayName);
 
             setColumnName(columnName);
@@ -364,7 +381,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
 
             setDurationMs(durationMs);
             setExecutedAt(executedAt);
-            setTimeGradient(timeGradient);
+            setTimeGradient(TimePeriodGradient.fromString(timeGradientString));
             setTimePeriod(timePeriod);
 
             setIncludeInKpi(includeInKpi);
@@ -388,6 +405,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
      * @param incidentUntil     The timestamp when the incident was closed or expired, returns check results up to this timestamp.
      * @param minSeverity       Minimum check issue severity that is returned.
      * @param filterParameters  Filter parameters.
+     * @param userDomainIdentity User identity with the data domain.
      * @return An array of matching check results.
      */
     @Override
@@ -397,10 +415,11 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                                                                      Instant firstSeen,
                                                                      Instant incidentUntil,
                                                                      int minSeverity,
-                                                                     CheckResultListFilterParameters filterParameters) {
+                                                                     CheckResultListFilterParameters filterParameters,
+                                                                     UserDomainIdentity userDomainIdentity) {
         ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
         CheckResultsSnapshot checkResultsSnapshot = this.checkResultsSnapshotFactory.createReadOnlySnapshot(connectionName,
-                physicalTableName, CheckResultsColumnNames.COLUMN_NAMES_FOR_INCIDENT_RELATED_RESULTS);
+                physicalTableName, CheckResultsColumnNames.COLUMN_NAMES_FOR_INCIDENT_RELATED_RESULTS, userDomainIdentity);
         LocalDate startMonth;
         if (filterParameters.getDays() != null) {
             startMonth = firstSeen.minus(12L, ChronoUnit.HOURS).atZone(ZoneOffset.UTC).toLocalDate();
@@ -505,6 +524,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
      * @param incidentUntil     The timestamp when the incident was closed or expired, returns check results up to this timestamp.
      * @param minSeverity       Minimum check issue severity that is returned.
      * @param filterParameters  Optional filter to limit the issues included in the histogram.
+     * @param userDomainIdentity User identity with the data domain.
      * @return Daily histogram of failed data quality checks.
      */
     @Override
@@ -514,11 +534,12 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                                                                             Instant firstSeen,
                                                                             Instant incidentUntil,
                                                                             int minSeverity,
-                                                                            IncidentHistogramFilterParameters filterParameters) {
+                                                                            IncidentHistogramFilterParameters filterParameters,
+                                                                            UserDomainIdentity userDomainIdentity) {
         ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
 
         CheckResultsSnapshot checkResultsSnapshot = this.checkResultsSnapshotFactory.createReadOnlySnapshot(connectionName,
-                physicalTableName, CheckResultsColumnNames.COLUMN_NAMES_FOR_INCIDENT_RELATED_RESULTS);
+                physicalTableName, CheckResultsColumnNames.COLUMN_NAMES_FOR_INCIDENT_RELATED_RESULTS, userDomainIdentity);
         LocalDate startMonth;
         if (filterParameters.getDays() != null) {
             startMonth = firstSeen.minus(12L, ChronoUnit.HOURS).atZone(ZoneOffset.UTC).toLocalDate();
@@ -616,11 +637,13 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
      * Analyzes the table to find the status of the most recent data quality check for each time series
      * and asses the most current status.
      * @param tableCurrentDataQualityStatusFilterParameters Filter parameters container.
+     * @param userDomainIdentity User identity with the data domain.
      * @return The table status.
      */
     @Override
     public TableCurrentDataQualityStatusModel analyzeTableMostRecentQualityStatus(
-            TableCurrentDataQualityStatusFilterParameters tableCurrentDataQualityStatusFilterParameters) {
+            TableCurrentDataQualityStatusFilterParameters tableCurrentDataQualityStatusFilterParameters,
+            UserDomainIdentity userDomainIdentity) {
         String connectionName = tableCurrentDataQualityStatusFilterParameters.getConnectionName();
         PhysicalTableName physicalTableName = tableCurrentDataQualityStatusFilterParameters.getPhysicalTableName();
 
@@ -648,7 +671,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                 .createForRecentMonths(lastMonths, lastMonths + 1);
 
         CheckResultsSnapshot checkResultsSnapshot = this.checkResultsSnapshotFactory.createReadOnlySnapshot(connectionName,
-                physicalTableName, CheckResultsColumnNames.COLUMN_NAMES_FOR_RESULTS_OVERVIEW);
+                physicalTableName, CheckResultsColumnNames.COLUMN_NAMES_FOR_RESULTS_OVERVIEW, userDomainIdentity);
         checkResultsSnapshot.ensureMonthsAreLoaded(checkResultsLoadParameters.getStartMonth(), checkResultsLoadParameters.getEndMonth());
 
         if (checkResultsSnapshot.getLoadedMonthlyPartitions() != null && !checkResultsSnapshot.getLoadedMonthlyPartitions().isEmpty()) {
@@ -675,7 +698,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         }
 
         ErrorsSnapshot errorsSnapshot = this.errorsSnapshotFactory.createReadOnlySnapshot(connectionName,
-                physicalTableName, ErrorsColumnNames.COLUMN_NAMES_FOR_ERRORS_OVERVIEW);
+                physicalTableName, ErrorsColumnNames.COLUMN_NAMES_FOR_ERRORS_OVERVIEW, userDomainIdentity);
         errorsSnapshot.ensureMonthsAreLoaded(checkResultsLoadParameters.getStartMonth(), checkResultsLoadParameters.getEndMonth());
 
         if (errorsSnapshot.getLoadedMonthlyPartitions() != null && !errorsSnapshot.getLoadedMonthlyPartitions().isEmpty()) {
@@ -1049,11 +1072,15 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
      * @param loadParameters Load parameters.
      * @param connectionName Connection name.
      * @param physicalTableName Physical table name.
+     * @param userDomainIdentity User identity with the  data domain.
      * @return Errors table or null when no data found.
      */
-    protected Table loadErrorsNormalizedToResults(CheckResultsOverviewParameters loadParameters, String connectionName, PhysicalTableName physicalTableName) {
+    protected Table loadErrorsNormalizedToResults(CheckResultsOverviewParameters loadParameters,
+                                                  String connectionName,
+                                                  PhysicalTableName physicalTableName,
+                                                  UserDomainIdentity userDomainIdentity) {
         ErrorsSnapshot errorsSnapshot = this.errorsSnapshotFactory.createReadOnlySnapshot(connectionName,
-                physicalTableName, ErrorsColumnNames.COLUMN_NAMES_FOR_ERRORS_OVERVIEW);
+                physicalTableName, ErrorsColumnNames.COLUMN_NAMES_FOR_ERRORS_OVERVIEW, userDomainIdentity);
         errorsSnapshot.ensureMonthsAreLoaded(loadParameters.getStartMonth(), loadParameters.getEndMonth());
         Table allErrors = errorsSnapshot.getAllData();
         if (allErrors == null) {
@@ -1072,11 +1099,15 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
      * @param loadParameters Load parameters.
      * @param connectionName Connection name.
      * @param physicalTableName Physical table name.
+     * @param userDomainIdentity User identity with the data domain.
      * @return Table with all rule results or null when no data found.
      */
-    protected Table loadRuleResults(CheckResultsOverviewParameters loadParameters, String connectionName, PhysicalTableName physicalTableName) {
+    protected Table loadRuleResults(CheckResultsOverviewParameters loadParameters,
+                                    String connectionName,
+                                    PhysicalTableName physicalTableName,
+                                    UserDomainIdentity userDomainIdentity) {
         CheckResultsSnapshot checkResultsSnapshot = this.checkResultsSnapshotFactory.createReadOnlySnapshot(connectionName,
-                physicalTableName, CheckResultsColumnNames.COLUMN_NAMES_FOR_RESULTS_OVERVIEW);
+                physicalTableName, CheckResultsColumnNames.COLUMN_NAMES_FOR_RESULTS_OVERVIEW, userDomainIdentity);
         checkResultsSnapshot.ensureMonthsAreLoaded(loadParameters.getStartMonth(), loadParameters.getEndMonth());
         Table ruleResultsData = checkResultsSnapshot.getAllData();
         return ruleResultsData;
@@ -1088,11 +1119,15 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
      * @param loadParameters Load parameters.
      * @param connectionName Connection name.
      * @param physicalTableName Physical table name.
+     * @param userDomainIdentity User identity with the data domain.
      * @return Table with rule results for the most recent two months inside the specified range or null when no data found.
      */
-    protected Table loadRecentRuleResults(CheckResultsDetailedFilterParameters loadParameters, String connectionName, PhysicalTableName physicalTableName) {
+    protected Table loadRecentRuleResults(CheckResultsDetailedFilterParameters loadParameters,
+                                          String connectionName,
+                                          PhysicalTableName physicalTableName,
+                                          UserDomainIdentity userDomainIdentity) {
         CheckResultsSnapshot checkResultsSnapshot = this.checkResultsSnapshotFactory.createReadOnlySnapshot(connectionName,
-                physicalTableName, CheckResultsColumnNames.COLUMN_NAMES_FOR_RESULTS_DETAILED);
+                physicalTableName, CheckResultsColumnNames.COLUMN_NAMES_FOR_RESULTS_DETAILED, userDomainIdentity);
         int maxMonthsToLoad = DEFAULT_MAX_RECENT_LOADED_MONTHS;
 
         if (loadParameters.getStartMonth() != null && loadParameters.getEndMonth() != null) {

@@ -31,7 +31,8 @@ class SnowflakeParametersSpec:
             format to use dynamic substitution.
         role (Union[Unset, str]): Snowflake role name. Supports also ${SNOWFLAKE_ROLE} configuration with a custom
             environment variable.
-        properties (Union[Unset, SnowflakeParametersSpecProperties]):
+        properties (Union[Unset, SnowflakeParametersSpecProperties]): A dictionary of custom JDBC parameters that are
+            added to the JDBC connection string, a key/value dictionary.
     """
 
     account: Union[Unset, str] = UNSET

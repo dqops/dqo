@@ -46,22 +46,21 @@ public class BetweenChange1DayRuleParametersSpec extends AbstractRuleParametersS
     public BetweenChange1DayRuleParametersSpec() {
     }
 
-    @JsonPropertyDescription("Minimal accepted change with regards to the previous readout (inclusive).")
+    @JsonPropertyDescription("Minimum accepted change with regards to the previous readout (inclusive).")
     @SampleValues(values = "10")
     private Double from;
 
-    @JsonPropertyDescription("Maximal accepted change with regards to the previous readout (inclusive).")
+    @JsonPropertyDescription("Maximum accepted change with regards to the previous readout (inclusive).")
     @SampleValues(values = "20")
     private Double to;
 
     @JsonPropertyDescription("When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. " +
             "If the parameter is selected (exact_day: true), the rule compares only with the results from the past 1 day. If no results are found from that time, no results or errors will be generated.")
-    @SampleValues(values = "false")
     private Boolean exactDay = false;
 
     /**
      * Gets the lower bound for the accepted change for a data quality check readout.
-     * @return Minimal accepted change for a data quality check readout.
+     * @return Minimum accepted change for a data quality check readout.
      */
     public Double getFrom() {
         return from;
@@ -78,7 +77,7 @@ public class BetweenChange1DayRuleParametersSpec extends AbstractRuleParametersS
 
     /**
      * Gets the upper bound for the accepted change for a data quality check readout.
-     * @return Maximal accepted change for a data quality check readout.
+     * @return Maximum accepted change for a data quality check readout.
      */
     public Double getTo() {
         return to;

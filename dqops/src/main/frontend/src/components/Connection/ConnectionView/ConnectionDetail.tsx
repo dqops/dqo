@@ -21,7 +21,7 @@ import { useParams } from "react-router-dom";
 import ErrorModal from "../../Dashboard/DatabaseConnection/ErrorModal";
 import Loader from "../../Loader";
 import Button from "../../Button";
-import { DataSourcesApi, SharedCredentailsApi } from "../../../services/apiClient";
+import { DataSourcesApi, SharedCredentialsApi } from "../../../services/apiClient";
 import ConfirmErrorModal from "../../Dashboard/DatabaseConnection/ConfirmErrorModal";
 import PostgreSQLConnection from "../../Dashboard/DatabaseConnection/PostgreSQLConnection";
 import RedshiftConnection from "../../Dashboard/DatabaseConnection/RedshiftConnection";
@@ -122,7 +122,7 @@ const ConnectionDetail = () => {
   };
 
   const getSharedCredentials = async () => {
-    await SharedCredentailsApi.getAllSharedCredentials()
+    await SharedCredentialsApi.getAllSharedCredentials()
       .then((res) => setSharedCredentials(res.data))
   }
 
@@ -155,9 +155,12 @@ const ConnectionDetail = () => {
               <div>
                 <Input
                   value={connectionBasic?.parallel_jobs_limit}
-                  onChange={(e) =>
-                    !isNaN(Number(e.target.value)) && onChange({ ...connectionBasic, parallel_jobs_limit: Number(e.target.value)})
-                  }
+                  onChange={(e) =>{
+                    if (!isNaN(Number(e.target.value))) {
+                       onChange({ ...connectionBasic, parallel_jobs_limit: String(e.target.value).length === 0 
+                         ? undefined : Number(e.target.value)})
+                     } 
+                   }}
                 />
               </div>
             </td>

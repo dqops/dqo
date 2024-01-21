@@ -52,7 +52,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "Incidents", description = "Data quality incidents controller that supports loading incidents and changing the status of an incident.")
+@Api(value = "Incidents", description = "Data quality incidents controller that supports reading and updating data quality incidents, such as changing the incident status or assigning an external ticket number.")
 public class IncidentsController {
     private IncidentsDataService incidentsDataService;
     private IncidentImportQueueService incidentImportQueueService;
@@ -99,7 +99,7 @@ public class IncidentsController {
             @ApiParam("Year when the incident was first seen") @PathVariable int year,
             @ApiParam("Month when the incident was first seen") @PathVariable int month,
             @ApiParam("Incident id") @PathVariable String incidentId) {
-        IncidentModel incidentModel = this.incidentsDataService.loadIncident(connectionName, year, month, incidentId);
+        IncidentModel incidentModel = this.incidentsDataService.loadIncident(connectionName, year, month, incidentId, principal.getDataDomainIdentity());
 
         if (incidentModel == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
@@ -193,7 +193,7 @@ public class IncidentsController {
         }
 
         CheckResultEntryModel[] checkResultEntryModels = this.incidentsDataService.loadCheckResultsForIncident(
-                connectionName, year, month, incidentId, filterParameters);
+                connectionName, year, month, incidentId, filterParameters, principal.getDataDomainIdentity());
 
         if (checkResultEntryModels == null) {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
@@ -263,7 +263,7 @@ public class IncidentsController {
         }
 
         IncidentIssueHistogramModel histogramModel = this.incidentsDataService.buildDailyIssuesHistogramForIncident(
-                connectionName, year, month, incidentId, filterParameters);
+                connectionName, year, month, incidentId, filterParameters, principal.getDataDomainIdentity());
 
         if (histogramModel == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
@@ -345,7 +345,8 @@ public class IncidentsController {
             filterParameters.setSortDirection(direction.get());
         }
 
-        Collection<IncidentModel> incidentModels = this.incidentsDataService.loadRecentIncidentsOnConnection(connectionName, filterParameters);
+        Collection<IncidentModel> incidentModels = this.incidentsDataService.loadRecentIncidentsOnConnection(
+                connectionName, filterParameters, principal.getDataDomainIdentity());
         if (incidentModels == null) {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.OK);
         }
@@ -371,7 +372,7 @@ public class IncidentsController {
     @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Flux<IncidentsPerConnectionModel>> findConnectionIncidentStats(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        Collection<IncidentsPerConnectionModel> connectionIncidentStats = this.incidentsDataService.findConnectionIncidentStats();
+        Collection<IncidentsPerConnectionModel> connectionIncidentStats = this.incidentsDataService.findConnectionIncidentStats(principal.getDataDomainIdentity());
         return new ResponseEntity<>(Flux.fromStream(connectionIncidentStats.stream()), HttpStatus.OK);
     }
 
@@ -405,7 +406,7 @@ public class IncidentsController {
             @ApiParam("Incident id") @PathVariable String incidentId,
             @ApiParam(name = "status", value = "New incident status, supported values: open, acknowledged, resolved, muted")
                 @RequestParam IncidentStatus status) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -416,7 +417,7 @@ public class IncidentsController {
 
         IncidentStatusChangeParameters incidentStatusChangeParameters = new IncidentStatusChangeParameters(
                 connectionName, year, month, incidentId, status, connectionWrapper.getSpec().getIncidentGrouping());
-        this.incidentImportQueueService.setIncidentStatus(incidentStatusChangeParameters); // operation performed in the background, no result is returned
+        this.incidentImportQueueService.setIncidentStatus(incidentStatusChangeParameters, principal.getDataDomainIdentity()); // operation performed in the background, no result is returned
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }
@@ -450,7 +451,7 @@ public class IncidentsController {
             @ApiParam("Incident id") @PathVariable String incidentId,
             @ApiParam(name = "issueUrl", value = "New incident's issueUrl") @RequestParam String issueUrl) {
         IncidentIssueUrlChangeParameters incidentIssueUrlChangeParameters = new IncidentIssueUrlChangeParameters(connectionName, year, month, incidentId, issueUrl);
-        this.incidentImportQueueService.setIncidentIssueUrl(incidentIssueUrlChangeParameters); // operation performed in the background, no result is returned
+        this.incidentImportQueueService.setIncidentIssueUrl(incidentIssueUrlChangeParameters, principal.getDataDomainIdentity()); // operation performed in the background, no result is returned
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }

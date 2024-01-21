@@ -16,6 +16,9 @@
 package com.dqops.core.jobqueue.monitoring;
 
 import com.dqops.core.synchronization.status.CloudSynchronizationFoldersStatusModel;
+import com.dqops.utils.docs.generators.SampleListUtility;
+import com.dqops.utils.docs.generators.SampleLongsRegistry;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.List;
@@ -65,5 +68,16 @@ public class DqoJobQueueIncrementalSnapshotModel {
      */
     public long getLastSequenceNumber() {
         return lastSequenceNumber;
+    }
+
+    public static class DqoJobQueueIncrementalSnapshotModelSampleFactory implements SampleValueFactory<DqoJobQueueIncrementalSnapshotModel> {
+        @Override
+        public DqoJobQueueIncrementalSnapshotModel createSample() {
+            return new DqoJobQueueIncrementalSnapshotModel(
+                    SampleListUtility.generateList(DqoJobHistoryEntryModel.class, 0),
+                    new CloudSynchronizationFoldersStatusModel(),
+                    SampleLongsRegistry.getSequenceNumber()
+            );
+        }
     }
 }

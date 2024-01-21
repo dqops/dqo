@@ -42,40 +42,22 @@ import java.util.Objects;
 public class ColumnDatetimeProfilingChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDatetimeProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("profile_date_match_format_percent", o -> o.profileDateMatchFormatPercent);
             put("profile_date_values_in_future_percent", o -> o.profileDateValuesInFuturePercent);
             put("profile_datetime_value_in_range_date_percent", o -> o.profileDatetimeValueInRangeDatePercent);
-
+            put("profile_date_match_format_percent", o -> o.profileDateMatchFormatPercent);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the percentage of date values matching the given format in a column does not exceed the minimum accepted percentage.")
-    private ColumnDatetimeDateMatchFormatPercentCheckSpec profileDateMatchFormatPercent;
-    
     @JsonPropertyDescription("Verifies that the percentage of date values in future in a column does not exceed the maximum accepted percentage.")
     private ColumnDateValuesInFuturePercentCheckSpec profileDateValuesInFuturePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage.")
     private ColumnDatetimeValueInRangeDatePercentCheckSpec profileDatetimeValueInRangeDatePercent;
 
-    /**
-     * Returns a date match format percentage check.
-     * @return Maximum date match format percentage check.
-     */
-    public ColumnDatetimeDateMatchFormatPercentCheckSpec getProfileDateMatchFormatPercent() {
-        return profileDateMatchFormatPercent;
-    }
+    @JsonPropertyDescription("Verifies that the percentage of date values matching the given format in a text column does not exceed the maximum accepted percentage.")
+    private ColumnDatetimeDateMatchFormatPercentCheckSpec profileDateMatchFormatPercent;
 
-    /**
-     * Sets a new definition of a date match format percentage check.
-     * @param profileDateMatchFormatPercent Date match format percentage check.
-     */
-    public void setProfileDateMatchFormatPercent(ColumnDatetimeDateMatchFormatPercentCheckSpec profileDateMatchFormatPercent) {
-        this.setDirtyIf(!Objects.equals(this.profileDateMatchFormatPercent, profileDateMatchFormatPercent));
-        this.profileDateMatchFormatPercent = profileDateMatchFormatPercent;
-        propagateHierarchyIdToField(profileDateMatchFormatPercent, "profile_date_match_format_percent");
-    }
-    
+
     /**
      * Returns a date values in future percent check specification.
      * @return Date values in future percent check specification.
@@ -110,6 +92,24 @@ public class ColumnDatetimeProfilingChecksSpec extends AbstractCheckCategorySpec
         this.setDirtyIf(!Objects.equals(this.profileDatetimeValueInRangeDatePercent, profileDatetimeValueInRangeDatePercent));
         this.profileDatetimeValueInRangeDatePercent = profileDatetimeValueInRangeDatePercent;
         propagateHierarchyIdToField(profileDatetimeValueInRangeDatePercent, "profile_datetime_value_in_range_date_percent");
+    }
+
+    /**
+     * Returns a date match format percentage check.
+     * @return Maximum date match format percentage check.
+     */
+    public ColumnDatetimeDateMatchFormatPercentCheckSpec getProfileDateMatchFormatPercent() {
+        return profileDateMatchFormatPercent;
+    }
+
+    /**
+     * Sets a new definition of a date match format percentage check.
+     * @param profileDateMatchFormatPercent Date match format percentage check.
+     */
+    public void setProfileDateMatchFormatPercent(ColumnDatetimeDateMatchFormatPercentCheckSpec profileDateMatchFormatPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileDateMatchFormatPercent, profileDateMatchFormatPercent));
+        this.profileDateMatchFormatPercent = profileDateMatchFormatPercent;
+        propagateHierarchyIdToField(profileDateMatchFormatPercent, "profile_date_match_format_percent");
     }
 
     /**
