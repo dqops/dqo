@@ -27,6 +27,7 @@ import org.springframework.stereotype.Component;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -76,6 +77,9 @@ public class PythonSerializerImpl implements PythonSerializer {
 
     private String serializeParsedObjectPrettyPrint(ParsedSampleObject parsedSource) {
         if (parsedSource.getDataType() == ParameterDataType.object_type) {
+            if (parsedSource.getSource().getClass().equals(Instant.class)) {
+                return "'" + parsedSource.getSource().toString() + "'";
+            }
             return serializeComplexParsedObjectPrettyPrint(parsedSource);
         } else {
             return serializeSimpleParsedObjectPrettyPrint(parsedSource);
@@ -113,7 +117,7 @@ public class PythonSerializerImpl implements PythonSerializer {
 
             case enum_type:
                 Enum<?> sourceEnum = (Enum<?>) source;
-                return source.getClass().getSimpleName() + "." + sourceEnum.name();
+                return source.getClass().getSimpleName() + "." + sourceEnum.name().toUpperCase();
 
             case boolean_type:
                 Boolean sourceBoolean = (Boolean) source;

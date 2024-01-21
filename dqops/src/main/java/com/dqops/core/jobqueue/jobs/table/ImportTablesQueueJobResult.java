@@ -17,11 +17,9 @@ package com.dqops.core.jobqueue.jobs.table;
 
 import com.dqops.core.jobqueue.DqoQueueJobId;
 import com.dqops.core.jobqueue.monitoring.DqoJobStatus;
-import com.dqops.execution.statistics.jobs.CollectStatisticsResult;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -81,5 +79,16 @@ public class ImportTablesQueueJobResult {
      */
     public ImportTablesQueueJobResult(DqoQueueJobId jobId) {
         this.jobId = jobId;
+    }
+
+    public static class ImportTablesQueueJobResultSampleFactory implements SampleValueFactory<ImportTablesQueueJobResult> {
+        @Override
+        public ImportTablesQueueJobResult createSample() {
+            return new ImportTablesQueueJobResult() {{
+                setJobId(new DqoQueueJobId.DqoQueueJobIdSampleFactory().createSample());
+                setStatus(DqoJobStatus.succeeded);
+                setResult(new ImportTablesResult.ImportTablesResultSampleFactory().createSample());
+            }};
+        }
     }
 }

@@ -1,8 +1,8 @@
 from dqops import client
 from dqops.client.api.{{moduleName}} import {{apiMethodName}}
 {{#if modelImports}}from dqops.client.models import {{{join modelImports ", \
-                                "}}}{{/if}}
-
+                                "}}}
+{{/if}}
 {{#if auth}}token = 's4mp13_4u7h_70k3n'
 
 {{/if}}dqops_client = client.{{#if auth}}Authenticated{{/if}}Client(
