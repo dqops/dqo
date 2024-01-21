@@ -1,7 +1,7 @@
 # Use cases
 Check various examples demonstrating how the DQOps platform can detect data quality issues, and help you evaluate results on data quality dashboards.
 
-## List of the use cases
+## List of data quality use cases
 
 Here is a comprehensive list of examples with links to the relevant documentation section with detailed descriptions.
 These examples use openly available datasets from [Google Cloud](https://cloud.google.com/datasets).
