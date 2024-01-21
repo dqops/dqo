@@ -23,6 +23,8 @@ import com.github.jknack.handlebars.helper.ConditionalHelpers;
 import com.github.jknack.handlebars.helper.StringHelpers;
 import com.github.jknack.handlebars.io.FileTemplateLoader;
 import io.swagger.models.auth.In;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,6 +50,7 @@ public class HandlebarsDocumentationUtilities {
         handlebars.registerHelper("render-type", renderTypeHelper);
         handlebars.registerHelper("checkmark", checkmarkHelper);
         handlebars.registerHelper("single-line", singleLineHelper);
+        handlebars.registerHelper("indent", indentHelper);
         handlebars.registerHelper("contains", containsHelper);
         handlebars.registerHelper("var", variableHelper);
     }
@@ -260,6 +263,28 @@ public class HandlebarsDocumentationUtilities {
         }
 
         return s.replaceAll("\\s+", " ");
+    };
+
+    private static final Helper<String> indentHelper = (s, o) -> {
+        if (s == null
+            || o.params.length == 0
+            || !(NumberUtils.isNumber(o.params[0].toString()))) {
+            return s;
+        }
+
+        int indentAmount = NumberUtils.toInt(o.params[0].toString());
+        String currentIndent;
+        String targetIndent;
+
+        if (indentAmount < 0) {
+            currentIndent = "\n" + StringUtils.repeat("\t", -1 * indentAmount);
+            targetIndent = "\n";
+        } else {
+            currentIndent = "\n";
+            targetIndent = "\n" + StringUtils.repeat("\t", indentAmount);
+        }
+
+        return s.replace(currentIndent, targetIndent);
     };
 
     private static final Helper<String> containsHelper = (s, o) -> {

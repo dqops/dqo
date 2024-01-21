@@ -1026,6 +1026,7 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder {
                 setTimestampColumns(new TimestampColumnsSpec.TimestampColumnsSpecSampleFactory().createSample());
                 setProfilingChecks(new TableProfilingCheckCategoriesSpec.TableProfilingCheckCategoriesSpecSampleFactory().createSample());
                 setPhysicalTableName(PhysicalTableName.fromSchemaTableFilter(schemaTableName));
+                setIncrementalTimeWindow(new PartitionIncrementalTimeWindowSpec.PartitionIncrementalTimeWindowSpecSampleFactory().createSample());
             }};
         }
     }

@@ -38,7 +38,7 @@ public class SampleLongsRegistry {
     }
 
     public static long getJobId() {
-        return 10832;
+        return 123456789L;
     }
 
     public static long getSequenceNumber() {
