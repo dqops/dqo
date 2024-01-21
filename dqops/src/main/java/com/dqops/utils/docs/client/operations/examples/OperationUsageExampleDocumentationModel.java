@@ -18,8 +18,12 @@ package com.dqops.utils.docs.client.operations.examples;
 import com.dqops.utils.docs.client.apimodel.OperationModel;
 import lombok.Data;
 
+/**
+ * Cloneable model for usage examples for a particular connecting method for a specific operation of the REST API client.
+ * Cloning creates a shallow copy, so that every clone can have different descriptions, but ultimately use the same OperationModel.
+ */
 @Data
-public class OperationUsageExampleDocumentationModel {
+public class OperationUsageExampleDocumentationModel implements Cloneable {
     /**
      * Name of the example snippet.
      */
@@ -49,4 +53,13 @@ public class OperationUsageExampleDocumentationModel {
      * Description of the example snippet to be included in a footer.
      */
     private String exampleFooter;
+
+    @Override
+    public OperationUsageExampleDocumentationModel clone() {
+        try {
+            return (OperationUsageExampleDocumentationModel) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

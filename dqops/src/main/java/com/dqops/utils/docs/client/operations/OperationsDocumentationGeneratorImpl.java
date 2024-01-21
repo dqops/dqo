@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 DQOps (support@dqops.com)
+ * Copyright © 2023 DQOps (support@dqops.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -173,6 +173,8 @@ public class OperationsDocumentationGeneratorImpl implements OperationsDocumenta
 
     protected List<OperationUsageExampleDocumentationModel> selectConnectingExamplesForClientMainPage(
             List<OperationsSuperiorObjectDocumentationModel> operationsSuperiorModels) {
+        List<OperationUsageExampleDocumentationModel> selectedConnectingExamples = new ArrayList<>();
+
         OperationsSuperiorObjectDocumentationModel connectionsController = operationsSuperiorModels.stream()
                 .filter(controller -> controller.getSuperiorClassSimpleName().equals("connections"))
                 .findAny().get();
@@ -180,13 +182,63 @@ public class OperationsDocumentationGeneratorImpl implements OperationsDocumenta
                 .filter(operation -> operation.getOperationPythonName().equals("get_all_connections"))
                 .findAny().get();
 
-        return getAllConnectionsOperation.getUsageExamples();
+        OperationUsageExampleDocumentationModel curlExample = getAllConnectionsOperation.getUsageExamples().stream()
+                .filter(operation -> operation.getExecutionMethod() == OperationExecutionMethod.curl)
+                .findAny().get().clone();
+        curlExample.setExampleDescription("Using curl you can communicate with the REST API by sending HTTP requests."
+                + " It's a simple but effective way of trying out REST API functionality."
+                + "\nIt can also easily be used as a part of CI/CD pipelines, which lets you validate data on the fly.");
+        selectedConnectingExamples.add(curlExample);
+
+        OperationUsageExampleDocumentationModel pythonSyncExample = getAllConnectionsOperation.getUsageExamples().stream()
+                .filter(operation -> operation.getExecutionMethod() == OperationExecutionMethod.python_sync)
+                .findAny().get().clone();
+        pythonSyncExample.setExampleDescription("This connecting method uses the synchronous interface offered by the unauthorized Python client."
+                + "\nUnauthorized client sends plain requests without an `Authorization` header, therefore no API Key is required."
+                + "\nMethods of the synchronous interface wait until a response from the REST API is captured before execution of the program will resume."
+                + "\nREST APIs that are accessible from a larger network and/or are accessed by many users should require requests to be authorized."
+                + " Trying to access them with an unauthorized will result in failure (`401 Unauthorized` error).");
+        selectedConnectingExamples.add(pythonSyncExample);
+
+        OperationUsageExampleDocumentationModel pythonAsyncExample = getAllConnectionsOperation.getUsageExamples().stream()
+                .filter(operation -> operation.getExecutionMethod() == OperationExecutionMethod.python_async)
+                .findAny().get().clone();
+        pythonAsyncExample.setExampleDescription("This connecting method uses the asynchronous interface offered by the unauthorized Python client."
+                + "\n\nUnauthorized client sends plain requests without an `Authorization` header, therefore no API Key is required."
+                + "\n\nMethods of the asynchronous interface send a request to the REST API and immediately resume the execution of the program."
+                + "\nTo collect results, you have to explicitly await for the result."
+                + "\n\n*Learn more on how to use Python's asyncio API [here](https://docs.python.org/3/library/asyncio-task.html).*"
+                + "\n\nREST APIs that are accessible from a larger network and/or are accessed by many users should require requests to be authorized."
+                + "\nTrying to access them with an unauthorized will result in failure (`401 Unauthorized` error).");
+        selectedConnectingExamples.add(pythonAsyncExample);
+
+        OperationUsageExampleDocumentationModel pythonAuthSyncExample = getAllConnectionsOperation.getUsageExamples().stream()
+                .filter(operation -> operation.getExecutionMethod() == OperationExecutionMethod.auth_python_sync)
+                .findAny().get().clone();
+        pythonAuthSyncExample.setExampleDescription("This connecting method uses the synchronous interface offered by the authorized Python client."
+                + "\n\nAuthorized client, along each request, sends an API Key as a `Bearer` token in the `Authorization` header."
+                + "\nIf you haven't already, go [here](#getting-the-personal-api-key) to generate your API Key."
+                + "\n\nMethods of the synchronous interface wait until a response from the REST API is captured before execution of the program will resume.");
+        selectedConnectingExamples.add(pythonAuthSyncExample);
+
+        OperationUsageExampleDocumentationModel pythonAuthAsyncExample = getAllConnectionsOperation.getUsageExamples().stream()
+                .filter(operation -> operation.getExecutionMethod() == OperationExecutionMethod.auth_python_async)
+                .findAny().get().clone();
+        pythonAuthAsyncExample.setExampleDescription("This connecting method uses the asynchronous interface offered by the authorized Python client."
+                + "\n\nAuthorized client, along each request, sends an API Key as a `Bearer` token in the `Authorization` header."
+                + "\nIf you haven't already, go [here](#getting-the-personal-api-key) to generate your API Key."
+                + "\n\nMethods of the asynchronous interface send a request to the REST API and immediately resume the execution of the program."
+                + "\nTo collect results, you have to explicitly await for the result."
+                + "\n\n*Learn more on how to use Python's asyncio API [here](https://docs.python.org/3/library/asyncio-task.html).*");
+        selectedConnectingExamples.add(pythonAuthAsyncExample);
+
+        return selectedConnectingExamples;
     }
 
     protected OperationUsageExampleDocumentationModel getUsageExampleFromOperationModel(OperationsOperationDocumentationModel operationDocumentationModel) {
         Optional<OperationUsageExampleDocumentationModel> usageExample = operationDocumentationModel.getUsageExamples().stream()
                 .filter(example -> example.getExecutionMethod() == OperationExecutionMethod.auth_python_sync)
                 .findAny();
-        return usageExample.get();
+        return usageExample.get().clone();
     }
 }
