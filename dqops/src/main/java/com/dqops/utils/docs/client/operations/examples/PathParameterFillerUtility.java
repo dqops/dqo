@@ -111,11 +111,7 @@ public final class PathParameterFillerUtility {
 
     public static String getJavaSimpleClassName(Class<?> clazz) {
         if (Strings.isNullOrEmpty(clazz.getSimpleName())) {
-            String classFullName = clazz.getName();
-            String mainClassFullName = classFullName.split("\\$")[0];
-            String[] mainClassFullNameComponents = mainClassFullName.split("\\.");
-            String mainClassSimpleName = mainClassFullNameComponents[mainClassFullNameComponents.length - 1];
-            return mainClassSimpleName;
+            return getJavaSimpleClassName(clazz.getSuperclass());
         } else {
             return clazz.getSimpleName();
         }
