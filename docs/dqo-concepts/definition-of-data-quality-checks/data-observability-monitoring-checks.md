@@ -123,6 +123,38 @@ For daily monitoring check even if the check is run several times a day, only th
 is stored. For monthly monitoring check even if the check is run several in a month, only the last sensor readout for each month
 is stored.
 
+## Storage of monitoring results
+
+The daily monitoring checks store the most recent sensor readouts for each day when the data quality check was run.
+This means that if you run a check several times a day only the most recent readout is stored. The previous readouts for
+that day will be overwritten.
+
+For example, if we run the check for three consecutive days, the results table could look like this:
+
+| actual_value | time_period |
+|-------------:|-------------|
+|       95.51% | 2023-04-05  |
+|       90.52% | 2023-04-06  |
+|       91.06% | 2023-04-07  |
+
+The original time_period timestamp of the result e.g. 2023-04-05T09:06:53.386Z is truncated to midnight for daily checks.
+
+If there was a change in the data on 2023-04-07 and we run the check again, the table will be updated to show the latest result.
+
+| actual_value | time_period    |
+|-------------:|----------------|
+|       95.51% | 2023-04-05     |
+|       90.52% | 2023-04-06     |
+|   **98.17%** | **2023-04-07** |
+
+The previous result for 2023-04-07 was deleted.
+
+Similarly, the monthly monitoring checks store the most recent sensor readout for each month when the data quality check was run.
+For monthly monitoring checks, the original time_period of the result e.g. 2023-04-05T09:06:53.386Z is truncated to the 1st day of the month - 2023-04-01.
+
+This approach allows you to track the data quality over time and calculate daily and monthly data quality KPIs.
+
+
 ## What's next 
 
 - [Learn more about profiling checks](data-profiling-checks.md)

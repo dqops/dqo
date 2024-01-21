@@ -13,6 +13,22 @@ The daily partition checks store the most recent sensor readouts for each partit
 check was run. This means that if you run a check several times a day only the most recent readout is stored. The previous readouts for
 that day will be overwritten.
 
+### **Daily partitioned checks**
+
+### **Daily partitioning**
+
+![daily partitioned data quality check results](https://dqops.com/docs/images/concepts/types-of-data-quality-checks/daily-partitioned-checks-editor-results-min.png)
+
+
+![daily partitioned data quality check results chart](https://dqops.com/docs/images/concepts/types-of-data-quality-checks/daily-partitioned-checks-editor-chart-min.png)
+
+
+### **Monthly partitioned checks**
+
+![monthly partitioned data quality check results](https://dqops.com/docs/images/concepts/types-of-data-quality-checks/monthly-partitioned-checks-editor-results-min.png)
+
+
+
 For example, we have a table with results from three consecutive days that look like this:
 
 | actual_value |              time_period |
@@ -164,6 +180,68 @@ spec:
     ingestion_timestamp_column: 
     partition_by_column: event_timestamp
 ```
+
+
+## Storage of partition check results
+The daily partition checks store the most recent sensor readouts for each partition and each day when the data quality
+check was run. This means that if you run a check several times a day only the most recent readout is stored. The previous readouts for
+that day will be overwritten.
+
+The daily monitoring checks store the most recent sensor readouts for each day when the data quality check was run.
+This means that if you run a check several times a day only the most recent readout is stored. The previous readouts for
+that day will be overwritten.
+
+For example, we have a table with results from three consecutive days that look like this:
+
+| actual_value | time_period              |
+|-------------:|--------------------------|
+|       95.51% | 2023-04-05T09:07:03.578Z |
+|       94.52% | 2023-04-05T09:08:50.635Z |
+|       90.88% | 2023-04-05T09:10:44.386Z |
+|       91.51% | 2023-04-06T09:07:03.578Z |
+|       93.56% | 2023-04-06T09:08:50.635Z |
+|       96.54% | 2023-04-06T09:10:44.386Z |
+|       95.55% | 2023-04-07T09:07:03.578Z |
+|       92.64% | 2023-04-07T09:08:50.635Z |
+|       96.06% | 2023-04-07T09:10:44.386Z |
+
+Daily partitioned data should be analyzed separately, for each daily partition. That is why daily partition checks use
+the **GROUP BY** clause with daily time slicing.
+
+The following Google BigQuery query example captures time-sliced data to calculate metrics for each day separately.
+
+``` sql hl_lines="1 4"
+SELECT DATETIME_TRUNC(time_period, DAY) as time_period,
+100.0 * SUM(CASE WHEN actual_value >= 0 THEN 1 ELSE 0 END) /
+COUNT(*) as percentage_valid FROM schema.table
+GROUP BY time_period
+```
+
+The results grouped by day may look like this:
+
+| actual_value | time_period |
+|-------------:|-------------|
+|       93.64% | 2023-04-05  |
+|       93.88% | 2023-04-06  |
+|       94.76% | 2023-04-07  |
+
+
+The original time_period of the result e.g. 2023-04-05T09:07:03.578Z is truncated to midnight for daily checks.
+
+When there was a change in the data and on 2023-04-07 we run the check again, the table will be updated to show the latest result.
+
+|  actual_value | time_period    |
+|--------------:|----------------|
+|        93.64% | 2023-04-05     |
+|        93.88% | 2023-04-06     |
+|    **98.65%** | **2023-04-07** |
+
+The previous result for 2023-04-07 was deleted.
+
+Similarly, the monthly monitoring checks store the most recent sensor readout for each month when the data quality check was run.
+For monthly monitoring checks, the original time_period of the result e.g. 2023-04-05T09:07:03.578Z is truncated to the 1st day of the month - 2023-04-01.
+
+
 
 ## What's next
 - Learn how partition checks are used for [incremental data quality monitoring](../incremental-data-quality-monitoring.md)
