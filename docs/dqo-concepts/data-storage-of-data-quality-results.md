@@ -331,7 +331,7 @@ synchronize_folders.sync(
 ```
 
 
-### **Push data quality results to a private cloud**
+## Push data quality results to a private cloud
 The local Data Quality Data Warehouse is not limited to synchronization with the DQOps Cloud data lake.
 Each user can set up a secondary file synchronization process that would replicate all the files in the `.data` folder
 to a different location, using the user's owned S3 buckets, Storage Accounts, or Cloud Storage.
