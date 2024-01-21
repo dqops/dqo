@@ -17,7 +17,10 @@ It is the easiest way to understand how the data quality check targeting is used
 !!! tip "Running data quality checks from the DQOps user interface"
 
     Follow the [running data quality checks](../working-with-dqo/run-data-quality-checks.md) manual
-    to see how to use the user interface to configure and run the data quality checks. 
+    to see how to use the user interface to configure and run the data quality checks. The remaining content of this guide
+    focuses on the data quality check **targeting** to select checks to run.
+
+    ![run data quality check in DQOps data quality check editor](https://dqops.com/docs/images/concepts/run-check-in-editor-min.png)
 
 
 ## Targeting data sources and tables
