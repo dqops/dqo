@@ -11,7 +11,6 @@ import qs from "query-string";
 
 import ConfirmDialog from '../CustomTree/ConfirmDialog';
 import { getFirstLevelActiveTab } from '../../redux/selectors';
-import { checkIfTabCouldExist } from '../../utils';
 import { useTree } from '../../contexts/treeContext';
 
 interface ConnectionLayoutProps {
@@ -38,6 +37,7 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
 
   const closeTab = (value: string) => {
     dispatch(closeFirstLevelTab(checkTypes, value))
+    // console.log(value)
   };
 
   const tabOptions = useMemo(() => {
@@ -49,16 +49,18 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
   }, [pageTabs]);
 
   useEffect(() => {
-    if (activeTab) {
+     if (activeTab) {
       const activeUrl = pageTabs.find((item) => item.value === activeTab)?.url;
-      const { import_schema } = qs.parse(location.search);
+      // const { import_schema } = qs.parse(location.search);
       if (activeUrl && activeUrl !== location.pathname) {
-        if (match.path !== ROUTES.PATTERNS.CONNECTION && !import_schema) {
-          history.push(checkIfTabCouldExist(checkTypes, location.pathname) ? location.pathname : activeUrl);
-        }
+        // if (match.path !== ROUTES.PATTERNS.CONNECTION && !import_schema) {
+          history.push(activeUrl)
+          // history.push(checkIfTabCouldExist(checkTypes, location.pathname) ? location.pathname : activeUrl);
+        // }
       }
-    }
+     }
   }, [activeTab]);
+  // TODO Aleksy: fix checkIfTabCouldExist function with opening tabs with url. 
 
   return (
     <MainLayout>

@@ -16,104 +16,104 @@
 
 package com.dqops.utils.docs.client.operations.examples;
 
-import com.dqops.utils.docs.SampleLongsRegistry;
-import com.dqops.utils.docs.SampleStringsRegistry;
-import com.dqops.utils.docs.SampleValueFactory;
-import com.dqops.utils.docs.TypeModel;
 import com.dqops.utils.docs.client.operations.OperationParameterDocumentationModel;
 import com.dqops.utils.docs.client.operations.OperationParameterType;
-import com.dqops.utils.reflection.ObjectDataType;
-import com.dqops.utils.serialization.JsonSerializer;
-import com.dqops.utils.serialization.JsonSerializerImpl;
+import com.dqops.utils.docs.generators.GeneratorUtility;
+import com.dqops.utils.docs.generators.SampleLongsRegistry;
+import com.dqops.utils.docs.generators.SampleStringsRegistry;
+import com.dqops.utils.docs.generators.TypeModel;
 import com.google.common.base.CaseFormat;
+import com.google.common.base.Strings;
 
-import java.lang.reflect.Constructor;
 import java.util.*;
+import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class PathParameterFillerUtility {
-    private static JsonSerializer jsonSerializer = new JsonSerializerImpl();
+public final class PathParameterFillerUtility {
     private static Pattern pathParameterPattern = Pattern.compile("\\{([^{}]*)\\}");
     public static String getSampleCallPath(String pathUrl, List<OperationParameterDocumentationModel> parameters) {
+        List<String> pathParameterValues = getSamplePathParameterValues(pathUrl, parameters);
+        return substitutePathUrlWithValues(pathUrl, pathParameterValues);
+    }
+
+    private static String substitutePathUrlWithValues(String pathUrl, List<String> pathParameterValues) {
+        StringBuilder resultBuilder = new StringBuilder();
+
+        Matcher pathParameterMatcher = pathParameterPattern.matcher(pathUrl);
+
+        Iterator<String> pathParameterIt = pathParameterValues.iterator();
+        int pathUrlMatchCursor = 0;
+        for (Iterator<MatchResult> it = pathParameterMatcher.results().iterator(); it.hasNext(); ) {
+            MatchResult matchResult = it.next();
+            resultBuilder.append(pathUrl, pathUrlMatchCursor, matchResult.start());
+            String replacement = pathParameterIt.next();
+
+            if (replacement.charAt(0) == '\'' && replacement.charAt(replacement.length() - 1) == '\'') {
+                // Handle string formatting.
+                replacement = replacement.substring(1, replacement.length() - 1);
+            } else if (replacement.contains(".")) {
+                // Handle enum formatting.
+                String[] splitReplacement = replacement.split("\\.");
+                replacement = splitReplacement[splitReplacement.length - 1];
+            }
+
+            resultBuilder.append(replacement);
+            pathUrlMatchCursor = matchResult.end();
+        }
+
+        resultBuilder.append(pathUrl, pathUrlMatchCursor, pathUrl.length());
+        return resultBuilder.toString();
+    }
+
+    public static List<String> getSamplePathParameterValues(String pathUrl, List<OperationParameterDocumentationModel> parameters) {
         Map<String, TypeModel> parameterMap = parameters.stream()
                 .filter(p -> p.getOperationParameterType() == OperationParameterType.pathParameter)
                 .collect(Collectors.toMap(
                         p -> CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, p.getYamlFieldName()),
-                        OperationParameterDocumentationModel::getTypeModel
+                        OperationParameterDocumentationModel::getTypeModel,
+                        (key, value) -> value,
+                        LinkedHashMap::new
                 ));
 
         String[] pathSplit = pathUrl.split("/");
+        List<String> samplePathParametersValues = new ArrayList<>();
 
         for (int i = 0; i < pathSplit.length; ++i) {
             String pathComponent = pathSplit[i];
             Matcher pathParameterMatcher = pathParameterPattern.matcher(pathComponent);
             if (pathParameterMatcher.find()) {
                 String pathParameter = pathParameterMatcher.group(1);
-                String filledPathComponent = getSampleParameterValue(pathParameter, parameterMap.get(pathParameter));
-                pathSplit[i] = filledPathComponent;
+                String samplePathParameterValue = getSampleParameterValue(pathParameter, parameterMap.get(pathParameter));
+                samplePathParametersValues.add(samplePathParameterValue);
             }
         }
 
-        String sampleCallPath = String.join("/", pathSplit);
-        if (sampleCallPath.charAt(sampleCallPath.length() - 1) == '/') {
-            sampleCallPath = sampleCallPath.substring(0, sampleCallPath.length() - 1);
-        }
-
-        return sampleCallPath;
+        return samplePathParametersValues;
     }
 
-    protected static String getSampleParameterValue(String parameterName, TypeModel parameterType) {
+    private static String getSampleParameterValue(String parameterName, TypeModel parameterType) {
         switch (parameterType.getDataType()) {
             case string_type:
-                return SampleStringsRegistry.getMatchingStringForParameter(parameterName);
+                String sampleStringValue = SampleStringsRegistry.getMatchingStringForParameter(parameterName);
+                return String.format("'%s'", sampleStringValue);
             case long_type:
                 return Long.toString(SampleLongsRegistry.getMatchingLongForParameter(parameterName));
+            case enum_type:
+                String jsonStringValue = GeneratorUtility.generateJsonSampleFromTypeModel(parameterType, false);
+                String enumValue = jsonStringValue.replaceAll("^\"|\"$", "");
+                return getJavaSimpleClassName(parameterType.getClazz()) + "." + enumValue;
             default:
-                return getSampleFromTypeModel(parameterType);
+                return GeneratorUtility.generateJsonSampleFromTypeModel(parameterType, false);
         }
-
     }
 
-    public static String getSampleFromTypeModel(TypeModel typeModel) {
-        switch (typeModel.getDataType()) {
-            case enum_type:
-            case object_type:
-                ObjectDataType objectDataType = Objects.requireNonNullElse(typeModel.getObjectDataType(), ObjectDataType.object_type);
-                switch (objectDataType) {
-                    case map_type:
-                        return "{}";
-                    case list_type:
-                        return "[]";
-                    case object_type:
-                        Optional<Class<?>> sampleValueFactoryO = Arrays.stream(typeModel.getClazz().getClasses())
-                                .filter(SampleValueFactory.class::isAssignableFrom)
-                                .findFirst();
-                        if (sampleValueFactoryO.isEmpty()) {
-                            throw new IllegalArgumentException("No factory " + typeModel.getClassNameUsedOnTheField());
-                        }
-
-                        Class<? extends SampleValueFactory> sampleValueFactory = (Class<? extends SampleValueFactory>) sampleValueFactoryO.get();
-
-                        Constructor<? extends SampleValueFactory> s = (Constructor<? extends SampleValueFactory>) sampleValueFactory.getConstructors()[0];
-                        Object sample;
-                        try {
-                            SampleValueFactory<?> t = s.newInstance();
-                            sample = t.createSample();
-                        } catch (Exception e) {
-                            throw new RuntimeException(e);
-                        }
-
-                        return jsonSerializer.serialize(sample);
-                }
-            case string_list_type:
-            case integer_list_type:
-                return "[]";
-            case string_type:
-                return "sample_string_value";
-            default:
-                throw new IllegalArgumentException(typeModel.toString());
+    public static String getJavaSimpleClassName(Class<?> clazz) {
+        if (Strings.isNullOrEmpty(clazz.getSimpleName())) {
+            return getJavaSimpleClassName(clazz.getSuperclass());
+        } else {
+            return clazz.getSimpleName();
         }
     }
 }

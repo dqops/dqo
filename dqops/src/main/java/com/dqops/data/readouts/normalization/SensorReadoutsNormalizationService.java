@@ -20,7 +20,7 @@ import com.dqops.execution.sensors.SensorExecutionRunParameters;
 
 /**
  * Service that parses datasets with results returned by a sensor query.
- * Detects column types (data stream level columns), describes the metadata of the result. Also fixes missing information, adds a data_stream_hash column with a hash of all data stream levels.
+ * Detects column types (data grouping level columns), describes the metadata of the result. Also fixes missing information, adds a data_group_hash column with a hash of all data stream levels.
  */
 public interface SensorReadoutsNormalizationService {
     /**

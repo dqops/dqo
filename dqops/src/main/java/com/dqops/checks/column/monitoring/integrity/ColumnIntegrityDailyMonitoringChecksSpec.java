@@ -20,7 +20,7 @@ import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.column.checkspecs.integrity.ColumnIntegrityForeignKeyMatchPercentCheckSpec;
-import com.dqops.checks.column.checkspecs.integrity.ColumnIntegrityForeignKeyNotMatchCountCheckSpec;
+import com.dqops.checks.column.checkspecs.integrity.ColumnIntegrityLookupKeyNotFoundCountCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -41,52 +41,52 @@ import java.util.Objects;
 public class ColumnIntegrityDailyMonitoringChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnIntegrityDailyMonitoringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_foreign_key_not_match_count", o -> o.dailyForeignKeyNotMatchCount);
-            put("daily_foreign_key_match_percent", o -> o.dailyForeignKeyMatchPercent);
+            put("daily_lookup_key_not_found", o -> o.dailyLookupKeyNotFound);
+            put("daily_lookup_key_found_percent", o -> o.dailyLookupKeyFoundPercent);
 
         }
     };
 
     @JsonPropertyDescription("Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnIntegrityForeignKeyNotMatchCountCheckSpec dailyForeignKeyNotMatchCount;
+    private ColumnIntegrityLookupKeyNotFoundCountCheckSpec dailyLookupKeyNotFound;
 
     @JsonPropertyDescription("Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnIntegrityForeignKeyMatchPercentCheckSpec dailyForeignKeyMatchPercent;
+    private ColumnIntegrityForeignKeyMatchPercentCheckSpec dailyLookupKeyFoundPercent;
 
     /**
      * Returns an integrity value not match count check specification.
      * @return Integrity value not match count check specification.
      */
-    public ColumnIntegrityForeignKeyNotMatchCountCheckSpec getDailyForeignKeyNotMatchCount() {
-        return dailyForeignKeyNotMatchCount;
+    public ColumnIntegrityLookupKeyNotFoundCountCheckSpec getDailyLookupKeyNotFound() {
+        return dailyLookupKeyNotFound;
     }
 
     /**
      * Sets a new definition of an integrity value not match count check.
-     * @param dailyForeignKeyNotMatchCount Integrity value not match count check specification.
+     * @param dailyLookupKeyNotFound Integrity value not match count check specification.
      */
-    public void setDailyForeignKeyNotMatchCount(ColumnIntegrityForeignKeyNotMatchCountCheckSpec dailyForeignKeyNotMatchCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyForeignKeyNotMatchCount, dailyForeignKeyNotMatchCount));
-        this.dailyForeignKeyNotMatchCount = dailyForeignKeyNotMatchCount;
-        propagateHierarchyIdToField(dailyForeignKeyNotMatchCount, "daily_foreign_key_not_match_count");
+    public void setDailyLookupKeyNotFound(ColumnIntegrityLookupKeyNotFoundCountCheckSpec dailyLookupKeyNotFound) {
+        this.setDirtyIf(!Objects.equals(this.dailyLookupKeyNotFound, dailyLookupKeyNotFound));
+        this.dailyLookupKeyNotFound = dailyLookupKeyNotFound;
+        propagateHierarchyIdToField(dailyLookupKeyNotFound, "daily_lookup_key_not_found");
     }
 
     /**
      * Returns an integrity value match percent check specification.
      * @return Integrity value match percent check specification.
      */
-    public ColumnIntegrityForeignKeyMatchPercentCheckSpec getDailyForeignKeyMatchPercent() {
-        return dailyForeignKeyMatchPercent;
+    public ColumnIntegrityForeignKeyMatchPercentCheckSpec getDailyLookupKeyFoundPercent() {
+        return dailyLookupKeyFoundPercent;
     }
 
     /**
      * Sets a new definition of an integrity value match percent check.
-     * @param dailyForeignKeyMatchPercent Integrity value match percent check specification.
+     * @param dailyLookupKeyFoundPercent Integrity value match percent check specification.
      */
-    public void setDailyForeignKeyMatchPercent(ColumnIntegrityForeignKeyMatchPercentCheckSpec dailyForeignKeyMatchPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyForeignKeyMatchPercent, dailyForeignKeyMatchPercent));
-        this.dailyForeignKeyMatchPercent = dailyForeignKeyMatchPercent;
-        propagateHierarchyIdToField(dailyForeignKeyMatchPercent, "daily_foreign_key_match_percent");
+    public void setDailyLookupKeyFoundPercent(ColumnIntegrityForeignKeyMatchPercentCheckSpec dailyLookupKeyFoundPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyLookupKeyFoundPercent, dailyLookupKeyFoundPercent));
+        this.dailyLookupKeyFoundPercent = dailyLookupKeyFoundPercent;
+        propagateHierarchyIdToField(dailyLookupKeyFoundPercent, "daily_lookup_key_found_percent");
     }
 
     /**

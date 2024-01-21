@@ -22,7 +22,7 @@ import com.dqops.checks.CheckType;
 import com.dqops.checks.table.checkspecs.volume.*;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.utils.docs.SampleValueFactory;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -45,10 +45,10 @@ public class TableVolumeDailyMonitoringChecksSpec extends AbstractCheckCategoryS
     public static final ChildHierarchyNodeFieldMapImpl<TableVolumeDailyMonitoringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("daily_row_count", o -> o.dailyRowCount);
-            put("daily_row_count_anomaly_differencing_30_days", o -> o.dailyRowCountAnomalyDifferencing30Days);
-            put("daily_row_count_anomaly_differencing", o -> o.dailyRowCountAnomalyDifferencing);
+            put("daily_row_count_anomaly", o -> o.dailyRowCountAnomaly);
+
             put("daily_row_count_change", o -> o.dailyRowCountChange);
-            put("daily_row_count_change_yesterday", o -> o.dailyRowCountChangeYesterday);
+            put("daily_row_count_change_1_day", o -> o.dailyRowCountChange1Day);
             put("daily_row_count_change_7_days", o -> o.dailyRowCountChange7Days);
             put("daily_row_count_change_30_days", o -> o.dailyRowCountChange30Days);
         }
@@ -62,27 +62,23 @@ public class TableVolumeDailyMonitoringChecksSpec extends AbstractCheckCategoryS
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableRowCountCheckSpec dailyRowCount;
 
-    @JsonProperty("daily_row_count_anomaly_differencing_30_days")
-    @JsonPropertyDescription("Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 30 days.")
-    private TableAnomalyDifferencingRowCount30DaysCheckSpec dailyRowCountAnomalyDifferencing30Days;
-
-    @JsonProperty("daily_row_count_anomaly_differencing")
-    @JsonPropertyDescription("Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 90 days.")
-    private TableAnomalyDifferencingRowCountCheckSpec dailyRowCountAnomalyDifferencing;
+    @JsonPropertyDescription("Verifies that the total row count of the tested table changes in a rate within a percentile boundary during the last 90 days.")
+    private TableRowCountAnomalyDifferencingCheckSpec dailyRowCountAnomaly;
 
     @JsonPropertyDescription("Verifies that the total row count of the tested table has changed by a fixed rate since the last day with a row count captured.")
-    private TableChangeRowCountCheckSpec dailyRowCountChange;
+    private TableRowCountChangeCheckSpec dailyRowCountChange;
 
+    @JsonProperty("daily_row_count_change_1_day")
     @JsonPropertyDescription("Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from yesterday. Allows for exact match to readouts from yesterday or past readouts lookup.")
-    private TableChangeRowCountSinceYesterdayCheckSpec dailyRowCountChangeYesterday;
+    private TableRowCountChange1DayCheckSpec dailyRowCountChange1Day;
 
     @JsonProperty("daily_row_count_change_7_days")
-    @JsonPropertyDescription("Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last week. Allows for exact match to readouts from 7 days ago or past readouts lookup.")
-    private TableChangeRowCountSince7DaysCheckSpec dailyRowCountChange7Days;
+    @JsonPropertyDescription("Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from the last week. Allows for exact match to readouts from 7 days ago or past readouts lookup.")
+    private TableRowCountChange7DaysCheckSpec dailyRowCountChange7Days;
 
     @JsonProperty("daily_row_count_change_30_days")
-    @JsonPropertyDescription("Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last month. Allows for exact match to readouts from 30 days ago or past readouts lookup.")
-    private TableChangeRowCountSince30DaysCheckSpec dailyRowCountChange30Days;
+    @JsonPropertyDescription("Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from the last month. Allows for exact match to readouts from 30 days ago or past readouts lookup.")
+    private TableRowCountChange30DaysCheckSpec dailyRowCountChange30Days;
 
 
     /**
@@ -104,46 +100,28 @@ public class TableVolumeDailyMonitoringChecksSpec extends AbstractCheckCategoryS
     }
 
     /**
-     * Returns the row count anomaly 30 days check.
-     * @return Row count anomaly 30 days check.
-     */
-    public TableAnomalyDifferencingRowCount30DaysCheckSpec getDailyRowCountAnomalyDifferencing30Days() {
-        return dailyRowCountAnomalyDifferencing30Days;
-    }
-
-    /**
-     * Sets a new row count anomaly 30 days check.
-     * @param dailyRowCountAnomalyDifferencing30Days Row count anomaly 30 days check.
-     */
-    public void setDailyRowCountAnomalyDifferencing30Days(TableAnomalyDifferencingRowCount30DaysCheckSpec dailyRowCountAnomalyDifferencing30Days) {
-        this.setDirtyIf(!Objects.equals(this.dailyRowCountAnomalyDifferencing30Days, dailyRowCountAnomalyDifferencing30Days));
-        this.dailyRowCountAnomalyDifferencing30Days = dailyRowCountAnomalyDifferencing30Days;
-        propagateHierarchyIdToField(dailyRowCountAnomalyDifferencing30Days, "daily_row_count_anomaly_differencing_30_days");
-    }
-
-    /**
      * Returns the row count anomaly 60 days check.
      * @return Row count anomaly 60 days check.
      */
-    public TableAnomalyDifferencingRowCountCheckSpec getDailyRowCountAnomalyDifferencing() {
-        return dailyRowCountAnomalyDifferencing;
+    public TableRowCountAnomalyDifferencingCheckSpec getDailyRowCountAnomaly() {
+        return dailyRowCountAnomaly;
     }
 
     /**
      * Sets a new row count anomaly 60 days check.
-     * @param dailyRowCountAnomalyDifferencing Row count anomaly 60 days check.
+     * @param dailyRowCountAnomaly Row count anomaly 60 days check.
      */
-    public void setDailyRowCountAnomalyDifferencing(TableAnomalyDifferencingRowCountCheckSpec dailyRowCountAnomalyDifferencing) {
-        this.setDirtyIf(!Objects.equals(this.dailyRowCountAnomalyDifferencing, dailyRowCountAnomalyDifferencing));
-        this.dailyRowCountAnomalyDifferencing = dailyRowCountAnomalyDifferencing;
-        propagateHierarchyIdToField(dailyRowCountAnomalyDifferencing, "daily_row_count_anomaly_differencing");
+    public void setDailyRowCountAnomaly(TableRowCountAnomalyDifferencingCheckSpec dailyRowCountAnomaly) {
+        this.setDirtyIf(!Objects.equals(this.dailyRowCountAnomaly, dailyRowCountAnomaly));
+        this.dailyRowCountAnomaly = dailyRowCountAnomaly;
+        propagateHierarchyIdToField(dailyRowCountAnomaly, "daily_row_count_anomaly");
     }
 
     /**
      * Returns the row count change check.
      * @return Row count change check.
      */
-    public TableChangeRowCountCheckSpec getDailyRowCountChange() {
+    public TableRowCountChangeCheckSpec getDailyRowCountChange() {
         return dailyRowCountChange;
     }
 
@@ -151,7 +129,7 @@ public class TableVolumeDailyMonitoringChecksSpec extends AbstractCheckCategoryS
      * Sets a new row count change check.
      * @param dailyRowCountChange Row count change check.
      */
-    public void setDailyRowCountChange(TableChangeRowCountCheckSpec dailyRowCountChange) {
+    public void setDailyRowCountChange(TableRowCountChangeCheckSpec dailyRowCountChange) {
         this.setDirtyIf(!Objects.equals(this.dailyRowCountChange, dailyRowCountChange));
         this.dailyRowCountChange = dailyRowCountChange;
         propagateHierarchyIdToField(dailyRowCountChange, "daily_row_count_change");
@@ -161,25 +139,25 @@ public class TableVolumeDailyMonitoringChecksSpec extends AbstractCheckCategoryS
      * Returns the row count change since yesterday check.
      * @return Row count change since yesterday check.
      */
-    public TableChangeRowCountSinceYesterdayCheckSpec getDailyRowCountChangeYesterday() {
-        return dailyRowCountChangeYesterday;
+    public TableRowCountChange1DayCheckSpec getDailyRowCountChange1Day() {
+        return dailyRowCountChange1Day;
     }
 
     /**
      * Sets a new row count change since yesterday check.
-     * @param dailyRowCountChangeYesterday Row count change since yesterday check.
+     * @param dailyRowCountChange1Day Row count change since yesterday check.
      */
-    public void setDailyRowCountChangeYesterday(TableChangeRowCountSinceYesterdayCheckSpec dailyRowCountChangeYesterday) {
-        this.setDirtyIf(!Objects.equals(this.dailyRowCountChangeYesterday, dailyRowCountChangeYesterday));
-        this.dailyRowCountChangeYesterday = dailyRowCountChangeYesterday;
-        propagateHierarchyIdToField(dailyRowCountChangeYesterday, "daily_row_count_change_yesterday");
+    public void setDailyRowCountChange1Day(TableRowCountChange1DayCheckSpec dailyRowCountChange1Day) {
+        this.setDirtyIf(!Objects.equals(this.dailyRowCountChange1Day, dailyRowCountChange1Day));
+        this.dailyRowCountChange1Day = dailyRowCountChange1Day;
+        propagateHierarchyIdToField(dailyRowCountChange1Day, "daily_row_count_change_1_day");
     }
 
     /**
      * Returns the row count change since 7 days check.
      * @return Row count change since 7 days check.
      */
-    public TableChangeRowCountSince7DaysCheckSpec getDailyRowCountChange7Days() {
+    public TableRowCountChange7DaysCheckSpec getDailyRowCountChange7Days() {
         return dailyRowCountChange7Days;
     }
 
@@ -187,7 +165,7 @@ public class TableVolumeDailyMonitoringChecksSpec extends AbstractCheckCategoryS
      * Sets a new row count change since 7 days check.
      * @param dailyRowCountChange7Days Row count change since 7 days check.
      */
-    public void setDailyRowCountChange7Days(TableChangeRowCountSince7DaysCheckSpec dailyRowCountChange7Days) {
+    public void setDailyRowCountChange7Days(TableRowCountChange7DaysCheckSpec dailyRowCountChange7Days) {
         this.setDirtyIf(!Objects.equals(this.dailyRowCountChange7Days, dailyRowCountChange7Days));
         this.dailyRowCountChange7Days = dailyRowCountChange7Days;
         propagateHierarchyIdToField(dailyRowCountChange7Days, "daily_row_count_change_7_days");
@@ -197,7 +175,7 @@ public class TableVolumeDailyMonitoringChecksSpec extends AbstractCheckCategoryS
      * Returns the row count change since 30 days check.
      * @return Row count change since 30 days check.
      */
-    public TableChangeRowCountSince30DaysCheckSpec getDailyRowCountChange30Days() {
+    public TableRowCountChange30DaysCheckSpec getDailyRowCountChange30Days() {
         return dailyRowCountChange30Days;
     }
 
@@ -205,7 +183,7 @@ public class TableVolumeDailyMonitoringChecksSpec extends AbstractCheckCategoryS
      * Sets a new row count change since 30 days check.
      * @param dailyRowCountChange30Days Row count change since 30 days check.
      */
-    public void setDailyRowCountChange30Days(TableChangeRowCountSince30DaysCheckSpec dailyRowCountChange30Days) {
+    public void setDailyRowCountChange30Days(TableRowCountChange30DaysCheckSpec dailyRowCountChange30Days) {
         this.setDirtyIf(!Objects.equals(this.dailyRowCountChange30Days, dailyRowCountChange30Days));
         this.dailyRowCountChange30Days = dailyRowCountChange30Days;
         propagateHierarchyIdToField(dailyRowCountChange30Days, "daily_row_count_change_30_days");

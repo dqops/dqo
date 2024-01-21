@@ -15,10 +15,9 @@
  */
 package com.dqops.utils.docs.client.models;
 
-import com.dqops.utils.docs.LinkageStore;
+import com.dqops.utils.docs.client.MainPageClientDocumentationModel;
 import com.dqops.utils.docs.client.apimodel.ComponentModel;
 import com.dqops.utils.docs.files.DocumentationFolder;
-import com.dqops.utils.docs.files.DocumentationMarkdownFile;
 
 import java.nio.file.Path;
 import java.util.Collection;
@@ -29,5 +28,6 @@ import java.util.Collection;
 public interface ModelsDocumentationGenerator {
     // TODO: add javadocs
     DocumentationFolder renderModelsDocumentation(Path projectRootPath,
-                                                  Collection<ComponentModel> componentModels);
+                                                  Collection<ComponentModel> componentModels,
+                                                  MainPageClientDocumentationModel mainPageModel);
 }

@@ -1,156 +1,137 @@
-# Checks/column/uniqueness
+# column level uniqueness data quality checks
 
-**This is a list of uniqueness column checks in DQOps and a brief description of what they do.**
-
-
+This is a list of uniqueness column data quality checks supported by DQOps and a brief description of what data quality issued they detect.
 
 
 
-## **uniqueness**  
+
+
+## **uniqueness**
 Counts the number or percent of duplicate or unique values in a column.
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_distinct_count](./column/uniqueness/distinct-count/#profile-distinct-count)|profiling|Verifies that the number of distinct values in a column does not fall below the minimum accepted count.|
-|[daily_distinct_count](./column/uniqueness/distinct-count/#daily-distinct-count)|monitoring|Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.|
-|[monthly_distinct_count](./column/uniqueness/distinct-count/#monthly-distinct-count)|monitoring|Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_distinct_count](./column/uniqueness/distinct-count/#daily-partition-distinct-count)|partitioned|Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_distinct_count](./column/uniqueness/distinct-count/#monthly-partition-distinct-count)|partitioned|Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.|
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_distinct_count`</span>](./distinct-count.md#profile-distinct-count)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the number of distinct values in a column does not fall below the minimum accepted count.|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_distinct_count`</span>](./distinct-count.md#daily-distinct-count)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
+|[<span class="no-wrap-code">`monthly_distinct_count`</span>](./distinct-count.md#monthly-distinct-count)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores the most recent check result for each month when the data quality check was evaluated.|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_partition_distinct_count`</span>](./distinct-count.md#daily-partition-distinct-count)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
+|[<span class="no-wrap-code">`monthly_partition_distinct_count`</span>](./distinct-count.md#monthly-partition-distinct-count)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
 
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_distinct_percent](./column/uniqueness/distinct-percent/#profile-distinct-percent)|profiling|Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent.|
-|[daily_distinct_percent](./column/uniqueness/distinct-percent/#daily-distinct-percent)|monitoring|Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Stores the most recent captured value for each day when the data quality check was evaluated.|
-|[monthly_distinct_percent](./column/uniqueness/distinct-percent/#monthly-distinct-percent)|monitoring|Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_distinct_percent](./column/uniqueness/distinct-percent/#daily-partition-distinct-percent)|partitioned|Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_distinct_percent](./column/uniqueness/distinct-percent/#monthly-partition-distinct-percent)|partitioned|Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Creates a separate data quality check (and an alert) for each monthly partition.|
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_distinct_percent`</span>](./distinct-percent.md#profile-distinct-percent)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent.|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_distinct_percent`</span>](./distinct-percent.md#daily-distinct-percent)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
+|[<span class="no-wrap-code">`monthly_distinct_percent`</span>](./distinct-percent.md#monthly-distinct-percent)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Stores the most recent check result for each month when the data quality check was evaluated.|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_partition_distinct_percent`</span>](./distinct-percent.md#daily-partition-distinct-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
+|[<span class="no-wrap-code">`monthly_partition_distinct_percent`</span>](./distinct-percent.md#monthly-partition-distinct-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
 
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_duplicate_count](./column/uniqueness/duplicate-count/#profile-duplicate-count)|profiling|Verifies that the number of duplicate values in a column does not exceed the maximum accepted count.|
-|[daily_duplicate_count](./column/uniqueness/duplicate-count/#daily-duplicate-count)|monitoring|Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.|
-|[monthly_duplicate_count](./column/uniqueness/duplicate-count/#monthly-duplicate-count)|monitoring|Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_duplicate_count](./column/uniqueness/duplicate-count/#daily-partition-duplicate-count)|partitioned|Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_duplicate_count](./column/uniqueness/duplicate-count/#monthly-partition-duplicate-count)|partitioned|Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.|
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_duplicate_count`</span>](./duplicate-count.md#profile-duplicate-count)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the number of duplicate values in a column does not exceed the maximum accepted count.|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_duplicate_count`</span>](./duplicate-count.md#daily-duplicate-count)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
+|[<span class="no-wrap-code">`monthly_duplicate_count`</span>](./duplicate-count.md#monthly-duplicate-count)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Stores the most recent check result for each month when the data quality check was evaluated.|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_partition_duplicate_count`</span>](./duplicate-count.md#daily-partition-duplicate-count)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
+|[<span class="no-wrap-code">`monthly_partition_duplicate_count`</span>](./duplicate-count.md#monthly-partition-duplicate-count)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
 
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_duplicate_percent](./column/uniqueness/duplicate-percent/#profile-duplicate-percent)|profiling|Verifies that the percentage of duplicate values in a column does not exceed the maximum accepted percentage.|
-|[daily_duplicate_percent](./column/uniqueness/duplicate-percent/#daily-duplicate-percent)|monitoring|Verifies that the percentage of duplicate values in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.|
-|[monthly_duplicate_percent](./column/uniqueness/duplicate-percent/#monthly-duplicate-percent)|monitoring|Verifies that the percentage of duplicate values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_duplicate_percent](./column/uniqueness/duplicate-percent/#daily-partition-duplicate-percent)|partitioned|Verifies that the percent of duplicate values in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_duplicate_percent](./column/uniqueness/duplicate-percent/#monthly-partition-duplicate-percent)|partitioned|Verifies that the percent of duplicate values in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each monthly partition.|
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_duplicate_percent`</span>](./duplicate-percent.md#profile-duplicate-percent)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of duplicate values in a column does not exceed the maximum accepted percentage.| |
+|[<span class="no-wrap-code">`daily_duplicate_percent`</span>](./duplicate-percent.md#daily-duplicate-percent)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of duplicate values in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.| |
+|[<span class="no-wrap-code">`monthly_duplicate_percent`</span>](./duplicate-percent.md#monthly-duplicate-percent)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of duplicate values in a column does not exceed the maximum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.| |
+|[<span class="no-wrap-code">`daily_partition_duplicate_percent`</span>](./duplicate-percent.md#daily-partition-duplicate-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percent of duplicate values in a column does not exceed the maximum accepted percent. Stores a separate data quality check result for each daily partition.| |
+|[<span class="no-wrap-code">`monthly_partition_duplicate_percent`</span>](./duplicate-percent.md#monthly-partition-duplicate-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percent of duplicate values in a column does not exceed the maximum accepted percent. Stores a separate data quality check result for each monthly partition.| |
 
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_anomaly_differencing_distinct_count_30_days](./column/uniqueness/anomaly-differencing-distinct-count-30-days/#profile-anomaly-differencing-distinct-count-30-days)|profiling|Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.|
-|[daily_anomaly_differencing_distinct_count_30_days](./column/uniqueness/anomaly-differencing-distinct-count-30-days/#daily-anomaly-differencing-distinct-count-30-days)|monitoring|Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.|
-|[monthly_anomaly_differencing_distinct_count_30_days](./column/uniqueness/anomaly-differencing-distinct-count-30-days/#monthly-anomaly-differencing-distinct-count-30-days)|monitoring|Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.|
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_distinct_count_anomaly`</span>](./distinct-count-anomaly.md#profile-distinct-count-anomaly)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_distinct_count_anomaly`</span>](./distinct-count-anomaly.md#daily-distinct-count-anomaly)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_partition_distinct_count_anomaly`</span>](./distinct-count-anomaly.md#daily-partition-distinct-count-anomaly)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.| |
 
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_anomaly_differencing_distinct_count](./column/uniqueness/anomaly-differencing-distinct-count/#profile-anomaly-differencing-distinct-count)|profiling|Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|
-|[daily_anomaly_differencing_distinct_count](./column/uniqueness/anomaly-differencing-distinct-count/#daily-anomaly-differencing-distinct-count)|monitoring|Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|
-|[monthly_anomaly_differencing_distinct_count](./column/uniqueness/anomaly-differencing-distinct-count/#monthly-anomaly-differencing-distinct-count)|monitoring|Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_distinct_percent_anomaly`</span>](./distinct-percent-anomaly.md#profile-distinct-percent-anomaly)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.| |
+|[<span class="no-wrap-code">`daily_distinct_percent_anomaly`</span>](./distinct-percent-anomaly.md#daily-distinct-percent-anomaly)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.| |
+|[<span class="no-wrap-code">`daily_partition_distinct_percent_anomaly`</span>](./distinct-percent-anomaly.md#daily-partition-distinct-percent-anomaly)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.| |
 
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_anomaly_stationary_distinct_percent_30_days](./column/uniqueness/anomaly-stationary-distinct-percent-30-days/#profile-anomaly-stationary-distinct-percent-30-days)|profiling|Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.|
-|[daily_anomaly_stationary_distinct_percent_30_days](./column/uniqueness/anomaly-stationary-distinct-percent-30-days/#daily-anomaly-stationary-distinct-percent-30-days)|monitoring|Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.|
-|[monthly_anomaly_stationary_distinct_percent_30_days](./column/uniqueness/anomaly-stationary-distinct-percent-30-days/#monthly-anomaly-stationary-distinct-percent-30-days)|monitoring|Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.|
-|[daily_partition_anomaly_stationary_distinct_count_30_days](./column/uniqueness/anomaly-stationary-distinct-percent-30-days/#daily-partition-anomaly-stationary-distinct-count-30-days)|partitioned|Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.|
-|[daily_partition_anomaly_stationary_distinct_percent_30_days](./column/uniqueness/anomaly-stationary-distinct-percent-30-days/#daily-partition-anomaly-stationary-distinct-percent-30-days)|partitioned|Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.|
-|[monthly_partition_anomaly_stationary_distinct_count_30_days](./column/uniqueness/anomaly-stationary-distinct-percent-30-days/#monthly-partition-anomaly-stationary-distinct-count-30-days)|partitioned|Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.|
-|[monthly_partition_anomaly_stationary_distinct_percent_30_days](./column/uniqueness/anomaly-stationary-distinct-percent-30-days/#monthly-partition-anomaly-stationary-distinct-percent-30-days)|partitioned|Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.|
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_distinct_count_change`</span>](./distinct-count-change.md#profile-distinct-count-change)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.| |
+|[<span class="no-wrap-code">`daily_distinct_count_change`</span>](./distinct-count-change.md#daily-distinct-count-change)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.| |
+|[<span class="no-wrap-code">`monthly_distinct_count_change`</span>](./distinct-count-change.md#monthly-distinct-count-change)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.| |
+|[<span class="no-wrap-code">`daily_partition_distinct_count_change`</span>](./distinct-count-change.md#daily-partition-distinct-count-change)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.| |
+|[<span class="no-wrap-code">`monthly_partition_distinct_count_change`</span>](./distinct-count-change.md#monthly-partition-distinct-count-change)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.| |
 
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_anomaly_stationary_distinct_percent](./column/uniqueness/anomaly-stationary-distinct-percent/#profile-anomaly-stationary-distinct-percent)|profiling|Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|
-|[daily_anomaly_stationary_distinct_percent](./column/uniqueness/anomaly-stationary-distinct-percent/#daily-anomaly-stationary-distinct-percent)|monitoring|Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|
-|[monthly_anomaly_stationary_distinct_percent](./column/uniqueness/anomaly-stationary-distinct-percent/#monthly-anomaly-stationary-distinct-percent)|monitoring|Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|
-|[daily_partition_anomaly_stationary_distinct_count](./column/uniqueness/anomaly-stationary-distinct-percent/#daily-partition-anomaly-stationary-distinct-count)|partitioned|Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|
-|[daily_partition_anomaly_stationary_distinct_percent](./column/uniqueness/anomaly-stationary-distinct-percent/#daily-partition-anomaly-stationary-distinct-percent)|partitioned|Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|
-|[monthly_partition_anomaly_stationary_distinct_count](./column/uniqueness/anomaly-stationary-distinct-percent/#monthly-partition-anomaly-stationary-distinct-count)|partitioned|Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|
-|[monthly_partition_anomaly_stationary_distinct_percent](./column/uniqueness/anomaly-stationary-distinct-percent/#monthly-partition-anomaly-stationary-distinct-percent)|partitioned|Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_distinct_count_change_1_day`</span>](./distinct-count-change-1-day.md#profile-distinct-count-change-1-day)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from yesterday.| |
+|[<span class="no-wrap-code">`daily_distinct_count_change_1_day`</span>](./distinct-count-change-1-day.md#daily-distinct-count-change-1-day)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from yesterday.| |
+|[<span class="no-wrap-code">`daily_partition_distinct_count_change_1_day`</span>](./distinct-count-change-1-day.md#daily-partition-distinct-count-change-1-day)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from yesterday.| |
 
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_change_distinct_count](./column/uniqueness/change-distinct-count/#profile-change-distinct-count)|profiling|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.|
-|[daily_change_distinct_count](./column/uniqueness/change-distinct-count/#daily-change-distinct-count)|monitoring|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.|
-|[monthly_change_distinct_count](./column/uniqueness/change-distinct-count/#monthly-change-distinct-count)|monitoring|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.|
-|[daily_partition_change_distinct_count](./column/uniqueness/change-distinct-count/#daily-partition-change-distinct-count)|partitioned|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.|
-|[monthly_partition_change_distinct_count](./column/uniqueness/change-distinct-count/#monthly-partition-change-distinct-count)|partitioned|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.|
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_distinct_count_change_7_days`</span>](./distinct-count-change-7-days.md#profile-distinct-count-change-7-days)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last week.| |
+|[<span class="no-wrap-code">`daily_distinct_count_change_7_days`</span>](./distinct-count-change-7-days.md#daily-distinct-count-change-7-days)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last week.| |
+|[<span class="no-wrap-code">`daily_partition_distinct_count_change_7_days`</span>](./distinct-count-change-7-days.md#daily-partition-distinct-count-change-7-days)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from the last week.| |
 
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_change_distinct_count_since_7_days](./column/uniqueness/change-distinct-count-since-7-days/#profile-change-distinct-count-since-7-days)|profiling|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last week.|
-|[daily_change_distinct_count_since_7_days](./column/uniqueness/change-distinct-count-since-7-days/#daily-change-distinct-count-since-7-days)|monitoring|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last week.|
-|[monthly_change_distinct_count_since_7_days](./column/uniqueness/change-distinct-count-since-7-days/#monthly-change-distinct-count-since-7-days)|monitoring|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last week.|
-|[daily_partition_change_distinct_count_since_7_days](./column/uniqueness/change-distinct-count-since-7-days/#daily-partition-change-distinct-count-since-7-days)|partitioned|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last week.|
-|[monthly_partition_change_distinct_count_since_7_days](./column/uniqueness/change-distinct-count-since-7-days/#monthly-partition-change-distinct-count-since-7-days)|partitioned|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last week.|
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_distinct_count_change_30_days`</span>](./distinct-count-change-30-days.md#profile-distinct-count-change-30-days)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last month.| |
+|[<span class="no-wrap-code">`daily_distinct_count_change_30_days`</span>](./distinct-count-change-30-days.md#daily-distinct-count-change-30-days)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last month.| |
+|[<span class="no-wrap-code">`daily_partition_distinct_count_change_30_days`</span>](./distinct-count-change-30-days.md#daily-partition-distinct-count-change-30-days)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from the last month.| |
 
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_change_distinct_count_since_30_days](./column/uniqueness/change-distinct-count-since-30-days/#profile-change-distinct-count-since-30-days)|profiling|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last month.|
-|[daily_change_distinct_count_since_30_days](./column/uniqueness/change-distinct-count-since-30-days/#daily-change-distinct-count-since-30-days)|monitoring|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last month.|
-|[monthly_change_distinct_count_since_30_days](./column/uniqueness/change-distinct-count-since-30-days/#monthly-change-distinct-count-since-30-days)|monitoring|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last month.|
-|[daily_partition_change_distinct_count_since_30_days](./column/uniqueness/change-distinct-count-since-30-days/#daily-partition-change-distinct-count-since-30-days)|partitioned|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last month.|
-|[monthly_partition_change_distinct_count_since_30_days](./column/uniqueness/change-distinct-count-since-30-days/#monthly-partition-change-distinct-count-since-30-days)|partitioned|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last month.|
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_distinct_percent_change`</span>](./distinct-percent-change.md#profile-distinct-percent-change)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout.| |
+|[<span class="no-wrap-code">`daily_distinct_percent_change`</span>](./distinct-percent-change.md#daily-distinct-percent-change)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout.| |
+|[<span class="no-wrap-code">`monthly_distinct_percent_change`</span>](./distinct-percent-change.md#monthly-distinct-percent-change)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout.| |
+|[<span class="no-wrap-code">`daily_partition_distinct_percent_change`</span>](./distinct-percent-change.md#daily-partition-distinct-percent-change)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout.| |
+|[<span class="no-wrap-code">`monthly_partition_distinct_percent_change`</span>](./distinct-percent-change.md#monthly-partition-distinct-percent-change)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout.| |
 
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_change_distinct_count_since_yesterday](./column/uniqueness/change-distinct-count-since-yesterday/#profile-change-distinct-count-since-yesterday)|profiling|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from yesterday.|
-|[daily_change_distinct_count_since_yesterday](./column/uniqueness/change-distinct-count-since-yesterday/#daily-change-distinct-count-since-yesterday)|monitoring|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from yesterday.|
-|[monthly_change_distinct_count_since_yesterday](./column/uniqueness/change-distinct-count-since-yesterday/#monthly-change-distinct-count-since-yesterday)|monitoring|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from yesterday.|
-|[daily_partition_change_distinct_count_since_yesterday](./column/uniqueness/change-distinct-count-since-yesterday/#daily-partition-change-distinct-count-since-yesterday)|partitioned|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from yesterday.|
-|[monthly_partition_change_distinct_count_since_yesterday](./column/uniqueness/change-distinct-count-since-yesterday/#monthly-partition-change-distinct-count-since-yesterday)|partitioned|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from yesterday.|
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_distinct_percent_change_1_day`</span>](./distinct-percent-change-1-day.md#profile-distinct-percent-change-1-day)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from yesterday.| |
+|[<span class="no-wrap-code">`daily_distinct_percent_change_1_day`</span>](./distinct-percent-change-1-day.md#daily-distinct-percent-change-1-day)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from yesterday.| |
+|[<span class="no-wrap-code">`daily_partition_distinct_percent_change_1_day`</span>](./distinct-percent-change-1-day.md#daily-partition-distinct-percent-change-1-day)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from yesterday.| |
 
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_change_distinct_percent](./column/uniqueness/change-distinct-percent/#profile-change-distinct-percent)|profiling|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout.|
-|[daily_change_distinct_percent](./column/uniqueness/change-distinct-percent/#daily-change-distinct-percent)|monitoring|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout.|
-|[monthly_change_distinct_percent](./column/uniqueness/change-distinct-percent/#monthly-change-distinct-percent)|monitoring|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout.|
-|[daily_partition_change_distinct_percent](./column/uniqueness/change-distinct-percent/#daily-partition-change-distinct-percent)|partitioned|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout.|
-|[monthly_partition_change_distinct_percent](./column/uniqueness/change-distinct-percent/#monthly-partition-change-distinct-percent)|partitioned|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout.|
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_distinct_percent_change_7_days`</span>](./distinct-percent-change-7-days.md#profile-distinct-percent-change-7-days)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last week.| |
+|[<span class="no-wrap-code">`daily_distinct_percent_change_7_days`</span>](./distinct-percent-change-7-days.md#daily-distinct-percent-change-7-days)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last week.| |
+|[<span class="no-wrap-code">`daily_partition_distinct_percent_change_7_days`</span>](./distinct-percent-change-7-days.md#daily-partition-distinct-percent-change-7-days)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from the last week.| |
 
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_change_distinct_percent_since_7_days](./column/uniqueness/change-distinct-percent-since-7-days/#profile-change-distinct-percent-since-7-days)|profiling|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last week.|
-|[daily_change_distinct_percent_since_7_days](./column/uniqueness/change-distinct-percent-since-7-days/#daily-change-distinct-percent-since-7-days)|monitoring|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last week.|
-|[monthly_change_distinct_percent_since_7_days](./column/uniqueness/change-distinct-percent-since-7-days/#monthly-change-distinct-percent-since-7-days)|monitoring|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last week.|
-|[daily_partition_change_distinct_percent_since_7_days](./column/uniqueness/change-distinct-percent-since-7-days/#daily-partition-change-distinct-percent-since-7-days)|partitioned|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last week.|
-|[monthly_partition_change_distinct_percent_since_7_days](./column/uniqueness/change-distinct-percent-since-7-days/#monthly-partition-change-distinct-percent-since-7-days)|partitioned|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last week.|
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_distinct_percent_change_30_days`</span>](./distinct-percent-change-30-days.md#profile-distinct-percent-change-30-days)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last month.| |
+|[<span class="no-wrap-code">`daily_distinct_percent_change_30_days`</span>](./distinct-percent-change-30-days.md#daily-distinct-percent-change-30-days)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last month.| |
+|[<span class="no-wrap-code">`daily_partition_distinct_percent_change_30_days`</span>](./distinct-percent-change-30-days.md#daily-partition-distinct-percent-change-30-days)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from the last month.| |
 
 
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_change_distinct_percent_since_30_days](./column/uniqueness/change-distinct-percent-since-30-days/#profile-change-distinct-percent-since-30-days)|profiling|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last month.|
-|[daily_change_distinct_percent_since_30_days](./column/uniqueness/change-distinct-percent-since-30-days/#daily-change-distinct-percent-since-30-days)|monitoring|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last month.|
-|[monthly_change_distinct_percent_since_30_days](./column/uniqueness/change-distinct-percent-since-30-days/#monthly-change-distinct-percent-since-30-days)|monitoring|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last month.|
-|[daily_partition_change_distinct_percent_since_30_days](./column/uniqueness/change-distinct-percent-since-30-days/#daily-partition-change-distinct-percent-since-30-days)|partitioned|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last month.|
-|[monthly_partition_change_distinct_percent_since_30_days](./column/uniqueness/change-distinct-percent-since-30-days/#monthly-partition-change-distinct-percent-since-30-days)|partitioned|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last month.|
-
-
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[profile_change_distinct_percent_since_yesterday](./column/uniqueness/change-distinct-percent-since-yesterday/#profile-change-distinct-percent-since-yesterday)|profiling|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from yesterday.|
-|[daily_change_distinct_percent_since_yesterday](./column/uniqueness/change-distinct-percent-since-yesterday/#daily-change-distinct-percent-since-yesterday)|monitoring|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from yesterday.|
-|[monthly_change_distinct_percent_since_yesterday](./column/uniqueness/change-distinct-percent-since-yesterday/#monthly-change-distinct-percent-since-yesterday)|monitoring|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from yesterday.|
-|[daily_partition_change_distinct_percent_since_yesterday](./column/uniqueness/change-distinct-percent-since-yesterday/#daily-partition-change-distinct-percent-since-yesterday)|partitioned|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from yesterday.|
-|[monthly_partition_change_distinct_percent_since_yesterday](./column/uniqueness/change-distinct-percent-since-yesterday/#monthly-partition-change-distinct-percent-since-yesterday)|partitioned|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from yesterday.|
 
 
 

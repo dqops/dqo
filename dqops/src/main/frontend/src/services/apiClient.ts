@@ -139,4 +139,4 @@ export const SettingsApi = DefaultsApiFactory(new Configuration(), '', axios);
 
 export const UsersApi = UsersApiFactory(new Configuration(), '', axios);
 
-export const SharedCredentailsApi = SharedCredentialsApiFactory(new Configuration(), '', axios);
+export const SharedCredentialsApi = SharedCredentialsApiFactory(new Configuration(), '', axios);

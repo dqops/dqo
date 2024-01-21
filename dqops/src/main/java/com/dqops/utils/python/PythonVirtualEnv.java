@@ -17,13 +17,14 @@ package com.dqops.utils.python;
 
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * Python settings required to start python inside a virtual environment.
  */
 public class PythonVirtualEnv {
     private Path virtualEnvPath;
-    private HashMap<String, String> environmentVariables = new HashMap<>();
+    private HashMap<String, String> environmentVariables = new LinkedHashMap<>();
     private String pythonInterpreterPath;
     private boolean enableDebugging;
 

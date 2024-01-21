@@ -17,7 +17,6 @@ package com.dqops.core.secrets;
 
 import com.dqops.core.secrets.credentials.SharedCredentialPropertySource;
 import com.dqops.core.secrets.gcp.GcpSecretManagerPropertySource;
-import com.dqops.metadata.userhome.UserHome;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import org.apache.parquet.Strings;
@@ -63,10 +62,10 @@ public class SecretValueProviderImpl implements SecretValueProvider {
      */
     @Autowired
     public SecretValueProviderImpl(BeanFactory beanFactory,
-                                   Environment environment,
+                                   ConfigurableEnvironment environment,
                                    GcpSecretManagerPropertySource gcpSecretManagerPropertySource,
                                    SharedCredentialPropertySource sharedCredentialPropertySource) {
-        this.environment = (ConfigurableEnvironment)environment;
+        this.environment = environment;
         this.beanFactory = (ConfigurableBeanFactory)beanFactory;
         this.gcpSecretManagerPropertySource = gcpSecretManagerPropertySource;
         this.sharedCredentialPropertySource = sharedCredentialPropertySource;

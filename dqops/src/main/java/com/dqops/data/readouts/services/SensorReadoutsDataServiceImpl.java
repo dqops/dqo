@@ -17,7 +17,9 @@ package com.dqops.data.readouts.services;
 
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTimeScale;
+import com.dqops.checks.CheckType;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.normalization.CommonTableNormalizationService;
 import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
 import com.dqops.data.readouts.services.models.SensorReadoutEntryModel;
@@ -66,17 +68,19 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
      *
      * @param rootChecksContainerSpec Root checks container.
      * @param loadParameters          Load parameters.
+     * @param userDomainIdentity      User identity with the data domain.
      * @return Complete model of the sensor readouts.
      */
     @Override
     public SensorReadoutsListModel[] readSensorReadoutsDetailed(AbstractRootChecksContainerSpec rootChecksContainerSpec,
-                                                                SensorReadoutsDetailedFilterParameters loadParameters) {
+                                                                SensorReadoutsDetailedFilterParameters loadParameters,
+                                                                UserDomainIdentity userDomainIdentity) {
         Map<Long, SensorReadoutsListModel> readoutMap = new LinkedHashMap<>();
         HierarchyId checksContainerHierarchyId = rootChecksContainerSpec.getHierarchyId();
         String connectionName = checksContainerHierarchyId.getConnectionName();
         PhysicalTableName physicalTableName = checksContainerHierarchyId.getPhysicalTableName();
 
-        Table sensorReadoutsTable = loadRecentSensorReadouts(loadParameters, connectionName, physicalTableName);
+        Table sensorReadoutsTable = loadRecentSensorReadouts(loadParameters, connectionName, physicalTableName, userDomainIdentity);
         if (sensorReadoutsTable == null || sensorReadoutsTable.isEmpty()) {
             return new SensorReadoutsListModel[0]; // empty array
         }
@@ -125,13 +129,13 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
                 String checkCategory = row.getString(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
                 String checkDisplayName = row.getString(SensorReadoutsColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME);
                 String checkName = row.getString(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME);
-                String checkType = row.getString(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME);
+                String checkTypeString = row.getString(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME);
 
                 sensorReadoutDetailedDataModel = new SensorReadoutsListModel();
                 sensorReadoutDetailedDataModel.setCheckCategory(checkCategory);
                 sensorReadoutDetailedDataModel.setCheckName(checkName);
                 sensorReadoutDetailedDataModel.setCheckHash(checkHash);
-                sensorReadoutDetailedDataModel.setCheckType(checkType);
+                sensorReadoutDetailedDataModel.setCheckType(CheckType.fromString(checkTypeString));
                 sensorReadoutDetailedDataModel.setCheckDisplayName(checkDisplayName);
                 sensorReadoutDetailedDataModel.setDataGroup(dataGroupNameForCheck);
 
@@ -172,7 +176,7 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
 
         String checkDisplayName = row.getString(SensorReadoutsColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME);
         String checkName = row.getString(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME);
-        String checkType = row.getString(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME);
+        String checkTypeString = row.getString(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME);
 
         Double actualValue = TableRowUtility.getSanitizedDoubleValue(row, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
         Double expectedValue = TableRowUtility.getSanitizedDoubleValue(row, SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME);
@@ -182,7 +186,7 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
 
         Integer durationMs = row.getInt(SensorReadoutsColumnNames.DURATION_MS_COLUMN_NAME);
         Instant executedAt = row.getInstant(SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME);
-        String timeGradient = row.getString(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME);
+        String timeGradientString = row.getString(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME);
         LocalDateTime timePeriod = row.getDateTime(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
 
         String provider = row.getString(SensorReadoutsColumnNames.PROVIDER_COLUMN_NAME);
@@ -200,14 +204,14 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
 
             setDurationMs(durationMs);
             setExecutedAt(executedAt);
-            setTimeGradient(timeGradient);
+            setTimeGradient(TimePeriodGradient.fromString(timeGradientString));
             setTimePeriod(timePeriod);
 
             setProvider(provider);
             setQualityDimension(qualityDimension);
 
             setCheckName(checkName);
-            setCheckType(checkType);
+            setCheckType(CheckType.fromString(checkTypeString));
             setCheckDisplayName(checkDisplayName);
             setTableComparison(tableComparison);
 
@@ -302,11 +306,15 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
      * @param loadParameters Load parameters.
      * @param connectionName Connection name.
      * @param physicalTableName Physical table name.
+     * @param userDomainIdentity User identity with the data domain.
      * @return Table with sensor readouts for the most recent three months inside the specified range or null when no data found.
      */
-    protected Table loadRecentSensorReadouts(SensorReadoutsDetailedFilterParameters loadParameters, String connectionName, PhysicalTableName physicalTableName) {
+    protected Table loadRecentSensorReadouts(SensorReadoutsDetailedFilterParameters loadParameters,
+                                             String connectionName,
+                                             PhysicalTableName physicalTableName,
+                                             UserDomainIdentity userDomainIdentity) {
         SensorReadoutsSnapshot sensorReadoutsSnapshot = this.sensorReadoutsSnapshotFactory.createReadOnlySnapshot(connectionName,
-                physicalTableName, SensorReadoutsColumnNames.COLUMN_NAMES_FOR_READOUTS_DETAILED);
+                physicalTableName, SensorReadoutsColumnNames.COLUMN_NAMES_FOR_READOUTS_DETAILED, userDomainIdentity);
         int maxMonthsToLoad = DEFAULT_MAX_RECENT_LOADED_MONTHS;
 
         if (loadParameters.getStartMonth() != null && loadParameters.getEndMonth() != null) {

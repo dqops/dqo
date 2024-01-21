@@ -11,7 +11,7 @@ import {
 import {
   ConnectionApiClient,
   DataSourcesApi,
-  SharedCredentailsApi
+  SharedCredentialsApi
 } from '../../../services/apiClient';
 import { useTree } from '../../../contexts/treeContext';
 import Loader from '../../Loader';
@@ -23,6 +23,10 @@ import SnowflakeConnection from './SnowflakeConnection';
 import SnowflakeLogo from '../../SvgIcon/svg/snowflake.svg';
 import PostgreSQLConnection from './PostgreSQLConnection';
 import PostgreSQLLogo from '../../SvgIcon/svg/postgresql.svg';
+import PrestoConnection from './PrestoConnection';
+import PrestoLogo from '../../SvgIcon/svg/presto.svg';
+import TrinoConnection from './TrinoConnection';
+import TrinoLogo from '../../SvgIcon/svg/trino.svg';
 import RedshiftConnection from './RedshiftConnection';
 import RedshiftLogo from '../../SvgIcon/svg/redshift.svg';
 import SqlServerConnection from './SqlServerConnection';
@@ -32,18 +36,27 @@ import MySQLLogo from '../../SvgIcon/svg/mysql.svg';
 import OracleConnection from './OracleConnection';
 import OracleLogo from '../../SvgIcon/svg/oracle.svg';
 import SvgIcon from '../../SvgIcon';
+import SparkConnection from './SparkConnection';
+import SparkLogo from '../../SvgIcon/svg/spark.svg';
+import DatabricksConnection from './DatabricksConnection';
+import DatabricksLogo from '../../SvgIcon/svg/databricks.svg';
+import clsx from 'clsx';
 
 interface IDatabaseConnectionProps {
   onNext: () => void;
   database: ConnectionModel;
   onChange: (db: ConnectionModel) => void;
-  nameOfdatabase?: string;
+  nameOfDatabase?: string;
+  onBack: () => void;
+  onNameOfDatabaseChange: (newName: string) => void;
 }
 
 const DatabaseConnection = ({
   database,
   onChange,
-  nameOfdatabase
+  nameOfDatabase,
+  onBack,
+  onNameOfDatabaseChange
 }: IDatabaseConnectionProps) => {
   const { addConnection } = useTree();
   const [isTesting, setIsTesting] = useState(false);
@@ -53,7 +66,9 @@ const DatabaseConnection = ({
   const [showConfirm, setShowConfirm] = useState(false);
   const [message, setMessage] = useState<string>();
   const [nameError, setNameError] = useState('');
-  const [sharedCredentials, setSharedCredentials] = useState<SharedCredentialListModel[]>([])
+  const [sharedCredentials, setSharedCredentials] = useState<
+    SharedCredentialListModel[]
+  >([]);
 
   const onConfirmSave = async () => {
     if (!database.connection_name) {
@@ -96,7 +111,7 @@ const DatabaseConnection = ({
     }
 
     setIsTesting(true);
-    let testRes : ConnectionTestModel | null = null;
+    let testRes: ConnectionTestModel | null = null;
     try {
       testRes = (await DataSourcesApi.testConnection(true, database)).data;
       setIsTesting(false);
@@ -108,8 +123,10 @@ const DatabaseConnection = ({
         ConnectionTestModelConnectionTestResultEnum.SUCCESS
       ) {
         await onConfirmSave();
-      } else if (testRes?.connectionTestResult ===
-        ConnectionTestModelConnectionTestResultEnum.CONNECTION_ALREADY_EXISTS) {
+      } else if (
+        testRes?.connectionTestResult ===
+        ConnectionTestModelConnectionTestResultEnum.CONNECTION_ALREADY_EXISTS
+      ) {
         setMessage(testRes?.errorMessage);
       }
     }
@@ -131,8 +148,12 @@ const DatabaseConnection = ({
     setShowError(true);
   };
 
-  const getTitle = (provider?: ConnectionModelProviderTypeEnum) => {
-    switch (provider) {
+  const getTitle = (database?: ConnectionModel): string => {
+    if(nameOfDatabase){
+      return nameOfDatabase + ' Connection Settings';
+    }
+
+    switch (database?.provider_type) {
       case ConnectionModelProviderTypeEnum.bigquery:
         return 'Google BigQuery Connection Settings';
       case ConnectionModelProviderTypeEnum.snowflake:
@@ -143,23 +164,46 @@ const DatabaseConnection = ({
         return 'Amazon Redshift Connection Settings';
       case ConnectionModelProviderTypeEnum.sqlserver:
         return 'Microsoft SQL Server Connection Settings';
+      case ConnectionModelProviderTypeEnum.presto:
+        return 'PrestoDB Connection Settings';
+      case ConnectionModelProviderTypeEnum.trino:
+        return 'Trino Connection Settings';
       case ConnectionModelProviderTypeEnum.mysql:
         return 'MySQL Connection Settings';
       case ConnectionModelProviderTypeEnum.oracle:
         return 'Oracle Database Connection Settings';
+      case ConnectionModelProviderTypeEnum.spark:
+        return 'Spark Connection Settings';
+      case ConnectionModelProviderTypeEnum.databricks:
+        return 'Databricks Connection Settings';
       default:
         return 'Database Connection Settings';
     }
   };
 
-  const getSharedCredentials = async () => {
-    await SharedCredentailsApi.getAllSharedCredentials()
-      .then((res) => setSharedCredentials(res.data))
+  const getIcon = () => {
+    if(nameOfDatabase){
+      return (<SvgIcon
+        name={nameOfDatabase?.toLowerCase().replace(/\s/g, '')}
+        className={clsx(
+          'mb-3 w-20 text-blue-500',
+          nameOfDatabase === 'Spark' && 'w-35',
+          nameOfDatabase === 'Trino' && 'max-w-11',
+        )}
+      />);
+    }
+    return (<img src={dbImage} className="h-16" alt="db logo" />);
   }
 
+  const getSharedCredentials = async () => {
+    await SharedCredentialsApi.getAllSharedCredentials().then((res) =>
+      setSharedCredentials(res.data)
+    );
+  };
+
   useEffect(() => {
-    getSharedCredentials()
-  },[])
+    getSharedCredentials();
+  }, []);
 
   const components = {
     [ConnectionModelProviderTypeEnum.bigquery]: (
@@ -173,42 +217,72 @@ const DatabaseConnection = ({
       <SnowflakeConnection
         snowflake={database.snowflake}
         onChange={(snowflake) => onChange({ ...database, snowflake })}
-        sharedCredentials = {sharedCredentials}
+        sharedCredentials={sharedCredentials}
       />
     ),
     [ConnectionModelProviderTypeEnum.postgresql]: (
       <PostgreSQLConnection
         postgresql={database.postgresql}
         onChange={(postgresql) => onChange({ ...database, postgresql })}
-        sharedCredentials = {sharedCredentials}
+        sharedCredentials={sharedCredentials}
       />
     ),
     [ConnectionModelProviderTypeEnum.redshift]: (
       <RedshiftConnection
         redshift={database.redshift}
         onChange={(redshift) => onChange({ ...database, redshift })}
-        sharedCredentials = {sharedCredentials}
+        sharedCredentials={sharedCredentials}
       />
     ),
     [ConnectionModelProviderTypeEnum.sqlserver]: (
       <SqlServerConnection
         sqlserver={database.sqlserver}
         onChange={(sqlserver) => onChange({ ...database, sqlserver })}
-        sharedCredentials = {sharedCredentials}
+        sharedCredentials={sharedCredentials}
+      />
+    ),
+    [ConnectionModelProviderTypeEnum.presto]: (
+      <PrestoConnection
+        presto={database.presto}
+        onChange={(presto) => onChange({ ...database, presto })}
+        sharedCredentials={sharedCredentials}
+      />
+    ),
+    [ConnectionModelProviderTypeEnum.trino]: (
+      <TrinoConnection
+        trino={database.trino}
+        onChange={(trino) => onChange({ ...database, trino })}
+        sharedCredentials={sharedCredentials}
+        nameOfDatabase={nameOfDatabase ? nameOfDatabase : ''}
+        onNameOfDatabaseChange={onNameOfDatabaseChange}
       />
     ),
     [ConnectionModelProviderTypeEnum.mysql]: (
       <MySQLConnection
         mysql={database.mysql}
         onChange={(mysql) => onChange({ ...database, mysql })}
-        sharedCredentials = {sharedCredentials}
+        sharedCredentials={sharedCredentials}
       />
     ),
     [ConnectionModelProviderTypeEnum.oracle]: (
       <OracleConnection
-          oracle={database.oracle}
-          onChange={(oracle) => onChange({ ...database, oracle })}
-          sharedCredentials = {sharedCredentials}
+        oracle={database.oracle}
+        onChange={(oracle) => onChange({ ...database, oracle })}
+        sharedCredentials={sharedCredentials}
+      />
+    ),
+    [ConnectionModelProviderTypeEnum.spark]: (
+      <SparkConnection
+        spark={database.spark}
+        onChange={(spark) => onChange({ ...database, spark })}
+        sharedCredentials={sharedCredentials}
+      />
+    ),
+    [ConnectionModelProviderTypeEnum.databricks]: (
+      <DatabricksConnection
+        databricks={database.databricks}
+        onChange={(databricks) => onChange({ ...database, databricks })}
+        sharedCredentials={sharedCredentials}
       />
     )
   };
@@ -225,40 +299,48 @@ const DatabaseConnection = ({
         return RedshiftLogo;
       case ConnectionModelProviderTypeEnum.sqlserver:
         return SqlServerLogo;
+      case ConnectionModelProviderTypeEnum.presto:
+        return PrestoLogo;
+      case ConnectionModelProviderTypeEnum.trino:
+        return TrinoLogo;
       case ConnectionModelProviderTypeEnum.mysql:
         return MySQLLogo;
       case ConnectionModelProviderTypeEnum.oracle:
         return OracleLogo;
+      case ConnectionModelProviderTypeEnum.spark:
+        return SparkLogo;
+      case ConnectionModelProviderTypeEnum.databricks:
+        return DatabricksLogo;
       default:
         return '';
     }
   }, [database.provider_type]);
+  console.log(database)
 
   return (
     <div>
+      <div
+        className="mb-4 flex items-center text-teal-500 cursor-pointer"
+        onClick={onBack}
+      >
+        {' '}
+        <SvgIcon name="chevron-left" className="w-4 h-4 mr-2" />
+        Back
+      </div>
       <div className="flex justify-between mb-4">
         <div>
           <div className="text-2xl font-semibold mb-3">Connect a database</div>
           <div>
-            {nameOfdatabase
-              ? nameOfdatabase + ' Connection Settings'
-              : getTitle(database.provider_type)}
+            {getTitle(database)}
           </div>
         </div>
-        {nameOfdatabase ? (
-          <SvgIcon
-            name={nameOfdatabase.toLowerCase().replace(/\s/g, '')}
-            className="mb-3 w-20 text-blue-500"
-          />
-        ) : (
-          <img src={dbImage} className="h-16" alt="db logo" />
-        )}
+        {getIcon()}
       </div>
 
       <div className="bg-white rounded-lg px-4 py-6 border border-gray-100">
         <Input
           label="Connection Name"
-          className='mb-4'
+          className="mb-4"
           value={database.connection_name}
           onChange={(e) =>
             onChange({ ...database, connection_name: e.target.value })
@@ -266,12 +348,20 @@ const DatabaseConnection = ({
           error={!!nameError}
           helperText={nameError}
         />
-          <Input
+        <Input
           label="Parallel jobs limit"
           value={database.parallel_jobs_limit}
-          onChange={(e) =>
-           !isNaN(Number(e.target.value)) && onChange({ ...database, parallel_jobs_limit: Number(e.target.value)})
-          }
+          onChange={(e) => {
+            if (!isNaN(Number(e.target.value))) {
+              onChange({
+                ...database,
+                parallel_jobs_limit:
+                  String(e.target.value).length === 0
+                    ? undefined
+                    : Number(e.target.value)
+              });
+            }
+          }}
         />
         <div className="mt-6">
           {database.provider_type ? components[database.provider_type] : ''}

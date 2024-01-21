@@ -1,0 +1,9 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: column/custom_sql/sql_aggregated_expression
+  rule_name: comparison/between_floats
+  help_text: "Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is\
+    \ not outside the expected range. Stores a separate data quality check result\
+    \ for each daily partition."

@@ -19,12 +19,11 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.rules.comparison.MinCountRule1ParametersSpec;
-import com.dqops.rules.comparison.MinCountRuleFatalParametersSpec;
-import com.dqops.rules.comparison.MinCountRuleWarningParametersSpec;
+import com.dqops.rules.comparison.*;
 import com.dqops.sensors.table.volume.TableVolumeRowCountSensorParametersSpec;
-import com.dqops.utils.docs.SampleValueFactory;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -35,13 +34,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Row count (select count(*) from ...) test that runs a row_count check, obtains a count of rows and verifies the number by calling the row count rule.
- * The default configuration for all severity rules (warning, error, fatal data quality issue) is to require at least one row, which checks if the table is not empty.
+ * A table-level check that ensures that the tested table has at least a minimum accepted number of rows.
+ * The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the table is not empty.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableRowCountCheckSpec extends AbstractCheckSpec<TableVolumeRowCountSensorParametersSpec, MinCountRuleWarningParametersSpec, MinCountRule1ParametersSpec, MinCountRuleFatalParametersSpec> {
+public class TableRowCountCheckSpec
+        extends AbstractCheckSpec<TableVolumeRowCountSensorParametersSpec, MinCountRule1ParametersSpec, MinCountRule1ParametersSpec, MinCountRule1ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<TableRowCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -55,9 +55,9 @@ public class TableRowCountCheckSpec extends AbstractCheckSpec<TableVolumeRowCoun
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinCountRuleWarningParametersSpec warning;
+    private MinCountRule1ParametersSpec warning;
 
-    @JsonPropertyDescription("Default alerting threshold for a row count that raises a data quality error (alert)")
+    @JsonPropertyDescription("Default alerting threshold that raises a data quality issue at an error severity level")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MinCountRule1ParametersSpec error;
@@ -65,7 +65,7 @@ public class TableRowCountCheckSpec extends AbstractCheckSpec<TableVolumeRowCoun
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinCountRuleFatalParametersSpec fatal;
+    private MinCountRule1ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -92,7 +92,7 @@ public class TableRowCountCheckSpec extends AbstractCheckSpec<TableVolumeRowCoun
      * @return Warning severity rule parameters.
      */
     @Override
-    public MinCountRuleWarningParametersSpec getWarning() {
+    public MinCountRule1ParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -100,7 +100,7 @@ public class TableRowCountCheckSpec extends AbstractCheckSpec<TableVolumeRowCoun
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MinCountRuleWarningParametersSpec warning) {
+    public void setWarning(MinCountRule1ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -132,7 +132,7 @@ public class TableRowCountCheckSpec extends AbstractCheckSpec<TableVolumeRowCoun
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MinCountRuleFatalParametersSpec getFatal() {
+    public MinCountRule1ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -140,7 +140,7 @@ public class TableRowCountCheckSpec extends AbstractCheckSpec<TableVolumeRowCoun
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MinCountRuleFatalParametersSpec fatal) {
+    public void setFatal(MinCountRule1ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");
@@ -166,12 +166,24 @@ public class TableRowCountCheckSpec extends AbstractCheckSpec<TableVolumeRowCoun
         return DefaultDataQualityDimensions.Completeness;
     }
 
+    /**
+     * Returns true if this is a standard data quality check that is always shown on the data quality checks editor screen.
+     * Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks.
+     *
+     * @return True when it is a standard check, false when it is an advanced check. The default value is 'false' (all checks are non-standard, advanced checks).
+     */
+    @Override
+    @JsonIgnore
+    public boolean isStandard() {
+        return true;
+    }
+
     public static class TableRowCountCheckSpecSampleFactory implements SampleValueFactory<TableRowCountCheckSpec> {
         @Override
         public TableRowCountCheckSpec createSample() {
             return new TableRowCountCheckSpec() {{
                 setParameters(new TableVolumeRowCountSensorParametersSpec.TableVolumeRowCountSensorParametersSpecSampleFactory().createSample());
-                setError(new MinCountRule1ParametersSpec.MinCountRule1ParametersSpecSampleFactory().createSample());
+                setError(new MinCountRule1ParametersSpec());
             }};
         }
     }

@@ -17,6 +17,7 @@ package com.dqops.execution.checks.jobs;
 
 import com.dqops.execution.checks.CheckExecutionSummary;
 import com.dqops.rules.RuleSeverityLevel;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -114,5 +115,19 @@ public class RunChecksResult {
         }
 
         return runChecksResult;
+    }
+
+    public static class RunChecksResultSampleFactory implements SampleValueFactory<RunChecksResult> {
+        @Override
+        public RunChecksResult createSample() {
+            return new RunChecksResult() {{
+                    setHighestSeverity(RuleSeverityLevel.error);
+                    setExecutedChecks(10);
+                    setErrors(2);
+                    setWarnings(1);
+                    setValidResults(7);
+                    setFatals(0);
+            }};
+        }
     }
 }

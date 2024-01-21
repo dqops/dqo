@@ -13,6 +13,9 @@ if TYPE_CHECKING:
     from ..models.table_availability_profiling_checks_spec import (
         TableAvailabilityProfilingChecksSpec,
     )
+    from ..models.table_custom_sql_profiling_checks_spec import (
+        TableCustomSqlProfilingChecksSpec,
+    )
     from ..models.table_profiling_check_categories_spec_comparisons import (
         TableProfilingCheckCategoriesSpecComparisons,
     )
@@ -22,7 +25,6 @@ if TYPE_CHECKING:
     from ..models.table_schema_profiling_checks_spec import (
         TableSchemaProfilingChecksSpec,
     )
-    from ..models.table_sql_profiling_checks_spec import TableSqlProfilingChecksSpec
     from ..models.table_timeliness_profiling_checks_spec import (
         TableTimelinessProfilingChecksSpec,
     )
@@ -44,7 +46,7 @@ class TableProfilingCheckCategoriesSpec:
         volume (Union[Unset, TableVolumeProfilingChecksSpec]):
         timeliness (Union[Unset, TableTimelinessProfilingChecksSpec]):
         accuracy (Union[Unset, TableAccuracyProfilingChecksSpec]):
-        sql (Union[Unset, TableSqlProfilingChecksSpec]):
+        custom_sql (Union[Unset, TableCustomSqlProfilingChecksSpec]):
         availability (Union[Unset, TableAvailabilityProfilingChecksSpec]):
         schema (Union[Unset, TableSchemaProfilingChecksSpec]):
         comparisons (Union[Unset, TableProfilingCheckCategoriesSpecComparisons]): Dictionary of configuration of checks
@@ -57,7 +59,7 @@ class TableProfilingCheckCategoriesSpec:
     volume: Union[Unset, "TableVolumeProfilingChecksSpec"] = UNSET
     timeliness: Union[Unset, "TableTimelinessProfilingChecksSpec"] = UNSET
     accuracy: Union[Unset, "TableAccuracyProfilingChecksSpec"] = UNSET
-    sql: Union[Unset, "TableSqlProfilingChecksSpec"] = UNSET
+    custom_sql: Union[Unset, "TableCustomSqlProfilingChecksSpec"] = UNSET
     availability: Union[Unset, "TableAvailabilityProfilingChecksSpec"] = UNSET
     schema: Union[Unset, "TableSchemaProfilingChecksSpec"] = UNSET
     comparisons: Union[Unset, "TableProfilingCheckCategoriesSpecComparisons"] = UNSET
@@ -84,9 +86,9 @@ class TableProfilingCheckCategoriesSpec:
         if not isinstance(self.accuracy, Unset):
             accuracy = self.accuracy.to_dict()
 
-        sql: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.sql, Unset):
-            sql = self.sql.to_dict()
+        custom_sql: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_sql, Unset):
+            custom_sql = self.custom_sql.to_dict()
 
         availability: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.availability, Unset):
@@ -113,8 +115,8 @@ class TableProfilingCheckCategoriesSpec:
             field_dict["timeliness"] = timeliness
         if accuracy is not UNSET:
             field_dict["accuracy"] = accuracy
-        if sql is not UNSET:
-            field_dict["sql"] = sql
+        if custom_sql is not UNSET:
+            field_dict["custom_sql"] = custom_sql
         if availability is not UNSET:
             field_dict["availability"] = availability
         if schema is not UNSET:
@@ -132,6 +134,9 @@ class TableProfilingCheckCategoriesSpec:
         from ..models.table_availability_profiling_checks_spec import (
             TableAvailabilityProfilingChecksSpec,
         )
+        from ..models.table_custom_sql_profiling_checks_spec import (
+            TableCustomSqlProfilingChecksSpec,
+        )
         from ..models.table_profiling_check_categories_spec_comparisons import (
             TableProfilingCheckCategoriesSpecComparisons,
         )
@@ -141,7 +146,6 @@ class TableProfilingCheckCategoriesSpec:
         from ..models.table_schema_profiling_checks_spec import (
             TableSchemaProfilingChecksSpec,
         )
-        from ..models.table_sql_profiling_checks_spec import TableSqlProfilingChecksSpec
         from ..models.table_timeliness_profiling_checks_spec import (
             TableTimelinessProfilingChecksSpec,
         )
@@ -185,12 +189,12 @@ class TableProfilingCheckCategoriesSpec:
         else:
             accuracy = TableAccuracyProfilingChecksSpec.from_dict(_accuracy)
 
-        _sql = d.pop("sql", UNSET)
-        sql: Union[Unset, TableSqlProfilingChecksSpec]
-        if isinstance(_sql, Unset):
-            sql = UNSET
+        _custom_sql = d.pop("custom_sql", UNSET)
+        custom_sql: Union[Unset, TableCustomSqlProfilingChecksSpec]
+        if isinstance(_custom_sql, Unset):
+            custom_sql = UNSET
         else:
-            sql = TableSqlProfilingChecksSpec.from_dict(_sql)
+            custom_sql = TableCustomSqlProfilingChecksSpec.from_dict(_custom_sql)
 
         _availability = d.pop("availability", UNSET)
         availability: Union[Unset, TableAvailabilityProfilingChecksSpec]
@@ -221,7 +225,7 @@ class TableProfilingCheckCategoriesSpec:
             volume=volume,
             timeliness=timeliness,
             accuracy=accuracy,
-            sql=sql,
+            custom_sql=custom_sql,
             availability=availability,
             schema=schema,
             comparisons=comparisons,

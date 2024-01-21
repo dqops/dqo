@@ -38,7 +38,7 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "Healthcheck", description = "Health check service for checking if the DQOps service is up and operational.")
+@Api(value = "Healthcheck", description = "Health check operations for checking if the DQOps service is up and operational. Used for monitoring by load balancers.")
 public class HealthcheckController {
     private DqoJobQueue jobQueue;
     private ParentDqoJobQueue parentJobQueue;

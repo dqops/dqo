@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
  */
 @Component
 public class ReflectionServiceImpl implements ReflectionService {
-    private static final Map<Class<?>, ParameterDataType> KNOWN_DATA_TYPES = new HashMap<>() {{
+    private static final Map<Class<?>, ParameterDataType> KNOWN_DATA_TYPES = new LinkedHashMap<>() {{
         put(String.class, ParameterDataType.string_type);
         put(Integer.class, ParameterDataType.integer_type);
         put(int.class, ParameterDataType.integer_type);
@@ -44,18 +44,18 @@ public class ReflectionServiceImpl implements ReflectionService {
         put(boolean.class, ParameterDataType.boolean_type);
         put(Double.class, ParameterDataType.double_type);
         put(double.class, ParameterDataType.double_type);
-         put(LocalDate.class, ParameterDataType.date_type);
+        put(LocalDate.class, ParameterDataType.date_type);
         put(LocalDateTime.class, ParameterDataType.datetime_type);
     }};
 
-    private static final Map<Class<?>, Object> DEFAULT_VALUES = new HashMap<>() {{
+    private static final Map<Class<?>, Object> DEFAULT_VALUES = new LinkedHashMap<>() {{
         put(int.class, 0);
         put(long.class, 0L);
         put(boolean.class, false);
         put(double.class, 0.0);
     }};
 
-    private Map<Class<?>, ClassInfo> reflectedClasses = new HashMap<>(); // accessed in a synchronized scope
+    private Map<Class<?>, ClassInfo> reflectedClasses = new LinkedHashMap<>(); // accessed in a synchronized scope
 
     /**
      * Returns a cached reflection info for a given class type.
@@ -83,8 +83,10 @@ public class ReflectionServiceImpl implements ReflectionService {
         Optional<Constructor<?>> parameterlessConstructor = Arrays.stream(constructors)
                 .filter(c -> c.getParameterCount() == 0)
                 .findFirst();
+        String metaDescription = targetClass.isAnnotationPresent(MetaDescription.class) ?
+                targetClass.getAnnotation(MetaDescription.class).values() : null;
 
-        ClassInfo classInfo = new ClassInfo(targetClass, parameterlessConstructor.orElse(null));
+        ClassInfo classInfo = new ClassInfo(targetClass, parameterlessConstructor.orElse(null), metaDescription);
 
         Class<?> reflectedClass = targetClass;
         while (reflectedClass != Object.class) {
@@ -144,8 +146,15 @@ public class ReflectionServiceImpl implements ReflectionService {
                 field.getAnnotation(DisplayName.class).value() : null;
         DisplayHint displayHint = field.isAnnotationPresent(ControlDisplayHint.class) ?
                 field.getAnnotation(ControlDisplayHint.class).value() : null;
+        String defaultStringValue = field.isAnnotationPresent(DefaultFieldValue.class) ?
+                field.getAnnotation(DefaultFieldValue.class).value() : null;
+        Object defaultValue = defaultStringValue == null ? null :
+                fieldType == String.class ? defaultStringValue : fieldType.isEnum() ?
+                        Enum.valueOf((Class<Enum>)fieldType, defaultStringValue) : defaultStringValue;
         String[] sampleValues = field.isAnnotationPresent(SampleValues.class) ?
                 field.getAnnotation(SampleValues.class).values() : null;
+        boolean requiredAnnotationPresent = field.isAnnotationPresent(RequiredField.class);
+        boolean notNullableField = fieldType == boolean.class || fieldType == int.class || fieldType == double.class;
 
         String yamlFieldName;
         if (field.isAnnotationPresent(JsonProperty.class)) {
@@ -161,9 +170,10 @@ public class ReflectionServiceImpl implements ReflectionService {
             setYamlFieldName(yamlFieldName);
             setDisplayName(displayName != null ? displayName : yamlFieldName);
             setHelpText(helpText);
-            setDefaultValue(DEFAULT_VALUES.getOrDefault(fieldType, null));
+            setDefaultValue(DEFAULT_VALUES.getOrDefault(fieldType, defaultValue));
             setDisplayHint(displayHint);
             setSampleValues(sampleValues);
+            setRequiredOrNotNullable(requiredAnnotationPresent || notNullableField);
         }};
 
         ParameterDataType parameterDataType = field.isAnnotationPresent(ControlType.class) ?
@@ -189,6 +199,7 @@ public class ReflectionServiceImpl implements ReflectionService {
 
         try {
             Method getterMethod = declaringClass.getMethod(getterMethodName);
+            getterMethod.setAccessible(true);
             fieldInfo.setGetterMethod(getterMethod);
         }
         catch (NoSuchMethodException nex) {
@@ -197,6 +208,7 @@ public class ReflectionServiceImpl implements ReflectionService {
 
         try {
             Method setterMethod = declaringClass.getMethod(setterMethodName, fieldType);
+            setterMethod.setAccessible(true);
             fieldInfo.setSetterMethod(setterMethod);
         }
         catch (NoSuchMethodException nex) {
@@ -222,7 +234,7 @@ public class ReflectionServiceImpl implements ReflectionService {
             parameterDataType = ParameterDataType.enum_type;
             fieldInfo.setEnumValuesByName(getEnumValuesMap((Class<? extends Enum<?>>) fieldType));
         } else if (isClassList(fieldType) && isJavaClass(fieldType)) {
-            Type listParameterType = genericType.getActualTypeArguments()[0];
+            Type listParameterType = genericType != null ? genericType.getActualTypeArguments()[0] : Object.class;
             if (listParameterType == String.class) {
                 parameterDataType = ParameterDataType.string_list_type;
                 try {
@@ -308,6 +320,10 @@ public class ReflectionServiceImpl implements ReflectionService {
         Object[] enumConstants = targetEnum.getEnumConstants();
         return Arrays.stream(enumConstants)
                 .map(e -> createEnumValue((Enum<?>) e))
-                .collect(Collectors.toMap(EnumValueInfo::getYamlName, Function.identity()));
+                .collect(Collectors.toMap(
+                        EnumValueInfo::getYamlName,
+                        Function.identity(),
+                        (key, value) -> value,
+                        LinkedHashMap::new));
     }
 }

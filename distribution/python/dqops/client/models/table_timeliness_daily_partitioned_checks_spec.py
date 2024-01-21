@@ -6,11 +6,9 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.table_data_freshness_check_spec import TableDataFreshnessCheckSpec
     from ..models.table_data_ingestion_delay_check_spec import (
         TableDataIngestionDelayCheckSpec,
     )
-    from ..models.table_data_staleness_check_spec import TableDataStalenessCheckSpec
     from ..models.table_partition_reload_lag_check_spec import (
         TablePartitionReloadLagCheckSpec,
     )
@@ -29,8 +27,6 @@ class TableTimelinessDailyPartitionedChecksSpec:
         custom_checks (Union[Unset, TableTimelinessDailyPartitionedChecksSpecCustomChecks]): Dictionary of additional
             custom checks within this category. The keys are check names defined in the definition section. The sensor
             parameters and rules should match the type of the configured sensor and rule for the custom check.
-        daily_partition_data_freshness (Union[Unset, TableDataFreshnessCheckSpec]):
-        daily_partition_data_staleness (Union[Unset, TableDataStalenessCheckSpec]):
         daily_partition_data_ingestion_delay (Union[Unset, TableDataIngestionDelayCheckSpec]):
         daily_partition_reload_lag (Union[Unset, TablePartitionReloadLagCheckSpec]):
     """
@@ -38,8 +34,6 @@ class TableTimelinessDailyPartitionedChecksSpec:
     custom_checks: Union[
         Unset, "TableTimelinessDailyPartitionedChecksSpecCustomChecks"
     ] = UNSET
-    daily_partition_data_freshness: Union[Unset, "TableDataFreshnessCheckSpec"] = UNSET
-    daily_partition_data_staleness: Union[Unset, "TableDataStalenessCheckSpec"] = UNSET
     daily_partition_data_ingestion_delay: Union[
         Unset, "TableDataIngestionDelayCheckSpec"
     ] = UNSET
@@ -50,18 +44,6 @@ class TableTimelinessDailyPartitionedChecksSpec:
         custom_checks: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.custom_checks, Unset):
             custom_checks = self.custom_checks.to_dict()
-
-        daily_partition_data_freshness: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_partition_data_freshness, Unset):
-            daily_partition_data_freshness = (
-                self.daily_partition_data_freshness.to_dict()
-            )
-
-        daily_partition_data_staleness: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_partition_data_staleness, Unset):
-            daily_partition_data_staleness = (
-                self.daily_partition_data_staleness.to_dict()
-            )
 
         daily_partition_data_ingestion_delay: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_partition_data_ingestion_delay, Unset):
@@ -78,14 +60,6 @@ class TableTimelinessDailyPartitionedChecksSpec:
         field_dict.update({})
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
-        if daily_partition_data_freshness is not UNSET:
-            field_dict[
-                "daily_partition_data_freshness"
-            ] = daily_partition_data_freshness
-        if daily_partition_data_staleness is not UNSET:
-            field_dict[
-                "daily_partition_data_staleness"
-            ] = daily_partition_data_staleness
         if daily_partition_data_ingestion_delay is not UNSET:
             field_dict[
                 "daily_partition_data_ingestion_delay"
@@ -97,11 +71,9 @@ class TableTimelinessDailyPartitionedChecksSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.table_data_freshness_check_spec import TableDataFreshnessCheckSpec
         from ..models.table_data_ingestion_delay_check_spec import (
             TableDataIngestionDelayCheckSpec,
         )
-        from ..models.table_data_staleness_check_spec import TableDataStalenessCheckSpec
         from ..models.table_partition_reload_lag_check_spec import (
             TablePartitionReloadLagCheckSpec,
         )
@@ -121,24 +93,6 @@ class TableTimelinessDailyPartitionedChecksSpec:
                 TableTimelinessDailyPartitionedChecksSpecCustomChecks.from_dict(
                     _custom_checks
                 )
-            )
-
-        _daily_partition_data_freshness = d.pop("daily_partition_data_freshness", UNSET)
-        daily_partition_data_freshness: Union[Unset, TableDataFreshnessCheckSpec]
-        if isinstance(_daily_partition_data_freshness, Unset):
-            daily_partition_data_freshness = UNSET
-        else:
-            daily_partition_data_freshness = TableDataFreshnessCheckSpec.from_dict(
-                _daily_partition_data_freshness
-            )
-
-        _daily_partition_data_staleness = d.pop("daily_partition_data_staleness", UNSET)
-        daily_partition_data_staleness: Union[Unset, TableDataStalenessCheckSpec]
-        if isinstance(_daily_partition_data_staleness, Unset):
-            daily_partition_data_staleness = UNSET
-        else:
-            daily_partition_data_staleness = TableDataStalenessCheckSpec.from_dict(
-                _daily_partition_data_staleness
             )
 
         _daily_partition_data_ingestion_delay = d.pop(
@@ -167,8 +121,6 @@ class TableTimelinessDailyPartitionedChecksSpec:
 
         table_timeliness_daily_partitioned_checks_spec = cls(
             custom_checks=custom_checks,
-            daily_partition_data_freshness=daily_partition_data_freshness,
-            daily_partition_data_staleness=daily_partition_data_staleness,
             daily_partition_data_ingestion_delay=daily_partition_data_ingestion_delay,
             daily_partition_reload_lag=daily_partition_reload_lag,
         )

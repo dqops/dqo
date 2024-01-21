@@ -23,7 +23,7 @@ const TableMonitoringChecksUIFilterView = () => {
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const getCheckOverview = () => {
-    CheckResultOverviewApi.getTableMonitoringChecksOverview(connectionName, schemaName, tableName, timePartitioned).then((res) => {
+    CheckResultOverviewApi.getTableMonitoringChecksOverview(connectionName, schemaName, tableName, timePartitioned, category, checkName).then((res) => {
       setCheckResultsOverview(res.data);
     });
   };
@@ -79,6 +79,7 @@ const TableMonitoringChecksUIFilterView = () => {
           checkResultsOverview={checkResultsOverview}
           getCheckOverview={getCheckOverview}
           loading={loading}
+          isFiltered = {true}
         />
       </div>
     </ConnectionLayout>

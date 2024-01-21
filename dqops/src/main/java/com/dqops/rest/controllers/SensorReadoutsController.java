@@ -47,7 +47,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/connections")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "SensorReadouts", description = "Returns the complete sensor readouts of executed checks on tables and columns.")
+@Api(value = "SensorReadouts", description = "Operations that are retrieving the data quality sensor readouts of executed checks on tables and columns.")
 public class SensorReadoutsController {
     private UserHomeContextFactory userHomeContextFactory;
     private SensorReadoutsDataService sensorReadoutsDataService;
@@ -101,7 +101,7 @@ public class SensorReadoutsController {
             @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
             @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
                     CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -132,7 +132,7 @@ public class SensorReadoutsController {
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
         SensorReadoutsListModel[] sensorReadoutsListModels = this.sensorReadoutsDataService.readSensorReadoutsDetailed(
-                checks, loadParams);
+                checks, loadParams, principal.getDataDomainIdentity());
         return new ResponseEntity<>(Flux.fromArray(sensorReadoutsListModels), HttpStatus.OK); // 200
     }
 
@@ -175,7 +175,7 @@ public class SensorReadoutsController {
             @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
             @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
                     CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -206,7 +206,7 @@ public class SensorReadoutsController {
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
         SensorReadoutsListModel[] sensorReadoutsListModels = this.sensorReadoutsDataService.readSensorReadoutsDetailed(
-                monitoringPartition, loadParams);
+                monitoringPartition, loadParams, principal.getDataDomainIdentity());
         return new ResponseEntity<>(Flux.fromArray(sensorReadoutsListModels), HttpStatus.OK); // 200
     }
 
@@ -249,7 +249,7 @@ public class SensorReadoutsController {
             @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
             @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
                     CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -280,7 +280,7 @@ public class SensorReadoutsController {
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
         SensorReadoutsListModel[] sensorReadoutsListModels = this.sensorReadoutsDataService.readSensorReadoutsDetailed(
-                partitionedCheckPartition, loadParams);
+                partitionedCheckPartition, loadParams, principal.getDataDomainIdentity());
         return new ResponseEntity<>(Flux.fromArray(sensorReadoutsListModels), HttpStatus.OK); // 200
     }
 
@@ -323,7 +323,7 @@ public class SensorReadoutsController {
             @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
             @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
                     CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -359,7 +359,7 @@ public class SensorReadoutsController {
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
         SensorReadoutsListModel[] sensorReadoutsListModels = this.sensorReadoutsDataService.readSensorReadoutsDetailed(
-                checks, loadParams);
+                checks, loadParams, principal.getDataDomainIdentity());
         return new ResponseEntity<>(Flux.fromArray(sensorReadoutsListModels), HttpStatus.OK); // 200
     }
 
@@ -404,7 +404,7 @@ public class SensorReadoutsController {
             @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
             @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
                     CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -440,7 +440,7 @@ public class SensorReadoutsController {
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
         SensorReadoutsListModel[] sensorReadoutsListModels = this.sensorReadoutsDataService.readSensorReadoutsDetailed(
-                monitoringPartition, loadParams);
+                monitoringPartition, loadParams, principal.getDataDomainIdentity());
         return new ResponseEntity<>(Flux.fromArray(sensorReadoutsListModels), HttpStatus.OK); // 200
     }
 
@@ -485,7 +485,7 @@ public class SensorReadoutsController {
             @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
             @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
                     CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -521,7 +521,7 @@ public class SensorReadoutsController {
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
         SensorReadoutsListModel[] sensorReadoutsListModels = this.sensorReadoutsDataService.readSensorReadoutsDetailed(
-                partitionedCheckPartition, loadParams);
+                partitionedCheckPartition, loadParams, principal.getDataDomainIdentity());
         return new ResponseEntity<>(Flux.fromArray(sensorReadoutsListModels), HttpStatus.OK); // 200
     }
 }

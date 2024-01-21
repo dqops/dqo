@@ -229,12 +229,12 @@ const CheckResultsTab = ({
       )
     },
     {
-      label: 'Include In Kpi',
+      label: 'Include In KPI',
       value: 'includeInKpi',
       className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700'
     },
     {
-      label: 'Include In Sla',
+      label: 'Include In SLA (Data Contract)',
       value: 'includeInSla',
       className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700'
     },

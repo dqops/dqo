@@ -1,0 +1,8 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: column/text/text_length_below_min_length_count
+  rule_name: comparison/max_count
+  help_text: The check counts the number of text values in the column that is below
+    the length defined by the user as a parameter

@@ -17,7 +17,9 @@ package com.dqops.data.errors.services;
 
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTimeScale;
+import com.dqops.checks.CheckType;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.errors.factory.ErrorsColumnNames;
 import com.dqops.data.errors.services.models.ErrorEntryModel;
 import com.dqops.data.errors.services.models.ErrorsListModel;
@@ -67,17 +69,19 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
      *
      * @param rootChecksContainerSpec Root checks container.
      * @param loadParameters          Load parameters.
+     * @param userDomainIdentity      User identity within the data domain.
      * @return Complete model of the errors.
      */
     @Override
     public ErrorsListModel[] readErrorsDetailed(AbstractRootChecksContainerSpec rootChecksContainerSpec,
-                                                ErrorsDetailedFilterParameters loadParameters) {
+                                                ErrorsDetailedFilterParameters loadParameters,
+                                                UserDomainIdentity userDomainIdentity) {
         Map<Long, ErrorsListModel> errorMap = new LinkedHashMap<>();
         HierarchyId checksContainerHierarchyId = rootChecksContainerSpec.getHierarchyId();
         String connectionName = checksContainerHierarchyId.getConnectionName();
         PhysicalTableName physicalTableName = checksContainerHierarchyId.getPhysicalTableName();
 
-        Table errorsTable = loadRecentErrors(loadParameters, connectionName, physicalTableName);
+        Table errorsTable = loadRecentErrors(loadParameters, connectionName, physicalTableName, userDomainIdentity);
         if (errorsTable == null || errorsTable.isEmpty()) {
             return new ErrorsListModel[0]; // empty array
         }
@@ -128,13 +132,13 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
                 String checkCategory = row.getString(ErrorsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
                 String checkDisplayName = row.getString(ErrorsColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME);
                 String checkName = row.getString(ErrorsColumnNames.CHECK_NAME_COLUMN_NAME);
-                String checkType = row.getString(ErrorsColumnNames.CHECK_TYPE_COLUMN_NAME);
+                String checkTypeString = row.getString(ErrorsColumnNames.CHECK_TYPE_COLUMN_NAME);
 
                 errorsListModel = new ErrorsListModel();
                 errorsListModel.setCheckCategory(checkCategory);
                 errorsListModel.setCheckName(checkName);
                 errorsListModel.setCheckHash(checkHash);
-                errorsListModel.setCheckType(checkType);
+                errorsListModel.setCheckType(CheckType.fromString(checkTypeString));
                 errorsListModel.setCheckDisplayName(checkDisplayName);
                 errorsListModel.setDataGroup(dataGroupNameForCheck);
 
@@ -173,10 +177,11 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
 
         String columnName = TableRowUtility.getSanitizedStringValue(row, ErrorsColumnNames.COLUMN_NAME_COLUMN_NAME);
         String dataGroupName = row.getString(ErrorsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+        String checkTypeString = row.getString(ErrorsColumnNames.CHECK_TYPE_COLUMN_NAME);
 
         Integer durationMs = row.getInt(ErrorsColumnNames.DURATION_MS_COLUMN_NAME);
         Instant executedAt = row.getInstant(ErrorsColumnNames.EXECUTED_AT_COLUMN_NAME);
-        String timeGradient = row.getString(ErrorsColumnNames.TIME_GRADIENT_COLUMN_NAME);
+        String timeGradientString = row.getString(ErrorsColumnNames.TIME_GRADIENT_COLUMN_NAME);
         LocalDateTime timePeriod = row.getDateTime(ErrorsColumnNames.TIME_PERIOD_COLUMN_NAME);
 
         String provider = row.getString(ErrorsColumnNames.PROVIDER_COLUMN_NAME);
@@ -195,10 +200,11 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
 
             setColumnName(columnName);
             setDataGroup(dataGroupName);
+            setCheckType(CheckType.fromString(checkTypeString));
 
             setDurationMs(durationMs);
             setExecutedAt(executedAt);
-            setTimeGradient(timeGradient);
+            setTimeGradient(TimePeriodGradient.fromString(timeGradientString));
             setTimePeriod(timePeriod);
 
             setProvider(provider);
@@ -302,13 +308,15 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
      * @param loadParameters Load parameters.
      * @param connectionName Connection name.
      * @param physicalTableName Physical table name.
+     * @param userDomainIdentity User identity within the data domain.
      * @return Table with errors for the most recent two months inside the specified range or null when no data found.
      */
     protected Table loadRecentErrors(ErrorsDetailedFilterParameters loadParameters,
                                      String connectionName,
-                                     PhysicalTableName physicalTableName) {
+                                     PhysicalTableName physicalTableName,
+                                     UserDomainIdentity userDomainIdentity) {
         ErrorsSnapshot errorsSnapshot = this.errorsSnapshotFactory.createReadOnlySnapshot(connectionName,
-                physicalTableName, ErrorsColumnNames.COLUMN_NAMES_FOR_ERRORS_DETAILED);
+                physicalTableName, ErrorsColumnNames.COLUMN_NAMES_FOR_ERRORS_DETAILED, userDomainIdentity);
         int maxMonthsToLoad = DEFAULT_MAX_RECENT_LOADED_MONTHS;
 
         if (loadParameters.getStartMonth() != null && loadParameters.getEndMonth() != null) {

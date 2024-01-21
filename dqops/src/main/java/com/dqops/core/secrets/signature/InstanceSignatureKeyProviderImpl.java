@@ -17,6 +17,8 @@
 package com.dqops.core.secrets.signature;
 
 import com.dqops.core.configuration.DqoInstanceConfigurationProperties;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.settings.LocalSettingsSpec;
@@ -41,6 +43,7 @@ public class InstanceSignatureKeyProviderImpl implements InstanceSignatureKeyPro
     private UserHomeContextFactory userHomeContextFactory;
     private SecretValueProvider secretValueProvider;
     private DqoInstanceConfigurationProperties dqoInstanceConfigurationProperties;
+    private DqoUserPrincipalProvider userPrincipalProvider;
     private SecureRandom secureRandom;
     private byte[] cachedInstanceKey;
     private final Object lock = new Object();
@@ -50,14 +53,17 @@ public class InstanceSignatureKeyProviderImpl implements InstanceSignatureKeyPro
      * @param userHomeContextFactory DQOps local home context factory - used to load the local user home.
      * @param secretValueProvider Secret value provider, used to decode secrets.
      * @param dqoInstanceConfigurationProperties DQOps instance (dqo.instance.*) configuration parameters.
+     * @param userPrincipalProvider Current user principal provider.
      */
     @Autowired
     public InstanceSignatureKeyProviderImpl(UserHomeContextFactory userHomeContextFactory,
                                             SecretValueProvider secretValueProvider,
-                                            DqoInstanceConfigurationProperties dqoInstanceConfigurationProperties) {
+                                            DqoInstanceConfigurationProperties dqoInstanceConfigurationProperties,
+                                            DqoUserPrincipalProvider userPrincipalProvider) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.secretValueProvider = secretValueProvider;
         this.dqoInstanceConfigurationProperties = dqoInstanceConfigurationProperties;
+        this.userPrincipalProvider = userPrincipalProvider;
     }
 
     /**
@@ -77,20 +83,27 @@ public class InstanceSignatureKeyProviderImpl implements InstanceSignatureKeyPro
                 this.cachedInstanceKey = decodedSignatureKeyFromConfiguration;
                 return decodedSignatureKeyFromConfiguration;
             }
+        }
 
-            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-            SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
-            LocalSettingsSpec localSettingsSpec = settingsWrapper.getSpec();
-            String instanceKeyBase64String = null;
+        DqoUserPrincipal userPrincipalForAdministrator = this.userPrincipalProvider.createUserPrincipalForAdministrator();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipalForAdministrator.getDataDomainIdentity());
+        SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
+        LocalSettingsSpec localSettingsSpec = settingsWrapper.getSpec();
+        String instanceKeyBase64String = null;
 
-            if (localSettingsSpec != null) {
-                SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(userHomeContext.getUserHome());
-                LocalSettingsSpec settings = localSettingsSpec.expandAndTrim(this.secretValueProvider, secretValueLookupContext);
-                instanceKeyBase64String = settings.getInstanceSignatureKey();
-            }
+        if (localSettingsSpec != null) {
+            SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(userHomeContext.getUserHome());
+            LocalSettingsSpec settings = localSettingsSpec.expandAndTrim(this.secretValueProvider, secretValueLookupContext);
+            instanceKeyBase64String = settings.getInstanceSignatureKey();
+        }
 
-            byte[] instanceKeyBytes;
-            if (Strings.isNullOrEmpty(instanceKeyBase64String)) {
+        byte[] instanceKeyBytes;
+        if (Strings.isNullOrEmpty(instanceKeyBase64String)) {
+            synchronized (this.lock) {
+                if (this.cachedInstanceKey != null) {
+                    return this.cachedInstanceKey;
+                }
+
                 if (this.secureRandom == null) {
                     this.secureRandom = new SecureRandom();
                 }
@@ -106,14 +119,20 @@ public class InstanceSignatureKeyProviderImpl implements InstanceSignatureKeyPro
                 String encodedNewKey = Base64.getEncoder().encodeToString(instanceKeyBytes);
                 localSettingsSpec.setInstanceSignatureKey(encodedNewKey);
                 userHomeContext.flush();
-            } else {
-                instanceKeyBytes = Base64.getDecoder().decode(instanceKeyBase64String);
+            }
+        } else {
+            instanceKeyBytes = Base64.getDecoder().decode(instanceKeyBase64String);
+        }
+
+        synchronized (this.lock) {
+            if (this.cachedInstanceKey != null) {
+                return this.cachedInstanceKey;
             }
 
             this.cachedInstanceKey = instanceKeyBytes;
-
-            return instanceKeyBytes;
         }
+
+        return instanceKeyBytes;
     }
 
     /**

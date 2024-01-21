@@ -25,9 +25,15 @@ import java.util.List;
 @Data
 public class ModelsSuperiorObjectDocumentationModel {
     /**
+     * The name of a group of models, it is the "common" or a controller name.
+     */
+    private String modelsGroupName;
+
+    /**
      * List of all superior class fields.
      */
     private List<ModelsObjectDocumentationModel> classObjects;
+
     /**
      * Location of the file relative to "docs/client/models" directory.
      */

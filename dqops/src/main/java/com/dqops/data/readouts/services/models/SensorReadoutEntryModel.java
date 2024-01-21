@@ -15,6 +15,8 @@
  */
 package com.dqops.data.readouts.services.models;
 
+import com.dqops.checks.CheckType;
+import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -31,40 +33,40 @@ import java.time.LocalDateTime;
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 @Data
 public class SensorReadoutEntryModel {
-    @JsonPropertyDescription("Sensor readout ID.")
+    @JsonPropertyDescription("Sensor readout primary key")
     String id;
 
-    @JsonPropertyDescription("Check name.")
+    @JsonPropertyDescription("Check name")
     String checkName;
-    @JsonPropertyDescription("Check display name.")
+    @JsonPropertyDescription("Check display name")
     String checkDisplayName;
-    @JsonPropertyDescription("Check type.")
-    String checkType;
+    @JsonPropertyDescription("Check type")
+    CheckType checkType;
 
-    @JsonPropertyDescription("Actual value.")
+    @JsonPropertyDescription("Actual value")
     Double actualValue;
-    @JsonPropertyDescription("Expected value.")
+    @JsonPropertyDescription("Expected value")
     Double expectedValue;
 
-    @JsonPropertyDescription("Column name.")
+    @JsonPropertyDescription("Column name")
     String columnName;
-    @JsonPropertyDescription("Data group.")
+    @JsonPropertyDescription("Data group")
     String dataGroup;
 
-    @JsonPropertyDescription("Duration (ms).")
+    @JsonPropertyDescription("Duration (ms)")
     Integer durationMs;
-    @JsonPropertyDescription("Executed at.")
+    @JsonPropertyDescription("Executed at")
     Instant executedAt;
-    @JsonPropertyDescription("Time gradient.")
-    String timeGradient;
-    @JsonPropertyDescription("Time period.")
+    @JsonPropertyDescription("Time gradient")
+    TimePeriodGradient timeGradient;
+    @JsonPropertyDescription("Time period")
     LocalDateTime timePeriod;
 
-    @JsonPropertyDescription("Provider.")
+    @JsonPropertyDescription("Provider name")
     String provider;
-    @JsonPropertyDescription("Quality dimension.")
+    @JsonPropertyDescription("Data quality dimension")
     String qualityDimension;
 
-    @JsonPropertyDescription("Quality dimension.")
+    @JsonPropertyDescription("Table comparison name")
     String tableComparison;
 }

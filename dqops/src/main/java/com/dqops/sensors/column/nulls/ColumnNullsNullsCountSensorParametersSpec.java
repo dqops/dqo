@@ -15,12 +15,10 @@
  */
 package com.dqops.sensors.column.nulls;
 
-import com.dqops.checks.column.profiling.ColumnNullsProfilingChecksSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
 import com.dqops.sensors.AbstractSensorParametersSpec;
-import com.dqops.utils.docs.SampleValueFactory;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;

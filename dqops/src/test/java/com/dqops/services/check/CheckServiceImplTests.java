@@ -20,18 +20,20 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
 import com.dqops.checks.column.checkspecs.numeric.ColumnNegativeCountCheckSpec;
-import com.dqops.checks.column.checkspecs.strings.ColumnStringLengthAboveMaxLengthCountCheckSpec;
+import com.dqops.checks.column.checkspecs.text.ColumnTextLengthAboveMaxLengthCheckSpec;
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
-import com.dqops.checks.column.profiling.ColumnStringsProfilingChecksSpec;
+import com.dqops.checks.column.profiling.ColumnTextProfilingChecksSpec;
 import com.dqops.checks.column.monitoring.ColumnDailyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.column.monitoring.ColumnMonitoringChecksRootSpec;
 import com.dqops.checks.column.monitoring.numeric.ColumnNumericDailyMonitoringChecksSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
+import com.dqops.core.configuration.DqoUserConfigurationPropertiesObjectMother;
 import com.dqops.core.jobqueue.*;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.principal.DqoUserPrincipalObjectMother;
+import com.dqops.core.principal.UserDomainIdentityObjectMother;
 import com.dqops.core.scheduler.quartz.*;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
@@ -57,7 +59,7 @@ import com.dqops.services.check.mapping.*;
 import com.dqops.services.check.mapping.models.*;
 import com.dqops.services.check.matching.SimilarCheckCacheImpl;
 import com.dqops.services.check.models.AllChecksPatchParameters;
-import com.dqops.services.check.models.BulkCheckDisableParameters;
+import com.dqops.services.check.models.BulkCheckDeactivateParameters;
 import com.dqops.services.timezone.DefaultTimeZoneProviderObjectMother;
 import com.dqops.utils.BeanFactoryObjectMother;
 import com.dqops.utils.reflection.ClassInfo;
@@ -94,7 +96,7 @@ public class CheckServiceImplTests extends BaseTest {
 
         SensorDefinitionFindService sensorDefinitionFindService = SensorDefinitionFindServiceObjectMother.getSensorDefinitionFindService();
         RuleDefinitionFindService ruleDefinitionFindService = RuleDefinitionFindServiceObjectMother.getRuleDefinitionFindService();
-        JobDataMapAdapter jobDataMapAdapter = new JobDataMapAdapterImpl(new JsonSerializerImpl());
+        JobDataMapAdapter jobDataMapAdapter = new JobDataMapAdapterImpl(new JsonSerializerImpl(), DqoUserConfigurationPropertiesObjectMother.createDefaultUserConfiguration());
         TriggerFactory triggerFactory = new TriggerFactoryImpl(jobDataMapAdapter, DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider());
         SchedulesUtilityService schedulesUtilityService = new SchedulesUtilityServiceImpl(triggerFactory, DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider());
         SimilarCheckCacheImpl similarCheckCache = new SimilarCheckCacheImpl(reflectionService, sensorDefinitionFindService, ruleDefinitionFindService, dqoHomeContextFactory);
@@ -126,7 +128,7 @@ public class CheckServiceImplTests extends BaseTest {
     }
 
     private ExecutionContext createHierarchyTree() {
-        ExecutionContext executionContext = this.executionContextFactory.create();
+        ExecutionContext executionContext = this.executionContextFactory.create(UserDomainIdentityObjectMother.createAdminIdentity());
         UserHome userHome = executionContext.getUserHomeContext().getUserHome();
         ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("conn");
         TableWrapper table1 = connectionWrapper.getTables().createAndAddNew(
@@ -148,7 +150,7 @@ public class CheckServiceImplTests extends BaseTest {
         TableVolumeProfilingChecksSpec t1volumeChecksSpec = new TableVolumeProfilingChecksSpec();
         TableRowCountCheckSpec t1rowCountSpec = new TableRowCountCheckSpec();
         MinCountRule1ParametersSpec t1rowCountErrorSpec = new MinCountRule1ParametersSpec();
-        MinCountRuleFatalParametersSpec t1rowCountFatalSpec = new MinCountRuleFatalParametersSpec();
+        MinCountRule1ParametersSpec t1rowCountFatalSpec = new MinCountRule1ParametersSpec();
         t1rowCountErrorSpec.setMinCount(50L);
         t1rowCountFatalSpec.setMinCount(20L);
         t1rowCountSpec.setError(t1rowCountErrorSpec);
@@ -161,7 +163,7 @@ public class CheckServiceImplTests extends BaseTest {
         TableVolumeProfilingChecksSpec t2volumeChecksSpec = new TableVolumeProfilingChecksSpec();
         TableRowCountCheckSpec t2rowCountSpec = new TableRowCountCheckSpec();
         MinCountRule1ParametersSpec t2rowCountErrorSpec = new MinCountRule1ParametersSpec();
-        MinCountRuleFatalParametersSpec t2rowCountFatalSpec = new MinCountRuleFatalParametersSpec();
+        MinCountRule1ParametersSpec t2rowCountFatalSpec = new MinCountRule1ParametersSpec();
         t2rowCountErrorSpec.setMinCount(100L);
         t2rowCountFatalSpec.setMinCount(10L);
         t2rowCountSpec.setError(t2rowCountErrorSpec);
@@ -171,16 +173,16 @@ public class CheckServiceImplTests extends BaseTest {
         table2.getSpec().setProfilingChecks(t2categoriesSpec);
 
         ColumnProfilingCheckCategoriesSpec col21categoriesSpec = new ColumnProfilingCheckCategoriesSpec();
-        ColumnStringsProfilingChecksSpec col21stringChecksSpec = new ColumnStringsProfilingChecksSpec();
-        ColumnStringLengthAboveMaxLengthCountCheckSpec col21stringLengthAboveCheckSpec = new ColumnStringLengthAboveMaxLengthCountCheckSpec();
-        MaxCountRule10ParametersSpec countRule0ParametersSpec = new MaxCountRule10ParametersSpec();
+        ColumnTextProfilingChecksSpec col21stringChecksSpec = new ColumnTextProfilingChecksSpec();
+        ColumnTextLengthAboveMaxLengthCheckSpec col21stringLengthAboveCheckSpec = new ColumnTextLengthAboveMaxLengthCheckSpec();
+        MaxCountRule0ErrorParametersSpec countRule0ParametersSpec = new MaxCountRule0ErrorParametersSpec();
         countRule0ParametersSpec.setMaxCount(40L);
-        MaxCountRule15ParametersSpec countRule0ParametersSpec1 = new MaxCountRule15ParametersSpec();
+        MaxCountRule100ParametersSpec countRule0ParametersSpec1 = new MaxCountRule100ParametersSpec();
         countRule0ParametersSpec1.setMaxCount(100L);
         col21stringLengthAboveCheckSpec.setError(countRule0ParametersSpec);
         col21stringLengthAboveCheckSpec.setFatal(countRule0ParametersSpec1);
-        col21stringChecksSpec.setProfileStringLengthAboveMaxLengthCount(col21stringLengthAboveCheckSpec);
-        col21categoriesSpec.setStrings(col21stringChecksSpec);
+        col21stringChecksSpec.setProfileTextLengthAboveMaxLength(col21stringLengthAboveCheckSpec);
+        col21categoriesSpec.setText(col21stringChecksSpec);
         col21.setProfilingChecks(col21categoriesSpec);
 
         ColumnMonitoringChecksRootSpec col23monitoringSpec = new ColumnMonitoringChecksRootSpec();
@@ -190,8 +192,8 @@ public class CheckServiceImplTests extends BaseTest {
         ColumnNumericDailyMonitoringChecksSpec col23numericChecksSpec = new ColumnNumericDailyMonitoringChecksSpec();
         col23categoriesSpec.setNumeric(col23numericChecksSpec);
         ColumnNegativeCountCheckSpec columnNegativeCountCheckSpec = new ColumnNegativeCountCheckSpec();
-        col23numericChecksSpec.setDailyNegativeCount(columnNegativeCountCheckSpec);
-        MaxCountRule0ParametersSpec col23max1 = new MaxCountRule0ParametersSpec();
+        col23numericChecksSpec.setDailyNegativeValues(columnNegativeCountCheckSpec);
+        MaxCountRule0WarningParametersSpec col23max1 = new MaxCountRule0WarningParametersSpec();
         col23max1.setMaxCount(15L);
         columnNegativeCountCheckSpec.setWarning(col23max1);
 
@@ -275,6 +277,7 @@ public class CheckServiceImplTests extends BaseTest {
     void disableChecks_whenConnectionAndCheckGiven_disablesRequestedChecks() {
         ExecutionContext executionContext = createHierarchyTree();
         UserHome userHome = executionContext.getUserHomeContext().getUserHome();
+        DqoUserPrincipal adminPrincipal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters(){{
             setConnection("conn");
@@ -293,11 +296,12 @@ public class CheckServiceImplTests extends BaseTest {
         Assertions.assertEquals(20L, tableRowCountCheckSpec.getFatal().getMinCount());
         Assertions.assertFalse(tableRowCountCheckSpec.isDisabled());
 
-        BulkCheckDisableParameters bulkCheckDisableParameters = new BulkCheckDisableParameters();
-        bulkCheckDisableParameters.setCheckSearchFilters(checkSearchFilters);
-        this.sut.disableChecks(bulkCheckDisableParameters);
+        BulkCheckDeactivateParameters bulkCheckDeactivateParameters = new BulkCheckDeactivateParameters();
+        bulkCheckDeactivateParameters.setCheckSearchFilters(checkSearchFilters);
+        this.sut.disableChecks(bulkCheckDeactivateParameters, adminPrincipal);
 
-        userHome = executionContextFactory.create().getUserHomeContext().getUserHome();
+        ExecutionContext executionContextSecond = executionContextFactory.create(adminPrincipal.getDataDomainIdentity());
+        userHome = executionContextSecond.getUserHomeContext().getUserHome();
         Collection<AbstractCheckSpec<?,?,?,?>> checksEnabled = hierarchyNodeTreeSearcher.findChecks(userHome, checkSearchFilters);
         Assertions.assertTrue(checksEnabled.isEmpty());
 
@@ -325,9 +329,10 @@ public class CheckServiceImplTests extends BaseTest {
     }
 
     @Test
-    void disableChecks_whenSpecificTablesGiven_disablesOnlyRequestedChecks() {
+    void deleteChecks_whenConnectionAndCheckGiven_deletesRequestedChecks() {
         ExecutionContext executionContext = createHierarchyTree();
         UserHome userHome = executionContext.getUserHomeContext().getUserHome();
+        DqoUserPrincipal adminPrincipal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters(){{
             setConnection("conn");
@@ -346,14 +351,55 @@ public class CheckServiceImplTests extends BaseTest {
         Assertions.assertEquals(20L, tableRowCountCheckSpec.getFatal().getMinCount());
         Assertions.assertFalse(tableRowCountCheckSpec.isDisabled());
 
-        BulkCheckDisableParameters bulkCheckDisableParameters = new BulkCheckDisableParameters();
-        bulkCheckDisableParameters.setCheckSearchFilters(checkSearchFilters);
+        BulkCheckDeactivateParameters bulkCheckDeactivateParameters = new BulkCheckDeactivateParameters();
+        bulkCheckDeactivateParameters.setCheckSearchFilters(checkSearchFilters);
+        this.sut.deleteChecks(bulkCheckDeactivateParameters, adminPrincipal);
+
+        ExecutionContext executionContextSecond = executionContextFactory.create(adminPrincipal.getDataDomainIdentity());
+        userHome = executionContextSecond.getUserHomeContext().getUserHome();
+        Collection<AbstractCheckSpec<?,?,?,?>> checksEnabled = hierarchyNodeTreeSearcher.findChecks(userHome, checkSearchFilters);
+        Assertions.assertTrue(checksEnabled.isEmpty());
+
+        CheckSearchFilters checkSearchFiltersDisabled = checkSearchFilters.clone();
+        checkSearchFiltersDisabled.setEnabled(false);
+        Collection<AbstractCheckSpec<?,?,?,?>> checksDisabled = hierarchyNodeTreeSearcher.findChecks(userHome, checkSearchFiltersDisabled);
+
+        Assertions.assertNotNull(checksDisabled);
+        Assertions.assertEquals(0, checksDisabled.size());
+    }
+
+    @Test
+    void disableChecks_whenSpecificTablesGiven_disablesOnlyRequestedChecks() {
+        ExecutionContext executionContext = createHierarchyTree();
+        UserHome userHome = executionContext.getUserHomeContext().getUserHome();
+        DqoUserPrincipal adminPrincipal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
+
+        CheckSearchFilters checkSearchFilters = new CheckSearchFilters(){{
+            setConnection("conn");
+            setCheckName("profile_row_count");
+        }};
+
+        TableRowCountCheckSpec tableRowCountCheckSpec = userHome
+                .getConnections().getByObjectName("conn", true)
+                .getTables().getByObjectName(new PhysicalTableName("sch", "tab1"), true).getSpec()
+                .getProfilingChecks().getVolume().getProfileRowCount();
+
+        Assertions.assertNull(tableRowCountCheckSpec.getWarning());
+        Assertions.assertNotNull(tableRowCountCheckSpec.getError());
+        Assertions.assertNotNull(tableRowCountCheckSpec.getFatal());
+        Assertions.assertEquals(50L, tableRowCountCheckSpec.getError().getMinCount());
+        Assertions.assertEquals(20L, tableRowCountCheckSpec.getFatal().getMinCount());
+        Assertions.assertFalse(tableRowCountCheckSpec.isDisabled());
+
+        BulkCheckDeactivateParameters bulkCheckDeactivateParameters = new BulkCheckDeactivateParameters();
+        bulkCheckDeactivateParameters.setCheckSearchFilters(checkSearchFilters);
         Map<String, List<String>> selectedTables = new HashMap<>();
         selectedTables.put("tab1", null);
-        bulkCheckDisableParameters.setSelectedTablesToColumns(selectedTables);
-        this.sut.disableChecks(bulkCheckDisableParameters);
+        bulkCheckDeactivateParameters.setSelectedTablesToColumns(selectedTables);
+        this.sut.disableChecks(bulkCheckDeactivateParameters, adminPrincipal);
 
-        userHome = executionContextFactory.create().getUserHomeContext().getUserHome();
+        ExecutionContext executionContextSecond = executionContextFactory.create(adminPrincipal.getDataDomainIdentity());
+        userHome = executionContextSecond.getUserHomeContext().getUserHome();
         Collection<AbstractCheckSpec<?,?,?,?>> checksEnabled = hierarchyNodeTreeSearcher.findChecks(userHome, checkSearchFilters);
         Assertions.assertEquals(1, checksEnabled.size());
 
@@ -381,6 +427,49 @@ public class CheckServiceImplTests extends BaseTest {
     }
 
     @Test
+    void deleteChecks_whenSpecificTablesGiven_deletesOnlyRequestedChecks() {
+        ExecutionContext executionContext = createHierarchyTree();
+        UserHome userHome = executionContext.getUserHomeContext().getUserHome();
+        DqoUserPrincipal adminPrincipal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
+
+        CheckSearchFilters checkSearchFilters = new CheckSearchFilters(){{
+            setConnection("conn");
+            setCheckName("profile_row_count");
+        }};
+
+        TableRowCountCheckSpec tableRowCountCheckSpec = userHome
+                .getConnections().getByObjectName("conn", true)
+                .getTables().getByObjectName(new PhysicalTableName("sch", "tab1"), true).getSpec()
+                .getProfilingChecks().getVolume().getProfileRowCount();
+
+        Assertions.assertNull(tableRowCountCheckSpec.getWarning());
+        Assertions.assertNotNull(tableRowCountCheckSpec.getError());
+        Assertions.assertNotNull(tableRowCountCheckSpec.getFatal());
+        Assertions.assertEquals(50L, tableRowCountCheckSpec.getError().getMinCount());
+        Assertions.assertEquals(20L, tableRowCountCheckSpec.getFatal().getMinCount());
+        Assertions.assertFalse(tableRowCountCheckSpec.isDisabled());
+
+        BulkCheckDeactivateParameters bulkCheckDeactivateParameters = new BulkCheckDeactivateParameters();
+        bulkCheckDeactivateParameters.setCheckSearchFilters(checkSearchFilters);
+        Map<String, List<String>> selectedTables = new HashMap<>();
+        selectedTables.put("tab1", null);
+        bulkCheckDeactivateParameters.setSelectedTablesToColumns(selectedTables);
+        this.sut.deleteChecks(bulkCheckDeactivateParameters, adminPrincipal);
+
+        ExecutionContext executionContextSecond = executionContextFactory.create(adminPrincipal.getDataDomainIdentity());
+        userHome = executionContextSecond.getUserHomeContext().getUserHome();
+        Collection<AbstractCheckSpec<?,?,?,?>> checksEnabled = hierarchyNodeTreeSearcher.findChecks(userHome, checkSearchFilters);
+        Assertions.assertEquals(1, checksEnabled.size());
+
+        CheckSearchFilters checkSearchFiltersDisabled = checkSearchFilters.clone();
+        checkSearchFiltersDisabled.setEnabled(false);
+        Collection<AbstractCheckSpec<?,?,?,?>> checksDisabled = hierarchyNodeTreeSearcher.findChecks(userHome, checkSearchFiltersDisabled);
+
+        Assertions.assertNotNull(checksDisabled);
+        Assertions.assertEquals(0, checksDisabled.size());
+    }
+
+    @Test
     void updateAllChecksPatch_whenConnectionAndCheckGiven_enablesRequestedChecks() {
         ExecutionContext executionContext = createHierarchyTree();
 
@@ -392,7 +481,7 @@ public class CheckServiceImplTests extends BaseTest {
         allChecksPatchParameters.setCheckSearchFilters(checkSearchFilters);
 
         DqoUserPrincipal principal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
-        List<AllChecksModel> allChecksModel = this.allChecksModelFactory.fromCheckSearchFilters(checkSearchFilters, principal);
+        List<AllChecksModel> allChecksModel = this.allChecksModelFactory.findAllConfiguredAndPossibleChecks(checkSearchFilters, principal);
         CheckModel checkModel = allChecksModel.stream()
                 .map(AllChecksModel::getColumnChecksModel)
                 .flatMap(uiAllColumnChecksModel -> uiAllColumnChecksModel.getTableColumnChecksModels().stream())
@@ -404,16 +493,17 @@ public class CheckServiceImplTests extends BaseTest {
                 .flatMap(uiQualityCategoryModel -> uiQualityCategoryModel.getChecks().stream())
                 .findAny().get();
 
-        MaxCountRule15ParametersSpec maxCountRule = new MaxCountRule15ParametersSpec(50L);
+        MaxCountRule100ParametersSpec maxCountRule = new MaxCountRule100ParametersSpec(50L);
         ColumnNullsCountCheckSpec checkSpec = new ColumnNullsCountCheckSpec();
         checkSpec.setFatal(maxCountRule);
 
         CheckModel checkModelTemplate = patchCheckModelTemplate(checkSpec, checkModel);
         allChecksPatchParameters.setCheckModelPatch(checkModelTemplate);
 
-        this.sut.updateAllChecksPatch(allChecksPatchParameters, principal);
+        this.sut.activateOrUpdateAllChecks(allChecksPatchParameters, principal);
 
-        UserHome userHome = executionContextFactory.create().getUserHomeContext().getUserHome();
+        ExecutionContext executionContextSecond = executionContextFactory.create(principal.getDataDomainIdentity());
+        UserHome userHome = executionContextSecond.getUserHomeContext().getUserHome();
         Collection<AbstractCheckSpec<?, ?, ?, ?>> checks = hierarchyNodeTreeSearcher.findChecks(userHome, checkSearchFilters);
         Assertions.assertNotNull(checks);
         Assertions.assertFalse(checks.isEmpty());
@@ -437,7 +527,7 @@ public class CheckServiceImplTests extends BaseTest {
         allChecksPatchParameters.setCheckSearchFilters(checkSearchFilters);
 
         DqoUserPrincipal principal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
-        List<AllChecksModel> allChecksModel = this.allChecksModelFactory.fromCheckSearchFilters(checkSearchFilters, principal);
+        List<AllChecksModel> allChecksModel = this.allChecksModelFactory.findAllConfiguredAndPossibleChecks(checkSearchFilters, principal);
         CheckModel checkModel = allChecksModel.stream()
                 .map(AllChecksModel::getColumnChecksModel)
                 .flatMap(uiAllColumnChecksModel -> uiAllColumnChecksModel.getTableColumnChecksModels().stream())
@@ -449,7 +539,7 @@ public class CheckServiceImplTests extends BaseTest {
                 .flatMap(uiQualityCategoryModel -> uiQualityCategoryModel.getChecks().stream())
                 .findAny().get();
 
-        MaxCountRule15ParametersSpec maxCountRule = new MaxCountRule15ParametersSpec(50L);
+        MaxCountRule100ParametersSpec maxCountRule = new MaxCountRule100ParametersSpec(50L);
         ColumnNullsCountCheckSpec checkSpec = new ColumnNullsCountCheckSpec();
         checkSpec.setFatal(maxCountRule);
 
@@ -466,9 +556,10 @@ public class CheckServiceImplTests extends BaseTest {
         selectedTablesToColumns.put("tab2", selectedColumns2);
         allChecksPatchParameters.setSelectedTablesToColumns(selectedTablesToColumns);
 
-        this.sut.updateAllChecksPatch(allChecksPatchParameters, principal);
+        this.sut.activateOrUpdateAllChecks(allChecksPatchParameters, principal);
 
-        UserHome userHome = executionContextFactory.create().getUserHomeContext().getUserHome();
+        ExecutionContext executionContextSecond = executionContextFactory.create(principal.getDataDomainIdentity());
+        UserHome userHome = executionContextSecond.getUserHomeContext().getUserHome();
         Collection<AbstractCheckSpec<?, ?, ?, ?>> checks = hierarchyNodeTreeSearcher.findChecks(userHome, checkSearchFilters);
         Assertions.assertNotNull(checks);
         Assertions.assertEquals(3, checks.size());

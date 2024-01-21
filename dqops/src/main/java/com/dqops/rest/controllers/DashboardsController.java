@@ -21,6 +21,7 @@ import com.dqops.core.dqocloud.apikey.DqoCloudInvalidKeyException;
 import com.dqops.core.dqocloud.apikey.DqoCloudLicenseType;
 import com.dqops.core.dqocloud.dashboards.LookerStudioUrlService;
 import com.dqops.core.principal.DqoPermissionNames;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.metadata.dashboards.DashboardSpec;
 import com.dqops.metadata.dashboards.DashboardsFolderListSpec;
 import com.dqops.metadata.dashboards.DashboardsFolderSpec;
@@ -52,7 +53,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/dashboards")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "Dashboards", description = "Provides access to data quality dashboards")
+@Api(value = "Dashboards", description = "Operations for retrieving the list of data quality dashboards supported by DQOps and issuing short-term access keys to open a dashboard.")
 @Slf4j
 public class DashboardsController {
     private final LookerStudioUrlService lookerStudioUrlService;
@@ -98,9 +99,10 @@ public class DashboardsController {
         DashboardsFolderListSpec dashboardList = this.dashboardsProvider.getDashboardTree();
         DashboardsFolderListSpec combinedDefaultAndUserDashboards = dashboardList;
 
-        DqoCloudApiKey cloudApiKey = this.cloudApiKeyProvider.getApiKey();
+        UserDomainIdentity userIdentity = principal.getDataDomainIdentity();
+        DqoCloudApiKey cloudApiKey = this.cloudApiKeyProvider.getApiKey(userIdentity);
         if (cloudApiKey != null && cloudApiKey.getApiKeyPayload().getLicenseType() != DqoCloudLicenseType.FREE) {
-            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentity);
             UserHome userHome = userHomeContext.getUserHome();
             DashboardsFolderListSpec userDashboardsList = userHome.getDashboards().getSpec();
             combinedDefaultAndUserDashboards = dashboardList.merge(userDashboardsList);
@@ -112,7 +114,7 @@ public class DashboardsController {
                         .cachePublic()
                         .mustRevalidate())
                 .lastModified(combinedDefaultAndUserDashboards.getFileLastModified())
-                .eTag(combinedDefaultAndUserDashboards.getFileLastModified().toString())
+                .eTag(userIdentity.getDataDomainFolder() + "/" + combinedDefaultAndUserDashboards.getFileLastModified().toString())
                 .body(Flux.fromStream(combinedDefaultAndUserDashboards.stream())); // 200
     }
 
@@ -124,12 +126,12 @@ public class DashboardsController {
      * @return Custom dashboard specification or null, when the dashboard was not found.
      */
     protected DashboardSpec findUserCustomDashboard(DqoUserPrincipal principal, String dashboardName, String... folders) {
-        DqoCloudApiKey cloudApiKey = this.cloudApiKeyProvider.getApiKey();
+        DqoCloudApiKey cloudApiKey = this.cloudApiKeyProvider.getApiKey(principal.getDataDomainIdentity());
         if (cloudApiKey == null || cloudApiKey.getApiKeyPayload().getLicenseType() == DqoCloudLicenseType.FREE) {
             return null;
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
         DashboardsFolderListSpec userDashboardsList = userHome.getDashboards().getSpec();
         if (userDashboardsList == null || userDashboardsList.size() == 0) {
@@ -179,7 +181,7 @@ public class DashboardsController {
         String dqoUrlOrigin = windowLocationOrigin.orElse(null);
 
         try {
-            String authenticatedDashboardUrl = this.lookerStudioUrlService.makeAuthenticatedDashboardUrl(dashboard, dqoUrlOrigin);
+            String authenticatedDashboardUrl = this.lookerStudioUrlService.makeAuthenticatedDashboardUrl(dashboard, dqoUrlOrigin, principal);
             AuthenticatedDashboardModel authenticatedDashboardModel = new AuthenticatedDashboardModel(folder, dashboard, authenticatedDashboardUrl);
             return new ResponseEntity<>(Mono.just(authenticatedDashboardModel), HttpStatus.OK); // 200
         }
@@ -231,7 +233,7 @@ public class DashboardsController {
         String dqoUrlOrigin = windowLocationOrigin.orElse(null);
 
         try {
-            String authenticatedDashboardUrl = this.lookerStudioUrlService.makeAuthenticatedDashboardUrl(dashboard, dqoUrlOrigin);
+            String authenticatedDashboardUrl = this.lookerStudioUrlService.makeAuthenticatedDashboardUrl(dashboard, dqoUrlOrigin, principal);
             AuthenticatedDashboardModel authenticatedDashboardModel = new AuthenticatedDashboardModel(
                     folder1 + "/" + folder2, dashboard, authenticatedDashboardUrl);
             return new ResponseEntity<>(Mono.just(authenticatedDashboardModel), HttpStatus.OK); // 200
@@ -286,7 +288,7 @@ public class DashboardsController {
         String dqoUrlOrigin = windowLocationOrigin.orElse(null);
 
         try {
-            String authenticatedDashboardUrl = this.lookerStudioUrlService.makeAuthenticatedDashboardUrl(dashboard, dqoUrlOrigin);
+            String authenticatedDashboardUrl = this.lookerStudioUrlService.makeAuthenticatedDashboardUrl(dashboard, dqoUrlOrigin, principal);
             AuthenticatedDashboardModel authenticatedDashboardModel = new AuthenticatedDashboardModel(
                     folder1 + "/" + folder2 + "/" + folder3, dashboard, authenticatedDashboardUrl);
             return new ResponseEntity<>(Mono.just(authenticatedDashboardModel), HttpStatus.OK); // 200
@@ -343,7 +345,7 @@ public class DashboardsController {
         String dqoUrlOrigin = windowLocationOrigin.orElse(null);
 
         try {
-            String authenticatedDashboardUrl = this.lookerStudioUrlService.makeAuthenticatedDashboardUrl(dashboard, dqoUrlOrigin);
+            String authenticatedDashboardUrl = this.lookerStudioUrlService.makeAuthenticatedDashboardUrl(dashboard, dqoUrlOrigin, principal);
             AuthenticatedDashboardModel authenticatedDashboardModel = new AuthenticatedDashboardModel(
                     folder1 + "/" + folder2 + "/" + folder3 + "/" + folder4, dashboard, authenticatedDashboardUrl);
             return new ResponseEntity<>(Mono.just(authenticatedDashboardModel), HttpStatus.OK); // 200
@@ -402,7 +404,7 @@ public class DashboardsController {
         String dqoUrlOrigin = windowLocationOrigin.orElse(null);
 
         try {
-            String authenticatedDashboardUrl = this.lookerStudioUrlService.makeAuthenticatedDashboardUrl(dashboard, dqoUrlOrigin);
+            String authenticatedDashboardUrl = this.lookerStudioUrlService.makeAuthenticatedDashboardUrl(dashboard, dqoUrlOrigin, principal);
             AuthenticatedDashboardModel authenticatedDashboardModel = new AuthenticatedDashboardModel(
                     folder1 + "/" + folder2 + "/" + folder3 + "/" + folder4 + "/" + folder5, dashboard, authenticatedDashboardUrl);
             return new ResponseEntity<>(Mono.just(authenticatedDashboardModel), HttpStatus.OK); // 200

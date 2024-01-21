@@ -31,7 +31,8 @@ class MysqlParametersSpec:
             statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a
             ${MYSQL_OPTIONS} configuration with a custom environment variable.
         sslmode (Union[Unset, MySqlSslMode]):
-        properties (Union[Unset, MysqlParametersSpecProperties]):
+        properties (Union[Unset, MysqlParametersSpecProperties]): A dictionary of custom JDBC parameters that are added
+            to the JDBC connection string, a key/value dictionary.
     """
 
     host: Union[Unset, str] = UNSET

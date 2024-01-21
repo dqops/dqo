@@ -44,7 +44,7 @@ public class TableAccuracyMonthlyMonitoringChecksSpec extends AbstractCheckCateg
         }
     };
 
-    @JsonPropertyDescription("Verifies the total row count of a tested table and compares it to a row count of a reference table. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies the total row count of a tested table and compares it to a row count of a reference table. Stores the most recent check result for each month when the data quality check was evaluated.")
     private TableAccuracyTotalRowCountMatchPercentCheckSpec monthlyTotalRowCountMatchPercent;
 
     /**

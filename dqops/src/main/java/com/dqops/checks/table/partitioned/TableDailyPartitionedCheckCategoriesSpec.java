@@ -20,7 +20,7 @@ import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.table.partitioned.comparison.TableComparisonDailyPartitionedChecksSpecMap;
-import com.dqops.checks.table.partitioned.sql.TableSqlDailyPartitionedChecksSpec;
+import com.dqops.checks.table.partitioned.customsql.TableCustomSqlDailyPartitionedChecksSpec;
 import com.dqops.checks.table.partitioned.timeliness.TableTimelinessDailyPartitionedChecksSpec;
 import com.dqops.checks.table.partitioned.volume.TableVolumeDailyPartitionedChecksSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -30,7 +30,7 @@ import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.metadata.timeseries.TimeSeriesMode;
-import com.dqops.utils.docs.SampleValueFactory;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -53,7 +53,7 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
         {
             put("volume", o -> o.volume);
             put("timeliness", o -> o.timeliness);
-            put("sql", o -> o.sql);
+            put("custom_sql", o -> o.customSql);
             put("comparisons", o -> o.comparisons);
 
             // accuracy checks are not supported on partitioned checks yet, but we support comparisons
@@ -73,7 +73,7 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
     @JsonPropertyDescription("Custom SQL daily partitioned data quality checks that verify the quality of every day of data separately")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableSqlDailyPartitionedChecksSpec sql;
+    private TableCustomSqlDailyPartitionedChecksSpec customSql;
 
     @JsonPropertyDescription("Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -120,18 +120,18 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
      * Returns a container of custom sql checks.
      * @return Custom sql checks.
      */
-    public TableSqlDailyPartitionedChecksSpec getSql() {
-        return sql;
+    public TableCustomSqlDailyPartitionedChecksSpec getCustomSql() {
+        return customSql;
     }
 
     /**
      * Sets a reference to a container of custom sql checks.
-     * @param sql Container of custom sql checks.
+     * @param customSql Container of custom sql checks.
      */
-    public void setSql(TableSqlDailyPartitionedChecksSpec sql) {
-        this.setDirtyIf(!Objects.equals(this.sql, sql));
-        this.sql = sql;
-        this.propagateHierarchyIdToField(sql, "sql");
+    public void setCustomSql(TableCustomSqlDailyPartitionedChecksSpec customSql) {
+        this.setDirtyIf(!Objects.equals(this.customSql, customSql));
+        this.customSql = customSql;
+        this.propagateHierarchyIdToField(customSql, "custom_sql");
     }
 
     /**

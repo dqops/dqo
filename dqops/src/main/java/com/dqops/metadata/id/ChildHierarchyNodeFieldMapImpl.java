@@ -28,7 +28,7 @@ import java.util.*;
  * @param <T>
  */
 public class ChildHierarchyNodeFieldMapImpl<T extends HierarchyNode>
-        extends HashMap<String, GetHierarchyChildNodeFunc<T>> implements ChildHierarchyNodeFieldMap {
+        extends LinkedHashMap<String, GetHierarchyChildNodeFunc<T>> implements ChildHierarchyNodeFieldMap {
     private final ClassInfo reflectionClassInfo;
 
     /**

@@ -24,9 +24,7 @@ import io.swagger.parser.OpenAPIParser;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.PathItem;
-import io.swagger.v3.oas.models.media.ObjectSchema;
-import io.swagger.v3.oas.models.media.Schema;
-import io.swagger.v3.oas.models.media.StringSchema;
+import io.swagger.v3.oas.models.media.*;
 import io.swagger.v3.oas.models.parameters.Parameter;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.parser.core.models.SwaggerParseResult;
@@ -40,6 +38,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -108,11 +107,25 @@ public class SwaggerFileUpgradeUtility {
                 pathItem.readOperations().forEach(operation -> {
                     if (operation.getResponses().size() > 1) {
                         // remove additional responses, so the python client will be simpler and return values will be of a single type
+                        String firstResponseName = null;
+                        for (String responseName : operation.getResponses().keySet()) {
+                            ApiResponse apiResponse = operation.getResponses().get(responseName);
+                            Content content = apiResponse.getContent();
+                            Optional<String> ref = content.values().stream()
+                                    .map(MediaType::getSchema)
+                                    .filter(Predicate.not(Objects::isNull))
+                                    .map(Schema::get$ref)
+                                    .filter(Predicate.not(Objects::isNull))
+                                    .findFirst();
+                            if (ref.isEmpty() || !ref.get().endsWith("MonoVoid")) {
+                                firstResponseName = responseName;
+                                break;
+                            }
+                        }
 
-                        Optional<String> firstResponseName = operation.getResponses().keySet().stream().findFirst();
-                        ApiResponse firstApiResponse = operation.getResponses().get(firstResponseName.get());
+                        ApiResponse firstApiResponse = operation.getResponses().get(firstResponseName);
                         operation.getResponses().clear();
-                        operation.getResponses().addApiResponse(firstResponseName.get(), firstApiResponse);
+                        operation.getResponses().addApiResponse(firstResponseName, firstApiResponse);
                     }
                 });
             }));
@@ -133,7 +146,7 @@ public class SwaggerFileUpgradeUtility {
         }
 
         public OpenAPIBuilder mutateUseReferentiableEnums() {
-            Map<Class<? extends Enum<?>>, String> enumComponentRefMapping = new HashMap<>();
+            Map<Class<? extends Enum<?>>, String> enumComponentRefMapping = new LinkedHashMap<>();
             useReferentiableEnumsForControllers(enumComponentRefMapping);
             useReferentiableEnumsForModels(enumComponentRefMapping);
             return this;
@@ -146,7 +159,9 @@ public class SwaggerFileUpgradeUtility {
                     .filter(c -> c.isAnnotationPresent(Api.class))
                     .collect(Collectors.toMap(
                             controller -> controller.getAnnotation(Api.class).value(),
-                            Function.identity()
+                            Function.identity(),
+                            (key, value) -> value,
+                            LinkedHashMap::new
                     ));
 
             List<Operation> apiOperations = openApi.getPaths().values().stream()
@@ -186,7 +201,7 @@ public class SwaggerFileUpgradeUtility {
         }
 
         private void useReferentiableEnumsForModels(Map<Class<? extends Enum<?>>, String> enumRefMapping) {
-            Map<String, Class<?>> projectModels = new HashMap<>();
+            Map<String, Class<?>> projectModels = new LinkedHashMap<>();
             for (Class<?> clazz : TargetClassSearchUtility.findClasses("com.dqops", Path.of("dqops"), Object.class)) {
                 projectModels.put(clazz.getSimpleName(), clazz);
             }

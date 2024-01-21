@@ -18,15 +18,24 @@ package com.dqops.metadata.storage.localfiles.sources;
 import com.dqops.core.filesystem.ApiVersion;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
+import com.dqops.utils.reflection.DefaultFieldValue;
 import com.dqops.utils.serialization.InvalidYamlStatusHolder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 /**
  * Connection definition for a data source connection that is covered by data quality checks.
  */
 public class ConnectionYaml implements InvalidYamlStatusHolder {
+    @JsonPropertyDescription("DQOps YAML schema version")
+    @DefaultFieldValue(ApiVersion.CURRENT_API_VERSION)
     private String apiVersion = ApiVersion.CURRENT_API_VERSION;
-    private SpecificationKind kind = SpecificationKind.SOURCE;
+
+    @JsonPropertyDescription("File type")
+    @DefaultFieldValue("source")
+    private SpecificationKind kind = SpecificationKind.source;
+
+    @JsonPropertyDescription("Connection specification object with the connection parameters to the data source")
     private ConnectionSpec spec = new ConnectionSpec();
 
     @JsonIgnore

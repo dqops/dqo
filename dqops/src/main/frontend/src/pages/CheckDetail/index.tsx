@@ -52,6 +52,7 @@ export const SensorDetail = () => {
   const [isUpdated, setIsUpdated] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [helpText, setHelpText] = useState(activeCheckDetail?.help_text ?? '');
+  const [standard, setStandard] = useState(activeCheckDetail?.standard ?? false);
 
   const onChangeSensor = (value: string) => {
     setSelectedSensor(value);
@@ -64,6 +65,10 @@ export const SensorDetail = () => {
   const onChangeHelpText = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setHelpText(e.target.value);
   };
+
+  const onChangeStandard = (value: boolean) => {
+    setStandard(value);
+  }
 
   useEffect(() => {
     if (type === 'create') {
@@ -86,11 +91,13 @@ export const SensorDetail = () => {
       setSelectedRule('');
       setSelectedSensor('');
       setHelpText('');
+      setStandard(false);
       setcheckName('');
     } else {
       setSelectedRule(activeCheckDetail.rule_name ?? '');
       setSelectedSensor(activeCheckDetail.sensor_name ?? '');
       setHelpText(activeCheckDetail.help_text ?? '');
+      setStandard(activeCheckDetail.standard ?? false);
       setcheckName(
         String(activeCheckDetail.check_name).split('/')[
           String(activeCheckDetail.check_name).split('/').length - 1
@@ -110,7 +117,8 @@ export const SensorDetail = () => {
             {
               sensor_name: urlencodeDecoder(selectedSensor),
               rule_name: urlencodeDecoder(selectedRule),
-              help_text: helpText
+              help_text: helpText,
+              standard: standard
             }
           )
         );
@@ -119,7 +127,8 @@ export const SensorDetail = () => {
           createCheck(urlencodeDecoder(fullName), {
             sensor_name: urlencodeDecoder(selectedSensor),
             rule_name: urlencodeDecoder(selectedRule),
-            help_text: helpText
+            help_text: helpText,
+            standard: standard
           })
         );
       }
@@ -141,7 +150,8 @@ export const SensorDetail = () => {
           {
             sensor_name: selectedSensor,
             rule_name: selectedRule,
-            help_text: helpText
+            help_text: helpText,
+            standard: standard,
           }
         )
       );
@@ -203,7 +213,8 @@ export const SensorDetail = () => {
           sensor: selectedSensor,
           rule: selectedRule,
           checkName: checkName,
-          helpText: helpText
+          helpText: helpText,
+          standard: standard
         },
         label: checkName
       })
@@ -329,6 +340,8 @@ export const SensorDetail = () => {
           custom={custom}
           helpText={helpText}
           onChangeHelpText={onChangeHelpText}
+          standard={standard}
+          onChangeStandard={onChangeStandard}
           canEditDefinitions={userProfile.can_manage_definitions}
         />
         {/* )} */}

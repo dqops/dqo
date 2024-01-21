@@ -32,8 +32,8 @@ import java.util.stream.Collectors;
 @Data
 public class OpenAPIModel {
     private OpenAPI sourceModel;
-    private final Set<ControllerModel> controllers = new HashSet<>();
-    private final Set<ComponentModel> models = new HashSet<>();
+    private final Set<ControllerModel> controllers = new LinkedHashSet<>();
+    private final Set<ComponentModel> models = new LinkedHashSet<>();
 
     public static OpenAPIModel fromOpenAPI(OpenAPI openAPI,
                                            LinkageStore<String> targetLinkage,
@@ -44,7 +44,7 @@ public class OpenAPIModel {
         OpenAPIModel model = new OpenAPIModel();
         model.sourceModel = openAPI;
 
-        Map<String, ControllerModel> controllerModelMap = new HashMap<>();
+        Map<String, ControllerModel> controllerModelMap = new LinkedHashMap<>();
 
         for (Tag tag : openAPI.getTags()) {
             ControllerModel controllerModel = ControllerModel.fromTag(tag, componentReflectionService);

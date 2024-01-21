@@ -15,7 +15,6 @@
  */
 package com.dqops.utils.docs.client.operations;
 
-import com.dqops.utils.docs.LinkageStore;
 import com.dqops.utils.docs.client.apimodel.OpenAPIModel;
 
 import java.util.List;

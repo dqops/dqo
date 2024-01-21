@@ -24,7 +24,8 @@ import com.dqops.cli.output.OutputFormatService;
 import com.dqops.cli.terminal.*;
 import com.dqops.connectors.*;
 import com.dqops.core.jobqueue.PushJobResult;
-import com.dqops.core.principal.DqoCloudApiKeyPrincipalProvider;
+import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.scheduler.defaults.DefaultSchedulesProvider;
 import com.dqops.core.secrets.SecretValueLookupContext;
@@ -66,7 +67,7 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
     private final OutputFormatService outputFormatService;
     private final EditorLaunchService editorLaunchService;
     private final DefaultSchedulesProvider defaultSchedulesProvider;
-    private final DqoCloudApiKeyPrincipalProvider dqoCloudApiKeyPrincipalProvider;
+    private final DqoUserPrincipalProvider dqoUserPrincipalProvider;
 
     @Autowired
     public ConnectionCliServiceImpl(ConnectionService connectionService,
@@ -78,7 +79,7 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
                                     OutputFormatService outputFormatService,
                                     EditorLaunchService editorLaunchService,
                                     DefaultSchedulesProvider defaultSchedulesProvider,
-                                    DqoCloudApiKeyPrincipalProvider dqoCloudApiKeyPrincipalProvider) {
+                                    DqoUserPrincipalProvider dqoUserPrincipalProvider) {
         this.connectionService = connectionService;
         this.userHomeContextFactory = userHomeContextFactory;
         this.connectionProviderRegistry = connectionProviderRegistry;
@@ -88,7 +89,7 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
         this.outputFormatService = outputFormatService;
         this.editorLaunchService = editorLaunchService;
         this.defaultSchedulesProvider = defaultSchedulesProvider;
-        this.dqoCloudApiKeyPrincipalProvider = dqoCloudApiKeyPrincipalProvider;
+        this.dqoUserPrincipalProvider = dqoUserPrincipalProvider;
     }
 
     private TableWrapper findTableFromNameAndSchema(String tableName, Collection<TableWrapper> tableWrappers) {
@@ -107,7 +108,9 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
     public CliOperationStatus showTableForConnection(String connectionName, String fullTableName, TabularOutputFormat tabularOutputFormat) {
         CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.getLocalUserPrincipal();
+        UserDomainIdentity userIdentity = userPrincipal.getDataDomainIdentity();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentity);
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -195,7 +198,9 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
                                             String[] dimensions, String[] labels) {
         CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.getLocalUserPrincipal();
+        UserDomainIdentity userIdentity = userPrincipal.getDataDomainIdentity();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentity);
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -280,7 +285,9 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
     public CliOperationStatus loadSchemaList(String connectionName, TabularOutputFormat tabularOutputFormat, String[] dimensions, String[] labels) {
         CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.getLocalUserPrincipal();
+        UserDomainIdentity userIdentity = userPrincipal.getDataDomainIdentity();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentity);
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionList connections = userHome.getConnections();
 
@@ -356,7 +363,9 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
      * @return Connection list.
      */
     public FormattedTableDto<ConnectionListModel> loadConnectionTable(String connectionNameFilter, String[] dimensions, String[] labels) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.getLocalUserPrincipal();
+        UserDomainIdentity userIdentity = userPrincipal.getDataDomainIdentity();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentity);
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionSearchFilters connectionSearchFilters = new ConnectionSearchFilters();
@@ -367,8 +376,7 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
         HierarchyNodeTreeWalker hierarchyNodeTreeWalker = new HierarchyNodeTreeWalkerImpl();
         HierarchyNodeTreeSearcherImpl hierarchyNodeTreeSearcher = new HierarchyNodeTreeSearcherImpl(hierarchyNodeTreeWalker);
 
-        Collection<ConnectionSpec> connectionSpecs = hierarchyNodeTreeSearcher.findConnections(userHomeContextFactory.
-                openLocalUserHome().getUserHome(), connectionSearchFilters);
+        Collection<ConnectionSpec> connectionSpecs = hierarchyNodeTreeSearcher.findConnections(userHome, connectionSearchFilters);
 
         List<ConnectionListModel> connectionModels = connectionSpecs.stream().map(
                 spec -> {
@@ -403,7 +411,9 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
     public CliOperationStatus addConnection(String connectionName, ConnectionSpec connectionSpec) {
         CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.getLocalUserPrincipal();
+        UserDomainIdentity userIdentity = userPrincipal.getDataDomainIdentity();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentity);
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionList connections = userHome.getConnections();
 
@@ -433,9 +443,10 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
     public CliOperationStatus removeConnection(String connectionName) {
         CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.getLocalUserPrincipal();
+        UserDomainIdentity userIdentity = userPrincipal.getDataDomainIdentity();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentity);
         UserHome userHome = userHomeContext.getUserHome();
-        ConnectionList connections = userHome.getConnections();
 
         ConnectionSearchFilters connectionSearchFilters = new ConnectionSearchFilters();
         connectionSearchFilters.setConnectionName(connectionName);
@@ -443,8 +454,7 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
         HierarchyNodeTreeWalker hierarchyNodeTreeWalker = new HierarchyNodeTreeWalkerImpl();
         HierarchyNodeTreeSearcherImpl hierarchyNodeTreeSearcher = new HierarchyNodeTreeSearcherImpl(hierarchyNodeTreeWalker);
 
-        Collection<ConnectionSpec> connectionSpecs = hierarchyNodeTreeSearcher.findConnections(userHomeContextFactory.
-                openLocalUserHome().getUserHome(), connectionSearchFilters);
+        Collection<ConnectionSpec> connectionSpecs = hierarchyNodeTreeSearcher.findConnections(userHome, connectionSearchFilters);
 
         if (connectionSpecs.size() == 0) {
             cliOperationStatus.setFailedMessage("There are no connections with this name");
@@ -464,7 +474,6 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
                 .map(ConnectionSpec::getConnectionName)
                 .collect(Collectors.toList());
 
-        DqoUserPrincipal userPrincipal = this.dqoCloudApiKeyPrincipalProvider.createUserPrincipal();
         List<PushJobResult<DeleteStoredDataResult>> backgroundJobs = this.connectionService.deleteConnections(
                 connectionNames, userPrincipal);
 
@@ -497,7 +506,9 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
     public CliOperationStatus updateConnection(String connectionName, ConnectionSpec connectionSpec) {
         CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.getLocalUserPrincipal();
+        UserDomainIdentity userIdentity = userPrincipal.getDataDomainIdentity();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentity);
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionSearchFilters connectionSearchFilters = new ConnectionSearchFilters();
@@ -530,7 +541,9 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
      */
     @Override
     public ConnectionWrapper getConnection(String connectionName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.getLocalUserPrincipal();
+        UserDomainIdentity userIdentity = userPrincipal.getDataDomainIdentity();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentity);
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionList connections = userHome.getConnections();
 
@@ -564,7 +577,9 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
      */
     @Override
     public int launchEditorForConnection(String connectionName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.getLocalUserPrincipal();
+        UserDomainIdentity userIdentity = userPrincipal.getDataDomainIdentity();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentity);
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionWrapper connectionWrapper = userHome.getConnections().getByObjectName(connectionName, true);
         if (connectionWrapper == null) {

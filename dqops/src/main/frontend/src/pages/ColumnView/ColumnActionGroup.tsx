@@ -5,14 +5,9 @@ import { ColumnApiClient } from '../../services/apiClient';
 import { useParams } from 'react-router-dom';
 import { CheckTypes } from '../../shared/routes';
 import clsx from 'clsx';
-import Loader from '../../components/Loader';
 import AddColumnDialog from '../../components/CustomTree/AddColumnDialog';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
-import {
-    DqoJobHistoryEntryModelJobTypeEnum,
-    DqoJobHistoryEntryModelStatusEnum
-} from '../../api';
 import SvgIcon from '../../components/SvgIcon';
 
 interface IActionGroupProps {
@@ -21,10 +16,9 @@ interface IActionGroupProps {
   isUpdating?: boolean;
   isUpdated?: boolean;
   shouldDelete?: boolean;
-
   isStatistics?: boolean;
   onCollectStatistics?: () => void;
-  runningStatistics?: boolean;
+  collectStatisticsSpinner?: boolean
 }
 
 const ColumnActionGroup = ({
@@ -35,13 +29,13 @@ const ColumnActionGroup = ({
   shouldDelete = true,
   isStatistics,
   onCollectStatistics,
-  runningStatistics
+  collectStatisticsSpinner
 }: IActionGroupProps) => {
   const { checkTypes, connection, schema, table, column }: { checkTypes: CheckTypes, connection: string, schema: string, table: string, column: string } = useParams();
   const [isOpen, setIsOpen] = useState(false);
   const [isAddColumnDialogOpen, setIsAddColumnDialogOpen] = useState(false);
   const isSourceScreen = checkTypes === CheckTypes.SOURCES;
-  const { userProfile, job_dictionary_state } = useSelector((state: IRootState) => state.job || {});
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
   const removeColumn = async () => {
     await ColumnApiClient.deleteColumn(
       connection ?? '',
@@ -51,20 +45,8 @@ const ColumnActionGroup = ({
     );
   };
 
-  const filteredCollectStatisticsJobs = Object.values(job_dictionary_state).filter(
-    (x) =>
-      x.jobType === DqoJobHistoryEntryModelJobTypeEnum.collect_statistics &&
-      x.parameters?.collectStatisticsParameters
-        ?.statistics_collector_search_filters?.fullTableName ===
-        schema + '.' + table && 
-         x.parameters?.collectStatisticsParameters?.statistics_collector_search_filters?.connection === 
-        connection &&
-      (x.status === DqoJobHistoryEntryModelStatusEnum.running ||
-        x.status === DqoJobHistoryEntryModelStatusEnum.queued ||
-        x.status === DqoJobHistoryEntryModelStatusEnum.waiting)
-  ).length !==0 
-
   const columnPath = `${connection}.${schema}.${table}.${column}`
+
   return (
     <div className="flex space-x-4 items-center absolute right-2 top-2">
       {isSourceScreen && (
@@ -90,30 +72,27 @@ const ColumnActionGroup = ({
 
       {isStatistics ? (
         <div className="flex items-center space-x-4">
-          {runningStatistics && (
-            <Loader isFull={false} className="w-8 h-8 !text-primary" />
-          )}
           <Button
           color={
-          filteredCollectStatisticsJobs
+          collectStatisticsSpinner
           ? 'secondary'
           : 'primary'
             }           
-            label={filteredCollectStatisticsJobs
+            label={collectStatisticsSpinner
               ? 'Collecting...'
               : "Collect Statistics"}
             className={clsx(
               '!h-10 disabled:bg-gray-500 disabled:border-none disabled:text-white whitespace-nowrap gap-x-2 '
             )}
             leftIcon={
-              filteredCollectStatisticsJobs? (
+              collectStatisticsSpinner? (
                 <SvgIcon name="sync" className="w-4 h-4 animate-spin" />
               ) : (
                 ''
               )
             }
             onClick={onCollectStatistics}
-            disabled={runningStatistics || userProfile.can_collect_statistics  !== true || filteredCollectStatisticsJobs}
+            disabled={ userProfile.can_collect_statistics  !== true || collectStatisticsSpinner}
           />
         </div>
       ) : (

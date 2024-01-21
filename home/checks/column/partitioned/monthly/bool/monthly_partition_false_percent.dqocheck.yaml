@@ -5,5 +5,6 @@ spec:
   sensor_name: column/bool/false_percent
   rule_name: comparison/min_percent
   help_text: Verifies that the percentage of false values in a column does not exceed
-    the minimum accepted percentage. Creates a separate data quality check (and an
-    alert) for each monthly partition.
+    the minimum accepted percentage. Stores a separate data quality check result for
+    each monthly partition.
+  standard: true

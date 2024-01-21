@@ -17,7 +17,7 @@ package com.dqops.metadata.fields;
 
 import com.dqops.metadata.basespecs.AbstractDirtyTrackingSpecList;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
-import com.dqops.utils.docs.SampleValueFactory;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 
 import java.util.Collection;
 import java.util.List;

@@ -93,6 +93,11 @@ import { ReactComponent as CopyTextSvg } from './svg/copy-text.svg';
 import { ReactComponent as DoneSvg } from './svg/done.svg';
 import { ReactComponent as WarningSvg } from './svg/warning.svg';
 import { ReactComponent as WebhooksSvg } from './svg/webhooks.svg';
+import { ReactComponent as SparkSvg } from './svg/spark.svg';
+import { ReactComponent as DatabricksSvg } from './svg/databricks.svg';
+import { ReactComponent as PrestoSvg } from './svg/presto.svg';
+import { ReactComponent as TrinoSvg } from './svg/trino.svg';
+import { ReactComponent as AmazonAthenaSvg } from './svg/amazon-athena.svg';
 
 const iconsMap: any = {
   bell: BellSvg,
@@ -114,7 +119,7 @@ const iconsMap: any = {
   'user-circle': UserCircleSvg,
   users: UsersSvg,
   'x-circle': XCircleSvg,
-  'big-query': BigQuerySvg,
+  bigquery: BigQuerySvg,
   'bigquery-big': BigQueryBigSvg,
   snowflake: SnowflakeSvg,
   info: InfoSvg,
@@ -190,10 +195,15 @@ const iconsMap: any = {
   'not-equal': NotEqualSvg,
   definitionsrules: DefinitionsRulesSvg,
   definitionssensors: DefinitionsSensorsSvg,
-  copytext : CopyTextSvg,
+  copytext: CopyTextSvg,
   done: DoneSvg,
   warning: WarningSvg,
-  webhooks: WebhooksSvg
+  webhooks: WebhooksSvg,
+  spark: SparkSvg,
+  databricks: DatabricksSvg,
+  presto: PrestoSvg,
+  trino: TrinoSvg,
+  athena: AmazonAthenaSvg
 };
 
 interface SvgIconProps {

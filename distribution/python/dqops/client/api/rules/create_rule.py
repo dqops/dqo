@@ -5,7 +5,6 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.mono_void import MonoVoid
 from ...models.rule_model import RuleModel
 from ...types import Response
 
@@ -30,11 +29,9 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[MonoVoid]:
-    if response.status_code == HTTPStatus.OK:
-        response_200 = MonoVoid.from_dict(response.json())
-
-        return response_200
+) -> Optional[Any]:
+    if response.status_code == HTTPStatus.CREATED:
+        return None
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -43,7 +40,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[MonoVoid]:
+) -> Response[Any]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -57,7 +54,7 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     json_body: RuleModel,
-) -> Response[MonoVoid]:
+) -> Response[Any]:
     """createRule
 
      Creates (adds) a new custom rule given the rule definition.
@@ -71,7 +68,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[MonoVoid]
+        Response[Any]
     """
 
     kwargs = _get_kwargs(
@@ -86,41 +83,12 @@ def sync_detailed(
     return _build_response(client=client, response=response)
 
 
-def sync(
-    full_rule_name: str,
-    *,
-    client: AuthenticatedClient,
-    json_body: RuleModel,
-) -> Optional[MonoVoid]:
-    """createRule
-
-     Creates (adds) a new custom rule given the rule definition.
-
-    Args:
-        full_rule_name (str):
-        json_body (RuleModel): Rule model
-
-    Raises:
-        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
-        httpx.TimeoutException: If the request takes longer than Client.timeout.
-
-    Returns:
-        MonoVoid
-    """
-
-    return sync_detailed(
-        full_rule_name=full_rule_name,
-        client=client,
-        json_body=json_body,
-    ).parsed
-
-
 async def asyncio_detailed(
     full_rule_name: str,
     *,
     client: AuthenticatedClient,
     json_body: RuleModel,
-) -> Response[MonoVoid]:
+) -> Response[Any]:
     """createRule
 
      Creates (adds) a new custom rule given the rule definition.
@@ -134,7 +102,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[MonoVoid]
+        Response[Any]
     """
 
     kwargs = _get_kwargs(
@@ -145,34 +113,3 @@ async def asyncio_detailed(
     response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
-
-
-async def asyncio(
-    full_rule_name: str,
-    *,
-    client: AuthenticatedClient,
-    json_body: RuleModel,
-) -> Optional[MonoVoid]:
-    """createRule
-
-     Creates (adds) a new custom rule given the rule definition.
-
-    Args:
-        full_rule_name (str):
-        json_body (RuleModel): Rule model
-
-    Raises:
-        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
-        httpx.TimeoutException: If the request takes longer than Client.timeout.
-
-    Returns:
-        MonoVoid
-    """
-
-    return (
-        await asyncio_detailed(
-            full_rule_name=full_rule_name,
-            client=client,
-            json_body=json_body,
-        )
-    ).parsed

@@ -42,8 +42,8 @@ const ReferenceTableList = ({
             <th className="text-left  py-2">
               Table comparison configuration name
             </th>
-            <th className="text-left px-2 py-2">Connection</th>
-            <th className="text-left px-2 py-2">Schema</th>
+            <th className="text-left px-2 py-2">Reference connection</th>
+            <th className="text-left px-2 py-2">Reference schema</th>
             <th className="text-left px-2 py-2">Reference table name</th>
             <th className="text-left px-2 py-2" />
             <th className="text-left px-2 py-2" />

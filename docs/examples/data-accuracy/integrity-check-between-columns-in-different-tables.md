@@ -1,4 +1,7 @@
 # Integrity check between columns in different tables
+This sample shows how to use data quality checks to detect integrity between columns in different tables and view the results on data quality dashboards.
+
+## Overview
 
 This example shows how to check the referential integrity of a column against a column in another table. 
 
@@ -15,7 +18,7 @@ only contains values that corresponds to the FIPS state codes listed in a separa
 **SOLUTION**
 
 We will check the data of `bigquery-public-data.census_utility.fips_codes_all` using 
-[foreign_key_match_percent](../../checks/column/integrity/foreign-key-match-percent.md) check.
+[lookup_key_found_percent](../../checks/column/integrity/lookup-key-found-percent.md) check.
 Our goal is to verify that the values in `state_fips_code` column in `fips_codes_all` table matches the values in the reference
 `state_fips_code` column in the `fips_codes_states` table. 
 
@@ -25,7 +28,7 @@ In this example, we will set three minimum percentage thresholds levels for the 
 - error: 98.0%
 - fatal: 95.0%
 
-If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
 **VALUE**
 
@@ -70,63 +73,90 @@ a list of all states and other related regions and with their unique codes (`sta
 | **12**          | FL                        | Florida              | 294478       |
 
 
-## Running the checks in the example and evaluating the results using the user interface
+## Run the example using the user interface
 
-The detailed explanation of how to run the example is described [here](../#running-the-examples).
+A detailed explanation of [how to start DQOps platform and run the example is described here](../index.md#running-the-use-cases).
 
-To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
+### **Navigate to a list of checks**
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-foreign-key-match-percent-checks.png)
+To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/dqops-user-interface-overview.md):
+
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-foreign-key-match-percent-checks1.png)
 
 1. Go to the **Monitoring** section.
 
-   The Monitoring Checks section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
+    The **Monitoring Checks** section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
 
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
 
-   On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../working-with-dqo/adding-data-source-connection/index.md).
+    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../data-sources/index.md).
 
 
-3. Select the **Monitoring Checks** tab.
+3. Select the **Daily checks** tab.
 
-   In this tab you can find a list of data quality checks.
+    This tab displays a list of data quality checks in the check editor.
 
+    Learn more about [navigating the check editor](../../dqo-concepts/dqops-user-interface-overview.md#check-editor).
 
-4. Run the enabled check using the **Run check** button.
-
-   You can also run all checks for the check category using the **Run check** button located at the end of the row with the name of the check group.
-
-   ![Run check](https://dqops.com/docs/images/examples/daily-foreign-key-match-percent-run-checks.png)
-
-
-5. Access the results by clicking the **Results** button.
-
-   Within the Results window, you will see three categories: **Sensor readouts**, **Check results**, and **Execution errors**. The Sensor readouts category
-   displays the values obtained by the sensors from the data source. The Check results category shows the severity level
-   that result from the verification of sensor readouts by set rule thresholds. The Execution errors category displays any error
-   that occurred during the check's execution.
-
-   ![Check details](https://dqops.com/docs/images/examples/daily-foreign-key-match-percent-checks-details.png)
+    The daily_lookup_key_found_percent check has additional parameters foreign_table and foreign_column which should be used
+    to define the name of the table and column, to be compared to. The name of the table and column should be written as a STRING.
+    In our example we use names of the table `fips_codes_states` and column `state_fips_code` which were also imported.
 
 
-6. Access the results which should be similar as the one below.
-   
-    The actual value in this example is 100, which is above the minimum threshold level set in the warning (99.0%).
-    The check gives a valid result (notice the green square on the left of the name of the check).
+### **Run checks**
 
-    ![Foreign-key-match-percent check results](https://dqops.com/docs/images/examples/daily-foreign-key-match-percent-checks-results.png)
+Run the activated check using the **Run check** button.
 
-7. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
+You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
-    Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
+![Run check](https://dqops.com/docs/images/examples/daily-foreign-key-match-percent-run-checks1.png)
 
-8. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
-   go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
+
+### **View detailed check results**
+
+Access the detailed results by clicking the **Results** button. The results should be similar to the one below.
+
+![Foreign-key-match-percent check results](https://dqops.com/docs/images/examples/daily-foreign-key-match-percent-checks-results1.png)
+
+Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
+The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
+The Sensor readouts category displays the values obtained by the sensors from the data source.
+The Execution errors category displays any error that occurred during the check's execution.
+ 
+The actual value in this example is 100%, which is above the minimum threshold level set in the warning (99.0%).
+The check gives a valid result (notice the green square to the left of the check name).
+
+
+### **Synchronize the results with the cloud account**
+
+Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner
+of the user interface.
+
+Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
+
+
+### **Review the results on the data quality dashboards**
+
+To review the results on the [data quality dashboards](../../working-with-dqo/review-the-data-quality-results-on-dashboards.md)
+go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
     
-   Below you can see the results displayed on the Current table status per data quality dimension dashboard showing results by connection, schema, dimension and data group.
+Below you can see the results displayed on the **KPIs per table - summary** dashboard located in the Data quality KPIs group.
+This dashboard shows high-level data quality KPIs, aggregated on a macro scale that can be shared at a
+corporate level. DQOps calculates data quality KPIs as a percentage of passed [data quality checks](../../dqo-concepts/definition-of-data-quality-checks/index.md)
+for each connection, schema, data grouping, etc. With this dashboard, senior management can review a summary of 
+KPIs per table
 
-   ![Foreign-key-match-percent results on Current table status per data quality dimension dashboard](https://dqops.com/docs/images/examples/daily-foreign-key-match-percent-checks-results-on-current-table-status-per-data-quality-dimension-dashboard.png)
+This dashboard allows filtering data by:
+    
+* current and previous month,
+* connection,
+* schema,
+* data group,
+* data quality dimension,
+* check category,
+   
+![Foreign-key-match-percent results on KPIs per table - summary dashboard](https://dqops.com/docs/images/examples/daily-foreign-key-match-percent-checks-results-on-kpis-dashboard.png)
 
 ## YAML configuration file
 
@@ -143,10 +173,10 @@ And the following parameters:
 - foreign_table: fips_codes_states
 - foreign_column: state_fips_code
 
-The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_foreign_key_match_percent`
+The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_lookup_key_found_percent`
 check is configured.
 
-If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
 ```yaml hl_lines="16-32"
 apiVersion: dqo/v1
@@ -171,7 +201,7 @@ spec:
       monitoring_checks:
         daily:
           integrity:
-            daily_foreign_key_match_percent:
+            daily_lookup_key_found_percent:
               parameters:
                 foreign_table: fips_codes_states
                 foreign_column: state_fips_code
@@ -183,8 +213,8 @@ spec:
                 min_percent: 95.0
 ```
 
-## Running the checks in the example and evaluating the results using DQOps Shell
-The detailed explanation of how to run the example is described [here](../#running-the-examples).
+## Run the checks in the example using the DQOps Shell
+A detailed explanation of [how to start DQOps platform and run the example is described here](../index.md#running-the-use-cases).
 
 To execute the check prepared in the example, run the following command in DQOps Shell:
 
@@ -243,8 +273,8 @@ values in our column of interest match those in the reference column.
 
 ```
 **************************************************
-Finished executing a sensor for a check foreign_key_match_percent on the table census_utility.fips_codes_all using 
-a sensor definition column/integrity/foreign_key_match_percent, sensor result count: 1
+Finished executing a sensor for a check lookup_key_found_percent on the table census_utility.fips_codes_all using 
+a sensor definition column/integrity/lookup_key_found_percent, sensor result count: 1
 
 Results returned by the sensor:
 +------------+------------------------+------------------------+
@@ -254,10 +284,16 @@ Results returned by the sensor:
 +------------+------------------------+------------------------+
 **************************************************
 ```
+
+In this example, we have demonstrated how to use DQOps to verify the integrity of a column in one table against a column
+in another table. By using the [lookup_key_found_percent](../../checks/column/integrity/lookup-key-found-percent.md) 
+check, we can monitor whether the matching data falls below a certain threshold. 
+If it does, you will get a warning, error or fatal result.
+
 ## Next steps
 
-- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
-- For details on the [foreign_key_match_percent used in this example, go to the check details section](../../checks/column/integrity/foreign-key-match-percent.md).
-- With DQOps, you can easily customize when the checks are run at the level of the entire connection, table, or individual check. [Learn more about how to set schedules here](../../working-with-dqo/schedules/index.md). 
-- DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) and [notifications](../../integrations/webhooks/index.md). 
-- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md) can help you to calculate separate data quality KPI scores for different groups of rows.
+- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../dqops-installation/install-dqops-using-pip.md) or [run DQOps as a Docker container](../../dqops-installation/run-dqops-as-docker-container.md).
+- For details on the [lookup_key_found_percent used in this example, go to the check details section](../../checks/column/integrity/lookup-key-found-percent.md).
+- With DQOps, you can easily customize when the checks are run at the level of the entire connection, table, or individual check. [Learn more about how to set schedules here](../../working-with-dqo/configure-scheduling-of-data-quality-checks/index.md). 
+- DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md) and [notifications](../../integrations/webhooks/index.md). 
+- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../../working-with-dqo/set-up-data-grouping-for-data-quality-checks.md) can help you to calculate separate data quality KPI scores for different groups of rows.

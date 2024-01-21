@@ -65,7 +65,7 @@ public enum DataTypeCategory {
     datetime_time,
 
     /**
-     * String column that accepts short values, typically: string, varchar, nvarchar, etc.
+     * Short (limited) string column that accepts short values, typically: string, varchar, nvarchar, etc.
      */
     @JsonProperty("string")
     string,

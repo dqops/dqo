@@ -1,0 +1,17 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/SensorDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: sensor
+spec:
+  fields:
+  - field_name: date_formats
+    display_name: date_formats
+    help_text: Desired date format. Sensor will try to parse the column records and
+      cast the data using this format.
+    data_type: enum
+    required: true
+    allowed_values:
+    - YYYY-MM-DD
+    - MM/DD/YYYY
+    - DD/MM/YYYY
+    - YYYY/MM/DD
+    - "Month D, YYYY"

@@ -29,7 +29,8 @@ public final class UserHomeLockManagerObjectMother {
      */
     public static UserHomeLockManager createNewLockManager() {
         DqoCoreConfigurationProperties coreConfigurationProperties = DqoCoreConfigurationPropertiesObjectMother.getCoreConfigurationProperties();
-        return new UserHomeLockManagerImpl(coreConfigurationProperties);
+        ThreadLocksCounterImpl threadLocksCounter = new ThreadLocksCounterImpl(coreConfigurationProperties);
+        return new UserHomeLockManagerImpl(coreConfigurationProperties, threadLocksCounter);
     }
 
     /**

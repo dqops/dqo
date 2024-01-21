@@ -45,6 +45,7 @@ public class FieldInfo {
     private Constructor<?> constructor;
     private Object defaultValue;
     private boolean isDirectField;
+    private boolean isRequiredOrNotNullable;
     private String[] sampleValues;
 
     /**
@@ -286,6 +287,22 @@ public class FieldInfo {
      */
     public void setDirectField(boolean directField) {
         isDirectField = directField;
+    }
+
+    /**
+     * Returns true if this field is marked with a RequiredValue annotation or it is not nullable, so it is also required.
+     * @return Not nullable field or required.
+     */
+    public boolean isRequiredOrNotNullable() {
+        return isRequiredOrNotNullable;
+    }
+
+    /**
+     * Sets the flag that the field is not nullable or is required.
+     * @param requiredOrNotNullable True when required or not nullable.
+     */
+    public void setRequiredOrNotNullable(boolean requiredOrNotNullable) {
+        isRequiredOrNotNullable = requiredOrNotNullable;
     }
 
     /**

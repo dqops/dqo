@@ -1,4 +1,7 @@
 # Table import operator
+Read this reference to learn how to use the DQOps Apache Airflow operator for importing metadata of tables to DQOps for further data quality monitoring.
+
+## Overview
 
 The Airflow table import operator **DqopsTableImportOperator** is used to import table to connection existing in DQOps.
 When the table schema changes you can also use this operator. 
@@ -152,8 +155,8 @@ Status field is the DqoJobStatus enum, which have one of values:
 
 ## What's next
 
-- [Learn about run checks operator](run-checks-operator.md)
-- [Learn how to use run checks operator](run-checks-use-case.md)
-- [Learn about collect statistics operator](collect-statistics-operator.md)
-- [Learn about table status operator](table-status-operator.md)
-- [Learn about wait for job operator](wait-for-job-operator.md)
+- [Learn about run checks operator](./run-checks-operator.md)
+- [Learn how to use run checks operator](./run-checks-use-case.md)
+- [Learn about collect statistics operator](./collect-statistics-operator.md)
+- [Learn about table status operator](./table-status-operator.md)
+- [Learn about wait for job operator](./wait-for-job-operator.md)

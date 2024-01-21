@@ -22,6 +22,7 @@ import com.dqops.core.dqocloud.users.DqoCloudUserModel;
 import com.dqops.core.dqocloud.users.DqoUserLimitExceededException;
 import com.dqops.core.dqocloud.users.DqoUserNotFoundException;
 import com.dqops.core.dqocloud.users.UserManagementService;
+import com.dqops.core.principal.DqoAccessDeniedException;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.rest.models.platform.SpringErrorPayload;
@@ -46,7 +47,7 @@ import java.util.stream.Stream;
 @RestController
 @RequestMapping("/api/")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "Users", description = "User management service")
+@Api(value = "Users", description = "Operations for managing access for DQOps users in a multi-user installations. User management is supported in the TEAM and ENTERPRISE licences.")
 public class UsersController {
     private UserManagementService userManagementService;
 
@@ -80,7 +81,7 @@ public class UsersController {
                     .sorted(Comparator.comparing(model -> model.getEmail()));
             return new ResponseEntity<>(Flux.fromStream(sortedStream), HttpStatus.OK);
         }
-        catch (DqoCloudInvalidKeyException ex) {
+        catch (DqoAccessDeniedException | DqoCloudInvalidKeyException ex) {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.FORBIDDEN);
         }
     }
@@ -119,7 +120,7 @@ public class UsersController {
 
             return new ResponseEntity<>(Mono.just(userByEmail), HttpStatus.OK);
         }
-        catch (DqoCloudInvalidKeyException ex) {
+        catch (DqoAccessDeniedException | DqoCloudInvalidKeyException ex) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.FORBIDDEN);
         }
     }
@@ -153,7 +154,7 @@ public class UsersController {
         try {
             this.userManagementService.createUser(principal, userModel, null);
         }
-        catch (DqoCloudInvalidKeyException ex) {
+        catch (DqoAccessDeniedException | DqoCloudInvalidKeyException ex) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.FORBIDDEN);
         }
         catch (DqoUserLimitExceededException ex) {
@@ -195,7 +196,7 @@ public class UsersController {
         try {
             this.userManagementService.updateUser(principal, userModel);
         }
-        catch (DqoCloudInvalidKeyException ex) {
+        catch (DqoAccessDeniedException | DqoCloudInvalidKeyException ex) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.FORBIDDEN);
         }
         catch (DqoUserLimitExceededException ex) {
@@ -239,7 +240,7 @@ public class UsersController {
         catch (DqoUserNotFoundException ex) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
         }
-        catch (DqoCloudInvalidKeyException ex) {
+        catch (DqoAccessDeniedException | DqoCloudInvalidKeyException ex) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.FORBIDDEN);
         }
     }
@@ -275,7 +276,7 @@ public class UsersController {
         try {
             this.userManagementService.changePassword(principal, email, password);
         }
-        catch (DqoCloudInvalidKeyException ex) {
+        catch (DqoAccessDeniedException | DqoCloudInvalidKeyException ex) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.FORBIDDEN);
         }
         catch (DqoUserLimitExceededException ex) {
@@ -310,9 +311,9 @@ public class UsersController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("New Password") @RequestBody String password) {
         try {
-            this.userManagementService.changePassword(principal, principal.getName(), password);
+            this.userManagementService.changePassword(principal, principal.getDataDomainIdentity().getUserName(), password);
         }
-        catch (DqoCloudInvalidKeyException ex) {
+        catch (DqoAccessDeniedException | DqoCloudInvalidKeyException ex) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.FORBIDDEN);
         }
         catch (DqoUserLimitExceededException ex) {

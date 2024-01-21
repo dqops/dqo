@@ -11,7 +11,9 @@ if TYPE_CHECKING:
     from ..models.table_column_list_unordered_hash_sensor_parameters_spec import (
         TableColumnListUnorderedHashSensorParametersSpec,
     )
-    from ..models.value_changed_parameters_spec import ValueChangedParametersSpec
+    from ..models.value_changed_rule_parameters_spec import (
+        ValueChangedRuleParametersSpec,
+    )
 
 
 T = TypeVar("T", bound="TableSchemaColumnListChangedCheckSpec")
@@ -31,9 +33,9 @@ class TableSchemaColumnListChangedCheckSpec:
         exclude_from_kpi (Union[Unset, bool]): Data quality check results (alerts) are included in the data quality KPI
             calculation by default. Set this field to true in order to exclude this data quality check from the data quality
             KPI calculation.
-        include_in_sla (Union[Unset, bool]): Marks the data quality check as part of a data quality SLA. The data
-            quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract
-            for the dataset.
+        include_in_sla (Union[Unset, bool]): Marks the data quality check as part of a data quality SLA (Data Contract).
+            The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data
+            Contract for the dataset.
         quality_dimension (Union[Unset, str]): Configures a custom data quality dimension name that is different than
             the built-in dimensions (Timeliness, Validity, etc.).
         display_name (Union[Unset, str]): Data quality check display name that could be assigned to the check, otherwise
@@ -43,9 +45,9 @@ class TableSchemaColumnListChangedCheckSpec:
             quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent
             table.
         parameters (Union[Unset, TableColumnListUnorderedHashSensorParametersSpec]):
-        warning (Union[Unset, ValueChangedParametersSpec]):
-        error (Union[Unset, ValueChangedParametersSpec]):
-        fatal (Union[Unset, ValueChangedParametersSpec]):
+        warning (Union[Unset, ValueChangedRuleParametersSpec]):
+        error (Union[Unset, ValueChangedRuleParametersSpec]):
+        fatal (Union[Unset, ValueChangedRuleParametersSpec]):
     """
 
     schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
@@ -57,9 +59,9 @@ class TableSchemaColumnListChangedCheckSpec:
     display_name: Union[Unset, str] = UNSET
     data_grouping: Union[Unset, str] = UNSET
     parameters: Union[Unset, "TableColumnListUnorderedHashSensorParametersSpec"] = UNSET
-    warning: Union[Unset, "ValueChangedParametersSpec"] = UNSET
-    error: Union[Unset, "ValueChangedParametersSpec"] = UNSET
-    fatal: Union[Unset, "ValueChangedParametersSpec"] = UNSET
+    warning: Union[Unset, "ValueChangedRuleParametersSpec"] = UNSET
+    error: Union[Unset, "ValueChangedRuleParametersSpec"] = UNSET
+    fatal: Union[Unset, "ValueChangedRuleParametersSpec"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -134,7 +136,9 @@ class TableSchemaColumnListChangedCheckSpec:
         from ..models.table_column_list_unordered_hash_sensor_parameters_spec import (
             TableColumnListUnorderedHashSensorParametersSpec,
         )
-        from ..models.value_changed_parameters_spec import ValueChangedParametersSpec
+        from ..models.value_changed_rule_parameters_spec import (
+            ValueChangedRuleParametersSpec,
+        )
 
         d = src_dict.copy()
         _schedule_override = d.pop("schedule_override", UNSET)
@@ -173,25 +177,25 @@ class TableSchemaColumnListChangedCheckSpec:
             )
 
         _warning = d.pop("warning", UNSET)
-        warning: Union[Unset, ValueChangedParametersSpec]
+        warning: Union[Unset, ValueChangedRuleParametersSpec]
         if isinstance(_warning, Unset):
             warning = UNSET
         else:
-            warning = ValueChangedParametersSpec.from_dict(_warning)
+            warning = ValueChangedRuleParametersSpec.from_dict(_warning)
 
         _error = d.pop("error", UNSET)
-        error: Union[Unset, ValueChangedParametersSpec]
+        error: Union[Unset, ValueChangedRuleParametersSpec]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = ValueChangedParametersSpec.from_dict(_error)
+            error = ValueChangedRuleParametersSpec.from_dict(_error)
 
         _fatal = d.pop("fatal", UNSET)
-        fatal: Union[Unset, ValueChangedParametersSpec]
+        fatal: Union[Unset, ValueChangedRuleParametersSpec]
         if isinstance(_fatal, Unset):
             fatal = UNSET
         else:
-            fatal = ValueChangedParametersSpec.from_dict(_fatal)
+            fatal = ValueChangedRuleParametersSpec.from_dict(_fatal)
 
         table_schema_column_list_changed_check_spec = cls(
             schedule_override=schedule_override,

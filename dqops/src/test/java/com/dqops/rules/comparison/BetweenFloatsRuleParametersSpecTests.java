@@ -63,12 +63,42 @@ public class BetweenFloatsRuleParametersSpecTests extends BaseTest {
     }
 
     @Test
+    void executeRule_whenActualValueIsAboveFromAndToNotProvided_thenReturnsPassed() {
+        this.sut.setFrom(1.0);
+        this.sut.setTo(null);
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(3.0, this.sut);
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
+        Assertions.assertEquals(1.0, ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
+    }
+
+    @Test
+    void executeRule_whenActualValueIsBelowToAndFromNotProvided_thenReturnsPassed() {
+        this.sut.setFrom(null);
+        this.sut.setTo(5.0);
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(3.0, this.sut);
+        Assertions.assertTrue(ruleExecutionResult.getPassed());
+        Assertions.assertEquals(null, ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(5.0, ruleExecutionResult.getUpperBound());
+    }
+
+    @Test
     void executeRule_whenActualValueIsAboveEnd_thenReturnsFailed() {
         this.sut.setFrom(1.0);
         this.sut.setTo(5.0);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(7.0, this.sut);
         Assertions.assertFalse(ruleExecutionResult.getPassed());
         Assertions.assertEquals(1.0, ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(5.0, ruleExecutionResult.getUpperBound());
+    }
+
+    @Test
+    void executeRule_whenActualValueIsAboveEndAndFromNotProvided_thenReturnsFailed() {
+        this.sut.setFrom(null);
+        this.sut.setTo(5.0);
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(7.0, this.sut);
+        Assertions.assertFalse(ruleExecutionResult.getPassed());
+        Assertions.assertEquals(null, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(5.0, ruleExecutionResult.getUpperBound());
     }
 
@@ -80,6 +110,16 @@ public class BetweenFloatsRuleParametersSpecTests extends BaseTest {
         Assertions.assertFalse(ruleExecutionResult.getPassed());
         Assertions.assertEquals(1.0, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(5.0, ruleExecutionResult.getUpperBound());
+    }
+
+    @Test
+    void executeRule_whenActualValueIsBelowBeginAndEndNotProvided_thenReturnsFailed() {
+        this.sut.setFrom(1.0);
+        this.sut.setTo(null);
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(0.0, this.sut);
+        Assertions.assertFalse(ruleExecutionResult.getPassed());
+        Assertions.assertEquals(1.0, ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
     }
 
     @Test

@@ -1,4 +1,7 @@
 # Run checks example
+Read this guide to learn how to run data quality checks in an Apache Airflow DAG using DQOps, and how to stop the pipeline if data quality issues are detected.
+
+## Overview
 
 This page presents how to use the _run checks_ operator in the non-blocking DAG configuration in Airflow.
 
@@ -15,8 +18,8 @@ Entry requirements include:
 
 The below DAG uses three tasks: 
 
-- [run checks](run-checks-operator.md),
-- [wait for run checks execution](wait-for-job-operator.md),
+- [run checks](./run-checks-operator.md),
+- [wait for run checks execution](./wait-for-job-operator.md),
 - load data.
 
 The code snippet does not contain the configuration of the data loading operator.
@@ -120,7 +123,7 @@ For more details which will help to solve the issue use the Incidents in the DQO
 
 To reach more information about the issue click the link on the **Data quality issue grouping** in the top menu.
 
-The issue in the example points to the [Completeness dimension](../../dqo-concepts/data-quality-dimensions/data-quality-dimensions.md).
+The issue in the example points to the [Completeness dimension](../../dqo-concepts/data-quality-dimensions.md).
 The check that controls the expected number of rows failed.
 This means the data are incomplete and the issue has to be investigated and resolved.
 
@@ -147,7 +150,7 @@ Finally, the DAG execution should finish uninterrupted as presented on the scree
 ## What's next
 
 - [Learn about webhooks notifications](../webhooks/index.md)
-- [Learn about collect statistics operator](collect-statistics-operator.md)
-- [Learn about wait for job operator](wait-for-job-operator.md)
-- [Learn about table import operator](table-import-operator.md)
-- [Learn about table status operator](table-status-operator.md)
+- [Learn about collect statistics operator](./collect-statistics-operator.md)
+- [Learn about wait for job operator](./wait-for-job-operator.md)
+- [Learn about table import operator](./table-import-operator.md)
+- [Learn about table status operator](./table-status-operator.md)

@@ -80,7 +80,7 @@ public class FileProviderSensorDefinitionWrapperImpl extends ProviderSensorDefin
                     if (!Objects.equals(deserialized.getApiVersion(), ApiVersion.CURRENT_API_VERSION)) {
                         throw new LocalFileSystemException("apiVersion not supported in file " + fileNode.getFilePath().toString());
                     }
-                    if (deserialized.getKind() != SpecificationKind.PROVIDER_SENSOR) {
+                    if (deserialized.getKind() != SpecificationKind.provider_sensor) {
                         throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
                     }
 
@@ -174,6 +174,8 @@ public class FileProviderSensorDefinitionWrapperImpl extends ProviderSensorDefin
                 if (this.getSqlTemplate() != null) {
 					this.sensorDefinitionFolderNode.addChildFile(templateFileNameWithExt, new FileContent(this.getSqlTemplate()));
                 }
+                break;
+
             case MODIFIED:
                 FileTreeNode modifiedFileNode = this.sensorDefinitionFolderNode.getChildFileByFileName(specFileNameWithExt);
                 modifiedFileNode.changeContent(newSpecFileContent);
@@ -194,6 +196,7 @@ public class FileProviderSensorDefinitionWrapperImpl extends ProviderSensorDefin
                     }
                 }
                 break;
+
             case TO_BE_DELETED:
 				this.sensorDefinitionFolderNode.deleteChildFile(specFileNameWithExt);
                 FileTreeNode sqlTemplateToDelete = this.sensorDefinitionFolderNode.getChildFileByFileName(templateFileNameWithExt);

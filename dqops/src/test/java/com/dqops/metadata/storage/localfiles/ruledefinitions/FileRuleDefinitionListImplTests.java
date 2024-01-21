@@ -48,7 +48,7 @@ public class FileRuleDefinitionListImplTests extends BaseTest {
     void createNewElement_whenCalled_createsElementWithEmptyModel() {
         RuleDefinitionWrapperImpl wrapper = this.sut.createNewElement("test");
         Assertions.assertEquals("test", wrapper.getRuleName());
-        Assertions.assertEquals(InstanceStatus.UNCHANGED, wrapper.getStatus());
+        Assertions.assertEquals(InstanceStatus.ADDED, wrapper.getStatus());
         Assertions.assertNotNull(wrapper.getSpec());
     }
 

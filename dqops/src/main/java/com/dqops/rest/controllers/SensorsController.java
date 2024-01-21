@@ -19,10 +19,7 @@ import com.dqops.connectors.ProviderType;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.metadata.basespecs.ElementWrapper;
-import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionList;
-import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionWrapper;
-import com.dqops.metadata.definitions.sensors.SensorDefinitionList;
-import com.dqops.metadata.definitions.sensors.SensorDefinitionWrapper;
+import com.dqops.metadata.definitions.sensors.*;
 import com.dqops.metadata.dqohome.DqoHome;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
@@ -56,7 +53,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "Sensors", description = "Sensors definition management")
+@Api(value = "Sensors", description = "Operations for managing custom data quality sensor definitions in DQOps. The custom sensors are stored in the DQOps user home folder.")
 public class SensorsController {
     private DqoHomeContextFactory dqoHomeContextFactory;
     private UserHomeContextFactory userHomeContextFactory;
@@ -125,7 +122,7 @@ public class SensorsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
         SensorDefinitionList userHomeSensorDefinitionList = userHome.getSensors();
         Optional<SensorDefinitionWrapper> userHomeSensorDefinitionWrapperOptional =
@@ -211,7 +208,7 @@ public class SensorsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
         SensorDefinitionList userHomeSensorDefinitionList = userHome.getSensors();
 
@@ -264,7 +261,7 @@ public class SensorsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
         SensorDefinitionList userHomeSensorDefinitionList = userHome.getSensors();
         SensorDefinitionWrapper userHomeSensorDefinitionWrapper = userHomeSensorDefinitionList.getByObjectName(fullSensorName,true);
@@ -305,6 +302,7 @@ public class SensorsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
         }
 
+        SensorDefinitionSpec oldSensorDefinitionSpec = userHomeSensorDefinitionWrapper.getSpec(); // force loading
         ProviderSensorDefinitionList userProviderSensorDefinitionList = userHomeSensorDefinitionWrapper.getProviderSensors();
 
         if (sensorModel.equalsSensorDqo(dqoHomeSensorDefinitionWrapper)) {
@@ -332,6 +330,8 @@ public class SensorsController {
                     userHomeProviderSensorDefinitionWrapper.setSpec(providerSensorModel.getProviderSensorDefinitionSpec());
                     userHomeProviderSensorDefinitionWrapper.setSqlTemplate(providerSensorModel.getSqlTemplate());
                 } else if (!providerSensorModel.equalsProviderSensorDqo(dqoHomeProviderSensorDefinitionWrapper) && userHomeProviderSensorDefinitionWrapper != null) {
+                    ProviderSensorDefinitionSpec oldProviderDefinitionSpec = userHomeProviderSensorDefinitionWrapper.getSpec(); // force loading
+                    String oldSqlTemplate = userHomeProviderSensorDefinitionWrapper.getSqlTemplate(); // force loading
                     userHomeProviderSensorDefinitionWrapper.setSpec(providerSensorModel.getProviderSensorDefinitionSpec());
                     userHomeProviderSensorDefinitionWrapper.setSqlTemplate(providerSensorModel.getSqlTemplate());
                 } else if (userHomeProviderSensorDefinitionWrapper != null){
@@ -371,7 +371,7 @@ public class SensorsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         SensorDefinitionList userSensorDefinitionList = userHome.getSensors();
@@ -416,7 +416,7 @@ public class SensorsController {
      */
     @NotNull
     private SensorFolderModel createSensorTreeModel(DqoUserPrincipal principal) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();

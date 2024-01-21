@@ -21,5 +21,4 @@ spec:
       \ exist to run the calculation. You can change the default value by modifying\
       \ prediction_time_window parameterin Definitions section."
     data_type: double
-    sample_values:
-    - 0.1
+    required: true

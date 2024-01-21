@@ -22,8 +22,8 @@ import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyIdModel;
 import com.dqops.metadata.search.pattern.SearchPattern;
 import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
-import com.dqops.utils.docs.SampleStringsRegistry;
-import com.dqops.utils.docs.SampleValueFactory;
+import com.dqops.utils.docs.generators.SampleStringsRegistry;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -31,8 +31,10 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.EqualsAndHashCode;
+import org.apache.parquet.Strings;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -49,11 +51,11 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
     private String column;
 
     @JsonPropertyDescription("The column data type that was imported from the data source and is stored in the " +
-            "[columns -> column_name -> type_snapshot -> column_type](../../reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file.")
+            "[columns -> column_name -> type_snapshot -> column_type](/docs/reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file.")
     private String columnDataType;
 
     @JsonPropertyDescription("Optional filter to find only nullable (when the value is *true*) or not nullable (when the value is *false*) columns, based on the value of the " +
-            "[columns -> column_name -> type_snapshot -> nullable](../../reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file.")
+            "[columns -> column_name -> type_snapshot -> nullable](/docs/reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file.")
     private Boolean columnNullable;
 
     @JsonPropertyDescription("The target type of object to run checks. Supported values are: *table* to run only table level checks or *column* to run only column level checks.")
@@ -95,6 +97,8 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
     private SearchPattern sensorNameSearchPattern;
     @JsonIgnore
     private SearchPattern checkNameSearchPattern;
+    @JsonIgnore
+    private SearchPattern columnDataTypeSearchPattern;
 
     /**
      * Create a hierarchy tree node traversal visitor that will search for nodes matching the current filter.
@@ -333,7 +337,7 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
      */
     @JsonIgnore
     public SearchPattern getColumnNameSearchPattern() {
-        if (columnNameSearchPattern == null && column != null) {
+        if (columnNameSearchPattern == null && !Strings.isNullOrEmpty(column)) {
             columnNameSearchPattern = SearchPattern.create(false, column);
         }
         
@@ -347,7 +351,7 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
      */
     @JsonIgnore
     public SearchPattern getSensorNameSearchPattern() {
-        if (sensorNameSearchPattern == null && sensorName != null) {
+        if (sensorNameSearchPattern == null && !Strings.isNullOrEmpty(sensorName)) {
             sensorNameSearchPattern = SearchPattern.create(false, sensorName);
         }
 
@@ -361,11 +365,25 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
      */
     @JsonIgnore
     public SearchPattern getCheckNameSearchPattern() {
-        if (checkNameSearchPattern == null && checkName != null) {
+        if (checkNameSearchPattern == null && !Strings.isNullOrEmpty(checkName)) {
             checkNameSearchPattern = SearchPattern.create(false, checkName);
         }
 
         return checkNameSearchPattern;
+    }
+
+    /**
+     * Returns the {@link SearchPattern} related to <code>columnDataType</code>.
+     * Lazy getter, parses <code>columnDataType</code> as a search pattern and returns parsed object.
+     * @return {@link SearchPattern} related to <code>columnDataType</code>.
+     */
+    @JsonIgnore
+    public SearchPattern getColumnDataTypeSearchPattern() {
+        if (columnDataTypeSearchPattern == null && !Strings.isNullOrEmpty(columnDataType)) {
+            columnDataTypeSearchPattern = SearchPattern.create(false, columnDataType);
+        }
+
+        return columnDataTypeSearchPattern;
     }
 
     /**
@@ -377,7 +395,7 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
         try {
             CheckSearchFilters cloned = (CheckSearchFilters) super.clone();
             if (this.checkHierarchyIds != null) {
-                cloned.checkHierarchyIds = new HashSet<>(this.checkHierarchyIds);
+                cloned.checkHierarchyIds = new LinkedHashSet<>(this.checkHierarchyIds);
             }
             return cloned;
         }

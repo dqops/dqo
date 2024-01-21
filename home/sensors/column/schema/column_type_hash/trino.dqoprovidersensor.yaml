@@ -1,0 +1,8 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/ProviderSensorYaml-schema.json
+apiVersion: dqo/v1
+kind: provider_sensor
+spec:
+  type: java_class
+  java_class_name: com.dqops.sensors.column.schema.ColumnColumnTypeHashSensorRunner
+  supports_grouping: false
+  supports_partitioned_checks: false

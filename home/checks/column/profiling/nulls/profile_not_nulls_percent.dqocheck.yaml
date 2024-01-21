@@ -4,5 +4,6 @@ kind: check
 spec:
   sensor_name: column/nulls/not_null_percent
   rule_name: comparison/min_percent
-  help_text: Verifies that the percent of not null values in a column does not exceed
-    the minimum accepted percentage.
+  help_text: Measures the percent of not null values in a column. Raises a data quality
+    exception when the percentage of not null values is below a minimum accepted percentage.
+  standard: true

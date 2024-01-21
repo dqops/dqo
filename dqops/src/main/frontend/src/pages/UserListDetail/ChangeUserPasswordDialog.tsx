@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Dialog, DialogBody, DialogFooter, Input } from '@material-tailwind/react'; 
+import { Dialog, DialogBody, DialogFooter} from '@material-tailwind/react'; 
 import Button from '../../components/Button';
+import Input from '../../components/Input';
 
 interface AddColumnDialogProps {
   open: boolean;

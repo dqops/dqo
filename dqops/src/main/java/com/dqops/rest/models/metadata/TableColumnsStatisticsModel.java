@@ -17,6 +17,9 @@ package com.dqops.rest.models.metadata;
 
 import com.dqops.metadata.search.StatisticsCollectorSearchFilters;
 import com.dqops.metadata.sources.PhysicalTableName;
+import com.dqops.utils.docs.generators.SampleListUtility;
+import com.dqops.utils.docs.generators.SampleStringsRegistry;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -25,6 +28,8 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.function.Function;
 
 /**
  * Model that returns a summary of the column statistics (the basic profiling results) for a single table, showing statistics for all columns.
@@ -56,6 +61,30 @@ public class TableColumnsStatisticsModel {
     @JsonPropertyDescription("Boolean flag that decides if the current user can collect statistics.")
     private boolean canCollectStatistics;
 
-    public TableColumnsStatisticsModel() {
+    public static class TableColumnsStatisticsModelSampleFactory implements SampleValueFactory<TableColumnsStatisticsModel> {
+        @Override
+        public TableColumnsStatisticsModel createSample() {
+            List<ColumnStatisticsModel> columnStatisticsModelList = SampleListUtility.generateList(
+                    ColumnStatisticsModel.class, 2,
+
+                    ColumnStatisticsModel::getColumnName,
+                    (Function<String, String>) SampleListUtility.HelperMutators.ITERATE_STRING.getMutator(),
+                    ColumnStatisticsModel::setColumnName,
+
+                    ColumnStatisticsModel::getStatistics,
+                    s -> {
+                        // TODO: Modify sample statistics.
+                        return s;
+                    },
+                    ColumnStatisticsModel::setStatistics
+            );
+            return new TableColumnsStatisticsModel() {{
+                setConnectionName(SampleStringsRegistry.getConnectionName());
+                setTable(PhysicalTableName.fromSchemaTableFilter(SampleStringsRegistry.getSchemaTableName()));
+                setColumnStatistics(columnStatisticsModelList);
+                setCollectColumnStatisticsJobTemplate(new StatisticsCollectorSearchFilters.StatisticsCollectorSearchFiltersSampleFactory().createSample());
+                setCanCollectStatistics(true);
+            }};
+        }
     }
 }

@@ -36,7 +36,7 @@ import reactor.core.publisher.Flux;
 @RestController
 @RequestMapping("/api/timezones")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "Timezones", description = "Timezone management")
+@Api(value = "Timezones", description = "Operations for returning time zone names and codes supported by DQOps.")
 public class TimezonesController {
 
     @GetMapping(produces = "application/json")

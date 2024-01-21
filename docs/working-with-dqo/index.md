@@ -1,0 +1,19 @@
+# Working with DQOps
+Our guides provide detailed step-by-step instructions on how to use DQOps to effectively monitor and manage data quality issues.
+
+## List of Working of DQOps guides
+
+| Guide name                                                                                                | Description                                                                                                                                       |
+|-----------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
+| [Daily monitoring of data quality](daily-monitoring-of-data-quality.md)                                   | Understand the daily workflow of using DQOps to review recently detected data quality issues.                                                     |
+| [Basic data statistics](collecting-basic-data-statistics.md)                                              | Learn how to collect basic statistics about data sources during the data profiling stage, before activating advanced profiling checks.            |
+| [Run data quality checks](run-data-quality-checks.md)                                                     | Familiarize yourself with the DQOps user interface and command line to run data quality checks.                                                   |
+| [Review the data quality results on dashboards](review-the-data-quality-results-on-dashboards.md)         | Learn how to use detailed data quality dashboards in DQOps for drilling down to identify all tables and columns affected by issues.               |
+| [Delete data quality results](delete-data-quality-results.md)                                             | Learn how to delete a subset of outdated data quality results, especially when tables were decommissioned or checks were run by mistake.          |
+| [Configuring the scheduling of data quality checks](configure-scheduling-of-data-quality-checks/index.md) | Understand how scheduling works in DQOops and learn how to configure the scheduling of data quality checks at different levels..                  |
+| [Incidents and notifications](managing-data-quality-incidents-with-dqops.md)                              | Understand how the data quality incident workflow works in DQOps, and how to use all incident management screens to manage data quality incidents |
+| [Activate and deactivate multiple checks](activate-and-deactivate-multiple-checks.md)                     | Learn how to activate or deactivate multiple data quality checks in the DQOps user interface.                                                     |
+| [Set up data grouping](set-up-data-grouping-for-data-quality-checks.md)                                   | Understand how to configure data grouping in DQOps for running data quality checks for different data streams.                                    |
+| [Compare tables](compare-tables-between-data-sources.md)                                                  | Understand how to compare tables between data sources using DQOps. Table comparison (reconciliation) enables detection of data accuracy issues.   |
+| [User and access management](access-management.md)                                                        | Learn how to manage user access in DQOps, to enable splitting the roles between data quality editors, operation teams, and data stakeholders.     |
+| [Working with DQOps Shell](working-with-dqo-shell.md)                                                     | Learn how to use DQOps Shell both from a development instance started as a Python module, or started as a docker container.                       |

@@ -18,11 +18,13 @@ package com.dqops.utils.docs.cli;
 import com.dqops.cli.commands.ICommand;
 import com.google.api.client.util.Lists;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.parquet.Strings;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Documentation factory that creates documentation of a single CLI command.
@@ -68,7 +70,7 @@ public class CliCommandDocumentationModelFactoryImpl implements CliCommandDocume
 
         for (CommandLine.Model.OptionSpec optionSpec : options) {
             CliOptionDocumentationModel optionDocumentationModel = new CliOptionDocumentationModel();
-            optionDocumentationModel.setNames(optionSpec.names());
+            optionDocumentationModel.setNames(List.of(optionSpec.names()).stream().map(o -> o.trim()).collect(Collectors.toList()));
             optionDocumentationModel.setDescription(optionSpec.description());
             optionDocumentationModel.setRequired(optionSpec.required());
 

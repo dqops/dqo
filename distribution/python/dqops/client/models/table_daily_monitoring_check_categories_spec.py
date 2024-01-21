@@ -12,6 +12,9 @@ if TYPE_CHECKING:
     from ..models.table_availability_daily_monitoring_checks_spec import (
         TableAvailabilityDailyMonitoringChecksSpec,
     )
+    from ..models.table_custom_sql_daily_monitoring_checks_spec import (
+        TableCustomSqlDailyMonitoringChecksSpec,
+    )
     from ..models.table_daily_monitoring_check_categories_spec_comparisons import (
         TableDailyMonitoringCheckCategoriesSpecComparisons,
     )
@@ -20,9 +23,6 @@ if TYPE_CHECKING:
     )
     from ..models.table_schema_daily_monitoring_checks_spec import (
         TableSchemaDailyMonitoringChecksSpec,
-    )
-    from ..models.table_sql_daily_monitoring_checks_spec import (
-        TableSqlDailyMonitoringChecksSpec,
     )
     from ..models.table_timeliness_daily_monitoring_checks_spec import (
         TableTimelinessDailyMonitoringChecksSpec,
@@ -44,7 +44,7 @@ class TableDailyMonitoringCheckCategoriesSpec:
         volume (Union[Unset, TableVolumeDailyMonitoringChecksSpec]):
         timeliness (Union[Unset, TableTimelinessDailyMonitoringChecksSpec]):
         accuracy (Union[Unset, TableAccuracyDailyMonitoringChecksSpec]):
-        sql (Union[Unset, TableSqlDailyMonitoringChecksSpec]):
+        custom_sql (Union[Unset, TableCustomSqlDailyMonitoringChecksSpec]):
         availability (Union[Unset, TableAvailabilityDailyMonitoringChecksSpec]):
         schema (Union[Unset, TableSchemaDailyMonitoringChecksSpec]):
         comparisons (Union[Unset, TableDailyMonitoringCheckCategoriesSpecComparisons]): Dictionary of configuration of
@@ -56,7 +56,7 @@ class TableDailyMonitoringCheckCategoriesSpec:
     volume: Union[Unset, "TableVolumeDailyMonitoringChecksSpec"] = UNSET
     timeliness: Union[Unset, "TableTimelinessDailyMonitoringChecksSpec"] = UNSET
     accuracy: Union[Unset, "TableAccuracyDailyMonitoringChecksSpec"] = UNSET
-    sql: Union[Unset, "TableSqlDailyMonitoringChecksSpec"] = UNSET
+    custom_sql: Union[Unset, "TableCustomSqlDailyMonitoringChecksSpec"] = UNSET
     availability: Union[Unset, "TableAvailabilityDailyMonitoringChecksSpec"] = UNSET
     schema: Union[Unset, "TableSchemaDailyMonitoringChecksSpec"] = UNSET
     comparisons: Union[
@@ -81,9 +81,9 @@ class TableDailyMonitoringCheckCategoriesSpec:
         if not isinstance(self.accuracy, Unset):
             accuracy = self.accuracy.to_dict()
 
-        sql: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.sql, Unset):
-            sql = self.sql.to_dict()
+        custom_sql: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.custom_sql, Unset):
+            custom_sql = self.custom_sql.to_dict()
 
         availability: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.availability, Unset):
@@ -108,8 +108,8 @@ class TableDailyMonitoringCheckCategoriesSpec:
             field_dict["timeliness"] = timeliness
         if accuracy is not UNSET:
             field_dict["accuracy"] = accuracy
-        if sql is not UNSET:
-            field_dict["sql"] = sql
+        if custom_sql is not UNSET:
+            field_dict["custom_sql"] = custom_sql
         if availability is not UNSET:
             field_dict["availability"] = availability
         if schema is not UNSET:
@@ -127,6 +127,9 @@ class TableDailyMonitoringCheckCategoriesSpec:
         from ..models.table_availability_daily_monitoring_checks_spec import (
             TableAvailabilityDailyMonitoringChecksSpec,
         )
+        from ..models.table_custom_sql_daily_monitoring_checks_spec import (
+            TableCustomSqlDailyMonitoringChecksSpec,
+        )
         from ..models.table_daily_monitoring_check_categories_spec_comparisons import (
             TableDailyMonitoringCheckCategoriesSpecComparisons,
         )
@@ -135,9 +138,6 @@ class TableDailyMonitoringCheckCategoriesSpec:
         )
         from ..models.table_schema_daily_monitoring_checks_spec import (
             TableSchemaDailyMonitoringChecksSpec,
-        )
-        from ..models.table_sql_daily_monitoring_checks_spec import (
-            TableSqlDailyMonitoringChecksSpec,
         )
         from ..models.table_timeliness_daily_monitoring_checks_spec import (
             TableTimelinessDailyMonitoringChecksSpec,
@@ -175,12 +175,12 @@ class TableDailyMonitoringCheckCategoriesSpec:
         else:
             accuracy = TableAccuracyDailyMonitoringChecksSpec.from_dict(_accuracy)
 
-        _sql = d.pop("sql", UNSET)
-        sql: Union[Unset, TableSqlDailyMonitoringChecksSpec]
-        if isinstance(_sql, Unset):
-            sql = UNSET
+        _custom_sql = d.pop("custom_sql", UNSET)
+        custom_sql: Union[Unset, TableCustomSqlDailyMonitoringChecksSpec]
+        if isinstance(_custom_sql, Unset):
+            custom_sql = UNSET
         else:
-            sql = TableSqlDailyMonitoringChecksSpec.from_dict(_sql)
+            custom_sql = TableCustomSqlDailyMonitoringChecksSpec.from_dict(_custom_sql)
 
         _availability = d.pop("availability", UNSET)
         availability: Union[Unset, TableAvailabilityDailyMonitoringChecksSpec]
@@ -212,7 +212,7 @@ class TableDailyMonitoringCheckCategoriesSpec:
             volume=volume,
             timeliness=timeliness,
             accuracy=accuracy,
-            sql=sql,
+            custom_sql=custom_sql,
             availability=availability,
             schema=schema,
             comparisons=comparisons,

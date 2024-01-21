@@ -19,7 +19,7 @@ import com.dqops.metadata.fields.ParameterDataType;
 import com.dqops.utils.docs.DocumentationReflectionService;
 import com.dqops.utils.docs.DocumentationReflectionServiceImpl;
 import com.dqops.utils.docs.LinkageStore;
-import com.dqops.utils.docs.TypeModel;
+import com.dqops.utils.docs.generators.TypeModel;
 import com.dqops.utils.reflection.ClassInfo;
 import com.dqops.utils.reflection.FieldInfo;
 import com.dqops.utils.reflection.ObjectDataType;
@@ -62,16 +62,19 @@ public class YamlDocumentationModelFactoryImpl implements YamlDocumentationModel
             Class<?> yamlClass = yamlDocumentationNode.getClazz();
             YamlSuperiorObjectDocumentationModel yamlSuperiorObjectDocumentationModel = new YamlSuperiorObjectDocumentationModel();
             yamlSuperiorObjectDocumentationModel.setSuperiorClassFullName(yamlClass.getName());
-            yamlSuperiorObjectDocumentationModel.setSuperiorClassSimpleName(yamlDocumentationNode.getPathToFile().toString().replace('\\', '/'));
+            yamlSuperiorObjectDocumentationModel.setSuperiorClassFilePath(yamlDocumentationNode.getPathToFile().toString());
+            yamlSuperiorObjectDocumentationModel.setSuperiorClassSimpleName(yamlDocumentationNode.getPathToFile().getFileName().toString());
 
-            Map<Class<?>, YamlObjectDocumentationModel> yamlObjectDocumentationModels = new HashMap<>();
+            Map<Class<?>, YamlObjectDocumentationModel> yamlObjectDocumentationModels = new LinkedHashMap<>();
 
             generateYamlObjectDocumentationModelRecursive(
                     Path.of("docs", "reference", "yaml",
-                            yamlSuperiorObjectDocumentationModel.getSuperiorClassSimpleName()),
+                            yamlSuperiorObjectDocumentationModel.getSuperiorClassFilePath()),
                     yamlClass, yamlObjectDocumentationModels);
 
             yamlSuperiorObjectDocumentationModel.setReflectedSuperiorClass(yamlClass);
+            TypeModel yamlTypeModel = getObjectsTypeModel(yamlClass, yamlObjectDocumentationModels);
+            yamlSuperiorObjectDocumentationModel.setReflectedSuperiorDataType(yamlTypeModel);
             yamlSuperiorObjectDocumentationModel.setClassObjects(new ArrayList<>());
 
             for (Map.Entry<Class<?>, YamlObjectDocumentationModel> yamlObject : yamlObjectDocumentationModels.entrySet()) {

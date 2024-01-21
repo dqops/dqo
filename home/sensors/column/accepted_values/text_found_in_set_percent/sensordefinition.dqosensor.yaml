@@ -1,0 +1,16 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/SensorDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: sensor
+spec:
+  fields:
+  - field_name: expected_values
+    display_name: expected_values
+    help_text: "A list of expected values that must be present in a string column,\
+      \ only values from this list are accepted and rows having these values in the\
+      \ tested column are counted as valid rows."
+    data_type: string_list
+    required: true
+    sample_values:
+    - USD
+    - GBP
+    - EUR

@@ -1,0 +1,8 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: column/patterns/text_not_matching_date_pattern_count
+  rule_name: comparison/max_count
+  help_text: Verifies that the number of texts not matching the date format regular
+    expression does not exceed the maximum accepted count.

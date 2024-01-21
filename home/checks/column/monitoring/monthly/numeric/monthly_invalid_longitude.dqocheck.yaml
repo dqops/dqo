@@ -1,0 +1,9 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: column/numeric/invalid_longitude_count
+  rule_name: comparison/max_count
+  help_text: Verifies that the number of invalid longitude values in a column does
+    not exceed the maximum accepted count. Stores the most recent value for each month
+    when the data quality check was evaluated.

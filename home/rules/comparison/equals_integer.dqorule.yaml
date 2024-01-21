@@ -11,5 +11,6 @@ spec:
     help_text: Expected value for the actual_value returned by the sensor. It must
       be an integer value.
     data_type: long
+    required: true
     sample_values:
     - 1

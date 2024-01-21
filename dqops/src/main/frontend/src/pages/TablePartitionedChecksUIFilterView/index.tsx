@@ -24,7 +24,7 @@ const TablePartitionedChecksUIFilterView = () => {
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const getCheckOverview = () => {
-    CheckResultOverviewApi.getTablePartitionedChecksOverview(connectionName, schemaName, tableName, timePartitioned).then((res) => {
+    CheckResultOverviewApi.getTablePartitionedChecksOverview(connectionName, schemaName, tableName, timePartitioned, category, checkName).then((res) => {
       setCheckResultsOverview(res.data);
     });
   };
@@ -80,6 +80,7 @@ const TablePartitionedChecksUIFilterView = () => {
           checkResultsOverview={checkResultsOverview}
           getCheckOverview={getCheckOverview}
           loading={loading}
+          isFiltered = {true}
         />
       </div>
     </ConnectionLayout>

@@ -1,6 +1,9 @@
-# Airflow integration overview 
+# Airflow integration
+This overview shows the list of Apache Airflow operators provided by DQOps that you can use to monitor data quality directly in the data pipelines. 
 
-DQOps integrates with Apache Airflow. 
+## Overview
+
+DQOps integrates very easily with Apache Airflow. 
 
 Operators are available for actions such as:
 
@@ -19,11 +22,11 @@ To use DQOps Airflow Operator an installation of the python package is required.
 DQOps publishes the package on the official repository Python Package Index (PyPI). https://pypi.org/project/dqops/
 
 
-## Combining DQOps with data pipelines in Airflow.
+## Combining DQOps with data pipelines in Airflow
 
 Start the observation of the data quality at every step of the existing data pipelines.
 Might your technology stack is based on a database that is supported in DQOps. 
-[Check the complete list of the built databases connectors](../../working-with-dqo/adding-data-source-connection/index.md).
+[Check the complete list of the built databases connectors](../../data-sources/index.md).
 
 For an immediate checks setup DQOps platform implements dozens of sensors. 
 Just activate a few of them choosing from the list.
@@ -37,8 +40,12 @@ In case you get the error in a task based on DQOps airflow operator in logs, her
 
 **httpx.ConnectError: [Errno 111] Connection refused**
 
-This error points out that the DQOps python client can not connect to the DQOps application. The reasons are:
+This error points out that the DQOps python client can not connect to the DQOps instance. The reasons are:
 
-- DQOps application is down, server is not running
-- Passed url to application is invalid 
-- The DQOps server is not reachable due to network configuration 
+- DQOps instance is down, or the server is not working
+- The DQOps base url passed to the operator is invalid 
+- The DQOps server is not reachable due to networking issues 
+
+
+## What's next
+- Look at the use case of [integrating DQOps data quality checks with Dbt](../dbt/index.md) to learn how to run Dbt and DQOps together in Apache Airflow.

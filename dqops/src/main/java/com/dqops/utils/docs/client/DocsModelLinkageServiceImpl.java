@@ -72,28 +72,36 @@ public class DocsModelLinkageServiceImpl implements DocsModelLinkageService {
                 "com.dqops.sensors", projectDir, AbstractSensorParametersSpec.class
         ).stream().collect(Collectors.toMap(
                 Class::getSimpleName,
-                Function.identity()
+                Function.identity(),
+                (key, value) -> value,
+                LinkedHashMap::new
         ));
 
         this.ruleParametersSpecsClasses = TargetClassSearchUtility.findClasses(
                 "com.dqops.rules", projectDir, AbstractRuleParametersSpec.class
         ).stream().collect(Collectors.toMap(
                 Class::getSimpleName,
-                Function.identity()
+                Function.identity(),
+                (key, value) -> value,
+                LinkedHashMap::new
         ));
 
         this.connectionProviderParametersClasses = TargetClassSearchUtility.findClasses(
                 "com.dqops.connectors", projectDir, ConnectionProviderSpecificParameters.class
         ).stream().collect(Collectors.toMap(
                 Class::getSimpleName,
-                Function.identity()
+                Function.identity(),
+                (key, value) -> value,
+                LinkedHashMap::new
         ));
 
         this.checkCategorySpecsClasses = TargetClassSearchUtility.findClasses(
                 "com.dqops.checks", projectDir, AbstractCheckCategorySpec.class
         ).stream().filter(clazz -> !clazz.getName().contains("$")).collect(Collectors.toMap(
                 Class::getSimpleName,
-                Function.identity()
+                Function.identity(),
+                (key, value) -> value,
+                LinkedHashMap::new
         ));
 
         this.checkSpecsClasses = Stream.concat(
@@ -105,11 +113,13 @@ public class DocsModelLinkageServiceImpl implements DocsModelLinkageService {
                 ).stream()
         ).filter(clazz -> !clazz.getName().contains("$")).collect(Collectors.toMap(
                 Class::getSimpleName,
-                Function.identity()
+                Function.identity(),
+                (key, value) -> value,
+                LinkedHashMap::new
         ));
 
         this.tableYamlClasses = generateTableYamlClasses(projectDir);
-        this.tableProfilingChecksClasses = new HashMap<>() {{
+        this.tableProfilingChecksClasses = new LinkedHashMap<>() {{
             put(CustomCheckSpec.class.getSimpleName(), CustomCheckSpec.class);
             put(CustomRuleParametersSpec.class.getSimpleName(), CustomRuleParametersSpec.class);
             put(CustomSensorParametersSpec.class.getSimpleName(), CustomSensorParametersSpec.class);
@@ -119,100 +129,116 @@ public class DocsModelLinkageServiceImpl implements DocsModelLinkageService {
     }
 
     protected Map<String, Class<?>> generateTableYamlClasses(Path projectDir) {
-        Map<String, Class<?>> tableYaml = new HashMap<>();
-        tableYaml.putAll(
-                TargetClassSearchUtility.findClasses(
-                        "com.dqops.metadata.sources", projectDir, AbstractSpec.class
-                ).stream().filter(clazz -> !clazz.getName().contains("$")).collect(Collectors.toMap(
-                        Class::getSimpleName,
-                        Function.identity()
-                ))
-        );
+        Map<String, Class<?>> tableYaml = new LinkedHashMap<>();
+        LinkedHashMap<String, Class<? extends AbstractSpec>> allAbstractSpecs = TargetClassSearchUtility.findClasses(
+                "com.dqops.metadata.sources", projectDir, AbstractSpec.class
+        ).stream().filter(clazz -> !clazz.getName().contains("$")).collect(Collectors.toMap(
+                Class::getSimpleName,
+                Function.identity(),
+                (key, value) -> value,
+                LinkedHashMap::new
+        ));
+        tableYaml.putAll(allAbstractSpecs);
         tableYaml.remove("");
         tableYaml.remove(ConnectionSpec.class.getSimpleName());
         tableYaml.remove(TableWrapperImpl.class.getSimpleName());
         tableYaml.remove(ConnectionWrapperImpl.class.getSimpleName());
 
-        tableYaml.putAll(
-                TargetClassSearchUtility.findClasses(
-                        "com.dqops.metadata.comparisons", projectDir, AbstractSpec.class
-                ).stream().collect(Collectors.toMap(
-                        Class::getSimpleName,
-                        Function.identity()
-                ))
-        );
+        LinkedHashMap<String, Class<? extends AbstractSpec>> allComparisons = TargetClassSearchUtility.findClasses(
+                "com.dqops.metadata.comparisons", projectDir, AbstractSpec.class
+        ).stream().collect(Collectors.toMap(
+                Class::getSimpleName,
+                Function.identity(),
+                (key, value) -> value,
+                LinkedHashMap::new
+        ));
+        tableYaml.putAll(allComparisons);
 
-        tableYaml.putAll(
+        LinkedHashMap<String, Class<? extends AbstractRootStatisticsCollectorsContainerSpec>> allStatisticsCollectorRoots =
                 TargetClassSearchUtility.findClasses(
-                        "com.dqops.statistics", projectDir, AbstractRootStatisticsCollectorsContainerSpec.class
-                ).stream().collect(Collectors.toMap(
-                        Class::getSimpleName,
-                        Function.identity()
-                ))
-        );
-        tableYaml.putAll(
+                "com.dqops.statistics", projectDir, AbstractRootStatisticsCollectorsContainerSpec.class
+        ).stream().collect(Collectors.toMap(
+                Class::getSimpleName,
+                Function.identity(),
+                (key, value) -> value,
+                LinkedHashMap::new
+        ));
+        tableYaml.putAll(allStatisticsCollectorRoots);
+
+        LinkedHashMap<String, Class<? extends AbstractStatisticsCollectorCategorySpec>> allStatisticsCollectorContainers =
                 TargetClassSearchUtility.findClasses(
-                        "com.dqops.statistics", projectDir, AbstractStatisticsCollectorCategorySpec.class
-                ).stream().collect(Collectors.toMap(
-                        Class::getSimpleName,
-                        Function.identity()
-                ))
-        );
-        tableYaml.putAll(
+                "com.dqops.statistics", projectDir, AbstractStatisticsCollectorCategorySpec.class
+        ).stream().collect(Collectors.toMap(
+                Class::getSimpleName,
+                Function.identity(),
+                (key, value) -> value,
+                LinkedHashMap::new
+        ));
+        tableYaml.putAll(allStatisticsCollectorContainers);
+
+        LinkedHashMap<String, Class<? extends AbstractStatisticsCollectorSpec>> allStatisticsCollectors =
                 TargetClassSearchUtility.findClasses(
-                        "com.dqops.statistics", projectDir, AbstractStatisticsCollectorSpec.class
-                ).stream().collect(Collectors.toMap(
-                        Class::getSimpleName,
-                        Function.identity()
-                ))
-        );
+                "com.dqops.statistics", projectDir, AbstractStatisticsCollectorSpec.class
+        ).stream().collect(Collectors.toMap(
+                Class::getSimpleName,
+                Function.identity(),
+                (key, value) -> value,
+                LinkedHashMap::new
+        ));
+        tableYaml.putAll(allStatisticsCollectors);
         tableYaml.put(TableIncidentGroupingSpec.class.getSimpleName(), TableIncidentGroupingSpec.class);
 
         return tableYaml;
     }
 
     protected Map<String, Class<?>> generateConnectionYamlClasses(Path projectDir) {
-        Map<String, Class<?>> connectionYaml = new HashMap<>();
-        connectionYaml.putAll(
+        Map<String, Class<?>> connectionYaml = new LinkedHashMap<>();
+        LinkedHashMap<String, Class<? extends AbstractSpec>> allAbstractSpecsInGroupings =
                 TargetClassSearchUtility.findClasses(
-                                "com.dqops.metadata.groupings", projectDir, AbstractSpec.class
-                        ).stream()
-                        .collect(Collectors.toMap(
-                                Class::getSimpleName,
-                                Function.identity()
-                        ))
-        );
+                        "com.dqops.metadata.groupings", projectDir, AbstractSpec.class
+                ).stream()
+                .collect(Collectors.toMap(
+                        Class::getSimpleName,
+                        Function.identity(),
+                        (key, value) -> value,
+                        LinkedHashMap::new
+                ));
+        connectionYaml.putAll(allAbstractSpecsInGroupings);
 
-        connectionYaml.putAll(
+        LinkedHashMap<String, Class<? extends AbstractSpec>> allSpecsInIncidents =
                 TargetClassSearchUtility.findClasses(
                         "com.dqops.metadata.incidents", projectDir, AbstractSpec.class
                 ).stream()
-                        .filter(clazz -> !clazz.getName().contains("$"))
-                        .filter(c -> !c.getSimpleName().toLowerCase().contains("table"))
-                        .collect(Collectors.toMap(
-                                Class::getSimpleName,
-                                Function.identity()
-                        ))
-        );
+                .filter(clazz -> !clazz.getName().contains("$"))
+                .filter(c -> !c.getSimpleName().toLowerCase().contains("table"))
+                .collect(Collectors.toMap(
+                        Class::getSimpleName,
+                        Function.identity(),
+                        (key, value) -> value,
+                        LinkedHashMap::new
+                ));
+        connectionYaml.putAll(allSpecsInIncidents);
 
         connectionYaml.put(ConnectionYaml.class.getSimpleName(), ConnectionYaml.class);
         connectionYaml.put(ConnectionSpec.class.getSimpleName(), ConnectionSpec.class);
         connectionYaml.put(DefaultSchedulesSpec.class.getSimpleName(), DefaultSchedulesSpec.class);
 
-        connectionYaml.putAll(
+        LinkedHashMap<String, Class<? extends BaseProviderParametersSpec>> allConnectorParameters =
                 TargetClassSearchUtility.findClasses(
-                        "com.dqops.connectors", projectDir, BaseProviderParametersSpec.class
-                ).stream().collect(Collectors.toMap(
-                        Class::getSimpleName,
-                        Function.identity()
-                ))
-        );
+                "com.dqops.connectors", projectDir, BaseProviderParametersSpec.class
+        ).stream().collect(Collectors.toMap(
+                Class::getSimpleName,
+                Function.identity(),
+                (key, value) -> value,
+                LinkedHashMap::new
+        ));
+        connectionYaml.putAll(allConnectorParameters);
 
         return connectionYaml;
     }
 
     protected Map<String, Path> generateExtraLinkageMappings() {
-        Map<String, Path> extraLinkage = new HashMap<>();
+        Map<String, Path> extraLinkage = new LinkedHashMap<>();
 
         extraLinkage.put(ProviderSensorDefinitionSpec.class.getSimpleName(),
                 Path.of("/docs/reference/yaml/ProviderSensorYaml/#providersensordefinitionspec"));
@@ -334,7 +360,7 @@ public class DocsModelLinkageServiceImpl implements DocsModelLinkageService {
         String fileName = splitName[splitName.length - 1];
 
         splitName[1] = String.join("-", category, target, "sensors");
-        splitName[splitName.length - 1] = "#" + fileName.replace("_", "-");
+        splitName[splitName.length - 1] = "#" + fileName.replace("_", "-").toLowerCase();
         return Path.of(String.join("/", splitName));
     }
 
@@ -342,7 +368,7 @@ public class DocsModelLinkageServiceImpl implements DocsModelLinkageService {
         String[] splitName = definitionName.split("/");
 
         String fileName = splitName[splitName.length - 1];
-        splitName[splitName.length - 1] = "#" + fileName.replace("_", "-");
+        splitName[splitName.length - 1] = "#" + fileName.replace("_", "-").toLowerCase();
         return Path.of(String.join("/", splitName));
     }
 }

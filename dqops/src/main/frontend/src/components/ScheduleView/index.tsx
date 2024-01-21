@@ -19,9 +19,12 @@ interface IScheduleViewProps {
   isDefault?: boolean;
 }
 type TMinutes = {'minutes' : number, 'day' : number, 'hour' : number }
+
+const defaultMinutes = {'minutes' : 15, 'day' : 15, 'hour' : 15 }
+
 const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps) => {
   const [mode, setMode] = useState('');
-  const [minutes, setMinutes] = useState<TMinutes>({'minutes' : 15, 'day' : 15, 'hour' : 15 });
+  const [minutes, setMinutes] = useState<TMinutes>(defaultMinutes);
   const [hour, setHour] = useState(15);
   const { table, column }: { table: string; column: string } = useParams();
 
@@ -32,11 +35,6 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
 
   const scheduleCron = (bool: boolean) => {
     dispatch(setCronScheduler(bool));
-  };
-
-  const getData = async () => {
-    const res = await JobApiClient.isCronSchedulerRunning();
-    scheduleCron(res.data);
   };
 
   const startCroner = async () => {
@@ -92,78 +90,90 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
   };
 
   useEffect(() => {
-    getData();
-  }, []);
-
-  useEffect(() => {
-    const cron_expression = schedule?.cron_expression ?? '';
-    if (cron_expression?.length === 0) {
-      setMode('');
-      return;
-    }
-    if (mode !== 'custom'){
+    const checkCronExpresion = () => {
+      const cron_expression = schedule?.cron_expression ?? '';
+      if (cron_expression?.length === 0) {
+        setMode('');
+        return;
+      }
       if (/^\*\/\d\d? \* \* \* \*$/.test(cron_expression)) {
-        setMode('minutes');
-        const matches = cron_expression.match(/^\*\/(\d\d?) \* \* \* \*$/);
+          setMode('minutes');
+          const matches = cron_expression.match(/^\*\/(\d\d?) \* \* \* \*$/);
+  
+          if (!matches) return;
+          if (Number(matches[1]) < 0) {
+            onChangeMinutes(0);
+        } else if (Number(matches[1]) > 59) {
+          onChangeMinutes(59);
+        } else {
+          setMinutes((prevState) => ({
+            ...prevState,
+            'minutes': Number(matches[1]),
+          }));
+        }
+        return;
+    }
+      else if (/^\d\d? \* \* \* \*$/.test(cron_expression)) {
+        setMode('hour');
+        const matches = cron_expression.match(/^(\d\d?) \* \* \* \*$/);
+  
         if (!matches) return;
         if (Number(matches[1]) < 0) {
           onChangeMinutes(0);
-      } else if (Number(matches[1]) > 59) {
-        onChangeMinutes(59);
-      } else {
-        setMinutes((prevState) => ({
-          ...prevState,
-          [mode as keyof TMinutes]: Number(matches[1]),
-        }));
+        } else if (Number(matches[1]) > 59) {
+          onChangeMinutes(59);
+        } else {
+          setMinutes((prevState) => ({
+            ...prevState,
+            'hour': Number(matches[1]),
+          }));
+        }
+        return;
       }
-      return;
-    }
-    if (/^\d\d? \* \* \* \*$/.test(cron_expression)) {
-      setMode('hour');
-      const matches = cron_expression.match(/^(\d\d?) \* \* \* \*$/);
-      if (!matches) return;
-      if (Number(matches[1]) < 0) {
-        onChangeMinutes(0);
-      } else if (Number(matches[1]) > 59) {
-        onChangeMinutes(59);
-      } else {
-        setMinutes((prevState) => ({
-          ...prevState,
-          [mode as keyof TMinutes]: Number(matches[1]),
-        }));
+      else if (/^\d\d? \d\d? \* \* \*$/.test(cron_expression)) {
+        setMode('day');
+        const matches = cron_expression.match(/^(\d\d?) (\d\d?) \* \* \*$/);
+  
+        if (!matches) return;
+        
+        if (Number(matches[2]) < 0) {
+          onChangeHour(0);
+        } else if (Number(matches[2]) > 23) {
+          onChangeHour(23);
+        } else {
+          setHour(Number(matches[2]));
+        }
+        if (Number(matches[1]) < 0) {
+          onChangeMinutes(0);
+        } else if (Number(matches[1]) > 59) {
+          onChangeMinutes(59);
+        } else {
+          setMinutes((prevState) => ({
+            ...prevState,
+            'day': Number(matches[1]),
+          }));
+        }
+        return;
       }
-      return;
-    }
-    if (/^\d\d? \d\d? \* \* \*$/.test(cron_expression)) {
-      setMode('day');
-      const matches = cron_expression.match(/^(\d\d?) (\d\d?) \* \* \*$/);
-      if (!matches) return;
-      
-      if (Number(matches[2]) < 0) {
-        onChangeHour(0);
-      } else if (Number(matches[2]) > 23) {
-        onChangeHour(23);
-      } else {
-        setHour(Number(matches[2]));
+      else {
+        setMode("custom")
+        return;
       }
-      if (Number(matches[1]) < 0) {
-        onChangeMinutes(0);
-      } else if (Number(matches[1]) > 59) {
-        onChangeMinutes(59);
-      } else {
-        setMinutes((prevState) => ({
-          ...prevState,
-          [mode as keyof TMinutes]: Number(matches[1]),
-        }));
-      }
-      return;
-    }
-  }
-    if(cron_expression?.length > 0) {
-      setMode("custom")
-      return;
-    }
+     }
+
+    setMinutes(defaultMinutes);
+    setHour(15);
+    checkCronExpresion()
   }, [schedule]);
+
+  useEffect(() => {
+    const getIsSchedulerRunning = async () => {
+      const res = await JobApiClient.isCronSchedulerRunning();
+      scheduleCron(res.data);
+    };
+
+    getIsSchedulerRunning();
+  }, []);
 
   const onChangeCronExpression = (e: ChangeEvent<HTMLInputElement>) => {
     if (mode === 'custom' ) {
@@ -211,7 +221,7 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
               />
             </td>
             <td className='text-xs underline text-teal-500'>
-              <a href='https://man.openbsd.org/crontab.5' target='_blank' rel="noreferrer">Unix cron expression documentation</a>
+              <a href='https://dqops.com/docs/working-with-dqo/configure-scheduling-of-data-quality-checks/cron-formatting/' target='_blank' rel="noreferrer">Unix cron expression documentation</a>
             </td>
           </tr>
           <tr>

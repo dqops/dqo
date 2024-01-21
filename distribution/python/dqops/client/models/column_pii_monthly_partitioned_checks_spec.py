@@ -37,8 +37,8 @@ class ColumnPiiMonthlyPartitionedChecksSpec:
             checks within this category. The keys are check names defined in the definition section. The sensor parameters
             and rules should match the type of the configured sensor and rule for the custom check.
         monthly_partition_contains_usa_phone_percent (Union[Unset, ColumnPiiContainsUsaPhonePercentCheckSpec]):
-        monthly_partition_contains_usa_zipcode_percent (Union[Unset, ColumnPiiContainsUsaZipcodePercentCheckSpec]):
         monthly_partition_contains_email_percent (Union[Unset, ColumnPiiContainsEmailPercentCheckSpec]):
+        monthly_partition_contains_usa_zipcode_percent (Union[Unset, ColumnPiiContainsUsaZipcodePercentCheckSpec]):
         monthly_partition_contains_ip4_percent (Union[Unset, ColumnPiiContainsIp4PercentCheckSpec]):
         monthly_partition_contains_ip6_percent (Union[Unset, ColumnPiiContainsIp6PercentCheckSpec]):
     """
@@ -49,11 +49,11 @@ class ColumnPiiMonthlyPartitionedChecksSpec:
     monthly_partition_contains_usa_phone_percent: Union[
         Unset, "ColumnPiiContainsUsaPhonePercentCheckSpec"
     ] = UNSET
-    monthly_partition_contains_usa_zipcode_percent: Union[
-        Unset, "ColumnPiiContainsUsaZipcodePercentCheckSpec"
-    ] = UNSET
     monthly_partition_contains_email_percent: Union[
         Unset, "ColumnPiiContainsEmailPercentCheckSpec"
+    ] = UNSET
+    monthly_partition_contains_usa_zipcode_percent: Union[
+        Unset, "ColumnPiiContainsUsaZipcodePercentCheckSpec"
     ] = UNSET
     monthly_partition_contains_ip4_percent: Union[
         Unset, "ColumnPiiContainsIp4PercentCheckSpec"
@@ -76,18 +76,18 @@ class ColumnPiiMonthlyPartitionedChecksSpec:
                 self.monthly_partition_contains_usa_phone_percent.to_dict()
             )
 
+        monthly_partition_contains_email_percent: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.monthly_partition_contains_email_percent, Unset):
+            monthly_partition_contains_email_percent = (
+                self.monthly_partition_contains_email_percent.to_dict()
+            )
+
         monthly_partition_contains_usa_zipcode_percent: Union[
             Unset, Dict[str, Any]
         ] = UNSET
         if not isinstance(self.monthly_partition_contains_usa_zipcode_percent, Unset):
             monthly_partition_contains_usa_zipcode_percent = (
                 self.monthly_partition_contains_usa_zipcode_percent.to_dict()
-            )
-
-        monthly_partition_contains_email_percent: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.monthly_partition_contains_email_percent, Unset):
-            monthly_partition_contains_email_percent = (
-                self.monthly_partition_contains_email_percent.to_dict()
             )
 
         monthly_partition_contains_ip4_percent: Union[Unset, Dict[str, Any]] = UNSET
@@ -111,14 +111,14 @@ class ColumnPiiMonthlyPartitionedChecksSpec:
             field_dict[
                 "monthly_partition_contains_usa_phone_percent"
             ] = monthly_partition_contains_usa_phone_percent
-        if monthly_partition_contains_usa_zipcode_percent is not UNSET:
-            field_dict[
-                "monthly_partition_contains_usa_zipcode_percent"
-            ] = monthly_partition_contains_usa_zipcode_percent
         if monthly_partition_contains_email_percent is not UNSET:
             field_dict[
                 "monthly_partition_contains_email_percent"
             ] = monthly_partition_contains_email_percent
+        if monthly_partition_contains_usa_zipcode_percent is not UNSET:
+            field_dict[
+                "monthly_partition_contains_usa_zipcode_percent"
+            ] = monthly_partition_contains_usa_zipcode_percent
         if monthly_partition_contains_ip4_percent is not UNSET:
             field_dict[
                 "monthly_partition_contains_ip4_percent"
@@ -176,21 +176,6 @@ class ColumnPiiMonthlyPartitionedChecksSpec:
                 )
             )
 
-        _monthly_partition_contains_usa_zipcode_percent = d.pop(
-            "monthly_partition_contains_usa_zipcode_percent", UNSET
-        )
-        monthly_partition_contains_usa_zipcode_percent: Union[
-            Unset, ColumnPiiContainsUsaZipcodePercentCheckSpec
-        ]
-        if isinstance(_monthly_partition_contains_usa_zipcode_percent, Unset):
-            monthly_partition_contains_usa_zipcode_percent = UNSET
-        else:
-            monthly_partition_contains_usa_zipcode_percent = (
-                ColumnPiiContainsUsaZipcodePercentCheckSpec.from_dict(
-                    _monthly_partition_contains_usa_zipcode_percent
-                )
-            )
-
         _monthly_partition_contains_email_percent = d.pop(
             "monthly_partition_contains_email_percent", UNSET
         )
@@ -203,6 +188,21 @@ class ColumnPiiMonthlyPartitionedChecksSpec:
             monthly_partition_contains_email_percent = (
                 ColumnPiiContainsEmailPercentCheckSpec.from_dict(
                     _monthly_partition_contains_email_percent
+                )
+            )
+
+        _monthly_partition_contains_usa_zipcode_percent = d.pop(
+            "monthly_partition_contains_usa_zipcode_percent", UNSET
+        )
+        monthly_partition_contains_usa_zipcode_percent: Union[
+            Unset, ColumnPiiContainsUsaZipcodePercentCheckSpec
+        ]
+        if isinstance(_monthly_partition_contains_usa_zipcode_percent, Unset):
+            monthly_partition_contains_usa_zipcode_percent = UNSET
+        else:
+            monthly_partition_contains_usa_zipcode_percent = (
+                ColumnPiiContainsUsaZipcodePercentCheckSpec.from_dict(
+                    _monthly_partition_contains_usa_zipcode_percent
                 )
             )
 
@@ -239,8 +239,8 @@ class ColumnPiiMonthlyPartitionedChecksSpec:
         column_pii_monthly_partitioned_checks_spec = cls(
             custom_checks=custom_checks,
             monthly_partition_contains_usa_phone_percent=monthly_partition_contains_usa_phone_percent,
-            monthly_partition_contains_usa_zipcode_percent=monthly_partition_contains_usa_zipcode_percent,
             monthly_partition_contains_email_percent=monthly_partition_contains_email_percent,
+            monthly_partition_contains_usa_zipcode_percent=monthly_partition_contains_usa_zipcode_percent,
             monthly_partition_contains_ip4_percent=monthly_partition_contains_ip4_percent,
             monthly_partition_contains_ip6_percent=monthly_partition_contains_ip6_percent,
         )

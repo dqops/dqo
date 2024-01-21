@@ -5,7 +5,7 @@
 
     <groupId>com.dqops</groupId>
     <artifactId>dqo-data-quality-observer</artifactId>
-    <version>0.4.1</version>  <!-- DQOps Version, do not touch (changed automatically) -->
+    <version>1.0.0</version>  <!-- DQOps Version, do not touch (changed automatically) -->
     <packaging>pom</packaging>
     <description>DQOps Data Quality Operations Center</description>
 
@@ -75,6 +75,13 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <repositories>
+        <repository>
+            <id>local-dqops</id>
+            <url>file://${pom.basedir}/lib/jdbc-drivers/</url>
+        </repository>
+    </repositories>
 
     <build>
         <pluginManagement>

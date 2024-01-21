@@ -21,6 +21,8 @@ import com.dqops.metadata.search.StatisticsCollectorSearchFilters;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
 import com.dqops.metadata.sources.PhysicalTableName;
+import com.dqops.utils.docs.generators.SampleStringsRegistry;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -112,5 +114,19 @@ public class ColumnStatisticsModel {
                 setEnabled(true);
             }});
         }};
+    }
+
+    public static class ColumnStatisticsModelSampleFactory implements SampleValueFactory<ColumnStatisticsModel> {
+        @Override
+        public ColumnStatisticsModel createSample() {
+            return ColumnStatisticsModel.fromColumnSpecificationAndStatistic(
+                    SampleStringsRegistry.getConnectionName(),
+                    PhysicalTableName.fromSchemaTableFilter(SampleStringsRegistry.getSchemaTableName()),
+                    SampleStringsRegistry.getColumnName(),
+                     new ColumnSpec.ColumnSpecSampleFactory().createSample(),
+                    new StatisticsResultsForColumnModel.StatisticsResultsForColumnModelSampleFactory().createSample(),
+                    true
+            );
+        }
     }
 }

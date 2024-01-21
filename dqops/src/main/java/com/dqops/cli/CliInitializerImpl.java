@@ -27,6 +27,8 @@ import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import com.dqops.core.jobqueue.DqoJobQueue;
 import com.dqops.core.jobqueue.ParentDqoJobQueue;
 import com.dqops.core.jobqueue.monitoring.DqoJobQueueMonitoringService;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.core.scheduler.JobSchedulerService;
 import com.dqops.core.synchronization.status.FileSynchronizationChangeDetectionService;
 import com.dqops.data.storage.TablesawParquetSupportFix;
@@ -64,6 +66,7 @@ public class CliInitializerImpl implements CliInitializer {
     private LocalUrlAddresses localUrlAddresses;
     private PythonVirtualEnvService pythonVirtualEnvService;
     private RootConfigurationProperties rootConfigurationProperties;
+    private DqoUserPrincipalProvider dqoUserPrincipalProvider;
 
     /**
      * Called by the dependency injection container to provide dependencies.
@@ -83,6 +86,7 @@ public class CliInitializerImpl implements CliInitializer {
      * @param localUrlAddresses Local URL addresses - used to store centralized information regarding URLs.
      * @param pythonVirtualEnvService Python virtual environment service. Used to initialize a private python venv.
      * @param rootConfigurationProperties Root configuration parameters that are mapped to parameters not configured without any prefix, such as --silent.
+     * @param dqoUserPrincipalProvider User principal provider.
      */
     @Autowired
     public CliInitializerImpl(LocalUserHomeCreator localUserHomeCreator,
@@ -100,7 +104,8 @@ public class CliInitializerImpl implements CliInitializer {
                               TerminalWriter terminalWriter,
                               LocalUrlAddresses localUrlAddresses,
                               PythonVirtualEnvService pythonVirtualEnvService,
-                              RootConfigurationProperties rootConfigurationProperties) {
+                              RootConfigurationProperties rootConfigurationProperties,
+                              DqoUserPrincipalProvider dqoUserPrincipalProvider) {
         this.localUserHomeCreator = localUserHomeCreator;
         this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
         this.terminalReader = terminalReader;
@@ -117,6 +122,7 @@ public class CliInitializerImpl implements CliInitializer {
         this.localUrlAddresses = localUrlAddresses;
         this.pythonVirtualEnvService = pythonVirtualEnvService;
         this.rootConfigurationProperties = rootConfigurationProperties;
+        this.dqoUserPrincipalProvider = dqoUserPrincipalProvider;
     }
 
     /**
@@ -124,13 +130,14 @@ public class CliInitializerImpl implements CliInitializer {
      * @param headless Is application running in headless mode.
      */
     protected void tryLoginToDqoCloud(boolean headless) {
+        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.getLocalUserPrincipal();
         try {
-            DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey();
+            DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey(userPrincipal.getDataDomainIdentity());
             if (apiKey != null) {
                 return; // api key is provided somehow (by an environment variable or in the local settings)
             }
         } catch (Exception ex) {
-            System.err.println("Cannot retrieve the API Key, the key is probably invalid: " + ex.getMessage());
+            System.err.println("Cannot retrieve the DQOps Cloud Pairing API Key, the key is probably invalid: " + ex.getMessage());
 //            ex.printStackTrace(System.err);
         }
 
@@ -142,7 +149,14 @@ public class CliInitializerImpl implements CliInitializer {
             return;
         }
 
+        if (this.dqoCloudApiKeyProvider.isCloudSynchronizationDisabled(userPrincipal.getDataDomainIdentity())) {
+            return; // user intentionally disabled cloud sync using 'cloud sync disable' command
+        }
+
         if (!this.terminalReader.promptBoolean("Log in to DQOps Cloud?", true)) {
+            if (this.terminalReader.promptBoolean("Disable synchronization with DQOps Cloud and run in an offline mode?", false)) {
+                this.cloudLoginService.disableCloudSync();
+            }
             return;
         }
 
@@ -193,7 +207,7 @@ public class CliInitializerImpl implements CliInitializer {
             this.parentDqoJobQueue.start();
 
             if (CliApplication.isRequiredWebServer()) {
-                this.fileSynchronizationChangeDetectionService.detectNotSynchronizedChangesInBackground();
+                this.fileSynchronizationChangeDetectionService.detectNotSynchronizedChangesAllDomains();
 
                 if (this.dqoSchedulerConfigurationProperties.getStart() != null &&
                         this.dqoSchedulerConfigurationProperties.getStart()) {

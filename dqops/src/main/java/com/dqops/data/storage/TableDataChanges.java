@@ -18,6 +18,7 @@ package com.dqops.data.storage;
 import tech.tablesaw.api.Table;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -26,7 +27,7 @@ import java.util.Set;
  */
 public class TableDataChanges {
     private Table newOrChangedRows;
-    private HashSet<String> deletedIds = new HashSet<>();
+    private Set<String> deletedIds = new LinkedHashSet<>();
 
     /**
      * Creates a partition delta.

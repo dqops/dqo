@@ -18,6 +18,7 @@ package com.dqops.metadata.search;
 import com.dqops.metadata.search.pattern.SearchPattern;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import org.apache.parquet.Strings;
 
 /**
  * Connection search filters used to provide search parameters to find target columns.
@@ -39,11 +40,11 @@ public class ColumnSearchFilters {
     private Boolean enabled = true;
 
     @JsonPropertyDescription("The column data type that was imported from the data source and is stored in the " +
-            "[columns -> column_name -> type_snapshot -> column_type](../../reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file.")
+            "[columns -> column_name -> type_snapshot -> column_type](/docs/reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file.")
     private String columnDataType;
 
     @JsonPropertyDescription("Optional filter to find only nullable (when the value is *true*) or not nullable (when the value is *false*) columns, based on the value of the " +
-            "[columns -> column_name -> type_snapshot -> nullable](../../reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file.")
+            "[columns -> column_name -> type_snapshot -> nullable](/docs/reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file.")
     private Boolean nullable;
 
     @JsonPropertyDescription("An array of tags assigned to the table. All tags must be present on a table to match. The tags can use patterns:  'prefix\\*', '\\*suffix', 'prefix\\*suffix'. " +
@@ -210,7 +211,7 @@ public class ColumnSearchFilters {
      */
     @JsonIgnore
     public SearchPattern getConnectionNameSearchPattern() {
-        if (connectionNameSearchPattern == null && connectionName != null) {
+        if (connectionNameSearchPattern == null && !Strings.isNullOrEmpty(connectionName)) {
             connectionNameSearchPattern = SearchPattern.create(false, connectionName);
         }
 
@@ -224,7 +225,7 @@ public class ColumnSearchFilters {
      */
     @JsonIgnore
     public SearchPattern getSchemaTableNameSearchPattern() {
-        if (schemaTableNameSearchPattern == null && schemaTableName != null) {
+        if (schemaTableNameSearchPattern == null && !Strings.isNullOrEmpty(schemaTableName)) {
             schemaTableNameSearchPattern = SearchPattern.create(false, schemaTableName);
         }
 
@@ -238,7 +239,7 @@ public class ColumnSearchFilters {
      */
     @JsonIgnore
     public SearchPattern getColumnNameSearchPattern() {
-        if (columnNameSearchPattern == null && columnName != null) {
+        if (columnNameSearchPattern == null && !Strings.isNullOrEmpty(columnName)) {
             columnNameSearchPattern = SearchPattern.create(false, columnName);
         }
 

@@ -25,23 +25,36 @@ public enum ProviderType {
     @JsonProperty("bigquery")
     bigquery,
 
-    @JsonProperty("snowflake")
-    snowflake,
-
-    @JsonProperty("postgresql")
-    postgresql,
-
-    @JsonProperty("redshift")
-    redshift,
-
-    @JsonProperty("sqlserver")
-    sqlserver,
+    @JsonProperty("databricks")
+    databricks,
 
     @JsonProperty("mysql")
     mysql,
 
     @JsonProperty("oracle")
     oracle,
+
+    @JsonProperty("postgresql")
+    postgresql,
+
+    @JsonProperty("presto")
+    presto,
+
+    @JsonProperty("redshift")
+    redshift,
+
+    @JsonProperty("snowflake")
+    snowflake,
+
+    @JsonProperty("spark")
+    spark,
+
+    @JsonProperty("sqlserver")
+    sqlserver,
+
+    @JsonProperty("trino")
+    trino,
+
     // TODO: add more connectors
 
     ;
@@ -49,18 +62,26 @@ public enum ProviderType {
         switch (this) {
             case bigquery:
                 return "BigQuery";
-            case snowflake:
-                return "Snowflake";
-            case postgresql:
-                return "PostgreSQL";
-            case redshift:
-                return "Redshift";
-            case sqlserver:
-                return "SQL Server";
+            case databricks:
+                return "Databricks";
             case mysql:
                 return "MySQL";
             case oracle:
                 return "Oracle";
+            case postgresql:
+                return "PostgreSQL";
+            case presto:
+                return "Presto";
+            case redshift:
+                return "Redshift";
+            case snowflake:
+                return "Snowflake";
+            case spark:
+                return "Spark";
+            case sqlserver:
+                return "SQL Server";
+            case trino:
+                return "Trino";
             default:
                 throw new RuntimeException("Unsupported enum: " + this.name());
         }

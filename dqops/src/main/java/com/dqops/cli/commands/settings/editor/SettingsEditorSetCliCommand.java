@@ -18,7 +18,7 @@ package com.dqops.cli.commands.settings.editor;
 import com.dqops.cli.commands.BaseCommand;
 import com.dqops.cli.commands.CliOperationStatus;
 import com.dqops.cli.commands.ICommand;
-import com.dqops.cli.commands.settings.impl.SettingsService;
+import com.dqops.cli.commands.settings.impl.SettingsCliService;
 import com.dqops.cli.completion.completedcommands.IEditorNameCommand;
 import com.dqops.cli.completion.completers.EditorNameCompleter;
 import com.dqops.cli.completion.completers.EditorPathCompleter;
@@ -38,7 +38,7 @@ import picocli.CommandLine;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "set", header = "Set editor settings", description = "Set the settings for the editor. It allows user to set the editor to use a specific output format.")
 public class SettingsEditorSetCliCommand extends BaseCommand implements ICommand, IEditorNameCommand {
-	private SettingsService settingsService;
+	private SettingsCliService settingsCliService;
 	private TerminalReader terminalReader;
 	private TerminalWriter terminalWriter;
 
@@ -46,10 +46,10 @@ public class SettingsEditorSetCliCommand extends BaseCommand implements ICommand
 	}
 
 	@Autowired
-	public SettingsEditorSetCliCommand(SettingsService settingsService,
-									  TerminalReader terminalReader,
-									  TerminalWriter terminalWriter) {
-		this.settingsService = settingsService;
+	public SettingsEditorSetCliCommand(SettingsCliService settingsCliService,
+									   TerminalReader terminalReader,
+									   TerminalWriter terminalWriter) {
+		this.settingsCliService = settingsCliService;
 		this.terminalReader = terminalReader;
 		this.terminalWriter = terminalWriter;
 	}
@@ -95,7 +95,7 @@ public class SettingsEditorSetCliCommand extends BaseCommand implements ICommand
 			this.editorPath = this.terminalReader.prompt("Editor path (--path)", null, false);
 		}
 
-		CliOperationStatus cliOperationStatus = this.settingsService.setSettingsEditor(editorName, editorPath);
+		CliOperationStatus cliOperationStatus = this.settingsCliService.setSettingsEditor(editorName, editorPath);
 		this.terminalWriter.writeLine(cliOperationStatus.getMessage());
 		return cliOperationStatus.isSuccess() ? 0 : -1;
 	}

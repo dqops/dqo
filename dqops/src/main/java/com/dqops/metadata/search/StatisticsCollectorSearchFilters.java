@@ -19,14 +19,15 @@ import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyIdModel;
 import com.dqops.metadata.search.pattern.SearchPattern;
 import com.dqops.statistics.StatisticsCollectorTarget;
-import com.dqops.utils.docs.SampleStringsRegistry;
-import com.dqops.utils.docs.SampleValueFactory;
+import com.dqops.utils.docs.generators.SampleStringsRegistry;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
+import org.apache.parquet.Strings;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -39,7 +40,7 @@ import java.util.stream.Collectors;
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 public class StatisticsCollectorSearchFilters extends TableSearchFilters implements Cloneable {
     @JsonPropertyDescription("The list of column names or column name patters. This field accepts search patterns in the format: 'fk_\\*', '\\*_id', 'prefix\\*suffix'.")
-    private Collection<String> columnNames = new LinkedHashSet<>();
+    private List<String> columnNames = new ArrayList<>();
 
     @JsonPropertyDescription("The target statistics collector name to capture only selected statistics. Uses the short collector name" +
             "This field supports search patterns such as: 'prefix\\*', '\\*suffix', 'prefix_\\*_suffix'. " +
@@ -78,7 +79,7 @@ public class StatisticsCollectorSearchFilters extends TableSearchFilters impleme
      * Returns a set of target column names. When the collection of column names is not empty, only column level statistics are collected.
      * @return Collection of target column names.
      */
-    public Collection<String> getColumnNames() {
+    public List<String> getColumnNames() {
         return columnNames;
     }
 
@@ -86,7 +87,7 @@ public class StatisticsCollectorSearchFilters extends TableSearchFilters impleme
      * Sets a set of target column names.
      * @param columnNames Set of target column names.
      */
-    public void setColumnNames(Collection<String> columnNames) {
+    public void setColumnNames(List<String> columnNames) {
         this.columnNames = columnNames;
     }
 
@@ -222,7 +223,7 @@ public class StatisticsCollectorSearchFilters extends TableSearchFilters impleme
      */
     @JsonIgnore
     public SearchPattern getCollectorNameSearchPattern() {
-        if (collectorNameSearchPattern == null && collectorName != null) {
+        if (collectorNameSearchPattern == null && !Strings.isNullOrEmpty(collectorName)) {
             collectorNameSearchPattern = SearchPattern.create(false, collectorName);
         }
 
@@ -236,7 +237,7 @@ public class StatisticsCollectorSearchFilters extends TableSearchFilters impleme
      */
     @JsonIgnore
     public SearchPattern getSensorNameSearchPattern() {
-        if (sensorNameSearchPattern == null && sensorName != null) {
+        if (sensorNameSearchPattern == null && !Strings.isNullOrEmpty(sensorName)) {
             sensorNameSearchPattern = SearchPattern.create(false, sensorName);
         }
 
@@ -252,7 +253,7 @@ public class StatisticsCollectorSearchFilters extends TableSearchFilters impleme
         try {
             StatisticsCollectorSearchFilters cloned = (StatisticsCollectorSearchFilters) super.clone();
             if (this.collectorsHierarchyIds != null) {
-                cloned.collectorsHierarchyIds = new HashSet<>(this.collectorsHierarchyIds);
+                cloned.collectorsHierarchyIds = new LinkedHashSet<>(this.collectorsHierarchyIds);
             }
             return cloned;
         }

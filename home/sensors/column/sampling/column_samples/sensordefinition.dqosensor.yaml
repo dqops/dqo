@@ -8,5 +8,4 @@ spec:
     help_text: The limit of results that are returned. The default value is 10 sample
       values with the highest count (the most popular).
     data_type: integer
-    sample_values:
-    - 10
+    required: true

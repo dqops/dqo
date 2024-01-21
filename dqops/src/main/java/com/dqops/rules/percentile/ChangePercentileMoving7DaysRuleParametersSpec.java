@@ -19,6 +19,7 @@ import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
+import com.dqops.utils.reflection.RequiredField;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -64,8 +65,6 @@ public class ChangePercentileMoving7DaysRuleParametersSpec extends AbstractRuleP
      * Default constructor.
      */
     public ChangePercentileMoving7DaysRuleParametersSpec() {
-        this.percentileBelow = null;
-        this.percentileAbove = null;
     }
 
     /**

@@ -6,4 +6,5 @@ spec:
   rule_name: comparison/max_percent
   help_text: Verifies that the percentage of date values in the range defined by the
     user in a column does not exceed the maximum accepted percentage. Stores the most
-    recent row count for each month when the data quality check was evaluated.
+    recent check result for each month when the data quality check was evaluated.
+  standard: true

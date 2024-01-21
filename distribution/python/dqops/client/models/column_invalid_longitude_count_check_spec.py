@@ -10,9 +10,15 @@ if TYPE_CHECKING:
         ColumnNumericInvalidLongitudeCountSensorParametersSpec,
     )
     from ..models.comment_spec import CommentSpec
-    from ..models.max_count_rule_0_parameters_spec import MaxCountRule0ParametersSpec
-    from ..models.max_count_rule_10_parameters_spec import MaxCountRule10ParametersSpec
-    from ..models.max_count_rule_15_parameters_spec import MaxCountRule15ParametersSpec
+    from ..models.max_count_rule_0_error_parameters_spec import (
+        MaxCountRule0ErrorParametersSpec,
+    )
+    from ..models.max_count_rule_0_warning_parameters_spec import (
+        MaxCountRule0WarningParametersSpec,
+    )
+    from ..models.max_count_rule_100_parameters_spec import (
+        MaxCountRule100ParametersSpec,
+    )
     from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
 
 
@@ -33,9 +39,9 @@ class ColumnInvalidLongitudeCountCheckSpec:
         exclude_from_kpi (Union[Unset, bool]): Data quality check results (alerts) are included in the data quality KPI
             calculation by default. Set this field to true in order to exclude this data quality check from the data quality
             KPI calculation.
-        include_in_sla (Union[Unset, bool]): Marks the data quality check as part of a data quality SLA. The data
-            quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract
-            for the dataset.
+        include_in_sla (Union[Unset, bool]): Marks the data quality check as part of a data quality SLA (Data Contract).
+            The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data
+            Contract for the dataset.
         quality_dimension (Union[Unset, str]): Configures a custom data quality dimension name that is different than
             the built-in dimensions (Timeliness, Validity, etc.).
         display_name (Union[Unset, str]): Data quality check display name that could be assigned to the check, otherwise
@@ -45,9 +51,9 @@ class ColumnInvalidLongitudeCountCheckSpec:
             quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent
             table.
         parameters (Union[Unset, ColumnNumericInvalidLongitudeCountSensorParametersSpec]):
-        warning (Union[Unset, MaxCountRule0ParametersSpec]):
-        error (Union[Unset, MaxCountRule10ParametersSpec]):
-        fatal (Union[Unset, MaxCountRule15ParametersSpec]):
+        warning (Union[Unset, MaxCountRule0WarningParametersSpec]):
+        error (Union[Unset, MaxCountRule0ErrorParametersSpec]):
+        fatal (Union[Unset, MaxCountRule100ParametersSpec]):
     """
 
     schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
@@ -61,9 +67,9 @@ class ColumnInvalidLongitudeCountCheckSpec:
     parameters: Union[
         Unset, "ColumnNumericInvalidLongitudeCountSensorParametersSpec"
     ] = UNSET
-    warning: Union[Unset, "MaxCountRule0ParametersSpec"] = UNSET
-    error: Union[Unset, "MaxCountRule10ParametersSpec"] = UNSET
-    fatal: Union[Unset, "MaxCountRule15ParametersSpec"] = UNSET
+    warning: Union[Unset, "MaxCountRule0WarningParametersSpec"] = UNSET
+    error: Union[Unset, "MaxCountRule0ErrorParametersSpec"] = UNSET
+    fatal: Union[Unset, "MaxCountRule100ParametersSpec"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -137,14 +143,14 @@ class ColumnInvalidLongitudeCountCheckSpec:
             ColumnNumericInvalidLongitudeCountSensorParametersSpec,
         )
         from ..models.comment_spec import CommentSpec
-        from ..models.max_count_rule_0_parameters_spec import (
-            MaxCountRule0ParametersSpec,
+        from ..models.max_count_rule_0_error_parameters_spec import (
+            MaxCountRule0ErrorParametersSpec,
         )
-        from ..models.max_count_rule_10_parameters_spec import (
-            MaxCountRule10ParametersSpec,
+        from ..models.max_count_rule_0_warning_parameters_spec import (
+            MaxCountRule0WarningParametersSpec,
         )
-        from ..models.max_count_rule_15_parameters_spec import (
-            MaxCountRule15ParametersSpec,
+        from ..models.max_count_rule_100_parameters_spec import (
+            MaxCountRule100ParametersSpec,
         )
         from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
 
@@ -187,25 +193,25 @@ class ColumnInvalidLongitudeCountCheckSpec:
             )
 
         _warning = d.pop("warning", UNSET)
-        warning: Union[Unset, MaxCountRule0ParametersSpec]
+        warning: Union[Unset, MaxCountRule0WarningParametersSpec]
         if isinstance(_warning, Unset):
             warning = UNSET
         else:
-            warning = MaxCountRule0ParametersSpec.from_dict(_warning)
+            warning = MaxCountRule0WarningParametersSpec.from_dict(_warning)
 
         _error = d.pop("error", UNSET)
-        error: Union[Unset, MaxCountRule10ParametersSpec]
+        error: Union[Unset, MaxCountRule0ErrorParametersSpec]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = MaxCountRule10ParametersSpec.from_dict(_error)
+            error = MaxCountRule0ErrorParametersSpec.from_dict(_error)
 
         _fatal = d.pop("fatal", UNSET)
-        fatal: Union[Unset, MaxCountRule15ParametersSpec]
+        fatal: Union[Unset, MaxCountRule100ParametersSpec]
         if isinstance(_fatal, Unset):
             fatal = UNSET
         else:
-            fatal = MaxCountRule15ParametersSpec.from_dict(_fatal)
+            fatal = MaxCountRule100ParametersSpec.from_dict(_fatal)
 
         column_invalid_longitude_count_check_spec = cls(
             schedule_override=schedule_override,

@@ -15,6 +15,7 @@
  */
 package com.dqops.core.dqocloud.buckets;
 
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.google.cloud.storage.Storage;
 
@@ -25,7 +26,8 @@ public interface DqoCloudBucketAccessProvider {
     /**
      * Creates a configured Google storage client to access a tenant' folder in a DQOps Cloud bucket.
      * @param rootType Bucket type (sensor_readouts, rule_results, etc.)
+     * @param userIdentity Calling user identity used to identify the data domain. It can be an admin user, but the data domain must be selected.
      * @return Configured bucket access with a {@link Storage} client to access the data with downscoped credentials.
      */
-    DqoCloudRemoteBucket getRemoteBucketClientRW(DqoRoot rootType);
+    DqoCloudRemoteBucket getRemoteBucketClientRW(DqoRoot rootType, UserDomainIdentity userIdentity);
 }

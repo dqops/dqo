@@ -6,3 +6,4 @@ spec:
   rule_name: comparison/value_changed
   help_text: "Checks the metadata of the monitored column and detects if the data\
     \ type (including the length, precision, scale, nullability) has changed."
+  standard: true

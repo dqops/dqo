@@ -15,7 +15,9 @@
  */
 package com.dqops.services.check;
 
+import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.AbstractCheckSpec;
+import com.dqops.checks.custom.CustomCategoryCheckSpecMap;
 import com.dqops.core.jobqueue.DqoQueueJobFactory;
 import com.dqops.core.jobqueue.ParentDqoJobQueue;
 import com.dqops.core.principal.DqoUserPrincipal;
@@ -24,6 +26,8 @@ import com.dqops.execution.checks.jobs.RunChecksQueueJob;
 import com.dqops.execution.checks.jobs.RunChecksParameters;
 import com.dqops.execution.checks.progress.CheckExecutionProgressListener;
 import com.dqops.execution.sensors.TimeWindowFilterParameters;
+import com.dqops.metadata.id.HierarchyId;
+import com.dqops.metadata.id.HierarchyNode;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcher;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcherImpl;
@@ -41,7 +45,7 @@ import com.dqops.services.check.mapping.models.column.AllColumnChecksModel;
 import com.dqops.services.check.mapping.models.table.AllTableChecksModel;
 import com.dqops.services.check.mapping.utils.AllChecksModelUtility;
 import com.dqops.services.check.models.AllChecksPatchParameters;
-import com.dqops.services.check.models.BulkCheckDisableParameters;
+import com.dqops.services.check.models.BulkCheckDeactivateParameters;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -110,15 +114,16 @@ public class CheckServiceImpl implements CheckService {
      * Disable existing checks matching the provided filters.
      *
      * @param parameters Bulk check disable parameters.
+     * @param principal User principal.
      */
     @Override
-    public void disableChecks(BulkCheckDisableParameters parameters) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+    public void disableChecks(BulkCheckDeactivateParameters parameters, DqoUserPrincipal principal) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
         HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher = new HierarchyNodeTreeSearcherImpl(new HierarchyNodeTreeWalkerImpl());
         Collection<AbstractCheckSpec<?,?,?,?>> checks = hierarchyNodeTreeSearcher.findChecks(userHome, parameters.getCheckSearchFilters());
 
-        if (parameters.getSelectedTablesToColumns() != null) {
+        if (parameters.getSelectedTablesToColumns() != null && !parameters.getSelectedTablesToColumns().isEmpty()) {
             Map<String, Set<String>> searchableTablesToColumns = getSearchableTableToColumnsMapping(parameters.getSelectedTablesToColumns());
 
             checks = checks.stream()
@@ -144,18 +149,74 @@ public class CheckServiceImpl implements CheckService {
                     }).collect(Collectors.toList());
         }
 
-        for (AbstractCheckSpec<?,?,?,?> check: checks) {
+        for (AbstractCheckSpec<?,?,?,?> check : checks) {
             check.setDisabled(true);
         }
+
+        userHomeContext.flush();
+    }
+
+    /**
+     * Delete existing checks matching the provided filters.
+     *
+     * @param parameters Bulk check disable parameters.
+     * @param principal User principal.
+     */
+    @Override
+    public void deleteChecks(BulkCheckDeactivateParameters parameters, DqoUserPrincipal principal) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
+        UserHome userHome = userHomeContext.getUserHome();
+        HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher = new HierarchyNodeTreeSearcherImpl(new HierarchyNodeTreeWalkerImpl());
+        Collection<AbstractCheckSpec<?,?,?,?>> checks = hierarchyNodeTreeSearcher.findChecks(userHome, parameters.getCheckSearchFilters());
+
+        if (parameters.getSelectedTablesToColumns() != null && !parameters.getSelectedTablesToColumns().isEmpty()) {
+            Map<String, Set<String>> searchableTablesToColumns = getSearchableTableToColumnsMapping(parameters.getSelectedTablesToColumns());
+
+            checks = checks.stream()
+                    .filter(check -> {
+                        String tableName = userHome.findTableFor(check.getHierarchyId()).getPhysicalTableName().getTableName();
+
+                        // Column is null for table-level checks.
+                        ColumnSpec columnNullable = userHome.findColumnFor(check.getHierarchyId());
+                        String columnName = columnNullable != null
+                                ? columnNullable.getColumnName()
+                                : null;
+
+                        if (!searchableTablesToColumns.containsKey(tableName)) {
+                            return false;
+                        }
+
+                        Set<String> selectedColumns = searchableTablesToColumns.get(tableName);
+                        if (columnName != null && !selectedColumns.contains(columnName)) {
+                            return false;
+                        }
+
+                        return true;
+                    }).collect(Collectors.toList());
+        }
+
+        for (AbstractCheckSpec<?,?,?,?> check : checks) {
+            HierarchyId parentHierarchyId = check.getHierarchyId().getParentHierarchyId();
+            HierarchyNode checkParentNode = userHome.findNode(parentHierarchyId);
+            if (checkParentNode instanceof AbstractCheckCategorySpec) {
+                AbstractCheckCategorySpec checkCategoryNode = (AbstractCheckCategorySpec)checkParentNode;
+                checkCategoryNode.detachChildNode(check.getCheckName());
+            }
+            else if (checkParentNode instanceof CustomCategoryCheckSpecMap) {
+                CustomCategoryCheckSpecMap customChecksMap = (CustomCategoryCheckSpecMap)checkParentNode;
+                customChecksMap.remove(check.getCheckName());
+            }
+        }
+
         userHomeContext.flush();
     }
 
     protected Map<String, Set<String>> getSearchableTableToColumnsMapping(Map<String, List<String>> tableToColumnsMapping) {
-        Map<String, Set<String>> searchableMap = new HashMap<>();
+        Map<String, Set<String>> searchableMap = new LinkedHashMap<>();
         for (Map.Entry<String, List<String>> tableToColumns: tableToColumnsMapping.entrySet()) {
             Set<String> columnsSet = tableToColumns.getValue() != null
-                    ? new HashSet<>(tableToColumns.getValue())
-                    : new HashSet<>();
+                    ? new LinkedHashSet<>(tableToColumns.getValue())
+                    : new LinkedHashSet<>();
             searchableMap.put(tableToColumns.getKey(), columnsSet);
         }
         return searchableMap;
@@ -168,7 +229,7 @@ public class CheckServiceImpl implements CheckService {
      * @return List of patches (by connections) of the updated configuration of all checks.
      */
     @Override
-    public List<AllChecksModel> updateAllChecksPatch(AllChecksPatchParameters parameters, DqoUserPrincipal principal) {
+    public List<AllChecksModel> activateOrUpdateAllChecks(AllChecksPatchParameters parameters, DqoUserPrincipal principal) {
         if (parameters == null
                 || parameters.getCheckSearchFilters() == null
                 || Strings.isNullOrEmpty(parameters.getCheckSearchFilters().getConnection())
@@ -178,8 +239,8 @@ public class CheckServiceImpl implements CheckService {
             return new ArrayList<>();
         }
 
-        List<AllChecksModel> patches = this.allChecksModelFactory.fromCheckSearchFilters(parameters.getCheckSearchFilters(), principal);
-        if (parameters.getSelectedTablesToColumns() != null) {
+        List<AllChecksModel> patches = this.allChecksModelFactory.findAllConfiguredAndPossibleChecks(parameters.getCheckSearchFilters(), principal);
+        if (parameters.getSelectedTablesToColumns() != null && !parameters.getSelectedTablesToColumns().isEmpty()) {
             for (AllChecksModel patch: patches) {
                 AllChecksModelUtility.pruneToConcreteTargets(parameters.getSelectedTablesToColumns(), patch);
             }
@@ -227,7 +288,7 @@ public class CheckServiceImpl implements CheckService {
             patchCheckModel(check, parameters);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionList connectionList = userHome.getConnections();
 
@@ -290,7 +351,7 @@ public class CheckServiceImpl implements CheckService {
     protected List<FieldModel> getPatchedFields(List<FieldModel> sourceFields,
                                                 List<FieldModel> patches,
                                                 boolean overrideConflicts) {
-        Map<String, FieldModel> paramsByName = new HashMap<>();
+        Map<String, FieldModel> paramsByName = new LinkedHashMap<>();
         for (FieldModel fieldModel: sourceFields) {
             paramsByName.put(fieldModel.getDefinition().getDisplayName(), fieldModel);
         }

@@ -18,18 +18,22 @@ package com.dqops.rest.models.metadata;
 import com.dqops.checks.CheckType;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.bigquery.BigQueryParametersSpec;
+import com.dqops.connectors.databricks.DatabricksParametersSpec;
 import com.dqops.connectors.mysql.MysqlParametersSpec;
 import com.dqops.connectors.oracle.OracleParametersSpec;
 import com.dqops.connectors.postgresql.PostgresqlParametersSpec;
+import com.dqops.connectors.presto.PrestoParametersSpec;
 import com.dqops.connectors.redshift.RedshiftParametersSpec;
 import com.dqops.connectors.snowflake.SnowflakeParametersSpec;
+import com.dqops.connectors.spark.SparkParametersSpec;
 import com.dqops.connectors.sqlserver.SqlServerParametersSpec;
+import com.dqops.connectors.trino.TrinoParametersSpec;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.search.StatisticsCollectorSearchFilters;
 import com.dqops.metadata.sources.ConnectionSpec;
-import com.dqops.utils.docs.SampleStringsRegistry;
-import com.dqops.utils.docs.SampleValueFactory;
+import com.dqops.utils.docs.generators.SampleStringsRegistry;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -100,6 +104,18 @@ public class ConnectionModel {
     private SqlServerParametersSpec sqlserver;
 
     /**
+     * Presto connection parameters.
+     */
+    @JsonPropertyDescription("Presto connection parameters.")
+    private PrestoParametersSpec presto;
+
+    /**
+     * Trino connection parameters.
+     */
+    @JsonPropertyDescription("Trino connection parameters.")
+    private TrinoParametersSpec trino;
+
+    /**
      * MySQL connection parameters.
      */
     @JsonPropertyDescription("MySQL connection parameters.")
@@ -110,6 +126,18 @@ public class ConnectionModel {
      */
     @JsonPropertyDescription("Oracle connection parameters.")
     private OracleParametersSpec oracle;
+
+    /**
+     * Spark connection parameters.
+     */
+    @JsonPropertyDescription("Spark connection parameters.")
+    private SparkParametersSpec spark;
+
+    /**
+     * Databricks connection parameters.
+     */
+    @JsonPropertyDescription("Databricks connection parameters.")
+    private DatabricksParametersSpec databricks;
 
     /**
      * Configured parameters for the "check run" job that should be pushed to the job queue in order to run all checks within this connection.
@@ -204,6 +232,10 @@ public class ConnectionModel {
             setSqlserver(connectionSpec.getSqlserver());
             setMysql(connectionSpec.getMysql());
             setOracle(connectionSpec.getOracle());
+            setSpark(connectionSpec.getSpark());
+            setPresto(connectionSpec.getPresto());
+            setTrino(connectionSpec.getTrino());
+            setDatabricks(connectionSpec.getDatabricks());
             setCanEdit(isEditor);
             setCanRunChecks(isOperator);
             setCanCollectStatistics(isOperator);
@@ -266,6 +298,10 @@ public class ConnectionModel {
         targetConnectionSpec.setSqlserver(this.getSqlserver());
         targetConnectionSpec.setMysql(this.getMysql());
         targetConnectionSpec.setOracle(this.getOracle());
+        targetConnectionSpec.setSpark(this.getSpark());
+        targetConnectionSpec.setPresto(this.getPresto());
+        targetConnectionSpec.setTrino(this.getTrino());
+        targetConnectionSpec.setDatabricks(this.getDatabricks());
     }
 
     public static class ConnectionModelSampleFactory implements SampleValueFactory<ConnectionModel> {

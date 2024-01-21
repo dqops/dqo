@@ -1,19 +1,18 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import ConnectionLayout from '../../components/ConnectionLayout';
 import SvgIcon from '../../components/SvgIcon';
 import Tabs from '../../components/Tabs';
 import { useHistory, useParams } from 'react-router-dom';
 import { CheckTypes, ROUTES } from '../../shared/routes';
-import { TableListModel } from '../../api';
-import { TableApiClient } from '../../services/apiClient';
 import Button from '../../components/Button';
 import AddTableDialog from '../../components/CustomTree/AddTableDialog';
 import { SchemaTables } from './SchemaTables';
-import { MultiChecks } from './MultiChecks';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { setActiveFirstLevelTab } from '../../redux/actions/source.actions';
+import { setActiveFirstLevelTab, setActiveFirstLevelUrl } from '../../redux/actions/source.actions';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
+import { MultiChecks } from './MultiCheck/MultiChecks';
+import { getFirstLevelActiveTab } from '../../redux/selectors';
 
 const SchemaPage = () => {
   const {
@@ -27,14 +26,12 @@ const SchemaPage = () => {
     tab: string;
     checkTypes: CheckTypes;
   } = useParams();
-  const [tables, setTables] = useState<TableListModel[]>([]);
   const [addTableDialogOpen, setAddTableDialogOpen] = useState(false);
   const isSourceScreen = checkTypes === CheckTypes.SOURCES;
   const dispatch = useActionDispatch();
-  const { userProfile } = useSelector(
-    (state: IRootState) => state.job || {}
-  );
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
   const history = useHistory();
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const tabs = useMemo(
     () => [
@@ -44,23 +41,25 @@ const SchemaPage = () => {
       },
       ...(checkTypes !== CheckTypes.SOURCES
         ? [
-            // {
-            //   label: 'Multiple checks edit',
-            //   value: 'multiple_checks'
-            // }
+            {
+              label: 'Data quality checks',
+              value: 'multiple_checks'
+            }
           ]
         : [])
     ],
     [checkTypes]
   );
 
-  useEffect(() => {
-    TableApiClient.getTables(connection, schema).then((res) => {
-      setTables(res.data);
-    });
-  }, [schema, connection]);
-
   const onChangeTab = (tab: string) => {
+    dispatch(
+      setActiveFirstLevelUrl(
+        checkTypes,
+        firstLevelActiveTab,
+        ROUTES.SCHEMA_LEVEL_PAGE(checkTypes, connection, schema, tab)
+      )
+    );
+
     history.push(ROUTES.SCHEMA_LEVEL_PAGE(checkTypes, connection, schema, tab));
   };
 
@@ -79,43 +78,56 @@ const SchemaPage = () => {
       )}?import_schema=true&import_table=true&schema=${schema}`
     );
   };
-
   return (
     <ConnectionLayout>
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14">
         <div className="flex items-center space-x-2 max-w-full">
           <SvgIcon name="schema" className="w-5 h-5 shrink-0" />
-          <div className="text-xl font-semibold truncate">{`${connection}.schema.${schema}`}</div>
+          <div className="text-xl font-semibold truncate">{`${connection}.${schema}`}</div>
         </div>
-
+        {isSourceScreen && (
         <div className="flex gap-4 items-center">
           <Button
             className="!h-10"
-            color={!(userProfile.can_manage_data_sources !== true) ? 'primary' : 'secondary'}
-            variant={!(userProfile.can_manage_data_sources !== true) ? "outlined" : "contained"}
+            color={
+              !(userProfile.can_manage_data_sources !== true)
+                ? 'primary'
+                : 'secondary'
+            }
+            variant={
+              !(userProfile.can_manage_data_sources !== true)
+                ? 'outlined'
+                : 'contained'
+            }
             label="Import more tables"
             onClick={onImportMoreTables}
             disabled={userProfile.can_manage_data_sources !== true}
           />
-
-          {isSourceScreen && (
-            <Button
-              className="!h-10"
-              color={!(userProfile.can_manage_data_sources !== true) ? 'primary' : 'secondary'}
-              variant={!(userProfile.can_manage_data_sources !== true) ? "outlined" : "contained"}
-              label="Add Table"
-              onClick={() => setAddTableDialogOpen(true)}
-              disabled={userProfile.can_manage_data_sources !== true}
-            />
-          )}
+          <Button
+            className="!h-10"
+            color={
+              !(userProfile.can_manage_data_sources !== true)
+                ? 'primary'
+                : 'secondary'
+            }
+            variant={
+              !(userProfile.can_manage_data_sources !== true)
+                ? 'outlined'
+                : 'contained'
+            }
+            label="Add Table"
+            onClick={() => setAddTableDialogOpen(true)}
+            disabled={userProfile.can_manage_data_sources !== true}
+          />
         </div>
+        )}
       </div>
       <div className="border-b border-gray-300">
         <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
       </div>
       {activeTab === 'tables' && (
         <div className="p-4">
-          <SchemaTables tables={tables} />
+          <SchemaTables />
         </div>
       )}
       {checkTypes !== CheckTypes.SOURCES && activeTab === 'multiple_checks' && (

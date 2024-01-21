@@ -18,6 +18,7 @@ package com.dqops.metadata.search;
 import com.dqops.metadata.search.pattern.SearchPattern;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import org.apache.parquet.Strings;
 
 /**
  * Hierarchy node search filters.
@@ -81,7 +82,7 @@ public class RuleDefinitionSearchFilters {
      */
     @JsonIgnore
     public SearchPattern getRuleNameSearchPattern() {
-        if (ruleNameSearchPattern == null && ruleName != null) {
+        if (ruleNameSearchPattern == null && !Strings.isNullOrEmpty(ruleName)) {
             ruleNameSearchPattern = SearchPattern.create(false, ruleName);
         }
 

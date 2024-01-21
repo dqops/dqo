@@ -199,7 +199,7 @@ public final class StatisticsColumnNames {
     public static final String SENSOR_NAME_COLUMN_NAME = CommonColumnNames.SENSOR_NAME_COLUMN_NAME;
 
     /**
-     * Column for a time series id (uuid). Identifies a single time series. A time series is a combination of the profiler_hash and data_stream_hash.
+     * Column for a time series id (uuid). Identifies a single time series. A time series is a combination of the profiler_hash and data_group_hash.
      */
     public static final String TIME_SERIES_ID_COLUMN_NAME = CommonColumnNames.TIME_SERIES_ID_COLUMN_NAME;
 

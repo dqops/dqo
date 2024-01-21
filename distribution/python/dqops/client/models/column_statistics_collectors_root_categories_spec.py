@@ -15,8 +15,8 @@ if TYPE_CHECKING:
     from ..models.column_sampling_statistics_collectors_spec import (
         ColumnSamplingStatisticsCollectorsSpec,
     )
-    from ..models.column_strings_statistics_collectors_spec import (
-        ColumnStringsStatisticsCollectorsSpec,
+    from ..models.column_text_statistics_collectors_spec import (
+        ColumnTextStatisticsCollectorsSpec,
     )
     from ..models.column_uniqueness_statistics_collectors_spec import (
         ColumnUniquenessStatisticsCollectorsSpec,
@@ -31,17 +31,19 @@ class ColumnStatisticsCollectorsRootCategoriesSpec:
     """
     Attributes:
         nulls (Union[Unset, ColumnNullsStatisticsCollectorsSpec]):
-        strings (Union[Unset, ColumnStringsStatisticsCollectorsSpec]):
+        text (Union[Unset, ColumnTextStatisticsCollectorsSpec]):
         uniqueness (Union[Unset, ColumnUniquenessStatisticsCollectorsSpec]):
         range_ (Union[Unset, ColumnRangeStatisticsCollectorsSpec]):
         sampling (Union[Unset, ColumnSamplingStatisticsCollectorsSpec]):
+        strings (Union[Unset, ColumnTextStatisticsCollectorsSpec]):
     """
 
     nulls: Union[Unset, "ColumnNullsStatisticsCollectorsSpec"] = UNSET
-    strings: Union[Unset, "ColumnStringsStatisticsCollectorsSpec"] = UNSET
+    text: Union[Unset, "ColumnTextStatisticsCollectorsSpec"] = UNSET
     uniqueness: Union[Unset, "ColumnUniquenessStatisticsCollectorsSpec"] = UNSET
     range_: Union[Unset, "ColumnRangeStatisticsCollectorsSpec"] = UNSET
     sampling: Union[Unset, "ColumnSamplingStatisticsCollectorsSpec"] = UNSET
+    strings: Union[Unset, "ColumnTextStatisticsCollectorsSpec"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -49,9 +51,9 @@ class ColumnStatisticsCollectorsRootCategoriesSpec:
         if not isinstance(self.nulls, Unset):
             nulls = self.nulls.to_dict()
 
-        strings: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.strings, Unset):
-            strings = self.strings.to_dict()
+        text: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.text, Unset):
+            text = self.text.to_dict()
 
         uniqueness: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.uniqueness, Unset):
@@ -65,19 +67,25 @@ class ColumnStatisticsCollectorsRootCategoriesSpec:
         if not isinstance(self.sampling, Unset):
             sampling = self.sampling.to_dict()
 
+        strings: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.strings, Unset):
+            strings = self.strings.to_dict()
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
         if nulls is not UNSET:
             field_dict["nulls"] = nulls
-        if strings is not UNSET:
-            field_dict["strings"] = strings
+        if text is not UNSET:
+            field_dict["text"] = text
         if uniqueness is not UNSET:
             field_dict["uniqueness"] = uniqueness
         if range_ is not UNSET:
             field_dict["range"] = range_
         if sampling is not UNSET:
             field_dict["sampling"] = sampling
+        if strings is not UNSET:
+            field_dict["strings"] = strings
 
         return field_dict
 
@@ -92,8 +100,8 @@ class ColumnStatisticsCollectorsRootCategoriesSpec:
         from ..models.column_sampling_statistics_collectors_spec import (
             ColumnSamplingStatisticsCollectorsSpec,
         )
-        from ..models.column_strings_statistics_collectors_spec import (
-            ColumnStringsStatisticsCollectorsSpec,
+        from ..models.column_text_statistics_collectors_spec import (
+            ColumnTextStatisticsCollectorsSpec,
         )
         from ..models.column_uniqueness_statistics_collectors_spec import (
             ColumnUniquenessStatisticsCollectorsSpec,
@@ -107,12 +115,12 @@ class ColumnStatisticsCollectorsRootCategoriesSpec:
         else:
             nulls = ColumnNullsStatisticsCollectorsSpec.from_dict(_nulls)
 
-        _strings = d.pop("strings", UNSET)
-        strings: Union[Unset, ColumnStringsStatisticsCollectorsSpec]
-        if isinstance(_strings, Unset):
-            strings = UNSET
+        _text = d.pop("text", UNSET)
+        text: Union[Unset, ColumnTextStatisticsCollectorsSpec]
+        if isinstance(_text, Unset):
+            text = UNSET
         else:
-            strings = ColumnStringsStatisticsCollectorsSpec.from_dict(_strings)
+            text = ColumnTextStatisticsCollectorsSpec.from_dict(_text)
 
         _uniqueness = d.pop("uniqueness", UNSET)
         uniqueness: Union[Unset, ColumnUniquenessStatisticsCollectorsSpec]
@@ -135,12 +143,20 @@ class ColumnStatisticsCollectorsRootCategoriesSpec:
         else:
             sampling = ColumnSamplingStatisticsCollectorsSpec.from_dict(_sampling)
 
+        _strings = d.pop("strings", UNSET)
+        strings: Union[Unset, ColumnTextStatisticsCollectorsSpec]
+        if isinstance(_strings, Unset):
+            strings = UNSET
+        else:
+            strings = ColumnTextStatisticsCollectorsSpec.from_dict(_strings)
+
         column_statistics_collectors_root_categories_spec = cls(
             nulls=nulls,
-            strings=strings,
+            text=text,
             uniqueness=uniqueness,
             range_=range_,
             sampling=sampling,
+            strings=strings,
         )
 
         column_statistics_collectors_root_categories_spec.additional_properties = d

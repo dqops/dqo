@@ -19,12 +19,16 @@ import com.dqops.connectors.ConnectionProvider;
 import com.dqops.connectors.ConnectionProviderRegistryObjectMother;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.bigquery.BigQueryConnectionSpecObjectMother;
+import com.dqops.connectors.databricks.DatabricksConnectionSpecObjectMother;
 import com.dqops.connectors.mysql.MysqlConnectionSpecObjectMother;
 import com.dqops.connectors.oracle.OracleConnectionSpecObjectMother;
 import com.dqops.connectors.postgresql.PostgresqlConnectionSpecObjectMother;
+import com.dqops.connectors.presto.PrestoConnectionSpecObjectMother;
 import com.dqops.connectors.redshift.RedshiftConnectionSpecObjectMother;
 import com.dqops.connectors.snowflake.SnowflakeConnectionSpecObjectMother;
+import com.dqops.connectors.spark.SparkConnectionSpecObjectMother;
 import com.dqops.connectors.sqlserver.SqlServerConnectionSpecObjectMother;
+import com.dqops.connectors.trino.TrinoConnectionSpecObjectMother;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProviderObjectMother;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
@@ -63,11 +67,23 @@ public class SampleTableMetadataObjectMother {
             case sqlserver:
                 return SqlServerConnectionSpecObjectMother.create();
 
+            case presto:
+                return PrestoConnectionSpecObjectMother.create();
+
+            case trino:
+                return TrinoConnectionSpecObjectMother.create();
+
             case mysql:
                 return MysqlConnectionSpecObjectMother.create();
 
             case oracle:
                 return OracleConnectionSpecObjectMother.create();
+
+            case spark:
+                return SparkConnectionSpecObjectMother.create();
+
+            case databricks:
+                return DatabricksConnectionSpecObjectMother.create();
         }
 
         Assertions.fail("Add a case statement for a target provider and define a connection spec object mother for " + providerType.name());
@@ -96,11 +112,23 @@ public class SampleTableMetadataObjectMother {
             case sqlserver:
                 return SqlServerConnectionSpecObjectMother.getSchemaName();
 
+            case presto:
+                return PrestoConnectionSpecObjectMother.getSchemaName();
+
+            case trino:
+                return TrinoConnectionSpecObjectMother.getSchemaName();
+
             case mysql:
                 return MysqlConnectionSpecObjectMother.getSchemaName();
 
             case oracle:
                 return OracleConnectionSpecObjectMother.getSchemaName();
+
+            case spark:
+                return SparkConnectionSpecObjectMother.getSchemaName();
+
+            case databricks:
+                return DatabricksConnectionSpecObjectMother.getSchemaName();
         }
 
         Assertions.fail("Add a case statement for a target provider " + providerType.name());
@@ -124,8 +152,22 @@ public class SampleTableMetadataObjectMother {
      * @return Sample table metadata.
      */
     public static SampleTableMetadata createSampleTableMetadataForCsvFile(String csvFileName, ProviderType providerType) {
+        ConnectionSpec connectionSpecRaw = makeConnectionSpecForProvider(providerType);
+        SampleTableMetadata sampleTableMetadata = createSampleTableMetadataForCsvFile(csvFileName, connectionSpecRaw);
+        return sampleTableMetadata;
+    }
+
+    /**
+     * Creates a sample table metadata adapted for the tested connection spec.
+     * The physical table name will match the desired name for a table in a tested database.
+     * The method allows to test e.g. different database versions.
+     * @param csvFileName Sample data CSV file name (a file name in the dqo/sampledata folder).
+     * @param connectionSpecRaw Target connection spec.
+     * @return Sample table metadata.
+     */
+    public static SampleTableMetadata createSampleTableMetadataForCsvFile(String csvFileName, ConnectionSpec connectionSpecRaw) {
+        ProviderType providerType = connectionSpecRaw.getProviderType();
         String connectionName = getConnectionNameForProvider(providerType);
-        ConnectionSpec connectionSpecRaw = makeConnectionSpecForProvider(providerType); // in order to support different database versions, we can accept a ConnectionSpec as a parameter
         SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(null);
         ConnectionSpec connectionSpec = connectionSpecRaw.expandAndTrim(SecretValueProviderObjectMother.getInstance(), secretValueLookupContext);
         String targetSchema = getSchemaForProvider(providerType);
@@ -145,7 +187,8 @@ public class SampleTableMetadataObjectMother {
                 columnSpec.setTypeSnapshot(userProposedType);
             }
             else {
-                ColumnTypeSnapshotSpec providerProposedTypeSnapshot = connectionProvider.proposePhysicalColumnType(dataColumn);
+                ColumnTypeSnapshotSpec providerProposedTypeSnapshot = connectionProvider
+                        .proposePhysicalColumnType(connectionSpec, dataColumn);
                 columnSpec.setTypeSnapshot(providerProposedTypeSnapshot);
             }
 
@@ -154,4 +197,26 @@ public class SampleTableMetadataObjectMother {
 
         return new SampleTableMetadata(connectionName, connectionSpec, tableSpec, sampleTable);
     }
+
+    /**
+     * Creates a sample table metadata with a non-existing table that cannot be used for sql execution.
+     * Schema and table name should not point to the existing table.
+     * @param schemaName A schema name.
+     * @param tableName Imagined table name that should not exist in real database.
+     * @param providerType Target provider type.
+     * @return Sample table metadata.
+     */
+    public static SampleTableMetadata createSampleTableMetadataWithNonExistingTable(String schemaName, String tableName, ProviderType providerType) {
+        String connectionName = getConnectionNameForProvider(providerType);
+        ConnectionSpec connectionSpecRaw = makeConnectionSpecForProvider(providerType); // in order to support different database versions, we can accept a ConnectionSpec as a parameter
+        SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(null);
+        ConnectionSpec connectionSpec = connectionSpecRaw.expandAndTrim(SecretValueProviderObjectMother.getInstance(), secretValueLookupContext);
+        TableSpec tableSpec = new TableSpec(new PhysicalTableName(schemaName, tableName));
+        DataGroupingConfigurationSpec dataGroupingConfigurationSpec = new DataGroupingConfigurationSpec();
+        tableSpec.getGroupings().put(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME, dataGroupingConfigurationSpec);
+        tableSpec.setDefaultGroupingName(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME);
+
+        return new SampleTableMetadata(connectionName, connectionSpec, tableSpec, null);
+    }
+
 }

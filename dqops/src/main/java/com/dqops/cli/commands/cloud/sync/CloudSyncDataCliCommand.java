@@ -17,12 +17,12 @@ package com.dqops.cli.commands.cloud.sync;
 
 import com.dqops.cli.commands.BaseCommand;
 import com.dqops.cli.commands.ICommand;
-import com.dqops.cli.commands.cloud.sync.impl.CloudSynchronizationService;
+import com.dqops.cli.commands.cloud.sync.impl.CloudSynchronizationCliService;
 import com.dqops.cli.terminal.TerminalFactory;
 import com.dqops.cli.terminal.TerminalWriter;
 import com.dqops.core.dqocloud.accesskey.DqoCloudCredentialsException;
 import com.dqops.core.jobqueue.exceptions.DqoQueueJobExecutionException;
-import com.dqops.core.principal.DqoCloudApiKeyPrincipalProvider;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.core.synchronization.fileexchange.FileSynchronizationDirection;
@@ -41,18 +41,18 @@ import picocli.CommandLine;
 @CommandLine.Command(name = "data", header = "Synchronize local \"data\" folder with sensor readouts and rule results with DQOps Cloud",
         description = "Uploads any local changes to the cloud and downloads any changes made to the cloud version of the \"data\" folder.")
 public class CloudSyncDataCliCommand extends BaseCommand implements ICommand {
-    private CloudSynchronizationService cloudSynchronizationService;
+    private CloudSynchronizationCliService cloudSynchronizationCliService;
     private TerminalFactory terminalFactory;
-    private DqoCloudApiKeyPrincipalProvider principalProvider;
+    private DqoUserPrincipalProvider principalProvider;
 
     public CloudSyncDataCliCommand() {
     }
 
     @Autowired
-    public CloudSyncDataCliCommand(CloudSynchronizationService cloudSynchronizationService,
+    public CloudSyncDataCliCommand(CloudSynchronizationCliService cloudSynchronizationCliService,
                                    TerminalFactory terminalFactory,
-                                   DqoCloudApiKeyPrincipalProvider principalProvider) {
-        this.cloudSynchronizationService = cloudSynchronizationService;
+                                   DqoUserPrincipalProvider principalProvider) {
+        this.cloudSynchronizationCliService = cloudSynchronizationCliService;
         this.terminalFactory = terminalFactory;
         this.principalProvider = principalProvider;
     }
@@ -123,32 +123,32 @@ public class CloudSyncDataCliCommand extends BaseCommand implements ICommand {
     @Override
     public Integer call() throws Exception {
         try {
-            DqoUserPrincipal principal = this.principalProvider.createUserPrincipal();
+            DqoUserPrincipal principal = this.principalProvider.getLocalUserPrincipal();
 
-            int synchronizeReadoutsResult = this.cloudSynchronizationService.synchronizeRoot(
+            int synchronizeReadoutsResult = this.cloudSynchronizationCliService.synchronizeRoot(
                     DqoRoot.data_sensor_readouts, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true, principal);
             if (synchronizeReadoutsResult < 0) {
                 return synchronizeReadoutsResult;
             }
-            int synchronizeRuleResultsResult = this.cloudSynchronizationService.synchronizeRoot(
+            int synchronizeRuleResultsResult = this.cloudSynchronizationCliService.synchronizeRoot(
                     DqoRoot.data_check_results, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true, principal);
             if (synchronizeRuleResultsResult < 0) {
                 return synchronizeReadoutsResult;
             }
 
-            int synchronizeErrorsResult = this.cloudSynchronizationService.synchronizeRoot(
+            int synchronizeErrorsResult = this.cloudSynchronizationCliService.synchronizeRoot(
                     DqoRoot.data_errors, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true, principal);
             if (synchronizeErrorsResult < 0) {
                 return synchronizeErrorsResult;
             }
 
-            int synchronizeStatisticsResult = this.cloudSynchronizationService.synchronizeRoot(
+            int synchronizeStatisticsResult = this.cloudSynchronizationCliService.synchronizeRoot(
                     DqoRoot.data_statistics, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true, principal);
             if (synchronizeStatisticsResult < 0) {
                 return synchronizeStatisticsResult;
             }
 
-            int synchronizeIncidentsResult = this.cloudSynchronizationService.synchronizeRoot(
+            int synchronizeIncidentsResult = this.cloudSynchronizationCliService.synchronizeRoot(
                     DqoRoot.data_incidents, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true, principal);
 
             return synchronizeIncidentsResult;

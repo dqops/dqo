@@ -8,3 +8,4 @@ spec:
     \ type (including the length, precision, scale, nullability) has changed since\
     \ the last day. Stores the most recent hash for each day when the data quality\
     \ check was evaluated."
+  standard: true

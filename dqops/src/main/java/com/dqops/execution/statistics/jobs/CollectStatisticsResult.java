@@ -16,6 +16,7 @@
 package com.dqops.execution.statistics.jobs;
 
 import com.dqops.execution.statistics.StatisticsCollectionExecutionSummary;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -33,6 +34,7 @@ import lombok.EqualsAndHashCode;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Data
 public class CollectStatisticsResult {
+    // TODO: How are these two counts different?
     /**
      * The total count of all executed statistics collectors.
      */
@@ -90,5 +92,22 @@ public class CollectStatisticsResult {
         }};
 
         return runChecksQueueJobResult;
+    }
+
+    public static class CollectStatisticsResultSampleFactory implements SampleValueFactory<CollectStatisticsResult> {
+        @Override
+        public CollectStatisticsResult createSample() {
+            // Columns analyzed, 1*3 + 2*2 + 4*1
+            // One of the sensors failed for a 3 statistics column.
+            // One for one of the two 2-statistics columns.
+            // One for one of the three 1-statistic columns.
+            return new CollectStatisticsResult() {{
+                setExecutedStatisticsCollectors(11);
+                setColumnsAnalyzed(7);
+                setColumnsSuccessfullyAnalyzed(4);
+                setTotalCollectorsFailed(3);
+                setTotalCollectedResults(8);
+            }};
+        }
     }
 }

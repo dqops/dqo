@@ -37,7 +37,7 @@ public class ConnectionListImplTests extends BaseTest {
     void createNewElement_whenCalled_createsElementWithEmptyModel() {
         ConnectionWrapper wrapper = this.sut.createNewElement("src");
         Assertions.assertEquals("src", wrapper.getName());
-        Assertions.assertEquals(InstanceStatus.UNCHANGED, wrapper.getStatus());
+        Assertions.assertEquals(InstanceStatus.ADDED, wrapper.getStatus());
         Assertions.assertNotNull(wrapper.getSpec());
         Assertions.assertEquals(0, this.sut.size());
     }

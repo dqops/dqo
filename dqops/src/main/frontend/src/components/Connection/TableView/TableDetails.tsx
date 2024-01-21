@@ -148,7 +148,8 @@ const TableDetails = () => {
                   { label: '', value: undefined },
                   ...Object.values(
                     TableListModelProfilingChecksResultTruncationEnum
-                  ).map((x) => ({ label: x, value: x }))
+                  ).map((x) => ({ label: x?.replaceAll("_", " ")
+                  .replace(/./, c => c.toUpperCase()) , value: x }))
                 ]}
                 value={tableBasic?.advanced_profiling_result_truncation ?? TableListModelProfilingChecksResultTruncationEnum.one_per_month}
                 onChange={(selected) =>

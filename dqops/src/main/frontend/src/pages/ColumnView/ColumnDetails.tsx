@@ -88,23 +88,23 @@ const TableDetails = ({
       <table className="mb-6 w-160">
         <tbody>
           <tr>
-            <td className="px-4 py-2">Connection Name</td>
+            <td className="px-4 py-2">Connection name</td>
             <td className="px-4 py-2">{columnBasic?.connection_name}</td>
           </tr>
           <tr>
-            <td className="px-4 py-2">Schema Name</td>
+            <td className="px-4 py-2">Schema name</td>
             <td className="px-4 py-2">{columnBasic?.table?.schema_name}</td>
           </tr>
           <tr>
-            <td className="px-4 py-2">Table Name</td>
+            <td className="px-4 py-2">Table name</td>
             <td className="px-4 py-2">{columnBasic?.table?.table_name}</td>
           </tr>
           <tr>
-            <td className="px-4 py-2">Column Name</td>
+            <td className="px-4 py-2">Column name</td>
             <td className="px-4 py-2">{columnBasic?.column_name}</td>
           </tr>
           <tr>
-            <td className="px-4 py-2">Disable Data Quality Checks</td>
+            <td className="px-4 py-2">Disable data quality checks</td>
             <td className="px-4 py-2">
               <div className="flex">
                 <Checkbox
@@ -115,7 +115,7 @@ const TableDetails = ({
             </td>
           </tr>
           <tr>
-            <td className="px-4 py-2">SQL Expression for a Calculated Column, use an {'{'}alias{'}'} token to reference the table</td>
+            <td className="px-4 py-2">SQL expression for a calculated column (use an {'{'}alias{'}.'} token to reference the table)</td>
             <td className="px-4 py-2">
               <Input
                 value={columnBasic?.sql_expression}
@@ -126,7 +126,7 @@ const TableDetails = ({
             </td>
           </tr>
           <tr>
-            <td className="px-4 py-2">Column Type</td>
+            <td className="px-4 py-2">Column data type</td>
             <td className="px-4 py-2">
               <Input
                 value={columnBasic?.type_snapshot?.column_type}

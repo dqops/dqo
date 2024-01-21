@@ -9,3 +9,4 @@ spec:
     \ it the last known column count that was captured when this data quality check\
     \ was executed the last time. Stores the most recent column count for each month\
     \ when the data quality check was evaluated."
+  standard: true

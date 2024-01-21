@@ -32,6 +32,8 @@ import com.dqops.core.jobqueue.DqoJobQueueObjectMother;
 import com.dqops.core.jobqueue.DqoQueueJobFactory;
 import com.dqops.core.jobqueue.DqoQueueJobFactoryImpl;
 import com.dqops.core.principal.DqoUserPrincipalObjectMother;
+import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.core.principal.UserDomainIdentityObjectMother;
 import com.dqops.data.statistics.services.StatisticsDataServiceImpl;
 import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.execution.ExecutionContextFactoryImpl;
@@ -47,8 +49,7 @@ import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactoryObjectMother;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import com.dqops.metadata.traversal.HierarchyNodeTreeWalkerImpl;
-import com.dqops.rules.comparison.MinCountRule1ParametersSpec;
-import com.dqops.rules.comparison.MinCountRuleWarningParametersSpec;
+import com.dqops.rules.comparison.*;
 import com.dqops.services.check.CheckFlatConfigurationFactory;
 import com.dqops.services.check.CheckFlatConfigurationFactoryImpl;
 import com.dqops.services.check.mapping.utils.CheckContainerListModelUtility;
@@ -56,7 +57,6 @@ import com.dqops.services.check.mapping.models.CheckContainerModel;
 import com.dqops.services.check.mapping.basicmodels.CheckContainerListModel;
 import com.dqops.rest.models.metadata.TableListModel;
 import com.dqops.rest.models.metadata.TableModel;
-import com.dqops.rules.comparison.MinCountRuleFatalParametersSpec;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
@@ -80,7 +80,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.Optional;
 
 @SpringBootTest
 public class TablesControllerUTTests extends BaseTest {
@@ -88,10 +87,12 @@ public class TablesControllerUTTests extends BaseTest {
     private UserHomeContextFactory userHomeContextFactory;
     private UserHomeContext userHomeContext;
     private SampleTableMetadata sampleTable;
+    private UserDomainIdentity userDomainIdentity;
 
     @BeforeEach
     void setUp() {
         this.userHomeContextFactory = UserHomeContextFactoryObjectMother.createWithInMemoryContext();
+        this.userDomainIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
 
         DqoQueueJobFactory dqoQueueJobFactory = new DqoQueueJobFactoryImpl(BeanFactoryObjectMother.getBeanFactory());
         DqoJobQueue dqoJobQueue = DqoJobQueueObjectMother.getDefaultJobQueue();
@@ -113,7 +114,7 @@ public class TablesControllerUTTests extends BaseTest {
         StatisticsDataServiceImpl statisticsDataService = new StatisticsDataServiceImpl(null, null); // TODO: configure dependencies if we want to unit test statistics
 
         this.sut = new TablesController(tableService, this.userHomeContextFactory, dqoHomeContextFactory, specToUiCheckMappingService, uiToSpecCheckMappingService, statisticsDataService);
-        this.userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        this.userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
         this.sampleTable = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day, ProviderType.bigquery);
     }
 
@@ -194,9 +195,9 @@ public class TablesControllerUTTests extends BaseTest {
     void getTableDailyMonitoringChecks_whenTableRequested_thenReturnsMonitoring() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        MinCountRuleWarningParametersSpec minRule1 = new MinCountRuleWarningParametersSpec(10L);
+        MinCountRule1ParametersSpec minRule1 = new MinCountRule1ParametersSpec(10L);
         MinCountRule1ParametersSpec minRule2 = new MinCountRule1ParametersSpec(20L);
-        MinCountRuleFatalParametersSpec minRule3 = new MinCountRuleFatalParametersSpec(30L);
+        MinCountRule1ParametersSpec minRule3 = new MinCountRule1ParametersSpec(30L);
         TableRowCountCheckSpec minRowCountSpec = new TableRowCountCheckSpec();
         minRowCountSpec.setWarning(minRule1);
         minRowCountSpec.setError(minRule2);
@@ -225,9 +226,9 @@ public class TablesControllerUTTests extends BaseTest {
     void getTablePartitionedChecksDaily_whenTableRequested_thenReturnsPartitionedChecks() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        MinCountRuleWarningParametersSpec minRule1 = new MinCountRuleWarningParametersSpec(10L);
+        MinCountRule1ParametersSpec minRule1 = new MinCountRule1ParametersSpec(10L);
         MinCountRule1ParametersSpec minRule2 = new MinCountRule1ParametersSpec(20L);
-        MinCountRuleFatalParametersSpec minRule3 = new MinCountRuleFatalParametersSpec(30L);
+        MinCountRule1ParametersSpec minRule3 = new MinCountRule1ParametersSpec(30L);
         TableRowCountCheckSpec minRowCountSpec = new TableRowCountCheckSpec();
         minRowCountSpec.setWarning(minRule1);
         minRowCountSpec.setError(minRule2);
@@ -325,7 +326,7 @@ public class TablesControllerUTTests extends BaseTest {
 
         CheckContainerListModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(6, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
+        Assertions.assertEquals(5, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
     }
 
     @ParameterizedTest
@@ -343,9 +344,9 @@ public class TablesControllerUTTests extends BaseTest {
         CheckContainerListModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
         if (timePartition == CheckTimeScale.daily) {
-            Assertions.assertEquals(6, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
+            Assertions.assertEquals(5, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
         } else {
-            Assertions.assertEquals(6, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
+            Assertions.assertEquals(5, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
         }
     }
 
@@ -364,9 +365,9 @@ public class TablesControllerUTTests extends BaseTest {
         CheckContainerListModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
         if (timePartition == CheckTimeScale.daily) {
-            Assertions.assertEquals(3, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
+            Assertions.assertEquals(2, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
         } else {
-            Assertions.assertEquals(3, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
+            Assertions.assertEquals(2, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
         }
     }
     
@@ -374,9 +375,9 @@ public class TablesControllerUTTests extends BaseTest {
     void updateTableProfilingChecks_whenTableAndProfilingChecksRequested_updatesProfilingChecks() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        MinCountRuleWarningParametersSpec minRule1 = new MinCountRuleWarningParametersSpec(10L);
+        MinCountRule1ParametersSpec minRule1 = new MinCountRule1ParametersSpec(10L);
         MinCountRule1ParametersSpec minRule2 = new MinCountRule1ParametersSpec(20L);
-        MinCountRuleFatalParametersSpec minRule3 = new MinCountRuleFatalParametersSpec(30L);
+        MinCountRule1ParametersSpec minRule3 = new MinCountRule1ParametersSpec(30L);
         TableRowCountCheckSpec minRowCountSpec = new TableRowCountCheckSpec();
         minRowCountSpec.setWarning(minRule1);
         minRowCountSpec.setError(minRule2);
@@ -403,9 +404,9 @@ public class TablesControllerUTTests extends BaseTest {
     void updateTableDailyMonitoringChecks_whenTableAndMonitoringRequested_updatesMonitoring() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        MinCountRuleWarningParametersSpec minRule1 = new MinCountRuleWarningParametersSpec(10L);
+        MinCountRule1ParametersSpec minRule1 = new MinCountRule1ParametersSpec(10L);
         MinCountRule1ParametersSpec minRule2 = new MinCountRule1ParametersSpec(20L);
-        MinCountRuleFatalParametersSpec minRule3 = new MinCountRuleFatalParametersSpec(30L);
+        MinCountRule1ParametersSpec minRule3 = new MinCountRule1ParametersSpec(30L);
         TableRowCountCheckSpec minRowCountSpec = new TableRowCountCheckSpec();
         minRowCountSpec.setWarning(minRule1);
         minRowCountSpec.setError(minRule2);
@@ -436,9 +437,9 @@ public class TablesControllerUTTests extends BaseTest {
     void updateTablePartitionedChecksDaily_whenTableAndPartitionedChecksRequested_updatesPartitionedChecks() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        MinCountRuleWarningParametersSpec minRule1 = new MinCountRuleWarningParametersSpec(10L);
+        MinCountRule1ParametersSpec minRule1 = new MinCountRule1ParametersSpec(10L);
         MinCountRule1ParametersSpec minRule2 = new MinCountRule1ParametersSpec(20L);
-        MinCountRuleFatalParametersSpec minRule3 = new MinCountRuleFatalParametersSpec(30L);
+        MinCountRule1ParametersSpec minRule3 = new MinCountRule1ParametersSpec(30L);
         TableRowCountCheckSpec minRowCountSpec = new TableRowCountCheckSpec();
         minRowCountSpec.setWarning(minRule1);
         minRowCountSpec.setError(minRule2);

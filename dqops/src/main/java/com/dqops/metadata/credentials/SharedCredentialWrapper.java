@@ -19,6 +19,8 @@ import com.dqops.core.filesystem.virtual.FileContent;
 import com.dqops.metadata.basespecs.ObjectName;
 import com.dqops.metadata.basespecs.PojoElementWrapper;
 
+import java.nio.file.Path;
+
 /**
  * Credential file wrapper.
  */
@@ -40,4 +42,10 @@ public interface SharedCredentialWrapper extends PojoElementWrapper<FileContent>
      * @return Deeply cloned object.
      */
     SharedCredentialWrapper clone();
+
+    /**
+     * Extracts an absolute file path to the credential file. This method returns null if the credentials are not stored on the disk, but using an in-memory user home instance.
+     * @return Absolut path to the file or null when it is not possible to find the file.
+     */
+    Path toAbsoluteFilePath();
 }

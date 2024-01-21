@@ -44,7 +44,7 @@ public class TableAvailabilityProfilingChecksSpec extends AbstractCheckCategoryS
         }
     };
 
-    @JsonPropertyDescription("Verifies availability of the table in a database using a simple row count.")
+    @JsonPropertyDescription("Verifies availability of a table in a monitored database using a simple query.")
     private TableAvailabilityCheckSpec profileTableAvailability;
 
     /**

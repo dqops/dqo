@@ -11,6 +11,7 @@ spec:
     help_text: Expected value for the actual_value returned by the sensor. The sensor
       value should equal expected_value +/- the error_margin.
     data_type: double
+    required: true
     sample_values:
     - 10.0
   - field_name: error_margin

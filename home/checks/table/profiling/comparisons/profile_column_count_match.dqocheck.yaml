@@ -7,3 +7,4 @@ spec:
   help_text: "Verifies that the column count of the tested (parent) table matches\
     \ the column count of the reference table. Only one comparison result is returned,\
     \ without data grouping."
+  standard: true

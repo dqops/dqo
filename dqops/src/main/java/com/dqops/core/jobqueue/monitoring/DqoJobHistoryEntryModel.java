@@ -18,11 +18,15 @@ package com.dqops.core.jobqueue.monitoring;
 import com.dqops.core.jobqueue.DqoJobQueueEntry;
 import com.dqops.core.jobqueue.DqoJobType;
 import com.dqops.core.jobqueue.DqoQueueJobId;
+import com.dqops.utils.docs.generators.SampleLongsRegistry;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Objects;
 
 /**
@@ -210,6 +214,22 @@ public class DqoJobHistoryEntryModel implements Comparable<DqoJobHistoryEntryMod
         }
         catch (CloneNotSupportedException ex) {
             throw new RuntimeException("Failed to clone an object");
+        }
+    }
+
+    public static class DqoJobHistoryEntryModelSampleFactory implements SampleValueFactory<DqoJobHistoryEntryModel> {
+        @Override
+        public DqoJobHistoryEntryModel createSample() {
+            return new DqoJobHistoryEntryModel() {{
+                setStatus(DqoJobStatus.succeeded);
+                setStatusChangedAt(LocalDateTime.of((int)SampleLongsRegistry.getYear(),
+                        (int)SampleLongsRegistry.getMonth(),
+                        11,
+                        13,
+                        42,
+                        0
+                ).toInstant(ZoneOffset.UTC));
+            }};
         }
     }
 }

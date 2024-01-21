@@ -15,6 +15,8 @@
  */
 package com.dqops.services.check.mapping.basicmodels;
 
+import com.dqops.utils.docs.generators.SampleStringsRegistry;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -60,5 +62,17 @@ public class CheckListModel implements Comparable<CheckListModel> {
         }
 
         return this.checkName.compareTo(o.checkName);
+    }
+
+    public static class CheckListModelSampleFactory implements SampleValueFactory<CheckListModel> {
+        @Override
+        public CheckListModel createSample() {
+            return new CheckListModel() {{
+                setCheckCategory(SampleStringsRegistry.getCategoryName());
+                setCheckName(SampleStringsRegistry.getCheckName());
+                setHelpText(SampleStringsRegistry.getHelpText());
+                setConfigured(true);
+            }};
+        }
     }
 }

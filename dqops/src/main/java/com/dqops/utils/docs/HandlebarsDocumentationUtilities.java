@@ -16,18 +16,20 @@
 package com.dqops.utils.docs;
 
 import com.dqops.metadata.fields.ParameterDataType;
+import com.dqops.utils.docs.generators.TypeModel;
 import com.dqops.utils.reflection.ObjectDataType;
 import com.github.jknack.handlebars.*;
 import com.github.jknack.handlebars.helper.ConditionalHelpers;
 import com.github.jknack.handlebars.helper.StringHelpers;
 import com.github.jknack.handlebars.io.FileTemplateLoader;
+import io.swagger.models.auth.In;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Handlebars template helper used to render documentation markdown files using Handlebars.
@@ -44,9 +46,12 @@ public class HandlebarsDocumentationUtilities {
         handlebars = new Handlebars(new FileTemplateLoader(templateDir));
         handlebars.registerHelpers(StringHelpers.class);
         handlebars.registerHelpers(ConditionalHelpers.class);
+        handlebars.registerHelpers(IntegerMathHelpers.class);
         handlebars.registerHelper("render-type", renderTypeHelper);
         handlebars.registerHelper("checkmark", checkmarkHelper);
         handlebars.registerHelper("single-line", singleLineHelper);
+        handlebars.registerHelper("indent", indentHelper);
+        handlebars.registerHelper("contains", containsHelper);
         handlebars.registerHelper("var", variableHelper);
     }
 
@@ -80,6 +85,94 @@ public class HandlebarsDocumentationUtilities {
         }
     }
 
+    private enum IntegerMathHelpers implements Helper<Integer> {
+        add {
+            @Override
+            public Integer apply(Integer n, Options options) throws IOException {
+                if (n == null) {
+                    return null;
+                }
+
+                if (Arrays.stream(options.params)
+                        .anyMatch(i -> !(i instanceof Integer))) {
+                    throw IntegerMathHelpers.nonIntegerParametersException(options.params);
+                }
+
+                Integer sumUp = Arrays.stream(options.params)
+                        .map(i->(Integer)i)
+                        .reduce(0, Integer::sum);
+
+                return n + sumUp;
+            }
+        },
+
+        subtract {
+            @Override
+            public Integer apply(Integer n, Options options) throws IOException {
+                if (n == null) {
+                    return null;
+                }
+
+                if (Arrays.stream(options.params)
+                        .anyMatch(i -> !(i instanceof Integer))) {
+                    throw IntegerMathHelpers.nonIntegerParametersException(options.params);
+                }
+
+                Integer sumUp = Arrays.stream(options.params)
+                        .map(i->(Integer)i)
+                        .reduce(0, Integer::sum);
+
+                return n - sumUp;
+            }
+        },
+
+        multiply {
+            @Override
+            public Integer apply(Integer n, Options options) throws IOException {
+                if (n == null) {
+                    return null;
+                }
+
+                if (Arrays.stream(options.params)
+                        .anyMatch(i -> !(i instanceof Integer))) {
+                    throw IntegerMathHelpers.nonIntegerParametersException(options.params);
+                }
+
+                Integer multiplication = Arrays.stream(options.params)
+                        .map(i->(Integer)i)
+                        .reduce(1, (a, b) -> a * b);
+
+                return n * multiplication;
+            }
+        },
+
+        divide {
+            @Override
+            public Integer apply(Integer n, Options options) throws IOException {
+                if (n == null) {
+                    return null;
+                }
+
+                if (Arrays.stream(options.params)
+                        .anyMatch(i -> !(i instanceof Integer))) {
+                    throw IntegerMathHelpers.nonIntegerParametersException(options.params);
+                }
+
+                Integer multiplication = Arrays.stream(options.params)
+                        .map(i->(Integer)i)
+                        .reduce(1, (a, b) -> a * b);
+
+                return n / multiplication;
+            }
+        },
+        ;
+
+        private static IOException nonIntegerParametersException(Object[] params) {
+            return new IOException(String.format("Not every parameter is an integer: %s",
+                    Arrays.toString(params)));
+        }
+    }
+
     private static final Helper<TypeModel> renderTypeHelper = new Helper<>() {
         @Override
         public CharSequence apply(TypeModel typeModel, Options options) {
@@ -92,9 +185,9 @@ public class HandlebarsDocumentationUtilities {
                 // Only simple objects get complete linkage
                 String templateToReturn = null;
                 if ((isSimpleObject(typeModel) || isLinkableEnum(typeModel)) && typeModel.getClassUsedOnTheFieldPath() != null) {
-                    templateToReturn = "[%s](" + typeModel.getClassUsedOnTheFieldPath() + ")";
+                    templateToReturn = "[`%s`](" + changeAnchorToLowerCase(typeModel.getClassUsedOnTheFieldPath()) + ")";
                 } else {
-                    templateToReturn = "%s";
+                    templateToReturn = "`%s`";
                 }
                 return String.format(templateToReturn, displayText);
             }
@@ -121,13 +214,27 @@ public class HandlebarsDocumentationUtilities {
                 default:
                     if (typeModel.getClassUsedOnTheFieldPath() != null) {
                         return "[" + typeModel.getClassNameUsedOnTheField() + "]" +
-                                "(" + typeModel.getClassUsedOnTheFieldPath() + ")";
+                                "(" + changeAnchorToLowerCase(typeModel.getClassUsedOnTheFieldPath()) + ")";
                     }
                     else {
-                        return typeModel.getClassNameUsedOnTheField();
+                        return "`" + typeModel.getClassNameUsedOnTheField() + "`";
                     }
 
             }
+        }
+
+        /**
+         * Finds an anchor after the '#' sign in the url and changes it to lower case.
+         * @param url Url to fix.
+         * @return Fixed url.
+         */
+        private String changeAnchorToLowerCase(String url) {
+            int indexOfHash = url.indexOf('#');
+            if (indexOfHash < 0) {
+                return url;
+            }
+
+            return url.substring(0, indexOfHash) + url.substring(indexOfHash).toLowerCase();
         }
 
         private boolean isLinkableEnum(TypeModel typeModel) {
@@ -158,8 +265,41 @@ public class HandlebarsDocumentationUtilities {
         return s.replaceAll("\\s+", " ");
     };
 
+    private static final Helper<String> indentHelper = (s, o) -> {
+        if (s == null
+            || o.params.length == 0
+            || !(NumberUtils.isNumber(o.params[0].toString()))) {
+            return s;
+        }
+
+        int indentAmount = NumberUtils.toInt(o.params[0].toString());
+        String currentIndent;
+        String targetIndent;
+
+        if (indentAmount < 0) {
+            currentIndent = "\n" + StringUtils.repeat("\t", -1 * indentAmount);
+            targetIndent = "\n";
+        } else {
+            currentIndent = "\n";
+            targetIndent = "\n" + StringUtils.repeat("\t", indentAmount);
+        }
+
+        return s.replace(currentIndent, targetIndent);
+    };
+
+    private static final Helper<String> containsHelper = (s, o) -> {
+        if (s == null
+            || o.params.length == 0
+            || !(o.params[0] instanceof CharSequence)
+        ) {
+            return false;
+        }
+
+        return s.contains((CharSequence)o.params[0]);
+    };
+
     private static final Helper<String> variableHelper = new Helper<>() {
-        Map<Long, Map<String, String>> state = new HashMap<>();
+        final Map<Long, Map<String, String>> state = new LinkedHashMap<>();
 
         @Override
         public CharSequence apply(String variableName, Options options) {
@@ -182,13 +322,13 @@ public class HandlebarsDocumentationUtilities {
         }
 
         private String getValue(Long scope, String variableName) {
-            Map<String, String> scopedState = state.computeIfAbsent(scope, _i -> new HashMap<>());
+            Map<String, String> scopedState = state.computeIfAbsent(scope, _i -> new LinkedHashMap<>());
             return scopedState.getOrDefault(variableName, null);
         }
 
         private void setValue(Long scope, String variableName, String value) {
             if (!state.containsKey(scope)) {
-                state.put(scope, new HashMap<>());
+                state.put(scope, new LinkedHashMap<>());
             }
 
             Map<String, String> scopedState = state.get(scope);

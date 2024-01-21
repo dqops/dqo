@@ -1,0 +1,20 @@
+from dqops import client
+from dqops.client.api.{{moduleName}} import {{apiMethodName}}
+{{#if modelImports}}from dqops.client.models import {{{join modelImports ", \
+                                "}}}
+{{/if}}
+{{#if auth}}token = 's4mp13_4u7h_70k3n'
+
+{{/if}}dqops_client = client.{{#if auth}}Authenticated{{/if}}Client(
+    'http://localhost:8888/'{{#if auth}},
+    token=token{{/if}}{{#if (eq httpStatus.code 200)}},
+    raise_on_unexpected_status=True{{/if}}
+)
+
+{{#if requestBody}}request_body = {{{requestBody}}}
+
+{{/if}}call_result = {{#if async}}await {{/if}}{{apiMethodName}}.{{#if async}}asyncio{{else}}sync{{/if}}(
+    {{#each pathParameters}}{{{.}}},
+    {{/each}}client=dqops_client{{#if requestBody}},
+    json_body=request_body{{/if}}
+)

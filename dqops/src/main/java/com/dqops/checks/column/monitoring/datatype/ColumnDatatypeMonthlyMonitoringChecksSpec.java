@@ -20,7 +20,7 @@ import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeStringDatatypeChangedCheckSpec;
-import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeStringDatatypeDetectedCheckSpec;
+import com.dqops.checks.column.checkspecs.datatype.ColumnDetectedDatatypeInTextCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -41,51 +41,51 @@ import java.util.Objects;
 public class ColumnDatatypeMonthlyMonitoringChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDatatypeMonthlyMonitoringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("monthly_string_datatype_detected", o -> o.monthlyStringDatatypeDetected);
-            put("monthly_string_datatype_changed", o -> o.monthlyStringDatatypeChanged);
+            put("monthly_detected_datatype_in_text", o -> o.monthlyDetectedDatatypeInText);
+            put("monthly_detected_datatype_in_text_changed", o -> o.monthlyDetectedDatatypeInTextChanged);
         }
     };
 
-    @JsonPropertyDescription("Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnDatatypeStringDatatypeDetectedCheckSpec monthlyStringDatatypeDetected;
+    @JsonPropertyDescription("Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores the most recent check result for each month when the data quality check was evaluated.")
+    private ColumnDetectedDatatypeInTextCheckSpec monthlyDetectedDatatypeInText;
 
     @JsonPropertyDescription("Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnDatatypeStringDatatypeChangedCheckSpec monthlyStringDatatypeChanged;
+    private ColumnDatatypeStringDatatypeChangedCheckSpec monthlyDetectedDatatypeInTextChanged;
 
     /**
      * Returns a count of expected values in datatype detect check.
      * @return Datatype detect check.
      */
-    public ColumnDatatypeStringDatatypeDetectedCheckSpec getMonthlyStringDatatypeDetected() {
-        return monthlyStringDatatypeDetected;
+    public ColumnDetectedDatatypeInTextCheckSpec getMonthlyDetectedDatatypeInText() {
+        return monthlyDetectedDatatypeInText;
     }
 
     /**
      * Sets a new definition of a datatype detect check.
-     * @param monthlyStringDatatypeDetected Datatype detect check.
+     * @param monthlyDetectedDatatypeInText Datatype detect check.
      */
-    public void setMonthlyStringDatatypeDetected(ColumnDatatypeStringDatatypeDetectedCheckSpec monthlyStringDatatypeDetected) {
-        this.setDirtyIf(!Objects.equals(this.monthlyStringDatatypeDetected, monthlyStringDatatypeDetected));
-        this.monthlyStringDatatypeDetected = monthlyStringDatatypeDetected;
-        propagateHierarchyIdToField(monthlyStringDatatypeDetected, "monthly_string_datatype_detected");
+    public void setMonthlyDetectedDatatypeInText(ColumnDetectedDatatypeInTextCheckSpec monthlyDetectedDatatypeInText) {
+        this.setDirtyIf(!Objects.equals(this.monthlyDetectedDatatypeInText, monthlyDetectedDatatypeInText));
+        this.monthlyDetectedDatatypeInText = monthlyDetectedDatatypeInText;
+        propagateHierarchyIdToField(monthlyDetectedDatatypeInText, "monthly_detected_datatype_in_text");
     }
 
     /**
      * Returns a count of expected values in datatype detect check.
      * @return Datatype detect check.
      */
-    public ColumnDatatypeStringDatatypeChangedCheckSpec getMonthlyStringDatatypeChanged() {
-        return monthlyStringDatatypeChanged;
+    public ColumnDatatypeStringDatatypeChangedCheckSpec getMonthlyDetectedDatatypeInTextChanged() {
+        return monthlyDetectedDatatypeInTextChanged;
     }
 
     /**
      * Sets a new definition of a datatype detect check.
-     * @param monthlyStringDatatypeChanged Datatype detect check.
+     * @param monthlyDetectedDatatypeInTextChanged Datatype detect check.
      */
-    public void setMonthlyStringDatatypeChanged(ColumnDatatypeStringDatatypeChangedCheckSpec monthlyStringDatatypeChanged) {
-        this.setDirtyIf(!Objects.equals(this.monthlyStringDatatypeChanged, monthlyStringDatatypeChanged));
-        this.monthlyStringDatatypeChanged = monthlyStringDatatypeChanged;
-        propagateHierarchyIdToField(monthlyStringDatatypeChanged, "monthly_string_datatype_changed");
+    public void setMonthlyDetectedDatatypeInTextChanged(ColumnDatatypeStringDatatypeChangedCheckSpec monthlyDetectedDatatypeInTextChanged) {
+        this.setDirtyIf(!Objects.equals(this.monthlyDetectedDatatypeInTextChanged, monthlyDetectedDatatypeInTextChanged));
+        this.monthlyDetectedDatatypeInTextChanged = monthlyDetectedDatatypeInTextChanged;
+        propagateHierarchyIdToField(monthlyDetectedDatatypeInTextChanged, "monthly_detected_datatype_in_text_changed");
     }
 
     /**

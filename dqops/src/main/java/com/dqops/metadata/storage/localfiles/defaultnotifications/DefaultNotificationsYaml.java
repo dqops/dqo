@@ -3,16 +3,25 @@ package com.dqops.metadata.storage.localfiles.defaultnotifications;
 import com.dqops.core.filesystem.ApiVersion;
 import com.dqops.metadata.incidents.IncidentWebhookNotificationsSpec;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
+import com.dqops.utils.reflection.DefaultFieldValue;
 import com.dqops.utils.serialization.InvalidYamlStatusHolder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 /**
  * The default configuration of notifications. Notifications are published by calling webhooks defined in this object.
  * The default notification settings are stored in the *$DQO_USER_HOME/settings/defaultnotifications.dqonotifications.yaml* file in the DQOps user's home folder.
  */
 public class DefaultNotificationsYaml  implements InvalidYamlStatusHolder {
+    @JsonPropertyDescription("DQOps YAML schema version")
+    @DefaultFieldValue(ApiVersion.CURRENT_API_VERSION)
     private String apiVersion = ApiVersion.CURRENT_API_VERSION;
-    private SpecificationKind kind = SpecificationKind.DEFAULT_NOTIFICATIONS;
+
+    @JsonPropertyDescription("File type")
+    @DefaultFieldValue("default_notifications")
+    private SpecificationKind kind = SpecificationKind.default_notifications;
+
+    @JsonPropertyDescription("The configuration object with the definition of the default webhook notification urls")
     private IncidentWebhookNotificationsSpec spec = new IncidentWebhookNotificationsSpec();
 
     @JsonIgnore

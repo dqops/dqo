@@ -58,8 +58,7 @@ const Tree = () => {
   useEffect(() => {
     const jobs = Object.values(job_dictionary_state).filter(
       (item) =>
-        item.jobType ===
-        DqoJobHistoryEntryModelJobTypeEnum.import_tables
+        item.jobType === DqoJobHistoryEntryModelJobTypeEnum.import_tables
     );
 
     jobs.forEach((job: DqoJobHistoryEntryModel) => {
@@ -379,7 +378,7 @@ const Tree = () => {
       <div style={{ paddingLeft: deep ? 16 : 0 }}>
         <div
           className={clsx(
-            'px-2 cursor-pointer flex space-x-1 hover:bg-gray-100 mb-0.5',
+            'px-2 cursor-pointer flex space-x-1 hover:bg-gray-100  mb-0.5',
             activeTab === node.id ? 'bg-gray-100' : '',
             node.level === TREE_LEVEL.TABLE &&
               checkTypes === CheckTypes.PARTITIONED &&
@@ -407,7 +406,7 @@ const Tree = () => {
               className="max-w-120 py-4 px-4  delay-300 "
               placement="top-start"
             >
-              <div className="flex justify-between items-center  w-full">
+              <div className="flex flex-1 justify-between items-center">
                 <div
                   className={clsx(
                     `flex-1 truncate`,
@@ -416,37 +415,34 @@ const Tree = () => {
                 >
                   {node.label}
                 </div>
-                <div className="flex items-center justify-center relative">
-                  <div>
-                    {node.parsingYamlError &&
-                    node.parsingYamlError.length > 0 ? (
-                      <Tooltip
-                        content={node.parsingYamlError}
-                        className="max-w-120 z-50"
-                        placement="right-start"
+                <div className="relative ">
+                  {node.parsingYamlError && node.parsingYamlError.length > 0 ? (
+                    <Tooltip
+                      content={node.parsingYamlError}
+                      className="max-w-120 z-50"
+                      placement="right-start"
+                    >
+                      <div
+                        style={{
+                          position: 'absolute',
+                          right: '30px',
+                          top: '-9px',
+                          borderRadius: '3px'
+                        }}
+                        className="bg-white"
                       >
-                        <div
-                          style={{
-                            position: 'absolute',
-                            right: '30px',
-                            top: '-9px',
-                            borderRadius: '3px'
-                          }}
-                          className="bg-white"
-                        >
-                          <SvgIcon name="warning" className="w-5 h-5" />
-                        </div>
-                      </Tooltip>
-                    ) : null}
-                  </div>
-                  <ContextMenu
-                    node={node}
-                    openConfirm={openConfirm}
-                    openAddColumnDialog={openAddColumnDialog}
-                    openAddTableDialog={openAddTableDialog}
-                    openAddSchemaDialog={openAddSchemaDialog}
-                  />
+                        <SvgIcon name="warning" className="w-5 h-5" />
+                      </div>
+                    </Tooltip>
+                  ) : null}
                 </div>
+                <ContextMenu
+                  node={node}
+                  openConfirm={openConfirm}
+                  openAddColumnDialog={openAddColumnDialog}
+                  openAddTableDialog={openAddTableDialog}
+                  openAddSchemaDialog={openAddSchemaDialog}
+                />
               </div>
             </Tooltip>
           </div>

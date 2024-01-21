@@ -1,0 +1,8 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: column/patterns/text_matching_name_pattern_percent
+  rule_name: comparison/min_percent
+  help_text: Verifies that the percentage of texts matching the name regular expression
+    does not fall below the minimum accepted percentage.

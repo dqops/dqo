@@ -25,11 +25,13 @@ import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextObjectMother;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingService;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingServiceImpl;
 import com.dqops.services.check.mapping.ModelToSpecCheckMappingServiceImpl;
+import com.dqops.services.check.matching.SimilarCheckGroupingKeyFactoryImpl;
 import com.dqops.services.check.matching.SimilarCheckMatchingServiceImpl;
 import com.dqops.utils.docs.LinkageStore;
 import com.dqops.utils.docs.rules.RuleDocumentationModelFactoryImpl;
 import com.dqops.utils.docs.sensors.SensorDocumentationModelFactoryImpl;
 import com.dqops.utils.reflection.ReflectionServiceImpl;
+import com.dqops.utils.serialization.JsonSerializerObjectMother;
 import com.dqops.utils.serialization.YamlSerializerObjectMother;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,7 +57,7 @@ public class CheckDocumentationModelFactoryImplTests extends BaseTest {
                 reflectionService, new SensorDefinitionFindServiceImpl(), new RuleDefinitionFindServiceImpl());
         DqoHomeContext dqoHomeContext = DqoHomeContextObjectMother.getRealDqoHomeContext();
         SimilarCheckMatchingServiceImpl similarCheckMatchingService = new SimilarCheckMatchingServiceImpl(specToModelCheckMappingService,
-                DqoHomeContextFactoryObjectMother.getRealDqoHomeContextFactory());
+                DqoHomeContextFactoryObjectMother.getRealDqoHomeContextFactory(), new SimilarCheckGroupingKeyFactoryImpl());
         ModelToSpecCheckMappingServiceImpl uiToSpecCheckMappingService = new ModelToSpecCheckMappingServiceImpl(reflectionService);
         this.sut = new CheckDocumentationModelFactoryImpl(
                 similarCheckMatchingService,
@@ -63,6 +65,7 @@ public class CheckDocumentationModelFactoryImplTests extends BaseTest {
                 new RuleDocumentationModelFactoryImpl(projectRoot, dqoHomeContext, specToModelCheckMappingService),
                 uiToSpecCheckMappingService,
                 YamlSerializerObjectMother.getDefault(),
+                JsonSerializerObjectMother.getDefault(),
                 JinjaTemplateRenderServiceObjectMother.getDefault(),
                 new LinkageStore<>());
 

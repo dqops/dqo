@@ -40,7 +40,7 @@ public class FileMonitoringSchedulesWrapperImpl extends MonitoringSchedulesWrapp
     @Override
     public DefaultSchedulesSpec getSpec() {
         DefaultSchedulesSpec spec = super.getSpec();
-        if (spec == null && this.getStatus() == InstanceStatus.NOT_TOUCHED) {
+        if (spec == null && this.getStatus() == InstanceStatus.LOAD_IN_PROGRESS) {
             FileTreeNode fileNode = this.settingsFolderNode.getChildFileByFileName(SpecFileNames.DEFAULT_MONITORING_SCHEDULES_SPEC_FILE_NAME_YAML);
             if (fileNode != null) {
                 FileContent fileContent = fileNode.getContent();
@@ -50,8 +50,8 @@ public class FileMonitoringSchedulesWrapperImpl extends MonitoringSchedulesWrapp
                 if (deserializedSpec == null) {
                     DefaultSchedulesYaml deserialized = this.yamlSerializer.deserialize(textContent, DefaultSchedulesYaml.class, fileNode.getPhysicalAbsolutePath());
                     deserializedSpec = deserialized.getSpec();
-                    if (deserialized.getKind() != SpecificationKind.DEFAULT_SCHEDULES) {
-                        log.info("Invalid specification kind, found: " + deserialized.getKind() + ", but expected: " + SpecificationKind.DEFAULT_SCHEDULES);
+                    if (deserialized.getKind() != SpecificationKind.default_schedules) {
+                        log.info("Invalid specification kind, found: " + deserialized.getKind() + ", but expected: " + SpecificationKind.default_schedules);
 //                        throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
                     }
                     if (deserializedSpec != null) {
@@ -98,6 +98,8 @@ public class FileMonitoringSchedulesWrapperImpl extends MonitoringSchedulesWrapp
             case ADDED:
                 this.settingsFolderNode.addChildFile(fileNameWithExt, newFileContent);
                 this.getSpec().clearDirty(true);
+                break;
+
             case MODIFIED:
                 FileTreeNode modifiedFileNode = this.settingsFolderNode.getChildFileByFileName(fileNameWithExt);
                 if (modifiedFileNode != null) {
@@ -108,6 +110,7 @@ public class FileMonitoringSchedulesWrapperImpl extends MonitoringSchedulesWrapp
                 }
                 this.getSpec().clearDirty(true);
                 break;
+
             case TO_BE_DELETED:
                 this.settingsFolderNode.deleteChildFile(fileNameWithExt);
                 break;

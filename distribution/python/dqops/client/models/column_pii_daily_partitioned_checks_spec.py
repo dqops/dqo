@@ -37,8 +37,8 @@ class ColumnPiiDailyPartitionedChecksSpec:
             checks within this category. The keys are check names defined in the definition section. The sensor parameters
             and rules should match the type of the configured sensor and rule for the custom check.
         daily_partition_contains_usa_phone_percent (Union[Unset, ColumnPiiContainsUsaPhonePercentCheckSpec]):
-        daily_partition_contains_usa_zipcode_percent (Union[Unset, ColumnPiiContainsUsaZipcodePercentCheckSpec]):
         daily_partition_contains_email_percent (Union[Unset, ColumnPiiContainsEmailPercentCheckSpec]):
+        daily_partition_contains_usa_zipcode_percent (Union[Unset, ColumnPiiContainsUsaZipcodePercentCheckSpec]):
         daily_partition_contains_ip4_percent (Union[Unset, ColumnPiiContainsIp4PercentCheckSpec]):
         daily_partition_contains_ip6_percent (Union[Unset, ColumnPiiContainsIp6PercentCheckSpec]):
     """
@@ -49,11 +49,11 @@ class ColumnPiiDailyPartitionedChecksSpec:
     daily_partition_contains_usa_phone_percent: Union[
         Unset, "ColumnPiiContainsUsaPhonePercentCheckSpec"
     ] = UNSET
-    daily_partition_contains_usa_zipcode_percent: Union[
-        Unset, "ColumnPiiContainsUsaZipcodePercentCheckSpec"
-    ] = UNSET
     daily_partition_contains_email_percent: Union[
         Unset, "ColumnPiiContainsEmailPercentCheckSpec"
+    ] = UNSET
+    daily_partition_contains_usa_zipcode_percent: Union[
+        Unset, "ColumnPiiContainsUsaZipcodePercentCheckSpec"
     ] = UNSET
     daily_partition_contains_ip4_percent: Union[
         Unset, "ColumnPiiContainsIp4PercentCheckSpec"
@@ -74,18 +74,18 @@ class ColumnPiiDailyPartitionedChecksSpec:
                 self.daily_partition_contains_usa_phone_percent.to_dict()
             )
 
+        daily_partition_contains_email_percent: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_partition_contains_email_percent, Unset):
+            daily_partition_contains_email_percent = (
+                self.daily_partition_contains_email_percent.to_dict()
+            )
+
         daily_partition_contains_usa_zipcode_percent: Union[
             Unset, Dict[str, Any]
         ] = UNSET
         if not isinstance(self.daily_partition_contains_usa_zipcode_percent, Unset):
             daily_partition_contains_usa_zipcode_percent = (
                 self.daily_partition_contains_usa_zipcode_percent.to_dict()
-            )
-
-        daily_partition_contains_email_percent: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_partition_contains_email_percent, Unset):
-            daily_partition_contains_email_percent = (
-                self.daily_partition_contains_email_percent.to_dict()
             )
 
         daily_partition_contains_ip4_percent: Union[Unset, Dict[str, Any]] = UNSET
@@ -109,14 +109,14 @@ class ColumnPiiDailyPartitionedChecksSpec:
             field_dict[
                 "daily_partition_contains_usa_phone_percent"
             ] = daily_partition_contains_usa_phone_percent
-        if daily_partition_contains_usa_zipcode_percent is not UNSET:
-            field_dict[
-                "daily_partition_contains_usa_zipcode_percent"
-            ] = daily_partition_contains_usa_zipcode_percent
         if daily_partition_contains_email_percent is not UNSET:
             field_dict[
                 "daily_partition_contains_email_percent"
             ] = daily_partition_contains_email_percent
+        if daily_partition_contains_usa_zipcode_percent is not UNSET:
+            field_dict[
+                "daily_partition_contains_usa_zipcode_percent"
+            ] = daily_partition_contains_usa_zipcode_percent
         if daily_partition_contains_ip4_percent is not UNSET:
             field_dict[
                 "daily_partition_contains_ip4_percent"
@@ -174,21 +174,6 @@ class ColumnPiiDailyPartitionedChecksSpec:
                 )
             )
 
-        _daily_partition_contains_usa_zipcode_percent = d.pop(
-            "daily_partition_contains_usa_zipcode_percent", UNSET
-        )
-        daily_partition_contains_usa_zipcode_percent: Union[
-            Unset, ColumnPiiContainsUsaZipcodePercentCheckSpec
-        ]
-        if isinstance(_daily_partition_contains_usa_zipcode_percent, Unset):
-            daily_partition_contains_usa_zipcode_percent = UNSET
-        else:
-            daily_partition_contains_usa_zipcode_percent = (
-                ColumnPiiContainsUsaZipcodePercentCheckSpec.from_dict(
-                    _daily_partition_contains_usa_zipcode_percent
-                )
-            )
-
         _daily_partition_contains_email_percent = d.pop(
             "daily_partition_contains_email_percent", UNSET
         )
@@ -201,6 +186,21 @@ class ColumnPiiDailyPartitionedChecksSpec:
             daily_partition_contains_email_percent = (
                 ColumnPiiContainsEmailPercentCheckSpec.from_dict(
                     _daily_partition_contains_email_percent
+                )
+            )
+
+        _daily_partition_contains_usa_zipcode_percent = d.pop(
+            "daily_partition_contains_usa_zipcode_percent", UNSET
+        )
+        daily_partition_contains_usa_zipcode_percent: Union[
+            Unset, ColumnPiiContainsUsaZipcodePercentCheckSpec
+        ]
+        if isinstance(_daily_partition_contains_usa_zipcode_percent, Unset):
+            daily_partition_contains_usa_zipcode_percent = UNSET
+        else:
+            daily_partition_contains_usa_zipcode_percent = (
+                ColumnPiiContainsUsaZipcodePercentCheckSpec.from_dict(
+                    _daily_partition_contains_usa_zipcode_percent
                 )
             )
 
@@ -237,8 +237,8 @@ class ColumnPiiDailyPartitionedChecksSpec:
         column_pii_daily_partitioned_checks_spec = cls(
             custom_checks=custom_checks,
             daily_partition_contains_usa_phone_percent=daily_partition_contains_usa_phone_percent,
-            daily_partition_contains_usa_zipcode_percent=daily_partition_contains_usa_zipcode_percent,
             daily_partition_contains_email_percent=daily_partition_contains_email_percent,
+            daily_partition_contains_usa_zipcode_percent=daily_partition_contains_usa_zipcode_percent,
             daily_partition_contains_ip4_percent=daily_partition_contains_ip4_percent,
             daily_partition_contains_ip6_percent=daily_partition_contains_ip6_percent,
         )

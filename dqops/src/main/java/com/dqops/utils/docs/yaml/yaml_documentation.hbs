@@ -1,7 +1,10 @@
+# DQOps YAML file definitions
+The definition of YAML files used by DQOps to configure the data sources, monitored tables, and the configuration of activated data quality checks.
+
 {{#each classObjects}}
-## {{classSimpleName}}{{#with "  "}}{{.}}{{/with}}
-{{classDescription}}{{#with "  "}}{{.}}{{/with}}
-{{#with "  "}}{{.}}{{/with}}
+## {{classSimpleName}}
+{{classDescription}}
+
 {{#if (eq classSimpleName "CommentsListSpec")}}
 {{else}}
 {{#if (eq classSimpleName "LabelSetSpec")}}
@@ -18,11 +21,11 @@
 {{else}}
 {{#if (eq classSimpleName "DashboardListSpec")}}
 {{else}}
-**The structure of this object is described below**{{#with "  "}}{{.}}{{/with}}
-{{#with "  "}}{{.}}{{/with}}
+The structure of this object is described below
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-{{#each objectFields}}|{{render-type typeModel yamlFieldName}}|{{helpText}}|{{render-type typeModel}}|{{#if enumValuesByName}}{{#each enumValuesByName}}{{this.yamlName}}<br/>{{/each}}{{else}} {{/if}}|{{#if defaultValue}}{{defaultValue}}{{else}} {{/if}}|{{#if sampleValues}}{{#each sampleValues}}{{this}}<br/>{{/each}}{{else}} {{/if}}|
+{{#each objectFields}}|<span class="no-wrap-code ">{{{render-type typeModel yamlFieldName}}}</span>|{{helpText}}|*{{render-type typeModel}}*|{{#if enumValuesByName}}{{#each enumValuesByName}}*{{this.yamlName}}*<br/>{{/each}}{{else}} {{/if}}|{{#if defaultValue}}{{defaultValue}}{{else}} {{/if}}|{{#if sampleValues}}{{#each sampleValues}}{{this}}<br/>{{/each}}{{else}} {{/if}}|
 {{/each}}
 {{/if}}
 {{/if}}
@@ -32,5 +35,6 @@
 {{/if}}
 {{/if}}
 {{/if}}
-___{{#with "  "}}{{.}}{{/with}}
+___
+
 {{/each}}

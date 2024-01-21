@@ -15,6 +15,7 @@
  */
 package com.dqops.data.statistics.snapshot;
 
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.metadata.sources.PhysicalTableName;
 
 /**
@@ -26,9 +27,10 @@ public interface StatisticsSnapshotFactory {
      *
      * @param connectionName    Connection name.
      * @param physicalTableName Physical table name.
+     * @param userIdentity      User identity that specifies the data domain.
      * @return Statistics results snapshot connected to a storage service.
      */
-    StatisticsSnapshot createSnapshot(String connectionName, PhysicalTableName physicalTableName);
+    StatisticsSnapshot createSnapshot(String connectionName, PhysicalTableName physicalTableName, UserDomainIdentity userIdentity);
 
     /**
      * Creates an empty, read-only snapshot that is connected to the statistics results storage service that will load requested months on demand.
@@ -36,7 +38,8 @@ public interface StatisticsSnapshotFactory {
      * @param connectionName Connection name.
      * @param physicalTableName Physical table name.
      * @param columnNames Array of column names to load from parquet files. Other columns will not be loaded.
+     * @param userIdentity User identity that specifies the data domain.
      * @return Statistics results snapshot connected to a storage service.
      */
-    StatisticsSnapshot createReadOnlySnapshot(String connectionName, PhysicalTableName physicalTableName, String[] columnNames);
+    StatisticsSnapshot createReadOnlySnapshot(String connectionName, PhysicalTableName physicalTableName, String[] columnNames, UserDomainIdentity userIdentity);
 }

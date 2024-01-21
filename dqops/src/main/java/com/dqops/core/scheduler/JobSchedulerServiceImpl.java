@@ -22,6 +22,8 @@ import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import com.dqops.core.dqocloud.apikey.DqoCloudLicenseType;
 import com.dqops.core.jobqueue.DqoJobQueue;
 import com.dqops.core.jobqueue.ParentDqoJobQueue;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.core.scheduler.quartz.*;
 import com.dqops.core.scheduler.runcheck.RunScheduledChecksSchedulerJob;
 import com.dqops.core.scheduler.synchronize.JobSchedulesDelta;
@@ -40,8 +42,6 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PreDestroy;
 import java.time.Instant;
 import java.time.ZoneOffset;
-import java.time.temporal.ChronoField;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static org.quartz.JobBuilder.newJob;
@@ -66,6 +66,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
     private ParentDqoJobQueue parentDqoJobQueue;
     private DefaultTimeZoneProvider defaultTimeZoneProvider;
     private DqoCloudApiKeyProvider dqoCloudApiKeyProvider;
+    private DqoUserPrincipalProvider principalProvider;
     private JobDetail runChecksJob;
     private JobDetail synchronizeMetadataJob;
     private FileSystemSynchronizationReportingMode synchronizationMode = FileSystemSynchronizationReportingMode.silent;
@@ -83,6 +84,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
      * @param parentDqoJobQueue Parent job queue, used to ensure that the job queue starts before the job scheduler.
      * @param defaultTimeZoneProvider Default time zone provider.
      * @param dqoCloudApiKeyProvider DQOps Cloud api key provider.
+     * @param principalProvider Local user principal provider.
      */
     @Autowired
     public JobSchedulerServiceImpl(DqoSchedulerConfigurationProperties schedulerConfigurationProperties,
@@ -94,7 +96,8 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
                                    DqoJobQueue dqoJobQueue,
                                    ParentDqoJobQueue parentDqoJobQueue,
                                    DefaultTimeZoneProvider defaultTimeZoneProvider,
-                                   DqoCloudApiKeyProvider dqoCloudApiKeyProvider) {
+                                   DqoCloudApiKeyProvider dqoCloudApiKeyProvider,
+                                   DqoUserPrincipalProvider principalProvider) {
         this.schedulerConfigurationProperties = schedulerConfigurationProperties;
         this.schedulerFactory = schedulerFactory;
         this.jobFactory = jobFactory;
@@ -105,6 +108,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
         this.parentDqoJobQueue = parentDqoJobQueue;
         this.defaultTimeZoneProvider = defaultTimeZoneProvider;
         this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
+        this.principalProvider = principalProvider;
     }
 
     /**
@@ -152,8 +156,12 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
                     synchronizationMode, checkRunReportingMode, this.defaultTimeZoneProvider.getDefaultTimeZoneId()));
         }
 
+        boolean schedulerWasPreviouslyRunning = this.scheduler != null;
+
         createAndStartScheduler();
-        defineDefaultJobs();
+        if (!schedulerWasPreviouslyRunning) {
+            defineDefaultJobs();
+        }
         this.started = true;
     }
 
@@ -164,8 +172,12 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
         this.dqoJobQueue.start(); // ensure that the job queues are working
         this.parentDqoJobQueue.start();
 
-        assert scheduler == null;
         try {
+            if (this.scheduler != null) {
+                this.scheduler.start();
+                return; // scheduler was started, stopped, and we are now starting it again
+            }
+
             this.scheduler = schedulerFactory.getScheduler();
             this.scheduler.setJobFactory(this.jobFactory);
             if (this.scheduler.getListenerManager().getJobListeners().stream()
@@ -202,7 +214,8 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
             }
 
             String scanMetadataCronSchedule = this.schedulerConfigurationProperties.getSynchronizeCronSchedule();
-            DqoCloudApiKey dqoCloudApiKey = this.dqoCloudApiKeyProvider.getApiKey();
+            DqoUserPrincipal userPrincipalForAdministrator = this.principalProvider.createUserPrincipalForAdministrator();
+            DqoCloudApiKey dqoCloudApiKey = this.dqoCloudApiKeyProvider.getApiKey(userPrincipalForAdministrator.getDataDomainIdentity());
             if (dqoCloudApiKey != null) {
                 DqoCloudApiKeyPayload apiKeyPayload = dqoCloudApiKey.getApiKeyPayload();
                 if (apiKeyPayload.getLicenseType() == DqoCloudLicenseType.FREE ||
@@ -220,6 +233,25 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
             log.error("Failed to define the default jobs because " + ex.getMessage(), ex);
             throw new JobSchedulerException(ex);
         }
+    }
+
+    /**
+     * Stops the job scheduler, but with an option to start it again.
+     */
+    @Override
+    public void stop() {
+        if (!this.started || this.scheduler == null) {
+            return;
+        }
+
+        try {
+            this.scheduler.standby();
+        } catch (SchedulerException ex) {
+            log.error("Failed to pause the scheduler because " + ex.getMessage(), ex);
+            throw new JobSchedulerException(ex);
+        }
+
+        this.started = false;
     }
 
     /**

@@ -18,6 +18,7 @@ package com.dqops.utils.docs;
 
 import com.dqops.metadata.fields.DisplayHint;
 import com.dqops.metadata.fields.ParameterDataType;
+import com.dqops.utils.docs.generators.TypeModel;
 import com.dqops.utils.reflection.ClassInfo;
 import com.dqops.utils.reflection.FieldInfo;
 import com.dqops.utils.reflection.ObjectDataType;
@@ -140,12 +141,14 @@ public class DocumentationReflectionServiceImpl implements DocumentationReflecti
         if (type instanceof ParameterizedType) {
             genericType = (ParameterizedType) type;
             clazz = (Class<?>) genericType.getRawType();
-        } else {
+        } else if (type instanceof Class<?>) {
             clazz = (Class<?>) type;
             genericType = null;
 
             String link = objectLinkAccessor.apply(clazz);
             typeModel.setClassUsedOnTheFieldPath(link);
+        } else {
+            throw new RuntimeException("Unexpected type: " + type.getClass().getName());
         }
 
         ParameterDataType parameterDataType = reflectionService.determineParameterDataType(clazz, genericType, fieldInfoContainer);
@@ -159,29 +162,31 @@ public class DocumentationReflectionServiceImpl implements DocumentationReflecti
         if (parameterDataType == ParameterDataType.object_type ||
                 (parameterDataType == ParameterDataType.enum_type && typeModel.getClassUsedOnTheFieldPath() != null)) {
             ParameterizedType parameterizedType = fieldInfoContainer.getGenericDataType();
-            ObjectDataType objectDataType = Objects.requireNonNullElse(fieldInfoContainer.getObjectDataType(), ObjectDataType.object_type);
-            switch (objectDataType) {
-                case object_type:
-                    break;
+            if (parameterizedType != null) {
+                ObjectDataType objectDataType = Objects.requireNonNullElse(fieldInfoContainer.getObjectDataType(), ObjectDataType.object_type);
+                switch (objectDataType) {
+                    case object_type:
+                        break;
 
-                case list_type:
-                    Type listType = parameterizedType.getActualTypeArguments()[0];
-                    TypeModel listTypeModel = getObjectsTypeModel(listType, objectLinkAccessor);
-                    typeModel.setGenericKeyType(listTypeModel);
-                    break;
+                    case list_type:
+                        Type listType = parameterizedType.getActualTypeArguments()[0];
+                        TypeModel listTypeModel = getObjectsTypeModel(listType, objectLinkAccessor);
+                        typeModel.setGenericKeyType(listTypeModel);
+                        break;
 
-                case map_type:
-                    Type keyType = parameterizedType.getActualTypeArguments()[0];
-                    TypeModel keyTypeModel = getObjectsTypeModel(keyType, objectLinkAccessor);
-                    typeModel.setGenericKeyType(keyTypeModel);
+                    case map_type:
+                        Type keyType = parameterizedType.getActualTypeArguments()[0];
+                        TypeModel keyTypeModel = getObjectsTypeModel(keyType, objectLinkAccessor);
+                        typeModel.setGenericKeyType(keyTypeModel);
 
-                    Type valueType = parameterizedType.getActualTypeArguments()[1];
-                    TypeModel valueTypeModel = getObjectsTypeModel(valueType, objectLinkAccessor);
-                    typeModel.setGenericValueType(valueTypeModel);
-                    break;
+                        Type valueType = parameterizedType.getActualTypeArguments()[1];
+                        TypeModel valueTypeModel = getObjectsTypeModel(valueType, objectLinkAccessor);
+                        typeModel.setGenericValueType(valueTypeModel);
+                        break;
 
-                default:
-                    throw new RuntimeException(new NoSuchFieldException("Enum value is not present"));
+                    default:
+                        throw new RuntimeException(new NoSuchFieldException("Enum value is not present"));
+                }
             }
         }
 

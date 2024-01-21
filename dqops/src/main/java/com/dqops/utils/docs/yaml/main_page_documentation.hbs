@@ -1,0 +1,39 @@
+{{#*inline "repeat"~}}
+{{token}}{{#if (gt n 1)}}{{>repeat token=token n=(subtract n 1)}}{{/if~}}
+{{/inline}}
+{{#*inline "groupedRecursive"}}
+{{>repeat token="#" n=level}} {{header}}
+
+{{helpText}}
+
+{{#if superiorObjects}}
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|---------------|--------------------------|
+{{#each superiorObjects~}}
+|{{#if (contains superiorClassSimpleName "daily")}}{{{render-type reflectedSuperiorDataType "daily"}}}{{else}}{{#if (contains superiorClassSimpleName "monthly")}}{{{render-type reflectedSuperiorDataType "monthly"}}}{{/if}}{{/if}}|*{{render-type reflectedSuperiorDataType}}*|
+{{/each}}
+{{/if}}
+
+{{#each subpages}}
+{{> groupedRecursive
+        level=(add level 1)
+        header=header
+        helpText=helpText
+        subpages=subpages
+        superiorObjects=superiorObjects
+}}
+{{/each}}
+{{#if subpages}}{{#if (eq level 2)}}
+___
+{{/if}}{{/if}}
+{{/inline}}
+
+{{> groupedRecursive
+        level=1
+        header=header
+        helpText=helpText
+        subpages=subpages
+        superiorObjects=superiorObjects
+}}

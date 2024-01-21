@@ -17,10 +17,9 @@ package com.dqops.execution.checks.jobs;
 
 import com.dqops.core.jobqueue.DqoQueueJobId;
 import com.dqops.core.jobqueue.monitoring.DqoJobStatus;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -79,5 +78,16 @@ public class RunChecksQueueJobResult {
      */
     public RunChecksQueueJobResult(DqoQueueJobId jobId) {
         this.jobId = jobId;
+    }
+
+    public static class RunChecksQueueJobResultSampleFactory implements SampleValueFactory<RunChecksQueueJobResult> {
+        @Override
+        public RunChecksQueueJobResult createSample() {
+            return new RunChecksQueueJobResult() {{
+                setJobId(new DqoQueueJobId.DqoQueueJobIdSampleFactory().createSample());
+                setStatus(DqoJobStatus.succeeded);
+                setResult(new RunChecksResult.RunChecksResultSampleFactory().createSample());
+            }};
+        }
     }
 }

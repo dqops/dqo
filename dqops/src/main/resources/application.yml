@@ -30,6 +30,8 @@ server:
   compression:
      enabled: true
      mime-types: application/json,application/xml,text/html,image/jpeg,image/x-png,image/svg+xm
+  netty:
+    max-keep-alive-requests: 5
 
 springdoc:
   swagger-ui:

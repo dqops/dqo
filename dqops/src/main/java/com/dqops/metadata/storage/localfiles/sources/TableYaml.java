@@ -18,15 +18,24 @@ package com.dqops.metadata.storage.localfiles.sources;
 import com.dqops.core.filesystem.ApiVersion;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
+import com.dqops.utils.reflection.DefaultFieldValue;
 import com.dqops.utils.serialization.InvalidYamlStatusHolder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 /**
  * Table and column definition file that defines a list of tables and columns that are covered by data quality checks.
  */
 public class TableYaml implements InvalidYamlStatusHolder {
+    @JsonPropertyDescription("DQOps YAML schema version")
+    @DefaultFieldValue(ApiVersion.CURRENT_API_VERSION)
     private String apiVersion = ApiVersion.CURRENT_API_VERSION;
-    private SpecificationKind kind = SpecificationKind.TABLE;
+
+    @JsonPropertyDescription("File type")
+    @DefaultFieldValue("table")
+    private SpecificationKind kind = SpecificationKind.table;
+
+    @JsonPropertyDescription("Table specification object with the table metadata and the configuration of data quality checks")
     private TableSpec spec = new TableSpec();
 
     @JsonIgnore

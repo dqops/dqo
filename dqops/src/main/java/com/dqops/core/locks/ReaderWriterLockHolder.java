@@ -31,13 +31,17 @@ public class ReaderWriterLockHolder {
      * Timeout on operations to obtain a lock.
      */
     private final long timeoutSeconds;
+    private final ThreadLocksCounter threadLocksCounter;
 
     /**
      * Creates a root lock that has no parent lock.
      * @param timeoutSeconds Timeout for tryLock operations in seconds.
+     * @param threadLocksCounter Threads lock counter.
      */
-    public ReaderWriterLockHolder(long timeoutSeconds) {
+    public ReaderWriterLockHolder(long timeoutSeconds,
+                                  ThreadLocksCounter threadLocksCounter) {
         this.timeoutSeconds = timeoutSeconds;
+        this.threadLocksCounter = threadLocksCounter;
     }
 
     /**
@@ -50,7 +54,8 @@ public class ReaderWriterLockHolder {
         try {
             boolean lockObtained = myReadLock.tryLock(this.timeoutSeconds, TimeUnit.SECONDS);
             if (lockObtained) {
-                return new AcquiredSharedReadLock(myReadLock);
+                this.threadLocksCounter.incrementReadLock();
+                return new AcquiredSharedReadLock(myReadLock, this.threadLocksCounter);
             } else {
                 throw new LockWaitTimeoutException();
             }
@@ -68,7 +73,8 @@ public class ReaderWriterLockHolder {
         try {
             boolean lockObtained = myWriteLock.tryLock(this.timeoutSeconds, TimeUnit.SECONDS);
             if (lockObtained) {
-                return new AcquiredExclusiveWriteLock(myWriteLock);
+                this.threadLocksCounter.incrementWriteLock();
+                return new AcquiredExclusiveWriteLock(myWriteLock, this.threadLocksCounter);
             } else {
                 throw new LockWaitTimeoutException();
             }

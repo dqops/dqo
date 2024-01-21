@@ -3,16 +3,25 @@ package com.dqops.metadata.storage.localfiles.defaultobservabilitychecks;
 import com.dqops.checks.defaults.DefaultObservabilityChecksSpec;
 import com.dqops.core.filesystem.ApiVersion;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
+import com.dqops.utils.reflection.DefaultFieldValue;
 import com.dqops.utils.serialization.InvalidYamlStatusHolder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 /**
  * The configuration of default data quality checks that are activated for all imported tables and columns.
  * The default observability checks are stored in the *$DQO_USER_HOME/settings/defaultchecks.dqochecks.yaml* file in the DQOps user's home folder.
  */
 public class DefaultObservabilityChecksYaml implements InvalidYamlStatusHolder {
+    @JsonPropertyDescription("DQOps YAML schema version")
+    @DefaultFieldValue(ApiVersion.CURRENT_API_VERSION)
     private String apiVersion = ApiVersion.CURRENT_API_VERSION;
-    private SpecificationKind kind = SpecificationKind.DEFAULT_CHECKS;
+
+    @JsonPropertyDescription("File type")
+    @DefaultFieldValue("default_checks")
+    private SpecificationKind kind = SpecificationKind.default_checks;
+
+    @JsonPropertyDescription("The configuration object with the definition of the default data observability checks")
     private DefaultObservabilityChecksSpec spec = new DefaultObservabilityChecksSpec();
 
     @JsonIgnore

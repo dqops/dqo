@@ -33,6 +33,8 @@ import com.dqops.core.jobqueue.DqoJobQueueObjectMother;
 import com.dqops.core.jobqueue.DqoQueueJobFactory;
 import com.dqops.core.jobqueue.DqoQueueJobFactoryImpl;
 import com.dqops.core.principal.DqoUserPrincipalObjectMother;
+import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.core.principal.UserDomainIdentityObjectMother;
 import com.dqops.execution.rules.finder.RuleDefinitionFindServiceImpl;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import com.dqops.metadata.sources.ColumnSpec;
@@ -42,7 +44,7 @@ import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactoryObjectMother;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
-import com.dqops.rules.comparison.MaxCountRule15ParametersSpec;
+import com.dqops.rules.comparison.*;
 import com.dqops.services.check.mapping.utils.CheckContainerListModelUtility;
 import com.dqops.services.check.mapping.models.CheckContainerModel;
 import com.dqops.services.check.mapping.basicmodels.CheckContainerListModel;
@@ -50,8 +52,6 @@ import com.dqops.services.check.mapping.SpecToModelCheckMappingServiceImpl;
 import com.dqops.services.check.mapping.ModelToSpecCheckMappingServiceImpl;
 import com.dqops.rest.models.metadata.ColumnListModel;
 import com.dqops.rest.models.metadata.ColumnModel;
-import com.dqops.rules.comparison.MaxCountRule0ParametersSpec;
-import com.dqops.rules.comparison.MaxCountRule10ParametersSpec;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
@@ -70,7 +70,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.Optional;
 
 @SpringBootTest
 public class ColumnsControllerUTTests extends BaseTest {
@@ -78,10 +77,12 @@ public class ColumnsControllerUTTests extends BaseTest {
     private UserHomeContextFactory userHomeContextFactory;
     private UserHomeContext userHomeContext;
     private SampleTableMetadata sampleTable;
+    private UserDomainIdentity userDomainIdentity;
     
     @BeforeEach
     void setUp() {
         this.userHomeContextFactory = UserHomeContextFactoryObjectMother.createWithInMemoryContext();
+        this.userDomainIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
         DqoQueueJobFactory dqoQueueJobFactory = new DqoQueueJobFactoryImpl(BeanFactoryObjectMother.getBeanFactory());
         DqoJobQueue dqoJobQueue = DqoJobQueueObjectMother.getDefaultJobQueue();
         ColumnService columnService = new ColumnServiceImpl(this.userHomeContextFactory, dqoQueueJobFactory, dqoJobQueue);
@@ -92,7 +93,7 @@ public class ColumnsControllerUTTests extends BaseTest {
         ModelToSpecCheckMappingServiceImpl uiToSpecCheckMappingService = new ModelToSpecCheckMappingServiceImpl(reflectionService);
         DqoHomeContextFactory dqoHomeContextFactory = DqoHomeContextFactoryObjectMother.getRealDqoHomeContextFactory();
         this.sut = new ColumnsController(columnService, this.userHomeContextFactory, dqoHomeContextFactory, specToUiCheckMappingService, uiToSpecCheckMappingService, null);
-        this.userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        this.userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
         this.sampleTable = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day, ProviderType.bigquery);
     }
 
@@ -167,7 +168,7 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         CheckContainerModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(13, result.getCategories().size());
+        Assertions.assertEquals(16, result.getCategories().size());
     }
 
     @ParameterizedTest
@@ -188,9 +189,9 @@ public class ColumnsControllerUTTests extends BaseTest {
         Assertions.assertNotNull(result);
 
         if (timePartition == CheckTimeScale.daily) {
-            Assertions.assertEquals(13, result.getCategories().size());
+            Assertions.assertEquals(16, result.getCategories().size());
         } else {
-            Assertions.assertEquals(13, result.getCategories().size());
+            Assertions.assertEquals(16, result.getCategories().size());
         }
     }
 
@@ -211,9 +212,9 @@ public class ColumnsControllerUTTests extends BaseTest {
         CheckContainerModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
         if (timePartition == CheckTimeScale.daily) {
-            Assertions.assertEquals(11, result.getCategories().size());
+            Assertions.assertEquals(14, result.getCategories().size());
         } else {
-            Assertions.assertEquals(11, result.getCategories().size());
+            Assertions.assertEquals(14, result.getCategories().size());
         }
     }
 
@@ -231,7 +232,7 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         CheckContainerListModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(13, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
+        Assertions.assertEquals(16, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
     }
 
     @ParameterizedTest
@@ -251,9 +252,9 @@ public class ColumnsControllerUTTests extends BaseTest {
         CheckContainerListModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
         if (timePartition == CheckTimeScale.daily) {
-            Assertions.assertEquals(13, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
+            Assertions.assertEquals(16, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
         } else {
-            Assertions.assertEquals(13, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
+            Assertions.assertEquals(15, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
         }
     }
 
@@ -274,9 +275,9 @@ public class ColumnsControllerUTTests extends BaseTest {
         CheckContainerListModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
         if (timePartition == CheckTimeScale.daily) {
-            Assertions.assertEquals(11, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
+            Assertions.assertEquals(14, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
         } else {
-            Assertions.assertEquals(11, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
+            Assertions.assertEquals(13, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
         }
     }
 
@@ -285,11 +286,11 @@ public class ColumnsControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
-        MaxCountRule0ParametersSpec maxCountRule1 = new MaxCountRule0ParametersSpec();
+        MaxCountRule0WarningParametersSpec maxCountRule1 = new MaxCountRule0WarningParametersSpec();
         maxCountRule1.setMaxCount(10L);
-        MaxCountRule10ParametersSpec maxCountRule2 = new MaxCountRule10ParametersSpec();
+        MaxCountRule0ErrorParametersSpec maxCountRule2 = new MaxCountRule0ErrorParametersSpec();
         maxCountRule2.setMaxCount(20L);
-        MaxCountRule15ParametersSpec maxCountRule3 = new MaxCountRule15ParametersSpec();
+        MaxCountRule100ParametersSpec maxCountRule3 = new MaxCountRule100ParametersSpec();
         maxCountRule3.setMaxCount(30L);
 
         ColumnNullsCountCheckSpec nullsChecksSpec = new ColumnNullsCountCheckSpec();
@@ -320,11 +321,11 @@ public class ColumnsControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
-        MaxCountRule0ParametersSpec maxCountRule1 = new MaxCountRule0ParametersSpec();
+        MaxCountRule0WarningParametersSpec maxCountRule1 = new MaxCountRule0WarningParametersSpec();
         maxCountRule1.setMaxCount(10L);
-        MaxCountRule10ParametersSpec maxCountRule2 = new MaxCountRule10ParametersSpec();
+        MaxCountRule0ErrorParametersSpec maxCountRule2 = new MaxCountRule0ErrorParametersSpec();
         maxCountRule2.setMaxCount(20L);
-        MaxCountRule15ParametersSpec maxCountRule3 = new MaxCountRule15ParametersSpec();
+        MaxCountRule100ParametersSpec maxCountRule3 = new MaxCountRule100ParametersSpec();
         maxCountRule3.setMaxCount(30L);
 
         ColumnNullsCountCheckSpec nullsChecksSpec = new ColumnNullsCountCheckSpec();
@@ -358,11 +359,11 @@ public class ColumnsControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
-        MaxCountRule0ParametersSpec maxCountRule1 = new MaxCountRule0ParametersSpec();
+        MaxCountRule0WarningParametersSpec maxCountRule1 = new MaxCountRule0WarningParametersSpec();
         maxCountRule1.setMaxCount(10L);
-        MaxCountRule10ParametersSpec maxCountRule2 = new MaxCountRule10ParametersSpec();
+        MaxCountRule0ErrorParametersSpec maxCountRule2 = new MaxCountRule0ErrorParametersSpec();
         maxCountRule2.setMaxCount(20L);
-        MaxCountRule15ParametersSpec maxCountRule3 = new MaxCountRule15ParametersSpec();
+        MaxCountRule100ParametersSpec maxCountRule3 = new MaxCountRule100ParametersSpec();
         maxCountRule3.setMaxCount(30L);
         
         ColumnNegativeCountCheckSpec negativeChecksSpec = new ColumnNegativeCountCheckSpec();
@@ -371,7 +372,7 @@ public class ColumnsControllerUTTests extends BaseTest {
         negativeChecksSpec.setFatal(maxCountRule3);
         
         ColumnNumericMonthlyPartitionedChecksSpec negativeMonthlyPartitionedChecks = new ColumnNumericMonthlyPartitionedChecksSpec();
-        negativeMonthlyPartitionedChecks.setMonthlyPartitionNegativeCount(negativeChecksSpec);
+        negativeMonthlyPartitionedChecks.setMonthlyPartitionNegativeValues(negativeChecksSpec);
         ColumnMonthlyPartitionedCheckCategoriesSpec monthlyPartitionedCheck = new ColumnMonthlyPartitionedCheckCategoriesSpec();
         monthlyPartitionedCheck.setNumeric(negativeMonthlyPartitionedChecks);
         ColumnPartitionedChecksRootSpec samplePartitionedCheck = new ColumnPartitionedChecksRootSpec();

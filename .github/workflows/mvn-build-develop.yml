@@ -41,7 +41,7 @@ jobs:
           key: 'npm'
 
       - name: Build with Maven
-        run: mvn package -DskipTests -Pbuild-with-jdk-11 -Prun-npm
+        run: mvn package -DskipTests -Pbuild-with-jdk-11 -Pdevelopment-build -Prun-npm
 
       - name: Save cached npm packages
         id: save-cached-npm-packages

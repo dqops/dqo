@@ -1,0 +1,16 @@
+{{~#each selectedExamples}}
+{{#if exampleName}}### **{{exampleName}}**
+{{/if}}
+{{exampleDescription}}
+
+```{{{executionMethod.codeFormatting}}}
+{{{indent renderedExample -1}}}
+```
+
+By running this operation you should get a response that resembles the one below:
+
+```{{{executionMethod.codeFormatting}}}
+{{{exampleFooter}}}
+```
+
+{{/each}}

@@ -116,7 +116,7 @@ public final class CommonColumnNames {
     public static final String SENSOR_NAME_COLUMN_NAME = "sensor_name";
 
     /**
-     * Column for a time series id (uuid). Identifies a single time series. A time series is a combination of the check_hash and data_stream_hash.
+     * Column for a time series id (uuid). Identifies a single time series. A time series is a combination of the check_hash and data_group_hash.
      */
     public static final String TIME_SERIES_ID_COLUMN_NAME = "time_series_id";
 

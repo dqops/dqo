@@ -64,8 +64,6 @@ public class ChangePercentileMoving30DaysRuleParametersSpec extends AbstractRule
      * Default constructor.
      */
     public ChangePercentileMoving30DaysRuleParametersSpec() {
-        this.percentileBelow = null;
-        this.percentileAbove = null;
     }
 
     /**

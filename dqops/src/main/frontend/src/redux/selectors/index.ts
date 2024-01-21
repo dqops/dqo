@@ -16,6 +16,7 @@
 
 import { IRootState } from '../reducers';
 import { CheckTypes } from '../../shared/routes';
+import { TABLE_LEVEL_TABS } from '../../shared/constants';
 
 export const getFirstLevelState =
   (checkType: CheckTypes) => (state: IRootState) => {
@@ -43,3 +44,9 @@ export const getFirstLevelIncidentsState = (state: IRootState) => {
 
   return tabs.find((item) => item.url === activeTab)?.state || ({} as any);
 };
+
+export const getSecondLevelTab = (checkType: CheckTypes, tab: string) : string => {
+  const secondTab = TABLE_LEVEL_TABS[checkType].find((x) => x.value === tab)?.value
+  
+  return secondTab ? secondTab : TABLE_LEVEL_TABS[checkType][0].value
+}

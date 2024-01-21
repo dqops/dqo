@@ -25,6 +25,7 @@ import com.dqops.rules.comparison.MaxDiffPercentRule1ParametersSpec;
 import com.dqops.rules.comparison.MaxDiffPercentRule5ParametersSpec;
 import com.dqops.sensors.column.numeric.ColumnNumericMaxSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -35,7 +36,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column-level check that ensures that compares the maximum value in the tested column to maximum value in a reference column from the reference table.
+ * A column-level check that ensures that compares the maximum value in the tested column to maximum value in a reference column from the reference table.
  * Compares the maximum values for each group of data. The data is grouped using a GROUP BY clause and groups are matched between the tested (parent) table and the reference table (the source of truth).
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -159,6 +160,18 @@ public class ColumnComparisonMaxMatchCheckSpec
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
+    }
+
+    /**
+     * Returns true if this is a standard data quality check that is always shown on the data quality checks editor screen.
+     * Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks.
+     *
+     * @return True when it is a standard check, false when it is an advanced check. The default value is 'false' (all checks are non-standard, advanced checks).
+     */
+    @Override
+    @JsonIgnore
+    public boolean isStandard() {
+        return true;
     }
 
     /**

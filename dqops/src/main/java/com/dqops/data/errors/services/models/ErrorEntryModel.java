@@ -15,6 +15,8 @@
  */
 package com.dqops.data.errors.services.models;
 
+import com.dqops.checks.CheckType;
+import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -31,40 +33,42 @@ import java.time.LocalDateTime;
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 @Data
 public class ErrorEntryModel {
-    @JsonPropertyDescription("Actual value.")
+    @JsonPropertyDescription("Actual value")
     Double actualValue;
-    @JsonPropertyDescription("Expected value.")
+    @JsonPropertyDescription("Expected value")
     Double expectedValue;
 
-    @JsonPropertyDescription("Column name.")
+    @JsonPropertyDescription("Column name")
     String columnName;
-    @JsonPropertyDescription("Data group.")
+    @JsonPropertyDescription("Data group")
     String dataGroup;
+    @JsonPropertyDescription("Check type")
+    private CheckType checkType;
 
-    @JsonPropertyDescription("Duration (ms).")
+    @JsonPropertyDescription("Duration (ms)")
     Integer durationMs;
-    @JsonPropertyDescription("Executed at.")
+    @JsonPropertyDescription("Executed at")
     Instant executedAt;
-    @JsonPropertyDescription("Time gradient.")
-    String timeGradient;
-    @JsonPropertyDescription("Time period.")
+    @JsonPropertyDescription("Time gradient")
+    TimePeriodGradient timeGradient;
+    @JsonPropertyDescription("Time period")
     LocalDateTime timePeriod;
 
-    @JsonPropertyDescription("Provider.")
+    @JsonPropertyDescription("Provider name")
     String provider;
-    @JsonPropertyDescription("Quality dimension.")
+    @JsonPropertyDescription("Data quality dimension")
     String qualityDimension;
 
-    @JsonPropertyDescription("Sensor name.")
+    @JsonPropertyDescription("Sensor name")
     String sensorName;
-    @JsonPropertyDescription("Sensor readout id.")
+    @JsonPropertyDescription("Sensor readout ID")
     String readoutId;
 
-    @JsonPropertyDescription("Error message.")
+    @JsonPropertyDescription("Error message")
     String errorMessage;
-    @JsonPropertyDescription("Error source.")
+    @JsonPropertyDescription("Error source")
     String errorSource;
-    @JsonPropertyDescription("Error timestamp.")
+    @JsonPropertyDescription("Error timestamp")
     LocalDateTime errorTimestamp;
 
     @JsonPropertyDescription("Table comparison name")

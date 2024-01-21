@@ -53,7 +53,7 @@ public class SensorDefinitionFindServiceImplTests extends BaseTest {
         Assertions.assertNotNull(result.getProviderSensorDefinitionSpec());
         Assertions.assertNull(result.getSqlTemplateText());
         Assertions.assertNotNull(result.getTemplateFilePath());
-        Assertions.assertEquals("table/volume/row_count/bigquery.sql.jinja2", result.getTemplateFilePath().toString());
+        Assertions.assertEquals("[]/table/volume/row_count/bigquery.sql.jinja2", result.getTemplateFilePath().toString());
         Assertions.assertEquals(HomeType.DQO_HOME, result.getHome());
     }
 
@@ -110,7 +110,7 @@ public class SensorDefinitionFindServiceImplTests extends BaseTest {
         Assertions.assertNotSame(userSensorDef.getSpec(), result.getSensorDefinitionSpec());
         Assertions.assertNull(result.getSqlTemplateText());
         Assertions.assertEquals(ProviderType.bigquery, result.getProviderType());
-        Assertions.assertEquals("table/volume/row_count/bigquery.sql.jinja2", result.getTemplateFilePath().toString());
+        Assertions.assertEquals("[]/table/volume/row_count/bigquery.sql.jinja2", result.getTemplateFilePath().toString());
         Assertions.assertEquals(HomeType.DQO_HOME, result.getHome());
     }
 }

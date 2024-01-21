@@ -8,6 +8,7 @@ from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.check_container_type_model import CheckContainerTypeModel
+    from ..models.check_model import CheckModel
     from ..models.parameter_definition_spec import ParameterDefinitionSpec
 
 
@@ -27,6 +28,8 @@ class CheckTemplate:
             check_container_type (Union[Unset, CheckContainerTypeModel]): Model identifying the check type and timescale of
                 checks belonging to a container.
             sensor_name (Union[Unset, str]): Full sensor name.
+            check_model (Union[Unset, CheckModel]): Model that returns the form definition and the form data to edit a
+                single data quality check.
             sensor_parameters_definitions (Union[Unset, List['ParameterDefinitionSpec']]): List of sensor parameter fields
                 definitions.
             rule_parameters_definitions (Union[Unset, List['ParameterDefinitionSpec']]): List of threshold (alerting) rule's
@@ -39,6 +42,7 @@ class CheckTemplate:
     help_text: Union[Unset, str] = UNSET
     check_container_type: Union[Unset, "CheckContainerTypeModel"] = UNSET
     sensor_name: Union[Unset, str] = UNSET
+    check_model: Union[Unset, "CheckModel"] = UNSET
     sensor_parameters_definitions: Union[Unset, List["ParameterDefinitionSpec"]] = UNSET
     rule_parameters_definitions: Union[Unset, List["ParameterDefinitionSpec"]] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -56,6 +60,10 @@ class CheckTemplate:
             check_container_type = self.check_container_type.to_dict()
 
         sensor_name = self.sensor_name
+        check_model: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.check_model, Unset):
+            check_model = self.check_model.to_dict()
+
         sensor_parameters_definitions: Union[Unset, List[Dict[str, Any]]] = UNSET
         if not isinstance(self.sensor_parameters_definitions, Unset):
             sensor_parameters_definitions = []
@@ -95,6 +103,8 @@ class CheckTemplate:
             field_dict["check_container_type"] = check_container_type
         if sensor_name is not UNSET:
             field_dict["sensor_name"] = sensor_name
+        if check_model is not UNSET:
+            field_dict["check_model"] = check_model
         if sensor_parameters_definitions is not UNSET:
             field_dict["sensor_parameters_definitions"] = sensor_parameters_definitions
         if rule_parameters_definitions is not UNSET:
@@ -105,6 +115,7 @@ class CheckTemplate:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.check_container_type_model import CheckContainerTypeModel
+        from ..models.check_model import CheckModel
         from ..models.parameter_definition_spec import ParameterDefinitionSpec
 
         d = src_dict.copy()
@@ -131,6 +142,13 @@ class CheckTemplate:
             )
 
         sensor_name = d.pop("sensor_name", UNSET)
+
+        _check_model = d.pop("check_model", UNSET)
+        check_model: Union[Unset, CheckModel]
+        if isinstance(_check_model, Unset):
+            check_model = UNSET
+        else:
+            check_model = CheckModel.from_dict(_check_model)
 
         sensor_parameters_definitions = []
         _sensor_parameters_definitions = d.pop("sensor_parameters_definitions", UNSET)
@@ -159,6 +177,7 @@ class CheckTemplate:
             help_text=help_text,
             check_container_type=check_container_type,
             sensor_name=sensor_name,
+            check_model=check_model,
             sensor_parameters_definitions=sensor_parameters_definitions,
             rule_parameters_definitions=rule_parameters_definitions,
         )

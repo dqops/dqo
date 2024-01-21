@@ -1,0 +1,1 @@
+docker run -p 10000:10000 dqops/spark:latest

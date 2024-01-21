@@ -22,6 +22,8 @@ import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.server.PortInUseException;
+import org.springframework.context.ApplicationContextException;
 
 import java.util.Arrays;
 import java.util.List;
@@ -149,6 +151,17 @@ public class CliApplication {
 			// calls CliMainCommandRunner and calls commands in io.dqo.cli.command, find the right command there if you want to know what happens now
 		}
 	    catch (Throwable t) {
+			if (t instanceof ApplicationContextException && t.getCause() instanceof PortInUseException) {
+				System.err.println("DQOps web server cannot bind to the default port, error: " + t.getCause().getMessage());
+				System.err.println("Try starting DQOps with an additional parameter --server.port=<port>");
+				System.err.println("For example: dqo --server.port=5000");
+				System.err.println("The default port could be in use by another application, or another instance of DQOps is already running and listening on the port.");
+				System.err.println("Another problem could be related to missing permissions to listen on a port, especially for privileged ports in the range 1-1023.");
+				System.err.println("Also starting DQOps on the default port 8888 could be forbidden on Windows, if the port is locked by other applications or anti-virus software, even if no applications are listening on the port.");
+				System.err.println("Please try starting DQOps on a different port.");
+				System.exit(-1);
+			}
+
 			if (t instanceof IllegalStateException && t.getCause() instanceof org.jline.reader.EndOfFileException) {
 				System.err.println("DQOps cannot open the terminal.");
 				System.err.println("If you have started DQOps from docker and want to use the DQOps shell, please run the container with docker's \"-it\" parameter.");

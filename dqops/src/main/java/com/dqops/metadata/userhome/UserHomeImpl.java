@@ -16,6 +16,7 @@
 package com.dqops.metadata.userhome;
 
 import com.dqops.checks.defaults.DefaultObservabilityChecksSpec;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.metadata.credentials.SharedCredentialListImpl;
 import com.dqops.metadata.dashboards.DashboardFolderListSpecWrapperImpl;
 import com.dqops.metadata.definitions.checks.CheckDefinitionListImpl;
@@ -53,6 +54,7 @@ public class UserHomeImpl implements UserHome, Cloneable {
         }
     };
 
+    private UserDomainIdentity userIdentity;
     @JsonIgnore
     private HierarchyId hierarchyId = HierarchyId.getRoot();
     private ConnectionListImpl connections;
@@ -85,8 +87,10 @@ public class UserHomeImpl implements UserHome, Cloneable {
 
     /**
      * Creates a default user home implementation.
+     * @param userIdentity User identity that specifies the calling user and the data domain.
      */
-    public UserHomeImpl() {
+    public UserHomeImpl(UserDomainIdentity userIdentity) {
+        this.userIdentity = userIdentity;
 		this.setConnections(new ConnectionListImpl());
 		this.setSensors(new SensorDefinitionListImpl());
 		this.setRules(new RuleDefinitionListImpl());
@@ -102,6 +106,8 @@ public class UserHomeImpl implements UserHome, Cloneable {
 
     /**
      * Creates a user home implementation with alternative implementations (file based) of collections.
+     *
+     * @param userIdentity User identity that specifies the calling user and the data domain.
      * @param connections Collection of connections.
      * @param sensors Collection of sensor definitions.
      * @param rules Collection of custom rule definitions.
@@ -113,7 +119,8 @@ public class UserHomeImpl implements UserHome, Cloneable {
      * @param schedules Default monitoring schedules wrapper.
      * @param observabilityCheck Default observability checks wrapper.
      */
-    public UserHomeImpl(ConnectionListImpl connections,
+    public UserHomeImpl(UserDomainIdentity userIdentity,
+                        ConnectionListImpl connections,
                         SensorDefinitionListImpl sensors,
                         RuleDefinitionListImpl rules,
                         CheckDefinitionListImpl checks,
@@ -124,6 +131,7 @@ public class UserHomeImpl implements UserHome, Cloneable {
                         MonitoringSchedulesWrapperImpl schedules,
                         DefaultObservabilityCheckWrapperImpl observabilityCheck,
                         DefaultIncidentWebhookNotificationsWrapperImpl notificationWebhooks) {
+        this.userIdentity = userIdentity;
 		this.setConnections(connections);
 		this.setSensors(sensors);
 		this.setRules(rules);
@@ -135,6 +143,16 @@ public class UserHomeImpl implements UserHome, Cloneable {
         this.setDefaultSchedules(schedules);
         this.setDefaultObservabilityChecks(observabilityCheck);
         this.setDefaultNotificationWebhooks(notificationWebhooks);
+    }
+
+    /**
+     * Returns the user identity for whom the user home was opened. Also identifies the data domain, which is a folder with a copy of the DQOps user home for a given data domain.
+     *
+     * @return User identity.
+     */
+    @Override
+    public UserDomainIdentity getUserIdentity() {
+        return this.userIdentity;
     }
 
     /**

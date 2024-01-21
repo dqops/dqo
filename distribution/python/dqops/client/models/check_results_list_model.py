@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
+from ..models.check_type import CheckType
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -16,13 +17,13 @@ T = TypeVar("T", bound="CheckResultsListModel")
 class CheckResultsListModel:
     """
     Attributes:
-        check_hash (Union[Unset, int]): Check hash.
-        check_category (Union[Unset, str]): Check category name.
-        check_name (Union[Unset, str]): Check name.
-        check_display_name (Union[Unset, str]): Check display name.
-        check_type (Union[Unset, str]): Check type.
-        data_groups (Union[Unset, List[str]]): Data groups list.
-        data_group (Union[Unset, str]): Selected data group.
+        check_hash (Union[Unset, int]): Check hash
+        check_category (Union[Unset, str]): Check category name
+        check_name (Union[Unset, str]): Check name
+        check_display_name (Union[Unset, str]): Check display name
+        check_type (Union[Unset, CheckType]):
+        data_groups (Union[Unset, List[str]]): Data groups list
+        data_group (Union[Unset, str]): Selected data group
         check_result_entries (Union[Unset, List['CheckResultEntryModel']]): Single check results
     """
 
@@ -30,7 +31,7 @@ class CheckResultsListModel:
     check_category: Union[Unset, str] = UNSET
     check_name: Union[Unset, str] = UNSET
     check_display_name: Union[Unset, str] = UNSET
-    check_type: Union[Unset, str] = UNSET
+    check_type: Union[Unset, CheckType] = UNSET
     data_groups: Union[Unset, List[str]] = UNSET
     data_group: Union[Unset, str] = UNSET
     check_result_entries: Union[Unset, List["CheckResultEntryModel"]] = UNSET
@@ -41,7 +42,10 @@ class CheckResultsListModel:
         check_category = self.check_category
         check_name = self.check_name
         check_display_name = self.check_display_name
-        check_type = self.check_type
+        check_type: Union[Unset, str] = UNSET
+        if not isinstance(self.check_type, Unset):
+            check_type = self.check_type.value
+
         data_groups: Union[Unset, List[str]] = UNSET
         if not isinstance(self.data_groups, Unset):
             data_groups = self.data_groups
@@ -90,7 +94,12 @@ class CheckResultsListModel:
 
         check_display_name = d.pop("checkDisplayName", UNSET)
 
-        check_type = d.pop("checkType", UNSET)
+        _check_type = d.pop("checkType", UNSET)
+        check_type: Union[Unset, CheckType]
+        if isinstance(_check_type, Unset):
+            check_type = UNSET
+        else:
+            check_type = CheckType(_check_type)
 
         data_groups = cast(List[str], d.pop("dataGroups", UNSET))
 

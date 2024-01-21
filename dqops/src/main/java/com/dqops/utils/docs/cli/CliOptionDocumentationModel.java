@@ -17,6 +17,8 @@ package com.dqops.utils.docs.cli;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * Documentation model for a single parameter (option) of a CLI command.
  */
@@ -25,7 +27,7 @@ public class CliOptionDocumentationModel {
     /**
      * Array of all option names (shorter, longer).
      */
-    private String[] names;
+    private List<String> names;
 
     /**
      * Option description.

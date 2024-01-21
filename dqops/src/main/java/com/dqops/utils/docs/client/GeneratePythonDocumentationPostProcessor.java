@@ -15,28 +15,26 @@
  */
 package com.dqops.utils.docs.client;
 
-import com.dqops.execution.rules.finder.RuleDefinitionFindServiceImpl;
-import com.dqops.execution.sensors.finder.SensorDefinitionFindServiceImpl;
-import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContext;
-import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeDirectFactory;
-import com.dqops.services.check.mapping.SpecToModelCheckMappingService;
-import com.dqops.services.check.mapping.SpecToModelCheckMappingServiceImpl;
-import com.dqops.services.check.matching.SimilarCheckMatchingService;
-import com.dqops.services.check.matching.SimilarCheckMatchingServiceImpl;
 import com.dqops.utils.docs.*;
 import com.dqops.utils.docs.client.apimodel.OpenAPIModel;
 import com.dqops.utils.docs.client.models.ModelsDocumentationGenerator;
 import com.dqops.utils.docs.client.models.ModelsDocumentationGeneratorImpl;
 import com.dqops.utils.docs.client.models.ModelsDocumentationModelFactoryImpl;
+import com.dqops.utils.docs.client.models.ModelsSuperiorObjectDocumentationModel;
 import com.dqops.utils.docs.client.operations.OperationsDocumentationGenerator;
 import com.dqops.utils.docs.client.operations.OperationsDocumentationGeneratorImpl;
 import com.dqops.utils.docs.client.operations.OperationsDocumentationModelFactoryImpl;
+import com.dqops.utils.docs.client.operations.examples.UsageExampleModelFactory;
 import com.dqops.utils.docs.client.operations.examples.UsageExampleModelFactoryImpl;
-import com.dqops.utils.docs.files.DocumentationFolder;
-import com.dqops.utils.docs.files.DocumentationFolderFactory;
-import com.dqops.utils.docs.files.DocumentationFolderPostCorrectorService;
-import com.dqops.utils.docs.files.DocumentationFolderPostCorrectorServiceImpl;
+import com.dqops.utils.docs.client.operations.examples.python.PythonExampleDocumentationGenerator;
+import com.dqops.utils.docs.client.operations.examples.python.PythonExampleDocumentationGeneratorImpl;
+import com.dqops.utils.docs.client.operations.examples.python.PythonExampleDocumentationModelFactory;
+import com.dqops.utils.docs.client.operations.examples.python.PythonExampleDocumentationModelFactoryImpl;
+import com.dqops.utils.docs.client.operations.examples.serialization.PythonSerializerImpl;
+import com.dqops.utils.docs.files.*;
+import com.dqops.utils.docs.generators.ParsedSampleObjectFactoryImpl;
 import com.dqops.utils.reflection.ReflectionServiceImpl;
+import com.github.jknack.handlebars.Template;
 import com.google.common.base.CaseFormat;
 import io.swagger.parser.OpenAPIParser;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -45,6 +43,7 @@ import io.swagger.v3.oas.models.parameters.Parameter;
 import io.swagger.v3.oas.models.parameters.RequestBody;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.parser.core.models.SwaggerParseResult;
+import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -56,6 +55,19 @@ import java.util.stream.Collectors;
  */
 public class GeneratePythonDocumentationPostProcessor {
     public static final Path baseClientDocsPath = Path.of("docs", "client");
+    public static final Comparator<String> cherryPickComparator = (s1, s2) -> {
+        if (s1.equals(s2)) {
+            return 0;
+        }
+        if (s1.equals(ModelsDocumentationModelFactoryImpl.SHARED_MODELS_IDENTIFIER)) {
+            return -1;
+        }
+        if (s2.equals(ModelsDocumentationModelFactoryImpl.SHARED_MODELS_IDENTIFIER)) {
+            return 1;
+        }
+        return 0;
+    };
+
     public static LinkageStore<String> linkageStore;
 
     /**
@@ -78,9 +90,6 @@ public class GeneratePythonDocumentationPostProcessor {
             System.out.println("Generating documentation for the python client: " + pythonClientDir);
 
             HandlebarsDocumentationUtilities.configure(projectDir);
-            Path dqoHomePath = projectDir.resolve("../home").toAbsolutePath().normalize();
-            DqoHomeContext dqoHomeContext = DqoHomeDirectFactory.openDqoHome(dqoHomePath);
-
             OpenAPI openAPI = getParsedSwaggerFile(swaggerFile);
 
             linkageStore = new LinkageStore<>();
@@ -91,8 +100,14 @@ public class GeneratePythonDocumentationPostProcessor {
 
             OpenAPIModel openAPIModel = OpenAPIModel.fromOpenAPI(openAPI, targetLinkage, linkageStore, docsModelLinkageService, componentReflectionService);
 
-            generateDocumentationForModels(projectDir, openAPIModel);
-            generateDocumentationForOperations(projectDir, openAPIModel);
+            MainPageClientDocumentationModel mainPageClientDocumentationModel = new MainPageClientDocumentationModel();
+            mainPageClientDocumentationModel.setIndexDocumentationModel(new MainPageClientIndexDocumentationModel());
+            mainPageClientDocumentationModel.setGuideDocumentationModel(new MainPageClientGuideDocumentationModel());
+            mainPageClientDocumentationModel.setConnectingDocumentationModel(new MainPageClientConnectingDocumentationModel());
+
+            generateDocumentationForModels(projectDir, openAPIModel, mainPageClientDocumentationModel);
+            generateDocumentationForOperations(projectDir, openAPIModel, mainPageClientDocumentationModel);
+            generateMainPageDocumentation(projectDir, mainPageClientDocumentationModel);
 
             Path clientDocPath = projectDir
                     .resolve("..")
@@ -100,8 +115,11 @@ public class GeneratePythonDocumentationPostProcessor {
                     .toAbsolutePath().normalize();
             DocumentationFolder modifiedClientFolder = DocumentationFolderFactory.loadCurrentFiles(clientDocPath);
             modifiedClientFolder.setLinkName("REST API Python client");
+
+            modifiedClientFolder.sortByNameRecursive(cherryPickComparator.thenComparing(Comparator.naturalOrder()));
+
             List<String> renderedIndexYaml = modifiedClientFolder.generateMkDocsNavigation(2);
-            MkDocsIndexReplaceUtility.replaceContentLines(projectDir.resolve("../mkdocs.yml"),
+            FileContentIndexReplaceUtility.replaceContentLines(projectDir.resolve("../mkdocs.yml"),
                     renderedIndexYaml,
                     "########## INCLUDE PYTHON CLIENT REFERENCE - DO NOT MODIFY MANUALLY",
                     "########## END INCLUDE PYTHON CLIENT REFERENCE");
@@ -115,7 +133,7 @@ public class GeneratePythonDocumentationPostProcessor {
     protected static LinkageStore<String> getPopulatedLinkageStore(OpenAPI openAPI) {
         LinkageStore<String> linkageStore = new LinkageStore<>();
 
-        Map<String, Set<String>> modelToOccurrence = new HashMap<>();
+        Map<String, Set<String>> modelToOccurrence = new LinkedHashMap<>();
         openAPI.getPaths().values().stream()
                 .flatMap(pathItem -> pathItem.readOperations().stream())
                 .forEach(operation -> populateModelMappingByOperation(operation, modelToOccurrence));
@@ -132,11 +150,13 @@ public class GeneratePythonDocumentationPostProcessor {
                 // Model use is restricted to a single controller.
                 String modelOccurrence = modelOccurrences.stream().findFirst().get();
                 modelDestination = baseModelDestination
-                        .resolve(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, modelOccurrence))
-                        .resolve("#" + modelName);
+                        .resolve(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, modelOccurrence)
+                                + ".md" + "#" + modelName.toLowerCase());
             } else {
                 // Model is used in several places.
-                modelDestination = baseModelDestination.resolve("#" + modelName);
+                modelDestination = baseModelDestination
+                        .resolve(ModelsDocumentationModelFactoryImpl.SHARED_MODELS_IDENTIFIER
+                                + ".md" + "#" + modelName.toLowerCase());
             }
 
             linkageStore.put(modelName, modelDestination);
@@ -154,11 +174,11 @@ public class GeneratePythonDocumentationPostProcessor {
         List<Parameter> operationParameters = Objects.requireNonNullElseGet(operation.getParameters(), ArrayList::new);
 
         // Parameters (path and query)
-        Set<String> variables$refs = operationParameters.stream()
+        Set<String> variables$refs = new LinkedHashSet<>(operationParameters.stream()
                 .map(Parameter::getSchema)
                 .map(OpenApiUtils::getEffective$refFromSchema)
                 .filter(Objects::nonNull)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList()));
 
         // Request body
         RequestBody requestBody = operation.getRequestBody();
@@ -176,13 +196,13 @@ public class GeneratePythonDocumentationPostProcessor {
             variables$refs.add(return$ref);
         }
 
-        Set<String> variablesTypes = variables$refs.stream()
+        Set<String> variablesTypes = new LinkedHashSet<>(variables$refs.stream()
                 .map(GeneratePythonDocumentationPostProcessor::getModelNameFrom$ref)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList()));
 
         for (String typeRef : variablesTypes) {
             if (!modelMethodMapping.containsKey(typeRef)) {
-                modelMethodMapping.put(typeRef, new HashSet<>());
+                modelMethodMapping.put(typeRef, new LinkedHashSet<>());
             }
 
             for (String controller : operation.getTags()) {
@@ -192,7 +212,8 @@ public class GeneratePythonDocumentationPostProcessor {
     }
 
     protected static void generateDocumentationForModels(Path projectRoot,
-                                                         OpenAPIModel openAPIModel) {
+                                                         OpenAPIModel openAPIModel,
+                                                         MainPageClientDocumentationModel mainPageModel) {
         Path modelsDocPath = projectRoot
                 .resolve("..")
                 .resolve(baseClientDocsPath)
@@ -201,24 +222,67 @@ public class GeneratePythonDocumentationPostProcessor {
         DocumentationFolder currentModelsDocFiles = DocumentationFolderFactory.loadCurrentFiles(modelsDocPath);
         ModelsDocumentationGenerator modelsDocumentationGenerator = new ModelsDocumentationGeneratorImpl(new ModelsDocumentationModelFactoryImpl());
 
-        DocumentationFolder renderedDocumentation = modelsDocumentationGenerator.renderModelsDocumentation(projectRoot, openAPIModel.getModels());
+        DocumentationFolder renderedDocumentation = modelsDocumentationGenerator.renderModelsDocumentation(
+                projectRoot, openAPIModel.getModels(), mainPageModel);
         renderedDocumentation.writeModifiedFiles(currentModelsDocFiles);
     }
 
     protected static void generateDocumentationForOperations(Path projectRoot,
-                                                             OpenAPIModel openAPIModel) {
+                                                             OpenAPIModel openAPIModel,
+                                                             MainPageClientDocumentationModel mainPageModel) {
         Path operationsDocPath = projectRoot
                 .resolve("..")
                 .resolve(baseClientDocsPath)
                 .resolve("operations")
                 .toAbsolutePath().normalize();
         DocumentationFolder currentOperationsDocFiles = DocumentationFolderFactory.loadCurrentFiles(operationsDocPath);
+
+        UsageExampleModelFactory usageExampleModelFactory = getUsageExampleModelFactory();
         OperationsDocumentationGenerator operationsDocumentationGenerator = new OperationsDocumentationGeneratorImpl(
                 new OperationsDocumentationModelFactoryImpl(),
-                new UsageExampleModelFactoryImpl());
+                usageExampleModelFactory);
 
-        DocumentationFolder renderedDocumentation = operationsDocumentationGenerator.renderOperationsDocumentation(projectRoot, openAPIModel);
+        DocumentationFolder renderedDocumentation = operationsDocumentationGenerator.renderOperationsDocumentation(
+                projectRoot, openAPIModel, mainPageModel);
         renderedDocumentation.writeModifiedFiles(currentOperationsDocFiles);
+    }
+
+    @NotNull
+    private static UsageExampleModelFactory getUsageExampleModelFactory() {
+        DocumentationReflectionService documentationReflectionService = new DocumentationReflectionServiceImpl(new ReflectionServiceImpl());
+        PythonExampleDocumentationModelFactory pythonExampleDocumentationModelFactory = new PythonExampleDocumentationModelFactoryImpl(
+                documentationReflectionService,
+                new PythonSerializerImpl(new ParsedSampleObjectFactoryImpl(documentationReflectionService))
+        );
+        PythonExampleDocumentationGenerator pythonExampleDocumentationGenerator = new PythonExampleDocumentationGeneratorImpl(pythonExampleDocumentationModelFactory);
+        return new UsageExampleModelFactoryImpl(pythonExampleDocumentationGenerator);
+    }
+
+    protected static void generateMainPageDocumentation(Path projectRoot,
+                                                        MainPageClientDocumentationModel mainPageModel) {
+        Path clientPath = projectRoot
+                .resolve("..")
+                .resolve(baseClientDocsPath)
+                .toAbsolutePath().normalize();
+        DocumentationFolder currentClientDocFiles = DocumentationFolderFactory.loadCurrentFiles(clientPath);
+
+        mainPageModel.getIndexDocumentationModel().setModels(
+                mainPageModel.getIndexDocumentationModel().getModels().stream()
+                        .sorted(Comparator.comparing(
+                                ModelsSuperiorObjectDocumentationModel::getLocationFilePath,
+                                cherryPickComparator.thenComparing(Comparator.naturalOrder()))
+                        ).collect(Collectors.toList())
+        );
+
+        DocumentationResourceFileLoader documentationResourceFileLoader = new DocumentationResourceFileLoaderImpl(projectRoot);
+        MainPageClientDocumentationGenerator mainPageClientDocumentationGenerator = new MainPageClientDocumentationGeneratorImpl(documentationResourceFileLoader);
+        DocumentationMarkdownFile mainPageFile = mainPageClientDocumentationGenerator.renderMainPageDocumentation(mainPageModel);
+
+        DocumentationFolder renderedDocFiles = DocumentationFolderFactory.loadCurrentFiles(clientPath);
+        DocumentationMarkdownFile nestedFile = renderedDocFiles.addNestedFile(mainPageFile);
+        nestedFile.setRenderContext(mainPageModel);
+
+        renderedDocFiles.writeModifiedFiles(currentClientDocFiles);
     }
 
     private static OpenAPI getParsedSwaggerFile(Path pathToSwaggerFile) {
@@ -247,8 +311,13 @@ public class GeneratePythonDocumentationPostProcessor {
         DocumentationFolder docsRootFolder = DocumentationFolderFactory.loadCurrentFiles(docPath);
         DocumentationFolder docsRootFolderCorrected = DocumentationFolderFactory.loadCurrentFiles(docPath);
 
-        DocumentationFolderPostCorrectorService documentationFolderPostCorrectorService = new DocumentationFolderPostCorrectorServiceImpl();
-        documentationFolderPostCorrectorService.postProcessCorrect(projectRoot.toAbsolutePath(), docsRootFolderCorrected);
+        DocumentationFolderPostCorrectorService documentationFolderPostCorrectorService =
+                new DocumentationFolderPostCorrectorServiceImpl(projectRoot.toAbsolutePath().getParent());
+        documentationFolderPostCorrectorService.postProcessCorrect(docsRootFolderCorrected);
         docsRootFolderCorrected.writeModifiedFiles(docsRootFolder);
+
+        DocumentationFolderPostValidatorService documentationFolderPostValidatorService =
+                new DocumentationFolderPostValidatorServiceImpl(projectRoot.toAbsolutePath().getParent());
+        documentationFolderPostValidatorService.postProcessValidate(docsRootFolderCorrected);
     }
 }

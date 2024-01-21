@@ -18,7 +18,7 @@ package com.dqops.core.synchronization.jobs;
 import com.dqops.core.synchronization.fileexchange.FileSynchronizationDirection;
 import com.dqops.core.synchronization.status.CloudSynchronizationFoldersStatusModel;
 import com.dqops.core.synchronization.status.FolderSynchronizationStatus;
-import com.dqops.utils.docs.SampleValueFactory;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;

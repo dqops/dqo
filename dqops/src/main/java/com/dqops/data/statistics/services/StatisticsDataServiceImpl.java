@@ -16,6 +16,7 @@
 package com.dqops.data.statistics.services;
 
 import com.dqops.core.configuration.DqoStatisticsCollectorConfigurationProperties;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.statistics.factory.StatisticsCollectorTarget;
 import com.dqops.data.statistics.factory.StatisticsColumnNames;
 import com.dqops.data.statistics.factory.StatisticsResultDataType;
@@ -59,21 +60,23 @@ public class StatisticsDataServiceImpl implements StatisticsDataService {
      * Retrieves the most recent table statistics results for a given table.
      * @param connectionName Connection name.
      * @param physicalTableName Full table name (schema and table).
-     * @param dataStreamName Data stream name.
+     * @param dataGroup Data group name.
      * @param includeColumnLevelStatistics True when column level statistics should be also included.
+     * @param userDomainIdentity User identity, with the data domain.
      * @return Statistics results for the given table.
      */
     @Override
     public StatisticsResultsForTableModel getMostRecentStatisticsForTable(String connectionName,
                                                                           PhysicalTableName physicalTableName,
-                                                                          String dataStreamName,
-                                                                          boolean includeColumnLevelStatistics) {
+                                                                          String dataGroup,
+                                                                          boolean includeColumnLevelStatistics,
+                                                                          UserDomainIdentity userDomainIdentity) {
         StatisticsResultsForTableModel tableStatisticsResults = new StatisticsResultsForTableModel();
-        Table allData = loadStatisticsResultsForTable(connectionName, physicalTableName);
+        Table allData = loadStatisticsResultsForTable(connectionName, physicalTableName, userDomainIdentity);
         if (allData == null) {
             return tableStatisticsResults; // no statistics data
         }
-        Table selectedDataStreamData = allData.where(allData.textColumn(StatisticsColumnNames.DATA_GROUP_COLUMN_NAME).isEqualTo(dataStreamName));
+        Table selectedDataStreamData = allData.where(allData.textColumn(StatisticsColumnNames.DATA_GROUP_COLUMN_NAME).isEqualTo(dataGroup));
         if (!includeColumnLevelStatistics) {
             selectedDataStreamData = selectedDataStreamData.where(
                     allData.textColumn(StatisticsColumnNames.COLLECTOR_TARGET_COLUMN_NAME).isEqualTo(StatisticsCollectorTarget.table.name()));
@@ -136,14 +139,16 @@ public class StatisticsDataServiceImpl implements StatisticsDataService {
      * @param connectionName    Connection name.
      * @param physicalTableName Full table name (schema and table).
      * @param columName         Column name.
-     * @param dataStreamName    Data stream name.
+     * @param dataGroup         Data group name.
+     * @param userDomainIdentity User identity with the data domain.
      * @return Statistics results for the given table.
      */
     @Override
     public StatisticsResultsForColumnModel getMostRecentStatisticsForColumn(String connectionName,
                                                                             PhysicalTableName physicalTableName,
                                                                             String columName,
-                                                                            String dataStreamName) {
+                                                                            String dataGroup,
+                                                                            UserDomainIdentity userDomainIdentity) {
         StatisticsResultsForColumnModel columnStatisticsResults = new StatisticsResultsForColumnModel(connectionName, physicalTableName, columName);
         columnStatisticsResults.setCollectStatisticsJobTemplate(new StatisticsCollectorSearchFilters() {{
             setConnection(connectionName);
@@ -152,12 +157,12 @@ public class StatisticsDataServiceImpl implements StatisticsDataService {
             setEnabled(true);
         }});
 
-        Table allData = loadStatisticsResultsForTable(connectionName, physicalTableName);
+        Table allData = loadStatisticsResultsForTable(connectionName, physicalTableName, userDomainIdentity);
         if (allData == null) {
             return columnStatisticsResults; // no profiling data
         }
         Table selectedDataStreamData = allData.where(allData.textColumn(StatisticsColumnNames.COLUMN_NAME_COLUMN_NAME).isEqualTo(columName)
-                .and(allData.textColumn(StatisticsColumnNames.DATA_GROUP_COLUMN_NAME).isEqualTo(dataStreamName)));
+                .and(allData.textColumn(StatisticsColumnNames.DATA_GROUP_COLUMN_NAME).isEqualTo(dataGroup)));
         Table sortedResults = selectedDataStreamData.sortDescendingOn(StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME, StatisticsColumnNames.SAMPLE_COUNT_COLUMN_NAME);
 
         TextColumn categoryColumn = sortedResults.textColumn(StatisticsColumnNames.COLLECTOR_CATEGORY_COLUMN_NAME);
@@ -189,10 +194,11 @@ public class StatisticsDataServiceImpl implements StatisticsDataService {
      * {@link DqoStatisticsCollectorConfigurationProperties#getViewedStatisticsAgeMonths()} are loaded.
      * @param connectionName Connection name.
      * @param physicalTableName Physical table name.
+     * @param userDomainIdentity User identity with the data domain name.
      * @return Table with results or null when no statistics results were found.
      */
-    protected Table loadStatisticsResultsForTable(String connectionName, PhysicalTableName physicalTableName) {
-        StatisticsSnapshot statisticsResultsSnapshot = this.statisticsResultsSnapshotFactory.createSnapshot(connectionName, physicalTableName);
+    protected Table loadStatisticsResultsForTable(String connectionName, PhysicalTableName physicalTableName, UserDomainIdentity userDomainIdentity) {
+        StatisticsSnapshot statisticsResultsSnapshot = this.statisticsResultsSnapshotFactory.createSnapshot(connectionName, physicalTableName, userDomainIdentity);
         LocalDate todayDate = LocalDate.now();
         int monthsToLoad = this.statisticsConfigurationProperties.getViewedStatisticsAgeMonths() - 1;
         if (monthsToLoad < 0 || monthsToLoad > 36) {

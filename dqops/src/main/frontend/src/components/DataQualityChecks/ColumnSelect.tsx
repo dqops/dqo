@@ -58,7 +58,7 @@ const ColumnSelect = ({
             }))
           );
         } catch (error) {
-          console.error('Błąd pobierania danych:', error);
+          console.error('Cannot fetch the data:', error);
         }
       } else if (table) {
         try {

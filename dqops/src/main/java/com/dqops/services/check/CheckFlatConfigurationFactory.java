@@ -38,7 +38,10 @@ public interface CheckFlatConfigurationFactory {
      * Gets a collection of check configuration models that fit the provided filters.
      * @param checkSearchFilters Check search filters.
      * @param principal User principal.
+     * @param limit Limit of results.
      * @return List of self-contained check configuration models that fit the filters.
      */
-    List<CheckConfigurationModel> fromCheckSearchFilters(CheckSearchFilters checkSearchFilters, DqoUserPrincipal principal);
+    List<CheckConfigurationModel> findAllCheckConfigurations(CheckSearchFilters checkSearchFilters,
+                                                             DqoUserPrincipal principal,
+                                                             int limit);
 }

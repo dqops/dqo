@@ -22,6 +22,8 @@ import com.dqops.core.configuration.DqoUserConfigurationProperties;
 import com.dqops.core.configuration.DqoUserConfigurationPropertiesObjectMother;
 import com.dqops.core.filesystem.cache.LocalFileSystemCache;
 import com.dqops.core.filesystem.cache.LocalFileSystemCacheObjectMother;
+import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.core.principal.UserDomainIdentityObjectMother;
 import com.dqops.core.synchronization.status.SynchronizationStatusTrackerStub;
 import com.dqops.core.locks.UserHomeLockManager;
 import com.dqops.core.locks.UserHomeLockManagerObjectMother;
@@ -53,6 +55,7 @@ public class SensorReadoutsSnapshotTests extends BaseTest {
     private ParquetPartitionStorageServiceImpl parquetStorageService;
     private PhysicalTableName tableName;
     private DqoUserConfigurationProperties dqoUserConfigurationProperties;
+    private UserDomainIdentity userDomainIdentity;
 
     @BeforeEach
     void setUp() {
@@ -61,6 +64,7 @@ public class SensorReadoutsSnapshotTests extends BaseTest {
         LocalDqoUserHomePathProvider localUserHomeProviderStub = LocalDqoUserHomePathProviderObjectMother.createLocalUserHomeProviderStub(dqoUserConfigurationProperties);
         UserHomeLockManager newLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
         LocalFileSystemCache fileSystemCache = LocalFileSystemCacheObjectMother.createNewCache();
+        userDomainIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
         // TODO: Add stub / virtual filesystem for localUserHomeFileStorageService
 
         ParquetPartitionMetadataService parquetPartitionMetadataService = new ParquetPartitionMetadataServiceImpl(
@@ -75,7 +79,7 @@ public class SensorReadoutsSnapshotTests extends BaseTest {
                 fileSystemCache);
 		tableName = new PhysicalTableName("sch2", "tab2");
         Table newRows = SensorReadoutTableFactoryObjectMother.createEmptyNormalizedTable("new_rows");
-		this.sut = new SensorReadoutsSnapshot("conn", tableName, this.parquetStorageService, newRows);
+		this.sut = new SensorReadoutsSnapshot(userDomainIdentity, "conn", tableName, this.parquetStorageService, newRows);
     }
 
     void saveThreeMonthsData() {
@@ -96,7 +100,7 @@ public class SensorReadoutsSnapshotTests extends BaseTest {
         normalizedResults.getActualValueColumn().set(row3.getRowNumber(), 30.5);
         normalizedResults.getTimePeriodColumn().set(row3.getRowNumber(), LocalDateTime.of(2022, 3, 10, 14, 30, 55));
 
-        SensorReadoutsSnapshot tempSut = new SensorReadoutsSnapshot("conn", tableName, this.parquetStorageService, sourceTable);
+        SensorReadoutsSnapshot tempSut = new SensorReadoutsSnapshot(userDomainIdentity, "conn", tableName, this.parquetStorageService, sourceTable);
         tempSut.save();
     }
 

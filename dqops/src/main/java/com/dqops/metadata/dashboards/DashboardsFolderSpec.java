@@ -63,6 +63,10 @@ public class DashboardsFolderSpec extends AbstractSpec implements Cloneable {
     @JsonPropertyDescription("Folder name")
     private String folderName;
 
+    @JsonPropertyDescription("Always shows this schema tree node because it contains standard dashboards. Set the value to false to show this folder only when advanced dashboards are enabled.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean standard;
+
     @JsonPropertyDescription("List of data quality dashboard at this level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
@@ -88,6 +92,23 @@ public class DashboardsFolderSpec extends AbstractSpec implements Cloneable {
     public void setFolderName(String folderName) {
         this.setDirtyIf(!Objects.equals(this.folderName, folderName));
         this.folderName = folderName;
+    }
+
+    /**
+     * Returns the flag if the folder contains standard dashboard and should be always shown.
+     * @return True when the folder contains standard dashboards.
+     */
+    public boolean isStandard() {
+        return standard;
+    }
+
+    /**
+     * Set the flag to show this folder always, not only when advanced dashboards are enabled.
+     * @param standard Folder is shown always.
+     */
+    public void setStandard(boolean standard) {
+        this.setDirtyIf(this.standard != standard);
+        this.standard = standard;
     }
 
     /**
@@ -250,6 +271,7 @@ public class DashboardsFolderSpec extends AbstractSpec implements Cloneable {
      */
     public DashboardsFolderSpec createExpandedDashboardFolder() {
         DashboardsFolderSpec expandedFolder = new DashboardsFolderSpec(this.folderName);
+        expandedFolder.setStandard(this.standard);
         expandedFolder.setFolders(this.getFolders().createExpandedDashboardTree()); // replacing with an expanded list
         expandedFolder.getFolders().setFileLastModified(this.getFolders().getFileLastModified());
 
@@ -372,6 +394,7 @@ public class DashboardsFolderSpec extends AbstractSpec implements Cloneable {
     public DashboardsFolderSpec merge(DashboardsFolderSpec otherFolder) {
         DashboardsFolderSpec cloned = new DashboardsFolderSpec();
         cloned.setFolderName(this.folderName);
+        cloned.setStandard(this.standard || otherFolder.standard);
         if (this.getHierarchyId() != null) {
             cloned.setHierarchyId(this.getHierarchyId());
         }

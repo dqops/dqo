@@ -25,7 +25,7 @@ export default function TableStatisticsView({
   setNumberOfSelected2,
   statistics,
   onChangeSelectedColumns,
-
+  refreshListFunc
 }: {
   connectionName: string;
   schemaName: string;
@@ -35,7 +35,7 @@ export default function TableStatisticsView({
   setNumberOfSelected2: (arg: number) => void;
   statistics?: TableColumnsStatisticsModel;
   onChangeSelectedColumns?: (columns: string[]) => void;
-
+  refreshListFunc: () => void;
 }) {
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
   const [rowCount, setRowCount] = useState<TableStatisticsModel>();
@@ -66,7 +66,7 @@ export default function TableStatisticsView({
   };
   useEffect(() => {
     fetchRows();
-  }, [connectionName, schemaName, tableName, statistics]);
+  }, [connectionName, schemaName, tableName]);
 
   useEffect(() => {
     setNumberOfSelected(0);
@@ -163,6 +163,7 @@ export default function TableStatisticsView({
         setNumberOfSelected={setNumberOfSelected}
         statistics={statistics}
         onChangeSelectedColumns={onChangeSelectedColumns}
+        refreshListFunc={refreshListFunc}
       />
     </div>
   );

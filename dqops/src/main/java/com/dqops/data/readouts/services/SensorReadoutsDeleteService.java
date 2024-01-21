@@ -15,6 +15,7 @@
  */
 package com.dqops.data.readouts.services;
 
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.readouts.models.SensorReadoutsFragmentFilter;
 
@@ -26,7 +27,8 @@ public interface SensorReadoutsDeleteService {
     /**
      * Deletes the readouts from a table, applying specific filters to get the fragment (if necessary).
      * @param filter Filter for the readouts fragment that is of interest.
+     * @param userIdentity User identity that specifies the data domain.
      * @return Data delete operation summary.
      */
-    DeleteStoredDataResult deleteSelectedSensorReadoutsFragment(SensorReadoutsFragmentFilter filter);
+    DeleteStoredDataResult deleteSelectedSensorReadoutsFragment(SensorReadoutsFragmentFilter filter, UserDomainIdentity userIdentity);
 }

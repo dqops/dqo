@@ -175,7 +175,7 @@ export default function UserProfile({ name, email }: UserProfile) {
         : <Button label='Generate API Key' color='primary' variant='outlined' onClick={generateApiKey}/>}
         </div>
         <div className="w-full flex flex-col h-30 text-black mt-4">
-        {userProfile.can_manage_account === true ? 
+        {userProfile.can_manage_account === true && 
           <a
             href="https://cloud.dqops.com/account"
             target="_blank"
@@ -184,9 +184,13 @@ export default function UserProfile({ name, email }: UserProfile) {
           >
             Manage account 
           </a> 
-          : <span className='text-teal-500 underline'>Manage account</span> }
+        }
+        {userProfile.can_change_own_password === true && 
+          <>
           <div className='text-teal-500 mb-3 text-lg cursor-pointer underline' onClick={() => setOpen(true)}>Change password</div>
           <div className='text-green-500 pt-2 text-lg'>{passwordChangedMessage}</div>
+          </>
+        }
         </div>
         <ChangePrincipalPasswordDialog open = {open} onClose={() => setOpen(false)} handleSubmit={changePrincipalPassword}/>
       </PopoverContent>

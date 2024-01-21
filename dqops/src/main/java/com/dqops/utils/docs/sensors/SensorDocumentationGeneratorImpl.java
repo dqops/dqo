@@ -20,6 +20,8 @@ import com.dqops.sensors.AbstractSensorParametersSpec;
 import com.dqops.sensors.CustomSensorParametersSpec;
 import com.dqops.utils.docs.HandlebarsDocumentationUtilities;
 import com.dqops.utils.docs.LinkageStore;
+import com.dqops.utils.docs.checks.CheckCategoryDocumentationModel;
+import com.dqops.utils.docs.checks.MainPageCheckDocumentationModel;
 import com.dqops.utils.docs.files.DocumentationFolder;
 import com.dqops.utils.docs.files.DocumentationMarkdownFile;
 import com.dqops.utils.reflection.TargetClassSearchUtility;
@@ -28,6 +30,8 @@ import com.github.jknack.handlebars.Template;
 import java.lang.reflect.Constructor;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Sensor documentation generator that generates documentation for sensors.
@@ -51,21 +55,20 @@ public class SensorDocumentationGeneratorImpl implements SensorDocumentationGene
     public DocumentationFolder renderSensorDocumentation(Path projectRootPath, LinkageStore<Class<?>> linkageStore, DqoHome dqoHome) {
         DocumentationFolder sensorsFolder = new DocumentationFolder();
         sensorsFolder.setFolderName("reference/sensors");
-        sensorsFolder.setLinkName("Sensors");
+        sensorsFolder.setLinkName("Data quality sensors");
         Path sensorsPath = Path.of("docs", "reference", "sensors");
         sensorsFolder.setDirectPath(projectRootPath.resolve("..").resolve(sensorsPath).toAbsolutePath().normalize());
 
         List<SensorDocumentationModel> sensorDocumentationModels = createSensorDocumentationModels(projectRootPath);
         List<SensorGroupedDocumentationModel> sensorGroupedDocumentationModels = groupSensors(sensorDocumentationModels);
 
-        MainPageSensorDocumentationModel mainPageSensorDocumentationModel = new MainPageSensorDocumentationModel();
-        mainPageSensorDocumentationModel.setSensors(sensorGroupedDocumentationModels);
+        MainPageSensorDocumentationModel mainPageSensorDocumentationModel = renderIndexPage(sensorGroupedDocumentationModels);
 
-        Template main_page_template = HandlebarsDocumentationUtilities.compileTemplate("sensors/main_page_documentation");
+        Template mainPageTemplate = HandlebarsDocumentationUtilities.compileTemplate("sensors/main_page_documentation");
         DocumentationMarkdownFile mainPageDocumentationMarkdownFile = sensorsFolder.addNestedFile("index" + ".md");
         mainPageDocumentationMarkdownFile.setRenderContext(mainPageSensorDocumentationModel);
 
-        String renderedMainPageDocument = HandlebarsDocumentationUtilities.renderTemplate(main_page_template, mainPageSensorDocumentationModel);
+        String renderedMainPageDocument = HandlebarsDocumentationUtilities.renderTemplate(mainPageTemplate, mainPageSensorDocumentationModel);
         mainPageDocumentationMarkdownFile.setFileContent(renderedMainPageDocument);
 
 
@@ -91,6 +94,17 @@ public class SensorDocumentationGeneratorImpl implements SensorDocumentationGene
                 );
             }
         }
+
+        for (DocumentationFolder targetFolder : sensorsFolder.getSubFolders()) {
+            List<SensorGroupedDocumentationModel> sensorsInFolder = sensorGroupedDocumentationModels.stream()
+                    .filter(sensorModel -> sensorModel.getTarget().equals(targetFolder.getFolderName()))
+                    .collect(Collectors.toList());
+            MainPageSensorDocumentationModel indexPageSensorDocumentationModel = renderIndexPage(sensorsInFolder);
+            DocumentationMarkdownFile indexFile = targetFolder.addNestedFile("index" + ".md");
+            indexFile.setRenderContext(indexPageSensorDocumentationModel);
+            String renderedIndexDocument = HandlebarsDocumentationUtilities.renderTemplate(mainPageTemplate, indexPageSensorDocumentationModel);
+            indexFile.setFileContent(renderedIndexDocument);
+        }
         return sensorsFolder;
     }
 
@@ -105,7 +119,7 @@ public class SensorDocumentationGeneratorImpl implements SensorDocumentationGene
         List<? extends Class<? extends AbstractSensorParametersSpec>> classes = TargetClassSearchUtility.findClasses(
                 "com.dqops.sensors", projectRootPath, AbstractSensorParametersSpec.class);
 
-        Set<String> documentedSensorNames = new HashSet<>();
+        Set<String> documentedSensorNames = new LinkedHashSet<>();
 
         for (Class<? extends AbstractSensorParametersSpec> sensorParametersClass : classes) {
             AbstractSensorParametersSpec abstractSensorParametersSpec = createSensorParameterInstance(sensorParametersClass);
@@ -138,7 +152,7 @@ public class SensorDocumentationGeneratorImpl implements SensorDocumentationGene
         sensorDocumentationModels.sort(Comparator.comparing(SensorDocumentationModel::getFullSensorName));
 
         List<SensorGroupedDocumentationModel> sensorGroupedDocumentationModels = new ArrayList<>();
-        Map<String, Map<String, List<SensorDocumentationModel>>> groupedSensors = new HashMap<>();
+        Map<String, Map<String, List<SensorDocumentationModel>>> groupedSensors = new LinkedHashMap<>();
 
         for (SensorDocumentationModel sensor : sensorDocumentationModels) {
             Map<String, List<SensorDocumentationModel>> categoryLevelSensorsGroup;
@@ -153,7 +167,7 @@ public class SensorDocumentationGeneratorImpl implements SensorDocumentationGene
                     categoryLevelSensorsGroup.put(sensor.getCategory(), sensorDocumentationModelsInCategory);
                 }
             } else {
-                categoryLevelSensorsGroup = new HashMap<>();
+                categoryLevelSensorsGroup = new LinkedHashMap<>();
                 sensorDocumentationModelsInCategory = new ArrayList<>();
                 categoryLevelSensorsGroup.put(sensor.getCategory(), sensorDocumentationModelsInCategory);
                 groupedSensors.put(sensor.getTarget(), categoryLevelSensorsGroup);
@@ -203,5 +217,34 @@ public class SensorDocumentationGeneratorImpl implements SensorDocumentationGene
         } catch (Exception ex) {
             throw new RuntimeException(ex.getMessage(), ex);
         }
+    }
+
+    private MainPageSensorDocumentationModel renderIndexPage(List<SensorGroupedDocumentationModel> sensorCategories) {
+        List<String> sensorTargets = sensorCategories.stream()
+                .map(SensorGroupedDocumentationModel::getTarget)
+                .distinct()
+                .sorted(Comparator.reverseOrder())
+                .collect(Collectors.toList());
+        String singleTarget = null;
+        if (sensorTargets.size() == 1) {
+            singleTarget = sensorTargets.get(0);
+        }
+
+        MainPageSensorDocumentationModel indexPageSensorDocumentationModel = new MainPageSensorDocumentationModel();
+        String header = "Sensors";
+        if (singleTarget != null) {
+            header = header + "/" + singleTarget;
+            indexPageSensorDocumentationModel.setHelpText(String.format(
+                    "This is a list of %s sensors in DQOps broken down by category and a brief description of what they do.",
+                    singleTarget));
+        } else {
+            indexPageSensorDocumentationModel.setHelpText("This is a list of sensors in DQOps broken down by category and a brief description of what they do.");
+        }
+
+        indexPageSensorDocumentationModel.setHeader(header);
+
+        indexPageSensorDocumentationModel.setSensorTargets(sensorTargets);
+        indexPageSensorDocumentationModel.setSensors(sensorCategories);
+        return indexPageSensorDocumentationModel;
     }
 }

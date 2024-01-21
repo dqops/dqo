@@ -15,6 +15,7 @@
  */
 package com.dqops.data.storage;
 
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.models.DataDeleteResultPartition;
 import com.dqops.data.normalization.CommonColumnNames;
@@ -41,6 +42,7 @@ import java.util.stream.Collectors;
  * from parquet files. Contains also changes that should be applied (new rows, updated rows, deleted rows).
  */
 public class TableDataSnapshot {
+    private final UserDomainIdentity userIdentity;
     private final String connectionName;
     private final PhysicalTableName tableName;
     private final ParquetPartitionStorageService storageService;
@@ -54,17 +56,20 @@ public class TableDataSnapshot {
 
     /**
      * Creates a new writable snapshot of data for a single parquet table with results for one connection and physical table.
+     * @param userIdentity User identity, that specifies the data domain.
      * @param connectionName Connection name.
      * @param tableName Table name.
      * @param storageService Storage service dependency.
      * @param storageSettings Configuration of the storage settings (folder names, parquet file names, column names).
      * @param newResults Empty tableaw table with new or updated rows. Changes to this object will be persisted on save.
      */
-    public TableDataSnapshot(String connectionName,
+    public TableDataSnapshot(UserDomainIdentity userIdentity,
+                             String connectionName,
                              PhysicalTableName tableName,
                              ParquetPartitionStorageService storageService,
                              FileStorageSettings storageSettings,
                              Table newResults) {
+        this.userIdentity = userIdentity;
         this.connectionName = connectionName;
         this.tableName = tableName;
         this.storageService = storageService;
@@ -77,19 +82,22 @@ public class TableDataSnapshot {
     /**
      * Creates a new read-only snapshot of data for a single parquet table with results for one connection and physical table.
      * The tables loaded from parquet files will be limited to the set of columns in the <code>columnNames</code> list.
+     * @param userIdentity User identity, specifies the data domain.
      * @param connectionName Connection name.
      * @param tableName Table name.
      * @param storageService Storage service dependency.
      * @param storageSettings Configuration of the storage settings (folder names, parquet file names, column names).
      * @param columnNames Array of column names that will be loaded.
      */
-    public TableDataSnapshot(String connectionName,
+    public TableDataSnapshot(UserDomainIdentity userIdentity,
+                             String connectionName,
                              PhysicalTableName tableName,
                              ParquetPartitionStorageService storageService,
                              FileStorageSettings storageSettings,
                              String[] columnNames,
                              Table newResultsTemplate) {
         assert columnNames != null && columnNames.length > 0;
+        this.userIdentity = userIdentity;
         this.connectionName = connectionName;
         this.tableName = tableName;
         this.storageService = storageService;
@@ -97,6 +105,14 @@ public class TableDataSnapshot {
         this.newResultsTable = newResultsTemplate;
         this.tableDataChanges = null;
         this.columnNames = columnNames;
+    }
+
+    /**
+     * Returns the user identity, also specifies the data domain.
+     * @return User identity with the data domain.
+     */
+    public UserDomainIdentity getUserIdentity() {
+        return userIdentity;
     }
 
     /**
@@ -200,7 +216,7 @@ public class TableDataSnapshot {
                     continue;
                 }
 
-                HashSet<String> columnNamesInPartitionData = new HashSet<>(partitionData.columnNames());
+                Set<String> columnNamesInPartitionData = new LinkedHashSet<>(partitionData.columnNames());
 
                 if (this.columnNames.length == columnNamesInPartitionData.size() &&
                         columnNamesInPartitionData.containsAll(Lists.newArrayList(this.columnNames))) {
@@ -209,7 +225,11 @@ public class TableDataSnapshot {
 
                 Table newTableWithLimitedColumns = Table.create(partitionData.name());
                 Map<String, ? extends Column<?>> existingColumnsByName = partitionData.columns().stream()
-                        .collect(Collectors.toMap(c -> c.name(), c -> c));
+                        .collect(Collectors.toMap(
+                                c -> c.name(),
+                                c -> c,
+                                (key, value) -> value,
+                                LinkedHashMap::new));
 
                 for (String expectedColumnName : this.columnNames) {
                     if (!existingColumnsByName.containsKey(expectedColumnName)) {
@@ -235,7 +255,7 @@ public class TableDataSnapshot {
                     continue;
                 }
 
-                HashSet<String> columnNamesInPartitionData = new HashSet<>(partitionData.columnNames());
+                Set<String> columnNamesInPartitionData = new LinkedHashSet<>(partitionData.columnNames());
                 Table updatedPartitionData = null;
 
                 Table emptyTableSample = this.getTableDataChanges().getNewOrChangedRows();
@@ -252,7 +272,7 @@ public class TableDataSnapshot {
                 if ((updatedPartitionData == null && partitionData.columnCount() != emptyTableSample.columnCount()) ||
                         (updatedPartitionData != null && updatedPartitionData.columnCount() != emptyTableSample.columnCount())) {
                     // remove old columns
-                    HashSet<String> expectedColumnNames = new HashSet<>(emptyTableSample.columnNames());
+                    Set<String> expectedColumnNames = new LinkedHashSet<>(emptyTableSample.columnNames());
 
                     for (Column<?> existingColumn : new ArrayList<>(partitionData.columns())) {
                         if (!expectedColumnNames.contains(existingColumn.name())) {
@@ -304,7 +324,7 @@ public class TableDataSnapshot {
             this.firstLoadedMonth = LocalDateTimeTruncateUtility.truncateMonth(startMonth);
             this.lastLoadedMonth = LocalDateTimeTruncateUtility.truncateMonth(endMonth);
             Map<ParquetPartitionId, LoadedMonthlyPartition> loadedPartitions = this.storageService.loadPartitionsForMonthsRange(
-                    this.connectionName, this.tableName, this.firstLoadedMonth, this.lastLoadedMonth, this.storageSettings, this.getExpectedColumns());
+                    this.connectionName, this.tableName, this.firstLoadedMonth, this.lastLoadedMonth, this.storageSettings, this.getExpectedColumns(), this.userIdentity);
             if (loadedPartitions != null) {
                 if (this.loadedMonthlyPartitions == null) {
                     this.loadedMonthlyPartitions = new LinkedHashMap<>();
@@ -321,7 +341,7 @@ public class TableDataSnapshot {
             this.firstLoadedMonth = LocalDateTimeTruncateUtility.truncateMonth(startMonth);
 
             Map<ParquetPartitionId, LoadedMonthlyPartition> loadedEarlierPartitions = this.storageService.loadPartitionsForMonthsRange(
-                    this.connectionName, this.tableName, this.firstLoadedMonth, lastMonthToLoad, this.storageSettings, this.getExpectedColumns());
+                    this.connectionName, this.tableName, this.firstLoadedMonth, lastMonthToLoad, this.storageSettings, this.getExpectedColumns(), this.userIdentity);
 
             if (loadedEarlierPartitions != null) {
                 updateSchemaForLoadedPartitions(loadedEarlierPartitions);
@@ -337,7 +357,7 @@ public class TableDataSnapshot {
             this.lastLoadedMonth = truncatedEndMonth;
 
             Map<ParquetPartitionId, LoadedMonthlyPartition> loadedLaterPartitions = this.storageService.loadPartitionsForMonthsRange(
-                    this.connectionName, this.tableName, firstMonthToLoad, this.lastLoadedMonth, this.storageSettings, this.getExpectedColumns());
+                    this.connectionName, this.tableName, firstMonthToLoad, this.lastLoadedMonth, this.storageSettings, this.getExpectedColumns(), this.userIdentity);
             if (loadedLaterPartitions != null) {
                 updateSchemaForLoadedPartitions(loadedLaterPartitions);
                 this.loadedMonthlyPartitions.putAll(loadedLaterPartitions);
@@ -367,7 +387,7 @@ public class TableDataSnapshot {
         if (this.firstLoadedMonth == null) {
             // no data ever loaded
             Map<ParquetPartitionId, LoadedMonthlyPartition> loadedPartitions = this.storageService.loadRecentPartitionsForMonthsRange(
-                    this.connectionName, this.tableName, start, end, this.storageSettings, this.getExpectedColumns(), maxRecentMonthsToLoad);
+                    this.connectionName, this.tableName, start, end, this.storageSettings, this.getExpectedColumns(), maxRecentMonthsToLoad, this.userIdentity);
 
             if (loadedPartitions != null) {
                 this.firstLoadedMonth = loadedPartitions.keySet().stream()
@@ -398,7 +418,7 @@ public class TableDataSnapshot {
                 }
 
                 Map<ParquetPartitionId, LoadedMonthlyPartition> loadedLaterPartitions = this.storageService.loadRecentPartitionsForMonthsRange(
-                        this.connectionName, this.tableName, firstMonthToLoad, end, this.storageSettings, this.getExpectedColumns(), needToLoad);
+                        this.connectionName, this.tableName, firstMonthToLoad, end, this.storageSettings, this.getExpectedColumns(), needToLoad, this.userIdentity);
                 Optional<LocalDate> lastLoadedLaterMonth = loadedLaterPartitions.keySet().stream().map(ParquetPartitionId::getMonth).max(LocalDate::compareTo);
                 this.lastLoadedMonth = lastLoadedLaterMonth.orElse(this.lastLoadedMonth);
                 updateSchemaForLoadedPartitions(loadedLaterPartitions);
@@ -421,7 +441,7 @@ public class TableDataSnapshot {
                 }
 
                 Map<ParquetPartitionId, LoadedMonthlyPartition> loadedEarlierPartitions = this.storageService.loadRecentPartitionsForMonthsRange(
-                        this.connectionName, this.tableName, start, lastMonthToLoad, this.storageSettings, this.getExpectedColumns(), needToLoad);
+                        this.connectionName, this.tableName, start, lastMonthToLoad, this.storageSettings, this.getExpectedColumns(), needToLoad, this.userIdentity);
                 Optional<LocalDate> lastLoadedEarlierMonth = loadedEarlierPartitions.keySet().stream().map(ParquetPartitionId::getMonth).max(LocalDate::compareTo);
                 this.firstLoadedMonth = lastLoadedEarlierMonth.orElse(this.firstLoadedMonth);
                 updateSchemaForLoadedPartitions(loadedEarlierPartitions);
@@ -449,7 +469,7 @@ public class TableDataSnapshot {
             return null;
         }
 
-        ParquetPartitionId partitionId = new ParquetPartitionId(storageSettings.getTableType(), connectionName, tableName, monthDate);
+        ParquetPartitionId partitionId = new ParquetPartitionId(this.userIdentity.getDataDomainFolder(), storageSettings.getTableType(), connectionName, tableName, monthDate);
         return this.loadedMonthlyPartitions.get(partitionId);
     }
 
@@ -486,7 +506,7 @@ public class TableDataSnapshot {
         for (LocalDate currentMonth = startMonth; !currentMonth.isAfter(endMonth);
              currentMonth = currentMonth.plus(1L, ChronoUnit.MONTHS)) {
 
-            ParquetPartitionId partitionId = new ParquetPartitionId(storageSettings.getTableType(), connectionName, tableName, currentMonth);
+            ParquetPartitionId partitionId = new ParquetPartitionId(this.userIdentity.getDataDomainFolder(), storageSettings.getTableType(), connectionName, tableName, currentMonth);
             LoadedMonthlyPartition loadedMonthlyPartition = this.loadedMonthlyPartitions.get(partitionId);
             Table monthlyPartitionTable = loadedMonthlyPartition.getData();
             if (monthlyPartitionTable == null) {
@@ -609,9 +629,9 @@ public class TableDataSnapshot {
         for (LocalDate currentMonth = startMonth; !currentMonth.isAfter(endMonth);
              currentMonth = currentMonth.plus(1L, ChronoUnit.MONTHS)) {
 
-            ParquetPartitionId partitionId = new ParquetPartitionId(storageSettings.getTableType(), connectionName, tableName, currentMonth);
+            ParquetPartitionId partitionId = new ParquetPartitionId(this.userIdentity.getDataDomainFolder(), storageSettings.getTableType(), connectionName, tableName, currentMonth);
             LoadedMonthlyPartition loadedMonthlyPartition = this.loadedMonthlyPartitions.get(partitionId);
-            this.storageService.savePartition(loadedMonthlyPartition, this.tableDataChanges, this.storageSettings);
+            this.storageService.savePartition(loadedMonthlyPartition, this.tableDataChanges, this.storageSettings, this.userIdentity);
         }
     }
 
@@ -627,7 +647,7 @@ public class TableDataSnapshot {
         TextColumn idColumn = this.getTableDataChanges()
                 .getNewOrChangedRows()
                 .textColumn(this.storageSettings.getIdStringColumnName());
-        Set<String> foundIds = new HashSet<>();
+        Set<String> foundIds = new LinkedHashSet<>();
         IntArrayList duplicateRowIndexesToDrop = null;
 
         for (int i = 0; i < idColumn.size(); i++) {

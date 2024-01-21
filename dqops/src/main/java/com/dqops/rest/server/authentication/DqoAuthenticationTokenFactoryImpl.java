@@ -16,9 +16,9 @@
 
 package com.dqops.rest.server.authentication;
 
+import com.dqops.core.dqocloud.login.DqoUserRole;
 import com.dqops.core.dqocloud.login.DqoUserTokenPayload;
-import com.dqops.core.principal.DqoCloudApiKeyPrincipalProvider;
-import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,6 +26,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * DQOps authentication token factory that creates Spring Security {@link org.springframework.security.core.Authentication} token
@@ -33,15 +34,20 @@ import java.util.ArrayList;
  */
 @Component
 public class DqoAuthenticationTokenFactoryImpl implements DqoAuthenticationTokenFactory {
-    private final DqoCloudApiKeyPrincipalProvider dqoCloudApiKeyPrincipalProvider;
+    private final DqoUserPrincipalProvider dqoUserPrincipalProvider;
+    private final UserDomainIdentityFactory userDomainIdentityFactory;
 
     /**
      * Dependency injection constructor.
-     * @param dqoCloudApiKeyPrincipalProvider DQOps principal provider that creates a principal for a single user, having direct access to DQOps.
+     * @param dqoUserPrincipalProvider DQOps principal provider that creates a principal for a single user, having direct access to DQOps.
+     * @param userDomainIdentityFactory User data domain factory, used to look up the data domain name.
      */
     @Autowired
-    public DqoAuthenticationTokenFactoryImpl(DqoCloudApiKeyPrincipalProvider dqoCloudApiKeyPrincipalProvider) {
-        this.dqoCloudApiKeyPrincipalProvider = dqoCloudApiKeyPrincipalProvider;
+    public DqoAuthenticationTokenFactoryImpl(
+            DqoUserPrincipalProvider dqoUserPrincipalProvider,
+            UserDomainIdentityFactory userDomainIdentityFactory) {
+        this.dqoUserPrincipalProvider = dqoUserPrincipalProvider;
+        this.userDomainIdentityFactory = userDomainIdentityFactory;
     }
 
     /**
@@ -51,7 +57,7 @@ public class DqoAuthenticationTokenFactoryImpl implements DqoAuthenticationToken
      */
     @Override
     public Authentication createAnonymousToken() {
-        DqoUserPrincipal dqoUserPrincipal = new DqoUserPrincipal();
+        DqoUserPrincipal dqoUserPrincipal = new DqoUserPrincipal(UserDomainIdentity.DEFAULT_DATA_DOMAIN, UserDomainIdentity.DEFAULT_DATA_DOMAIN);
         ArrayList<GrantedAuthority> emptyListOfRoles = new ArrayList<>();
         UsernamePasswordAuthenticationToken anonymousAuthenticationToken = new UsernamePasswordAuthenticationToken(dqoUserPrincipal, null, emptyListOfRoles);
         return anonymousAuthenticationToken;
@@ -65,7 +71,7 @@ public class DqoAuthenticationTokenFactoryImpl implements DqoAuthenticationToken
      */
     @Override
     public Authentication createAuthenticatedWithDefaultDqoCloudApiKey() {
-        DqoUserPrincipal userPrincipal = this.dqoCloudApiKeyPrincipalProvider.createUserPrincipal();
+        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.createUserPrincipalForAdministrator();
         UsernamePasswordAuthenticationToken localUserAuthenticationToken = new UsernamePasswordAuthenticationToken(
                 userPrincipal, userPrincipal.getApiKeyPayload(), userPrincipal.getPrivileges());
         return localUserAuthenticationToken;
@@ -75,14 +81,27 @@ public class DqoAuthenticationTokenFactoryImpl implements DqoAuthenticationToken
      * Creates an authentication principal from a DQOps Cloud issued user token. User tokens are issued for multi-user accounts.
      *
      * @param userTokenPayload User token payload.
+     * @param dataDomain Data domain name.
      * @return Authenticated user principal, based on the user token.
      */
     @Override
-    public Authentication createAuthenticatedWithUserToken(DqoUserTokenPayload userTokenPayload) {
-        DqoUserPrincipal userPrincipalFromApiKey = userTokenPayload.createUserPrincipal();
+    public Authentication createAuthenticatedWithUserToken(DqoUserTokenPayload userTokenPayload, String dataDomain) {
+        String effectiveCloudDataDomainName = dataDomain == null ? UserDomainIdentity.DEFAULT_DATA_DOMAIN : dataDomain;
+        String dataDomainFolderName = this.userDomainIdentityFactory.mapDataDomainCloudNameToFolder(effectiveCloudDataDomainName);
+
+        DqoUserRole effectiveRole = userTokenPayload.getAccountRole();
+
+        if (userTokenPayload.getDomainRoles() != null) {
+            DqoUserRole dataDomainRole = userTokenPayload.getDomainRoles().get(dataDomain);
+            effectiveRole = DqoUserRole.strongest(userTokenPayload.getAccountRole(), dataDomainRole);
+        }
+
+        List<GrantedAuthority> grantedPrivileges = DqoPermissionGrantedAuthorities.getPrivilegesForRole(effectiveRole);
+        DqoUserPrincipal dqoUserPrincipal = new DqoUserPrincipal(userTokenPayload.getUser(), userTokenPayload.getAccountRole(),
+                grantedPrivileges, userTokenPayload, dataDomainFolderName, effectiveCloudDataDomainName);
 
         UsernamePasswordAuthenticationToken apiKeyAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                userPrincipalFromApiKey, userTokenPayload, userPrincipalFromApiKey.getPrivileges());
+                dqoUserPrincipal, userTokenPayload, dqoUserPrincipal.getPrivileges());
         return apiKeyAuthenticationToken;
     }
 }

@@ -21,7 +21,6 @@ import com.dqops.core.filesystem.virtual.FileContent;
 import com.dqops.core.filesystem.virtual.FileTreeNode;
 import com.dqops.core.filesystem.virtual.FolderTreeNode;
 import com.dqops.metadata.basespecs.InstanceStatus;
-import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionSpec;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.sources.TableWrapperImpl;
@@ -97,7 +96,7 @@ public class FileTableWrapperImpl extends TableWrapperImpl {
                 if (!Objects.equals(deserialized.getApiVersion(), ApiVersion.CURRENT_API_VERSION)) {
                     throw new LocalFileSystemException("apiVersion not supported in file " + fileNode.getFilePath().toString());
                 }
-                if (deserialized.getKind() != SpecificationKind.TABLE) {
+                if (deserialized.getKind() != SpecificationKind.table) {
                     throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
                 }
                 fileContent.setCachedObjectInstance(deserializedSpec.deepClone());
@@ -140,11 +139,14 @@ public class FileTableWrapperImpl extends TableWrapperImpl {
             case ADDED:
 				this.connectionFolderNode.addChildFile(fileNameWithExt, newFileContent);
 				this.getSpec().clearDirty(true);
+                break;
+
             case MODIFIED:
                 FileTreeNode modifiedFileNode = this.connectionFolderNode.getChildFileByFileName(fileNameWithExt);
                 modifiedFileNode.changeContent(newFileContent);
 				this.getSpec().clearDirty(true);
                 break;
+
             case TO_BE_DELETED:
 				this.connectionFolderNode.deleteChildFile(fileNameWithExt);
                 break;

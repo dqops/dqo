@@ -53,7 +53,7 @@ public class SchedulerStopCliCommand extends BaseCommand implements ICommand {
      */
     @Override
     public Integer call() throws Exception {
-        this.jobSchedulerService.shutdown();
+        this.jobSchedulerService.stop();
         return 0;
     }
 }

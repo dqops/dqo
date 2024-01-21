@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import SvgIcon from '../../components/SvgIcon';
 import TableColumns from './TableColumns';
 import { useHistory, useParams } from 'react-router-dom';
@@ -11,9 +11,7 @@ import {
 } from '../../services/apiClient';
 import {
   DataGroupingConfigurationSpec,
-  DqoJobHistoryEntryModelJobTypeEnum,
   DqoJobHistoryEntryModelStatusEnum,
-  StatisticsCollectorSearchFilters,
   TableColumnsStatisticsModel
 } from '../../api';
 import { AxiosResponse } from 'axios';
@@ -35,7 +33,7 @@ const TableColumnsView = () => {
     schema: schemaName,
     table: tableName
   }: { connection: string; schema: string; table: string } = useParams();
-  const { job_dictionary_state } = useSelector(
+  const { job_dictionary_state, userProfile } = useSelector(
     (state: IRootState) => state.job || {}
   );
   const dispatch = useDispatch();
@@ -45,7 +43,10 @@ const TableColumnsView = () => {
   const [levels, setLevels] = useState<DataGroupingConfigurationSpec>({});
   const [selected, setSelected] = useState<number>(0);
   const [selectedColumns, setSelectedColumns]= useState<Array<string>>([])
-  const { userProfile } = useSelector((state: IRootState) => state.job || {});
+  const [jobId, setJobId] = useState<number>();
+
+  const job = jobId ? job_dictionary_state[jobId] : undefined;
+
   const fetchColumns = async () => {
     try {
       const res: AxiosResponse<TableColumnsStatisticsModel> =
@@ -82,28 +83,24 @@ const TableColumnsView = () => {
         undefined,
         false,
         undefined,
-        collectStiatisticsObject);
+        {
+          connection: connectionName,
+          fullTableName: schemaName + "." + tableName,
+          enabled: true,
+           columnNames: selectedColumns?.[0]?.length!== 0 ? selectedColumns : [],
+        }).then((res) => setJobId(res.data.jobId?.jobId));
       }catch (err){
       console.error(err)
     }
   };
 
-  const collectStiatisticsObject : StatisticsCollectorSearchFilters = {
-    connection: connectionName,
-    fullTableName: schemaName + "." + tableName,
-    enabled: true,
-     columnNames: selectedColumns?.[0]?.length!== 0 ? selectedColumns : [],
-  }
-  const filteredJobs = Object.values(job_dictionary_state)?.filter(
-    (x) =>
-      x.jobType === DqoJobHistoryEntryModelJobTypeEnum.collect_statistics &&
-      x.parameters?.collectStatisticsParameters
-        ?.statistics_collector_search_filters?.fullTableName ===
-        schemaName + '.' + tableName &&
-      (x.status === DqoJobHistoryEntryModelStatusEnum.running ||
-        x.status === DqoJobHistoryEntryModelStatusEnum.queued ||
-        x.status === DqoJobHistoryEntryModelStatusEnum.waiting)
-  );
+  const filteredJobs = useMemo(() => {
+    return (job && (
+      job.status === DqoJobHistoryEntryModelStatusEnum.running ||
+      job.status === DqoJobHistoryEntryModelStatusEnum.queued ||
+      job.status === DqoJobHistoryEntryModelStatusEnum.waiting ))
+    }, [job])
+     
   const doNothing = (): void => {};
   const postDataStream = async () => {
     const url = ROUTES.TABLE_LEVEL_PAGE(
@@ -153,12 +150,17 @@ const TableColumnsView = () => {
     setCreatedDataStream(false, '', {});
   };
 
+      
+  useEffect(() => {
+    if (job && job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded) {
+      fetchColumns();
+    }
+  }, [job]);
 
   useEffect(() => {
-    if(filteredJobs !== undefined){
-      fetchColumns()
-      }
-  }, [job_dictionary_state])
+      fetchColumns();
+  }, [connectionName, schemaName, tableName]);
+
 
   return (
     <ConnectionLayout>
@@ -189,14 +191,7 @@ const TableColumnsView = () => {
           <Button
             className="flex items-center gap-x-2 justify-center"
             label={
-              filteredJobs?.find(
-                (x) =>
-                  x.parameters?.collectStatisticsParameters
-                    ?.statistics_collector_search_filters?.fullTableName ===
-                  schemaName + '.' + tableName
-                  && x.parameters?.collectStatisticsParameters?.statistics_collector_search_filters?.collectorName === 
-                  connectionName
-              )
+              filteredJobs
                 ? 'Collecting...'
                 : 
                 selectedColumns?.length!== 0 ? 
@@ -204,26 +199,12 @@ const TableColumnsView = () => {
                 'Collect Statistics'
             }
             color={
-              filteredJobs?.find(
-                (x) =>
-                  x.parameters?.collectStatisticsParameters
-                    ?.statistics_collector_search_filters?.fullTableName ===
-                  schemaName + '.' + tableName
-                  && x.parameters?.collectStatisticsParameters?.statistics_collector_search_filters?.collectorName === 
-                  connectionName
-              )
+              filteredJobs
                 ? 'secondary'
                 : 'primary'
             }
             leftIcon={
-              filteredJobs?.find(
-                (x) =>
-                  x.parameters?.collectStatisticsParameters
-                    ?.statistics_collector_search_filters?.fullTableName ===
-                  schemaName + '.' + tableName
-                  && x.parameters?.collectStatisticsParameters?.statistics_collector_search_filters?.collectorName === 
-                  connectionName
-              ) ? (
+              filteredJobs ? (
                 <SvgIcon name="sync" className="w-4 h-4" />
               ) : (
                 ''
@@ -244,6 +225,7 @@ const TableColumnsView = () => {
           setNumberOfSelected={setNumberOfSelected}
           statistics={statistics}
           onChangeSelectedColumns = {onChangeSelectedColumns}
+          refreshListFunc={fetchColumns}
         />
       </div>
     </ConnectionLayout>

@@ -1,7 +1,11 @@
-# 0.4.1
-* More Airflow operators - waiting for a data quality job to finish
-* Table quality status summary screen
-* Renames of some dashboards
-* Updates to dashboards - unification of filters
-* Current table status detects statuses at column and check levels, also returning the current and highest historical quality status
-* Fixes in the UI - filtering detailed check results
+# 1.0.0
+* Apache Spark connector
+* Databricks connector
+* Initial versions of Apache Trino and Presto connectors
+* Updates to dashboards - cross-filtering configured
+* Refactoring towards supporting multiple data domains at the same time
+* Fixes in the UI - table status overview screen, filtering checks related to incidents
+* Support activating and deactivating multiple data quality checks from UI
+* Additional navigation screens for jumping between schemas and tables
+* COMPLETE DOCUMENTATION with examples
+

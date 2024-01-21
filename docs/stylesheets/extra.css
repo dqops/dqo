@@ -2,7 +2,7 @@
   width: 95%;
   max-width: 95%;
 }
-.md-typeset :not(h1):not(h2) {
+.md-typeset {
   font-size: 16px;
 }
 .md-typeset h1{
@@ -11,13 +11,32 @@
 .md-typeset h2{
   font-size: 1.4em;
 }
-.md-nav {
-  font-size: 16px;
+.md-typeset h3{
+  font-size: 1.2em;
 }
+
 .md-sidebar__scrollwrap{
   white-space: normal; 
 }
 .md-nav__item {
   padding-left: 0.6rem;
   padding-right: 0.2rem;
+}
+
+.four-divs-row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.four-divs-element {
+  flex: 1 0 21%; /* it will put max 4 elements (+ space for all margins) in a row (4 * 21% + margins) */
+  margin: 5px;
+  height: 150px;
+  width: 100%;
+  text-align: center;
+}
+
+.no-wrap-code {
+  white-space: nowrap;
+  word-break: normal;
 }

@@ -1,56 +1,83 @@
-# connection
+# dqo connection command
+The reference of the **connection** command in DQOps. Modify or list connections
+
+
 
 ___
-### **dqo connection list**
+
+## dqo connection list
 
 List connections that match a given condition
 
+
 **Description**
+
 
 Lists all the created connections for the logged-in user that match the conditions specified in the options. It allows the user to filter connections based on various parameters.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] connection list [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
                  [-d=<dimensions>]... [-l=<labels>]...
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> connection list [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
                  [-d=<dimensions>]... [-l=<labels>]...
 
 ```
 
-**Options**  
-  
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|<p id="connection list-d">`-d`</p><br/><p id="connection list--dimension">`--dimension`</p><br/>|Dimension filter| ||
-|<p id="connection list-fw">`-fw`</p><br/><p id="connection list--file-write">`--file-write`</p><br/>|Write command response to a file| ||
-|<p id="connection list--headless">`--headless`</p><br/><p id="connection list-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|<p id="connection list-h">`-h`</p><br/><p id="connection list--help">`--help`</p><br/>|Show the help for the command and parameters| ||
-|<p id="connection list-l">`-l`</p><br/><p id="connection list--label">`--label`</p><br/>|Label filter| ||
-|<p id="connection list-n">`-n`</p><br/><p id="connection list--name">`--name`</p><br/>|Connection name filter| ||
-|<p id="connection list-of">`-of`</p><br/><p id="connection list--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|<div id="connection list-d" class="no-wrap-code">`-d`</div><div id="connection list--dimension" class="no-wrap-code">`--dimension`</div>|Dimension filter| ||
+|<div id="connection list-fw" class="no-wrap-code">`-fw`</div><div id="connection list--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="connection list--headless" class="no-wrap-code">`--headless`</div><div id="connection list-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="connection list-h" class="no-wrap-code">`-h`</div><div id="connection list--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="connection list-l" class="no-wrap-code">`-l`</div><div id="connection list--label" class="no-wrap-code">`--label`</div>|Label filter| ||
+|<div id="connection list-n" class="no-wrap-code">`-n`</div><div id="connection list--name" class="no-wrap-code">`--name`</div>|Connection name filter| ||
+|<div id="connection list-of" class="no-wrap-code">`-of`</div><div id="connection list--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
+
+
 
 
 
 
 ___
-### **dqo connection add**
+
+## dqo connection add
 
 Add a connection with specified details
 
+
 **Description**
+
 
 Creates a new connection to the database with the specified details such as connection name, database type, hostname, username, and password. It allows the user to connect to the database from the application to perform various operations on the database.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
+                [--athena-authentication-mode=<athenaAuthenticationMode>]
+                [--athena-output-location=<athenaOutputLocation>]
+                [--athena-region=<athenaRegion>]
+                [--athena-work-group=<athenaWorkGroup>]
                 [--bigquery-authentication-mode=<authenticationMode>]
                 [--bigquery-billing-project-id=<billingProjectId>]
                 [--bigquery-jobs-create-project=<jobsCreateProject>]
@@ -58,11 +85,17 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
                 [--bigquery-json-key-path=<jsonKeyPath>]
                 [--bigquery-quota-project-id=<quotaProjectId>]
                 [--bigquery-source-project-id=<sourceProjectId>]
-                [--mysql-database=<database>] [--mysql-host=<host>]
-                [--mysql-options=<options>] [--mysql-password=<password>]
-                [--mysql-port=<port>] [--mysql-sslmode=<sslmode>]
-                [--mysql-user=<user>] [-n=<name>] [-of=<outputFormat>]
-                [--oracle-database=<database>] [--oracle-host=<host>]
+                [--databricks-access-token=<accessToken>]
+                [--databricks-catalog=<catalog>] [--databricks-host=<host>]
+                [--databricks-http-path=<httpPath>]
+                [--databricks-options=<options>]
+                [--databricks-password=<password>] [--databricks-port=<port>]
+                [--databricks-user=<user>] [--mysql-database=<database>]
+                [--mysql-host=<host>] [--mysql-options=<options>]
+                [--mysql-password=<password>] [--mysql-port=<port>]
+                [--mysql-sslmode=<sslmode>] [--mysql-user=<user>] [-n=<name>]
+                [-of=<outputFormat>] [--oracle-database=<database>]
+                [--oracle-host=<host>]
                 [--oracle-initialization-sql=<initializationSql>]
                 [--oracle-options=<options>] [--oracle-password=<password>]
                 [--oracle-port=<port>] [--oracle-user=<user>]
@@ -70,25 +103,42 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
                 [--postgresql-options=<options>]
                 [--postgresql-password=<password>] [--postgresql-port=<port>]
                 [--postgresql-sslmode=<sslmode>] [--postgresql-user=<user>]
-                [--redshift-database=<database>] [--redshift-host=<host>]
-                [--redshift-options=<options>] [--redshift-password=<password>]
-                [--redshift-port=<port>] [--redshift-user=<user>]
-                [--snowflake-account=<account>]
+                [--presto-database=<database>] [--presto-host=<host>]
+                [--presto-password=<password>] [--presto-port=<port>]
+                [--presto-user=<user>] [--redshift-database=<database>]
+                [--redshift-host=<host>] [--redshift-options=<options>]
+                [--redshift-password=<password>] [--redshift-port=<port>]
+                [--redshift-user=<user>] [--snowflake-account=<account>]
                 [--snowflake-database=<database>]
                 [--snowflake-password=<password>] [--snowflake-role=<role>]
                 [--snowflake-user=<user>] [--snowflake-warehouse=<warehouse>]
+                [--spark-host=<host>] [--spark-options=<options>]
+                [--spark-password=<password>] [--spark-port=<port>]
+                [--spark-user=<user>]
+                [--sqlserver-authentication-mode=<authenticationMode>]
                 [--sqlserver-database=<database>] [--sqlserver-host=<host>]
                 [--sqlserver-options=<options>]
                 [--sqlserver-password=<password>] [--sqlserver-port=<port>]
                 [--sqlserver-user=<user>] [-t=<providerType>]
-                [-F=<String=String>]... [-M=<String=String>]...
-                [-O=<String=String>]... [-P=<String=String>]...
-                [-R=<String=String>]... [-S=<String=String>]...
+                [--trino-catalog=<catalog>] [--trino-engine=<trinoEngineType>]
+                [--trino-host=<host>] [--trino-password=<password>]
+                [--trino-port=<port>] [--trino-user=<user>]
+                [-D=<String=String>]... [-E=<String=String>]...
+                [-F=<String=String>]... [-K=<String=String>]...
+                [-M=<String=String>]... [-O=<String=String>]...
+                [-P=<String=String>]... [-R=<String=String>]...
+                [-S=<String=String>]... [-T=<String=String>]...
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
+                [--athena-authentication-mode=<athenaAuthenticationMode>]
+                [--athena-output-location=<athenaOutputLocation>]
+                [--athena-region=<athenaRegion>]
+                [--athena-work-group=<athenaWorkGroup>]
                 [--bigquery-authentication-mode=<authenticationMode>]
                 [--bigquery-billing-project-id=<billingProjectId>]
                 [--bigquery-jobs-create-project=<jobsCreateProject>]
@@ -96,11 +146,17 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--bigquery-json-key-path=<jsonKeyPath>]
                 [--bigquery-quota-project-id=<quotaProjectId>]
                 [--bigquery-source-project-id=<sourceProjectId>]
-                [--mysql-database=<database>] [--mysql-host=<host>]
-                [--mysql-options=<options>] [--mysql-password=<password>]
-                [--mysql-port=<port>] [--mysql-sslmode=<sslmode>]
-                [--mysql-user=<user>] [-n=<name>] [-of=<outputFormat>]
-                [--oracle-database=<database>] [--oracle-host=<host>]
+                [--databricks-access-token=<accessToken>]
+                [--databricks-catalog=<catalog>] [--databricks-host=<host>]
+                [--databricks-http-path=<httpPath>]
+                [--databricks-options=<options>]
+                [--databricks-password=<password>] [--databricks-port=<port>]
+                [--databricks-user=<user>] [--mysql-database=<database>]
+                [--mysql-host=<host>] [--mysql-options=<options>]
+                [--mysql-password=<password>] [--mysql-port=<port>]
+                [--mysql-sslmode=<sslmode>] [--mysql-user=<user>] [-n=<name>]
+                [-of=<outputFormat>] [--oracle-database=<database>]
+                [--oracle-host=<host>]
                 [--oracle-initialization-sql=<initializationSql>]
                 [--oracle-options=<options>] [--oracle-password=<password>]
                 [--oracle-port=<port>] [--oracle-user=<user>]
@@ -108,137 +164,211 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--postgresql-options=<options>]
                 [--postgresql-password=<password>] [--postgresql-port=<port>]
                 [--postgresql-sslmode=<sslmode>] [--postgresql-user=<user>]
-                [--redshift-database=<database>] [--redshift-host=<host>]
-                [--redshift-options=<options>] [--redshift-password=<password>]
-                [--redshift-port=<port>] [--redshift-user=<user>]
-                [--snowflake-account=<account>]
+                [--presto-database=<database>] [--presto-host=<host>]
+                [--presto-password=<password>] [--presto-port=<port>]
+                [--presto-user=<user>] [--redshift-database=<database>]
+                [--redshift-host=<host>] [--redshift-options=<options>]
+                [--redshift-password=<password>] [--redshift-port=<port>]
+                [--redshift-user=<user>] [--snowflake-account=<account>]
                 [--snowflake-database=<database>]
                 [--snowflake-password=<password>] [--snowflake-role=<role>]
                 [--snowflake-user=<user>] [--snowflake-warehouse=<warehouse>]
+                [--spark-host=<host>] [--spark-options=<options>]
+                [--spark-password=<password>] [--spark-port=<port>]
+                [--spark-user=<user>]
+                [--sqlserver-authentication-mode=<authenticationMode>]
                 [--sqlserver-database=<database>] [--sqlserver-host=<host>]
                 [--sqlserver-options=<options>]
                 [--sqlserver-password=<password>] [--sqlserver-port=<port>]
                 [--sqlserver-user=<user>] [-t=<providerType>]
-                [-F=<String=String>]... [-M=<String=String>]...
-                [-O=<String=String>]... [-P=<String=String>]...
-                [-R=<String=String>]... [-S=<String=String>]...
+                [--trino-catalog=<catalog>] [--trino-engine=<trinoEngineType>]
+                [--trino-host=<host>] [--trino-password=<password>]
+                [--trino-port=<port>] [--trino-user=<user>]
+                [-D=<String=String>]... [-E=<String=String>]...
+                [-F=<String=String>]... [-K=<String=String>]...
+                [-M=<String=String>]... [-O=<String=String>]...
+                [-P=<String=String>]... [-R=<String=String>]...
+                [-S=<String=String>]... [-T=<String=String>]...
 
 ```
 
-**Options**  
-  
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|<p id="connection add--bigquery-authentication-mode">`--bigquery-authentication-mode`</p><br/>|Bigquery authentication mode. The default value uses the current GCP application default credentials. The default GCP credentials is the Service Account of a VM in GCP cloud, a GCP JSON key file whose path is in the GOOGLE_APPLICATION_CREDENTIALS environment variable, or it is the default GCP credentials obtained on a user&#x27;s computer by running &#x27;gcloud auth application-default login&#x27; from the command line.| |google_application_credentials<br/>json_key_content<br/>json_key_path<br/>|
-|<p id="connection add--bigquery-billing-project-id">`--bigquery-billing-project-id`</p><br/>|Bigquery billing GCP project id. This is the project used as the default GCP project. The calling user must have a bigquery.jobs.create permission in this project.| ||
-|<p id="connection add--bigquery-jobs-create-project">`--bigquery-jobs-create-project`</p><br/>|Configures the way how to select the project that will be used to start BigQuery jobs and will be used for billing. The user/service identified by the credentials must have bigquery.jobs.create permission in that project.| |create_jobs_in_source_project<br/>create_jobs_in_default_project_from_credentials<br/>create_jobs_in_selected_billing_project_id<br/>|
-|<p id="connection add--bigquery-json-key-content">`--bigquery-json-key-content`</p><br/>|Bigquery service account key content as JSON.| ||
-|<p id="connection add--bigquery-json-key-path">`--bigquery-json-key-path`</p><br/>|Path to a GCP service account key JSON file used to authenticate to Bigquery.| ||
-|<p id="connection add--bigquery-quota-project-id">`--bigquery-quota-project-id`</p><br/>|Bigquery quota GCP project id.| ||
-|<p id="connection add--bigquery-source-project-id">`--bigquery-source-project-id`</p><br/>|Bigquery source GCP project id. This is the project that has datasets that will be imported.| ||
-|<p id="connection add-fw">`-fw`</p><br/><p id="connection add--file-write">`--file-write`</p><br/>|Write command response to a file| ||
-|<p id="connection add--headless">`--headless`</p><br/><p id="connection add-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|<p id="connection add-h">`-h`</p><br/><p id="connection add--help">`--help`</p><br/>|Show the help for the command and parameters| ||
-|<p id="connection add--mysql-database">`--mysql-database`</p><br/>|MySQL database name. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection add--mysql-host">`--mysql-host`</p><br/>|MySQL host name| ||
-|<p id="connection add--mysql-options">`--mysql-options`</p><br/>|MySQL connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
-|<p id="connection add--mysql-password">`--mysql-password`</p><br/>|MySQL database password. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection add--mysql-port">`--mysql-port`</p><br/>|MySQL port number| ||
-|<p id="connection add--mysql-sslmode">`--mysql-sslmode`</p><br/>|SslMode MySQL connection parameter| |DISABLED<br/>PREFERRED<br/>REQUIRED<br/>VERIFY_CA<br/>VERIFY_IDENTITY<br/>|
-|<p id="connection add--mysql-user">`--mysql-user`</p><br/>|MySQL user name. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection add-n">`-n`</p><br/><p id="connection add--name">`--name`</p><br/>|Connection name| ||
-|<p id="connection add--oracle-database">`--oracle-database`</p><br/>|Oracle database name. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection add--oracle-host">`--oracle-host`</p><br/>|Oracle host name| ||
-|<p id="connection add--oracle-initialization-sql">`--oracle-initialization-sql`</p><br/>|Custom SQL that is executed after connecting to Oracle. This SQL script can configure the default language, for example: alter session set NLS_DATE_FORMAT&#x3D;&#x27;YYYY-DD-MM HH24:MI:SS&#x27;| ||
-|<p id="connection add--oracle-options">`--oracle-options`</p><br/>|Oracle connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
-|<p id="connection add--oracle-password">`--oracle-password`</p><br/>|Oracle database password. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection add--oracle-port">`--oracle-port`</p><br/>|Oracle port number| ||
-|<p id="connection add--oracle-user">`--oracle-user`</p><br/>|Oracle user name. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection add-of">`-of`</p><br/><p id="connection add--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
-|<p id="connection add--postgresql-database">`--postgresql-database`</p><br/>|PostgreSQL database name. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection add--postgresql-host">`--postgresql-host`</p><br/>|PostgreSQL host name| ||
-|<p id="connection add--postgresql-options">`--postgresql-options`</p><br/>|PostgreSQL connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
-|<p id="connection add--postgresql-password">`--postgresql-password`</p><br/>|PostgreSQL database password. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection add--postgresql-port">`--postgresql-port`</p><br/>|PostgreSQL port number| ||
-|<p id="connection add--postgresql-sslmode">`--postgresql-sslmode`</p><br/>|Connect to PostgreSQL using sslmode connection parameter| |disable<br/>allow<br/>prefer<br/>require<br/>verify_ca<br/>verify_full<br/>|
-|<p id="connection add--postgresql-user">`--postgresql-user`</p><br/>|PostgreSQL user name. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection add-t">`-t`</p><br/><p id="connection add--provider">`--provider`</p><br/>|Connection provider type| |bigquery<br/>snowflake<br/>postgresql<br/>redshift<br/>sqlserver<br/>mysql<br/>oracle<br/>|
-|<p id="connection add--redshift-database">`--redshift-database`</p><br/>|Redshift database name. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection add--redshift-host">`--redshift-host`</p><br/>|Redshift host name| ||
-|<p id="connection add--redshift-options">`--redshift-options`</p><br/>|Redshift connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
-|<p id="connection add--redshift-password">`--redshift-password`</p><br/>|Redshift database password. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection add--redshift-port">`--redshift-port`</p><br/>|Redshift port number| ||
-|<p id="connection add--redshift-user">`--redshift-user`</p><br/>|Redshift user name. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection add--snowflake-account">`--snowflake-account`</p><br/>|Snowflake account name, e.q. &lt;account&gt;, &lt;account&gt;-&lt;locator&gt;, &lt;account&gt;.&lt;region&gt; or &lt;account&gt;.&lt;region&gt;.&lt;platform&gt;.| ||
-|<p id="connection add--snowflake-database">`--snowflake-database`</p><br/>|Snowflake database name. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection add--snowflake-password">`--snowflake-password`</p><br/>|Snowflake database password. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection add--snowflake-role">`--snowflake-role`</p><br/>|Snowflake role name.| ||
-|<p id="connection add--snowflake-user">`--snowflake-user`</p><br/>|Snowflake user name. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection add--snowflake-warehouse">`--snowflake-warehouse`</p><br/>|Snowflake warehouse name.| ||
-|<p id="connection add--sqlserver-database">`--sqlserver-database`</p><br/>|SQL Server database name. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection add--sqlserver-disable-encryption">`--sqlserver-disable-encryption`</p><br/>|Disable SSL encryption parameter. The default value is false. You may need to disable encryption when SQL Server is started in Docker.| ||
-|<p id="connection add--sqlserver-host">`--sqlserver-host`</p><br/>|SQL Server host name| ||
-|<p id="connection add--sqlserver-options">`--sqlserver-options`</p><br/>|SQL Server connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
-|<p id="connection add--sqlserver-password">`--sqlserver-password`</p><br/>|SQL Server database password. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection add--sqlserver-port">`--sqlserver-port`</p><br/>|SQL Server port number| ||
-|<p id="connection add--sqlserver-user">`--sqlserver-user`</p><br/>|SQL Server user name. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection add-F">`-F`</p><br/>|Snowflake additional properties that are added to the JDBC connection string| ||
-|<p id="connection add-M">`-M`</p><br/>|MySQL additional properties that are added to the JDBC connection string| ||
-|<p id="connection add-O">`-O`</p><br/>|Oracle&#x27;s additional properties that are added to the JDBC connection string| ||
-|<p id="connection add-P">`-P`</p><br/>|PostgreSQL additional properties that are added to the JDBC connection string| ||
-|<p id="connection add-R">`-R`</p><br/>|Redshift additional properties that are added to the JDBC connection string| ||
-|<p id="connection add-S">`-S`</p><br/>|SQL Server additional properties that are added to the JDBC connection string| ||
+|<div id="connection add--athena-authentication-mode" class="no-wrap-code">`--athena-authentication-mode`</div>|The authentication mode for AWS Athena. Supports also a null configuration with a custom environment variable.| |*iam*<br/>*default_credentials*<br/>|
+|<div id="connection add--athena-output-location" class="no-wrap-code">`--athena-output-location`</div>|The location in Amazon S3 where query results will be stored. Supports also a null configuration with a custom environment variable.| ||
+|<div id="connection add--athena-region" class="no-wrap-code">`--athena-region`</div>|The AWS Athena Region where queries will be run. Supports also a null configuration with a custom environment variable.| ||
+|<div id="connection add--athena-work-group" class="no-wrap-code">`--athena-work-group`</div>|The Athena WorkGroup in which queries will run. Supports also a null configuration with a custom environment variable.| ||
+|<div id="connection add--bigquery-authentication-mode" class="no-wrap-code">`--bigquery-authentication-mode`</div>|Bigquery authentication mode. The default value uses the current GCP application default credentials. The default GCP credentials is the Service Account of a VM in GCP cloud, a GCP JSON key file whose path is in the GOOGLE_APPLICATION_CREDENTIALS environment variable, or it is the default GCP credentials obtained on a user&#x27;s computer by running &#x27;gcloud auth application-default login&#x27; from the command line.| |*google_application_credentials*<br/>*json_key_content*<br/>*json_key_path*<br/>|
+|<div id="connection add--bigquery-billing-project-id" class="no-wrap-code">`--bigquery-billing-project-id`</div>|Bigquery billing GCP project id. This is the project used as the default GCP project. The calling user must have a bigquery.jobs.create permission in this project.| ||
+|<div id="connection add--bigquery-jobs-create-project" class="no-wrap-code">`--bigquery-jobs-create-project`</div>|Configures the way how to select the project that will be used to start BigQuery jobs and will be used for billing. The user/service identified by the credentials must have bigquery.jobs.create permission in that project.| |*create_jobs_in_source_project*<br/>*create_jobs_in_default_project_from_credentials*<br/>*create_jobs_in_selected_billing_project_id*<br/>|
+|<div id="connection add--bigquery-json-key-content" class="no-wrap-code">`--bigquery-json-key-content`</div>|Bigquery service account key content as JSON.| ||
+|<div id="connection add--bigquery-json-key-path" class="no-wrap-code">`--bigquery-json-key-path`</div>|Path to a GCP service account key JSON file used to authenticate to Bigquery.| ||
+|<div id="connection add--bigquery-quota-project-id" class="no-wrap-code">`--bigquery-quota-project-id`</div>|Bigquery quota GCP project id.| ||
+|<div id="connection add--bigquery-source-project-id" class="no-wrap-code">`--bigquery-source-project-id`</div>|Bigquery source GCP project id. This is the project that has datasets that will be imported.| ||
+|<div id="connection add--databricks-access-token" class="no-wrap-code">`--databricks-access-token`</div>|Databricks access token for the warehouse.| ||
+|<div id="connection add--databricks-catalog" class="no-wrap-code">`--databricks-catalog`</div>|Databricks catalog name.| ||
+|<div id="connection add--databricks-host" class="no-wrap-code">`--databricks-host`</div>|Databricks host name| ||
+|<div id="connection add--databricks-http-path" class="no-wrap-code">`--databricks-http-path`</div>|Databricks http path to the warehouse. For example: /sql/1.0/warehouses/&lt;warehouse instance id&gt;| ||
+|<div id="connection add--databricks-options" class="no-wrap-code">`--databricks-options`</div>|Databricks connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
+|<div id="connection add--databricks-password" class="no-wrap-code">`--databricks-password`</div>|Databricks database password.| ||
+|<div id="connection add--databricks-port" class="no-wrap-code">`--databricks-port`</div>|Databricks port number| ||
+|<div id="connection add--databricks-user" class="no-wrap-code">`--databricks-user`</div>|Databricks user name.| ||
+|<div id="connection add-fw" class="no-wrap-code">`-fw`</div><div id="connection add--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="connection add--headless" class="no-wrap-code">`--headless`</div><div id="connection add-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="connection add-h" class="no-wrap-code">`-h`</div><div id="connection add--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="connection add--mysql-database" class="no-wrap-code">`--mysql-database`</div>|MySQL database name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--mysql-host" class="no-wrap-code">`--mysql-host`</div>|MySQL host name| ||
+|<div id="connection add--mysql-options" class="no-wrap-code">`--mysql-options`</div>|MySQL connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
+|<div id="connection add--mysql-password" class="no-wrap-code">`--mysql-password`</div>|MySQL database password. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--mysql-port" class="no-wrap-code">`--mysql-port`</div>|MySQL port number| ||
+|<div id="connection add--mysql-sslmode" class="no-wrap-code">`--mysql-sslmode`</div>|SslMode MySQL connection parameter| |*DISABLED*<br/>*PREFERRED*<br/>*REQUIRED*<br/>*VERIFY_CA*<br/>*VERIFY_IDENTITY*<br/>|
+|<div id="connection add--mysql-user" class="no-wrap-code">`--mysql-user`</div>|MySQL user name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add-n" class="no-wrap-code">`-n`</div><div id="connection add--name" class="no-wrap-code">`--name`</div>|Connection name| ||
+|<div id="connection add--oracle-database" class="no-wrap-code">`--oracle-database`</div>|Oracle database name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--oracle-host" class="no-wrap-code">`--oracle-host`</div>|Oracle host name| ||
+|<div id="connection add--oracle-initialization-sql" class="no-wrap-code">`--oracle-initialization-sql`</div>|Custom SQL that is executed after connecting to Oracle. This SQL script can configure the default language, for example: alter session set NLS_DATE_FORMAT&#x3D;&#x27;YYYY-DD-MM HH24:MI:SS&#x27;| ||
+|<div id="connection add--oracle-options" class="no-wrap-code">`--oracle-options`</div>|Oracle connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
+|<div id="connection add--oracle-password" class="no-wrap-code">`--oracle-password`</div>|Oracle database password. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--oracle-port" class="no-wrap-code">`--oracle-port`</div>|Oracle port number| ||
+|<div id="connection add--oracle-user" class="no-wrap-code">`--oracle-user`</div>|Oracle user name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add-of" class="no-wrap-code">`-of`</div><div id="connection add--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
+|<div id="connection add--postgresql-database" class="no-wrap-code">`--postgresql-database`</div>|PostgreSQL database name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--postgresql-host" class="no-wrap-code">`--postgresql-host`</div>|PostgreSQL host name| ||
+|<div id="connection add--postgresql-options" class="no-wrap-code">`--postgresql-options`</div>|PostgreSQL connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
+|<div id="connection add--postgresql-password" class="no-wrap-code">`--postgresql-password`</div>|PostgreSQL database password. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--postgresql-port" class="no-wrap-code">`--postgresql-port`</div>|PostgreSQL port number| ||
+|<div id="connection add--postgresql-sslmode" class="no-wrap-code">`--postgresql-sslmode`</div>|Connect to PostgreSQL using sslmode connection parameter| |*disable*<br/>*allow*<br/>*prefer*<br/>*require*<br/>*verify_ca*<br/>*verify_full*<br/>|
+|<div id="connection add--postgresql-user" class="no-wrap-code">`--postgresql-user`</div>|PostgreSQL user name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--presto-database" class="no-wrap-code">`--presto-database`</div>|Presto database name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--presto-host" class="no-wrap-code">`--presto-host`</div>|Presto host name| ||
+|<div id="connection add--presto-password" class="no-wrap-code">`--presto-password`</div>|Presto database password. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--presto-port" class="no-wrap-code">`--presto-port`</div>|Presto port number| ||
+|<div id="connection add--presto-user" class="no-wrap-code">`--presto-user`</div>|Presto user name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add-t" class="no-wrap-code">`-t`</div><div id="connection add--provider" class="no-wrap-code">`--provider`</div>|Connection provider type| |*bigquery*<br/>*databricks*<br/>*mysql*<br/>*oracle*<br/>*postgresql*<br/>*presto*<br/>*redshift*<br/>*snowflake*<br/>*spark*<br/>*sqlserver*<br/>*trino*<br/>|
+|<div id="connection add--redshift-database" class="no-wrap-code">`--redshift-database`</div>|Redshift database name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--redshift-host" class="no-wrap-code">`--redshift-host`</div>|Redshift host name| ||
+|<div id="connection add--redshift-options" class="no-wrap-code">`--redshift-options`</div>|Redshift connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
+|<div id="connection add--redshift-password" class="no-wrap-code">`--redshift-password`</div>|Redshift database password. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--redshift-port" class="no-wrap-code">`--redshift-port`</div>|Redshift port number| ||
+|<div id="connection add--redshift-user" class="no-wrap-code">`--redshift-user`</div>|Redshift user name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--snowflake-account" class="no-wrap-code">`--snowflake-account`</div>|Snowflake account name, e.q. &lt;account&gt;, &lt;account&gt;-&lt;locator&gt;, &lt;account&gt;.&lt;region&gt; or &lt;account&gt;.&lt;region&gt;.&lt;platform&gt;.| ||
+|<div id="connection add--snowflake-database" class="no-wrap-code">`--snowflake-database`</div>|Snowflake database name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--snowflake-password" class="no-wrap-code">`--snowflake-password`</div>|Snowflake database password. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--snowflake-role" class="no-wrap-code">`--snowflake-role`</div>|Snowflake role name.| ||
+|<div id="connection add--snowflake-user" class="no-wrap-code">`--snowflake-user`</div>|Snowflake user name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--snowflake-warehouse" class="no-wrap-code">`--snowflake-warehouse`</div>|Snowflake warehouse name.| ||
+|<div id="connection add--spark-host" class="no-wrap-code">`--spark-host`</div>|Spark host name| ||
+|<div id="connection add--spark-options" class="no-wrap-code">`--spark-options`</div>|Spark connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
+|<div id="connection add--spark-password" class="no-wrap-code">`--spark-password`</div>|Spark database password. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--spark-port" class="no-wrap-code">`--spark-port`</div>|Spark port number| ||
+|<div id="connection add--spark-user" class="no-wrap-code">`--spark-user`</div>|Spark user name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--sqlserver-authentication-mode" class="no-wrap-code">`--sqlserver-authentication-mode`</div>|Authenticaiton mode for the SQL Server. The value can be in the null format to use dynamic substitution.| |*sql_password*<br/>*active_directory_password*<br/>*active_directory_service_principal*<br/>*default_credential*<br/>|
+|<div id="connection add--sqlserver-database" class="no-wrap-code">`--sqlserver-database`</div>|SQL Server database name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--sqlserver-disable-encryption" class="no-wrap-code">`--sqlserver-disable-encryption`</div>|Disable SSL encryption parameter. The default value is false. You may need to disable encryption when SQL Server is started in Docker.| ||
+|<div id="connection add--sqlserver-host" class="no-wrap-code">`--sqlserver-host`</div>|SQL Server host name| ||
+|<div id="connection add--sqlserver-options" class="no-wrap-code">`--sqlserver-options`</div>|SQL Server connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
+|<div id="connection add--sqlserver-password" class="no-wrap-code">`--sqlserver-password`</div>|SQL Server database password. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--sqlserver-port" class="no-wrap-code">`--sqlserver-port`</div>|SQL Server port number| ||
+|<div id="connection add--sqlserver-user" class="no-wrap-code">`--sqlserver-user`</div>|SQL Server user name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--trino-catalog" class="no-wrap-code">`--trino-catalog`</div>|The Trino catalog that contains the databases and the tables that will be accessed with the driver. Supports also a null configuration with a custom environment variable.| ||
+|<div id="connection add--trino-engine" class="no-wrap-code">`--trino-engine`</div>|Trino engine type.| |*trino*<br/>*athena*<br/>|
+|<div id="connection add--trino-host" class="no-wrap-code">`--trino-host`</div>|Trino host name.| ||
+|<div id="connection add--trino-password" class="no-wrap-code">`--trino-password`</div>|Trino database password. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--trino-port" class="no-wrap-code">`--trino-port`</div>|Trino port number.| ||
+|<div id="connection add--trino-user" class="no-wrap-code">`--trino-user`</div>|Trino user name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add-D" class="no-wrap-code">`-D`</div>|Databricks additional properties that are added to the JDBC connection string| ||
+|<div id="connection add-E" class="no-wrap-code">`-E`</div>|Presto additional properties that are added to the JDBC connection string.| ||
+|<div id="connection add-F" class="no-wrap-code">`-F`</div>|Snowflake additional properties that are added to the JDBC connection string| ||
+|<div id="connection add-K" class="no-wrap-code">`-K`</div>|Spark additional properties that are added to the JDBC connection string| ||
+|<div id="connection add-M" class="no-wrap-code">`-M`</div>|MySQL additional properties that are added to the JDBC connection string| ||
+|<div id="connection add-O" class="no-wrap-code">`-O`</div>|Oracle&#x27;s additional properties that are added to the JDBC connection string| ||
+|<div id="connection add-P" class="no-wrap-code">`-P`</div>|PostgreSQL additional properties that are added to the JDBC connection string| ||
+|<div id="connection add-R" class="no-wrap-code">`-R`</div>|Redshift additional properties that are added to the JDBC connection string| ||
+|<div id="connection add-S" class="no-wrap-code">`-S`</div>|SQL Server additional properties that are added to the JDBC connection string| ||
+|<div id="connection add-T" class="no-wrap-code">`-T`</div>|Trino additional properties that are added to the JDBC connection string| ||
+
+
 
 
 
 
 ___
-### **dqo connection remove**
+
+## dqo connection remove
 
 Remove the connection(s) that match a given condition
 
+
 **Description**
+
 
 Removes the connection or connections that match the conditions specified in the options. It allows the user to remove any unwanted connections that are no longer needed.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] connection remove [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> connection remove [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
 
 ```
 
-**Options**  
-  
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|<p id="connection remove-fw">`-fw`</p><br/><p id="connection remove--file-write">`--file-write`</p><br/>|Write command response to a file| ||
-|<p id="connection remove--headless">`--headless`</p><br/><p id="connection remove-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|<p id="connection remove-h">`-h`</p><br/><p id="connection remove--help">`--help`</p><br/>|Show the help for the command and parameters| ||
-|<p id="connection remove-n">`-n`</p><br/><p id="connection remove--name">`--name`</p><br/>|Connection name| ||
-|<p id="connection remove-of">`-of`</p><br/><p id="connection remove--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|<div id="connection remove-fw" class="no-wrap-code">`-fw`</div><div id="connection remove--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="connection remove--headless" class="no-wrap-code">`--headless`</div><div id="connection remove-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="connection remove-h" class="no-wrap-code">`-h`</div><div id="connection remove--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="connection remove-n" class="no-wrap-code">`-n`</div><div id="connection remove--name" class="no-wrap-code">`--name`</div>|Connection name| ||
+|<div id="connection remove-of" class="no-wrap-code">`-of`</div><div id="connection remove--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
+
+
 
 
 
 
 ___
-### **dqo connection update**
+
+## dqo connection update
 
 Update the connection(s) that match a given condition
 
+
 **Description**
+
 
 Update the connection or connections that match the conditions specified in the options with new details. It allows the user to modify existing connections in the application.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
+                   [--athena-authentication-mode=<athenaAuthenticationMode>]
+                   [--athena-output-location=<athenaOutputLocation>]
+                   [--athena-region=<athenaRegion>]
+                   [--athena-work-group=<athenaWorkGroup>]
                    [--bigquery-authentication-mode=<authenticationMode>]
                    [--bigquery-billing-project-id=<billingProjectId>]
                    [--bigquery-jobs-create-project=<jobsCreateProject>]
@@ -246,6 +376,12 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
                    [--bigquery-json-key-path=<jsonKeyPath>]
                    [--bigquery-quota-project-id=<quotaProjectId>]
                    [--bigquery-source-project-id=<sourceProjectId>]
+                   [--databricks-access-token=<accessToken>]
+                   [--databricks-catalog=<catalog>] [--databricks-host=<host>]
+                   [--databricks-http-path=<httpPath>]
+                   [--databricks-options=<options>]
+                   [--databricks-password=<password>]
+                   [--databricks-port=<port>] [--databricks-user=<user>]
                    [--mysql-database=<database>] [--mysql-host=<host>]
                    [--mysql-options=<options>] [--mysql-password=<password>]
                    [--mysql-port=<port>] [--mysql-sslmode=<sslmode>]
@@ -258,26 +394,43 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
                    [--postgresql-host=<host>] [--postgresql-options=<options>]
                    [--postgresql-password=<password>]
                    [--postgresql-port=<port>] [--postgresql-sslmode=<sslmode>]
-                   [--postgresql-user=<user>] [--redshift-database=<database>]
-                   [--redshift-host=<host>] [--redshift-options=<options>]
+                   [--postgresql-user=<user>] [--presto-database=<database>]
+                   [--presto-host=<host>] [--presto-password=<password>]
+                   [--presto-port=<port>] [--presto-user=<user>]
+                   [--redshift-database=<database>] [--redshift-host=<host>]
+                   [--redshift-options=<options>]
                    [--redshift-password=<password>] [--redshift-port=<port>]
                    [--redshift-user=<user>] [--snowflake-account=<account>]
                    [--snowflake-database=<database>]
                    [--snowflake-password=<password>] [--snowflake-role=<role>]
                    [--snowflake-user=<user>]
-                   [--snowflake-warehouse=<warehouse>]
+                   [--snowflake-warehouse=<warehouse>] [--spark-host=<host>]
+                   [--spark-options=<options>] [--spark-password=<password>]
+                   [--spark-port=<port>] [--spark-user=<user>]
+                   [--sqlserver-authentication-mode=<authenticationMode>]
                    [--sqlserver-database=<database>] [--sqlserver-host=<host>]
                    [--sqlserver-options=<options>]
                    [--sqlserver-password=<password>] [--sqlserver-port=<port>]
-                   [--sqlserver-user=<user>] [-F=<String=String>]...
-                   [-M=<String=String>]... [-O=<String=String>]...
-                   [-P=<String=String>]... [-R=<String=String>]...
-                   [-S=<String=String>]...
+                   [--sqlserver-user=<user>] [--trino-catalog=<catalog>]
+                   [--trino-engine=<trinoEngineType>] [--trino-host=<host>]
+                   [--trino-password=<password>] [--trino-port=<port>]
+                   [--trino-user=<user>] [-D=<String=String>]...
+                   [-E=<String=String>]... [-F=<String=String>]...
+                   [-K=<String=String>]... [-M=<String=String>]...
+                   [-O=<String=String>]... [-P=<String=String>]...
+                   [-R=<String=String>]... [-S=<String=String>]...
+                   [-T=<String=String>]...
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
+                   [--athena-authentication-mode=<athenaAuthenticationMode>]
+                   [--athena-output-location=<athenaOutputLocation>]
+                   [--athena-region=<athenaRegion>]
+                   [--athena-work-group=<athenaWorkGroup>]
                    [--bigquery-authentication-mode=<authenticationMode>]
                    [--bigquery-billing-project-id=<billingProjectId>]
                    [--bigquery-jobs-create-project=<jobsCreateProject>]
@@ -285,6 +438,12 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--bigquery-json-key-path=<jsonKeyPath>]
                    [--bigquery-quota-project-id=<quotaProjectId>]
                    [--bigquery-source-project-id=<sourceProjectId>]
+                   [--databricks-access-token=<accessToken>]
+                   [--databricks-catalog=<catalog>] [--databricks-host=<host>]
+                   [--databricks-http-path=<httpPath>]
+                   [--databricks-options=<options>]
+                   [--databricks-password=<password>]
+                   [--databricks-port=<port>] [--databricks-user=<user>]
                    [--mysql-database=<database>] [--mysql-host=<host>]
                    [--mysql-options=<options>] [--mysql-password=<password>]
                    [--mysql-port=<port>] [--mysql-sslmode=<sslmode>]
@@ -297,146 +456,218 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--postgresql-host=<host>] [--postgresql-options=<options>]
                    [--postgresql-password=<password>]
                    [--postgresql-port=<port>] [--postgresql-sslmode=<sslmode>]
-                   [--postgresql-user=<user>] [--redshift-database=<database>]
-                   [--redshift-host=<host>] [--redshift-options=<options>]
+                   [--postgresql-user=<user>] [--presto-database=<database>]
+                   [--presto-host=<host>] [--presto-password=<password>]
+                   [--presto-port=<port>] [--presto-user=<user>]
+                   [--redshift-database=<database>] [--redshift-host=<host>]
+                   [--redshift-options=<options>]
                    [--redshift-password=<password>] [--redshift-port=<port>]
                    [--redshift-user=<user>] [--snowflake-account=<account>]
                    [--snowflake-database=<database>]
                    [--snowflake-password=<password>] [--snowflake-role=<role>]
                    [--snowflake-user=<user>]
-                   [--snowflake-warehouse=<warehouse>]
+                   [--snowflake-warehouse=<warehouse>] [--spark-host=<host>]
+                   [--spark-options=<options>] [--spark-password=<password>]
+                   [--spark-port=<port>] [--spark-user=<user>]
+                   [--sqlserver-authentication-mode=<authenticationMode>]
                    [--sqlserver-database=<database>] [--sqlserver-host=<host>]
                    [--sqlserver-options=<options>]
                    [--sqlserver-password=<password>] [--sqlserver-port=<port>]
-                   [--sqlserver-user=<user>] [-F=<String=String>]...
-                   [-M=<String=String>]... [-O=<String=String>]...
-                   [-P=<String=String>]... [-R=<String=String>]...
-                   [-S=<String=String>]...
+                   [--sqlserver-user=<user>] [--trino-catalog=<catalog>]
+                   [--trino-engine=<trinoEngineType>] [--trino-host=<host>]
+                   [--trino-password=<password>] [--trino-port=<port>]
+                   [--trino-user=<user>] [-D=<String=String>]...
+                   [-E=<String=String>]... [-F=<String=String>]...
+                   [-K=<String=String>]... [-M=<String=String>]...
+                   [-O=<String=String>]... [-P=<String=String>]...
+                   [-R=<String=String>]... [-S=<String=String>]...
+                   [-T=<String=String>]...
 
 ```
 
-**Options**  
-  
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|<p id="connection update--bigquery-authentication-mode">`--bigquery-authentication-mode`</p><br/>|Bigquery authentication mode. The default value uses the current GCP application default credentials. The default GCP credentials is the Service Account of a VM in GCP cloud, a GCP JSON key file whose path is in the GOOGLE_APPLICATION_CREDENTIALS environment variable, or it is the default GCP credentials obtained on a user&#x27;s computer by running &#x27;gcloud auth application-default login&#x27; from the command line.| |google_application_credentials<br/>json_key_content<br/>json_key_path<br/>|
-|<p id="connection update--bigquery-billing-project-id">`--bigquery-billing-project-id`</p><br/>|Bigquery billing GCP project id. This is the project used as the default GCP project. The calling user must have a bigquery.jobs.create permission in this project.| ||
-|<p id="connection update--bigquery-jobs-create-project">`--bigquery-jobs-create-project`</p><br/>|Configures the way how to select the project that will be used to start BigQuery jobs and will be used for billing. The user/service identified by the credentials must have bigquery.jobs.create permission in that project.| |create_jobs_in_source_project<br/>create_jobs_in_default_project_from_credentials<br/>create_jobs_in_selected_billing_project_id<br/>|
-|<p id="connection update--bigquery-json-key-content">`--bigquery-json-key-content`</p><br/>|Bigquery service account key content as JSON.| ||
-|<p id="connection update--bigquery-json-key-path">`--bigquery-json-key-path`</p><br/>|Path to a GCP service account key JSON file used to authenticate to Bigquery.| ||
-|<p id="connection update--bigquery-quota-project-id">`--bigquery-quota-project-id`</p><br/>|Bigquery quota GCP project id.| ||
-|<p id="connection update--bigquery-source-project-id">`--bigquery-source-project-id`</p><br/>|Bigquery source GCP project id. This is the project that has datasets that will be imported.| ||
-|<p id="connection update-fw">`-fw`</p><br/><p id="connection update--file-write">`--file-write`</p><br/>|Write command response to a file| ||
-|<p id="connection update--headless">`--headless`</p><br/><p id="connection update-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|<p id="connection update-h">`-h`</p><br/><p id="connection update--help">`--help`</p><br/>|Show the help for the command and parameters| ||
-|<p id="connection update--mysql-database">`--mysql-database`</p><br/>|MySQL database name. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection update--mysql-host">`--mysql-host`</p><br/>|MySQL host name| ||
-|<p id="connection update--mysql-options">`--mysql-options`</p><br/>|MySQL connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
-|<p id="connection update--mysql-password">`--mysql-password`</p><br/>|MySQL database password. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection update--mysql-port">`--mysql-port`</p><br/>|MySQL port number| ||
-|<p id="connection update--mysql-sslmode">`--mysql-sslmode`</p><br/>|SslMode MySQL connection parameter| |DISABLED<br/>PREFERRED<br/>REQUIRED<br/>VERIFY_CA<br/>VERIFY_IDENTITY<br/>|
-|<p id="connection update--mysql-user">`--mysql-user`</p><br/>|MySQL user name. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection update-n">`-n`</p><br/><p id="connection update--name">`--name`</p><br/>|Connection name, supports wildcards for changing multiple connections at once, i.e. &quot;conn*&quot;| ||
-|<p id="connection update--oracle-database">`--oracle-database`</p><br/>|Oracle database name. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection update--oracle-host">`--oracle-host`</p><br/>|Oracle host name| ||
-|<p id="connection update--oracle-initialization-sql">`--oracle-initialization-sql`</p><br/>|Custom SQL that is executed after connecting to Oracle. This SQL script can configure the default language, for example: alter session set NLS_DATE_FORMAT&#x3D;&#x27;YYYY-DD-MM HH24:MI:SS&#x27;| ||
-|<p id="connection update--oracle-options">`--oracle-options`</p><br/>|Oracle connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
-|<p id="connection update--oracle-password">`--oracle-password`</p><br/>|Oracle database password. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection update--oracle-port">`--oracle-port`</p><br/>|Oracle port number| ||
-|<p id="connection update--oracle-user">`--oracle-user`</p><br/>|Oracle user name. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection update-of">`-of`</p><br/><p id="connection update--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
-|<p id="connection update--postgresql-database">`--postgresql-database`</p><br/>|PostgreSQL database name. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection update--postgresql-host">`--postgresql-host`</p><br/>|PostgreSQL host name| ||
-|<p id="connection update--postgresql-options">`--postgresql-options`</p><br/>|PostgreSQL connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
-|<p id="connection update--postgresql-password">`--postgresql-password`</p><br/>|PostgreSQL database password. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection update--postgresql-port">`--postgresql-port`</p><br/>|PostgreSQL port number| ||
-|<p id="connection update--postgresql-sslmode">`--postgresql-sslmode`</p><br/>|Connect to PostgreSQL using sslmode connection parameter| |disable<br/>allow<br/>prefer<br/>require<br/>verify_ca<br/>verify_full<br/>|
-|<p id="connection update--postgresql-user">`--postgresql-user`</p><br/>|PostgreSQL user name. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection update--redshift-database">`--redshift-database`</p><br/>|Redshift database name. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection update--redshift-host">`--redshift-host`</p><br/>|Redshift host name| ||
-|<p id="connection update--redshift-options">`--redshift-options`</p><br/>|Redshift connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
-|<p id="connection update--redshift-password">`--redshift-password`</p><br/>|Redshift database password. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection update--redshift-port">`--redshift-port`</p><br/>|Redshift port number| ||
-|<p id="connection update--redshift-user">`--redshift-user`</p><br/>|Redshift user name. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection update--snowflake-account">`--snowflake-account`</p><br/>|Snowflake account name, e.q. &lt;account&gt;, &lt;account&gt;-&lt;locator&gt;, &lt;account&gt;.&lt;region&gt; or &lt;account&gt;.&lt;region&gt;.&lt;platform&gt;.| ||
-|<p id="connection update--snowflake-database">`--snowflake-database`</p><br/>|Snowflake database name. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection update--snowflake-password">`--snowflake-password`</p><br/>|Snowflake database password. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection update--snowflake-role">`--snowflake-role`</p><br/>|Snowflake role name.| ||
-|<p id="connection update--snowflake-user">`--snowflake-user`</p><br/>|Snowflake user name. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection update--snowflake-warehouse">`--snowflake-warehouse`</p><br/>|Snowflake warehouse name.| ||
-|<p id="connection update--sqlserver-database">`--sqlserver-database`</p><br/>|SQL Server database name. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection update--sqlserver-disable-encryption">`--sqlserver-disable-encryption`</p><br/>|Disable SSL encryption parameter. The default value is false. You may need to disable encryption when SQL Server is started in Docker.| ||
-|<p id="connection update--sqlserver-host">`--sqlserver-host`</p><br/>|SQL Server host name| ||
-|<p id="connection update--sqlserver-options">`--sqlserver-options`</p><br/>|SQL Server connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
-|<p id="connection update--sqlserver-password">`--sqlserver-password`</p><br/>|SQL Server database password. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection update--sqlserver-port">`--sqlserver-port`</p><br/>|SQL Server port number| ||
-|<p id="connection update--sqlserver-user">`--sqlserver-user`</p><br/>|SQL Server user name. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection update-F">`-F`</p><br/>|Snowflake additional properties that are added to the JDBC connection string| ||
-|<p id="connection update-M">`-M`</p><br/>|MySQL additional properties that are added to the JDBC connection string| ||
-|<p id="connection update-O">`-O`</p><br/>|Oracle&#x27;s additional properties that are added to the JDBC connection string| ||
-|<p id="connection update-P">`-P`</p><br/>|PostgreSQL additional properties that are added to the JDBC connection string| ||
-|<p id="connection update-R">`-R`</p><br/>|Redshift additional properties that are added to the JDBC connection string| ||
-|<p id="connection update-S">`-S`</p><br/>|SQL Server additional properties that are added to the JDBC connection string| ||
+|<div id="connection update--athena-authentication-mode" class="no-wrap-code">`--athena-authentication-mode`</div>|The authentication mode for AWS Athena. Supports also a null configuration with a custom environment variable.| |*iam*<br/>*default_credentials*<br/>|
+|<div id="connection update--athena-output-location" class="no-wrap-code">`--athena-output-location`</div>|The location in Amazon S3 where query results will be stored. Supports also a null configuration with a custom environment variable.| ||
+|<div id="connection update--athena-region" class="no-wrap-code">`--athena-region`</div>|The AWS Athena Region where queries will be run. Supports also a null configuration with a custom environment variable.| ||
+|<div id="connection update--athena-work-group" class="no-wrap-code">`--athena-work-group`</div>|The Athena WorkGroup in which queries will run. Supports also a null configuration with a custom environment variable.| ||
+|<div id="connection update--bigquery-authentication-mode" class="no-wrap-code">`--bigquery-authentication-mode`</div>|Bigquery authentication mode. The default value uses the current GCP application default credentials. The default GCP credentials is the Service Account of a VM in GCP cloud, a GCP JSON key file whose path is in the GOOGLE_APPLICATION_CREDENTIALS environment variable, or it is the default GCP credentials obtained on a user&#x27;s computer by running &#x27;gcloud auth application-default login&#x27; from the command line.| |*google_application_credentials*<br/>*json_key_content*<br/>*json_key_path*<br/>|
+|<div id="connection update--bigquery-billing-project-id" class="no-wrap-code">`--bigquery-billing-project-id`</div>|Bigquery billing GCP project id. This is the project used as the default GCP project. The calling user must have a bigquery.jobs.create permission in this project.| ||
+|<div id="connection update--bigquery-jobs-create-project" class="no-wrap-code">`--bigquery-jobs-create-project`</div>|Configures the way how to select the project that will be used to start BigQuery jobs and will be used for billing. The user/service identified by the credentials must have bigquery.jobs.create permission in that project.| |*create_jobs_in_source_project*<br/>*create_jobs_in_default_project_from_credentials*<br/>*create_jobs_in_selected_billing_project_id*<br/>|
+|<div id="connection update--bigquery-json-key-content" class="no-wrap-code">`--bigquery-json-key-content`</div>|Bigquery service account key content as JSON.| ||
+|<div id="connection update--bigquery-json-key-path" class="no-wrap-code">`--bigquery-json-key-path`</div>|Path to a GCP service account key JSON file used to authenticate to Bigquery.| ||
+|<div id="connection update--bigquery-quota-project-id" class="no-wrap-code">`--bigquery-quota-project-id`</div>|Bigquery quota GCP project id.| ||
+|<div id="connection update--bigquery-source-project-id" class="no-wrap-code">`--bigquery-source-project-id`</div>|Bigquery source GCP project id. This is the project that has datasets that will be imported.| ||
+|<div id="connection update--databricks-access-token" class="no-wrap-code">`--databricks-access-token`</div>|Databricks access token for the warehouse.| ||
+|<div id="connection update--databricks-catalog" class="no-wrap-code">`--databricks-catalog`</div>|Databricks catalog name.| ||
+|<div id="connection update--databricks-host" class="no-wrap-code">`--databricks-host`</div>|Databricks host name| ||
+|<div id="connection update--databricks-http-path" class="no-wrap-code">`--databricks-http-path`</div>|Databricks http path to the warehouse. For example: /sql/1.0/warehouses/&lt;warehouse instance id&gt;| ||
+|<div id="connection update--databricks-options" class="no-wrap-code">`--databricks-options`</div>|Databricks connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
+|<div id="connection update--databricks-password" class="no-wrap-code">`--databricks-password`</div>|Databricks database password.| ||
+|<div id="connection update--databricks-port" class="no-wrap-code">`--databricks-port`</div>|Databricks port number| ||
+|<div id="connection update--databricks-user" class="no-wrap-code">`--databricks-user`</div>|Databricks user name.| ||
+|<div id="connection update-fw" class="no-wrap-code">`-fw`</div><div id="connection update--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="connection update--headless" class="no-wrap-code">`--headless`</div><div id="connection update-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="connection update-h" class="no-wrap-code">`-h`</div><div id="connection update--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="connection update--mysql-database" class="no-wrap-code">`--mysql-database`</div>|MySQL database name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--mysql-host" class="no-wrap-code">`--mysql-host`</div>|MySQL host name| ||
+|<div id="connection update--mysql-options" class="no-wrap-code">`--mysql-options`</div>|MySQL connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
+|<div id="connection update--mysql-password" class="no-wrap-code">`--mysql-password`</div>|MySQL database password. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--mysql-port" class="no-wrap-code">`--mysql-port`</div>|MySQL port number| ||
+|<div id="connection update--mysql-sslmode" class="no-wrap-code">`--mysql-sslmode`</div>|SslMode MySQL connection parameter| |*DISABLED*<br/>*PREFERRED*<br/>*REQUIRED*<br/>*VERIFY_CA*<br/>*VERIFY_IDENTITY*<br/>|
+|<div id="connection update--mysql-user" class="no-wrap-code">`--mysql-user`</div>|MySQL user name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update-n" class="no-wrap-code">`-n`</div><div id="connection update--name" class="no-wrap-code">`--name`</div>|Connection name, supports wildcards for changing multiple connections at once, i.e. &quot;conn*&quot;| ||
+|<div id="connection update--oracle-database" class="no-wrap-code">`--oracle-database`</div>|Oracle database name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--oracle-host" class="no-wrap-code">`--oracle-host`</div>|Oracle host name| ||
+|<div id="connection update--oracle-initialization-sql" class="no-wrap-code">`--oracle-initialization-sql`</div>|Custom SQL that is executed after connecting to Oracle. This SQL script can configure the default language, for example: alter session set NLS_DATE_FORMAT&#x3D;&#x27;YYYY-DD-MM HH24:MI:SS&#x27;| ||
+|<div id="connection update--oracle-options" class="no-wrap-code">`--oracle-options`</div>|Oracle connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
+|<div id="connection update--oracle-password" class="no-wrap-code">`--oracle-password`</div>|Oracle database password. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--oracle-port" class="no-wrap-code">`--oracle-port`</div>|Oracle port number| ||
+|<div id="connection update--oracle-user" class="no-wrap-code">`--oracle-user`</div>|Oracle user name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update-of" class="no-wrap-code">`-of`</div><div id="connection update--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
+|<div id="connection update--postgresql-database" class="no-wrap-code">`--postgresql-database`</div>|PostgreSQL database name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--postgresql-host" class="no-wrap-code">`--postgresql-host`</div>|PostgreSQL host name| ||
+|<div id="connection update--postgresql-options" class="no-wrap-code">`--postgresql-options`</div>|PostgreSQL connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
+|<div id="connection update--postgresql-password" class="no-wrap-code">`--postgresql-password`</div>|PostgreSQL database password. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--postgresql-port" class="no-wrap-code">`--postgresql-port`</div>|PostgreSQL port number| ||
+|<div id="connection update--postgresql-sslmode" class="no-wrap-code">`--postgresql-sslmode`</div>|Connect to PostgreSQL using sslmode connection parameter| |*disable*<br/>*allow*<br/>*prefer*<br/>*require*<br/>*verify_ca*<br/>*verify_full*<br/>|
+|<div id="connection update--postgresql-user" class="no-wrap-code">`--postgresql-user`</div>|PostgreSQL user name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--presto-database" class="no-wrap-code">`--presto-database`</div>|Presto database name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--presto-host" class="no-wrap-code">`--presto-host`</div>|Presto host name| ||
+|<div id="connection update--presto-password" class="no-wrap-code">`--presto-password`</div>|Presto database password. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--presto-port" class="no-wrap-code">`--presto-port`</div>|Presto port number| ||
+|<div id="connection update--presto-user" class="no-wrap-code">`--presto-user`</div>|Presto user name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--redshift-database" class="no-wrap-code">`--redshift-database`</div>|Redshift database name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--redshift-host" class="no-wrap-code">`--redshift-host`</div>|Redshift host name| ||
+|<div id="connection update--redshift-options" class="no-wrap-code">`--redshift-options`</div>|Redshift connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
+|<div id="connection update--redshift-password" class="no-wrap-code">`--redshift-password`</div>|Redshift database password. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--redshift-port" class="no-wrap-code">`--redshift-port`</div>|Redshift port number| ||
+|<div id="connection update--redshift-user" class="no-wrap-code">`--redshift-user`</div>|Redshift user name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--snowflake-account" class="no-wrap-code">`--snowflake-account`</div>|Snowflake account name, e.q. &lt;account&gt;, &lt;account&gt;-&lt;locator&gt;, &lt;account&gt;.&lt;region&gt; or &lt;account&gt;.&lt;region&gt;.&lt;platform&gt;.| ||
+|<div id="connection update--snowflake-database" class="no-wrap-code">`--snowflake-database`</div>|Snowflake database name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--snowflake-password" class="no-wrap-code">`--snowflake-password`</div>|Snowflake database password. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--snowflake-role" class="no-wrap-code">`--snowflake-role`</div>|Snowflake role name.| ||
+|<div id="connection update--snowflake-user" class="no-wrap-code">`--snowflake-user`</div>|Snowflake user name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--snowflake-warehouse" class="no-wrap-code">`--snowflake-warehouse`</div>|Snowflake warehouse name.| ||
+|<div id="connection update--spark-host" class="no-wrap-code">`--spark-host`</div>|Spark host name| ||
+|<div id="connection update--spark-options" class="no-wrap-code">`--spark-options`</div>|Spark connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
+|<div id="connection update--spark-password" class="no-wrap-code">`--spark-password`</div>|Spark database password. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--spark-port" class="no-wrap-code">`--spark-port`</div>|Spark port number| ||
+|<div id="connection update--spark-user" class="no-wrap-code">`--spark-user`</div>|Spark user name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--sqlserver-authentication-mode" class="no-wrap-code">`--sqlserver-authentication-mode`</div>|Authenticaiton mode for the SQL Server. The value can be in the null format to use dynamic substitution.| |*sql_password*<br/>*active_directory_password*<br/>*active_directory_service_principal*<br/>*default_credential*<br/>|
+|<div id="connection update--sqlserver-database" class="no-wrap-code">`--sqlserver-database`</div>|SQL Server database name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--sqlserver-disable-encryption" class="no-wrap-code">`--sqlserver-disable-encryption`</div>|Disable SSL encryption parameter. The default value is false. You may need to disable encryption when SQL Server is started in Docker.| ||
+|<div id="connection update--sqlserver-host" class="no-wrap-code">`--sqlserver-host`</div>|SQL Server host name| ||
+|<div id="connection update--sqlserver-options" class="no-wrap-code">`--sqlserver-options`</div>|SQL Server connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
+|<div id="connection update--sqlserver-password" class="no-wrap-code">`--sqlserver-password`</div>|SQL Server database password. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--sqlserver-port" class="no-wrap-code">`--sqlserver-port`</div>|SQL Server port number| ||
+|<div id="connection update--sqlserver-user" class="no-wrap-code">`--sqlserver-user`</div>|SQL Server user name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--trino-catalog" class="no-wrap-code">`--trino-catalog`</div>|The Trino catalog that contains the databases and the tables that will be accessed with the driver. Supports also a null configuration with a custom environment variable.| ||
+|<div id="connection update--trino-engine" class="no-wrap-code">`--trino-engine`</div>|Trino engine type.| |*trino*<br/>*athena*<br/>|
+|<div id="connection update--trino-host" class="no-wrap-code">`--trino-host`</div>|Trino host name.| ||
+|<div id="connection update--trino-password" class="no-wrap-code">`--trino-password`</div>|Trino database password. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--trino-port" class="no-wrap-code">`--trino-port`</div>|Trino port number.| ||
+|<div id="connection update--trino-user" class="no-wrap-code">`--trino-user`</div>|Trino user name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update-D" class="no-wrap-code">`-D`</div>|Databricks additional properties that are added to the JDBC connection string| ||
+|<div id="connection update-E" class="no-wrap-code">`-E`</div>|Presto additional properties that are added to the JDBC connection string.| ||
+|<div id="connection update-F" class="no-wrap-code">`-F`</div>|Snowflake additional properties that are added to the JDBC connection string| ||
+|<div id="connection update-K" class="no-wrap-code">`-K`</div>|Spark additional properties that are added to the JDBC connection string| ||
+|<div id="connection update-M" class="no-wrap-code">`-M`</div>|MySQL additional properties that are added to the JDBC connection string| ||
+|<div id="connection update-O" class="no-wrap-code">`-O`</div>|Oracle&#x27;s additional properties that are added to the JDBC connection string| ||
+|<div id="connection update-P" class="no-wrap-code">`-P`</div>|PostgreSQL additional properties that are added to the JDBC connection string| ||
+|<div id="connection update-R" class="no-wrap-code">`-R`</div>|Redshift additional properties that are added to the JDBC connection string| ||
+|<div id="connection update-S" class="no-wrap-code">`-S`</div>|SQL Server additional properties that are added to the JDBC connection string| ||
+|<div id="connection update-T" class="no-wrap-code">`-T`</div>|Trino additional properties that are added to the JDBC connection string| ||
+
+
 
 
 
 
 ___
-### **dqo connection schema list**
+
+## dqo connection schema list
 
 List schemas in the specified connection
 
+
 **Description**
+
 
 It allows the user to view the summary of all schemas in a selected connection.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] connection schema list [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
                         [-d=<dimensions>]... [-l=<labels>]...
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> connection schema list [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
                         [-d=<dimensions>]... [-l=<labels>]...
 
 ```
 
-**Options**  
-  
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|<p id="connection schema list-d">`-d`</p><br/><p id="connection schema list--dimension">`--dimension`</p><br/>|Dimension filter| ||
-|<p id="connection schema list-fw">`-fw`</p><br/><p id="connection schema list--file-write">`--file-write`</p><br/>|Write command response to a file| ||
-|<p id="connection schema list--headless">`--headless`</p><br/><p id="connection schema list-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|<p id="connection schema list-h">`-h`</p><br/><p id="connection schema list--help">`--help`</p><br/>|Show the help for the command and parameters| ||
-|<p id="connection schema list-l">`-l`</p><br/><p id="connection schema list--label">`--label`</p><br/>|Label filter| ||
-|<p id="connection schema list-n">`-n`</p><br/><p id="connection schema list--name">`--name`</p><br/>|Connection name filter| ||
-|<p id="connection schema list-of">`-of`</p><br/><p id="connection schema list--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|<div id="connection schema list-d" class="no-wrap-code">`-d`</div><div id="connection schema list--dimension" class="no-wrap-code">`--dimension`</div>|Dimension filter| ||
+|<div id="connection schema list-fw" class="no-wrap-code">`-fw`</div><div id="connection schema list--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="connection schema list--headless" class="no-wrap-code">`--headless`</div><div id="connection schema list-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="connection schema list-h" class="no-wrap-code">`-h`</div><div id="connection schema list--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="connection schema list-l" class="no-wrap-code">`-l`</div><div id="connection schema list--label" class="no-wrap-code">`--label`</div>|Label filter| ||
+|<div id="connection schema list-n" class="no-wrap-code">`-n`</div><div id="connection schema list--name" class="no-wrap-code">`--name`</div>|Connection name filter| ||
+|<div id="connection schema list-of" class="no-wrap-code">`-of`</div><div id="connection schema list--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
+
+
 
 
 
 
 ___
-### **dqo connection table list**
+
+## dqo connection table list
 
 List tables for the specified connection and schema name.
 
+
 **Description**
+
 
 List all the tables available in the database for the specified connection and schema. It allows the user to view all the tables in the database.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] connection table list [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
                        [-s=<schema>] [-t=<table>] [-d=<dimensions>]...
                        [-l=<labels>]...
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> connection table list [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
                        [-s=<schema>] [-t=<table>] [-d=<dimensions>]...
@@ -444,90 +675,124 @@ dqo> connection table list [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat
 
 ```
 
-**Options**  
-  
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|<p id="connection table list-c">`-c`</p><br/><p id="connection table list--connection">`--connection`</p><br/>|Connection name| ||
-|<p id="connection table list-d">`-d`</p><br/><p id="connection table list--dimension">`--dimension`</p><br/>|Dimension filter| ||
-|<p id="connection table list-fw">`-fw`</p><br/><p id="connection table list--file-write">`--file-write`</p><br/>|Write command response to a file| ||
-|<p id="connection table list--headless">`--headless`</p><br/><p id="connection table list-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|<p id="connection table list-h">`-h`</p><br/><p id="connection table list--help">`--help`</p><br/>|Show the help for the command and parameters| ||
-|<p id="connection table list-l">`-l`</p><br/><p id="connection table list--label">`--label`</p><br/>|Label filter| ||
-|<p id="connection table list-of">`-of`</p><br/><p id="connection table list--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
-|<p id="connection table list-s">`-s`</p><br/><p id="connection table list--schema">`--schema`</p><br/>|Schema name| ||
-|<p id="connection table list-t">`-t`</p><br/><p id="connection table list--table">`--table`</p><br/>|Table name, without the schema name.| ||
+|<div id="connection table list-c" class="no-wrap-code">`-c`</div><div id="connection table list--connection" class="no-wrap-code">`--connection`</div>|Connection name| ||
+|<div id="connection table list-d" class="no-wrap-code">`-d`</div><div id="connection table list--dimension" class="no-wrap-code">`--dimension`</div>|Dimension filter| ||
+|<div id="connection table list-fw" class="no-wrap-code">`-fw`</div><div id="connection table list--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="connection table list--headless" class="no-wrap-code">`--headless`</div><div id="connection table list-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="connection table list-h" class="no-wrap-code">`-h`</div><div id="connection table list--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="connection table list-l" class="no-wrap-code">`-l`</div><div id="connection table list--label" class="no-wrap-code">`--label`</div>|Label filter| ||
+|<div id="connection table list-of" class="no-wrap-code">`-of`</div><div id="connection table list--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
+|<div id="connection table list-s" class="no-wrap-code">`-s`</div><div id="connection table list--schema" class="no-wrap-code">`--schema`</div>|Schema name| ||
+|<div id="connection table list-t" class="no-wrap-code">`-t`</div><div id="connection table list--table" class="no-wrap-code">`--table`</div>|Table name, without the schema name.| ||
+
+
 
 
 
 
 ___
-### **dqo connection table show**
+
+## dqo connection table show
 
 Show table for connection
 
+
 **Description**
+
 
 Show the details of the specified table in the database for the specified connection. It allows the user to view the details of a specific table in the database.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] connection table show [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
                        [-t=<table>]
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> connection table show [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
                        [-t=<table>]
 
 ```
 
-**Options**  
-  
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|<p id="connection table show-c">`-c`</p><br/><p id="connection table show--connection">`--connection`</p><br/>|Connection name| ||
-|<p id="connection table show-fw">`-fw`</p><br/><p id="connection table show--file-write">`--file-write`</p><br/>|Write command response to a file| ||
-|<p id="connection table show-t">`-t`</p><br/><p id="connection table show--table">`--table`</p><br/><p id="connection table show--full-table-name">`--full-table-name`</p><br/>|Full table name (schema.table), supports wildcard patterns &#x27;sch*.tab*&#x27;| ||
-|<p id="connection table show--headless">`--headless`</p><br/><p id="connection table show-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|<p id="connection table show-h">`-h`</p><br/><p id="connection table show--help">`--help`</p><br/>|Show the help for the command and parameters| ||
-|<p id="connection table show-of">`-of`</p><br/><p id="connection table show--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|<div id="connection table show-c" class="no-wrap-code">`-c`</div><div id="connection table show--connection" class="no-wrap-code">`--connection`</div>|Connection name| ||
+|<div id="connection table show-fw" class="no-wrap-code">`-fw`</div><div id="connection table show--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="connection table show-t" class="no-wrap-code">`-t`</div><div id="connection table show--table" class="no-wrap-code">`--table`</div><div id="connection table show--full-table-name" class="no-wrap-code">`--full-table-name`</div>|Full table name (schema.table), supports wildcard patterns &#x27;sch*.tab*&#x27;| ||
+|<div id="connection table show--headless" class="no-wrap-code">`--headless`</div><div id="connection table show-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="connection table show-h" class="no-wrap-code">`-h`</div><div id="connection table show--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="connection table show-of" class="no-wrap-code">`-of`</div><div id="connection table show--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
+
+
 
 
 
 
 ___
-### **dqo connection edit**
+
+## dqo connection edit
 
 Edit connection that matches a given condition
 
+
 **Description**
+
 
 Edit the connection or connections that match the filter conditions specified in the options. It allows the user to modify the details of an existing connection in the application.
 
 
+
+
 **Command-line synopsis**
+
 ```
 $ dqo [dqo options...] connection edit [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
 
 ```
-**DQOps Shell synopsis**
+
+**DQOps shell synopsis**
+
 ```
 dqo> connection edit [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
 
 ```
 
-**Options**  
-  
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|<p id="connection edit-c">`-c`</p><br/><p id="connection edit--connection">`--connection`</p><br/>|Connection Name| ||
-|<p id="connection edit-fw">`-fw`</p><br/><p id="connection edit--file-write">`--file-write`</p><br/>|Write command response to a file| ||
-|<p id="connection edit--headless">`--headless`</p><br/><p id="connection edit-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|<p id="connection edit-h">`-h`</p><br/><p id="connection edit--help">`--help`</p><br/>|Show the help for the command and parameters| ||
-|<p id="connection edit-of">`-of`</p><br/><p id="connection edit--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|<div id="connection edit-c" class="no-wrap-code">`-c`</div><div id="connection edit--connection" class="no-wrap-code">`--connection`</div>|Connection Name| ||
+|<div id="connection edit-fw" class="no-wrap-code">`-fw`</div><div id="connection edit--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="connection edit--headless" class="no-wrap-code">`--headless`</div><div id="connection edit-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="connection edit-h" class="no-wrap-code">`-h`</div><div id="connection edit--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="connection edit-of" class="no-wrap-code">`-of`</div><div id="connection edit--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
+
+
 
 
 
