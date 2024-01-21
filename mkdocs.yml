@@ -52,6 +52,7 @@ nav:
       - Data quality rules: "dqo-concepts/definition-of-data-quality-rules.md"
       - Data quality dashboards: "dqo-concepts/types-of-data-quality-dashboards.md"
       - Data quality dimensions: "dqo-concepts/data-quality-dimensions.md"
+      - Auditing time periods: "dqo-concepts/auditing-data-quality-with-time-periods.md"
       - Data grouping: "dqo-concepts/measuring-data-quality-with-data-grouping.md"
       - Data quality KPIs: "dqo-concepts/definition-of-data-quality-kpis.md"
       - Incremental data quality monitoring: "dqo-concepts/incremental-data-quality-monitoring.md"

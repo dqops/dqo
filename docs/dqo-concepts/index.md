@@ -166,6 +166,14 @@ These topics introduce the basic concepts of DQOps.
     - `Validity` detects common field format issues, such as an *email* field does not meet the email format
 
 
+ - **[Auditing time periods](auditing-data-quality-with-time-periods.md)**
+
+    DQOps captures the time period for which the data quality result is valid. It could be an end-of-day data quality status
+    in *[daily monitoring checks](definition-of-data-quality-checks/data-observability-monitoring-checks.md#daily-monitoring-checks)*.
+    Learn how DQOps captures the local timezone of monitored data sources, even if monitoring databases are located
+    in different countries, regions and continents.
+
+
  - **[Data grouping](measuring-data-quality-with-data-grouping.md)**
 
     DQOps unique feature is the ability to use a **GROUP BY** clause in the data quality sensors, allowing to run data quality checks
