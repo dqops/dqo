@@ -23,7 +23,10 @@ import com.dqops.utils.docs.client.apimodel.ComponentModel;
 import com.dqops.utils.docs.client.apimodel.ControllerModel;
 import com.dqops.utils.docs.client.apimodel.OpenAPIModel;
 import com.dqops.utils.docs.client.apimodel.OperationModel;
+import com.dqops.utils.docs.client.operations.examples.serialization.PythonSerializer;
+import com.dqops.utils.docs.client.operations.examples.serialization.PythonSerializerImpl;
 import com.dqops.utils.docs.generators.GeneratorUtility;
+import com.dqops.utils.docs.generators.ParsedSampleObjectFactoryImpl;
 import com.dqops.utils.docs.generators.TypeModel;
 import com.dqops.utils.reflection.ReflectionServiceImpl;
 import com.dqops.utils.string.StringCaseFormat;
@@ -61,6 +64,7 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
     private static final String clientApiSourceBaseUrl = "https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/";
 
     private final DocumentationReflectionService documentationReflectionService = new DocumentationReflectionServiceImpl(new ReflectionServiceImpl());
+    private final PythonSerializer pythonSerializer = new PythonSerializerImpl(new ParsedSampleObjectFactoryImpl(documentationReflectionService));
 
     @Override
     public List<OperationsSuperiorObjectDocumentationModel> createDocumentationForOperations(OpenAPIModel openAPIModel) {
@@ -188,9 +192,13 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
 
             operationsOperationDocumentationModel.setReturnValueField(returnParameterModel);
 
-            String sampleReturnValue = GeneratorUtility.generateJsonSampleFromTypeModel(returnParameterTypeModel, true);
-            sampleReturnValue = sampleReturnValue.replace(System.lineSeparator(), "\n\t");
-            operationsOperationDocumentationModel.setReturnValueSample(sampleReturnValue);
+            String sampleReturnValueJson = GeneratorUtility.generateJsonSampleFromTypeModel(returnParameterTypeModel, true);
+            sampleReturnValueJson = sampleReturnValueJson.replace(System.lineSeparator(), "\n\t");
+            operationsOperationDocumentationModel.setReturnValueSampleJson(sampleReturnValueJson);
+
+            Object sampleReturnValue = GeneratorUtility.generateSampleFromTypeModel(returnParameterTypeModel);
+            String sampleReturnValuePython = pythonSerializer.serializePrettyPrint(sampleReturnValue);
+            operationsOperationDocumentationModel.setReturnValueSamplePython(sampleReturnValuePython);
         }
 
         return operationsOperationDocumentationModel;

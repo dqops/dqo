@@ -119,6 +119,7 @@ public class OperationsDocumentationGeneratorImpl implements OperationsDocumenta
         OperationUsageExampleDocumentationModel runChecksExample = getUsageExampleFromOperationModel(runChecksOperation);
         runChecksExample.setExampleName("Run checks");
         runChecksExample.setExampleDescription(runChecksOperation.getOperationDescription());
+        runChecksExample.setExampleFooter(runChecksOperation.getReturnValueSamplePython());
         selectedUsageExamples.add(runChecksExample);
 
         List<OperationsOperationDocumentationModel> collectStatisticsOperations = jobsController.getOperationObjects().stream()
@@ -130,13 +131,16 @@ public class OperationsDocumentationGeneratorImpl implements OperationsDocumenta
         OperationUsageExampleDocumentationModel collectStatisticsOnTablesExample = getUsageExampleFromOperationModel(collectStatisticsOnTablesOperation);
         collectStatisticsOnTablesExample.setExampleName("Collect statistics on tables");
         collectStatisticsOnTablesExample.setExampleDescription(collectStatisticsOnTablesOperation.getOperationDescription());
+        collectStatisticsOnTablesExample.setExampleFooter(collectStatisticsOnTablesOperation.getReturnValueSamplePython());
         selectedUsageExamples.add(collectStatisticsOnTablesExample);
+
         OperationsOperationDocumentationModel collectStatisticsOnDataGroupsOperation = collectStatisticsOperations.stream()
                 .filter(operation -> operation.getOperationPythonName().contains("data_groups"))
                 .findAny().get();
         OperationUsageExampleDocumentationModel collectStatisticsOnDataGroupsExample = getUsageExampleFromOperationModel(collectStatisticsOnDataGroupsOperation);
         collectStatisticsOnDataGroupsExample.setExampleName("Collect statistics on data groups");
         collectStatisticsOnDataGroupsExample.setExampleDescription(collectStatisticsOnDataGroupsOperation.getOperationDescription());
+        collectStatisticsOnDataGroupsExample.setExampleFooter(collectStatisticsOnDataGroupsOperation.getReturnValueSamplePython());
         selectedUsageExamples.add(collectStatisticsOnDataGroupsExample);
 
         OperationsOperationDocumentationModel importTablesOperation = jobsController.getOperationObjects().stream()
@@ -145,6 +149,7 @@ public class OperationsDocumentationGeneratorImpl implements OperationsDocumenta
         OperationUsageExampleDocumentationModel importTablesExample = getUsageExampleFromOperationModel(importTablesOperation);
         importTablesExample.setExampleName("Import tables");
         importTablesExample.setExampleDescription(importTablesOperation.getOperationDescription());
+        importTablesExample.setExampleFooter(importTablesOperation.getReturnValueSamplePython());
         selectedUsageExamples.add(importTablesExample);
 
         // Check results
@@ -157,6 +162,7 @@ public class OperationsDocumentationGeneratorImpl implements OperationsDocumenta
         OperationUsageExampleDocumentationModel getTableDataQualityStatusExample = getUsageExampleFromOperationModel(getTableDataQualityStatusOperation);
         getTableDataQualityStatusExample.setExampleName("Get table data quality status");
         getTableDataQualityStatusExample.setExampleDescription(getTableDataQualityStatusOperation.getOperationDescription());
+        getTableDataQualityStatusExample.setExampleFooter(getTableDataQualityStatusOperation.getReturnValueSamplePython());
         selectedUsageExamples.add(getTableDataQualityStatusExample);
 
         // Jobs (continuation)
@@ -166,6 +172,7 @@ public class OperationsDocumentationGeneratorImpl implements OperationsDocumenta
         OperationUsageExampleDocumentationModel waitForJobExample = getUsageExampleFromOperationModel(waitForJobOperation);
         waitForJobExample.setExampleName("Wait for job");
         waitForJobExample.setExampleDescription(waitForJobOperation.getOperationDescription());
+        waitForJobExample.setExampleFooter(waitForJobOperation.getReturnValueSamplePython());
         selectedUsageExamples.add(waitForJobExample);
 
         return selectedUsageExamples;

@@ -223,7 +223,26 @@ call_result = run_checks.sync(
 
 ```
 
+By running this operation you should get a response that resembles the one below:
 
+```python
+RunChecksQueueJobResult(
+	job_id=RunChecksQueueJobResult(
+		job_id=123456789,
+		created_at=Instant()
+	),
+	result=RunChecksQueueJobResult(
+		highest_severity=RuleSeverityLevel.error,
+		executed_checks=10,
+		valid_results=7,
+		warnings=1,
+		errors=2,
+		fatals=0,
+		execution_errors=0
+	),
+	status=DqoJobStatus.succeeded
+)
+```
 
 
 ### **Collect statistics on tables**
@@ -259,7 +278,11 @@ call_result = collect_statistics_on_table.sync(
 
 ```
 
+By running this operation you should get a response that resembles the one below:
 
+```python
+CollectStatisticsQueueJobResult(status=DqoJobStatus.queued)
+```
 
 
 ### **Collect statistics on data groups**
@@ -295,7 +318,11 @@ call_result = collect_statistics_on_data_groups.sync(
 
 ```
 
+By running this operation you should get a response that resembles the one below:
 
+```python
+CollectStatisticsQueueJobResult(status=DqoJobStatus.queued)
+```
 
 
 ### **Import tables**
@@ -329,7 +356,11 @@ call_result = import_tables.sync(
 
 ```
 
+By running this operation you should get a response that resembles the one below:
 
+```python
+ImportTablesQueueJobResult(status=DqoJobStatus.queued)
+```
 
 
 ### **Get table data quality status**
@@ -358,7 +389,118 @@ call_result = get_table_data_quality_status.sync(
 
 ```
 
+By running this operation you should get a response that resembles the one below:
 
+```python
+TableCurrentDataQualityStatusModel(
+	connection_name='sample_connection',
+	schema_name='sample_schema',
+	table_name='sample_table',
+	current_severity=RuleSeverityLevel.warning,
+	highest_historical_severity=RuleSeverityLevel.fatal,
+	last_check_executed_at=Instant(),
+	executed_checks=8,
+	valid_results=3,
+	warnings=5,
+	errors=0,
+	fatals=0,
+	execution_errors=0,
+	checks={
+		'table_sample_check_1': CheckCurrentDataQualityStatusModel(
+			current_severity=CheckResultStatus.warning,
+			highest_historical_severity=RuleSeverityLevel.error,
+			last_executed_at=Instant(),
+			check_type=CheckType.profiling,
+			category='sample_category',
+			quality_dimension='sample_quality_dimension'
+		),
+		'table_sample_check_2': CheckCurrentDataQualityStatusModel(
+			current_severity=CheckResultStatus.valid,
+			highest_historical_severity=RuleSeverityLevel.error,
+			last_executed_at=Instant(),
+			check_type=CheckType.profiling,
+			category='sample_category',
+			quality_dimension='sample_quality_dimension'
+		)
+	},
+	columns={
+		'sample_column_1': ColumnCurrentDataQualityStatusModel(
+			current_severity=RuleSeverityLevel.warning,
+			highest_historical_severity=RuleSeverityLevel.error,
+			last_check_executed_at=Instant(),
+			executed_checks=3,
+			valid_results=1,
+			warnings=2,
+			errors=0,
+			fatals=0,
+			execution_errors=0,
+			checks={
+				'sample_check_1': CheckCurrentDataQualityStatusModel(
+					current_severity=CheckResultStatus.warning,
+					highest_historical_severity=RuleSeverityLevel.error,
+					last_executed_at=Instant(),
+					check_type=CheckType.profiling,
+					category='sample_category',
+					quality_dimension='sample_quality_dimension'
+				),
+				'sample_check_2': CheckCurrentDataQualityStatusModel(
+					current_severity=CheckResultStatus.valid,
+					highest_historical_severity=RuleSeverityLevel.error,
+					last_executed_at=Instant(),
+					check_type=CheckType.profiling,
+					category='sample_category',
+					quality_dimension='sample_quality_dimension'
+				),
+				'sample_check_3': CheckCurrentDataQualityStatusModel(
+					current_severity=CheckResultStatus.warning,
+					highest_historical_severity=RuleSeverityLevel.error,
+					last_executed_at=Instant(),
+					check_type=CheckType.profiling,
+					category='sample_category',
+					quality_dimension='sample_quality_dimension'
+				)
+			}
+		),
+		'sample_column_2': ColumnCurrentDataQualityStatusModel(
+			current_severity=RuleSeverityLevel.warning,
+			highest_historical_severity=RuleSeverityLevel.error,
+			last_check_executed_at=Instant(),
+			executed_checks=3,
+			valid_results=1,
+			warnings=2,
+			errors=0,
+			fatals=0,
+			execution_errors=0,
+			checks={
+				'sample_check_1': CheckCurrentDataQualityStatusModel(
+					current_severity=CheckResultStatus.warning,
+					highest_historical_severity=RuleSeverityLevel.error,
+					last_executed_at=Instant(),
+					check_type=CheckType.profiling,
+					category='sample_category',
+					quality_dimension='sample_quality_dimension'
+				),
+				'sample_check_2': CheckCurrentDataQualityStatusModel(
+					current_severity=CheckResultStatus.valid,
+					highest_historical_severity=RuleSeverityLevel.error,
+					last_executed_at=Instant(),
+					check_type=CheckType.profiling,
+					category='sample_category',
+					quality_dimension='sample_quality_dimension'
+				),
+				'sample_check_3': CheckCurrentDataQualityStatusModel(
+					current_severity=CheckResultStatus.warning,
+					highest_historical_severity=RuleSeverityLevel.error,
+					last_executed_at=Instant(),
+					check_type=CheckType.profiling,
+					category='sample_category',
+					quality_dimension='sample_quality_dimension'
+				)
+			}
+		)
+	}
+)
+```
 
 
 ### **Wait for job**
@@ -384,7 +526,11 @@ call_result = wait_for_job.sync(
 
 ```
 
+By running this operation you should get a response that resembles the one below:
 
+```python
+DqoJobHistoryEntryModel()
+```
 
 
 
