@@ -108,7 +108,7 @@ export default function TableColumnsBody({
         url,
         value,
         state: {},
-        label: table
+        label: column
       })
     );
     history.push(url);
