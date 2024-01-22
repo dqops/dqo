@@ -1,5 +1,5 @@
 # Install DQOps from GitHub
-This guide shows all the steps to check out DQOps source code from GitHub, and compile the code locally. If you know SQL, Python, or Java - you can contribute.
+This guide shows all the steps to check out DQOps source code from GitHub, and compile the code locally. If you know SQL, Python, or Java, you can contribute.
 
 ## Prerequisites
 
