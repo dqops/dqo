@@ -26,7 +26,7 @@ To navigate to the Check editor:
 
     This will open a [**Check editor**](../dqo-concepts/dqops-user-interface-overview.md#check-editor) screen when you can work with checks.
 
-    ![Select a table or column of interest](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/select-a-table-or-colum-of-interest2.png)
+    ![Select a table or column of interest](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/select-a-table-or-colum-of-interest3.png)
    
     The Check editor screen has tabs that allow you to switch between Profiling (only in Profiling section) or Daily
     and Monthly checks, review Table quality status, access the screen for setting Comparisons, view Basic data statistics
@@ -37,23 +37,23 @@ To navigate to the Check editor:
 
     The right side of the table allows setting different threshold levels (severity levels). [Learn more about threshold levels.](../dqo-concepts/definition-of-data-quality-checks/index.md#issue-severity-levels)
 
-### **Run a check**
+### **Run a check from a check editor**
 
 To run a check:
 
-1. Enable the check of interest by clicking the switch button next to the name of the check in the list on the right.
+1. Activate the check of interest by clicking the toggle button next to the check name in the list on the right.
 
-    ![Enable check](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/enable-check2.png)
+    ![Activate check](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/enable-check3.png)
 
 2. Set the threshold levels or leave default values. Set parameters if the check has any. Click the **Save** button in the upper right corner.
     
     You can read more about [threshold severity levels in DQOps concepts section](../dqo-concepts/definition-of-data-quality-checks/index.md#issue-severity-levels).
 
-    ![Set threshold levels](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/set-threshold-levels2.png)
+    ![Set threshold levels](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/set-threshold-levels3.png)
 
 3. Run data quality check by clicking the **Run Check** icon
 
-    ![Enable check](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/run-check2.png)
+    ![Run check](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/run-check3.png)
 
     A square should appear next to the name of the checks indicating the results of the run check:
 
@@ -65,15 +65,30 @@ To run a check:
    
     You can view the details by placing the mouse cursor on the square.
 
-    ![View quick check results](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/view-quick-check-results.png)
+    ![View quick check results](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/view-quick-check-results1.png)
 
     This check run resulted in a valid result. The daily_row_count sensor readout was 18 155, which was higher than the min_count error threshold 1 000.
+
+### **Run checks from a tree view**
+
+You can run checks for your entire connection, schema, table, or column from the tree view on the left-hand
+side of the screen. 
+
+To do so, click on the three-dot icon and select the **Run check** option.
+This will run all the activated checks for the selected connection, schema, table, or column.
+
+![Run checks from the tree view](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/run-checks-from-the-tree-view.png)
+
+If you run **Partition checks**, you will have the additional option to choose from different incremental time windows
+when running from the tree view.
+
+![Run partition checks from the tree view](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/run-partition-checks-from-the-tree-view.png)
 
 ### **View detailed check results**
 
 To view detailed check results, sensor readouts, and execution errors, click on the **Results** icon.
 
-![Checking results](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/detailed-check-results.png)
+![Checking results](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/detailed-check-results1.png)
 
 A table will appear with detailed information about the run check. You can filter the table by data group and month 
 using the dropdowns. Additionally, you can switch between the table and chart view by clicking on the icons on the 
