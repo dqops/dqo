@@ -177,13 +177,8 @@
 <script src="/docs/javascripts/micromodal.min.js"></script>
 <script>
   if (
-    document.cookie &&
-    document.cookie.length !== 0 &&
-    !document.cookie.includes(".expires=")
+    !localStorage.getItem("ebook-popup-shown")
   ) {
-    let date = new Date(Date.now())
-    date = date.toUTCString()
-    document.cookie = ".expires=" + date
     document.addEventListener("DOMContentLoaded", function () {
       try {
         MicroModal.init({
@@ -193,7 +188,8 @@
         })
 
         setTimeout(function () {
-          MicroModal.show("modal-1")
+          MicroModal.show("modal-1");
+          localStorage.setItem("ebook-popup-shown", new Date());
         }, 10000)
       } catch (e) {
         console.log("micromodal error: ", e)

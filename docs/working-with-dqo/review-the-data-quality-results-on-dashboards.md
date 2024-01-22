@@ -1,4 +1,4 @@
-# Review the dta quality results on dashboards
+# Review the data quality results on dashboards
 Read this guide to learn how to use detailed data quality dashboards in DQOps for drilling down to identify all tables and columns affected by issues.
 
 ## Overview
