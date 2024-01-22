@@ -2,11 +2,14 @@ name: Build and publish the release to GitHub releases and PyPi
 
 on:
   pull_request:
+    types:
+      - closed
     branches:
       - main
 
 jobs:
   build-release:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
