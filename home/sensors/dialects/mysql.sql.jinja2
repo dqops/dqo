@@ -427,10 +427,10 @@
     {%- endif -%}
 {% endmacro %}
 
-{% macro render_regexp(column, regex_pattern, indentation = '') %}
+{% macro render_regexp(column, regex_pattern) %}
     {%- if engine_type == 'singlestore' %}
-        {{ indentation }}{{ column }} RLIKE {{ regex_pattern }}
+        {{ column }} RLIKE {{ regex_pattern }}
     {%- else -%}
-        {{ indentation }}REGEXP_LIKE({{ column }}, {{ regex_pattern }})
+        REGEXP_LIKE({{ column }}, {{ regex_pattern }})
     {%- endif -%}
 {% endmacro %}
