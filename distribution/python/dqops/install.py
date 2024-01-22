@@ -19,6 +19,7 @@ import os
 import sys
 import urllib.request
 import zipfile
+import ssl
 
 import jdk
 
@@ -46,6 +47,8 @@ def install_dqo(dest: str, dqo_tag: str, dqo_version: str):
     :param dqo_tag: GitHub release tag.
     :param dqo_version:  DQOps version.
     """
+
+    ssl._create_default_https_context = ssl._create_unverified_context
 
     github_url = (
         "https://github.com/dqops/dqo/releases/download/%s/dqo-distribution-%s-bin.zip"
@@ -100,6 +103,8 @@ def install_dqo_home_if_missing(dqo_home):
 def install_jre_if_missing(java_install_dir):
     if os.path.exists(java_install_dir) and len(os.listdir(java_install_dir)) > 0:
         return
+
+    ssl._create_default_https_context = ssl._create_unverified_context
 
     print("Installing Java JRE %s at %s" % (JAVA_VERSION, java_install_dir))
     jdk.install(JAVA_VERSION, jre=True, path=java_install_dir)

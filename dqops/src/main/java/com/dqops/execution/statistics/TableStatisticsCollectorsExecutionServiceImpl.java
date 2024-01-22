@@ -15,10 +15,7 @@
  */
 package com.dqops.execution.statistics;
 
-import com.dqops.connectors.ConnectionProvider;
-import com.dqops.connectors.ConnectionProviderRegistry;
-import com.dqops.connectors.DataTypeCategory;
-import com.dqops.connectors.ProviderDialectSettings;
+import com.dqops.connectors.*;
 import com.dqops.core.configuration.DqoSensorLimitsConfigurationProperties;
 import com.dqops.core.configuration.DqoStatisticsCollectorConfigurationProperties;
 import com.dqops.core.jobqueue.*;
@@ -43,6 +40,7 @@ import com.dqops.execution.statistics.progress.ExecuteStatisticsCollectorsOnTabl
 import com.dqops.execution.statistics.progress.ExecuteStatisticsCollectorsOnTableStartEvent;
 import com.dqops.execution.statistics.progress.SavingStatisticsResultsEvent;
 import com.dqops.execution.statistics.progress.StatisticsCollectorExecutionProgressListener;
+import com.dqops.metadata.dqohome.DqoHome;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.search.HierarchyNodeTreeSearcher;
 import com.dqops.metadata.search.StatisticsCollectorSearchFilters;
@@ -240,6 +238,7 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
                                                     CollectorExecutionStatistics executionStatistics,
                                                     StatisticsDataScope statisticsDataScope,
                                                     JobCancellationToken jobCancellationToken) {
+        DqoHome dqoHome = executionContext.getDqoHomeContext().getDqoHome();
         List<SensorPrepareResult> sensorPrepareResults = new ArrayList<>();
         int sensorResultId = 0;
 
@@ -249,8 +248,8 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
             }
 
             try {
-                SensorExecutionRunParameters sensorRunParameters = createSensorRunParameters(userHome, statisticsCollectorSpec, statisticsDataScope);
-                if (!collectorSupportsTarget(statisticsCollectorSpec, sensorRunParameters)) {
+                SensorExecutionRunParameters sensorRunParameters = createSensorRunParameters(dqoHome, userHome, statisticsCollectorSpec, statisticsDataScope);
+                if (sensorRunParameters == null || !collectorSupportsTarget(statisticsCollectorSpec, sensorRunParameters)) {
                     continue; // the collector does not support that target
                 }
                 executionStatistics.incrementCollectorsExecutedCount(1);
@@ -385,7 +384,8 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
             return true; // all data types supported
         }
 
-        ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(sensorRunParameters.getConnection().getProviderType());
+        ProviderType providerType = sensorRunParameters.getConnection().getProviderType();
+        ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(providerType);
         ProviderDialectSettings dialectSettings = connectionProvider.getDialectSettings(sensorRunParameters.getConnection());
         DataTypeCategory targetColumnTypeCategory = dialectSettings.detectColumnType(typeSnapshot);
 
@@ -400,12 +400,14 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
 
     /**
      * Creates a sensor run parameters from the statistics collector specification. Retrieves the connection, table, column and sensor parameters.
+     * @param dqoHome DQO home.
      * @param userHome User home with the metadata.
      * @param statisticsCollectorSpec Statistics collector specification.
      * @param statisticsDataScope Statistics collector data scope to analyze - the whole table or each data stream separately.
      * @return Sensor run parameters.
      */
-    public SensorExecutionRunParameters createSensorRunParameters(UserHome userHome,
+    public SensorExecutionRunParameters createSensorRunParameters(DqoHome dqoHome,
+                                                                  UserHome userHome,
                                                                   AbstractStatisticsCollectorSpec<?> statisticsCollectorSpec,
                                                                   StatisticsDataScope statisticsDataScope) {
         HierarchyId checkHierarchyId = statisticsCollectorSpec.getHierarchyId();
@@ -420,8 +422,9 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
         // TODO: statistics collection could support time windows or a time range, the filter that is passed downstream is now null
 
         SensorExecutionRunParameters sensorRunParameters = this.sensorExecutionRunParametersFactory.createStatisticsSensorParameters(
-                userHome, connectionSpec, tableSpec, columnSpec, statisticsCollectorSpec, null, statisticsDataScope, dialectSettings);
-        return sensorRunParameters;
+                dqoHome, userHome, connectionSpec, tableSpec, columnSpec, statisticsCollectorSpec,
+                null, statisticsDataScope, dialectSettings);
+        return sensorRunParameters; // may return null if the sensor is not supported on the data source
     }
 
 }
