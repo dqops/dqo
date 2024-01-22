@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Popover,
   PopoverHandler,
@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { setCronScheduler, toggleMenu } from '../../redux/actions/job.actions';
-import { IError, useError} from '../../contexts/errrorContext';
+// import { IError, useError} from '../../contexts/errrorContext';
 import JobItem from './JobItem';
 import ErrorItem from './ErrorItem';
 import { JobApiClient } from '../../services/apiClient';
@@ -18,13 +18,13 @@ import Switch from '../Switch';
 import clsx from 'clsx';
 
 const NotificationMenu = () => {
-  const {jobList, isOpen, isCronScheduled, userProfile } = useSelector(
+  const {error_dictionary_state, jobList, isOpen, isCronScheduled, userProfile } = useSelector(
     (state: IRootState) => state.job || {}
     );
   const [showNewIcon, setShowNewIcon] = useState(false);
 
   const dispatch = useActionDispatch();
-  const { errors } = useError();
+  // const { errors } = useError();
 
   const toggleOpen = () => {
     dispatch(toggleMenu(!isOpen));
@@ -116,8 +116,8 @@ const NotificationMenu = () => {
           </div>
         </div>
         <div className="overflow-x-hidden max-h-100 py-4 px-4 relative">
-         {/* {errorsData.map((error, index) => <ErrorItem error={error} key={index}/>)} */}
-          {Object.keys(jobList).map((jobId: string, index) =>
+         {error_dictionary_state.map((error, index) => <ErrorItem error={error} key={index}/>)}
+          {Object.keys(jobList).reverse().map((jobId: string, index) =>
               <JobItem
                 jobId={jobId}
                 key={index}

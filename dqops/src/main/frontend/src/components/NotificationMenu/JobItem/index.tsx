@@ -16,7 +16,6 @@ import { reduceCounter } from '../../../redux/actions/job.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { JobApiClient } from '../../../services/apiClient';
 import clsx from 'clsx';
-import { TJobDictionary } from '../../../shared/constants';
 import { IRootState } from '../../../redux/reducers';
 import { useSelector } from 'react-redux';
 

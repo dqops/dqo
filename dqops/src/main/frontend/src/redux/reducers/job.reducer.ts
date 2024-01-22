@@ -27,6 +27,7 @@ import {
 } from '../../api';
 import moment from 'moment';
 import { TJobDictionary, TJobList } from '../../shared/constants';
+import { IError } from '../../contexts/errrorContext';
 
 export interface IJobsState {
   jobs?: DqoJobQueueInitialSnapshotModel;
@@ -42,6 +43,7 @@ export interface IJobsState {
   isProfileOpen: boolean;
   areSettingsOpen: boolean;
   job_dictionary_state: Record<string, TJobDictionary>;
+  error_dictionary_state: IError[];
   bool?: boolean;
   dataGrouping: string;
   spec: DataGroupingConfigurationSpec;
@@ -65,6 +67,7 @@ const initialState: IJobsState = {
   isProfileOpen: false,
   areSettingsOpen: false,
   job_dictionary_state: {},
+  error_dictionary_state: [],
   bool: false,
   dataGrouping: '',
   spec: {},
@@ -88,7 +91,7 @@ const schemaReducer = (state = initialState, action: any) => {
     case JOB_ACTION.GET_JOBS_SUCCESS: {
       const job_dictionary_state: Record<string, TJobDictionary> = {};
         const jobList : TJobList = {};
-    action.data.jobs.forEach((item: DqoJobHistoryEntryModel) => {
+      action.data.jobs.forEach((item: DqoJobHistoryEntryModel) => {
       
     const jobIdKey = String(item.jobId?.parentJobId?.jobId || item.jobId?.jobId || '');
 
@@ -114,8 +117,8 @@ const schemaReducer = (state = initialState, action: any) => {
 
       jobList[jobIdKey].push(String(item?.jobId?.jobId) || '');
     }});
-      console.log(jobList, job_dictionary_state)
-      return {
+
+    return {
         ...state,
         loading: false,
         job_dictionary_state,
@@ -256,9 +259,8 @@ const schemaReducer = (state = initialState, action: any) => {
           }
         }
       });
-      console.log(not_filtered_job_dictionary_state, notFilteredList)
-
-      const {filteredObject: job_dictionary_state, filteredList: jobList} = filterObject(not_filtered_job_dictionary_state, notFilteredList);
+      const {filteredObject: job_dictionary_state, filteredList: jobList} =
+       filterObject(not_filtered_job_dictionary_state, notFilteredList);
 
       return {
         ...state,
@@ -341,6 +343,19 @@ const schemaReducer = (state = initialState, action: any) => {
       return {
         ...state,
         userProfile: action.userProfile
+      }
+    }
+    case JOB_ACTION.SET_ERRORS: {
+      const error = {...action.error}
+      const error_dictionary_state = [...state.error_dictionary_state]
+
+      if (!error_dictionary_state.find((err) => err.date === error.date)) {
+        error_dictionary_state.push(error)
+      }
+
+      return {
+        ...state,
+        error_dictionary_state
       }
     }
     default:
