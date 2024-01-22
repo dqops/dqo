@@ -94,21 +94,21 @@ public class SingleStoreTableAvailabilitySensorParametersSpecIntegrationTest ext
         Assertions.assertEquals(0.0f, resultTable.column(0).get(0));
     }
 
-//    @Test
-//    void runSensor_whenSensorExecutedOnNonExistingTable_thenReturnsFailedValue() {
-//        ConnectionSpec connectionSpec = SingleStoreConnectionSpecObjectMother.create();
-//
-//        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataWithNonExistingTable("schema", "table", connectionSpec);        // todo
-//        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-//
-//        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForProfilingCheck(
-//                sampleTableMetadata, this.checkSpec);
-//
-//        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
-//
-//        Table resultTable = sensorResult.getResultTable();
-//        Assertions.assertEquals(1, resultTable.rowCount());
-//        Assertions.assertEquals("actual_value", resultTable.column(0).name());
-//        Assertions.assertEquals(1.0, resultTable.column(0).get(0));
-//    }
+    @Test
+    void runSensor_whenSensorExecutedOnNonExistingTable_thenReturnsFailedValue() {
+        ConnectionSpec connectionSpec = SingleStoreConnectionSpecObjectMother.create();
+
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataWithNonExistingTable("schema", "table", connectionSpec);
+        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForProfilingCheck(
+                sampleTableMetadata, this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(1.0, resultTable.column(0).get(0));
+    }
 }
