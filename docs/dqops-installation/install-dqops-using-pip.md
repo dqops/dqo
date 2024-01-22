@@ -84,7 +84,7 @@ DQOps is available on [PyPi repository](https://pypi.org/project/dqops/).
     Successfully installed dqops-1.0.0
     ```
 
-    If you see additional two warning (shown in yellow on Microsoft Windows) that the default location
+    <span id="add-python-scripts-to-path">If</span> you see additional two warning (shown in yellow on Microsoft Windows) that the default location
     where scripts are added is not included in the `PATH` environment variable, copy the path
     shown in the window (it was *C:\Users\&lt;yourlogin&gt;\AppData\Roaming\Python\Python39\Scripts* it the example below),
     and add it to the default `$PATH` environment variable. After changing the environment variables, you will need to open
@@ -129,9 +129,9 @@ After adding the *PyPi* host names to the list of trusted locations, repeat the 
     !!! note "Start DQOps using a startup script"
 
         DQOps package registers also a `dqo` script on the *PATH*. You can start DQOps simply by running a `dqo` command,
-        if the Python location is correctly configured on the *PATH* variable.
+        if the Python location is correctly configured on the *PATH* environment variable.
 
-        If you are lucky to have a proper Python installation, you can start DQOps simply from the command line as shown below.
+        If you are lucky to have a [proper Python installation](#add-python-scripts-to-path), you can start DQOps simply from the command line as shown below.
 
         === "Windows"
             ```
