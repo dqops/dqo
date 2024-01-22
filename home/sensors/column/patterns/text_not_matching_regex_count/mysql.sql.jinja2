@@ -13,8 +13,7 @@ SELECT
         WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
         ELSE SUM(
             CASE
-                WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
-                    THEN 0
+                WHEN {{ lib.render_regexp(lib.render_target_column('analyzed_table'), render_regex(parameters.regex), '                ') }} THEN 0
                 ELSE 1
             END
         )
