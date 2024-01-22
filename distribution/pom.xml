@@ -69,7 +69,7 @@
 								<descriptor>zip.xml</descriptor>
 							</descriptors>
 							<archiverConfig>
-								<compress>false</compress>
+								<compress>true</compress>
 							</archiverConfig>
 						</configuration>
 					</execution>
