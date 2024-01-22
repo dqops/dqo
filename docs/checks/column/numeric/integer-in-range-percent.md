@@ -15,13 +15,13 @@ The **integer in range percent** data quality check has the following variants f
 
 Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_integer_in_range_percent`</span>|profiling| |Reasonableness|[*integer_in_range_percent*](../../../reference/sensors/column/numeric-column-sensors.md#integer-in-range-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_integer_in_range_percent`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Reasonableness|[*integer_in_range_percent*](../../../reference/sensors/column/numeric-column-sensors.md#integer-in-range-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile integer in range percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile integer in range percent data quality check.
 
 ??? example "Managing profile integer in range percent check from DQOps shell"
 
@@ -1088,13 +1088,13 @@ ___
 
 Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_integer_in_range_percent`</span>|monitoring|daily|Reasonableness|[*integer_in_range_percent*](../../../reference/sensors/column/numeric-column-sensors.md#integer-in-range-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_integer_in_range_percent`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Reasonableness|[*integer_in_range_percent*](../../../reference/sensors/column/numeric-column-sensors.md#integer-in-range-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily integer in range percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily integer in range percent data quality check.
 
 ??? example "Managing daily integer in range percent check from DQOps shell"
 
@@ -2163,13 +2163,13 @@ ___
 
 Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent value for each month when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_integer_in_range_percent`</span>|monitoring|monthly|Reasonableness|[*integer_in_range_percent*](../../../reference/sensors/column/numeric-column-sensors.md#integer-in-range-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_integer_in_range_percent`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Reasonableness|[*integer_in_range_percent*](../../../reference/sensors/column/numeric-column-sensors.md#integer-in-range-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly integer in range percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly integer in range percent data quality check.
 
 ??? example "Managing monthly integer in range percent check from DQOps shell"
 
@@ -3238,13 +3238,13 @@ ___
 
 Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each daily partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_integer_in_range_percent`</span>|partitioned|daily|Reasonableness|[*integer_in_range_percent*](../../../reference/sensors/column/numeric-column-sensors.md#integer-in-range-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_integer_in_range_percent`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Reasonableness|[*integer_in_range_percent*](../../../reference/sensors/column/numeric-column-sensors.md#integer-in-range-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition integer in range percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition integer in range percent data quality check.
 
 ??? example "Managing daily partition integer in range percent check from DQOps shell"
 
@@ -4335,13 +4335,13 @@ ___
 
 Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_partition_integer_in_range_percent`</span>|partitioned|monthly|Reasonableness|[*integer_in_range_percent*](../../../reference/sensors/column/numeric-column-sensors.md#integer-in-range-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_integer_in_range_percent`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Reasonableness|[*integer_in_range_percent*](../../../reference/sensors/column/numeric-column-sensors.md#integer-in-range-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition integer in range percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly partition integer in range percent data quality check.
 
 ??? example "Managing monthly partition integer in range percent check from DQOps shell"
 

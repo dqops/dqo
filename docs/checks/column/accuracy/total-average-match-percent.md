@@ -16,13 +16,13 @@ The **total average match percent** data quality check has the following variant
 
 Verifies that the percentage of difference in total average of a column in a table and total average of a column of another table does not exceed the set number.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_total_average_match_percent`</span>|profiling| |Accuracy|[*total_average_match_percent*](../../../reference/sensors/column/accuracy-column-sensors.md#total-average-match-percent)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_total_average_match_percent`</span>|[accuracy](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-accuracy-data-quality-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Accuracy|[*total_average_match_percent*](../../../reference/sensors/column/accuracy-column-sensors.md#total-average-match-percent)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile total average match percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile total average match percent data quality check.
 
 ??? example "Managing profile total average match percent check from DQOps shell"
 
@@ -535,13 +535,13 @@ ___
 
 Verifies that the percentage of difference in total average of a column in a table and total average of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_total_average_match_percent`</span>|monitoring|daily|Accuracy|[*total_average_match_percent*](../../../reference/sensors/column/accuracy-column-sensors.md#total-average-match-percent)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_total_average_match_percent`</span>|[accuracy](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-accuracy-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Accuracy|[*total_average_match_percent*](../../../reference/sensors/column/accuracy-column-sensors.md#total-average-match-percent)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily total average match percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily total average match percent data quality check.
 
 ??? example "Managing daily total average match percent check from DQOps shell"
 
@@ -1055,13 +1055,13 @@ ___
 
 Verifies that the percentage of difference in total average of a column in a table and total average of a column of another table does not exceed the set number. Stores the most recent check result for each month when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_total_average_match_percent`</span>|monitoring|monthly|Accuracy|[*total_average_match_percent*](../../../reference/sensors/column/accuracy-column-sensors.md#total-average-match-percent)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_total_average_match_percent`</span>|[accuracy](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-accuracy-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Accuracy|[*total_average_match_percent*](../../../reference/sensors/column/accuracy-column-sensors.md#total-average-match-percent)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly total average match percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly total average match percent data quality check.
 
 ??? example "Managing monthly total average match percent check from DQOps shell"
 

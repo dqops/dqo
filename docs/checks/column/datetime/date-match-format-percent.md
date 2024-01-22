@@ -17,13 +17,13 @@ The **date match format percent** data quality check has the following variants 
 
 Verifies that the percentage of date values matching the given format in a text column does not exceed the maximum accepted percentage.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_date_match_format_percent`</span>|profiling| |Validity|[*date_match_format_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-match-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_date_match_format_percent`</span>|[datetime](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-dates.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*date_match_format_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-match-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile date match format percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile date match format percent data quality check.
 
 ??? example "Managing profile date match format percent check from DQOps shell"
 
@@ -1538,13 +1538,13 @@ ___
 
 Verifies that the percentage of date values matching the given format in a text column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily monitoring.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_date_match_format_percent`</span>|monitoring|daily|Validity|[*date_match_format_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-match-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_date_match_format_percent`</span>|[datetime](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-dates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*date_match_format_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-match-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily date match format percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily date match format percent data quality check.
 
 ??? example "Managing daily date match format percent check from DQOps shell"
 
@@ -3061,13 +3061,13 @@ ___
 
 Verifies that the percentage of date values matching the given format in a text column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly monitoring.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_date_match_format_percent`</span>|monitoring|monthly|Validity|[*date_match_format_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-match-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_date_match_format_percent`</span>|[datetime](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-dates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*date_match_format_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-match-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly date match format percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly date match format percent data quality check.
 
 ??? example "Managing monthly date match format percent check from DQOps shell"
 
@@ -4584,13 +4584,13 @@ ___
 
 Verifies that the percentage of date values matching the given format in a text column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_date_match_format_percent`</span>|partitioned|daily|Validity|[*date_match_format_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-match-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_date_match_format_percent`</span>|[datetime](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-dates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*date_match_format_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-match-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition date match format percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition date match format percent data quality check.
 
 ??? example "Managing daily partition date match format percent check from DQOps shell"
 
@@ -6129,13 +6129,13 @@ ___
 
 Verifies that the percentage of date values matching the given format in a text column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_partition_date_match_format_percent`</span>|partitioned|monthly|Validity|[*date_match_format_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-match-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_date_match_format_percent`</span>|[datetime](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-dates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*date_match_format_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-match-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition date match format percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly partition date match format percent data quality check.
 
 ??? example "Managing monthly partition date match format percent check from DQOps shell"
 

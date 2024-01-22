@@ -13,7 +13,7 @@ versioned along with any other pipeline code or machine learning code.
 When the DQOps YAML files are edited in Visual Studio Code, syntax highlighting and code completion is supported. 
 
 In order to enable support for the DQOps file schema in Visual Studio Code, the first line of the YAML file
-must have a reference to a YAML file schema that is published by DQOps, as showing on the following example.
+must have a reference to a YAML file schema that is published by DQOps, as showing in the following example.
 Visual Studio Code uses the schema file for validation and syntax highlighting.
 
 ``` { .yaml .annotate hl_lines="1" }
@@ -61,7 +61,7 @@ Before Visual Studio Code can use the DQOps YAML schema for validation and synta
 extensions must be installed.
 
 First, please install the [YAML](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml) extension
-by Red Hat as shown on the following example.
+by Red Hat as shown in the following example.
 
 ![YAML extension](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/yaml-extension.png)
 

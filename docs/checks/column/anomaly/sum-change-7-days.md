@@ -15,13 +15,13 @@ The **sum change 7 days** data quality check has the following variants for each
 
 Verifies that the sum in a column changed in a fixed rate since the last readout from last week.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_sum_change_7_days`</span>|profiling| |Consistency|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*change_percent_7_days*](../../../reference/rules/Change.md#change-percent-7-days)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_sum_change_7_days`</span>|[anomaly](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*change_percent_7_days*](../../../reference/rules/Change.md#change-percent-7-days)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile sum change 7 days data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile sum change 7 days data quality check.
 
 ??? example "Managing profile sum change 7 days check from DQOps shell"
 
@@ -856,13 +856,13 @@ ___
 
 Verifies that the sum in a column changed in a fixed rate since the last readout from the last week.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_sum_change_7_days`</span>|monitoring|daily|Consistency|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*change_percent_7_days*](../../../reference/rules/Change.md#change-percent-7-days)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_sum_change_7_days`</span>|[anomaly](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*change_percent_7_days*](../../../reference/rules/Change.md#change-percent-7-days)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily sum change 7 days data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily sum change 7 days data quality check.
 
 ??? example "Managing daily sum change 7 days check from DQOps shell"
 
@@ -1699,13 +1699,13 @@ ___
 
 Verifies that the sum in a column changed in a fixed rate since the last readout from the last week.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_sum_change_7_days`</span>|partitioned|daily|Consistency|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*change_percent_7_days*](../../../reference/rules/Change.md#change-percent-7-days)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_sum_change_7_days`</span>|[anomaly](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Consistency|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*change_percent_7_days*](../../../reference/rules/Change.md#change-percent-7-days)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition sum change 7 days data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition sum change 7 days data quality check.
 
 ??? example "Managing daily partition sum change 7 days check from DQOps shell"
 

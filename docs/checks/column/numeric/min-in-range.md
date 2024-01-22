@@ -15,13 +15,13 @@ The **min in range** data quality check has the following variants for each
 
 Verifies that the minimum value in a column is not outside the expected range.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_min_in_range`</span>|profiling| |Reasonableness|[*min_value*](../../../reference/sensors/column/range-column-sensors.md#min-value)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_min_in_range`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Reasonableness|[*min_value*](../../../reference/sensors/column/range-column-sensors.md#min-value)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile min in range data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile min in range data quality check.
 
 ??? example "Managing profile min in range check from DQOps shell"
 
@@ -844,13 +844,13 @@ ___
 
 Verifies that the minimum value in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_min_in_range`</span>|monitoring|daily|Reasonableness|[*min_value*](../../../reference/sensors/column/range-column-sensors.md#min-value)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_min_in_range`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Reasonableness|[*min_value*](../../../reference/sensors/column/range-column-sensors.md#min-value)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily min in range data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily min in range data quality check.
 
 ??? example "Managing daily min in range check from DQOps shell"
 
@@ -1675,13 +1675,13 @@ ___
 
 Verifies that the minimum value in a column does not exceed the expected range. Stores the most recent value for each month when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_min_in_range`</span>|monitoring|monthly|Reasonableness|[*min_value*](../../../reference/sensors/column/range-column-sensors.md#min-value)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_min_in_range`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Reasonableness|[*min_value*](../../../reference/sensors/column/range-column-sensors.md#min-value)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly min in range data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly min in range data quality check.
 
 ??? example "Managing monthly min in range check from DQOps shell"
 
@@ -2506,13 +2506,13 @@ ___
 
 Verifies that the minimum value in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_min_in_range`</span>|partitioned|daily|Reasonableness|[*min_value*](../../../reference/sensors/column/range-column-sensors.md#min-value)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_min_in_range`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Reasonableness|[*min_value*](../../../reference/sensors/column/range-column-sensors.md#min-value)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition min in range data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition min in range data quality check.
 
 ??? example "Managing daily partition min in range check from DQOps shell"
 
@@ -3359,13 +3359,13 @@ ___
 
 Verifies that the minimum value in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_partition_min_in_range`</span>|partitioned|monthly|Reasonableness|[*min_value*](../../../reference/sensors/column/range-column-sensors.md#min-value)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_min_in_range`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Reasonableness|[*min_value*](../../../reference/sensors/column/range-column-sensors.md#min-value)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition min in range data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly partition min in range data quality check.
 
 ??? example "Managing monthly partition min in range check from DQOps shell"
 

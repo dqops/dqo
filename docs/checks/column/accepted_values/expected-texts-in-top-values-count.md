@@ -19,13 +19,13 @@ The **expected texts in top values count** data quality check has the following 
 
 Verifies that the top X most popular column values contain all values from a list of expected values.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_expected_texts_in_top_values_count`</span>|profiling| |Reasonableness|[*expected_texts_in_top_values_count*](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-texts-in-top-values-count)|[*max_missing*](../../../reference/rules/Comparison.md#max-missing)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_expected_texts_in_top_values_count`</span>|[accepted_values](../../../dqo-concepts/categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Reasonableness|[*expected_texts_in_top_values_count*](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-texts-in-top-values-count)|[*max_missing*](../../../reference/rules/Comparison.md#max-missing)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile expected texts in top values count data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile expected texts in top values count data quality check.
 
 ??? example "Managing profile expected texts in top values count check from DQOps shell"
 
@@ -2948,13 +2948,13 @@ ___
 
 Verifies that the top X most popular column values contain all values from a list of expected values. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_expected_texts_in_top_values_count`</span>|monitoring|daily|Reasonableness|[*expected_texts_in_top_values_count*](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-texts-in-top-values-count)|[*max_missing*](../../../reference/rules/Comparison.md#max-missing)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_expected_texts_in_top_values_count`</span>|[accepted_values](../../../dqo-concepts/categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Reasonableness|[*expected_texts_in_top_values_count*](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-texts-in-top-values-count)|[*max_missing*](../../../reference/rules/Comparison.md#max-missing)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily expected texts in top values count data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily expected texts in top values count data quality check.
 
 ??? example "Managing daily expected texts in top values count check from DQOps shell"
 
@@ -5879,13 +5879,13 @@ ___
 
 Verifies that the top X most popular column values contain all values from a list of expected values. Stores the most recent captured value for each month when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_expected_texts_in_top_values_count`</span>|monitoring|monthly|Reasonableness|[*expected_texts_in_top_values_count*](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-texts-in-top-values-count)|[*max_missing*](../../../reference/rules/Comparison.md#max-missing)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_expected_texts_in_top_values_count`</span>|[accepted_values](../../../dqo-concepts/categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Reasonableness|[*expected_texts_in_top_values_count*](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-texts-in-top-values-count)|[*max_missing*](../../../reference/rules/Comparison.md#max-missing)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly expected texts in top values count data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly expected texts in top values count data quality check.
 
 ??? example "Managing monthly expected texts in top values count check from DQOps shell"
 
@@ -8810,13 +8810,13 @@ ___
 
 Verifies that the top X most popular column values contain all values from a list of expected values. Stores a separate data quality check result for each daily partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_expected_texts_in_top_values_count`</span>|partitioned|daily|Reasonableness|[*expected_texts_in_top_values_count*](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-texts-in-top-values-count)|[*max_missing*](../../../reference/rules/Comparison.md#max-missing)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_expected_texts_in_top_values_count`</span>|[accepted_values](../../../dqo-concepts/categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Reasonableness|[*expected_texts_in_top_values_count*](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-texts-in-top-values-count)|[*max_missing*](../../../reference/rules/Comparison.md#max-missing)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition expected texts in top values count data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition expected texts in top values count data quality check.
 
 ??? example "Managing daily partition expected texts in top values count check from DQOps shell"
 
@@ -11761,13 +11761,13 @@ ___
 
 Verifies that the top X most popular column values contain all values from a list of expected values. Stores a separate data quality check result for each monthly partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_partition_expected_texts_in_top_values_count`</span>|partitioned|monthly|Reasonableness|[*expected_texts_in_top_values_count*](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-texts-in-top-values-count)|[*max_missing*](../../../reference/rules/Comparison.md#max-missing)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_expected_texts_in_top_values_count`</span>|[accepted_values](../../../dqo-concepts/categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Reasonableness|[*expected_texts_in_top_values_count*](../../../reference/sensors/column/accepted_values-column-sensors.md#expected-texts-in-top-values-count)|[*max_missing*](../../../reference/rules/Comparison.md#max-missing)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition expected texts in top values count data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly partition expected texts in top values count data quality check.
 
 ??? example "Managing monthly partition expected texts in top values count check from DQOps shell"
 

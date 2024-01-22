@@ -17,17 +17,12 @@ package com.dqops.execution.checks.jobs;
 
 import com.dqops.core.jobqueue.DqoQueueJobId;
 import com.dqops.core.jobqueue.monitoring.DqoJobStatus;
-import com.dqops.rules.RuleSeverityLevel;
-import com.dqops.utils.docs.generators.SampleLongsRegistry;
 import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 
 /**
  * Object returned from the operation that queues a "run checks" job. The result contains the job id that was started
@@ -89,24 +84,9 @@ public class RunChecksQueueJobResult {
         @Override
         public RunChecksQueueJobResult createSample() {
             return new RunChecksQueueJobResult() {{
-                setJobId(new DqoQueueJobId(123456789L) {{
-                    setCreatedAt(LocalDateTime.of((int)SampleLongsRegistry.getYear(),
-                            (int)SampleLongsRegistry.getMonth(),
-                            11,
-                            13,
-                            42,
-                            0
-                    ).toInstant(ZoneOffset.UTC));
-                }});
+                setJobId(new DqoQueueJobId.DqoQueueJobIdSampleFactory().createSample());
                 setStatus(DqoJobStatus.succeeded);
-                setResult(new RunChecksResult() {{
-                    setHighestSeverity(RuleSeverityLevel.error);
-                    setExecutedChecks(10);
-                    setErrors(2);
-                    setWarnings(1);
-                    setValidResults(7);
-                    setFatals(0);
-                }});
+                setResult(new RunChecksResult.RunChecksResultSampleFactory().createSample());
             }};
         }
     }

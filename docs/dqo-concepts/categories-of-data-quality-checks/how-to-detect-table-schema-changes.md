@@ -9,9 +9,9 @@ Data quality checks that are detecting issues related to schema are listed below
 How to detect schema data quality issues.
 
 ## Use cases
-| **Name of the example**                                                             | **Description**                                                                                     |
-|:------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------|
-| [Detect table schema changes](../../examples/schema/detect-table-schema-changes.md) | This example shows how to detect schema changes on the table using several schema detection checks. |
+| **Name of the example**                                                             | **Description**                                                                                           |
+|:------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------|
+| [Detect table schema changes](../../examples/schema/detect-table-schema-changes.md) | This example shows how to detect schema changes on the table using several schema drift detection checks. |
 
 
 ## List of schema checks at a table level

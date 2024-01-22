@@ -130,7 +130,7 @@ The *partition_by_column* should be the name of the **date dimension** column.
 
 ### **Analyze append-only tables**
 All other tables that track financial transactions and cannot be modified are obvious candidates for 
-incremental data quality monitoring, because only the most recent data can change, and the old records are not modified.
+incremental data quality monitoring because only the most recent data can change, and the old records are not modified.
 
 
 ### **Analyze financial data**

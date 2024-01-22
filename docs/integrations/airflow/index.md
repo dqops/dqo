@@ -22,7 +22,7 @@ To use DQOps Airflow Operator an installation of the python package is required.
 DQOps publishes the package on the official repository Python Package Index (PyPI). https://pypi.org/project/dqops/
 
 
-## Combining DQOps with data pipelines in Airflow.
+## Combining DQOps with data pipelines in Airflow
 
 Start the observation of the data quality at every step of the existing data pipelines.
 Might your technology stack is based on a database that is supported in DQOps. 

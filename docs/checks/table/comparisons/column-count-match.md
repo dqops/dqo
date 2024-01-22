@@ -15,13 +15,13 @@ The **column count match** data quality check has the following variants for eac
 
 Verifies that the column count of the tested (parent) table matches the column count of the reference table. Only one comparison result is returned, without data grouping.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_column_count_match`</span>|profiling| |Accuracy|[*column_count*](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_column_count_match`</span>|[comparisons](../../../dqo-concepts/categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Accuracy|[*column_count*](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile column count match data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile column count match data quality check.
 
 ??? example "Managing profile column count match check from DQOps shell"
 
@@ -154,13 +154,13 @@ ___
 
 Verifies that the column count of the tested (parent) table matches the column count of the reference table. Only one comparison result is returned, without data grouping. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_column_count_match`</span>|monitoring|daily|Accuracy|[*column_count*](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_column_count_match`</span>|[comparisons](../../../dqo-concepts/categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Accuracy|[*column_count*](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily column count match data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily column count match data quality check.
 
 ??? example "Managing daily column count match check from DQOps shell"
 
@@ -294,13 +294,13 @@ ___
 
 Verifies that the column count of the tested (parent) table matches the column count of the reference table. Only one comparison result is returned, without data grouping. Stores the most recent captured value for each month when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_column_count_match`</span>|monitoring|monthly|Accuracy|[*column_count*](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_column_count_match`</span>|[comparisons](../../../dqo-concepts/categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Accuracy|[*column_count*](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly column count match data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly column count match data quality check.
 
 ??? example "Managing monthly column count match check from DQOps shell"
 

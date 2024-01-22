@@ -285,6 +285,7 @@ const ProfilingView = () => {
           setNumberOfSelected2={setNumberOfSelected2}
           statistics={statistics}
           onChangeSelectedColumns={onChangeSelectedColumns}
+          refreshListFunc={fetchColumns}
         />
       )}
       {activeTab === 'preview' && (

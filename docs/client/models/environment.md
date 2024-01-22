@@ -64,6 +64,7 @@ The model that describes the current user and his access rights.
 |<span class="no-wrap-code">`can_compare_tables`</span>|User can define table comparison configurations and compare tables.|*boolean*|
 |<span class="no-wrap-code">`can_manage_users`</span>|User can manage other users, add users to a multi-user account, change access rights, reset passwords.|*boolean*|
 |<span class="no-wrap-code">`can_manage_and_view_shared_credentials`</span>|User can manage shared credentials and view (or download) already defined shared credentials.|*boolean*|
+|<span class="no-wrap-code">`can_change_own_password`</span>|User can change his own password in DQOps Cloud, because the DQOps Cloud Pairing API Key is valid and synchronization is enabled.|*boolean*|
 
 
 ___

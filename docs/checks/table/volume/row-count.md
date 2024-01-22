@@ -16,13 +16,13 @@ The **row count** data quality check has the following variants for each
 
 Verifies that the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the table is not empty. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_row_count`</span>|profiling| |Completeness|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_row_count`</span>|[volume](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Completeness|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile row count data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile row count data quality check.
 
 ??? example "Managing profile row count check from DQOps shell"
 
@@ -815,13 +815,13 @@ ___
 
 Verifies that the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the table is not empty. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.Stores the most recent captured row count value for each day when the row count was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_row_count`</span>|monitoring|daily|Completeness|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_row_count`</span>|[volume](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Completeness|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily row count data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily row count data quality check.
 
 ??? example "Managing daily row count check from DQOps shell"
 
@@ -1616,13 +1616,13 @@ ___
 
 Verifies that the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the table is not empty. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.Stores the most recent captured row count value for each month when the row count was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_row_count`</span>|monitoring|monthly|Completeness|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_row_count`</span>|[volume](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Completeness|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly row count data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly row count data quality check.
 
 ??? example "Managing monthly row count check from DQOps shell"
 
@@ -2417,13 +2417,13 @@ ___
 
 Verifies that each daily partition in the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the partition is not empty. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_row_count`</span>|partitioned|daily|Completeness|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_row_count`</span>|[volume](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Completeness|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition row count data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition row count data quality check.
 
 ??? example "Managing daily partition row count check from DQOps shell"
 
@@ -3240,13 +3240,13 @@ ___
 
 Verifies that each monthly partition in the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the partition is not empty. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_partition_row_count`</span>|partitioned|monthly|Completeness|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_row_count`</span>|[volume](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Completeness|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition row count data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly partition row count data quality check.
 
 ??? example "Managing monthly partition row count check from DQOps shell"
 

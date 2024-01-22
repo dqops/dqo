@@ -15,13 +15,13 @@ The **false percent** data quality check has the following variants for each
 
 Verifies that the percentage of false values in a column does not exceed the minimum accepted percentage.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_false_percent`</span>|profiling| |Reasonableness|[*false_percent*](../../../reference/sensors/column/bool-column-sensors.md#false-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_false_percent`</span>|[bool](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Reasonableness|[*false_percent*](../../../reference/sensors/column/bool-column-sensors.md#false-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile false percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile false percent data quality check.
 
 ??? example "Managing profile false percent check from DQOps shell"
 
@@ -1242,13 +1242,13 @@ ___
 
 Verifies that the percentage of false values in a column does not exceed the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_false_percent`</span>|monitoring|daily|Reasonableness|[*false_percent*](../../../reference/sensors/column/bool-column-sensors.md#false-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_false_percent`</span>|[bool](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Reasonableness|[*false_percent*](../../../reference/sensors/column/bool-column-sensors.md#false-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily false percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily false percent data quality check.
 
 ??? example "Managing daily false percent check from DQOps shell"
 
@@ -2471,13 +2471,13 @@ ___
 
 Verifies that the percentage of false values in a column does not exceed the minimum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_false_percent`</span>|monitoring|monthly|Reasonableness|[*false_percent*](../../../reference/sensors/column/bool-column-sensors.md#false-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_false_percent`</span>|[bool](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Reasonableness|[*false_percent*](../../../reference/sensors/column/bool-column-sensors.md#false-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly false percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly false percent data quality check.
 
 ??? example "Managing monthly false percent check from DQOps shell"
 
@@ -3700,13 +3700,13 @@ ___
 
 Verifies that the percentage of false values in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each daily partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_false_percent`</span>|partitioned|daily|Reasonableness|[*false_percent*](../../../reference/sensors/column/bool-column-sensors.md#false-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_false_percent`</span>|[bool](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Reasonableness|[*false_percent*](../../../reference/sensors/column/bool-column-sensors.md#false-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition false percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition false percent data quality check.
 
 ??? example "Managing daily partition false percent check from DQOps shell"
 
@@ -4951,13 +4951,13 @@ ___
 
 Verifies that the percentage of false values in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_partition_false_percent`</span>|partitioned|monthly|Reasonableness|[*false_percent*](../../../reference/sensors/column/bool-column-sensors.md#false-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_false_percent`</span>|[bool](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Reasonableness|[*false_percent*](../../../reference/sensors/column/bool-column-sensors.md#false-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition false percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly partition false percent data quality check.
 
 ??? example "Managing monthly partition false percent check from DQOps shell"
 

@@ -5,6 +5,7 @@ Operations for managing custom data quality sensor definitions in DQOps. The cus
 ___
 ## create_sensor
 Creates (adds) a new sensor given sensor information.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensors/create_sensor.py) to see the source code on GitHub.
 
 
@@ -211,6 +212,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 ___
 ## delete_sensor
 Deletes a custom sensor definition
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensors/delete_sensor.py) to see the source code on GitHub.
 
 
@@ -248,7 +250,6 @@ http://localhost:8888/api/sensors/{fullSensorName}
     from dqops import client
 	from dqops.client.api.sensors import delete_sensor
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
@@ -266,7 +267,6 @@ http://localhost:8888/api/sensors/{fullSensorName}
     from dqops import client
 	from dqops.client.api.sensors import delete_sensor
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
@@ -283,7 +283,6 @@ http://localhost:8888/api/sensors/{fullSensorName}
     ```python
     from dqops import client
 	from dqops.client.api.sensors import delete_sensor
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -304,7 +303,6 @@ http://localhost:8888/api/sensors/{fullSensorName}
     ```python
     from dqops import client
 	from dqops.client.api.sensors import delete_sensor
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -327,6 +325,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 ___
 ## get_all_sensors
 Returns a flat list of all sensors available in DQOps, both built-in sensors and user defined or customized sensors.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensors/get_all_sensors.py) to see the source code on GitHub.
 
 
@@ -364,7 +363,6 @@ http://localhost:8888/api/sensors
     from dqops import client
 	from dqops.client.api.sensors import get_all_sensors
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -382,7 +380,6 @@ http://localhost:8888/api/sensors
     from dqops import client
 	from dqops.client.api.sensors import get_all_sensors
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -399,7 +396,6 @@ http://localhost:8888/api/sensors
     ```python
     from dqops import client
 	from dqops.client.api.sensors import get_all_sensors
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -421,7 +417,6 @@ http://localhost:8888/api/sensors
     from dqops import client
 	from dqops.client.api.sensors import get_all_sensors
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -439,27 +434,11 @@ http://localhost:8888/api/sensors
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "custom" : false,
-	  "built_in" : false,
-	  "can_edit" : false
-	}, {
-	  "custom" : false,
-	  "built_in" : false,
-	  "can_edit" : false
-	}, {
-	  "custom" : false,
-	  "built_in" : false,
-	  "can_edit" : false
-	} ]
-    ```
-
 
 ___
 ## get_sensor
 Returns a sensor model
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensors/get_sensor.py) to see the source code on GitHub.
 
 
@@ -504,7 +483,6 @@ http://localhost:8888/api/sensors/{fullSensorName}
     from dqops import client
 	from dqops.client.api.sensors import get_sensor
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -523,7 +501,6 @@ http://localhost:8888/api/sensors/{fullSensorName}
     from dqops import client
 	from dqops.client.api.sensors import get_sensor
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -541,7 +518,6 @@ http://localhost:8888/api/sensors/{fullSensorName}
     ```python
     from dqops import client
 	from dqops.client.api.sensors import get_sensor
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -564,7 +540,6 @@ http://localhost:8888/api/sensors/{fullSensorName}
     from dqops import client
 	from dqops.client.api.sensors import get_sensor
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -583,31 +558,11 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "full_sensor_name" : "sample_target/sample_category/sample_sensor",
-	  "sensor_definition_spec" : {
-	    "fields" : [ {
-	      "field_name" : "sample_string_param",
-	      "data_type" : "string"
-	    }, {
-	      "field_name" : "sample_double_param",
-	      "data_type" : "double"
-	    } ],
-	    "default_value" : 0.0
-	  },
-	  "provider_sensor_list" : [ ],
-	  "custom" : false,
-	  "built_in" : false,
-	  "can_edit" : true
-	}
-    ```
-
 
 ___
 ## get_sensor_folder_tree
 Returns a tree of all sensors available in DQOps, both built-in sensors and user defined or customized sensors.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensors/get_sensor_folder_tree.py) to see the source code on GitHub.
 
 
@@ -645,7 +600,6 @@ http://localhost:8888/api/definitions/sensors
     from dqops import client
 	from dqops.client.api.sensors import get_sensor_folder_tree
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -663,7 +617,6 @@ http://localhost:8888/api/definitions/sensors
     from dqops import client
 	from dqops.client.api.sensors import get_sensor_folder_tree
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -680,7 +633,6 @@ http://localhost:8888/api/definitions/sensors
     ```python
     from dqops import client
 	from dqops.client.api.sensors import get_sensor_folder_tree
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -702,7 +654,6 @@ http://localhost:8888/api/definitions/sensors
     from dqops import client
 	from dqops.client.api.sensors import get_sensor_folder_tree
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -720,18 +671,12 @@ http://localhost:8888/api/definitions/sensors
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "all_sensors" : [ ]
-	}
-    ```
-
 
 ___
 ## update_sensor
 Updates an existing sensor, making a custom sensor definition if it is not present. 
 Removes sensor if custom definition is same as Dqo Home sensor
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensors/update_sensor.py) to see the source code on GitHub.
 
 

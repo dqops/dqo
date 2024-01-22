@@ -1462,6 +1462,7 @@ from .sort_direction import SortDirection
 from .spark_parameters_spec import SparkParametersSpec
 from .spark_parameters_spec_properties import SparkParametersSpecProperties
 from .spring_error_payload import SpringErrorPayload
+from .sql_server_authentication_mode import SqlServerAuthenticationMode
 from .sql_server_parameters_spec import SqlServerParametersSpec
 from .sql_server_parameters_spec_properties import SqlServerParametersSpecProperties
 from .statistics_collector_search_filters import StatisticsCollectorSearchFilters
@@ -2510,6 +2511,7 @@ __all__ = (
     "SparkParametersSpec",
     "SparkParametersSpecProperties",
     "SpringErrorPayload",
+    "SqlServerAuthenticationMode",
     "SqlServerParametersSpec",
     "SqlServerParametersSpecProperties",
     "StatisticsCollectorSearchFilters",

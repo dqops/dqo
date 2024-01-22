@@ -5,6 +5,7 @@ Operations for listing imported schemas from monitored data sources. Also provid
 ___
 ## get_schema_monitoring_checks_model
 Return a UI friendly model of configurations for data quality monitoring checks on a schema
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/schemas/get_schema_monitoring_checks_model.py) to see the source code on GitHub.
 
 
@@ -151,27 +152,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "sensor_parameters" : [ ],
-	  "disabled" : false,
-	  "configured" : false
-	}, {
-	  "sensor_parameters" : [ ],
-	  "disabled" : false,
-	  "configured" : false
-	}, {
-	  "sensor_parameters" : [ ],
-	  "disabled" : false,
-	  "configured" : false
-	} ]
-    ```
-
 
 ___
 ## get_schema_monitoring_checks_templates
 Return available data quality checks on a requested schema.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/schemas/get_schema_monitoring_checks_templates.py) to see the source code on GitHub.
 
 
@@ -312,21 +297,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "sensor_parameters_definitions" : [ ]
-	}, {
-	  "sensor_parameters_definitions" : [ ]
-	}, {
-	  "sensor_parameters_definitions" : [ ]
-	} ]
-    ```
-
 
 ___
 ## get_schema_partitioned_checks_model
 Return a UI friendly model of configurations for data quality partitioned checks on a schema
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/schemas/get_schema_partitioned_checks_model.py) to see the source code on GitHub.
 
 
@@ -473,27 +448,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "sensor_parameters" : [ ],
-	  "disabled" : false,
-	  "configured" : false
-	}, {
-	  "sensor_parameters" : [ ],
-	  "disabled" : false,
-	  "configured" : false
-	}, {
-	  "sensor_parameters" : [ ],
-	  "disabled" : false,
-	  "configured" : false
-	} ]
-    ```
-
 
 ___
 ## get_schema_partitioned_checks_templates
 Return available data quality checks on a requested schema.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/schemas/get_schema_partitioned_checks_templates.py) to see the source code on GitHub.
 
 
@@ -634,21 +593,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "sensor_parameters_definitions" : [ ]
-	}, {
-	  "sensor_parameters_definitions" : [ ]
-	}, {
-	  "sensor_parameters_definitions" : [ ]
-	} ]
-    ```
-
 
 ___
 ## get_schema_profiling_checks_model
 Return a flat list of configurations for profiling checks on a schema
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/schemas/get_schema_profiling_checks_model.py) to see the source code on GitHub.
 
 
@@ -786,27 +735,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "sensor_parameters" : [ ],
-	  "disabled" : false,
-	  "configured" : false
-	}, {
-	  "sensor_parameters" : [ ],
-	  "disabled" : false,
-	  "configured" : false
-	}, {
-	  "sensor_parameters" : [ ],
-	  "disabled" : false,
-	  "configured" : false
-	} ]
-    ```
-
 
 ___
 ## get_schema_profiling_checks_templates
 Return available data quality checks on a requested schema.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/schemas/get_schema_profiling_checks_templates.py) to see the source code on GitHub.
 
 
@@ -938,21 +871,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "sensor_parameters_definitions" : [ ]
-	}, {
-	  "sensor_parameters_definitions" : [ ]
-	}, {
-	  "sensor_parameters_definitions" : [ ]
-	} ]
-    ```
-
 
 ___
 ## get_schemas
 Returns a list of schemas inside a connection
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/schemas/get_schemas.py) to see the source code on GitHub.
 
 
@@ -997,7 +920,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas
     from dqops import client
 	from dqops.client.api.schemas import get_schemas
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -1016,7 +938,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas
     from dqops import client
 	from dqops.client.api.schemas import get_schemas
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -1034,7 +955,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas
     ```python
     from dqops import client
 	from dqops.client.api.schemas import get_schemas
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -1057,7 +977,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas
     from dqops import client
 	from dqops.client.api.schemas import get_schemas
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -1075,25 +994,5 @@ http://localhost:8888/api/connections/{connectionName}/schemas
 
 
 
-
-??? "Return value sample"
-    ```js
-    [ {
-	  "can_edit" : false,
-	  "can_collect_statistics" : false,
-	  "can_run_checks" : false,
-	  "can_delete_data" : false
-	}, {
-	  "can_edit" : false,
-	  "can_collect_statistics" : false,
-	  "can_run_checks" : false,
-	  "can_delete_data" : false
-	}, {
-	  "can_edit" : false,
-	  "can_collect_statistics" : false,
-	  "can_run_checks" : false,
-	  "can_delete_data" : false
-	} ]
-    ```
 
 

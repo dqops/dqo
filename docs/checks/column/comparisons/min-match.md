@@ -16,13 +16,13 @@ The **min match** data quality check has the following variants for each
 
 Verifies that percentage of the difference between the minimum value in a tested column in a parent table and the minimum value in a column in the reference table. The difference must be below defined percentage thresholds.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_min_match`</span>|profiling| |Accuracy|[*min_value*](../../../reference/sensors/column/range-column-sensors.md#min-value)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_min_match`</span>|[comparisons](../../../dqo-concepts/categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Accuracy|[*min_value*](../../../reference/sensors/column/range-column-sensors.md#min-value)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile min match data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile min match data quality check.
 
 ??? example "Managing profile min match check from DQOps shell"
 
@@ -481,13 +481,13 @@ ___
 
 Verifies that percentage of the difference between the minimum value in a tested column in a parent table and the minimum value in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_min_match`</span>|monitoring|daily|Accuracy|[*min_value*](../../../reference/sensors/column/range-column-sensors.md#min-value)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_min_match`</span>|[comparisons](../../../dqo-concepts/categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Accuracy|[*min_value*](../../../reference/sensors/column/range-column-sensors.md#min-value)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily min match data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily min match data quality check.
 
 ??? example "Managing daily min match check from DQOps shell"
 
@@ -947,13 +947,13 @@ ___
 
 Verifies that percentage of the difference between the minimum value in a tested column in a parent table and the minimum value in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each month when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_min_match`</span>|monitoring|monthly|Accuracy|[*min_value*](../../../reference/sensors/column/range-column-sensors.md#min-value)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_min_match`</span>|[comparisons](../../../dqo-concepts/categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Accuracy|[*min_value*](../../../reference/sensors/column/range-column-sensors.md#min-value)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly min match data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly min match data quality check.
 
 ??? example "Managing monthly min match check from DQOps shell"
 
@@ -1413,13 +1413,13 @@ ___
 
 Verifies that percentage of the difference between the minimum value in a tested column in a parent table and the minimum value in a column in the reference table. The difference must be below defined percentage thresholds. Compares each daily partition (each day of data) between the compared table and the reference table (the source of truth).
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_min_match`</span>|partitioned|daily|Accuracy|[*min_value*](../../../reference/sensors/column/range-column-sensors.md#min-value)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_min_match`</span>|[comparisons](../../../dqo-concepts/categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Accuracy|[*min_value*](../../../reference/sensors/column/range-column-sensors.md#min-value)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition min match data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition min match data quality check.
 
 ??? example "Managing daily partition min match check from DQOps shell"
 
@@ -1893,13 +1893,13 @@ ___
 
 Verifies that percentage of the difference between the minimum value in a tested column in a parent table and the minimum value in a column in the reference table. The difference must be below defined percentage thresholds. Compares each monthly partition (each month of data) between the compared table and the reference table (the source of truth).
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_partition_min_match`</span>|partitioned|monthly|Accuracy|[*min_value*](../../../reference/sensors/column/range-column-sensors.md#min-value)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_min_match`</span>|[comparisons](../../../dqo-concepts/categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Accuracy|[*min_value*](../../../reference/sensors/column/range-column-sensors.md#min-value)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition min match data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly partition min match data quality check.
 
 ??? example "Managing monthly partition min match check from DQOps shell"
 

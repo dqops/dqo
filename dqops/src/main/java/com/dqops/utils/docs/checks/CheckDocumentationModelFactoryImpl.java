@@ -95,30 +95,6 @@ import java.util.*;
 public class CheckDocumentationModelFactoryImpl implements CheckDocumentationModelFactory {
     private static final String COMPARISON_NAME = "compare_to_source_of_truth_table";
 
-    private static final Map<String, String> TABLE_CATEGORY_HELP = new LinkedHashMap<>() {{
-        put("volume", "Evaluates the overall quality of the table by verifying the number of rows.");
-        put("timeliness", "Assesses the freshness and staleness of data, as well as data ingestion delay and reload lag for partitioned data.");
-        put("accuracy", "Compares the tested table with another (reference) table.");
-        put("custom_sql", "Validate data against user-defined SQL queries at the table level. Checks in this group allow for validation that the set percentage of rows passed a custom SQL expression or that the custom SQL expression is not outside the set range.");
-        put("availability", "Checks whether the table is accessible and available for use.");
-        put("anomaly", "Detects anomalous (unexpected) changes and outliers in the time series of data quality results collected over a period of time.");
-        put("schema", "Detects schema drifts such as columns added, removed, reordered or the data types of columns have changed.");
-    }};
-
-    private static final Map<String, String> COLUMN_CATEGORY_HELP = new LinkedHashMap<>() {{
-        put("nulls", "Checks for the presence of null or missing values in a column.");
-        put("numeric", "Validates that the data in a numeric column is in the expected format or within predefined ranges.");
-        put("text", "Validates that the data in a string column match the expected format or pattern.");
-        put("uniqueness", "Counts the number or percent of duplicate or unique values in a column.");
-        put("datetime", "Validates that the data in a date or time column is in the expected format and within predefined ranges.");
-        put("pii", "Checks for the presence of sensitive or personally identifiable information (PII) in a column such as email, phone, zip code, IP4 and IP6 addresses.");
-        put("custom_sql", "Validate data against user-defined SQL queries at the column level. Checks in this group allows to validate that the set percentage of rows passed a custom SQL expression or that the custom SQL expression is not outside the set range.");
-        put("bool", "Calculates the percentage of data in a Boolean format.");
-        put("integrity", "Checks the referential integrity of a column against a column in another table.");
-        put("anomaly", "Detects anomalous (unexpected) changes and outliers in the time series of data quality results collected over a period of time.");
-        put("schema", "Detects schema drifts such as a column is missing or the data type has changed.");
-    }};
-
     private static final CommentFormatter commentFormatter = new CommentFormatter();
 
     private SimilarCheckMatchingService similarCheckMatchingService;
@@ -217,7 +193,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
 
         SimilarChecksContainer similarTableChecks = this.similarCheckMatchingService.findSimilarTableChecks();
         Map<String, Collection<SimilarChecksGroup>> checksPerGroup = similarTableChecks.getChecksPerGroup();
-        List<CheckCategoryDocumentationModel> resultList = buildDocumentationForChecks(checksPerGroup, TABLE_CATEGORY_HELP, tableSpec, CheckTarget.table);
+        List<CheckCategoryDocumentationModel> resultList = buildDocumentationForChecks(checksPerGroup, CheckCategoryDocumentationIndex.TABLE_CATEGORY_HELP, tableSpec, CheckTarget.table);
 
         resultList.sort(Comparator.comparing(CheckCategoryDocumentationModel::getCategoryName));
 
@@ -238,7 +214,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
 
         SimilarChecksContainer similarTableChecks = this.similarCheckMatchingService.findSimilarColumnChecks();
         Map<String, Collection<SimilarChecksGroup>> checksPerGroup = similarTableChecks.getChecksPerGroup();
-        List<CheckCategoryDocumentationModel> resultList = buildDocumentationForChecks(checksPerGroup, COLUMN_CATEGORY_HELP, tableSpec, CheckTarget.column);
+        List<CheckCategoryDocumentationModel> resultList = buildDocumentationForChecks(checksPerGroup, CheckCategoryDocumentationIndex.COLUMN_CATEGORY_HELP, tableSpec, CheckTarget.column);
 
         resultList.sort(Comparator.comparing(CheckCategoryDocumentationModel::getCategoryName));
 
@@ -287,7 +263,6 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 }
 
                 similarChecksDocumentationModel.setPrimaryCheckName(firstCheckName.replace('_', ' '));
-                similarChecksDocumentationModel.setCheckClass(firstCheckModel.getCheckModel().isStandard() ? "standard" : "advanced");
                 similarChecksDocumentationModel.setStandard(firstCheckModel.getCheckModel().isStandard());
                 similarChecksDocumentationModel.setQualityDimension(firstCheckModel.getCheckModel().getQualityDimension());
 
@@ -330,8 +305,11 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
 
         CheckDocumentationModel checkDocumentationModel = new CheckDocumentationModel();
         checkDocumentationModel.setCheckName(checkModel.getCheckName());
-        checkDocumentationModel.setCheckType(similarCheckModel.getCheckType().getDisplayName());
-        checkDocumentationModel.setCheckClass(checkModel.isStandard() ? "standard" : "advanced");
+        String checkTypeName = similarCheckModel.getCheckType().getDisplayName();
+        checkDocumentationModel.setCheckType(checkTypeName);
+        checkDocumentationModel.setCheckTypeConceptPage(CheckCategoryDocumentationIndex.CHECK_TYPE_PAGES.get(checkTypeName));
+
+        checkDocumentationModel.setStandard(checkModel.isStandard());
         checkDocumentationModel.setTimeScale(similarCheckModel.getTimeScale() != null ? similarCheckModel.getTimeScale().name() : null);
         checkDocumentationModel.setQualityDimension(similarCheckModel.getCheckModel().getQualityDimension());
 
@@ -347,6 +325,11 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         checkDocumentationModel.setTarget(similarCheckModel.getCheckTarget().toString());
         String checkCategoryName = similarCheckModel.getCategory();
         checkDocumentationModel.setCategory(checkCategoryName);
+        String categoryPageName = CheckCategoryDocumentationIndex.CATEGORY_FILE_NAMES.get(checkCategoryName);
+        if (categoryPageName == null) {
+            categoryPageName =  "how-to-detect-" + checkCategoryName.replace('_', '-') + "-data-quality-issues.md";
+        }
+        checkDocumentationModel.setCategoryPageName(categoryPageName);
 
         ClassJavadoc checkClassJavadoc = RuntimeJavadoc.getJavadoc(checkModel.getCheckSpec().getClass());
         if (checkClassJavadoc != null) {

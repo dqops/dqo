@@ -21,8 +21,9 @@ def _verify_tag_application(line: str):
 
     script_tag_opening: str = "<script"
     script_exclusion_string: str = "lazyload.min.js"
+    excluded_config_script_tag_opening: str = "<script id=\"__config\" type=\"application/json\""
 
-    if script_tag_opening not in line or script_exclusion_string in line:
+    if script_tag_opening not in line or script_exclusion_string in line or excluded_config_script_tag_opening in line:
         return False
     return True
 
@@ -34,6 +35,9 @@ def _apply_tag_modification(line: str) -> str:
 def _replace_in_opening_script_tag(line: str, replaced: str, replacement: str) -> str:
 
     result = opening_script_tag_pattern.search(line)
+    if result is None:
+        return line
+
     match_text = result.group(0)
 
     modified_line: str = line.replace(match_text, match_text.replace(replaced, replacement))

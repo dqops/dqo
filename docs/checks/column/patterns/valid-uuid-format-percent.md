@@ -15,13 +15,13 @@ The **valid uuid format percent** data quality check has the following variants 
 
 Verifies that the percentage of valid UUID in a text column does not fall below the minimum accepted percentage.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_valid_uuid_format_percent`</span>|profiling| |Validity|[*valid_uuid_format_percent*](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_valid_uuid_format_percent`</span>|[patterns](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*valid_uuid_format_percent*](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile valid uuid format percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile valid uuid format percent data quality check.
 
 ??? example "Managing profile valid uuid format percent check from DQOps shell"
 
@@ -1242,13 +1242,13 @@ ___
 
 Verifies that the percentage of valid UUID in a text column does not fall below the minimum accepted percentage.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_valid_uuid_format_percent`</span>|monitoring|daily|Validity|[*valid_uuid_format_percent*](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_valid_uuid_format_percent`</span>|[patterns](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*valid_uuid_format_percent*](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily valid uuid format percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily valid uuid format percent data quality check.
 
 ??? example "Managing daily valid uuid format percent check from DQOps shell"
 
@@ -2471,13 +2471,13 @@ ___
 
 Verifies that the percentage of valid UUID in a text column does not fall below the minimum accepted percentage.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_valid_uuid_format_percent`</span>|monitoring|monthly|Validity|[*valid_uuid_format_percent*](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_valid_uuid_format_percent`</span>|[patterns](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*valid_uuid_format_percent*](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly valid uuid format percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly valid uuid format percent data quality check.
 
 ??? example "Managing monthly valid uuid format percent check from DQOps shell"
 
@@ -3700,13 +3700,13 @@ ___
 
 Verifies that the percentage of valid UUID in a text column does not fall below the minimum accepted percentage.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_valid_uuid_format_percent`</span>|partitioned|daily|Validity|[*valid_uuid_format_percent*](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_valid_uuid_format_percent`</span>|[patterns](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*valid_uuid_format_percent*](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition valid uuid format percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition valid uuid format percent data quality check.
 
 ??? example "Managing daily partition valid uuid format percent check from DQOps shell"
 
@@ -4951,13 +4951,13 @@ ___
 
 Verifies that the percentage of valid UUID in a text column does not fall below the minimum accepted percentage.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_partition_valid_uuid_format_percent`</span>|partitioned|monthly|Validity|[*valid_uuid_format_percent*](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_valid_uuid_format_percent`</span>|[patterns](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*valid_uuid_format_percent*](../../../reference/sensors/column/patterns-column-sensors.md#valid-uuid-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition valid uuid format percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly partition valid uuid format percent data quality check.
 
 ??? example "Managing monthly partition valid uuid format percent check from DQOps shell"
 

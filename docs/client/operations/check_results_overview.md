@@ -5,6 +5,7 @@ Returns the overview of the recently executed checks on tables and columns, retu
 ___
 ## get_column_monitoring_checks_overview
 Returns an overview of the most recent column level monitoring executions for the monitoring at a requested time scale
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/check_results_overview/get_column_monitoring_checks_overview.py) to see the source code on GitHub.
 
 
@@ -150,42 +151,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "checkHash" : 0,
-	  "timePeriods" : [ ],
-	  "timePeriodsUtc" : [ ],
-	  "executedAtTimestamps" : [ ],
-	  "timePeriodDisplayTexts" : [ ],
-	  "statuses" : [ ],
-	  "dataGroups" : [ ],
-	  "results" : [ ]
-	}, {
-	  "checkHash" : 0,
-	  "timePeriods" : [ ],
-	  "timePeriodsUtc" : [ ],
-	  "executedAtTimestamps" : [ ],
-	  "timePeriodDisplayTexts" : [ ],
-	  "statuses" : [ ],
-	  "dataGroups" : [ ],
-	  "results" : [ ]
-	}, {
-	  "checkHash" : 0,
-	  "timePeriods" : [ ],
-	  "timePeriodsUtc" : [ ],
-	  "executedAtTimestamps" : [ ],
-	  "timePeriodDisplayTexts" : [ ],
-	  "statuses" : [ ],
-	  "dataGroups" : [ ],
-	  "results" : [ ]
-	} ]
-    ```
-
 
 ___
 ## get_column_partitioned_checks_overview
 Returns an overview of the most recent column level partitioned checks executions for a requested time scale
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/check_results_overview/get_column_partitioned_checks_overview.py) to see the source code on GitHub.
 
 
@@ -331,42 +301,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "checkHash" : 0,
-	  "timePeriods" : [ ],
-	  "timePeriodsUtc" : [ ],
-	  "executedAtTimestamps" : [ ],
-	  "timePeriodDisplayTexts" : [ ],
-	  "statuses" : [ ],
-	  "dataGroups" : [ ],
-	  "results" : [ ]
-	}, {
-	  "checkHash" : 0,
-	  "timePeriods" : [ ],
-	  "timePeriodsUtc" : [ ],
-	  "executedAtTimestamps" : [ ],
-	  "timePeriodDisplayTexts" : [ ],
-	  "statuses" : [ ],
-	  "dataGroups" : [ ],
-	  "results" : [ ]
-	}, {
-	  "checkHash" : 0,
-	  "timePeriods" : [ ],
-	  "timePeriodsUtc" : [ ],
-	  "executedAtTimestamps" : [ ],
-	  "timePeriodDisplayTexts" : [ ],
-	  "statuses" : [ ],
-	  "dataGroups" : [ ],
-	  "results" : [ ]
-	} ]
-    ```
-
 
 ___
 ## get_column_profiling_checks_overview
 Returns an overview of the most recent check executions for all column level data quality profiling checks on a column
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/check_results_overview/get_column_profiling_checks_overview.py) to see the source code on GitHub.
 
 
@@ -416,7 +355,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.check_results_overview import get_column_profiling_checks_overview
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -438,7 +376,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.check_results_overview import get_column_profiling_checks_overview
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -459,7 +396,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.check_results_overview import get_column_profiling_checks_overview
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -485,7 +421,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.check_results_overview import get_column_profiling_checks_overview
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -507,42 +442,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "checkHash" : 0,
-	  "timePeriods" : [ ],
-	  "timePeriodsUtc" : [ ],
-	  "executedAtTimestamps" : [ ],
-	  "timePeriodDisplayTexts" : [ ],
-	  "statuses" : [ ],
-	  "dataGroups" : [ ],
-	  "results" : [ ]
-	}, {
-	  "checkHash" : 0,
-	  "timePeriods" : [ ],
-	  "timePeriodsUtc" : [ ],
-	  "executedAtTimestamps" : [ ],
-	  "timePeriodDisplayTexts" : [ ],
-	  "statuses" : [ ],
-	  "dataGroups" : [ ],
-	  "results" : [ ]
-	}, {
-	  "checkHash" : 0,
-	  "timePeriods" : [ ],
-	  "timePeriodsUtc" : [ ],
-	  "executedAtTimestamps" : [ ],
-	  "timePeriodDisplayTexts" : [ ],
-	  "statuses" : [ ],
-	  "dataGroups" : [ ],
-	  "results" : [ ]
-	} ]
-    ```
-
 
 ___
 ## get_table_monitoring_checks_overview
 Returns an overview of the most recent table level monitoring executions for the monitoring at a requested time scale
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/check_results_overview/get_table_monitoring_checks_overview.py) to see the source code on GitHub.
 
 
@@ -683,42 +587,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "checkHash" : 0,
-	  "timePeriods" : [ ],
-	  "timePeriodsUtc" : [ ],
-	  "executedAtTimestamps" : [ ],
-	  "timePeriodDisplayTexts" : [ ],
-	  "statuses" : [ ],
-	  "dataGroups" : [ ],
-	  "results" : [ ]
-	}, {
-	  "checkHash" : 0,
-	  "timePeriods" : [ ],
-	  "timePeriodsUtc" : [ ],
-	  "executedAtTimestamps" : [ ],
-	  "timePeriodDisplayTexts" : [ ],
-	  "statuses" : [ ],
-	  "dataGroups" : [ ],
-	  "results" : [ ]
-	}, {
-	  "checkHash" : 0,
-	  "timePeriods" : [ ],
-	  "timePeriodsUtc" : [ ],
-	  "executedAtTimestamps" : [ ],
-	  "timePeriodDisplayTexts" : [ ],
-	  "statuses" : [ ],
-	  "dataGroups" : [ ],
-	  "results" : [ ]
-	} ]
-    ```
-
 
 ___
 ## get_table_partitioned_checks_overview
 Returns an overview of the most recent table level partitioned checks executions for a requested time scale
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/check_results_overview/get_table_partitioned_checks_overview.py) to see the source code on GitHub.
 
 
@@ -859,42 +732,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "checkHash" : 0,
-	  "timePeriods" : [ ],
-	  "timePeriodsUtc" : [ ],
-	  "executedAtTimestamps" : [ ],
-	  "timePeriodDisplayTexts" : [ ],
-	  "statuses" : [ ],
-	  "dataGroups" : [ ],
-	  "results" : [ ]
-	}, {
-	  "checkHash" : 0,
-	  "timePeriods" : [ ],
-	  "timePeriodsUtc" : [ ],
-	  "executedAtTimestamps" : [ ],
-	  "timePeriodDisplayTexts" : [ ],
-	  "statuses" : [ ],
-	  "dataGroups" : [ ],
-	  "results" : [ ]
-	}, {
-	  "checkHash" : 0,
-	  "timePeriods" : [ ],
-	  "timePeriodsUtc" : [ ],
-	  "executedAtTimestamps" : [ ],
-	  "timePeriodDisplayTexts" : [ ],
-	  "statuses" : [ ],
-	  "dataGroups" : [ ],
-	  "results" : [ ]
-	} ]
-    ```
-
 
 ___
 ## get_table_profiling_checks_overview
 Returns an overview of the most recent check executions for all table level data quality profiling checks on a table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/check_results_overview/get_table_profiling_checks_overview.py) to see the source code on GitHub.
 
 
@@ -943,7 +785,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.check_results_overview import get_table_profiling_checks_overview
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -964,7 +805,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.check_results_overview import get_table_profiling_checks_overview
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -984,7 +824,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.check_results_overview import get_table_profiling_checks_overview
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -1009,7 +848,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.check_results_overview import get_table_profiling_checks_overview
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -1029,37 +867,5 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-
-??? "Return value sample"
-    ```js
-    [ {
-	  "checkHash" : 0,
-	  "timePeriods" : [ ],
-	  "timePeriodsUtc" : [ ],
-	  "executedAtTimestamps" : [ ],
-	  "timePeriodDisplayTexts" : [ ],
-	  "statuses" : [ ],
-	  "dataGroups" : [ ],
-	  "results" : [ ]
-	}, {
-	  "checkHash" : 0,
-	  "timePeriods" : [ ],
-	  "timePeriodsUtc" : [ ],
-	  "executedAtTimestamps" : [ ],
-	  "timePeriodDisplayTexts" : [ ],
-	  "statuses" : [ ],
-	  "dataGroups" : [ ],
-	  "results" : [ ]
-	}, {
-	  "checkHash" : 0,
-	  "timePeriods" : [ ],
-	  "timePeriodsUtc" : [ ],
-	  "executedAtTimestamps" : [ ],
-	  "timePeriodDisplayTexts" : [ ],
-	  "statuses" : [ ],
-	  "dataGroups" : [ ],
-	  "results" : [ ]
-	} ]
-    ```
 
 

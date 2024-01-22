@@ -70,7 +70,7 @@ This will open a screen where you can set the parameters and thresholds. [Learn 
 
 After setting the thresholds click on the **Activate all selected check** button. 
 
-This will activate all the checks with the selected threshold level, as shown on the example below. 
+This will activate all the checks with the selected threshold level, as shown in the example below. 
 
 ![List of checks after activation](https://dqops.com/docs/images/working-with-dqo/activate-and-deactivate-multiple-checks/checks-after-activation1.png)
 

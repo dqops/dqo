@@ -15,13 +15,13 @@ The **distinct count** data quality check has the following variants for each
 
 Verifies that the number of distinct values in a column does not fall below the minimum accepted count.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_distinct_count`</span>|profiling| |Uniqueness|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*count_between*](../../../reference/rules/Comparison.md#count-between)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_distinct_count`</span>|[uniqueness](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Uniqueness|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*count_between*](../../../reference/rules/Comparison.md#count-between)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile distinct count data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile distinct count data quality check.
 
 ??? example "Managing profile distinct count check from DQOps shell"
 
@@ -932,13 +932,13 @@ ___
 
 Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_distinct_count`</span>|monitoring|daily|Uniqueness|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*count_between*](../../../reference/rules/Comparison.md#count-between)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_distinct_count`</span>|[uniqueness](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Uniqueness|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*count_between*](../../../reference/rules/Comparison.md#count-between)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily distinct count data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily distinct count data quality check.
 
 ??? example "Managing daily distinct count check from DQOps shell"
 
@@ -1851,13 +1851,13 @@ ___
 
 Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores the most recent check result for each month when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_distinct_count`</span>|monitoring|monthly|Uniqueness|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*count_between*](../../../reference/rules/Comparison.md#count-between)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_distinct_count`</span>|[uniqueness](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Uniqueness|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*count_between*](../../../reference/rules/Comparison.md#count-between)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly distinct count data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly distinct count data quality check.
 
 ??? example "Managing monthly distinct count check from DQOps shell"
 
@@ -2770,13 +2770,13 @@ ___
 
 Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores a separate data quality check result for each daily partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_distinct_count`</span>|partitioned|daily|Uniqueness|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*count_between*](../../../reference/rules/Comparison.md#count-between)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_distinct_count`</span>|[uniqueness](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Uniqueness|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*count_between*](../../../reference/rules/Comparison.md#count-between)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition distinct count data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition distinct count data quality check.
 
 ??? example "Managing daily partition distinct count check from DQOps shell"
 
@@ -3711,13 +3711,13 @@ ___
 
 Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores a separate data quality check result for each monthly partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_partition_distinct_count`</span>|partitioned|monthly|Uniqueness|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*count_between*](../../../reference/rules/Comparison.md#count-between)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_distinct_count`</span>|[uniqueness](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Uniqueness|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*count_between*](../../../reference/rules/Comparison.md#count-between)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition distinct count data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly partition distinct count data quality check.
 
 ??? example "Managing monthly partition distinct count check from DQOps shell"
 

@@ -15,13 +15,13 @@ The **not nulls count** data quality check has the following variants for each
 
 Detects empty columns. The default rule min_count&#x3D;1 verifies that the column has any values. Verifies that the number of not null values in a column does not exceed the minimum accepted count.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_not_nulls_count`</span>|profiling| |Completeness|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_not_nulls_count`</span>|[nulls](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-nulls-data-quality-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Completeness|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile not nulls count data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile not nulls count data quality check.
 
 ??? example "Managing profile not nulls count check from DQOps shell"
 
@@ -870,13 +870,13 @@ ___
 
 Detects empty columns. The default rule min_count&#x3D;1 verifies that the column has any values. Verifies that the number of not null values in a column does not exceed the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_not_nulls_count`</span>|monitoring|daily|Completeness|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_not_nulls_count`</span>|[nulls](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-nulls-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Completeness|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily not nulls count data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily not nulls count data quality check.
 
 ??? example "Managing daily not nulls count check from DQOps shell"
 
@@ -1727,13 +1727,13 @@ ___
 
 Detects columns that are empty and have no values (with the rule threshold min_count&#x3D;1). Verifies that the number of not null values in a column does not exceed the minimum accepted count. Stores the most recent check result for each month when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_not_nulls_count`</span>|monitoring|monthly|Completeness|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_not_nulls_count`</span>|[nulls](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-nulls-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Completeness|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly not nulls count data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly not nulls count data quality check.
 
 ??? example "Managing monthly not nulls count check from DQOps shell"
 
@@ -2584,13 +2584,13 @@ ___
 
 Detects empty columns. The default rule min_count&#x3D;1 verifies that the column has any values. Verifies that the number of not null values in a column does not exceed the minimum accepted count. Stores a separate data quality check result for each daily partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_not_nulls_count`</span>|partitioned|daily|Completeness|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_not_nulls_count`</span>|[nulls](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-nulls-data-quality-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Completeness|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition not nulls count data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition not nulls count data quality check.
 
 ??? example "Managing daily partition not nulls count check from DQOps shell"
 
@@ -3463,13 +3463,13 @@ ___
 
 Detects empty columns. The default rule min_count&#x3D;1 verifies that the column has any values. Verifies that the number of not null values in a column does not exceed the minimum accepted count. Stores a separate data quality check result for each monthly partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_partition_not_nulls_count`</span>|partitioned|monthly|Completeness|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_not_nulls_count`</span>|[nulls](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-nulls-data-quality-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Completeness|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition not nulls count data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly partition not nulls count data quality check.
 
 ??? example "Managing monthly partition not nulls count check from DQOps shell"
 

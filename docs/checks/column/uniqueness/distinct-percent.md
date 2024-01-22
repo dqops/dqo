@@ -15,13 +15,13 @@ The **distinct percent** data quality check has the following variants for each
 
 Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_distinct_percent`</span>|profiling| |Uniqueness|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_distinct_percent`</span>|[uniqueness](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Uniqueness|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile distinct percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile distinct percent data quality check.
 
 ??? example "Managing profile distinct percent check from DQOps shell"
 
@@ -1026,13 +1026,13 @@ ___
 
 Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_distinct_percent`</span>|monitoring|daily|Uniqueness|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_distinct_percent`</span>|[uniqueness](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Uniqueness|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily distinct percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily distinct percent data quality check.
 
 ??? example "Managing daily distinct percent check from DQOps shell"
 
@@ -2039,13 +2039,13 @@ ___
 
 Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Stores the most recent check result for each month when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_distinct_percent`</span>|monitoring|monthly|Uniqueness|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_distinct_percent`</span>|[uniqueness](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Uniqueness|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly distinct percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly distinct percent data quality check.
 
 ??? example "Managing monthly distinct percent check from DQOps shell"
 
@@ -3052,13 +3052,13 @@ ___
 
 Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Stores a separate data quality check result for each daily partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_distinct_percent`</span>|partitioned|daily|Uniqueness|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_distinct_percent`</span>|[uniqueness](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Uniqueness|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition distinct percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition distinct percent data quality check.
 
 ??? example "Managing daily partition distinct percent check from DQOps shell"
 
@@ -4087,13 +4087,13 @@ ___
 
 Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Stores a separate data quality check result for each monthly partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_partition_distinct_percent`</span>|partitioned|monthly|Uniqueness|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_distinct_percent`</span>|[uniqueness](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Uniqueness|[*distinct_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition distinct percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly partition distinct percent data quality check.
 
 ??? example "Managing monthly partition distinct percent check from DQOps shell"
 

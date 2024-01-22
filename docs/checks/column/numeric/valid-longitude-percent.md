@@ -15,13 +15,13 @@ The **valid longitude percent** data quality check has the following variants fo
 
 Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_valid_longitude_percent`</span>|profiling| |Validity|[*valid_longitude_percent*](../../../reference/sensors/column/numeric-column-sensors.md#valid-longitude-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_valid_longitude_percent`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*valid_longitude_percent*](../../../reference/sensors/column/numeric-column-sensors.md#valid-longitude-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile valid longitude percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile valid longitude percent data quality check.
 
 ??? example "Managing profile valid longitude percent check from DQOps shell"
 
@@ -1078,13 +1078,13 @@ ___
 
 Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_valid_longitude_percent`</span>|monitoring|daily|Validity|[*valid_longitude_percent*](../../../reference/sensors/column/numeric-column-sensors.md#valid-longitude-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_valid_longitude_percent`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*valid_longitude_percent*](../../../reference/sensors/column/numeric-column-sensors.md#valid-longitude-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily valid longitude percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily valid longitude percent data quality check.
 
 ??? example "Managing daily valid longitude percent check from DQOps shell"
 
@@ -2143,13 +2143,13 @@ ___
 
 Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage. Stores the most recent value for each month when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_valid_longitude_percent`</span>|monitoring|monthly|Validity|[*valid_longitude_percent*](../../../reference/sensors/column/numeric-column-sensors.md#valid-longitude-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_valid_longitude_percent`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*valid_longitude_percent*](../../../reference/sensors/column/numeric-column-sensors.md#valid-longitude-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly valid longitude percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly valid longitude percent data quality check.
 
 ??? example "Managing monthly valid longitude percent check from DQOps shell"
 
@@ -3208,13 +3208,13 @@ ___
 
 Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each daily partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_valid_longitude_percent`</span>|partitioned|daily|Validity|[*valid_longitude_percent*](../../../reference/sensors/column/numeric-column-sensors.md#valid-longitude-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_valid_longitude_percent`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*valid_longitude_percent*](../../../reference/sensors/column/numeric-column-sensors.md#valid-longitude-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition valid longitude percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition valid longitude percent data quality check.
 
 ??? example "Managing daily partition valid longitude percent check from DQOps shell"
 
@@ -4295,13 +4295,13 @@ ___
 
 Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_partition_valid_longitude_percent`</span>|partitioned|monthly|Validity|[*valid_longitude_percent*](../../../reference/sensors/column/numeric-column-sensors.md#valid-longitude-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_valid_longitude_percent`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*valid_longitude_percent*](../../../reference/sensors/column/numeric-column-sensors.md#valid-longitude-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition valid longitude percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly partition valid longitude percent data quality check.
 
 ??? example "Managing monthly partition valid longitude percent check from DQOps shell"
 

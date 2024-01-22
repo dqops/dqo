@@ -1,68 +1,12 @@
-<div class="modal micromodal-slide" id="modal-1" aria-hidden="true">
-  <div class="modal__overlay" tabindex="-1">
-    <div
-      class="modal__container"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="modal-1-title"
-    >
-      <div
-        style="
-          width: 100%;
-          display: flex;
-          justify-content: flex-end;
-          margin-bottom: 20px;
-        "
-      >
-        <button
-          class="modal__btn"
-          data-micromodal-close
-          aria-label="Close this dialog window"
-          style="padding: 0; width: 0px; height: 0px; font-weight: 700"
-        >
-          X
-        </button>
-      </div>
-
-      <div class="popupcontainer">
-        <div class="imagepopupcontainer">
-          <a
-            href="https://dqops.com/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/"
-            target="_blank"
-            id="aEbookLink"
-          >
-            <img
-              src="/docs/images/dqops-ebook-open-with-process.png"
-              alt="A step-by-step guide to improve data quality"
-              title="A step-by-step guide to improve data quality"
-              id="imageEbook"
-              class="glightbox-ignored-image"
-            />
-          </a>
-        </div>
-        <div>
-          <p class="ebook-description-popup">
-            Check out "A Step-by-Step Guide to Improve Data Quality" eBook
-            created by the DQOps team.
-          </p>
-          <p class="ebook-description-popup">
-            Learn the whole process of profiling, monitoring,
-            and fixing data quality issues.
-          </p>
-          <div class="_form_35" style="background-color: white"></div>
-          <script
-            src="https://dqo.activehosted.com/f/embed.php?id=35"
-            type="text/javascript"
-            charset="utf-8"
-            style="background-color: white"
-          ></script>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
 <style>
+  .modal {
+    display: none;
+  }
+
+  .modal.is-open {
+    display: block;
+  }
+
   .popupcontainer {
     display: flex;
   }
@@ -170,6 +114,71 @@
     }
   }
 </style>
+
+<div class="modal micromodal-slide" id="modal-1" aria-hidden="true">
+  <div class="modal__overlay" tabindex="-1">
+    <div
+      class="modal__container"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-1-title"
+    >
+      <div
+        style="
+          width: 100%;
+          display: flex;
+          justify-content: flex-end;
+          margin-bottom: 20px;
+        "
+      >
+        <button
+          class="modal__btn"
+          data-micromodal-close
+          aria-label="Close this dialog window"
+          style="padding: 0; width: 0px; height: 0px; font-weight: 700"
+        >
+          X
+        </button>
+      </div>
+
+      <div class="popupcontainer">
+        <div class="imagepopupcontainer">
+          <a
+            href="https://dqops.com/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/"
+            target="_blank"
+            id="aEbookLink"
+          >
+            <img
+              src="/docs/images/dqops-ebook-open-with-process.png"
+              alt="A step-by-step guide to improve data quality"
+              title="A step-by-step guide to improve data quality"
+              id="imageEbook"
+              class="glightbox-ignored-image"
+            />
+          </a>
+        </div>
+        <div>
+          <p class="ebook-description-popup">
+            Check out "A Step-by-Step Guide to Improve Data Quality" eBook
+            created by the DQOps team.
+          </p>
+          <p class="ebook-description-popup">
+            Learn the whole process of profiling, monitoring,
+            and fixing data quality issues.
+          </p>
+          <div class="_form_35" style="background-color: white"></div>
+          <script
+            data-rocket-src="https://dqo.activehosted.com/f/embed.php?id=35"
+            type="rocketlazyloadscript"
+            charset="utf-8"
+            style="background-color: white"
+          ></script>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="/docs/javascripts/micromodal.min.js"></script>
 <script>
   if (

@@ -20,7 +20,7 @@ The [profiling checks](../dqo-concepts/definition-of-data-quality-checks/data-pr
 statistics and store the most current value for each month. Their role is to monitor the overall quality of data,
 without affecting the [data quality KPIs](../dqo-concepts/definition-of-data-quality-kpis.md).
 
-The [monitoring checks](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md) are the primary type of data quality checks
+The [monitoring checks](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md) are the primary type of data quality check
 used in DQOps for continuous monitoring of the data quality of the data source.
 
 You can learn more about each default check by clicking on the links below.

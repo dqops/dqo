@@ -15,13 +15,13 @@ The **sum change** data quality check has the following variants for each
 
 Verifies that the sum in a column changed in a fixed rate since the last readout.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_sum_change`</span>|profiling| |Consistency|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_sum_change`</span>|[anomaly](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*change_percent*](../../../reference/rules/Change.md#change-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile sum change data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile sum change data quality check.
 
 ??? example "Managing profile sum change check from DQOps shell"
 
@@ -850,13 +850,13 @@ ___
 
 Verifies that the sum in a column changed in a fixed rate since the last readout.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_sum_change`</span>|monitoring|daily|Consistency|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_sum_change`</span>|[anomaly](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*change_percent*](../../../reference/rules/Change.md#change-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily sum change data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily sum change data quality check.
 
 ??? example "Managing daily sum change check from DQOps shell"
 
@@ -1687,13 +1687,13 @@ ___
 
 Verifies that the sum in a column changed in a fixed rate since the last readout.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_sum_change`</span>|monitoring|monthly|Consistency|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_sum_change`</span>|[anomaly](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Consistency|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*change_percent*](../../../reference/rules/Change.md#change-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly sum change data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly sum change data quality check.
 
 ??? example "Managing monthly sum change check from DQOps shell"
 
@@ -2524,13 +2524,13 @@ ___
 
 Verifies that the sum in a column changed in a fixed rate since the last readout.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_sum_change`</span>|partitioned|daily|Consistency|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_sum_change`</span>|[anomaly](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Consistency|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*change_percent*](../../../reference/rules/Change.md#change-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition sum change data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition sum change data quality check.
 
 ??? example "Managing daily partition sum change check from DQOps shell"
 
@@ -3383,13 +3383,13 @@ ___
 
 Verifies that the sum in a column changed in a fixed rate since the last readout.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_partition_sum_change`</span>|partitioned|monthly|Consistency|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_sum_change`</span>|[anomaly](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Consistency|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*change_percent*](../../../reference/rules/Change.md#change-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition sum change data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly partition sum change data quality check.
 
 ??? example "Managing monthly partition sum change check from DQOps shell"
 

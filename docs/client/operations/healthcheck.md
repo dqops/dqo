@@ -5,6 +5,7 @@ Health check operations for checking if the DQOps service is up and operational.
 ___
 ## is_healthy
 Checks if the DQOps instance is healthy and operational. Returns a text &quot;OK&quot; and a HTTP status code 200 when the service is active and can accept jobs,  or returns a text &quot;UNAVAILABLE&quot; and a HTTP status code 503 when the service is still starting or is shutting down.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/healthcheck/is_healthy.py) to see the source code on GitHub.
 
 
@@ -42,7 +43,6 @@ http://localhost:8888/api/ishealthy
     from dqops import client
 	from dqops.client.api.healthcheck import is_healthy
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -60,7 +60,6 @@ http://localhost:8888/api/ishealthy
     from dqops import client
 	from dqops.client.api.healthcheck import is_healthy
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -77,7 +76,6 @@ http://localhost:8888/api/ishealthy
     ```python
     from dqops import client
 	from dqops.client.api.healthcheck import is_healthy
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -99,7 +97,6 @@ http://localhost:8888/api/ishealthy
     from dqops import client
 	from dqops.client.api.healthcheck import is_healthy
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -116,10 +113,5 @@ http://localhost:8888/api/ishealthy
 
 
 
-
-??? "Return value sample"
-    ```js
-    "sample_string_value"
-    ```
 
 

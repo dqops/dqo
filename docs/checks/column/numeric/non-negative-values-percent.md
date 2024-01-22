@@ -15,13 +15,13 @@ The **non negative values percent** data quality check has the following variant
 
 Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_non_negative_values_percent`</span>|profiling| |Validity|[*non_negative_percent*](../../../reference/sensors/column/numeric-column-sensors.md#non-negative-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_non_negative_values_percent`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*non_negative_percent*](../../../reference/sensors/column/numeric-column-sensors.md#non-negative-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile non negative values percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile non negative values percent data quality check.
 
 ??? example "Managing profile non negative values percent check from DQOps shell"
 
@@ -1078,13 +1078,13 @@ ___
 
 Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_non_negative_values_percent`</span>|monitoring|daily|Validity|[*non_negative_percent*](../../../reference/sensors/column/numeric-column-sensors.md#non-negative-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_non_negative_values_percent`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*non_negative_percent*](../../../reference/sensors/column/numeric-column-sensors.md#non-negative-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily non negative values percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily non negative values percent data quality check.
 
 ??? example "Managing daily non negative values percent check from DQOps shell"
 
@@ -2143,13 +2143,13 @@ ___
 
 Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage. Stores the most recent value for each month when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_non_negative_values_percent`</span>|monitoring|monthly|Validity|[*non_negative_percent*](../../../reference/sensors/column/numeric-column-sensors.md#non-negative-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_non_negative_values_percent`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*non_negative_percent*](../../../reference/sensors/column/numeric-column-sensors.md#non-negative-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly non negative values percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly non negative values percent data quality check.
 
 ??? example "Managing monthly non negative values percent check from DQOps shell"
 
@@ -3208,13 +3208,13 @@ ___
 
 Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_non_negative_values_percent`</span>|partitioned|daily|Validity|[*non_negative_percent*](../../../reference/sensors/column/numeric-column-sensors.md#non-negative-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_non_negative_values_percent`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*non_negative_percent*](../../../reference/sensors/column/numeric-column-sensors.md#non-negative-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition non negative values percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition non negative values percent data quality check.
 
 ??? example "Managing daily partition non negative values percent check from DQOps shell"
 
@@ -4295,13 +4295,13 @@ ___
 
 Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_partition_non_negative_values_percent`</span>|partitioned|monthly|Validity|[*non_negative_percent*](../../../reference/sensors/column/numeric-column-sensors.md#non-negative-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_non_negative_values_percent`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*non_negative_percent*](../../../reference/sensors/column/numeric-column-sensors.md#non-negative-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition non negative values percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly partition non negative values percent data quality check.
 
 ??? example "Managing monthly partition non negative values percent check from DQOps shell"
 

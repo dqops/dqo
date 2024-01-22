@@ -15,13 +15,13 @@ The **distinct count anomaly** data quality check has the following variants for
 
 Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_distinct_count_anomaly`</span>|profiling| |Consistency|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*anomaly_differencing_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-differencing-percentile-moving-average)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_distinct_count_anomaly`</span>|[uniqueness](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*anomaly_differencing_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-differencing-percentile-moving-average)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile distinct count anomaly data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile distinct count anomaly data quality check.
 
 ??? example "Managing profile distinct count anomaly check from DQOps shell"
 
@@ -938,13 +938,13 @@ ___
 
 Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_distinct_count_anomaly`</span>|monitoring|daily|Consistency|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*anomaly_differencing_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-differencing-percentile-moving-average)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_distinct_count_anomaly`</span>|[uniqueness](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*anomaly_differencing_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-differencing-percentile-moving-average)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily distinct count anomaly data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily distinct count anomaly data quality check.
 
 ??? example "Managing daily distinct count anomaly check from DQOps shell"
 
@@ -1863,13 +1863,13 @@ ___
 
 Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_distinct_count_anomaly`</span>|partitioned|daily|Consistency|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*anomaly_stationary_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_distinct_count_anomaly`</span>|[uniqueness](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Consistency|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*anomaly_stationary_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition distinct count anomaly data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition distinct count anomaly data quality check.
 
 ??? example "Managing daily partition distinct count anomaly check from DQOps shell"
 

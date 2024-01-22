@@ -15,13 +15,13 @@ The **median in range** data quality check has the following variants for each
 
 Verifies that the median of all values in a column is not outside the expected range.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_median_in_range`</span>|profiling| |Reasonableness|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_median_in_range`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Reasonableness|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile median in range data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile median in range data quality check.
 
 ??? example "Managing profile median in range check from DQOps shell"
 
@@ -1338,13 +1338,13 @@ ___
 
 Verifies that the median of all values in a column is not outside the expected range. Stores the most recent value for each month when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_median_in_range`</span>|monitoring|daily|Reasonableness|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_median_in_range`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Reasonableness|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily median in range data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily median in range data quality check.
 
 ??? example "Managing daily median in range check from DQOps shell"
 
@@ -2663,13 +2663,13 @@ ___
 
 Verifies that the median of all values in a column is not outside the expected range. Stores the most recent value for each month when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_median_in_range`</span>|monitoring|monthly|Reasonableness|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_median_in_range`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Reasonableness|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly median in range data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly median in range data quality check.
 
 ??? example "Managing monthly median in range check from DQOps shell"
 
@@ -3988,13 +3988,13 @@ ___
 
 Verifies that the median of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_median_in_range`</span>|partitioned|daily|Reasonableness|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_median_in_range`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Reasonableness|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition median in range data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition median in range data quality check.
 
 ??? example "Managing daily partition median in range check from DQOps shell"
 
@@ -5333,13 +5333,13 @@ ___
 
 Verifies that the median of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_partition_median_in_range`</span>|partitioned|monthly|Reasonableness|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_median_in_range`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Reasonableness|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition median in range data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly partition median in range data quality check.
 
 ??? example "Managing monthly partition median in range check from DQOps shell"
 

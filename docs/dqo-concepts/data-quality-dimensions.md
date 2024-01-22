@@ -1,18 +1,18 @@
 # Data quality dimensions
-This guide shows the types of data quality dimensions that are measured by DQOps Data Quality Operations Center. 
+This guide shows the types of data quality dimensions that are measured by the DQOps Data Quality Operations Center. 
 
 ## What is the data quality dimension?
 
 Data quality dimension is a term adopted by the data quality field to identify these aspects of data that can be measured 
 and through which its quality can be quantified. While different experts have proposed different data quality dimensions
 and there is no standardization of their names or descriptions, almost all of them include some version of accuracy, completeness, 
-consistency, timeliness, uniqueness and validity.
+consistency, timeliness, uniqueness, and validity.
 
 ### Data quality dimension categories
 
 The following table explains the typical data quality dimensions and data quality issues that can be detected with those dimensions.
-The full list of data quality dimensions can be found in [Dimensions of Data Quality (DDQ) Research Paper](https://www.dama-nl.org/wp-content/uploads/2020/09/DDQ-Dimensions-of-Data-Quality-Research-Paper-version-1.2-d.d.-3-Sept-2020.pdf) 
-published by DAMA NL Foundation.
+The full list of data quality dimensions can be found in the [Dimensions of Data Quality (DDQ) Research Paper](https://www.dama-nl.org/wp-content/uploads/2020/09/DDQ-Dimensions-of-Data-Quality-Research-Paper-version-1.2-d.d.-3-Sept-2020.pdf) 
+published by the DAMA NL Foundation.
 
 | Data quality dimension | Definition                                                                                                                                                                                                                                                                                                          | Potential issues                                                                                                                                                    |
 |:-----------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -30,16 +30,16 @@ Selecting data quality dimensions is one of the steps in the process of defining
 This is usually done by the Data Owner who understands the purpose of the data, the data model, and the business processes 
 in their area of responsibility.
 
-Before you can select data quality dimensions which are relevant for your company, you must first identify current goals 
+Before you can select data quality dimensions that are relevant for your company, you must first identify current goals 
 and scope in terms of data quality monitoring. This will make it easier to come up with the metrics to measure its quality.
 
-Next you need to identify the data elements that are critical or required for a specific business process that needs to 
+Next, you need to identify the data elements that are critical or required for a specific business process that needs to 
 be monitored. This data is typically referred to as critical data elements (CDEs). The Data Owner should also collect and
 define the expectations of data consumers regarding the condition of the data, that ensure its suitability for particular purposes.
 
 It is also a good idea to review the list of previous data quality issues that the Data Owner would like to eliminate in the future.
 
-Only after completing the previous steps you can assess data quality dimensions which are important for your company.
+Only after completing the previous steps, you can assess data quality dimensions that are important for your company.
 For example, if the data must arrive on time and without delays - the company should prioritize timeliness. If it is more
 important that the data arrives in a certain format - the company should prioritize validity.
 

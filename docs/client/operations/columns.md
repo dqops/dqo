@@ -5,6 +5,7 @@ Operations related to manage the metadata of columns, and managing the configura
 ___
 ## create_column
 Creates a new column (adds a column metadata to the table)
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/create_column.py) to see the source code on GitHub.
 
 
@@ -262,6 +263,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## delete_column
 Deletes a column from the table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/delete_column.py) to see the source code on GitHub.
 
 
@@ -309,7 +311,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import delete_column
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
@@ -330,7 +331,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import delete_column
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
@@ -350,7 +350,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.columns import delete_column
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -375,7 +374,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import delete_column
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -396,18 +394,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "jobId" : 10832,
-	  "createdAt" : "2007-10-11T13:42:00Z"
-	}
-    ```
-
 
 ___
 ## get_column
 Returns the full column specification
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column.py) to see the source code on GitHub.
 
 
@@ -455,7 +446,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_column
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -477,7 +467,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_column
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -498,7 +487,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.columns import get_column
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -524,7 +512,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_column
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -546,39 +533,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "connection_name" : "sample_connection",
-	  "table" : {
-	    "schema_name" : "sample_schema",
-	    "table_name" : "sample_table"
-	  },
-	  "column_name" : "sample_column",
-	  "spec" : {
-	    "type_snapshot" : {
-	      "column_type" : "string",
-	      "nullable" : false,
-	      "length" : 256
-	    },
-	    "profiling_checks" : {
-	      "nulls" : {
-	        "profile_nulls_count" : {
-	          "error" : {
-	            "max_count" : 0
-	          }
-	        }
-	      }
-	    }
-	  },
-	  "can_edit" : true
-	}
-    ```
-
 
 ___
 ## get_column_basic
 Returns the column specification
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_basic.py) to see the source code on GitHub.
 
 
@@ -626,7 +585,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_column_basic
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -648,7 +606,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_column_basic
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -669,7 +626,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.columns import get_column_basic
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -695,7 +651,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_column_basic
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -717,33 +672,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "connection_name" : "sample_connection",
-	  "table" : {
-	    "schema_name" : "sample_schema",
-	    "table_name" : "sample_table"
-	  },
-	  "column_name" : "sample_column",
-	  "has_any_configured_checks" : true,
-	  "has_any_configured_profiling_checks" : true,
-	  "type_snapshot" : {
-	    "column_type" : "string",
-	    "nullable" : false,
-	    "length" : 256
-	  },
-	  "can_edit" : false,
-	  "can_collect_statistics" : true,
-	  "can_run_checks" : true,
-	  "can_delete_data" : true
-	}
-    ```
-
 
 ___
 ## get_column_comments
 Return the list of comments assigned to a column
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_comments.py) to see the source code on GitHub.
 
 
@@ -791,7 +724,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_column_comments
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -813,7 +745,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_column_comments
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -834,7 +765,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.columns import get_column_comments
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -860,7 +790,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_column_comments
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -882,27 +811,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "date" : "2007-12-03T10:15:30",
-	  "comment_by" : "sample_user",
-	  "comment" : "Sample comment"
-	}, {
-	  "date" : "2007-12-03T10:15:30",
-	  "comment_by" : "sample_user",
-	  "comment" : "Sample comment"
-	}, {
-	  "date" : "2007-12-03T10:15:30",
-	  "comment_by" : "sample_user",
-	  "comment" : "Sample comment"
-	} ]
-    ```
-
 
 ___
 ## get_column_labels
 Return the list of labels assigned to a column
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_labels.py) to see the source code on GitHub.
 
 
@@ -950,7 +863,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_column_labels
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -972,7 +884,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_column_labels
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -993,7 +904,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.columns import get_column_labels
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -1019,7 +929,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_column_labels
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -1041,15 +950,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    [ "sampleString_1", "sampleString_2", "sampleString_3" ]
-    ```
-
 
 ___
 ## get_column_monitoring_checks_basic_model
 Return a simplistic UI friendly model of column level data quality monitoring on a column
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_monitoring_checks_basic_model.py) to see the source code on GitHub.
 
 
@@ -1193,50 +1098,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "checks" : [ {
-	    "check_category" : "sample_category_1",
-	    "check_name" : "sample_check_1",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_2",
-	    "check_name" : "sample_check_1",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_1",
-	    "check_name" : "sample_check_2",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_2",
-	    "check_name" : "sample_check_2",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_1",
-	    "check_name" : "sample_check_3",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_2",
-	    "check_name" : "sample_check_3",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  } ],
-	  "can_edit" : false,
-	  "can_run_checks" : true,
-	  "can_delete_data" : true
-	}
-    ```
-
 
 ___
 ## get_column_monitoring_checks_daily
 Return the configuration of daily column level data quality monitoring on a column
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_monitoring_checks_daily.py) to see the source code on GitHub.
 
 
@@ -1284,7 +1150,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_column_monitoring_checks_daily
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -1306,7 +1171,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_column_monitoring_checks_daily
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -1327,7 +1191,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.columns import get_column_monitoring_checks_daily
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -1353,7 +1216,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_column_monitoring_checks_daily
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -1375,23 +1237,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "nulls" : {
-	    "daily_nulls_count" : {
-	      "error" : {
-	        "max_count" : 0
-	      }
-	    }
-	  }
-	}
-    ```
-
 
 ___
 ## get_column_monitoring_checks_model
 Return a UI friendly model of column level data quality monitoring on a column
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_monitoring_checks_model.py) to see the source code on GitHub.
 
 
@@ -1535,38 +1385,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "categories" : [ {
-	    "category" : "sample_category",
-	    "help_text" : "Sample help text",
-	    "checks" : [ {
-	      "check_name" : "sample_check",
-	      "help_text" : "Sample help text",
-	      "sensor_parameters" : [ ],
-	      "sensor_name" : "sample_target/sample_category/sample_sensor",
-	      "quality_dimension" : "sample_quality_dimension",
-	      "supports_grouping" : false,
-	      "disabled" : false,
-	      "exclude_from_kpi" : false,
-	      "include_in_sla" : false,
-	      "configured" : false,
-	      "can_edit" : false,
-	      "can_run_checks" : false,
-	      "can_delete_data" : false
-	    } ]
-	  } ],
-	  "can_edit" : false,
-	  "can_run_checks" : false,
-	  "can_delete_data" : false
-	}
-    ```
-
 
 ___
 ## get_column_monitoring_checks_model_filter
 Return a UI friendly model of column level data quality monitoring on a column filtered by category and check name
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_monitoring_checks_model_filter.py) to see the source code on GitHub.
 
 
@@ -1720,38 +1543,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "categories" : [ {
-	    "category" : "sample_category",
-	    "help_text" : "Sample help text",
-	    "checks" : [ {
-	      "check_name" : "sample_check",
-	      "help_text" : "Sample help text",
-	      "sensor_parameters" : [ ],
-	      "sensor_name" : "sample_target/sample_category/sample_sensor",
-	      "quality_dimension" : "sample_quality_dimension",
-	      "supports_grouping" : false,
-	      "disabled" : false,
-	      "exclude_from_kpi" : false,
-	      "include_in_sla" : false,
-	      "configured" : false,
-	      "can_edit" : false,
-	      "can_run_checks" : false,
-	      "can_delete_data" : false
-	    } ]
-	  } ],
-	  "can_edit" : false,
-	  "can_run_checks" : false,
-	  "can_delete_data" : false
-	}
-    ```
-
 
 ___
 ## get_column_monitoring_checks_monthly
 Return the configuration of monthly column level data quality monitoring on a column
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_monitoring_checks_monthly.py) to see the source code on GitHub.
 
 
@@ -1799,7 +1595,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_column_monitoring_checks_monthly
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -1821,7 +1616,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_column_monitoring_checks_monthly
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -1842,7 +1636,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.columns import get_column_monitoring_checks_monthly
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -1868,7 +1661,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_column_monitoring_checks_monthly
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -1890,23 +1682,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "nulls" : {
-	    "monthly_nulls_count" : {
-	      "error" : {
-	        "max_count" : 0
-	      }
-	    }
-	  }
-	}
-    ```
-
 
 ___
 ## get_column_partitioned_checks_basic_model
 Return a simplistic UI friendly model of column level data quality partitioned checks on a column
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_partitioned_checks_basic_model.py) to see the source code on GitHub.
 
 
@@ -2050,50 +1830,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "checks" : [ {
-	    "check_category" : "sample_category_1",
-	    "check_name" : "sample_check_1",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_2",
-	    "check_name" : "sample_check_1",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_1",
-	    "check_name" : "sample_check_2",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_2",
-	    "check_name" : "sample_check_2",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_1",
-	    "check_name" : "sample_check_3",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_2",
-	    "check_name" : "sample_check_3",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  } ],
-	  "can_edit" : false,
-	  "can_run_checks" : true,
-	  "can_delete_data" : true
-	}
-    ```
-
 
 ___
 ## get_column_partitioned_checks_daily
 Return the configuration of daily column level data quality partitioned checks on a column
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_partitioned_checks_daily.py) to see the source code on GitHub.
 
 
@@ -2141,7 +1882,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_column_partitioned_checks_daily
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -2163,7 +1903,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_column_partitioned_checks_daily
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -2184,7 +1923,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.columns import get_column_partitioned_checks_daily
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -2210,7 +1948,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_column_partitioned_checks_daily
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -2232,23 +1969,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "nulls" : {
-	    "daily_partition_nulls_count" : {
-	      "error" : {
-	        "max_count" : 0
-	      }
-	    }
-	  }
-	}
-    ```
-
 
 ___
 ## get_column_partitioned_checks_model
 Return a UI friendly model of column level data quality partitioned checks on a column
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_partitioned_checks_model.py) to see the source code on GitHub.
 
 
@@ -2392,38 +2117,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "categories" : [ {
-	    "category" : "sample_category",
-	    "help_text" : "Sample help text",
-	    "checks" : [ {
-	      "check_name" : "sample_check",
-	      "help_text" : "Sample help text",
-	      "sensor_parameters" : [ ],
-	      "sensor_name" : "sample_target/sample_category/sample_sensor",
-	      "quality_dimension" : "sample_quality_dimension",
-	      "supports_grouping" : false,
-	      "disabled" : false,
-	      "exclude_from_kpi" : false,
-	      "include_in_sla" : false,
-	      "configured" : false,
-	      "can_edit" : false,
-	      "can_run_checks" : false,
-	      "can_delete_data" : false
-	    } ]
-	  } ],
-	  "can_edit" : false,
-	  "can_run_checks" : false,
-	  "can_delete_data" : false
-	}
-    ```
-
 
 ___
 ## get_column_partitioned_checks_model_filter
 Return a UI friendly model of column level data quality partitioned checks on a column, filtered by category and check name
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_partitioned_checks_model_filter.py) to see the source code on GitHub.
 
 
@@ -2577,38 +2275,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "categories" : [ {
-	    "category" : "sample_category",
-	    "help_text" : "Sample help text",
-	    "checks" : [ {
-	      "check_name" : "sample_check",
-	      "help_text" : "Sample help text",
-	      "sensor_parameters" : [ ],
-	      "sensor_name" : "sample_target/sample_category/sample_sensor",
-	      "quality_dimension" : "sample_quality_dimension",
-	      "supports_grouping" : false,
-	      "disabled" : false,
-	      "exclude_from_kpi" : false,
-	      "include_in_sla" : false,
-	      "configured" : false,
-	      "can_edit" : false,
-	      "can_run_checks" : false,
-	      "can_delete_data" : false
-	    } ]
-	  } ],
-	  "can_edit" : false,
-	  "can_run_checks" : false,
-	  "can_delete_data" : false
-	}
-    ```
-
 
 ___
 ## get_column_partitioned_checks_monthly
 Return the configuration of monthly column level data quality partitioned checks on a column
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_partitioned_checks_monthly.py) to see the source code on GitHub.
 
 
@@ -2656,7 +2327,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_column_partitioned_checks_monthly
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -2678,7 +2348,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_column_partitioned_checks_monthly
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -2699,7 +2368,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.columns import get_column_partitioned_checks_monthly
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -2725,7 +2393,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_column_partitioned_checks_monthly
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -2747,23 +2414,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "nulls" : {
-	    "monthly_partition_nulls_count" : {
-	      "error" : {
-	        "max_count" : 0
-	      }
-	    }
-	  }
-	}
-    ```
-
 
 ___
 ## get_column_profiling_checks
 Return the configuration of column level data quality profiling checks on a column
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_profiling_checks.py) to see the source code on GitHub.
 
 
@@ -2811,7 +2466,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_column_profiling_checks
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -2833,7 +2487,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_column_profiling_checks
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -2854,7 +2507,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.columns import get_column_profiling_checks
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -2880,7 +2532,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_column_profiling_checks
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -2902,23 +2553,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "nulls" : {
-	    "profile_nulls_count" : {
-	      "error" : {
-	        "max_count" : 0
-	      }
-	    }
-	  }
-	}
-    ```
-
 
 ___
 ## get_column_profiling_checks_basic_model
 Return a simplistic UI friendly model of column level data quality profiling checks on a column
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_profiling_checks_basic_model.py) to see the source code on GitHub.
 
 
@@ -2966,7 +2605,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_column_profiling_checks_basic_model
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -2988,7 +2626,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_column_profiling_checks_basic_model
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -3009,7 +2646,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.columns import get_column_profiling_checks_basic_model
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -3035,7 +2671,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_column_profiling_checks_basic_model
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -3057,50 +2692,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "checks" : [ {
-	    "check_category" : "sample_category_1",
-	    "check_name" : "sample_check_1",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_2",
-	    "check_name" : "sample_check_1",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_1",
-	    "check_name" : "sample_check_2",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_2",
-	    "check_name" : "sample_check_2",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_1",
-	    "check_name" : "sample_check_3",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  }, {
-	    "check_category" : "sample_category_2",
-	    "check_name" : "sample_check_3",
-	    "help_text" : "Sample help text",
-	    "configured" : true
-	  } ],
-	  "can_edit" : false,
-	  "can_run_checks" : true,
-	  "can_delete_data" : true
-	}
-    ```
-
 
 ___
 ## get_column_profiling_checks_model
 Return a UI friendly model of data quality profiling checks on a column
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_profiling_checks_model.py) to see the source code on GitHub.
 
 
@@ -3148,7 +2744,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_column_profiling_checks_model
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -3170,7 +2765,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_column_profiling_checks_model
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -3191,7 +2785,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.columns import get_column_profiling_checks_model
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -3217,7 +2810,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_column_profiling_checks_model
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -3239,38 +2831,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "categories" : [ {
-	    "category" : "sample_category",
-	    "help_text" : "Sample help text",
-	    "checks" : [ {
-	      "check_name" : "sample_check",
-	      "help_text" : "Sample help text",
-	      "sensor_parameters" : [ ],
-	      "sensor_name" : "sample_target/sample_category/sample_sensor",
-	      "quality_dimension" : "sample_quality_dimension",
-	      "supports_grouping" : false,
-	      "disabled" : false,
-	      "exclude_from_kpi" : false,
-	      "include_in_sla" : false,
-	      "configured" : false,
-	      "can_edit" : false,
-	      "can_run_checks" : false,
-	      "can_delete_data" : false
-	    } ]
-	  } ],
-	  "can_edit" : false,
-	  "can_run_checks" : false,
-	  "can_delete_data" : false
-	}
-    ```
-
 
 ___
 ## get_column_profiling_checks_model_filter
 Return a UI friendly model of data quality profiling checks on a column filtered by category and check name
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_profiling_checks_model_filter.py) to see the source code on GitHub.
 
 
@@ -3320,7 +2885,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_column_profiling_checks_model_filter
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -3344,7 +2908,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_column_profiling_checks_model_filter
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -3367,7 +2930,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.columns import get_column_profiling_checks_model_filter
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -3395,7 +2957,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_column_profiling_checks_model_filter
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -3419,38 +2980,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "categories" : [ {
-	    "category" : "sample_category",
-	    "help_text" : "Sample help text",
-	    "checks" : [ {
-	      "check_name" : "sample_check",
-	      "help_text" : "Sample help text",
-	      "sensor_parameters" : [ ],
-	      "sensor_name" : "sample_target/sample_category/sample_sensor",
-	      "quality_dimension" : "sample_quality_dimension",
-	      "supports_grouping" : false,
-	      "disabled" : false,
-	      "exclude_from_kpi" : false,
-	      "include_in_sla" : false,
-	      "configured" : false,
-	      "can_edit" : false,
-	      "can_run_checks" : false,
-	      "can_delete_data" : false
-	    } ]
-	  } ],
-	  "can_edit" : false,
-	  "can_run_checks" : false,
-	  "can_delete_data" : false
-	}
-    ```
-
 
 ___
 ## get_column_statistics
 Returns the column specification with the metrics captured by the most recent statistics collection.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_column_statistics.py) to see the source code on GitHub.
 
 
@@ -3498,7 +3032,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_column_statistics
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -3520,7 +3053,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_column_statistics
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -3541,7 +3073,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.columns import get_column_statistics
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -3567,7 +3098,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_column_statistics
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -3589,66 +3119,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "connection_name" : "sample_connection",
-	  "table" : {
-	    "schema_name" : "sample_schema",
-	    "table_name" : "sample_table"
-	  },
-	  "column_name" : "sample_column",
-	  "has_any_configured_checks" : true,
-	  "type_snapshot" : {
-	    "column_type" : "string",
-	    "nullable" : false,
-	    "length" : 256
-	  },
-	  "statistics" : [ {
-	    "category" : "sample_category",
-	    "collector" : "sample_collector",
-	    "resultDataType" : "integer",
-	    "result" : 4372,
-	    "collectedAt" : "2007-10-11T18:00:00"
-	  }, {
-	    "category" : "sample_category",
-	    "collector" : "sample_collector",
-	    "resultDataType" : "integer",
-	    "result" : 9624,
-	    "collectedAt" : "2007-10-12T18:00:00"
-	  }, {
-	    "category" : "sample_category",
-	    "collector" : "sample_collector",
-	    "resultDataType" : "integer",
-	    "result" : 1575,
-	    "collectedAt" : "2007-10-13T18:00:00"
-	  }, {
-	    "category" : "sample_category",
-	    "collector" : "sample_collector",
-	    "resultDataType" : "integer",
-	    "result" : 5099,
-	    "collectedAt" : "2007-10-14T18:00:00"
-	  }, {
-	    "category" : "sample_category",
-	    "collector" : "sample_collector",
-	    "resultDataType" : "integer",
-	    "result" : 9922,
-	    "collectedAt" : "2007-10-15T18:00:00"
-	  } ],
-	  "collect_column_statistics_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true,
-	    "columnNames" : [ "sample_column" ]
-	  },
-	  "can_collect_statistics" : true
-	}
-    ```
-
 
 ___
 ## get_columns
 Returns a list of columns inside a table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_columns.py) to see the source code on GitHub.
 
 
@@ -3695,7 +3170,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_columns
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -3716,7 +3190,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_columns
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -3736,7 +3209,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.columns import get_columns
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -3761,7 +3233,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_columns
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -3782,69 +3253,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "connection_name" : "sample_connection",
-	  "table" : {
-	    "schema_name" : "sample_schema",
-	    "table_name" : "sample_table"
-	  },
-	  "column_name" : "sample_column",
-	  "has_any_configured_checks" : true,
-	  "has_any_configured_profiling_checks" : true,
-	  "type_snapshot" : {
-	    "column_type" : "string",
-	    "nullable" : false,
-	    "length" : 256
-	  },
-	  "can_edit" : false,
-	  "can_collect_statistics" : true,
-	  "can_run_checks" : true,
-	  "can_delete_data" : true
-	}, {
-	  "connection_name" : "sample_connection",
-	  "table" : {
-	    "schema_name" : "sample_schema",
-	    "table_name" : "sample_table"
-	  },
-	  "column_name" : "sample_column",
-	  "has_any_configured_checks" : true,
-	  "has_any_configured_profiling_checks" : true,
-	  "type_snapshot" : {
-	    "column_type" : "string",
-	    "nullable" : false,
-	    "length" : 256
-	  },
-	  "can_edit" : false,
-	  "can_collect_statistics" : true,
-	  "can_run_checks" : true,
-	  "can_delete_data" : true
-	}, {
-	  "connection_name" : "sample_connection",
-	  "table" : {
-	    "schema_name" : "sample_schema",
-	    "table_name" : "sample_table"
-	  },
-	  "column_name" : "sample_column",
-	  "has_any_configured_checks" : true,
-	  "has_any_configured_profiling_checks" : true,
-	  "type_snapshot" : {
-	    "column_type" : "string",
-	    "nullable" : false,
-	    "length" : 256
-	  },
-	  "can_edit" : false,
-	  "can_collect_statistics" : true,
-	  "can_run_checks" : true,
-	  "can_delete_data" : true
-	} ]
-    ```
-
 
 ___
 ## get_columns_statistics
 Returns a list of columns inside a table with the metrics captured by the most recent statistics collection.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/get_columns_statistics.py) to see the source code on GitHub.
 
 
@@ -3891,7 +3304,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_columns_statistics
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -3912,7 +3324,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_columns_statistics
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -3932,7 +3343,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.columns import get_columns_statistics
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -3957,7 +3367,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import get_columns_statistics
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -3978,132 +3387,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "connection_name" : "sample_connection",
-	  "table" : {
-	    "schema_name" : "sample_schema",
-	    "table_name" : "sample_table"
-	  },
-	  "column_statistics" : [ {
-	    "connection_name" : "sample_connection",
-	    "table" : {
-	      "schema_name" : "sample_schema",
-	      "table_name" : "sample_table"
-	    },
-	    "column_name" : "sample_column",
-	    "has_any_configured_checks" : true,
-	    "type_snapshot" : {
-	      "column_type" : "string",
-	      "nullable" : false,
-	      "length" : 256
-	    },
-	    "statistics" : [ {
-	      "category" : "sample_category",
-	      "collector" : "sample_collector",
-	      "resultDataType" : "integer",
-	      "result" : 4372,
-	      "collectedAt" : "2007-10-11T18:00:00"
-	    }, {
-	      "category" : "sample_category",
-	      "collector" : "sample_collector",
-	      "resultDataType" : "integer",
-	      "result" : 9624,
-	      "collectedAt" : "2007-10-12T18:00:00"
-	    }, {
-	      "category" : "sample_category",
-	      "collector" : "sample_collector",
-	      "resultDataType" : "integer",
-	      "result" : 1575,
-	      "collectedAt" : "2007-10-13T18:00:00"
-	    }, {
-	      "category" : "sample_category",
-	      "collector" : "sample_collector",
-	      "resultDataType" : "integer",
-	      "result" : 5099,
-	      "collectedAt" : "2007-10-14T18:00:00"
-	    }, {
-	      "category" : "sample_category",
-	      "collector" : "sample_collector",
-	      "resultDataType" : "integer",
-	      "result" : 9922,
-	      "collectedAt" : "2007-10-15T18:00:00"
-	    } ],
-	    "collect_column_statistics_job_template" : {
-	      "connection" : "sample_connection",
-	      "fullTableName" : "sample_schema.sample_table",
-	      "enabled" : true,
-	      "columnNames" : [ "sample_column" ]
-	    },
-	    "can_collect_statistics" : true
-	  }, {
-	    "connection_name" : "sample_connection",
-	    "table" : {
-	      "schema_name" : "sample_schema",
-	      "table_name" : "sample_table"
-	    },
-	    "column_name" : "sample_column_1",
-	    "has_any_configured_checks" : true,
-	    "type_snapshot" : {
-	      "column_type" : "string",
-	      "nullable" : false,
-	      "length" : 256
-	    },
-	    "statistics" : [ {
-	      "category" : "sample_category",
-	      "collector" : "sample_collector",
-	      "resultDataType" : "integer",
-	      "result" : 4372,
-	      "collectedAt" : "2007-10-11T18:00:00"
-	    }, {
-	      "category" : "sample_category",
-	      "collector" : "sample_collector",
-	      "resultDataType" : "integer",
-	      "result" : 9624,
-	      "collectedAt" : "2007-10-12T18:00:00"
-	    }, {
-	      "category" : "sample_category",
-	      "collector" : "sample_collector",
-	      "resultDataType" : "integer",
-	      "result" : 1575,
-	      "collectedAt" : "2007-10-13T18:00:00"
-	    }, {
-	      "category" : "sample_category",
-	      "collector" : "sample_collector",
-	      "resultDataType" : "integer",
-	      "result" : 5099,
-	      "collectedAt" : "2007-10-14T18:00:00"
-	    }, {
-	      "category" : "sample_category",
-	      "collector" : "sample_collector",
-	      "resultDataType" : "integer",
-	      "result" : 9922,
-	      "collectedAt" : "2007-10-15T18:00:00"
-	    } ],
-	    "collect_column_statistics_job_template" : {
-	      "connection" : "sample_connection",
-	      "fullTableName" : "sample_schema.sample_table",
-	      "enabled" : true,
-	      "columnNames" : [ "sample_column" ]
-	    },
-	    "can_collect_statistics" : true
-	  } ],
-	  "collect_column_statistics_job_template" : {
-	    "connection" : "sample_connection",
-	    "fullTableName" : "sample_schema.sample_table",
-	    "enabled" : true,
-	    "columnNames" : [ "sample_column" ],
-	    "collectorCategory" : "sample_category"
-	  },
-	  "can_collect_statistics" : true
-	}
-    ```
-
 
 ___
 ## update_column
 Updates an existing column specification, changing all the fields (even the column level data quality checks).
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column.py) to see the source code on GitHub.
 
 
@@ -4361,6 +3649,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_column_basic
 Updates an existing column, changing only the basic information like the expected data type (the data type snapshot).
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_basic.py) to see the source code on GitHub.
 
 
@@ -4606,6 +3895,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_column_comments
 Updates the list of comments assigned to a column.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_comments.py) to see the source code on GitHub.
 
 
@@ -4823,6 +4113,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_column_labels
 Updates the list of labels assigned to a column.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_labels.py) to see the source code on GitHub.
 
 
@@ -4873,7 +4164,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import update_column_labels
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
@@ -4901,7 +4191,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     from dqops import client
 	from dqops.client.api.columns import update_column_labels
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
@@ -4928,7 +4217,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.columns import update_column_labels
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -4959,7 +4247,6 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```python
     from dqops import client
 	from dqops.client.api.columns import update_column_labels
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -4992,6 +4279,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_column_monitoring_checks_daily
 Updates configuration of daily column level data quality monitoring on a column.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_monitoring_checks_daily.py) to see the source code on GitHub.
 
 
@@ -5209,6 +4497,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_column_monitoring_checks_model
 Updates configuration of column level data quality monitoring on a column, for a given time scale, from a UI friendly model.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_monitoring_checks_model.py) to see the source code on GitHub.
 
 
@@ -5503,6 +4792,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_column_monitoring_checks_monthly
 Updates configuration of monthly column level data quality monitoring checks on a column.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_monitoring_checks_monthly.py) to see the source code on GitHub.
 
 
@@ -5720,6 +5010,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_column_partitioned_checks_daily
 Updates configuration of daily column level data quality partitioned checks on a column.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_partitioned_checks_daily.py) to see the source code on GitHub.
 
 
@@ -5937,6 +5228,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_column_partitioned_checks_model
 Updates configuration of column level data quality partitioned checks on a column, for a given time scale, from a UI friendly model.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_partitioned_checks_model.py) to see the source code on GitHub.
 
 
@@ -6231,6 +5523,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_column_partitioned_checks_monthly
 Updates configuration of monthly column level data quality partitioned checks on a column.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_partitioned_checks_monthly.py) to see the source code on GitHub.
 
 
@@ -6448,6 +5741,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_column_profiling_checks
 Updates configuration of column level data quality profiling checks on a column.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_profiling_checks.py) to see the source code on GitHub.
 
 
@@ -6665,6 +5959,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 ___
 ## update_column_profiling_checks_model
 Updates configuration of column level data quality profiling checks on a column from a UI friendly model.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/columns/update_column_profiling_checks_model.py) to see the source code on GitHub.
 
 

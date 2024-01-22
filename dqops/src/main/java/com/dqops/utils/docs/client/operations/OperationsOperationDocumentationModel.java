@@ -79,7 +79,11 @@ public class OperationsOperationDocumentationModel {
     private List<OperationUsageExampleDocumentationModel> usageExamples = new ArrayList<>();
 
     /**
-     * Sample return value.
+     * Sample return value JSON.
      */
-    private String returnValueSample;
+    private String returnValueSampleJson;
+    /**
+     * Sample return value in Python.
+     */
+    private String returnValueSamplePython;
 }

@@ -5,6 +5,7 @@ Rest API controller that operates on data sources that are not yet imported, tes
 ___
 ## get_remote_data_source_schemas
 Introspects a list of schemas inside a remote data source, identified by an already imported connection.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/data_sources/get_remote_data_source_schemas.py) to see the source code on GitHub.
 
 
@@ -49,7 +50,6 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
     from dqops import client
 	from dqops.client.api.data_sources import get_remote_data_source_schemas
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -68,7 +68,6 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
     from dqops import client
 	from dqops.client.api.data_sources import get_remote_data_source_schemas
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -86,7 +85,6 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
     ```python
     from dqops import client
 	from dqops.client.api.data_sources import get_remote_data_source_schemas
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -109,7 +107,6 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
     from dqops import client
 	from dqops.client.api.data_sources import get_remote_data_source_schemas
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -128,21 +125,11 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "alreadyImported" : false
-	}, {
-	  "alreadyImported" : false
-	}, {
-	  "alreadyImported" : false
-	} ]
-    ```
-
 
 ___
 ## get_remote_data_source_tables
 Introspects the list of columns inside a schema on a remote data source that is identified by a connection that was added to DQOps.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/data_sources/get_remote_data_source_tables.py) to see the source code on GitHub.
 
 
@@ -188,7 +175,6 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
     from dqops import client
 	from dqops.client.api.data_sources import get_remote_data_source_tables
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -208,7 +194,6 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
     from dqops import client
 	from dqops.client.api.data_sources import get_remote_data_source_tables
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -227,7 +212,6 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
     ```python
     from dqops import client
 	from dqops.client.api.data_sources import get_remote_data_source_tables
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -251,7 +235,6 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
     from dqops import client
 	from dqops.client.api.data_sources import get_remote_data_source_tables
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -271,21 +254,11 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
 
 
 
-??? "Return value sample"
-    ```js
-    [ {
-	  "alreadyImported" : false
-	}, {
-	  "alreadyImported" : false
-	}, {
-	  "alreadyImported" : false
-	} ]
-    ```
-
 
 ___
 ## test_connection
 Checks if the given remote connection could be opened and the credentials are valid
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/data_sources/test_connection.py) to see the source code on GitHub.
 
 
@@ -354,41 +327,41 @@ http://localhost:8888/api/datasource/testconnection
 	request_body = ConnectionModel(
 		connection_name='sample_connection',
 		parallel_jobs_limit=4,
-		provider_type=ProviderType.postgresql,
+		provider_type=ProviderType.POSTGRESQL,
 		postgresql=PostgresqlParametersSpec(
 			host='localhost',
 			port='5432',
 			database='db',
 			user='PASSWD',
-			sslmode=PostgresqlSslMode.disable
+			sslmode=PostgresqlSslMode.DISABLE
 		),
-		run_checks_job_template=ConnectionModel(
+		run_checks_job_template=CheckSearchFilters(
 			connection='sample_connection',
 			enabled=True
 		),
-		run_profiling_checks_job_template=ConnectionModel(
-			check_type=CheckType.profiling,
+		run_profiling_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PROFILING,
 			connection='sample_connection',
 			enabled=True
 		),
-		run_monitoring_checks_job_template=ConnectionModel(
-			check_type=CheckType.monitoring,
+		run_monitoring_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.MONITORING,
 			connection='sample_connection',
 			enabled=True
 		),
-		run_partition_checks_job_template=ConnectionModel(
-			check_type=CheckType.partitioned,
+		run_partition_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PARTITIONED,
 			connection='sample_connection',
 			enabled=True
 		),
-		collect_statistics_job_template=ConnectionModel(
+		collect_statistics_job_template=StatisticsCollectorSearchFilters(
 			column_names=[
 			
 			],
 			connection='sample_connection',
 			enabled=True
 		),
-		data_clean_job_template=ConnectionModel(
+		data_clean_job_template=DeleteStoredDataQueueJobParameters(
 			connection='sample_connection',
 			delete_errors=True,
 			delete_statistics=True,
@@ -428,41 +401,41 @@ http://localhost:8888/api/datasource/testconnection
 	request_body = ConnectionModel(
 		connection_name='sample_connection',
 		parallel_jobs_limit=4,
-		provider_type=ProviderType.postgresql,
+		provider_type=ProviderType.POSTGRESQL,
 		postgresql=PostgresqlParametersSpec(
 			host='localhost',
 			port='5432',
 			database='db',
 			user='PASSWD',
-			sslmode=PostgresqlSslMode.disable
+			sslmode=PostgresqlSslMode.DISABLE
 		),
-		run_checks_job_template=ConnectionModel(
+		run_checks_job_template=CheckSearchFilters(
 			connection='sample_connection',
 			enabled=True
 		),
-		run_profiling_checks_job_template=ConnectionModel(
-			check_type=CheckType.profiling,
+		run_profiling_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PROFILING,
 			connection='sample_connection',
 			enabled=True
 		),
-		run_monitoring_checks_job_template=ConnectionModel(
-			check_type=CheckType.monitoring,
+		run_monitoring_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.MONITORING,
 			connection='sample_connection',
 			enabled=True
 		),
-		run_partition_checks_job_template=ConnectionModel(
-			check_type=CheckType.partitioned,
+		run_partition_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PARTITIONED,
 			connection='sample_connection',
 			enabled=True
 		),
-		collect_statistics_job_template=ConnectionModel(
+		collect_statistics_job_template=StatisticsCollectorSearchFilters(
 			column_names=[
 			
 			],
 			connection='sample_connection',
 			enabled=True
 		),
-		data_clean_job_template=ConnectionModel(
+		data_clean_job_template=DeleteStoredDataQueueJobParameters(
 			connection='sample_connection',
 			delete_errors=True,
 			delete_statistics=True,
@@ -505,41 +478,41 @@ http://localhost:8888/api/datasource/testconnection
 	request_body = ConnectionModel(
 		connection_name='sample_connection',
 		parallel_jobs_limit=4,
-		provider_type=ProviderType.postgresql,
+		provider_type=ProviderType.POSTGRESQL,
 		postgresql=PostgresqlParametersSpec(
 			host='localhost',
 			port='5432',
 			database='db',
 			user='PASSWD',
-			sslmode=PostgresqlSslMode.disable
+			sslmode=PostgresqlSslMode.DISABLE
 		),
-		run_checks_job_template=ConnectionModel(
+		run_checks_job_template=CheckSearchFilters(
 			connection='sample_connection',
 			enabled=True
 		),
-		run_profiling_checks_job_template=ConnectionModel(
-			check_type=CheckType.profiling,
+		run_profiling_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PROFILING,
 			connection='sample_connection',
 			enabled=True
 		),
-		run_monitoring_checks_job_template=ConnectionModel(
-			check_type=CheckType.monitoring,
+		run_monitoring_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.MONITORING,
 			connection='sample_connection',
 			enabled=True
 		),
-		run_partition_checks_job_template=ConnectionModel(
-			check_type=CheckType.partitioned,
+		run_partition_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PARTITIONED,
 			connection='sample_connection',
 			enabled=True
 		),
-		collect_statistics_job_template=ConnectionModel(
+		collect_statistics_job_template=StatisticsCollectorSearchFilters(
 			column_names=[
 			
 			],
 			connection='sample_connection',
 			enabled=True
 		),
-		data_clean_job_template=ConnectionModel(
+		data_clean_job_template=DeleteStoredDataQueueJobParameters(
 			connection='sample_connection',
 			delete_errors=True,
 			delete_statistics=True,
@@ -582,41 +555,41 @@ http://localhost:8888/api/datasource/testconnection
 	request_body = ConnectionModel(
 		connection_name='sample_connection',
 		parallel_jobs_limit=4,
-		provider_type=ProviderType.postgresql,
+		provider_type=ProviderType.POSTGRESQL,
 		postgresql=PostgresqlParametersSpec(
 			host='localhost',
 			port='5432',
 			database='db',
 			user='PASSWD',
-			sslmode=PostgresqlSslMode.disable
+			sslmode=PostgresqlSslMode.DISABLE
 		),
-		run_checks_job_template=ConnectionModel(
+		run_checks_job_template=CheckSearchFilters(
 			connection='sample_connection',
 			enabled=True
 		),
-		run_profiling_checks_job_template=ConnectionModel(
-			check_type=CheckType.profiling,
+		run_profiling_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PROFILING,
 			connection='sample_connection',
 			enabled=True
 		),
-		run_monitoring_checks_job_template=ConnectionModel(
-			check_type=CheckType.monitoring,
+		run_monitoring_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.MONITORING,
 			connection='sample_connection',
 			enabled=True
 		),
-		run_partition_checks_job_template=ConnectionModel(
-			check_type=CheckType.partitioned,
+		run_partition_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PARTITIONED,
 			connection='sample_connection',
 			enabled=True
 		),
-		collect_statistics_job_template=ConnectionModel(
+		collect_statistics_job_template=StatisticsCollectorSearchFilters(
 			column_names=[
 			
 			],
 			connection='sample_connection',
 			enabled=True
 		),
-		data_clean_job_template=ConnectionModel(
+		data_clean_job_template=DeleteStoredDataQueueJobParameters(
 			connection='sample_connection',
 			delete_errors=True,
 			delete_statistics=True,
@@ -638,10 +611,5 @@ http://localhost:8888/api/datasource/testconnection
 
 
 
-
-??? "Return value sample"
-    ```js
-    { }
-    ```
 
 

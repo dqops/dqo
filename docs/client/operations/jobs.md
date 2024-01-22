@@ -5,6 +5,7 @@ Jobs management controller that supports starting new jobs, such as running sele
 ___
 ## cancel_job
 Cancels a running job
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/cancel_job.py) to see the source code on GitHub.
 
 
@@ -42,7 +43,6 @@ http://localhost:8888/api/jobs/jobs/{jobId}
     from dqops import client
 	from dqops.client.api.jobs import cancel_job
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
@@ -60,7 +60,6 @@ http://localhost:8888/api/jobs/jobs/{jobId}
     from dqops import client
 	from dqops.client.api.jobs import cancel_job
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
@@ -77,7 +76,6 @@ http://localhost:8888/api/jobs/jobs/{jobId}
     ```python
     from dqops import client
 	from dqops.client.api.jobs import cancel_job
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -98,7 +96,6 @@ http://localhost:8888/api/jobs/jobs/{jobId}
     ```python
     from dqops import client
 	from dqops.client.api.jobs import cancel_job
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -121,6 +118,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}
 ___
 ## collect_statistics_on_data_groups
 Starts a new background job that will run selected data statistics collectors on tables, calculating separate metric for each data grouping
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/collect_statistics_on_data_groups.py) to see the source code on GitHub.
 
 
@@ -292,17 +290,11 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "status" : "queued"
-	}
-    ```
-
 
 ___
 ## collect_statistics_on_table
 Starts a new background job that will run selected data statistics collectors on a whole table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/collect_statistics_on_table.py) to see the source code on GitHub.
 
 
@@ -474,17 +466,11 @@ http://localhost:8888/api/jobs/collectstatistics/table
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "status" : "queued"
-	}
-    ```
-
 
 ___
 ## delete_stored_data
 Starts a new background job that will delete stored data about check results, sensor readouts etc.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/delete_stored_data.py) to see the source code on GitHub.
 
 
@@ -664,21 +650,11 @@ http://localhost:8888/api/jobs/deletestoreddata
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "jobId" : {
-	    "jobId" : 10832,
-	    "createdAt" : "2007-10-11T13:42:00Z"
-	  },
-	  "status" : "queued"
-	}
-    ```
-
 
 ___
 ## get_all_jobs
 Retrieves a list of all queued and recently finished jobs.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/get_all_jobs.py) to see the source code on GitHub.
 
 
@@ -716,7 +692,6 @@ http://localhost:8888/api/jobs/jobs
     from dqops import client
 	from dqops.client.api.jobs import get_all_jobs
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -734,7 +709,6 @@ http://localhost:8888/api/jobs/jobs
     from dqops import client
 	from dqops.client.api.jobs import get_all_jobs
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -751,7 +725,6 @@ http://localhost:8888/api/jobs/jobs
     ```python
     from dqops import client
 	from dqops.client.api.jobs import get_all_jobs
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -773,7 +746,6 @@ http://localhost:8888/api/jobs/jobs
     from dqops import client
 	from dqops.client.api.jobs import get_all_jobs
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -791,31 +763,11 @@ http://localhost:8888/api/jobs/jobs
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "jobs" : [ ],
-	  "folderSynchronizationStatus" : {
-	    "sources" : "unchanged",
-	    "sensors" : "unchanged",
-	    "rules" : "unchanged",
-	    "checks" : "unchanged",
-	    "settings" : "unchanged",
-	    "credentials" : "unchanged",
-	    "data_sensor_readouts" : "unchanged",
-	    "data_check_results" : "unchanged",
-	    "data_statistics" : "unchanged",
-	    "data_errors" : "unchanged",
-	    "data_incidents" : "unchanged"
-	  },
-	  "lastSequenceNumber" : 3854372
-	}
-    ```
-
 
 ___
 ## get_job
 Retrieves the current status of a single job, identified by a job id.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/get_job.py) to see the source code on GitHub.
 
 
@@ -860,7 +812,6 @@ http://localhost:8888/api/jobs/jobs/{jobId}
     from dqops import client
 	from dqops.client.api.jobs import get_job
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -879,7 +830,6 @@ http://localhost:8888/api/jobs/jobs/{jobId}
     from dqops import client
 	from dqops.client.api.jobs import get_job
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -897,7 +847,6 @@ http://localhost:8888/api/jobs/jobs/{jobId}
     ```python
     from dqops import client
 	from dqops.client.api.jobs import get_job
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -920,7 +869,6 @@ http://localhost:8888/api/jobs/jobs/{jobId}
     from dqops import client
 	from dqops.client.api.jobs import get_job
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -939,15 +887,11 @@ http://localhost:8888/api/jobs/jobs/{jobId}
 
 
 
-??? "Return value sample"
-    ```js
-    { }
-    ```
-
 
 ___
 ## get_job_changes_since
 Retrieves an incremental list of job changes (new jobs or job status changes)
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/get_job_changes_since.py) to see the source code on GitHub.
 
 
@@ -992,7 +936,6 @@ http://localhost:8888/api/jobs/jobchangessince/{sequenceNumber}
     from dqops import client
 	from dqops.client.api.jobs import get_job_changes_since
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -1011,7 +954,6 @@ http://localhost:8888/api/jobs/jobchangessince/{sequenceNumber}
     from dqops import client
 	from dqops.client.api.jobs import get_job_changes_since
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -1029,7 +971,6 @@ http://localhost:8888/api/jobs/jobchangessince/{sequenceNumber}
     ```python
     from dqops import client
 	from dqops.client.api.jobs import get_job_changes_since
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -1052,7 +993,6 @@ http://localhost:8888/api/jobs/jobchangessince/{sequenceNumber}
     from dqops import client
 	from dqops.client.api.jobs import get_job_changes_since
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -1071,31 +1011,11 @@ http://localhost:8888/api/jobs/jobchangessince/{sequenceNumber}
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "jobChanges" : [ ],
-	  "folderSynchronizationStatus" : {
-	    "sources" : "unchanged",
-	    "sensors" : "unchanged",
-	    "rules" : "unchanged",
-	    "checks" : "unchanged",
-	    "settings" : "unchanged",
-	    "credentials" : "unchanged",
-	    "data_sensor_readouts" : "unchanged",
-	    "data_check_results" : "unchanged",
-	    "data_statistics" : "unchanged",
-	    "data_errors" : "unchanged",
-	    "data_incidents" : "unchanged"
-	  },
-	  "lastSequenceNumber" : 3854372
-	}
-    ```
-
 
 ___
 ## import_tables
 Starts a new background job that will import selected tables.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/import_tables.py) to see the source code on GitHub.
 
 
@@ -1259,17 +1179,11 @@ http://localhost:8888/api/jobs/importtables
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "status" : "queued"
-	}
-    ```
-
 
 ___
 ## is_cron_scheduler_running
 Checks if the DQOps internal CRON scheduler is running and processing jobs scheduled using cron expressions.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/is_cron_scheduler_running.py) to see the source code on GitHub.
 
 
@@ -1300,7 +1214,6 @@ http://localhost:8888/api/jobs/scheduler/isrunning
     from dqops import client
 	from dqops.client.api.jobs import is_cron_scheduler_running
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -1318,7 +1231,6 @@ http://localhost:8888/api/jobs/scheduler/isrunning
     from dqops import client
 	from dqops.client.api.jobs import is_cron_scheduler_running
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -1335,7 +1247,6 @@ http://localhost:8888/api/jobs/scheduler/isrunning
     ```python
     from dqops import client
 	from dqops.client.api.jobs import is_cron_scheduler_running
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -1356,7 +1267,6 @@ http://localhost:8888/api/jobs/scheduler/isrunning
     ```python
     from dqops import client
 	from dqops.client.api.jobs import is_cron_scheduler_running
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -1379,6 +1289,7 @@ http://localhost:8888/api/jobs/scheduler/isrunning
 ___
 ## run_checks
 Starts a new background job that will run selected data quality checks
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/run_checks.py) to see the source code on GitHub.
 
 
@@ -1558,30 +1469,11 @@ http://localhost:8888/api/jobs/runchecks
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "jobId" : {
-	    "jobId" : 123456789,
-	    "createdAt" : "2007-10-11T13:42:00Z"
-	  },
-	  "result" : {
-	    "highest_severity" : "error",
-	    "executed_checks" : 10,
-	    "valid_results" : 7,
-	    "warnings" : 1,
-	    "errors" : 2,
-	    "fatals" : 0,
-	    "execution_errors" : 0
-	  },
-	  "status" : "succeeded"
-	}
-    ```
-
 
 ___
 ## start_cron_scheduler
 Starts the job scheduler that runs monitoring jobs that are scheduled by assigning cron expressions.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/start_cron_scheduler.py) to see the source code on GitHub.
 
 
@@ -1589,6 +1481,13 @@ Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/
 ```
 http://localhost:8888/api/jobs/scheduler/status/start
 ```
+
+**Return value**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">[`spring_error_payload`](../models/jobs.md#springerrorpayload)</span>||*[SpringErrorPayload](../models/jobs.md#springerrorpayload)*|
+
 
 
 
@@ -1612,7 +1511,6 @@ http://localhost:8888/api/jobs/scheduler/status/start
     from dqops import client
 	from dqops.client.api.jobs import start_cron_scheduler
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
@@ -1629,7 +1527,6 @@ http://localhost:8888/api/jobs/scheduler/status/start
     from dqops import client
 	from dqops.client.api.jobs import start_cron_scheduler
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
@@ -1645,7 +1542,6 @@ http://localhost:8888/api/jobs/scheduler/status/start
     ```python
     from dqops import client
 	from dqops.client.api.jobs import start_cron_scheduler
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -1665,7 +1561,6 @@ http://localhost:8888/api/jobs/scheduler/status/start
     ```python
     from dqops import client
 	from dqops.client.api.jobs import start_cron_scheduler
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -1687,6 +1582,7 @@ http://localhost:8888/api/jobs/scheduler/status/start
 ___
 ## stop_cron_scheduler
 Stops the job scheduler that runs monitoring jobs that are scheduled by assigning cron expressions.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/stop_cron_scheduler.py) to see the source code on GitHub.
 
 
@@ -1694,6 +1590,13 @@ Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/
 ```
 http://localhost:8888/api/jobs/scheduler/status/stop
 ```
+
+**Return value**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+|<span class="no-wrap-code">[`spring_error_payload`](../models/jobs.md#springerrorpayload)</span>||*[SpringErrorPayload](../models/jobs.md#springerrorpayload)*|
+
 
 
 
@@ -1717,7 +1620,6 @@ http://localhost:8888/api/jobs/scheduler/status/stop
     from dqops import client
 	from dqops.client.api.jobs import stop_cron_scheduler
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
@@ -1734,7 +1636,6 @@ http://localhost:8888/api/jobs/scheduler/status/stop
     from dqops import client
 	from dqops.client.api.jobs import stop_cron_scheduler
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
 	)
@@ -1750,7 +1651,6 @@ http://localhost:8888/api/jobs/scheduler/status/stop
     ```python
     from dqops import client
 	from dqops.client.api.jobs import stop_cron_scheduler
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -1770,7 +1670,6 @@ http://localhost:8888/api/jobs/scheduler/status/stop
     ```python
     from dqops import client
 	from dqops.client.api.jobs import stop_cron_scheduler
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -1792,6 +1691,7 @@ http://localhost:8888/api/jobs/scheduler/status/stop
 ___
 ## synchronize_folders
 Starts multiple file synchronization jobs that will synchronize files from selected DQOps User home folders to the DQOps Cloud. The default synchronization mode is a full synchronization (upload local files, download new files from the cloud).
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/synchronize_folders.py) to see the source code on GitHub.
 
 
@@ -1855,7 +1755,7 @@ http://localhost:8888/api/jobs/synchronize
 	)
 	
 	request_body = SynchronizeMultipleFoldersDqoQueueJobParameters(
-		direction=FileSynchronizationDirection.full,
+		direction=FileSynchronizationDirection.FULL,
 		force_refresh_native_tables=False,
 		detect_cron_schedules=False,
 		sources=True,
@@ -1892,7 +1792,7 @@ http://localhost:8888/api/jobs/synchronize
 	)
 	
 	request_body = SynchronizeMultipleFoldersDqoQueueJobParameters(
-		direction=FileSynchronizationDirection.full,
+		direction=FileSynchronizationDirection.FULL,
 		force_refresh_native_tables=False,
 		detect_cron_schedules=False,
 		sources=True,
@@ -1932,7 +1832,7 @@ http://localhost:8888/api/jobs/synchronize
 	)
 	
 	request_body = SynchronizeMultipleFoldersDqoQueueJobParameters(
-		direction=FileSynchronizationDirection.full,
+		direction=FileSynchronizationDirection.FULL,
 		force_refresh_native_tables=False,
 		detect_cron_schedules=False,
 		sources=True,
@@ -1972,7 +1872,7 @@ http://localhost:8888/api/jobs/synchronize
 	)
 	
 	request_body = SynchronizeMultipleFoldersDqoQueueJobParameters(
-		direction=FileSynchronizationDirection.full,
+		direction=FileSynchronizationDirection.FULL,
 		force_refresh_native_tables=False,
 		detect_cron_schedules=False,
 		sources=True,
@@ -1999,17 +1899,11 @@ http://localhost:8888/api/jobs/synchronize
 
 
 
-??? "Return value sample"
-    ```js
-    {
-	  "status" : "queued"
-	}
-    ```
-
 
 ___
 ## wait_for_job
 Waits for a job to finish. Returns the status of a finished job or a current state of a job that is still running, but the wait timeout elapsed.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/wait_for_job.py) to see the source code on GitHub.
 
 
@@ -2055,7 +1949,6 @@ http://localhost:8888/api/jobs/jobs/{jobId}/wait
     from dqops import client
 	from dqops.client.api.jobs import wait_for_job
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -2074,7 +1967,6 @@ http://localhost:8888/api/jobs/jobs/{jobId}/wait
     from dqops import client
 	from dqops.client.api.jobs import wait_for_job
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -2092,7 +1984,6 @@ http://localhost:8888/api/jobs/jobs/{jobId}/wait
     ```python
     from dqops import client
 	from dqops.client.api.jobs import wait_for_job
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -2115,7 +2006,6 @@ http://localhost:8888/api/jobs/jobs/{jobId}/wait
     from dqops import client
 	from dqops.client.api.jobs import wait_for_job
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -2134,15 +2024,11 @@ http://localhost:8888/api/jobs/jobs/{jobId}/wait
 
 
 
-??? "Return value sample"
-    ```js
-    { }
-    ```
-
 
 ___
 ## wait_for_run_checks_job
 Waits for a job to finish. Returns the status of a finished job or a current state of a job that is still running, but the wait timeout elapsed.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/jobs/wait_for_run_checks_job.py) to see the source code on GitHub.
 
 
@@ -2188,7 +2074,6 @@ http://localhost:8888/api/jobs/runchecks/{jobId}/wait
     from dqops import client
 	from dqops.client.api.jobs import wait_for_run_checks_job
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -2207,7 +2092,6 @@ http://localhost:8888/api/jobs/runchecks/{jobId}/wait
     from dqops import client
 	from dqops.client.api.jobs import wait_for_run_checks_job
 	
-	
 	dqops_client = client.Client(
 	    'http://localhost:8888/',
 	    raise_on_unexpected_status=True
@@ -2225,7 +2109,6 @@ http://localhost:8888/api/jobs/runchecks/{jobId}/wait
     ```python
     from dqops import client
 	from dqops.client.api.jobs import wait_for_run_checks_job
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -2248,7 +2131,6 @@ http://localhost:8888/api/jobs/runchecks/{jobId}/wait
     from dqops import client
 	from dqops.client.api.jobs import wait_for_run_checks_job
 	
-	
 	token = 's4mp13_4u7h_70k3n'
 	
 	dqops_client = client.AuthenticatedClient(
@@ -2266,25 +2148,5 @@ http://localhost:8888/api/jobs/runchecks/{jobId}/wait
 
 
 
-
-??? "Return value sample"
-    ```js
-    {
-	  "jobId" : {
-	    "jobId" : 123456789,
-	    "createdAt" : "2007-10-11T13:42:00Z"
-	  },
-	  "result" : {
-	    "highest_severity" : "error",
-	    "executed_checks" : 10,
-	    "valid_results" : 7,
-	    "warnings" : 1,
-	    "errors" : 2,
-	    "fatals" : 0,
-	    "execution_errors" : 0
-	  },
-	  "status" : "succeeded"
-	}
-    ```
 
 

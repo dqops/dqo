@@ -7,7 +7,7 @@ DQOps distinguishes **data quality issues** from **data quality incidents**. Bec
 by monitoring the data sources in regular intervals, the same issues will be detected until the root cause is not fixed.
 Additionally, because DQOps supports hundreds of data quality checks, there are a lot of possible positive and false-positive
 checks that can detect data quality issues.
-Some data quality issues may be expected, because data quality checks have not been disabled on a table that was decommissioned.
+Some data quality issues may be expected because data quality checks have not been disabled on a table that was decommissioned.
 Other issues are caused by planned maintenance events. 
 
 In order to avoid flooding the support team with a lot of data quality issues to resolve, DQOps implements

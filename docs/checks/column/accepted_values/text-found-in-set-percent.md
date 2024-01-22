@@ -20,13 +20,13 @@ The **text found in set percent** data quality check has the following variants 
 
 The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_text_found_in_set_percent`</span>|profiling| |Validity|[*text_found_in_set_percent*](../../../reference/sensors/column/accepted_values-column-sensors.md#text-found-in-set-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_text_found_in_set_percent`</span>|[accepted_values](../../../dqo-concepts/categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*text_found_in_set_percent*](../../../reference/sensors/column/accepted_values-column-sensors.md#text-found-in-set-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile text found in set percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile text found in set percent data quality check.
 
 ??? example "Managing profile text found in set percent check from DQOps shell"
 
@@ -1671,13 +1671,13 @@ ___
 
 The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_text_found_in_set_percent`</span>|monitoring|daily|Validity|[*text_found_in_set_percent*](../../../reference/sensors/column/accepted_values-column-sensors.md#text-found-in-set-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_text_found_in_set_percent`</span>|[accepted_values](../../../dqo-concepts/categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*text_found_in_set_percent*](../../../reference/sensors/column/accepted_values-column-sensors.md#text-found-in-set-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily text found in set percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily text found in set percent data quality check.
 
 ??? example "Managing daily text found in set percent check from DQOps shell"
 
@@ -3324,13 +3324,13 @@ ___
 
 The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_text_found_in_set_percent`</span>|monitoring|monthly|Validity|[*text_found_in_set_percent*](../../../reference/sensors/column/accepted_values-column-sensors.md#text-found-in-set-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_text_found_in_set_percent`</span>|[accepted_values](../../../dqo-concepts/categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*text_found_in_set_percent*](../../../reference/sensors/column/accepted_values-column-sensors.md#text-found-in-set-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly text found in set percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly text found in set percent data quality check.
 
 ??? example "Managing monthly text found in set percent check from DQOps shell"
 
@@ -4977,13 +4977,13 @@ ___
 
 The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores a separate data quality check result for each daily partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_text_found_in_set_percent`</span>|partitioned|daily|Validity|[*text_found_in_set_percent*](../../../reference/sensors/column/accepted_values-column-sensors.md#text-found-in-set-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_text_found_in_set_percent`</span>|[accepted_values](../../../dqo-concepts/categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*text_found_in_set_percent*](../../../reference/sensors/column/accepted_values-column-sensors.md#text-found-in-set-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition text found in set percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition text found in set percent data quality check.
 
 ??? example "Managing daily partition text found in set percent check from DQOps shell"
 
@@ -6652,13 +6652,13 @@ ___
 
 The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_partition_text_found_in_set_percent`</span>|partitioned|monthly|Validity|[*text_found_in_set_percent*](../../../reference/sensors/column/accepted_values-column-sensors.md#text-found-in-set-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_text_found_in_set_percent`</span>|[accepted_values](../../../dqo-concepts/categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*text_found_in_set_percent*](../../../reference/sensors/column/accepted_values-column-sensors.md#text-found-in-set-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition text found in set percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly partition text found in set percent data quality check.
 
 ??? example "Managing monthly partition text found in set percent check from DQOps shell"
 

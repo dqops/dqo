@@ -51,6 +51,8 @@ class DqoUserProfileModel:
             access rights, reset passwords.
         can_manage_and_view_shared_credentials (Union[Unset, bool]): User can manage shared credentials and view (or
             download) already defined shared credentials.
+        can_change_own_password (Union[Unset, bool]): User can change his own password in DQOps Cloud, because the DQOps
+            Cloud Pairing API Key is valid and synchronization is enabled.
     """
 
     user: Union[Unset, str] = UNSET
@@ -79,6 +81,7 @@ class DqoUserProfileModel:
     can_compare_tables: Union[Unset, bool] = UNSET
     can_manage_users: Union[Unset, bool] = UNSET
     can_manage_and_view_shared_credentials: Union[Unset, bool] = UNSET
+    can_change_own_password: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -113,6 +116,7 @@ class DqoUserProfileModel:
         can_manage_and_view_shared_credentials = (
             self.can_manage_and_view_shared_credentials
         )
+        can_change_own_password = self.can_change_own_password
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -171,6 +175,8 @@ class DqoUserProfileModel:
             field_dict[
                 "can_manage_and_view_shared_credentials"
             ] = can_manage_and_view_shared_credentials
+        if can_change_own_password is not UNSET:
+            field_dict["can_change_own_password"] = can_change_own_password
 
         return field_dict
 
@@ -236,6 +242,8 @@ class DqoUserProfileModel:
             "can_manage_and_view_shared_credentials", UNSET
         )
 
+        can_change_own_password = d.pop("can_change_own_password", UNSET)
+
         dqo_user_profile_model = cls(
             user=user,
             tenant=tenant,
@@ -263,6 +271,7 @@ class DqoUserProfileModel:
             can_compare_tables=can_compare_tables,
             can_manage_users=can_manage_users,
             can_manage_and_view_shared_credentials=can_manage_and_view_shared_credentials,
+            can_change_own_password=can_change_own_password,
         )
 
         dqo_user_profile_model.additional_properties = d

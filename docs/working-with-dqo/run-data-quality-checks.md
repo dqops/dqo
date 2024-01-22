@@ -10,7 +10,7 @@ In DQOps there are two ways to activate and run data quality checks:
 
 To activate checks, you need to add a connection. You can learn [how to add connection here](../data-sources/index.md).
 
-For more information about [different categories of checks, see DQOps concepts section](../dqo-concepts/definition-of-data-quality-checks/index.md).
+For more information about [different types of checks, see DQOps concepts section](../dqo-concepts/definition-of-data-quality-checks/index.md).
 
 ## Run data quality checks using the user interface
 
@@ -111,7 +111,7 @@ To add and run data quality checks using the DQOps Shell, follow the steps below
 
 3. Add the check to the YAML file using Visual Studio Code editor and save the file. 
 
-    Below is an example of the YAML file showing sample configuration of a profiling table check row_count. 
+    Below is an example of the YAML file showing a sample configuration of a profiling table check row_count. 
     Some columns were truncated for clarity
 
     ```yaml hl_lines="9-13"

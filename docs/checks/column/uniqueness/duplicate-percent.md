@@ -15,13 +15,13 @@ The **duplicate percent** data quality check has the following variants for each
 
 Verifies that the percentage of duplicate values in a column does not exceed the maximum accepted percentage.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_duplicate_percent`</span>|profiling| |Uniqueness|[*duplicate_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#duplicate-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_duplicate_percent`</span>|[uniqueness](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Uniqueness|[*duplicate_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#duplicate-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile duplicate percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile duplicate percent data quality check.
 
 ??? example "Managing profile duplicate percent check from DQOps shell"
 
@@ -1070,13 +1070,13 @@ ___
 
 Verifies that the percentage of duplicate values in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_duplicate_percent`</span>|monitoring|daily|Uniqueness|[*duplicate_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#duplicate-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_duplicate_percent`</span>|[uniqueness](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Uniqueness|[*duplicate_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#duplicate-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily duplicate percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily duplicate percent data quality check.
 
 ??? example "Managing daily duplicate percent check from DQOps shell"
 
@@ -2127,13 +2127,13 @@ ___
 
 Verifies that the percentage of duplicate values in a column does not exceed the maximum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_duplicate_percent`</span>|monitoring|monthly|Uniqueness|[*duplicate_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#duplicate-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_duplicate_percent`</span>|[uniqueness](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Uniqueness|[*duplicate_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#duplicate-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly duplicate percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly duplicate percent data quality check.
 
 ??? example "Managing monthly duplicate percent check from DQOps shell"
 
@@ -3184,13 +3184,13 @@ ___
 
 Verifies that the percent of duplicate values in a column does not exceed the maximum accepted percent. Stores a separate data quality check result for each daily partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_duplicate_percent`</span>|partitioned|daily|Uniqueness|[*duplicate_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#duplicate-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_duplicate_percent`</span>|[uniqueness](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Uniqueness|[*duplicate_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#duplicate-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition duplicate percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition duplicate percent data quality check.
 
 ??? example "Managing daily partition duplicate percent check from DQOps shell"
 
@@ -4263,13 +4263,13 @@ ___
 
 Verifies that the percent of duplicate values in a column does not exceed the maximum accepted percent. Stores a separate data quality check result for each monthly partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_partition_duplicate_percent`</span>|partitioned|monthly|Uniqueness|[*duplicate_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#duplicate-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_duplicate_percent`</span>|[uniqueness](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Uniqueness|[*duplicate_percent*](../../../reference/sensors/column/uniqueness-column-sensors.md#duplicate-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition duplicate percent data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly partition duplicate percent data quality check.
 
 ??? example "Managing monthly partition duplicate percent check from DQOps shell"
 

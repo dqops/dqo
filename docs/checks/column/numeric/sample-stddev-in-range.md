@@ -15,13 +15,13 @@ The **sample stddev in range** data quality check has the following variants for
 
 Verifies that the sample standard deviation of all values in a column is not outside the expected range.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_sample_stddev_in_range`</span>|profiling| |Reasonableness|[*sample_stddev*](../../../reference/sensors/column/numeric-column-sensors.md#sample-stddev)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_sample_stddev_in_range`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Reasonableness|[*sample_stddev*](../../../reference/sensors/column/numeric-column-sensors.md#sample-stddev)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile sample stddev in range data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile sample stddev in range data quality check.
 
 ??? example "Managing profile sample stddev in range check from DQOps shell"
 
@@ -844,13 +844,13 @@ ___
 
 Verifies that the sample standard deviation of all values in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_sample_stddev_in_range`</span>|monitoring|daily|Reasonableness|[*sample_stddev*](../../../reference/sensors/column/numeric-column-sensors.md#sample-stddev)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_sample_stddev_in_range`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Reasonableness|[*sample_stddev*](../../../reference/sensors/column/numeric-column-sensors.md#sample-stddev)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily sample stddev in range data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily sample stddev in range data quality check.
 
 ??? example "Managing daily sample stddev in range check from DQOps shell"
 
@@ -1675,13 +1675,13 @@ ___
 
 Verifies that the sample standard deviation of all values in a column is not outside the expected range. Stores the most recent value for each month when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_sample_stddev_in_range`</span>|monitoring|monthly|Reasonableness|[*sample_stddev*](../../../reference/sensors/column/numeric-column-sensors.md#sample-stddev)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_sample_stddev_in_range`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Reasonableness|[*sample_stddev*](../../../reference/sensors/column/numeric-column-sensors.md#sample-stddev)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly sample stddev in range data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly sample stddev in range data quality check.
 
 ??? example "Managing monthly sample stddev in range check from DQOps shell"
 
@@ -2506,13 +2506,13 @@ ___
 
 Verifies that the sample standard deviation of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_sample_stddev_in_range`</span>|partitioned|daily|Reasonableness|[*sample_stddev*](../../../reference/sensors/column/numeric-column-sensors.md#sample-stddev)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_sample_stddev_in_range`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Reasonableness|[*sample_stddev*](../../../reference/sensors/column/numeric-column-sensors.md#sample-stddev)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition sample stddev in range data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition sample stddev in range data quality check.
 
 ??? example "Managing daily partition sample stddev in range check from DQOps shell"
 
@@ -3359,13 +3359,13 @@ ___
 
 Verifies that the sample standard deviation of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_partition_sample_stddev_in_range`</span>|partitioned|monthly|Reasonableness|[*sample_stddev*](../../../reference/sensors/column/numeric-column-sensors.md#sample-stddev)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_sample_stddev_in_range`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Reasonableness|[*sample_stddev*](../../../reference/sensors/column/numeric-column-sensors.md#sample-stddev)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition sample stddev in range data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly partition sample stddev in range data quality check.
 
 ??? example "Managing monthly partition sample stddev in range check from DQOps shell"
 

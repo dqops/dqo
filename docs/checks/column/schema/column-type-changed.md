@@ -17,13 +17,13 @@ The **column type changed** data quality check has the following variants for ea
 
 Checks the metadata of the monitored column and detects if the data type (including the length, precision, scale, nullability) has changed.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_column_type_changed`</span>|profiling| |Consistency|[*column_type_hash*](../../../reference/sensors/column/schema-column-sensors.md#column-type-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_column_type_changed`</span>|[schema](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*column_type_hash*](../../../reference/sensors/column/schema-column-sensors.md#column-type-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile column type changed data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile column type changed data quality check.
 
 ??? example "Managing profile column type changed check from DQOps shell"
 
@@ -122,13 +122,13 @@ ___
 
 Checks the metadata of the monitored column and detects if the data type (including the length, precision, scale, nullability) has changed since the last day. Stores the most recent hash for each day when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_column_type_changed`</span>|monitoring|daily|Consistency|[*column_type_hash*](../../../reference/sensors/column/schema-column-sensors.md#column-type-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_column_type_changed`</span>|[schema](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*column_type_hash*](../../../reference/sensors/column/schema-column-sensors.md#column-type-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily column type changed data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily column type changed data quality check.
 
 ??? example "Managing daily column type changed check from DQOps shell"
 
@@ -228,13 +228,13 @@ ___
 
 Checks the metadata of the monitored column and detects if the data type (including the length, precision, scale, nullability) has changed since the last month. Stores the most recent hash for each month when the data quality check was evaluated.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_column_type_changed`</span>|monitoring|monthly|Consistency|[*column_type_hash*](../../../reference/sensors/column/schema-column-sensors.md#column-type-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_column_type_changed`</span>|[schema](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Consistency|[*column_type_hash*](../../../reference/sensors/column/schema-column-sensors.md#column-type-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly column type changed data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly column type changed data quality check.
 
 ??? example "Managing monthly column type changed check from DQOps shell"
 

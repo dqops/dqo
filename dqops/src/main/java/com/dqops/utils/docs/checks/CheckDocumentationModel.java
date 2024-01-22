@@ -49,6 +49,11 @@ public class CheckDocumentationModel {
     private String category;
 
     /**
+     * The name of the markdown file with the documentation of the category.
+     */
+    private String categoryPageName;
+
+    /**
      * Check name inside the category.
      */
     private String checkName;
@@ -57,6 +62,11 @@ public class CheckDocumentationModel {
      * Check type.
      */
     private String checkType;
+
+    /**
+     * The name of the page with the check concept.
+     */
+    private String checkTypeConceptPage;
 
     /**
      * Check time scale (daily, monthly, or empty).
@@ -74,9 +84,9 @@ public class CheckDocumentationModel {
     private RuleDocumentationModel rule;
 
     /**
-     * Check class - "standard" or "advanced".
+     * The check is standard or advanced.
      */
-    private String checkClass;
+    private boolean standard;
 
     /**
      * Check quality dimension (Availability, Consistency, etc.).

@@ -63,6 +63,11 @@ const ContextMenu = ({
     setOpen(false);
   };
 
+  const handleRunPartitionedChecks = (value: TimeWindowFilterParameters) => {
+    runPartitionedChecks(setSetectedRun(value));
+    setOpen(false);
+  };
+
   const handleCollectStatisticsOnTable = () => {
     collectStatisticsOnTable(node);
     setOpen(false);
@@ -155,7 +160,7 @@ const ContextMenu = ({
               </div>
             )}
           {isClicked && (
-            <div className="w-80 h-81 bg-white absolute left-50 top-0 rounded border">
+            <div className="w-80 h-121 bg-white absolute left-50 top-0 rounded border">
               {Object.entries(RUN_CHECK_TIME_WINDOW_FILTERS).map(
                 ([key, value]) => (
                   <div
@@ -163,7 +168,7 @@ const ContextMenu = ({
                     key={key}
                     onClick={() =>
                       value
-                        ? runPartitionedChecks(setSetectedRun(value))
+                        ? handleRunPartitionedChecks(value)
                         : handleRunChecks()
                     }
                   >

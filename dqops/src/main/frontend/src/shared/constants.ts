@@ -473,13 +473,25 @@ export const RUN_CHECK_TIME_WINDOW_FILTERS: {
     daily_partitioning_include_today: false,
     daily_partitioning_recent_days: 1
   },
+  'Last 3 days, including today': {
+    daily_partitioning_include_today: true,
+    daily_partitioning_recent_days: 3
+  },
   'Last 3 days, excluding today': {
     daily_partitioning_include_today: false,
     daily_partitioning_recent_days: 3
   },
+  'Last 7 days, including today': {
+    daily_partitioning_include_today: true,
+    daily_partitioning_recent_days: 7
+  },
   'Last 7 days, excluding today': {
     daily_partitioning_include_today: false,
     daily_partitioning_recent_days: 7
+  },
+  'Last 30 days, including today': {
+    daily_partitioning_include_today: true,
+    daily_partitioning_recent_days: 30
   },
   'Last 30 days, excluding today': {
     daily_partitioning_include_today: false,
@@ -493,9 +505,17 @@ export const RUN_CHECK_TIME_WINDOW_FILTERS: {
     monthly_partitioning_include_current_month: false,
     monthly_partitioning_recent_months: 1
   },
+  'Last 3 months, including current month': {
+    monthly_partitioning_include_current_month: true,
+    monthly_partitioning_recent_months: 3
+  },
   'Last 3 months, excluding current month': {
     monthly_partitioning_include_current_month: false,
     monthly_partitioning_recent_months: 3
+  },
+  'Last 12 months, including current month': {
+    monthly_partitioning_include_current_month: true,
+    monthly_partitioning_recent_months: 12
   },
   'Last 12 months, excluding current month': {
     monthly_partitioning_include_current_month: false,

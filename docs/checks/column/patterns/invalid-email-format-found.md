@@ -15,13 +15,13 @@ The **invalid email format found** data quality check has the following variants
 
 Verifies that the number of invalid emails in a text column does not exceed the maximum accepted count.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_invalid_email_format_found`</span>|profiling| |Validity|[*invalid_email_format_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-email-format-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_invalid_email_format_found`</span>|[patterns](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*invalid_email_format_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-email-format-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile invalid email format found data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile invalid email format found data quality check.
 
 ??? example "Managing profile invalid email format found check from DQOps shell"
 
@@ -1110,13 +1110,13 @@ ___
 
 Verifies that the number of invalid emails in a text column does not exceed the maximum accepted count.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_invalid_email_format_found`</span>|monitoring|daily|Validity|[*invalid_email_format_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-email-format-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_invalid_email_format_found`</span>|[patterns](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*invalid_email_format_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-email-format-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily invalid email format found data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily invalid email format found data quality check.
 
 ??? example "Managing daily invalid email format found check from DQOps shell"
 
@@ -2207,13 +2207,13 @@ ___
 
 Verifies that the number of invalid emails in a text column does not exceed the maximum accepted count.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_invalid_email_format_found`</span>|monitoring|monthly|Validity|[*invalid_email_format_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-email-format-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_invalid_email_format_found`</span>|[patterns](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*invalid_email_format_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-email-format-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly invalid email format found data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly invalid email format found data quality check.
 
 ??? example "Managing monthly invalid email format found check from DQOps shell"
 
@@ -3304,13 +3304,13 @@ ___
 
 Verifies that the number of invalid emails in a text column does not exceed the maximum accepted count.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_invalid_email_format_found`</span>|partitioned|daily|Validity|[*invalid_email_format_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-email-format-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_invalid_email_format_found`</span>|[patterns](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*invalid_email_format_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-email-format-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition invalid email format found data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition invalid email format found data quality check.
 
 ??? example "Managing daily partition invalid email format found check from DQOps shell"
 
@@ -4423,13 +4423,13 @@ ___
 
 Verifies that the number of invalid emails in a text column does not exceed the maximum accepted count.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_partition_invalid_email_format_found`</span>|partitioned|monthly|Validity|[*invalid_email_format_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-email-format-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_invalid_email_format_found`</span>|[patterns](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*invalid_email_format_count*](../../../reference/sensors/column/patterns-column-sensors.md#invalid-email-format-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition invalid email format found data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly partition invalid email format found data quality check.
 
 ??? example "Managing monthly partition invalid email format found check from DQOps shell"
 

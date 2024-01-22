@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { MyData } from './TableColumnsConstans';
 import SvgIcon from '../../components/SvgIcon';
 import { dateToString, formatNumber } from '../../shared/constants';
@@ -29,6 +29,7 @@ interface ITableColumnsBodyProps {
   rewriteData: any;
   handleButtonClick: any;
   showDataStreamButtonFunc: any;
+  refreshListFunc: ()  => void;
 }
 
 export default function TableColumnsBody({
@@ -37,7 +38,8 @@ export default function TableColumnsBody({
   statistics,
   rewriteData,
   handleButtonClick,
-  showDataStreamButtonFunc
+  showDataStreamButtonFunc,
+  refreshListFunc
 }: ITableColumnsBodyProps) {
   const history = useHistory();
     const {
@@ -56,8 +58,16 @@ export default function TableColumnsBody({
   );
   const dispatch = useDispatch();
   const [jobId, setJobId] = useState<number>();
+  const [lastRefreshedJobId, setLastRefreshedJobId] = useState<number>();
 
   const job = jobId ? job_dictionary_state[jobId] : undefined;
+
+  useEffect(() => {
+    if (job && job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded && jobId != lastRefreshedJobId) {
+      setLastRefreshedJobId(jobId);
+      refreshListFunc();
+    }
+  }, [job]);
 
   const collectStatistics = async (
     statistics: TableColumnsStatisticsModel,
@@ -98,7 +108,7 @@ export default function TableColumnsBody({
         url,
         value,
         state: {},
-        label: table
+        label: column
       })
     );
     history.push(url);

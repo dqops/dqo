@@ -57,6 +57,7 @@ export interface ITableColumnsProps {
   setNumberOfSelected: (arg: number) => void;
   statistics?: TableColumnsStatisticsModel;
   onChangeSelectedColumns?: (columns: Array<string>) => void;
+  refreshListFunc: ()  => void;
 }
 
 export const labels = [

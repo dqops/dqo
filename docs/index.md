@@ -62,6 +62,31 @@ and enabling quick identification of tables with data quality issues.
 
 ![DQOps dashboards simplify monitoring of data quality KPIs](https://dqops.com/docs/images/dqops-kpis-scorecard-dashboard.png "DQOps dashboards simplify monitoring of data quality KPIs"){ loading=lazy } &nbsp; &nbsp; &nbsp; ![DQOps dashboards enable quick identification of tables with data quality issues](https://dqops.com/docs/images/dqops-current-completeness-issues-dashboard.png "DQOps dashboards enable quick identification of tables with data quality issues"){ loading=lazy } 
 
+## DQOps is DevOps and DataOps friendly
+
+Technical users can manage data quality check configuration at scale by changing YAML files in their editor of choice 
+and version the configuration in Git. An example YAML configuration with the `profile_nulls_count` check configured is shown below.
+
+```yaml hl_lines="7-15"
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  columns:
+    target_column:
+      profiling_checks:
+        nulls:
+          profile_nulls_count:
+            warning:
+              max_count: 0
+            error:
+              max_count: 10
+            fatal:
+              max_count: 100
+      labels:
+      - This is the column that is analyzed for data quality issues
+```
+
 ## Additional resources
 
 Want to learn more about data quality? 

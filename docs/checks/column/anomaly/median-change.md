@@ -15,13 +15,13 @@ The **median change** data quality check has the following variants for each
 
 Verifies that the median in a column changed in a fixed rate since the last readout.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`profile_median_change`</span>|profiling| |Consistency|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`profile_median_change`</span>|[anomaly](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*change_percent*](../../../reference/rules/Change.md#change-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the profile median change data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile median change data quality check.
 
 ??? example "Managing profile median change check from DQOps shell"
 
@@ -1344,13 +1344,13 @@ ___
 
 Verifies that the median in a column changed in a fixed rate since the last readout.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_median_change`</span>|monitoring|daily|Consistency|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_median_change`</span>|[anomaly](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*change_percent*](../../../reference/rules/Change.md#change-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily median change data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily median change data quality check.
 
 ??? example "Managing daily median change check from DQOps shell"
 
@@ -2675,13 +2675,13 @@ ___
 
 Verifies that the median in a column changed in a fixed rate since the last readout.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_median_change`</span>|monitoring|monthly|Consistency|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_median_change`</span>|[anomaly](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Consistency|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*change_percent*](../../../reference/rules/Change.md#change-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly median change data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly median change data quality check.
 
 ??? example "Managing monthly median change check from DQOps shell"
 
@@ -4006,13 +4006,13 @@ ___
 
 Verifies that the median in a column changed in a fixed rate since the last readout.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`daily_partition_median_change`</span>|partitioned|daily|Consistency|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`daily_partition_median_change`</span>|[anomaly](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Consistency|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*change_percent*](../../../reference/rules/Change.md#change-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the daily partition median change data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition median change data quality check.
 
 ??? example "Managing daily partition median change check from DQOps shell"
 
@@ -5357,13 +5357,13 @@ ___
 
 Verifies that the median in a column changed in a fixed rate since the last readout.
 
-|Data quality check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
-|----------|----------|----------|-----------------|-----------------|------------|
-|<span class="no-wrap-code">`monthly_partition_median_change`</span>|partitioned|monthly|Consistency|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*change_percent*](../../../reference/rules/Change.md#change-percent)|
+|Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
+|-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
+|<span class="no-wrap-code">`monthly_partition_median_change`</span>|[anomaly](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Consistency|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*change_percent*](../../../reference/rules/Change.md#change-percent)| |
 
 **Command-line examples**
 
-Please expand the section below to see the DQOps command-line examples to run or activate the monthly partition median change data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the monthly partition median change data quality check.
 
 ??? example "Managing monthly partition median change check from DQOps shell"
 
