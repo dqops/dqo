@@ -25,7 +25,6 @@ import com.dqops.utils.BeanFactoryObjectMother;
 import org.springframework.beans.factory.BeanFactory;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Object mother for a testable Single Store connection spec that provides access to the sandbox database.
@@ -49,16 +48,16 @@ public class SingleStoreConnectionSpecObjectMother {
             SingleStoreParametersSpec singleStoreParametersSpec = new SingleStoreParametersSpec(){{
                 setHostDescriptions(List.of(secretValueProvider.expandValue("${SINGLE_STORE_HOST_DESCRIPTIONS}", secretValueLookupContext)));
                 setLoadBalancingMode(SingleStoreLoadBalancingMode.none);
+                setSchema(secretValueProvider.expandValue("${SINGLE_STORE_DATABASE}", secretValueLookupContext));
+                setUseSsl(true);
             }};
 
 			setMysql(new MysqlParametersSpec()
             {{
                 setMysqlEngineType(MysqlEngineType.singlestore);
                 setSingleStoreParametersSpec(singleStoreParametersSpec);
-                setDatabase(secretValueProvider.expandValue("${SINGLE_STORE_DATABASE}", secretValueLookupContext));
                 setUser(secretValueProvider.expandValue("${SINGLE_STORE_USERNAME}", secretValueLookupContext));
                 setPassword(secretValueProvider.expandValue("${SINGLE_STORE_PASSWORD}", secretValueLookupContext));
-                setProperties(Map.of("useSsl", "true"));    // todo: to it as a field
             }});
         }};
 
