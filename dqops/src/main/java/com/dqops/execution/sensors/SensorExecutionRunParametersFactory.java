@@ -21,6 +21,7 @@ import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.data.statistics.factory.StatisticsDataScope;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
 import com.dqops.metadata.definitions.checks.CheckDefinitionSpec;
+import com.dqops.metadata.dqohome.DqoHome;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.metadata.sources.ColumnSpec;
@@ -67,6 +68,7 @@ public interface SensorExecutionRunParametersFactory {
     /**
      * Creates a sensor parameters object for a statistics collector. The sensor parameter object contains cloned, truncated and expanded (parameter expansion)
      * specifications for the target connection, table, column, check.
+     * @param dqoHome DQO home.
      * @param userHome User home used to look up credentials.
      * @param connection Connection specification.
      * @param table Table specification.
@@ -77,7 +79,8 @@ public interface SensorExecutionRunParametersFactory {
      * @param dialectSettings Dialect settings.
      * @return Sensor execution run parameters.
      */
-    SensorExecutionRunParameters createStatisticsSensorParameters(UserHome userHome,
+    SensorExecutionRunParameters createStatisticsSensorParameters(DqoHome dqoHome,
+                                                                  UserHome userHome,
                                                                   ConnectionSpec connection,
                                                                   TableSpec table,
                                                                   ColumnSpec column,
