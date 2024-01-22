@@ -18,7 +18,7 @@ import Switch from '../Switch';
 import clsx from 'clsx';
 
 const NotificationMenu = () => {
-  const {error_dictionary_state, jobList, isOpen, isCronScheduled, userProfile } = useSelector(
+  const {jobList, isOpen, isCronScheduled, userProfile } = useSelector(
     (state: IRootState) => state.job || {}
     );
   const [showNewIcon, setShowNewIcon] = useState(false);
@@ -116,8 +116,10 @@ const NotificationMenu = () => {
           </div>
         </div>
         <div className="overflow-x-hidden max-h-100 py-4 px-4 relative">
-         {error_dictionary_state.map((error, index) => <ErrorItem error={error} key={index}/>)}
+         {/* {error_dictionary_state.map((error, index) => <ErrorItem error={error} key={index}/>)} */}
           {Object.keys(jobList).reverse().map((jobId: string, index) =>
+          jobId[0] === '-' ? 
+          <ErrorItem errorId={jobId} key={index}/> : 
               <JobItem
                 jobId={jobId}
                 key={index}

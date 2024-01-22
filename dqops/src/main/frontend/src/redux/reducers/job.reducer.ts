@@ -27,7 +27,6 @@ import {
 } from '../../api';
 import moment from 'moment';
 import { TJobDictionary, TJobList } from '../../shared/constants';
-import { IError } from '../../contexts/errrorContext';
 
 export interface IJobsState {
   jobs?: DqoJobQueueInitialSnapshotModel;
@@ -43,7 +42,6 @@ export interface IJobsState {
   isProfileOpen: boolean;
   areSettingsOpen: boolean;
   job_dictionary_state: Record<string, TJobDictionary>;
-  error_dictionary_state: IError[];
   bool?: boolean;
   dataGrouping: string;
   spec: DataGroupingConfigurationSpec;
@@ -67,7 +65,6 @@ const initialState: IJobsState = {
   isProfileOpen: false,
   areSettingsOpen: false,
   job_dictionary_state: {},
-  error_dictionary_state: [],
   bool: false,
   dataGrouping: '',
   spec: {},
@@ -347,15 +344,16 @@ const schemaReducer = (state = initialState, action: any) => {
     }
     case JOB_ACTION.SET_ERRORS: {
       const error = {...action.error}
-      const error_dictionary_state = [...state.error_dictionary_state]
+      const job_dictionary_state = {...state.job_dictionary_state};
+      const jobList = {...state.jobList}
 
-      if (!error_dictionary_state.find((err) => err.date === error.date)) {
-        error_dictionary_state.push(error)
-      }
+      jobList[String("-" + error.date)] = [];
+      job_dictionary_state[String("-" + error.date)] = error;
 
       return {
         ...state,
-        error_dictionary_state
+        jobList,
+        job_dictionary_state
       }
     }
     default:
