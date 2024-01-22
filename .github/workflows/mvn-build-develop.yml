@@ -43,6 +43,22 @@ jobs:
       - name: Build with Maven
         run: mvn package -DskipTests -Pbuild-with-jdk-11 -Pdevelopment-build -Prun-npm
 
+      - uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: ${{ secrets.RELEASES_SERVICE_ACCOUNT_JSON }}
+
+      - uses: juliangruber/read-file-action@v1
+        name: Read VERSION
+        id: read_version
+        with:
+          path: ./VERSION
+
+      - id: 'upload-release-private'
+        uses: 'google-github-actions/upload-cloud-storage@v2'
+        with:
+          path: './distribution/target/dqo-distribution-${{steps.read_version.outputs.content}}-bin.zip'
+          destination: 'docs-dqo-ai/releases/dqo-distribution-${{steps.read_version.outputs.content}}-bin.zip'
+
       - name: Save cached npm packages
         id: save-cached-npm-packages
         uses: actions/cache/save@v3
