@@ -2,7 +2,9 @@ package com.dqops.connectors.mysql;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-// todo descriptions
+/**
+ * The engine type of MySQL
+ */
 public enum MysqlEngineType {
 
     @JsonProperty("mysql")
