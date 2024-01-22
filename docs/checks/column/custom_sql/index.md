@@ -5,9 +5,15 @@ This is a list of custom_sql column data quality checks supported by DQOps and a
 
 
 
-
-## **custom_sql**
+## column-level custom_sql checks
 Validate data against user-defined SQL queries at the column level. Checks in this group allows to validate that the set percentage of rows passed a custom SQL expression or that the custom SQL expression is not outside the set range.
+
+### [sql condition failed on column](./sql-condition-failed-on-column.md)
+A column-level check that uses a custom SQL expression on each column to verify (assert) that all rows pass a custom condition defined as an SQL expression.
+ Use the {alias} token to reference the tested table, and the {column} to reference the column that is tested. This data quality check can be used to compare columns on the same table.
+ For example, when this check is applied on a *col_price* column, the condition can verify that the *col_price* is higher than the *col_tax* using an SQL expression: &#x60;{alias}.{column} &gt; {alias}.col_tax&#x60;
+ Use an SQL expression that returns a *true* value for valid values and *false* for invalid values, because it is an assertion.
+
 
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
@@ -19,6 +25,10 @@ Validate data against user-defined SQL queries at the column level. Checks in th
 
 
 
+### [sql condition passed percent on column](./sql-condition-passed-percent-on-column.md)
+A column-level check that ensures that a set percentage of rows passed a custom SQL condition (expression).
+
+
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_sql_condition_passed_percent_on_column`</span>](./sql-condition-passed-percent-on-column.md#profile-sql-condition-passed-percent-on-column)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Reference the current column by using tokens, for example: &#x60;{alias}.{column} &gt; {alias}.col_tax&#x60;.| |
@@ -27,6 +37,10 @@ Validate data against user-defined SQL queries at the column level. Checks in th
 |[<span class="no-wrap-code">`daily_partition_sql_condition_passed_percent_on_column`</span>](./sql-condition-passed-percent-on-column.md#daily-partition-sql-condition-passed-percent-on-column)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Reference the current column by using tokens, for example: &#x60;{alias}.{column} &gt; {alias}.col_tax&#x60;. Stores a separate data quality check result for each daily partition.| |
 |[<span class="no-wrap-code">`monthly_partition_sql_condition_passed_percent_on_column`</span>](./sql-condition-passed-percent-on-column.md#monthly-partition-sql-condition-passed-percent-on-column)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Reference the current column by using tokens, for example: &#x60;{alias}.{column} &gt; {alias}.col_tax&#x60;. Stores a separate data quality check result for each monthly partition.| |
 
+
+
+### [sql aggregate expression on column](./sql-aggregate-expression-on-column.md)
+A column-level check that calculates a given SQL aggregate expression on a column and compares it with a maximum accepted value.
 
 
 | Data quality check name | Check type | Description | Standard |

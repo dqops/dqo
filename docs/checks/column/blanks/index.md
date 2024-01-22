@@ -5,9 +5,12 @@ This is a list of blanks column data quality checks supported by DQOps and a bri
 
 
 
-
-## **blanks**
+## column-level blanks checks
 Detects text columns that contain blank values, or values that are used as placeholders for missing values: &#x27;n/a&#x27;, &#x27;None&#x27;, etc.
+
+### [empty text found](./empty-text-found.md)
+A column-level check that ensures that there are no more than a maximum number of empty texts in a monitored column.
+
 
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
@@ -17,6 +20,10 @@ Detects text columns that contain blank values, or values that are used as place
 |[<span class="no-wrap-code">`daily_partition_empty_text_found`</span>](./empty-text-found.md#daily-partition-empty-text-found)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
 |[<span class="no-wrap-code">`monthly_partition_empty_text_found`</span>](./empty-text-found.md#monthly-partition-empty-text-found)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
 
+
+
+### [whitespace text found](./whitespace-text-found.md)
+A column-level check that ensures that there are no more than a maximum number of whitespace texts in a monitored column.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -29,6 +36,10 @@ Detects text columns that contain blank values, or values that are used as place
 
 
 
+### [null placeholder text found](./null-placeholder-text-found.md)
+A column-level check that ensures that there are no more than a maximum number of rows with a null placeholder text in a monitored column.
+
+
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_null_placeholder_text_found`</span>](./null-placeholder-text-found.md#profile-null-placeholder-text-found)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the number of null placeholders in a column does not exceed the maximum accepted count.|:material-check-bold:|
@@ -37,6 +48,10 @@ Detects text columns that contain blank values, or values that are used as place
 |[<span class="no-wrap-code">`daily_partition_null_placeholder_text_found`</span>](./null-placeholder-text-found.md#daily-partition-null-placeholder-text-found)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
 |[<span class="no-wrap-code">`monthly_partition_null_placeholder_text_found`</span>](./null-placeholder-text-found.md#monthly-partition-null-placeholder-text-found)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
 
+
+
+### [empty text percent](./empty-text-percent.md)
+A column-level check that ensures that there are no more than a maximum percent of empty texts in a monitored column.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -49,6 +64,10 @@ Detects text columns that contain blank values, or values that are used as place
 
 
 
+### [whitespace text percent](./whitespace-text-percent.md)
+A column-level check that ensures that there are no more than a maximum percent of whitespace texts in a monitored column.
+
+
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_whitespace_text_percent`</span>](./whitespace-text-percent.md#profile-whitespace-text-percent)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of whitespace strings in a column does not exceed the minimum accepted percentage.| |
@@ -57,6 +76,10 @@ Detects text columns that contain blank values, or values that are used as place
 |[<span class="no-wrap-code">`daily_partition_whitespace_text_percent`</span>](./whitespace-text-percent.md#daily-partition-whitespace-text-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores a separate data quality check result for each daily partition.| |
 |[<span class="no-wrap-code">`monthly_partition_whitespace_text_percent`</span>](./whitespace-text-percent.md#monthly-partition-whitespace-text-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores a separate data quality check result for each monthly partition.| |
 
+
+
+### [null placeholder text percent](./null-placeholder-text-percent.md)
+A column-level check that ensures that there are no more than a maximum percent of rows with a null placeholder text in a monitored column.
 
 
 | Data quality check name | Check type | Description | Standard |

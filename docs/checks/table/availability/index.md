@@ -5,9 +5,14 @@ This is a list of availability table data quality checks supported by DQOps and 
 
 
 
-
-## **availability**
+## table-level availability checks
 Checks whether the table is accessible and available for use.
+
+### [table availability](./table-availability.md)
+A table-level check that ensures a query can be successfully executed on a table without server errors. It also verifies that the table exists and is accessible (queryable).
+ The actual value (the result of the check) indicates the number of failures. If the table is accessible and a simple query can be executed without errors, the result will be 0.0.
+ A sensor result (the actual value) of 1.0 indicates that there is a failure. Any value greater than 1.0 is stored only in the check result table and represents the number of consecutive failures in the following days.
+
 
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
