@@ -427,10 +427,13 @@
     {%- endif -%}
 {% endmacro %}
 
-{% macro render_regexp(column, regex_pattern) %}
-    {%- if engine_type == 'singlestore' %}
-        {{ column }} RLIKE {{ regex_pattern }}
-    {%- else -%}
-        REGEXP_LIKE({{ column }}, {{ regex_pattern }})
+{% macro render_regex(column, regex_pattern) %}
+    {%- if engine_type == 'singlestore' %}{{ column }} RLIKE {{ make_text_constant(regex_pattern) }}
+    {%- else -%}REGEXP_LIKE({{ column }}, {{ make_text_constant(regex_pattern) }})
     {%- endif -%}
 {% endmacro %}
+
+{%- macro make_text_constant(string) -%}
+    {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
+{%- endmacro %}
+

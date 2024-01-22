@@ -17,21 +17,20 @@ package com.dqops.singlestore.sensors.column.text;
 
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.checkspecs.text.ColumnTextMeanLengthCheckSpec;
-import com.dqops.connectors.ProviderType;
+import com.dqops.connectors.mysql.SingleStoreConnectionSpecObjectMother;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
+import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
-import com.dqops.singlestore.BaseSingleStoreIntegrationTest;
-import com.dqops.metadata.sources.ConnectionSpec;
-import com.dqops.connectors.mysql.SingleStoreConnectionSpecObjectMother;
 import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.column.text.ColumnTextTextMeanLengthSensorParametersSpec;
+import com.dqops.singlestore.BaseSingleStoreIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,7 +48,7 @@ public class SingleStoreColumnTextTextMeanLengthSensorParametersSpecIntegrationT
     @BeforeEach
     void setUp() {
         ConnectionSpec connectionSpec = SingleStoreConnectionSpecObjectMother.create();
-		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
+		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, connectionSpec);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnTextTextMeanLengthSensorParametersSpec();
@@ -67,7 +66,7 @@ public class SingleStoreColumnTextTextMeanLengthSensorParametersSpecIntegrationT
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(1.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(1.0F, resultTable.column(0).get(0));
     }
 
     @Test
@@ -80,7 +79,7 @@ public class SingleStoreColumnTextTextMeanLengthSensorParametersSpecIntegrationT
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(1.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(1.0F, resultTable.column(0).get(0));
     }
 
     @Test
@@ -93,7 +92,7 @@ public class SingleStoreColumnTextTextMeanLengthSensorParametersSpecIntegrationT
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(1.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(1.0F, resultTable.column(0).get(0));
     }
 
     @Test
@@ -106,7 +105,7 @@ public class SingleStoreColumnTextTextMeanLengthSensorParametersSpecIntegrationT
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(1.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(1.0F, resultTable.column(0).get(0));
     }
 
     @Test
@@ -119,6 +118,6 @@ public class SingleStoreColumnTextTextMeanLengthSensorParametersSpecIntegrationT
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(1.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(1.0F, resultTable.column(0).get(0));
     }
 }
