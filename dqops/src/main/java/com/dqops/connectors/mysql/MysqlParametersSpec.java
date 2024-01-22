@@ -300,7 +300,9 @@ public class MysqlParametersSpec extends BaseProviderParametersSpec
         cloned.options = secretValueProvider.expandValue(cloned.options, lookupContext);
         cloned.properties = secretValueProvider.expandProperties(cloned.properties, lookupContext);
 
-        cloned.singleStoreParametersSpec.expandAndTrim(secretValueProvider, lookupContext);
+        if(cloned.singleStoreParametersSpec != null){
+            cloned.singleStoreParametersSpec = cloned.singleStoreParametersSpec.expandAndTrim(secretValueProvider, lookupContext);
+        }
         cloned.mysqlEngineType = MysqlEngineType.valueOf(secretValueProvider.expandValue(cloned.mysqlEngineType.toString(), lookupContext));
 
         return cloned;
