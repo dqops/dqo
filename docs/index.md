@@ -14,7 +14,7 @@ DQOps comes with more than 150 predefined data quality checks which helps you mo
 - Intuitive [user interface](dqo-concepts/dqops-user-interface-overview.md) that uses tabs
   to work on multiple tables at the same time
 - [Command-line](dqo-concepts/command-line-interface.md) interface
-- Support of a number of different data sources: BigQuery, Snowflake, PostgreSQL, Redshift, SQL Server, MySQL, Spark, Databricks, Oracle and others
+- Support of a number of different [data sources](data-sources/index.md): BigQuery, Snowflake, PostgreSQL, Redshift, SQL Server, MySQL, Spark, Databricks, Oracle and others
 - More than 150 built-in table and column checks with easy customization
 - Table and column-level [data quality checks](dqo-concepts/definition-of-data-quality-checks/index.md) which allows writing your own SQL queries
 - Daily and monthly date [partition testing](dqo-concepts/definition-of-data-quality-checks/partition-checks.md)
