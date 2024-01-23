@@ -19,7 +19,7 @@ Finally, we will review the data quality results on the [data quality dashboards
 
 ## Steps
 
-1. [Installation](installation.md)
+1. [Local installation](installation.md)
 
 2. [Connect to a data source](add-data-source-connection.md)
 

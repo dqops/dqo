@@ -1,34 +1,38 @@
-# Installation
-This guide will tell you how to quickly install DQOps from PyPI and create a DQOps Cloud account to enable the data quality dashboards.
+# DQOps local installation
+This guide will tell you how to quickly install DQOps locally from PyPI and create a DQOps Cloud account to enable the data quality dashboards.
 
 ## Overview
+DQOps is available in the  [PyPi repository](https://pypi.org/project/dqops/) as a `dqops` package. 
+You can also look at the [installation of DQOps using `pip`](../dqops-installation/install-dqops-using-pip.md),
+if you have any issues when installing DQOps using a simplified installation process described in this article.
 
-DQOps is available in the  [PyPi repository](https://pypi.org/project/dqops/).
-
-If you want to [install DQOps directly from GitHub go to this section](../dqops-installation/install-dqops-from-github.md).
-
-You can also [run DQOps as a Docker container](../dqops-installation/run-dqops-as-docker-container.md) for the production use.
+You can also [start DQOps as a docker container](../dqops-installation/run-dqops-as-docker-container.md), which is
+a preferred option for production installation.
 
 
 ## Prerequisites
 
-To use DQOps you need:
+To start DQOps locally, you need:
 
   - Python version 3.8 or greater (for details see [Python's documentation](https://www.python.org/doc/) and [download sites](https://www.python.org/downloads/)).
 
     To confirm that you have Python installed run the following command
+
     ```
     python --version
     ```
+    
     To view the Python 3 version, run `python3 --version` instead.
 
 
   - Ability to install Python packages with pip.
     
     To confirm that you have pip installed run the following command
+
     ```
     pip --version
     ```
+    
     Current version of pip should be displayed.
 
 
