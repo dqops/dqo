@@ -19,6 +19,7 @@
 	<properties>
 		<java.version>11</java.version>
 		<license.licenseName>apache_v2</license.licenseName>
+		<compressZip>false</compressZip>
 	</properties>
 
 	<licenses>
@@ -69,7 +70,7 @@
 								<descriptor>zip.xml</descriptor>
 							</descriptors>
 							<archiverConfig>
-								<compress>true</compress>
+								<compress>${compressZip}</compress>
 							</archiverConfig>
 						</configuration>
 					</execution>
