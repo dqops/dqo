@@ -23,6 +23,16 @@ import java.util.Map;
  */
 public interface SecretValueProvider {
     /**
+     * The prefix of an entry that references a data dictionary.
+     */
+    String DICTIONARY_EXTRACT_TOKEN_PREFIX = "${dictionary://";
+
+    /**
+     * The suffix of an entry that references a data dictionary.
+     */
+    String DICTIONARY_EXTRACT_TOKEN_SUFFIX = "}";
+
+    /**
      * Expands a value that references possible secret values. For example ${ENVIRONMENT_VARIABLE_NAME}
      * @param value Value to expand.
      * @param lookupContext Context used to look up credentials in the user home.

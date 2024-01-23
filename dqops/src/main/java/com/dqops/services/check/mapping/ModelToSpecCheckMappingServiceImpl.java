@@ -33,11 +33,13 @@ import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.dqops.utils.reflection.ClassInfo;
 import com.dqops.utils.reflection.FieldInfo;
 import com.dqops.utils.reflection.ReflectionService;
+import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -389,10 +391,25 @@ public class ModelToSpecCheckMappingServiceImpl implements ModelToSpecCheckMappi
                     fieldInfo.setFieldValue(fieldModelForUpdate.getEnumValue(), targetParametersSpec);
                     break;
                 case string_list_type:
-                    fieldInfo.setFieldValue(fieldModelForUpdate.getStringListValue(), targetParametersSpec);
+                    List<String> stringListValue = fieldModelForUpdate.getStringListValue();
+                    if (stringListValue != null) {
+                        while (stringListValue.contains("")) {
+                            stringListValue.remove("");
+                        }
+                        while (stringListValue.contains(null)) {
+                            stringListValue.remove(null);
+                        }
+                    }
+                    fieldInfo.setFieldValue(stringListValue, targetParametersSpec);
                     break;
                 case integer_list_type:
-                    fieldInfo.setFieldValue(fieldModelForUpdate.getIntegerListValue(), targetParametersSpec);
+                    List<Long> integerListValue = fieldModelForUpdate.getIntegerListValue();
+                    if (integerListValue != null) {
+                        while (integerListValue.contains(null)) {
+                            integerListValue.remove(null);
+                        }
+                    }
+                    fieldInfo.setFieldValue(integerListValue, targetParametersSpec);
                     break;
                 case date_type:
                     fieldInfo.setFieldValue(fieldModelForUpdate.getDateValue(), targetParametersSpec);

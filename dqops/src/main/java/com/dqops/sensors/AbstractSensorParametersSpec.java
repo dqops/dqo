@@ -19,8 +19,11 @@ import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.execution.sqltemplates.rendering.JinjaSqlTemplateSensorRunner;
 import com.dqops.metadata.basespecs.AbstractSpec;
+import com.dqops.metadata.fields.ParameterDataType;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.utils.reflection.ClassInfo;
+import com.dqops.utils.reflection.FieldInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -28,6 +31,8 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -89,6 +94,19 @@ public abstract class AbstractSensorParametersSpec extends AbstractSpec {
     public AbstractSensorParametersSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
         AbstractSensorParametersSpec cloned = (AbstractSensorParametersSpec)super.deepClone();
         cloned.filter = secretValueProvider.expandValue(cloned.filter, lookupContext);
+
+        ClassInfo reflectionClassInfo = this.getChildMap().getReflectionClassInfo();
+        for (FieldInfo fieldInfo : reflectionClassInfo.getFields()) {
+            if (fieldInfo.getDataType() == ParameterDataType.string_list_type) {
+                Object rawFieldValue = fieldInfo.getRawFieldValue(cloned);
+                if (rawFieldValue instanceof List) {
+                    List<String> originalList = (List<String>)rawFieldValue;
+                    List<String> expandedList = secretValueProvider.expandList(originalList, lookupContext);
+                    fieldInfo.setFieldValue(expandedList, cloned);
+                }
+            }
+        }
+
         return cloned;
     }
 

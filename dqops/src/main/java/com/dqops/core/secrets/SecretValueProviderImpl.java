@@ -17,6 +17,8 @@ package com.dqops.core.secrets;
 
 import com.dqops.core.secrets.credentials.SharedCredentialPropertySource;
 import com.dqops.core.secrets.gcp.GcpSecretManagerPropertySource;
+import com.dqops.metadata.dictionaries.DictionaryList;
+import com.dqops.metadata.dictionaries.DictionaryWrapper;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import org.apache.parquet.Strings;
@@ -146,10 +148,34 @@ public class SecretValueProviderImpl implements SecretValueProvider {
             return list;
         }
 
-        List<String> expanded = new ArrayList<>();
-        for (String element : list) {
-            expanded.add(expandValue(element, lookupContext));
+        List<Object> expanded = new ArrayList<>();
+        for (Object element : list) {
+            if (element instanceof String) {
+                String stringElement = (String) element;
+                if (stringElement.startsWith(DICTIONARY_EXTRACT_TOKEN_PREFIX) && stringElement.endsWith(DICTIONARY_EXTRACT_TOKEN_SUFFIX)) {
+                    String dictionaryName = stringElement.substring(
+                            DICTIONARY_EXTRACT_TOKEN_PREFIX.length(),
+                            stringElement.length() - DICTIONARY_EXTRACT_TOKEN_SUFFIX.length());
+
+                    if (lookupContext.getUserHome() != null && lookupContext.getUserHome().getDictionaries() != null) {
+                        DictionaryList dictionaries = lookupContext.getUserHome().getDictionaries();
+                        DictionaryWrapper dictionaryWrapper = dictionaries.getByObjectName(dictionaryName, true);
+                        if (dictionaryWrapper != null && dictionaryWrapper.getObject() != null) {
+                            List<String> dictionaryEntries = dictionaryWrapper.getDictionaryEntries();
+                            expanded.addAll(dictionaryEntries);
+                        } else {
+                            expanded.add(element);
+                        }
+                    } else {
+                        expanded.add(element);
+                    }
+                } else {
+                    expanded.add(expandValue(stringElement, lookupContext));
+                }
+            } else {
+                expanded.add(element);
+            }
         }
-        return Collections.synchronizedList(expanded);
+        return Collections.synchronizedList((List<String>)(List<?>)expanded);
     }
 }

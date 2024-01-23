@@ -21,9 +21,14 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.base.Strings;
+import org.apache.commons.lang3.StringUtils;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 /**
  * Data dictionary file wrapper.
@@ -114,5 +119,37 @@ public class DictionaryWrapperImpl extends AbstractPojoElementWrapper<String, Fi
     @Override
     public DictionaryWrapper clone() {
         return (DictionaryWrapper) super.deepClone();
+    }
+
+    /**
+     * Parses the data dictionary and returns a flat list of entries.
+     *
+     * @return A list of dictionary entries.
+     */
+    @Override
+    public List<String> getDictionaryEntries() {
+        ArrayList<String> entries = new ArrayList<>();
+        FileContent fileContent = this.getObject();
+        if (fileContent == null || fileContent.getTextContent() == null) {
+            return entries;
+        }
+
+        Stream<String> lines = fileContent.getTextContent().lines();
+        lines.forEach(line -> {
+            if (line.isEmpty()) {
+                return;
+            }
+
+            String[] splitByComma = StringUtils.split(line, ',');
+            for (String entryByComma : splitByComma) {
+                if (entryByComma.isEmpty()) {
+                    continue;
+                }
+
+                entries.add(entryByComma);
+            }
+        });
+
+        return entries;
     }
 }

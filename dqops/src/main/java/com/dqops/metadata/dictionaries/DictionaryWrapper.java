@@ -20,6 +20,7 @@ import com.dqops.metadata.basespecs.ObjectName;
 import com.dqops.metadata.basespecs.PojoElementWrapper;
 
 import java.nio.file.Path;
+import java.util.List;
 
 /**
  * Data dictionary file wrapper.
@@ -48,4 +49,10 @@ public interface DictionaryWrapper extends PojoElementWrapper<FileContent>, Obje
      * @return Absolute path to the file or null when it is not possible to find the file.
      */
     Path toAbsoluteFilePath();
+
+    /**
+     * Parses the data dictionary and returns a flat list of entries.
+     * @return A list of dictionary entries.
+     */
+    List<String> getDictionaryEntries();
 }
