@@ -122,18 +122,31 @@ public class MysqlSourceConnection extends AbstractJdbcSourceConnection {
      */
     @Override
     public HikariConfig createHikariConfig(SecretValueLookupContext secretValueLookupContext) {
+        MysqlParametersSpec mysqlParametersSpec = this.getConnectionSpec().getMysql();
+
+        switch(mysqlParametersSpec.getMysqlEngineType()){
+            case singlestore:
+                return SingleStoreSourceConnection.createHikariConfig(
+                        secretValueLookupContext,
+                        mysqlParametersSpec,
+                        this.getSecretValueProvider());
+            case mysql:
+                return createHikariConfigForMysql(secretValueLookupContext);
+            default:
+                throw new RuntimeException("Given enum is not supported : " + mysqlParametersSpec.getMysqlEngineType());
+        }
+    }
+
+    /**
+     * Creates a hikari connection pool config for the connection specification for mysql.
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
+     * @return Hikari config.
+     */
+    private HikariConfig createHikariConfigForMysql(SecretValueLookupContext secretValueLookupContext) {
+
         HikariConfig hikariConfig = new HikariConfig();
         ConnectionSpec connectionSpec = this.getConnectionSpec();
         MysqlParametersSpec mysqlParametersSpec = connectionSpec.getMysql();
-
-        if(mysqlParametersSpec.getMysqlEngineType().equals(MysqlEngineType.singlestore)){
-            return SingleStoreSourceConnection.createHikariConfig(
-                    secretValueLookupContext,
-                    mysqlParametersSpec,
-                    this.getSecretValueProvider());
-        }
-
-        // todo: exttract below as a method, then above if might be a switch
 
         String host = this.getSecretValueProvider().expandValue(mysqlParametersSpec.getHost(), secretValueLookupContext);
         StringBuilder jdbcConnectionBuilder = new StringBuilder();
