@@ -70,7 +70,7 @@ public class SharedCredentialsController {
      * @return List of all shared credentials.
      */
     @GetMapping(value = "/credentials", produces = "application/json")
-    @ApiOperation(value = "getAllSharedCredentials", notes = "Returns a list of all shared credentials that are present in the DQOps user's home .credentials/ folder..",
+    @ApiOperation(value = "getAllSharedCredentials", notes = "Returns a list of all shared credentials that are present in the DQOps user's home .credentials/ folder.",
             response = SharedCredentialListModel[].class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -200,7 +200,7 @@ public class SharedCredentialsController {
 
     /**
      * Creates (adds) a new shared credential, which creates a file in the DQOps user's home .credentials/ folder named as the credential and with the content that is provided in this call
-     * @param sharedCredentialModel Check model to save.
+     * @param sharedCredentialModel Shared credential model to save.
      * @return Empty response.
      */
     @PostMapping(value = "/credentials", consumes = "application/json", produces = "application/json")

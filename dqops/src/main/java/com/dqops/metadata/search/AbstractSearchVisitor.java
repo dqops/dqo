@@ -34,6 +34,8 @@ import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairSpec;
 import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairsListSpec;
 import com.dqops.metadata.credentials.SharedCredentialList;
 import com.dqops.metadata.credentials.SharedCredentialWrapper;
+import com.dqops.metadata.dictionaries.DictionaryListImpl;
+import com.dqops.metadata.dictionaries.DictionaryWrapperImpl;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
 import com.dqops.checks.table.monitoring.TableMonitoringChecksSpec;
 import com.dqops.metadata.comments.CommentSpec;
@@ -1026,4 +1028,27 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
+    /**
+     * Accepts a data dictionary list.
+     *
+     * @param dictionaryWrappers Data dictionary list.
+     * @param parameter          Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(DictionaryListImpl dictionaryWrappers, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a single data dictionary wrapper.
+     *
+     * @param dictionaryWrapper Data dictionary wrapper.
+     * @param parameter         Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(DictionaryWrapperImpl dictionaryWrapper, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
 }

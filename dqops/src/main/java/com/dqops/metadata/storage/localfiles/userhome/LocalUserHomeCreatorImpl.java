@@ -218,6 +218,8 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.INDEX));
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.LOGS));
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.CREDENTIALS));
+            initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.DICTIONARIES));
+
 
             Path gitIgnorePath = userHomePath.resolve(".gitignore");
             if (!Files.exists(gitIgnorePath)) {

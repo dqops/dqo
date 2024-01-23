@@ -231,19 +231,29 @@ public class FolderTreeNode implements Cloneable {
                 else  if (Objects.equals(folderName.getFileSystemName(), BuiltInFolderNames.CREDENTIALS)) {
                     return FolderKind.CREDENTIALS;
                 }
+                else  if (Objects.equals(folderName.getFileSystemName(), BuiltInFolderNames.DICTIONARIES)) {
+                    return FolderKind.DICTIONARIES;
+                }
                 return FolderKind.FOREIGN;
             case CHECKS:
+            case CHECK_SUBFOLDER:
                 return FolderKind.CHECK_SUBFOLDER;
             case SOURCES:
                 return FolderKind.SOURCE;
             case SOURCE:
+            case SOURCE_SUBFOLDER:
                 return FolderKind.SOURCE_SUBFOLDER;
             case RULES:
+            case RULES_SUBFOLDER:
                 return FolderKind.RULES_SUBFOLDER;
             case SETTINGS:
                 return FolderKind.SETTINGS_SUBFOLDER;
             case CREDENTIALS:
+            case CREDENTIALS_SUBFOLDER:
                 return FolderKind.CREDENTIALS_SUBFOLDER;
+            case DICTIONARIES:
+            case DICTIONARIES_SUBFOLDER:
+                return FolderKind.DICTIONARIES_SUBFOLDER;
             default:
                 return FolderKind.UNKNOWN;
         }

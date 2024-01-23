@@ -101,6 +101,9 @@ public class LocalSynchronizationFileSystemFactoryImpl implements LocalSynchroni
             case credentials:
                 return localUserHomePath.resolve(BuiltInFolderNames.CREDENTIALS);
 
+            case dictionaries:
+                return localUserHomePath.resolve(BuiltInFolderNames.DICTIONARIES);
+
             default:
                 throw new IllegalArgumentException("Unsupported root: " +  rootType.toString());
         }

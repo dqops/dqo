@@ -41,6 +41,9 @@ tags:
 - name: "Defaults"
   description: "Default settings management for configuring the default data quality\
     \ checks that are configured for all imported tables and columns."
+- name: "Dictionaries"
+  description: "Operations for managing data dictionary CSV files in DQOps. Data dictionaries\
+    \ can be used in *accepted_values* data quality checks."
 - name: "Environment"
   description: "DQOps environment and configuration controller, provides access to\
     \ the DQOps configuration, current user's information and issue local API Keys\
@@ -9299,7 +9302,7 @@ paths:
       - "SharedCredentials"
       summary: "getAllSharedCredentials"
       description: "Returns a list of all shared credentials that are present in the\
-        \ DQOps user's home .credentials/ folder.."
+        \ DQOps user's home .credentials/ folder."
       operationId: "getAllSharedCredentials"
       produces:
       - "application/json"
@@ -10399,6 +10402,195 @@ paths:
           description: "OK"
           schema:
             $ref: "#/definitions/SensorFolderModel"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/dictionaries:
+    get:
+      tags:
+      - "Dictionaries"
+      summary: "getAllDictionaries"
+      description: "Returns a list of all data dictionary CSV files that are present\
+        \ in the DQOps user's home dictionaries/ folder."
+      operationId: "getAllDictionaries"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/DataDictionaryListModel"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    post:
+      tags:
+      - "Dictionaries"
+      summary: "createDictionary"
+      description: "Creates (adds) a new data dictionary CSV file, which creates a\
+        \ file in the DQOps user's home dictionaries/ folder named as the dictionary\
+        \ and with the content that is provided in this call."
+      operationId: "createDictionary"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Data dictionary model"
+        required: false
+        schema:
+          $ref: "#/definitions/DataDictionaryModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoVoid"
+        201:
+          description: "New data dictionary successfully created"
+        400:
+          description: "Bad request, adjust before retrying"
+        406:
+          description: "Rejected, missing required fields"
+        409:
+          description: "Data dictionary with the same name already exists"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/dictionaries/{dictionaryName}:
+    get:
+      tags:
+      - "Dictionaries"
+      summary: "getDictionary"
+      description: "Returns the content of a data dictionary CSV file as a model object"
+      operationId: "getDictionary"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "dictionaryName"
+        in: "path"
+        description: "Data dictionary CSV file name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/DataDictionaryModel"
+        404:
+          description: "Data dictionary not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    put:
+      tags:
+      - "Dictionaries"
+      summary: "updateDictionary"
+      description: "Updates an existing data dictionary CSV file, replacing the dictionary's\
+        \ file content."
+      operationId: "updateDictionary"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Data dictionary model"
+        required: false
+        schema:
+          $ref: "#/definitions/DataDictionaryModel"
+      - name: "dictionaryName"
+        in: "path"
+        description: "Data dictionary file name that will be updated"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoVoid"
+        204:
+          description: "Data dictionary successfully updated"
+        400:
+          description: "Bad request, adjust before retrying"
+        404:
+          description: "Data dictionary not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    delete:
+      tags:
+      - "Dictionaries"
+      summary: "deleteDictionary"
+      description: "Deletes a data dictionary CSV file from the DQOps user's home\
+        \ dictionaries/ folder."
+      operationId: "deleteDictionary"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "dictionaryName"
+        in: "path"
+        description: "Data dictionary name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Data dictionary CSV file successfully deleted"
+          schema:
+            $ref: "#/definitions/MonoVoid"
+        404:
+          description: "Data dictionary file not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/dictionaries/{dictionaryName}/download:
+    get:
+      tags:
+      - "Dictionaries"
+      summary: "downloadDictionary"
+      description: "Downloads a data dictionary CSV file"
+      operationId: "downloadDictionary"
+      produces:
+      - "text/csv"
+      parameters:
+      - name: "dictionaryName"
+        in: "path"
+        description: "Data dictionary CSV file name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              type: "string"
+              format: "byte"
+        404:
+          description: "Data dictionary not found"
         500:
           description: "Internal Server Error"
           schema:
@@ -13527,6 +13719,13 @@ definitions:
       credentials:
         type: "string"
         description: "The synchronization status of the \".credentials\" folder."
+        enum:
+        - "unchanged"
+        - "changed"
+        - "synchronizing"
+      dictionaries:
+        type: "string"
+        description: "The synchronization status of the \"dictionaries\" folder."
         enum:
         - "unchanged"
         - "changed"
@@ -28630,6 +28829,35 @@ definitions:
         type: "boolean"
         description: "True if a whole partition (a parquet file) was deleted instead\
           \ of removing only selected rows."
+  DataDictionaryListModel:
+    type: "object"
+    properties:
+      dictionary_name:
+        type: "string"
+        description: "Dictionary name. It is the name of a file in the dictionaries/\
+          \ folder inside the DQOps user's home folder."
+      can_edit:
+        type: "boolean"
+        description: "Boolean flag that decides if the current user can update or\
+          \ delete the dictionary file."
+      can_access_dictionary:
+        type: "boolean"
+        description: "Boolean flag that decides if the current user see or download\
+          \ the dictionary file."
+    description: "Data dictionary CSV file list model with the basic information about\
+      \ the dictionary."
+  DataDictionaryModel:
+    type: "object"
+    properties:
+      dictionary_name:
+        type: "string"
+        description: "Dictionary name. It is the name of a file in the dictionaries/\
+          \ folder inside the DQOps user's home folder."
+      file_content:
+        type: "string"
+        description: "Dictionary CSV file content as a single file."
+    description: "Data dictionary CSV file full model used to create and update the\
+      \ dictionary. Contains the content of the CSV file as a text field."
   DataGroupingConfigurationListModel:
     type: "object"
     properties:
@@ -30006,6 +30234,16 @@ definitions:
         - "REQUIRED"
         - "VERIFY_CA"
         - "VERIFY_IDENTITY"
+      single_store_db_parameters_spec:
+        description: "Single Store DB parameters spec."
+        $ref: "#/definitions/SingleStoreDbParametersSpec"
+      mysql_engine_type:
+        type: "string"
+        description: "MySQL engine type. Supports also a ${MYSQL_ENGINE} configuration\
+          \ with a custom environment variable."
+        enum:
+        - "mysql"
+        - "singlestoredb"
       properties:
         type: "object"
         description: "A dictionary of custom JDBC parameters that are added to the\
@@ -31148,6 +31386,31 @@ definitions:
         description: "The similar check name in another category."
     description: "Model that identifies a similar check in another category or another\
       \ type of check (monitoring, partition)."
+  SingleStoreDbParametersSpec:
+    type: "object"
+    properties:
+      load_balancing_mode:
+        type: "string"
+        description: "Failover and Load-Balancing Modes for Single Store DB. The value\
+          \ can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
+        enum:
+        - "none"
+        - "sequential"
+        - "loadbalance"
+      host_descriptions:
+        type: "array"
+        description: "Host descriptions. Supports also a ${SINGLE_STORE_HOST_DESCRIPTIONS}\
+          \ configuration with a custom environment variable."
+        items:
+          type: "string"
+      schema:
+        type: "string"
+        description: "Single Store DB database/schema name. The value can be in the\
+          \ ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
+      use_ssl:
+        type: "boolean"
+        description: "Force enables SSL/TLS on the connection. Supports also a ${SINGLE_STORE_USE_SSL}\
+          \ configuration with a custom environment variable."
   SnowflakeParametersSpec:
     type: "object"
     properties:
@@ -31438,6 +31701,9 @@ definitions:
       credentials:
         type: "boolean"
         description: "Synchronize the \".credentials\" folder."
+      dictionaries:
+        type: "boolean"
+        description: "Synchronize the \"dictionaries\" folder."
       dataSensorReadouts:
         type: "boolean"
         description: "Synchronize the \".data/sensor_readouts\" folder."
@@ -31503,6 +31769,7 @@ definitions:
         - "checks"
         - "settings"
         - "credentials"
+        - "dictionaries"
         - "_indexes"
         - "_local_settings"
       direction:

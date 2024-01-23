@@ -114,6 +114,10 @@ public class SampleStringsRegistry {
         return "sample_credential";
     }
 
+    public static String getDictionary() {
+        return "sample_dictionary";
+    }
+
     public static String getTableComparison() {
         return "sample_table_comparison";
     }
