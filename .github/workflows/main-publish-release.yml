@@ -38,15 +38,6 @@ jobs:
         with:
           credentials_json: ${{ secrets.RELEASES_SERVICE_ACCOUNT_JSON }}
 
-      - id: 'upload-release-private'
-        uses: 'google-github-actions/upload-cloud-storage@v2'
-        with:
-          path: './distribution/target/dqo-distribution-${{steps.read_version.outputs.content}}-bin.zip'
-          destination: 'docs-dqo-ai/releases'
-          gzip: false
-          headers: |-
-            content-type: application/zip
-
       - id: 'upload-release-asia'
         uses: 'google-github-actions/upload-cloud-storage@v2'
         with:
