@@ -26,6 +26,7 @@ import {
   ImportTablesQueueJobParameters
 } from '../../api';
 import { JOB_CHANGES_RETRY_INTERVAL } from '../../shared/config';
+import { IError } from '../../contexts/errrorContext';
 
 export const getJobsRequest = () => ({
   type: JOB_ACTION.GET_JOBS
@@ -136,4 +137,9 @@ export const setLicenseFree = (isLicenseFree: boolean) => ({
 export const setUserProfile = (userProfile : DqoUserProfileModel) => ({
   type: JOB_ACTION.SET_USER_PROFILE,
   userProfile
+});
+
+export const setError = (error: IError) => ({
+  type: JOB_ACTION.SET_ERRORS,
+  error
 });

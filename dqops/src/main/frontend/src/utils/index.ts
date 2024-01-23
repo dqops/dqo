@@ -1,6 +1,4 @@
 import moment from "moment/moment";
-import { TABLE_LEVEL_TABS } from "../shared/constants";
-import { CheckTypes } from "../shared/routes";
 
 export const getDaysString = (value: string | number) => {
   const daysDiff = moment().diff(moment(value), 'day');

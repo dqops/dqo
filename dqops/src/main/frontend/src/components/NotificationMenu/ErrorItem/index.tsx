@@ -2,9 +2,16 @@ import { IError } from "../../../contexts/errrorContext";
 import React, { useState } from "react";
 import { Accordion, AccordionBody, AccordionHeader } from "@material-tailwind/react";
 import moment from "moment";
+import { useSelector } from "react-redux";
+import { IRootState } from "../../../redux/reducers";
 
-const ErrorItem = ({ error }: { error: IError }) => {
+const ErrorItem = ({ errorId }: { errorId: string }) => {
+  const {job_dictionary_state, } = useSelector(
+    (state: IRootState) => state.job || {}
+    );
   const [open, setOpen] = useState(false);
+
+  const error = job_dictionary_state[errorId] as unknown as IError
 
   return (
     <Accordion open={open}>
