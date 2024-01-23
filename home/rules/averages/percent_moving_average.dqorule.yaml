@@ -18,8 +18,6 @@ spec:
       \ default is a 14 time periods (days, etc.) time window, but at least 7 readouts\
       \ must exist to run the calculation."
     data_type: double
-    sample_values:
-    - 10.0
   - field_name: max_percent_below
     display_name: max_percent_below
     help_text: "Maximum percent (e.q. 3%) that the current sensor readout could be\
@@ -28,5 +26,3 @@ spec:
       \ default is a 14 time periods (days, etc.) time window, but at least 7 readouts\
       \ must exist to run the calculation."
     data_type: double
-    sample_values:
-    - 10.0

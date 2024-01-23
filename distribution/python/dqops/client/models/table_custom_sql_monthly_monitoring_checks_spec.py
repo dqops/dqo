@@ -18,6 +18,9 @@ if TYPE_CHECKING:
     from ..models.table_sql_condition_passed_percent_check_spec import (
         TableSqlConditionPassedPercentCheckSpec,
     )
+    from ..models.table_sql_import_custom_result_check_spec import (
+        TableSqlImportCustomResultCheckSpec,
+    )
 
 
 T = TypeVar("T", bound="TableCustomSqlMonthlyMonitoringChecksSpec")
@@ -33,6 +36,7 @@ class TableCustomSqlMonthlyMonitoringChecksSpec:
         monthly_sql_condition_failed_on_table (Union[Unset, TableSqlConditionFailedCheckSpec]):
         monthly_sql_condition_passed_percent_on_table (Union[Unset, TableSqlConditionPassedPercentCheckSpec]):
         monthly_sql_aggregate_expression_on_table (Union[Unset, TableSqlAggregateExpressionCheckSpec]):
+        monthly_import_custom_result_on_table (Union[Unset, TableSqlImportCustomResultCheckSpec]):
     """
 
     custom_checks: Union[
@@ -46,6 +50,9 @@ class TableCustomSqlMonthlyMonitoringChecksSpec:
     ] = UNSET
     monthly_sql_aggregate_expression_on_table: Union[
         Unset, "TableSqlAggregateExpressionCheckSpec"
+    ] = UNSET
+    monthly_import_custom_result_on_table: Union[
+        Unset, "TableSqlImportCustomResultCheckSpec"
     ] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -74,6 +81,12 @@ class TableCustomSqlMonthlyMonitoringChecksSpec:
                 self.monthly_sql_aggregate_expression_on_table.to_dict()
             )
 
+        monthly_import_custom_result_on_table: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.monthly_import_custom_result_on_table, Unset):
+            monthly_import_custom_result_on_table = (
+                self.monthly_import_custom_result_on_table.to_dict()
+            )
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -91,6 +104,10 @@ class TableCustomSqlMonthlyMonitoringChecksSpec:
             field_dict[
                 "monthly_sql_aggregate_expression_on_table"
             ] = monthly_sql_aggregate_expression_on_table
+        if monthly_import_custom_result_on_table is not UNSET:
+            field_dict[
+                "monthly_import_custom_result_on_table"
+            ] = monthly_import_custom_result_on_table
 
         return field_dict
 
@@ -107,6 +124,9 @@ class TableCustomSqlMonthlyMonitoringChecksSpec:
         )
         from ..models.table_sql_condition_passed_percent_check_spec import (
             TableSqlConditionPassedPercentCheckSpec,
+        )
+        from ..models.table_sql_import_custom_result_check_spec import (
+            TableSqlImportCustomResultCheckSpec,
         )
 
         d = src_dict.copy()
@@ -168,11 +188,27 @@ class TableCustomSqlMonthlyMonitoringChecksSpec:
                 )
             )
 
+        _monthly_import_custom_result_on_table = d.pop(
+            "monthly_import_custom_result_on_table", UNSET
+        )
+        monthly_import_custom_result_on_table: Union[
+            Unset, TableSqlImportCustomResultCheckSpec
+        ]
+        if isinstance(_monthly_import_custom_result_on_table, Unset):
+            monthly_import_custom_result_on_table = UNSET
+        else:
+            monthly_import_custom_result_on_table = (
+                TableSqlImportCustomResultCheckSpec.from_dict(
+                    _monthly_import_custom_result_on_table
+                )
+            )
+
         table_custom_sql_monthly_monitoring_checks_spec = cls(
             custom_checks=custom_checks,
             monthly_sql_condition_failed_on_table=monthly_sql_condition_failed_on_table,
             monthly_sql_condition_passed_percent_on_table=monthly_sql_condition_passed_percent_on_table,
             monthly_sql_aggregate_expression_on_table=monthly_sql_aggregate_expression_on_table,
+            monthly_import_custom_result_on_table=monthly_import_custom_result_on_table,
         )
 
         table_custom_sql_monthly_monitoring_checks_spec.additional_properties = d

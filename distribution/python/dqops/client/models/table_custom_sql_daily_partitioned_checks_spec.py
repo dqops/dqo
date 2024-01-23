@@ -18,6 +18,9 @@ if TYPE_CHECKING:
     from ..models.table_sql_condition_passed_percent_check_spec import (
         TableSqlConditionPassedPercentCheckSpec,
     )
+    from ..models.table_sql_import_custom_result_check_spec import (
+        TableSqlImportCustomResultCheckSpec,
+    )
 
 
 T = TypeVar("T", bound="TableCustomSqlDailyPartitionedChecksSpec")
@@ -33,6 +36,7 @@ class TableCustomSqlDailyPartitionedChecksSpec:
         daily_partition_sql_condition_failed_on_table (Union[Unset, TableSqlConditionFailedCheckSpec]):
         daily_partition_sql_condition_passed_percent_on_table (Union[Unset, TableSqlConditionPassedPercentCheckSpec]):
         daily_partition_sql_aggregate_expression_on_table (Union[Unset, TableSqlAggregateExpressionCheckSpec]):
+        daily_partition_import_custom_result_on_table (Union[Unset, TableSqlImportCustomResultCheckSpec]):
     """
 
     custom_checks: Union[
@@ -46,6 +50,9 @@ class TableCustomSqlDailyPartitionedChecksSpec:
     ] = UNSET
     daily_partition_sql_aggregate_expression_on_table: Union[
         Unset, "TableSqlAggregateExpressionCheckSpec"
+    ] = UNSET
+    daily_partition_import_custom_result_on_table: Union[
+        Unset, "TableSqlImportCustomResultCheckSpec"
     ] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -82,6 +89,14 @@ class TableCustomSqlDailyPartitionedChecksSpec:
                 self.daily_partition_sql_aggregate_expression_on_table.to_dict()
             )
 
+        daily_partition_import_custom_result_on_table: Union[
+            Unset, Dict[str, Any]
+        ] = UNSET
+        if not isinstance(self.daily_partition_import_custom_result_on_table, Unset):
+            daily_partition_import_custom_result_on_table = (
+                self.daily_partition_import_custom_result_on_table.to_dict()
+            )
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -99,6 +114,10 @@ class TableCustomSqlDailyPartitionedChecksSpec:
             field_dict[
                 "daily_partition_sql_aggregate_expression_on_table"
             ] = daily_partition_sql_aggregate_expression_on_table
+        if daily_partition_import_custom_result_on_table is not UNSET:
+            field_dict[
+                "daily_partition_import_custom_result_on_table"
+            ] = daily_partition_import_custom_result_on_table
 
         return field_dict
 
@@ -115,6 +134,9 @@ class TableCustomSqlDailyPartitionedChecksSpec:
         )
         from ..models.table_sql_condition_passed_percent_check_spec import (
             TableSqlConditionPassedPercentCheckSpec,
+        )
+        from ..models.table_sql_import_custom_result_check_spec import (
+            TableSqlImportCustomResultCheckSpec,
         )
 
         d = src_dict.copy()
@@ -176,11 +198,27 @@ class TableCustomSqlDailyPartitionedChecksSpec:
                 )
             )
 
+        _daily_partition_import_custom_result_on_table = d.pop(
+            "daily_partition_import_custom_result_on_table", UNSET
+        )
+        daily_partition_import_custom_result_on_table: Union[
+            Unset, TableSqlImportCustomResultCheckSpec
+        ]
+        if isinstance(_daily_partition_import_custom_result_on_table, Unset):
+            daily_partition_import_custom_result_on_table = UNSET
+        else:
+            daily_partition_import_custom_result_on_table = (
+                TableSqlImportCustomResultCheckSpec.from_dict(
+                    _daily_partition_import_custom_result_on_table
+                )
+            )
+
         table_custom_sql_daily_partitioned_checks_spec = cls(
             custom_checks=custom_checks,
             daily_partition_sql_condition_failed_on_table=daily_partition_sql_condition_failed_on_table,
             daily_partition_sql_condition_passed_percent_on_table=daily_partition_sql_condition_passed_percent_on_table,
             daily_partition_sql_aggregate_expression_on_table=daily_partition_sql_aggregate_expression_on_table,
+            daily_partition_import_custom_result_on_table=daily_partition_import_custom_result_on_table,
         )
 
         table_custom_sql_daily_partitioned_checks_spec.additional_properties = d

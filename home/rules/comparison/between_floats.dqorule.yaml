@@ -11,12 +11,8 @@ spec:
     help_text: Minimum accepted value for the actual_value returned by the sensor
       (inclusive).
     data_type: double
-    sample_values:
-    - 10.0
   - field_name: to
     display_name: to
     help_text: Maximum accepted value for the actual_value returned by the sensor
       (inclusive).
     data_type: double
-    sample_values:
-    - 20.5

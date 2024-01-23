@@ -4,6 +4,105 @@ All [data quality sensors](../../../dqo-concepts/definition-of-data-quality-sens
 ---
 
 
+## import custom result
+Table level sensor that uses a custom SQL SELECT statement to retrieve a result of running a custom data quality check that was hardcoded
+ in the data pipeline, and the result was stored in a separate table. The SQL query that is configured in this external data quality results importer must be
+ a complete SELECT statement that queries a dedicated table (created by the data engineers) that stores the results of custom data quality checks.
+
+**Sensor summary**
+
+The import custom result sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| table | custom_sql | <span class="no-wrap-code">`table/custom_sql/import_custom_result`</span> | [*sensors/table/custom_sql*](https://github.com/dqops/dqo/tree/develop/home/sensors/table/custom_sql/) |
+
+
+**Sensor parameters**
+
+| Field name | Description | Allowed data type | Required | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|<span class="no-wrap-code">`sql_query`</span>|A custom SELECT statement that queries a logging table with custom results of data quality checks executed by the data pipeline. The query must return a result column named *severity*. The values of the *severity* column must be: 0 - data quality check passed, 1 - warning issue, 2 - error severity issue, 3 - fatal severity issue. The query can return *actual_value* and *expected_value* results that are imported into DQOps data lake. The query can use a {table_name} placeholder that is replaced with a table name for which the results are imported.|*string*|:material-check-bold:||
+
+
+
+
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
+=== "BigQuery"
+
+    ```sql+jinja
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    {{ parameters.sql_query | replace('{table_name}', target_table.table_name) | replace('{schema_name}', target_table.schema_name) }}
+    ```
+=== "Databricks"
+
+    ```sql+jinja
+    {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+    {{ parameters.sql_query | replace('{table_name}', target_table.table_name) | replace('{schema_name}', target_table.schema_name) }}
+    ```
+=== "MySQL"
+
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    {{ parameters.sql_query | replace('{table_name}', target_table.table_name) | replace('{schema_name}', target_table.schema_name) }}
+    ```
+=== "Oracle"
+
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    {{ parameters.sql_query | replace('{table_name}', target_table.table_name) | replace('{schema_name}', target_table.schema_name) }}
+    ```
+=== "PostgreSQL"
+
+    ```sql+jinja
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    {{ parameters.sql_query | replace('{table_name}', target_table.table_name) | replace('{schema_name}', target_table.schema_name) }}
+    ```
+=== "Presto"
+
+    ```sql+jinja
+    {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+    {{ parameters.sql_query | replace('{table_name}', target_table.table_name) | replace('{schema_name}', target_table.schema_name) }}
+    ```
+=== "Redshift"
+
+    ```sql+jinja
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    {{ parameters.sql_query | replace('{table_name}', target_table.table_name) | replace('{schema_name}', target_table.schema_name) }}
+    ```
+=== "Snowflake"
+
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    {{ parameters.sql_query | replace('{table_name}', target_table.table_name) | replace('{schema_name}', target_table.schema_name) }}
+    ```
+=== "Spark"
+
+    ```sql+jinja
+    {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+    {{ parameters.sql_query | replace('{table_name}', target_table.table_name) | replace('{schema_name}', target_table.schema_name) }}
+    ```
+=== "SQL Server"
+
+    ```sql+jinja
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    {{ parameters.sql_query | replace('{table_name}', target_table.table_name) | replace('{schema_name}', target_table.schema_name) }}
+    ```
+=== "Trino"
+
+    ```sql+jinja
+    {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+    {{ parameters.sql_query | replace('{table_name}', target_table.table_name) | replace('{schema_name}', target_table.schema_name) }}
+    ```
+___
+
+
+
 ## sql aggregated expression
 Table level sensor that executes a given SQL expression on a table.
 
@@ -20,7 +119,7 @@ The sql aggregated expression sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`sql_expression`</span>|SQL aggregate expression that returns a numeric value calculated from rows. The expression is evaluated on a whole table or withing a GROUP BY clause for daily partitions and/or data groups. The expression can use {table} placeholder that is replaced with a full table name.|*string*|:material-check-bold:||
+|<span class="no-wrap-code">`sql_expression`</span>|SQL aggregate expression that returns a numeric value calculated from rows. The expression is evaluated on a whole table or withing a GROUP BY clause for daily partitions and/or data groups. The expression can use a {table} placeholder that is replaced with a full table name.|*string*|:material-check-bold:||
 
 
 
@@ -224,7 +323,7 @@ The sql condition failed count sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`sql_condition`</span>|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} placeholder that is replaced with a full table name.|*string*|:material-check-bold:||
+|<span class="no-wrap-code">`sql_condition`</span>|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use a {table} placeholder that is replaced with a full table name.|*string*|:material-check-bold:||
 
 
 
@@ -495,7 +594,7 @@ The sql condition failed percent sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`sql_condition`</span>|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} placeholder that is replaced with a full table name.|*string*|:material-check-bold:||
+|<span class="no-wrap-code">`sql_condition`</span>|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use a {table} placeholder that is replaced with a full table name.|*string*|:material-check-bold:||
 
 
 
@@ -788,7 +887,7 @@ The sql condition passed count sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`sql_condition`</span>|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} placeholder that is replaced with a full table name.|*string*|:material-check-bold:||
+|<span class="no-wrap-code">`sql_condition`</span>|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use a {table} placeholder that is replaced with a full table name.|*string*|:material-check-bold:||
 
 
 
@@ -1059,7 +1158,7 @@ The sql condition passed percent sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`sql_condition`</span>|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} placeholder that is replaced with a full table name.|*string*|:material-check-bold:||
+|<span class="no-wrap-code">`sql_condition`</span>|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use a {table} placeholder that is replaced with a full table name.|*string*|:material-check-bold:||
 
 
 

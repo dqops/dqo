@@ -8,8 +8,10 @@ spec:
     help_text: Sets a minimum text length
     data_type: integer
     required: true
+    default_value: 5
   - field_name: max_length
     display_name: max_length
     help_text: Sets a maximum text length
     data_type: integer
     required: true
+    default_value: 100

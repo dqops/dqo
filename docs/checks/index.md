@@ -67,6 +67,14 @@ A table-level check that calculates a given SQL aggregate expression and compare
 
 
 
+### [import custom result on table](./table/custom_sql/import-custom-result-on-table.md)
+A table-level check that uses a custom SQL SELECT statement to retrieve a result of running a custom data quality check that was hardcoded
+ in the data pipeline, and the result was stored in a separate table. The SQL query that is configured in this external data quality results importer must be
+ a complete SELECT statement that queries a dedicated table (created by the data engineers) that stores the results of custom data quality checks.
+ The SQL query must return a *severity* column with values: 0 - data quality check passed, 1 - warning issue, 2 - error severity issue, 3 - fatal severity issue.
+
+
+
 
 
 
@@ -538,6 +546,15 @@ A column-level check that ensures that a set percentage of rows passed a custom 
 
 ### [sql aggregate expression on column](./column/custom_sql/sql-aggregate-expression-on-column.md)
 A column-level check that calculates a given SQL aggregate expression on a column and compares it with a maximum accepted value.
+
+
+
+### [import custom result on column](./column/custom_sql/import-custom-result-on-column.md)
+Column level check that uses a custom SQL SELECT statement to retrieve a result of running a custom data quality check on a column by a custom
+ data quality check, hardcoded in the data pipeline. The result is retrieved by querying a separate **logging table**, whose schema is not fixed.
+ The logging table should have columns that identify a table and a column for which they store custom data quality check results, and a *severity* column of the data quality issue.
+ The SQL query that is configured in this external data quality results importer must be
+ a complete SELECT statement that queries a dedicated logging table, created by the data engineering team.
 
 
 

@@ -51,14 +51,10 @@ The rule definition YAML file *change/between_change.dqorule.yaml* with the time
         display_name: from
         help_text: Minimum accepted change with regards to the previous readout (inclusive).
         data_type: double
-        sample_values:
-        - 10
       - field_name: to
         display_name: to
         help_text: Maximum accepted change with regards to the previous readout (inclusive).
         data_type: double
-        sample_values:
-        - 20
     ```
 
 
@@ -214,14 +210,10 @@ The rule definition YAML file *change/between_change_1_day.dqorule.yaml* with th
         display_name: from
         help_text: Minimum accepted change with regards to the previous readout (inclusive).
         data_type: double
-        sample_values:
-        - 10
       - field_name: to
         display_name: to
         help_text: Maximum accepted change with regards to the previous readout (inclusive).
         data_type: double
-        sample_values:
-        - 20
       - field_name: exact_day
         display_name: exact_day
         help_text: "When the exact_day parameter is unchecked (exact_day: false), rule\
@@ -230,6 +222,7 @@ The rule definition YAML file *change/between_change_1_day.dqorule.yaml* with th
           \ with the results from the past 1 day. If no results are found from that time,\
           \ no results or errors will be generated."
         data_type: boolean
+        default_value: "false"
     ```
 
 
@@ -394,14 +387,10 @@ The rule definition YAML file *change/between_change_30_days.dqorule.yaml* with 
         display_name: from
         help_text: Minimum accepted change with regards to the previous readout (inclusive).
         data_type: double
-        sample_values:
-        - 10
       - field_name: to
         display_name: to
         help_text: Maximum accepted change with regards to the previous readout (inclusive).
         data_type: double
-        sample_values:
-        - 20
       - field_name: exact_day
         display_name: exact_day
         help_text: "When the exact_day parameter is unchecked (exact_day: false), rule\
@@ -410,6 +399,7 @@ The rule definition YAML file *change/between_change_30_days.dqorule.yaml* with 
           \ with the results from the past 30 days. If no results are found from that\
           \ time, no results or errors will be generated."
         data_type: boolean
+        default_value: "false"
     ```
 
 
@@ -574,14 +564,10 @@ The rule definition YAML file *change/between_change_7_days.dqorule.yaml* with t
         display_name: from
         help_text: Minimum accepted change with regards to the previous readout (inclusive).
         data_type: double
-        sample_values:
-        - 10
       - field_name: to
         display_name: to
         help_text: Maximum accepted change with regards to the previous readout (inclusive).
         data_type: double
-        sample_values:
-        - 20
       - field_name: exact_day
         display_name: exact_day
         help_text: "When the exact_day parameter is unchecked (exact_day: false), rule\
@@ -590,6 +576,7 @@ The rule definition YAML file *change/between_change_7_days.dqorule.yaml* with t
           \ with the results from the past 7 days. If no results are found from that time,\
           \ no results or errors will be generated."
         data_type: boolean
+        default_value: "false"
     ```
 
 
@@ -753,14 +740,10 @@ The rule definition YAML file *change/between_percent_change.dqorule.yaml* with 
         display_name: from_percent
         help_text: Minimum accepted change relative to the previous readout (inclusive).
         data_type: double
-        sample_values:
-        - 10
       - field_name: to_percent
         display_name: to_percent
         help_text: Maximum accepted change relative to the previous readout (inclusive).
         data_type: double
-        sample_values:
-        - 20
     ```
 
 
@@ -911,14 +894,10 @@ The rule definition YAML file *change/between_percent_change_1_day.dqorule.yaml*
         display_name: from_percent
         help_text: Minimum accepted change relative to the previous readout (inclusive).
         data_type: double
-        sample_values:
-        - 10
       - field_name: to_percent
         display_name: to_percent
         help_text: Maximum accepted change relative to the previous readout (inclusive).
         data_type: double
-        sample_values:
-        - 20
       - field_name: exact_day
         display_name: exact_day
         help_text: "When the exact_day parameter is unchecked (exact_day: false), rule\
@@ -927,6 +906,7 @@ The rule definition YAML file *change/between_percent_change_1_day.dqorule.yaml*
           \ with the results from the past 1 day. If no results are found from that time,\
           \ no results or errors will be generated."
         data_type: boolean
+        default_value: "false"
     ```
 
 
@@ -1085,14 +1065,10 @@ The rule definition YAML file *change/between_percent_change_30_days.dqorule.yam
         display_name: from_percent
         help_text: Minimum accepted change relative to the previous readout (inclusive).
         data_type: double
-        sample_values:
-        - 10
       - field_name: to_percent
         display_name: to_percent
         help_text: Maximum accepted change relative to the previous readout (inclusive).
         data_type: double
-        sample_values:
-        - 20
       - field_name: exact_day
         display_name: exact_day
         help_text: "When the exact_day parameter is unchecked (exact_day: false), rule\
@@ -1101,8 +1077,7 @@ The rule definition YAML file *change/between_percent_change_30_days.dqorule.yam
           \ with the results from the past 30 days. If no results are found from that\
           \ time, no results or errors will be generated."
         data_type: boolean
-        sample_values:
-        - "false"
+        default_value: "false"
     ```
 
 
@@ -1261,14 +1236,10 @@ The rule definition YAML file *change/between_percent_change_7_days.dqorule.yaml
         display_name: from_percent
         help_text: Minimum accepted change relative to the previous readout (inclusive).
         data_type: double
-        sample_values:
-        - 10
       - field_name: to_percent
         display_name: to_percent
         help_text: Maximum accepted change relative to the previous readout (inclusive).
         data_type: double
-        sample_values:
-        - 20
       - field_name: exact_day
         display_name: exact_day
         help_text: "When the exact_day parameter is unchecked (exact_day: false), rule\
@@ -1277,6 +1248,7 @@ The rule definition YAML file *change/between_percent_change_7_days.dqorule.yaml
           \ with the results from the past 7 days. If no results are found from that time,\
           \ no results or errors will be generated."
         data_type: boolean
+        default_value: "false"
     ```
 
 
@@ -1434,8 +1406,6 @@ The rule definition YAML file *change/change_difference.dqorule.yaml* with the t
         help_text: Maximum accepted absolute difference compared to previous readout (inclusive).
         data_type: double
         required: true
-        sample_values:
-        - 10
     ```
 
 
@@ -1586,8 +1556,6 @@ The rule definition YAML file *change/change_difference_1_day.dqorule.yaml* with
           (inclusive).
         data_type: double
         required: true
-        sample_values:
-        - 10
       - field_name: exact_day
         display_name: exact_day
         help_text: "When the exact_day parameter is unchecked (exact_day: false), rule\
@@ -1596,6 +1564,7 @@ The rule definition YAML file *change/change_difference_1_day.dqorule.yaml* with
           \ with the results from the past 1 day. If no results are found from that time,\
           \ no results or errors will be generated."
         data_type: boolean
+        default_value: "false"
     ```
 
 
@@ -1754,8 +1723,6 @@ The rule definition YAML file *change/change_difference_30_days.dqorule.yaml* wi
           ago (inclusive).
         data_type: double
         required: true
-        sample_values:
-        - 10
       - field_name: exact_day
         display_name: exact_day
         help_text: "When the exact_day parameter is unchecked (exact_day: false), rule\
@@ -1764,6 +1731,7 @@ The rule definition YAML file *change/change_difference_30_days.dqorule.yaml* wi
           \ with the results from the past 30 days. If no results are found from that\
           \ time, no results or errors will be generated."
         data_type: boolean
+        default_value: "false"
     ```
 
 
@@ -1922,8 +1890,6 @@ The rule definition YAML file *change/change_difference_7_days.dqorule.yaml* wit
           (inclusive).
         data_type: double
         required: true
-        sample_values:
-        - 10
       - field_name: exact_day
         display_name: exact_day
         help_text: "When the exact_day parameter is unchecked (exact_day: false), rule\
@@ -1932,6 +1898,7 @@ The rule definition YAML file *change/change_difference_7_days.dqorule.yaml* wit
           \ with the results from the past 7 days. If no results are found from that time,\
           \ no results or errors will be generated."
         data_type: boolean
+        default_value: "false"
     ```
 
 
@@ -2089,6 +2056,7 @@ The rule definition YAML file *change/change_percent.dqorule.yaml* with the time
           (inclusive).
         data_type: double
         required: true
+        default_value: 10.0
     ```
 
 
@@ -2239,6 +2207,7 @@ The rule definition YAML file *change/change_percent_1_day.dqorule.yaml* with th
           (inclusive).
         data_type: double
         required: true
+        default_value: 10.0
       - field_name: exact_day
         display_name: exact_day
         help_text: "When the exact_day parameter is unchecked (exact_day: false), the\
@@ -2247,6 +2216,7 @@ The rule definition YAML file *change/change_percent_1_day.dqorule.yaml* with th
           \ only with the results from the past 1 day. If no results are found from that\
           \ time, no results or errors will be generated."
         data_type: boolean
+        default_value: "false"
     ```
 
 
@@ -2405,6 +2375,7 @@ The rule definition YAML file *change/change_percent_30_days.dqorule.yaml* with 
           ago (inclusive).
         data_type: double
         required: true
+        default_value: 10.0
       - field_name: exact_day
         display_name: exact_day
         help_text: "When the exact_day parameter is unchecked (exact_day: false), rule\
@@ -2413,6 +2384,7 @@ The rule definition YAML file *change/change_percent_30_days.dqorule.yaml* with 
           \ with the results from the past 30 days. If no results are found from that\
           \ time, no results or errors will be generated."
         data_type: boolean
+        default_value: "false"
     ```
 
 
@@ -2571,6 +2543,7 @@ The rule definition YAML file *change/change_percent_7_days.dqorule.yaml* with t
           ago (inclusive).
         data_type: double
         required: true
+        default_value: 10.0
       - field_name: exact_day
         display_name: exact_day
         help_text: "When the exact_day parameter is unchecked (exact_day: false), rule\
@@ -2579,6 +2552,7 @@ The rule definition YAML file *change/change_percent_7_days.dqorule.yaml* with t
           \ with the results from the past 7 days. If no results are found from that time,\
           \ no results or errors will be generated."
         data_type: boolean
+        default_value: "false"
     ```
 
 

@@ -16,8 +16,6 @@ spec:
       (inclusive).
     data_type: double
     required: true
-    sample_values:
-    - 10
   - field_name: exact_day
     display_name: exact_day
     help_text: "When the exact_day parameter is unchecked (exact_day: false), rule\
@@ -26,3 +24,4 @@ spec:
       \ with the results from the past 1 day. If no results are found from that time,\
       \ no results or errors will be generated."
     data_type: boolean
+    default_value: "false"

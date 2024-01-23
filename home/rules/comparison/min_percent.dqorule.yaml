@@ -12,5 +12,4 @@ spec:
       (inclusive).
     data_type: double
     required: true
-    sample_values:
-    - 99.0
+    default_value: 100.0

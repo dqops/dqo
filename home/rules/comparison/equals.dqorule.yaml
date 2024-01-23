@@ -12,11 +12,7 @@ spec:
       value should equal expected_value +/- the error_margin.
     data_type: double
     required: true
-    sample_values:
-    - 10.0
   - field_name: error_margin
     display_name: error_margin
     help_text: Error margin for comparison.
     data_type: double
-    sample_values:
-    - 0.01

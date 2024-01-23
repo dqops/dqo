@@ -1,17 +1,19 @@
 # REST API and Python client
-The DQOps instance can be used by external clients to run checks and other more complex automation using the RESTful API.
+
+A running DQOps instance can be interacted with through the use of a RESTful API.
+
 
 ## Overview
 
-You can integrate the DQOps REST API with Python code using the `dqops` package.
+You can integrate the DQOps REST API with Python code using `dqops` package.
 
-*Check out the guide that follows, which will walk you through several [common use cases for the DQOps Python client](#python-client-guide).*
+*Check out the [guide](#python-client-guide) underneath. It will walk you through several common use cases for the DQOps Python client.*
 
 
 ## Connecting to DQOps
 
-To connect to DQOPs, we will be using the synchronous interface offered by the authenticated Python client.
-This interface waits for the response from the REST API before execution of the program resumes.
+For the purposes of this guide, we'll be using the synchronous interface offered by the authenticated Python client.
+It waits for the response from the REST API before execution of the program will resume.
 
 It is recommended to only allow authenticated users to access the service, especially for exposed REST APIs that can be accessed by different users.
 For this purpose, the authenticated Python client for DQOps requires an API Key to be passed.
@@ -20,10 +22,10 @@ The client puts the API Key as a `Bearer` token in the `Authorization` header fo
 
 ## Getting the personal API Key
 
-To get your personal, user-unique API Key, you can easily do so through the [DQOps user interface](../dqo-concepts/dqops-user-interface-overview.md).
+You can easily get your personal, user-unique API Key through the DQOps Web UI.
 
-1. Open your DQOps instance's user interface in your browser. *If you're trying to access a local DQOps instance, that would be [http://localhost:8888/home](http://localhost:8888/home).*
-2. Click on your portrait icon in the top-right corner.
+1. Open your DQOps instance's Web UI in your browser. *If you're trying to access a local DQOps instance, that would be [http://localhost:8888/home](http://localhost:8888/home).*
+2. Click on your portrait in the top-right corner.
 3. Click on the "Generate API Key" button.
 
 ![User portrait menu](../images/api-key.png "User portrait menu"){ loading=lazy } &nbsp;&nbsp;&nbsp;&nbsp; ![Generate API Key](../images/generated-api-key.png "Generate API Key"){ loading=lazy }
@@ -35,7 +37,7 @@ When running the examples below, use your API Key in place of the placeholder `s
 ## Alternative connecting methods
 
 A running DQOps instance is by default shipped alongside a REST API server.
-Here is a list of proposed ways of accessing the DQOps REST API:
+Here's a list of proposed ways of accessing the DQOps REST API:
 
 1. [**curl**](#curl) - Direct HTTP method calls.
 2. [**Python sync client**](#python-sync-client) - Unauthenticated synchronous Python client.
@@ -47,21 +49,23 @@ Here is a list of proposed ways of accessing the DQOps REST API:
 
 
 ### **curl**
-Using curl you can communicate with the REST API by sending HTTP requests. It is a simple but effective way of trying out REST API functionality.
+Using curl you can communicate with the REST API by sending HTTP requests. It's a simple but effective way of trying out REST API functionality.
 It can also easily be used as a part of CI/CD pipelines, which lets you validate data on the fly.
 
 ```bash
 curl http://localhost:8888/api/connections^
 	-H "Accept: application/json"
+
 ```
+
+
 
 
 ### **Python sync client**
 This connecting method uses the synchronous interface offered by the unauthorized Python client.
-The unauthorized client sends plain requests without an `Authorization` header, therefore no API Key is required.
-Methods of the synchronous interface wait until a response from the REST API is captured before the execution of the program will resume.
-REST APIs that are accessible from a larger network and/or are accessed by many users should require requests to be authorized. 
-Trying to access them with an unauthorized will result in failure (`401 Unauthorized` error).
+Unauthorized client sends plain requests without an `Authorization` header, therefore no API Key is required.
+Methods of the synchronous interface wait until a response from the REST API is captured before execution of the program will resume.
+REST APIs that are accessible from a larger network and/or are accessed by many users should require requests to be authorized. Trying to access them with an unauthorized will result in failure (`401 Unauthorized` error).
 
 ```python
 from dqops import client
@@ -75,17 +79,21 @@ dqops_client = client.Client(
 call_result = get_all_connections.sync(
     client=dqops_client
 )
+
 ```
+
+
+
 
 ### **Python async client**
 This connecting method uses the asynchronous interface offered by the unauthorized Python client.
 
-The unauthorized client sends plain requests without an `Authorization` header, therefore no API Key is required.
+Unauthorized client sends plain requests without an `Authorization` header, therefore no API Key is required.
 
 Methods of the asynchronous interface send a request to the REST API and immediately resume the execution of the program.
-To collect results, you have to explicitly wait for the result.
+To collect results, you have to explicitly await for the result.
 
-*Learn more on [how to use Python's asyncio API here](https://docs.python.org/3/library/asyncio-task.html).*
+*Learn more on how to use Python's asyncio API [here](https://docs.python.org/3/library/asyncio-task.html).*
 
 REST APIs that are accessible from a larger network and/or are accessed by many users should require requests to be authorized.
 Trying to access them with an unauthorized will result in failure (`401 Unauthorized` error).
@@ -102,15 +110,19 @@ dqops_client = client.Client(
 call_result = await get_all_connections.asyncio(
     client=dqops_client
 )
+
 ```
+
+
+
 
 ### **Python auth sync client**
 This connecting method uses the synchronous interface offered by the authorized Python client.
 
-Authorized client, along with each request, sends an API Key as a `Bearer` token in the `Authorization` header.
-If you have not already, go [here to generate your API Key](#getting-the-personal-api-key).
+Authorized client, along each request, sends an API Key as a `Bearer` token in the `Authorization` header.
+If you haven't already, go [here](#getting-the-personal-api-key) to generate your API Key.
 
-Methods of the synchronous interface wait until a response from the REST API is captured before the execution of the program will resume.
+Methods of the synchronous interface wait until a response from the REST API is captured before execution of the program will resume.
 
 ```python
 from dqops import client
@@ -127,19 +139,22 @@ dqops_client = client.AuthenticatedClient(
 call_result = get_all_connections.sync(
     client=dqops_client
 )
+
 ```
+
+
 
 
 ### **Python auth async client**
 This connecting method uses the asynchronous interface offered by the authorized Python client.
 
-Authorized client, along with each request, sends an API Key as a `Bearer` token in the `Authorization` header.
-If you have not already, go [here to generate your API Key](#getting-the-personal-api-key).
+Authorized client, along each request, sends an API Key as a `Bearer` token in the `Authorization` header.
+If you haven't already, go [here](#getting-the-personal-api-key) to generate your API Key.
 
 Methods of the asynchronous interface send a request to the REST API and immediately resume the execution of the program.
 To collect results, you have to explicitly await for the result.
 
-*Learn more on [how to use Python's asyncio API here](https://docs.python.org/3/library/asyncio-task.html).*
+*Learn more on how to use Python's asyncio API [here](https://docs.python.org/3/library/asyncio-task.html).*
 
 ```python
 from dqops import client
@@ -156,21 +171,26 @@ dqops_client = client.AuthenticatedClient(
 call_result = await get_all_connections.asyncio(
     client=dqops_client
 )
+
 ```
+
+
+
+
 
 
 ## Python client guide
 
-This guide demonstrate the capabilities of DQOps REST API client when integrated into your Python applications.
-Using an authenticated synchronous client we will execute some key operations. Find out about other [methods of connecting to DQOps here](#alternative-connection-methods).
+This guide will showcase the capabilities of DQOps REST API client when integrated into your Python applications.
+Using an authenticated synchronous client we'll execute some key operations. Find out about other methods of connecting to DQOps [here](#alternative-connection-methods).
 
-Before heading on to the guide, you will need to have completed the [DQOps installation using PIP](../dqops-installation/install-dqops-using-pip.md).
+Before heading on to the guide, you'll need to have completed the [DQOps installation using PIP](../dqops-installation/install-dqops-using-pip.md).
 On top of that, connection to a DQOps instance with the authenticated client requires a valid [API Key](#getting-the-personal-api-key).
 
 
 ### **Run checks**
 
-The following example, shows how to start a new background job that will run selected data quality checks.
+Starts a new background job that will run selected data quality checks
 
 ```python
 from dqops import client
@@ -200,9 +220,10 @@ call_result = run_checks.sync(
     client=dqops_client,
     json_body=request_body
 )
+
 ```
 
-By running the above operation you should get a response that resembles the one below:
+By running this operation you should get a response that resembles the one below:
 
 ```python
 RunChecksQueueJobResult(
@@ -226,7 +247,7 @@ RunChecksQueueJobResult(
 
 ### **Collect statistics on tables**
 
-The following example, shows how to start a new background job that will run selected data statistics collectors on a whole table
+Starts a new background job that will run selected data statistics collectors on a whole table
 
 ```python
 from dqops import client
@@ -277,9 +298,10 @@ CollectStatisticsQueueJobResult(
 )
 ```
 
+
 ### **Collect statistics on data groups**
 
-The following example, shows how to start a new background job that will run selected data statistics collectors on tables, calculating separate metrics for each data grouping
+Starts a new background job that will run selected data statistics collectors on tables, calculating separate metric for each data grouping
 
 ```python
 from dqops import client
@@ -333,7 +355,7 @@ CollectStatisticsQueueJobResult(
 
 ### **Import tables**
 
-The following example, shows how to start a new background job that will import selected tables.
+Starts a new background job that will import selected tables.
 
 ```python
 from dqops import client
@@ -410,10 +432,7 @@ ImportTablesQueueJobResult(
 
 ### **Get table data quality status**
 
-The following example, shows how to read the most recent results of executed data quality checks on the table and return
-the current table's data quality status - the number of failed data quality checks if the table has active data quality issues.
-Also returns the names of data quality checks that did not pass most recently. This operation verifies only the status of 
-the most recently executed data quality checks. Previous data quality issues are not counted.
+Read the most recent results of executed data quality checks on the table and return the current table&#x27;s data quality status - the number of failed data quality checks if the table has active data quality issues. Also returns the names of data quality checks that did not pass most recently. This operation verifies only the status of the most recently executed data quality checks. Previous data quality issues are not counted.
 
 ```python
 from dqops import client
@@ -550,10 +569,10 @@ TableCurrentDataQualityStatusModel(
 )
 ```
 
+
 ### **Wait for job**
 
-The following example, shows **Waits for a job** operation that returns the status of a finished job or a current 
-state of a job that is still running, but the wait timeout elapsed.
+Waits for a job to finish. Returns the status of a finished job or a current state of a job that is still running, but the wait timeout elapsed.
 
 ```python
 from dqops import client
@@ -584,34 +603,38 @@ DqoJobHistoryEntryModel(
 ```
 
 
-## A list of DQOps REST API operations
 
-Below is the full documentation of DQOps REST API operations. Click on a link for more information. 
 
-| Operation module                                                           | Description                                                                                                                                                                |
-|----------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [CheckResults](./operations/check_results.md)                              | Returns all the data quality check results of executed checks on tables and columns.                                                                                       |
-| [CheckResultsOverview](./operations/check_results_overview.md)             | Returns the overview of the recently executed checks on tables and columns, returning a summary of the last 5 runs.                                                        |
-| [Checks](./operations/checks.md)                                           | Data quality check definition management operations for adding/removing/changing custom data quality checks.                                                               |
-| [Columns](./operations/columns.md)                                         | Operations related to manage the metadata of columns, and managing the configuration of column-level data quality checks.                                                  |
-| [Connections](./operations/connections.md)                                 | Operations for adding/updating/deleting the configuration of data sources managed by DQOps.                                                                                |
-| [Dashboards](./operations/dashboards.md)                                   | Operations for retrieving the list of data quality dashboards supported by DQOps and issuing short-term access keys to open a dashboard.                                   |
-| [DataGroupingConfigurations](./operations/data_grouping_configurations.md) | Operations for managing the configuration of data groupings on a table level in DQOps.                                                                                     |
-| [DataSources](./operations/data_sources.md)                                | Rest API controller that operates on data sources that are not yet imported, testing connections or retrieving the metadata (schemas and tables).                          |
-| [Defaults](./operations/defaults.md)                                       | Default settings management for configuring the default data quality checks that are configured for all imported tables and columns.                                       |
-| [Environment](./operations/environment.md)                                 | DQOps environment and configuration controller, provides access to the DQOps configuration, current user&#x27;s information and issue local API Keys for the calling user. |
-| [Errors](./operations/errors.md)                                           | Operations that return the execution errors captured when data quality checks were executed on data sources, and sensors or rules failed with an error.                    |
-| [Healthcheck](./operations/healthcheck.md)                                 | Health check operations to check if the DQOps service is up and operational. Used for monitoring by load balancers.                                                        |
-| [Incidents](./operations/incidents.md)                                     | Data quality incidents controller that supports reading and updating data quality incidents, such as changing the incident status or assigning an external ticket number.  |
-| [Jobs](./operations/jobs.md)                                               | Jobs management controller that supports starting new jobs, such as running selected data quality checks. Provides access to the job queue for incremental monitoring.     |
-| [LogShipping](./operations/log_shipping.md)                                | Log shipping controller that accepts logs sent from a web application or external tools and aggregates them in the local DQOps instance logs.                              |
-| [Rules](./operations/rules.md)                                             | Operations for managing custom data quality rule definitions in DQOps. The custom rules are stored in the DQOps user home folder.                                          |
-| [Schemas](./operations/schemas.md)                                         | Operations for listing imported schemas from monitored data sources. Also provides operations for activating and deactivating multiple checks at once.                     |
-| [SensorReadouts](./operations/sensor_readouts.md)                          | Operations that are retrieving the data quality sensor readouts of executed checks on tables and columns.                                                                  |
-| [Sensors](./operations/sensors.md)                                         | Operations for managing custom data quality sensor definitions in DQOps. The custom sensors are stored in the DQOps user home folder.                                      |
-| [SharedCredentials](./operations/shared_credentials.md)                    | Operations for managing shared credentials in DQOps. Credentials that are stored in the shared .credentials folder in the DQOps user&#x27;s home folder.                   |
-| [TableComparisonResults](./operations/table_comparison_results.md)         | Operations that returns the results of the most recent table comparison that was performed between the compared table and the reference table (the source of truth).       |
-| [TableComparisons](./operations/table_comparisons.md)                      | Operations for managing the configurations of table comparisons between tables on the same or different data sources                                                       |
-| [Tables](./operations/tables.md)                                           | Operations related to manage the metadata of imported tables, and managing the configuration of table-level data quality checks.                                           |
-| [Timezones](./operations/timezones.md)                                     | Operations for returning time zone names and codes supported by DQOps.                                                                                                     |
-| [Users](./operations/users.md)                                             | Operations for managing access for DQOps users in a multi-user installations. User management is supported in the TEAM and ENTERPRISE licences.                            |
+## What's more
+
+Are you looking to address a specific issue? Head down here for full reference documentation over DQOps REST API operations.
+
+| Operation module | Description |
+|------------------|-------------|
+|[CheckResults](./operations/check_results.md)|Returns all the data quality check results of executed checks on tables and columns.|
+|[CheckResultsOverview](./operations/check_results_overview.md)|Returns the overview of the recently executed checks on tables and columns, returning a summary of the last 5 runs.|
+|[Checks](./operations/checks.md)|Data quality check definition management operations for adding/removing/changing custom data quality checks.|
+|[Columns](./operations/columns.md)|Operations related to manage the metadata of columns, and managing the configuration of column-level data quality checks.|
+|[Connections](./operations/connections.md)|Operations for adding/updating/deleting the configuration of data sources managed by DQOps.|
+|[Dashboards](./operations/dashboards.md)|Operations for retrieving the list of data quality dashboards supported by DQOps and issuing short-term access keys to open a dashboard.|
+|[DataGroupingConfigurations](./operations/data_grouping_configurations.md)|Operations for managing the configuration of data groupings on a table level in DQOps.|
+|[DataSources](./operations/data_sources.md)|Rest API controller that operates on data sources that are not yet imported, testing connections or retrieving the metadata (schemas and tables).|
+|[Defaults](./operations/defaults.md)|Default settings management for configuring the default data quality checks that are configured for all imported tables and columns.|
+|[Environment](./operations/environment.md)|DQOps environment and configuration controller, provides access to the DQOps configuration, current user&#x27;s information and issue local API Keys for the calling user.|
+|[Errors](./operations/errors.md)|Operations that return the execution errors captured when data quality checks were executed on data sources, and sensors or rules failed with an error.|
+|[Healthcheck](./operations/healthcheck.md)|Health check operations for checking if the DQOps service is up and operational. Used for monitoring by load balancers.|
+|[Incidents](./operations/incidents.md)|Data quality incidents controller that supports reading and updating data quality incidents, such as changing the incident status or assigning an external ticket number.|
+|[Jobs](./operations/jobs.md)|Jobs management controller that supports starting new jobs, such as running selected data quality checks. Provides access to the job queue for incremental monitoring.|
+|[LogShipping](./operations/log_shipping.md)|Log shipping controller that accepts logs sent from a web application or external tools and aggregates them in the local DQOps instance logs.|
+|[Rules](./operations/rules.md)|Operations for managing custom data quality rule definitions in DQOps. The custom rules are stored in the DQOps user home folder.|
+|[Schemas](./operations/schemas.md)|Operations for listing imported schemas from monitored data sources. Also provides operations for activating and deactivating multiple checks at once.|
+|[SensorReadouts](./operations/sensor_readouts.md)|Operations that are retrieving the data quality sensor readouts of executed checks on tables and columns.|
+|[Sensors](./operations/sensors.md)|Operations for managing custom data quality sensor definitions in DQOps. The custom sensors are stored in the DQOps user home folder.|
+|[SharedCredentials](./operations/shared_credentials.md)|Operations for managing shared credentials in DQOps. Credentials that are stored in the shared .credentials folder in the DQOps user&#x27;s home folder.|
+|[TableComparisonResults](./operations/table_comparison_results.md)|Operations that returns the results of the most recent table comparison that was performed between the compared table and the reference table (the source of truth).|
+|[TableComparisons](./operations/table_comparisons.md)|Operations for managing the configurations of table comparisons between tables on the same or different data sources|
+|[Tables](./operations/tables.md)|Operations related to manage the metadata of imported tables, and managing the configuration of table-level data quality checks.|
+|[Timezones](./operations/timezones.md)|Operations for returning time zone names and codes supported by DQOps.|
+|[Users](./operations/users.md)|Operations for managing access for DQOps users in a multi-user installations. User management is supported in the TEAM and ENTERPRISE licences.|
+
+

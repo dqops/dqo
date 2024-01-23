@@ -15,3 +15,4 @@ spec:
     - DD/MM/YYYY
     - YYYY/MM/DD
     - "Month D, YYYY"
+    default_value: YYYY-MM-DD

@@ -22,6 +22,7 @@ import com.dqops.checks.CheckType;
 import com.dqops.checks.table.checkspecs.customsql.TableSqlAggregateExpressionCheckSpec;
 import com.dqops.checks.table.checkspecs.customsql.TableSqlConditionFailedCheckSpec;
 import com.dqops.checks.table.checkspecs.customsql.TableSqlConditionPassedPercentCheckSpec;
+import com.dqops.checks.table.checkspecs.customsql.TableSqlImportCustomResultCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -45,6 +46,7 @@ public class TableCustomSqlDailyMonitoringChecksSpec extends AbstractCheckCatego
             put("daily_sql_condition_failed_on_table", o -> o.dailySqlConditionFailedOnTable);
             put("daily_sql_condition_passed_percent_on_table", o -> o.dailySqlConditionPassedPercentOnTable);
             put("daily_sql_aggregate_expression_on_table", o -> o.dailySqlAggregateExpressionOnTable);
+            put("daily_import_custom_result_on_table", o -> o.dailyImportCustomResultOnTable);
         }
     };
 
@@ -59,6 +61,10 @@ public class TableCustomSqlDailyMonitoringChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private TableSqlAggregateExpressionCheckSpec dailySqlAggregateExpressionOnTable;
+
+    @JsonPropertyDescription("Runs a custom query that retrieves a result of a data quality check performed in the data engineering, whose result (the severity level) is pulled from a separate table.")
+    private TableSqlImportCustomResultCheckSpec dailyImportCustomResultOnTable;
+
 
     /**
      * Returns a check specification.
@@ -112,6 +118,24 @@ public class TableCustomSqlDailyMonitoringChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailySqlAggregateExpressionOnTable, dailySqlAggregateExpressionOnTable));
         this.dailySqlAggregateExpressionOnTable = dailySqlAggregateExpressionOnTable;
         propagateHierarchyIdToField(dailySqlAggregateExpressionOnTable, "daily_sql_aggregate_expression_on_table");
+    }
+
+    /**
+     * Returns a custom check that imports data quality results from custom log tables.
+     * @return Import custom result check.
+     */
+    public TableSqlImportCustomResultCheckSpec getDailyImportCustomResultOnTable() {
+        return dailyImportCustomResultOnTable;
+    }
+
+    /**
+     * Sets a custom check that pulls results from a custom table.
+     * @param dailyImportCustomResultOnTable Import a result from a custom table.
+     */
+    public void setDailyImportCustomResultOnTable(TableSqlImportCustomResultCheckSpec dailyImportCustomResultOnTable) {
+        this.setDirtyIf(!Objects.equals(this.dailyImportCustomResultOnTable, dailyImportCustomResultOnTable));
+        this.dailyImportCustomResultOnTable = dailyImportCustomResultOnTable;
+        propagateHierarchyIdToField(dailyImportCustomResultOnTable, "daily_import_custom_result_on_table");
     }
 
     /**

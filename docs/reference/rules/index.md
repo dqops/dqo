@@ -50,6 +50,7 @@ The full list of data quality rules supported by DQOps. The source code is found
 |[*equals_0*](./Comparison.md#equals-0)|Data quality rule that verifies that a data quality check readout equals 0. It is used in data quality checks that have an expected value &quot;0&quot;.|
 |[*equals_1*](./Comparison.md#equals-1)|Data quality rule that verifies that a data quality check readout equals 1. It is used in data quality checks that have an expected value &quot;1&quot;.|
 |[*equals_integer*](./Comparison.md#equals-integer)|Data quality rule that verifies that a data quality check readout equals a given integer value, with an expected value preconfigured as 1.|
+|[*import_severity*](./Comparison.md#import-severity)|A dummy data quality rule that always fails. It is activated on an *import_custom_result* data quality check that imports data quality results from different data quality libraries directly from logging tables.|
 |[*max*](./Comparison.md#max)|Data quality rule that verifies if a data quality check readsout is less or equal a maximum value.|
 |[*max_count*](./Comparison.md#max-count)|Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.|
 |[*max_days*](./Comparison.md#max-days)|Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.|
@@ -61,6 +62,7 @@ The full list of data quality rules supported by DQOps. The source code is found
 |[*min_count*](./Comparison.md#min-count)|Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.|
 |[*min_percent*](./Comparison.md#min-percent)|Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.|
 |[*min_value*](./Comparison.md#min-value)|Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.|
+|[*pass*](./Comparison.md#pass)|A dummy data quality rule that always passes.|
 |[*value_changed*](./Comparison.md#value-changed)|Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.|
 
 

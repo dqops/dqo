@@ -53,6 +53,21 @@ A table-level check that calculates a given SQL aggregate expression and compare
 
 
 
+### [import custom result on table](./import-custom-result-on-table.md)
+A table-level check that uses a custom SQL SELECT statement to retrieve a result of running a custom data quality check that was hardcoded
+ in the data pipeline, and the result was stored in a separate table. The SQL query that is configured in this external data quality results importer must be
+ a complete SELECT statement that queries a dedicated table (created by the data engineers) that stores the results of custom data quality checks.
+ The SQL query must return a *severity* column with values: 0 - data quality check passed, 1 - warning issue, 2 - error severity issue, 3 - fatal severity issue.
+
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_import_custom_result_on_table`</span>](./import-custom-result-on-table.md#profile-import-custom-result-on-table)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Runs a custom query that retrieves a result of a data quality check performed in the data engineering, whose result (the severity level) is pulled from a separate table.| |
+|[<span class="no-wrap-code">`daily_import_custom_result_on_table`</span>](./import-custom-result-on-table.md#daily-import-custom-result-on-table)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Runs a custom query that retrieves a result of a data quality check performed in the data engineering, whose result (the severity level) is pulled from a separate table.| |
+|[<span class="no-wrap-code">`monthly_import_custom_result_on_table`</span>](./import-custom-result-on-table.md#monthly-import-custom-result-on-table)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Runs a custom query that retrieves a result of a data quality check performed in the data engineering, whose result (the severity level) is pulled from a separate table.| |
+
+
+
 
 
 

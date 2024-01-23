@@ -12,5 +12,4 @@ spec:
       (inclusive).
     data_type: long
     required: true
-    sample_values:
-    - 10
+    default_value: 0

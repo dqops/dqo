@@ -285,6 +285,15 @@ A column-level check that calculates a given SQL aggregate expression on a colum
 
 
 
+### [import custom result on column](./custom_sql/import-custom-result-on-column.md)
+Column level check that uses a custom SQL SELECT statement to retrieve a result of running a custom data quality check on a column by a custom
+ data quality check, hardcoded in the data pipeline. The result is retrieved by querying a separate **logging table**, whose schema is not fixed.
+ The logging table should have columns that identify a table and a column for which they store custom data quality check results, and a *severity* column of the data quality issue.
+ The SQL query that is configured in this external data quality results importer must be
+ a complete SELECT statement that queries a dedicated logging table, created by the data engineering team.
+
+
+
 
 
 

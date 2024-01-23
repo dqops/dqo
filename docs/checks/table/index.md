@@ -67,6 +67,14 @@ A table-level check that calculates a given SQL aggregate expression and compare
 
 
 
+### [import custom result on table](./custom_sql/import-custom-result-on-table.md)
+A table-level check that uses a custom SQL SELECT statement to retrieve a result of running a custom data quality check that was hardcoded
+ in the data pipeline, and the result was stored in a separate table. The SQL query that is configured in this external data quality results importer must be
+ a complete SELECT statement that queries a dedicated table (created by the data engineers) that stores the results of custom data quality checks.
+ The SQL query must return a *severity* column with values: 0 - data quality check passed, 1 - warning issue, 2 - error severity issue, 3 - fatal severity issue.
+
+
+
 
 
 

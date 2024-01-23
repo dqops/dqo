@@ -22,6 +22,7 @@ import com.dqops.checks.CheckType;
 import com.dqops.checks.table.checkspecs.customsql.TableSqlAggregateExpressionCheckSpec;
 import com.dqops.checks.table.checkspecs.customsql.TableSqlConditionFailedCheckSpec;
 import com.dqops.checks.table.checkspecs.customsql.TableSqlConditionPassedPercentCheckSpec;
+import com.dqops.checks.table.checkspecs.customsql.TableSqlImportCustomResultCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -45,6 +46,7 @@ public class TableCustomSqlMonthlyMonitoringChecksSpec extends AbstractCheckCate
             put("monthly_sql_condition_failed_on_table", o -> o.monthlySqlConditionFailedOnTable);
             put("monthly_sql_condition_passed_percent_on_table", o -> o.monthlySqlConditionPassedPercentOnTable);
             put("monthly_sql_aggregate_expression_on_table", o -> o.monthlySqlAggregateExpressionOnTable);
+            put("monthly_import_custom_result_on_table", o -> o.monthlyImportCustomResultOnTable);
         }
     };
 
@@ -59,6 +61,9 @@ public class TableCustomSqlMonthlyMonitoringChecksSpec extends AbstractCheckCate
 
     @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range. Stores the most recent value for each month when the data quality check was evaluated.")
     private TableSqlAggregateExpressionCheckSpec monthlySqlAggregateExpressionOnTable;
+
+    @JsonPropertyDescription("Runs a custom query that retrieves a result of a data quality check performed in the data engineering, whose result (the severity level) is pulled from a separate table.")
+    private TableSqlImportCustomResultCheckSpec monthlyImportCustomResultOnTable;
 
     /**
      * Returns a check specification.
@@ -113,6 +118,25 @@ public class TableCustomSqlMonthlyMonitoringChecksSpec extends AbstractCheckCate
         this.monthlySqlAggregateExpressionOnTable = monthlySqlAggregateExpressionOnTable;
         propagateHierarchyIdToField(monthlySqlAggregateExpressionOnTable, "monthly_sql_aggregate_expression_on_table");
     }
+
+    /**
+     * Returns a custom check that imports data quality results from custom log tables.
+     * @return Import custom result check.
+     */
+    public TableSqlImportCustomResultCheckSpec getMonthlyImportCustomResultOnTable() {
+        return monthlyImportCustomResultOnTable;
+    }
+
+    /**
+     * Sets a custom check that pulls results from a custom table.
+     * @param monthlyImportCustomResultOnTable Import a result from a custom table.
+     */
+    public void setMonthlyImportCustomResultOnTable(TableSqlImportCustomResultCheckSpec monthlyImportCustomResultOnTable) {
+        this.setDirtyIf(!Objects.equals(this.monthlyImportCustomResultOnTable, monthlyImportCustomResultOnTable));
+        this.monthlyImportCustomResultOnTable = monthlyImportCustomResultOnTable;
+        propagateHierarchyIdToField(monthlyImportCustomResultOnTable, "monthly_import_custom_result_on_table");
+    }
+
 
     /**
      * Returns the child map on the spec class with all fields.

@@ -440,11 +440,12 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         String errorYaml = checkSpec.getError() != null ? this.jsonSerializer.serialize(checkSpec.getError()) : null;
         String fatalYaml = checkSpec.getFatal() != null ? this.jsonSerializer.serialize(checkSpec.getFatal()) : null;
 
-        if (Objects.equals(warningYaml, errorYaml)) {
+        boolean isImportSeverityRule = Objects.equals(ruleDocumentationModel.getRuleName(), "import_severity");
+        if (!isImportSeverityRule && Objects.equals(warningYaml, errorYaml)) {
             checkSpec.setWarning(null); // we don't need the sample of the warning, because the rule has the same parameters
         }
 
-        if (Objects.equals(fatalYaml, errorYaml)) {
+        if (!isImportSeverityRule && Objects.equals(fatalYaml, errorYaml)) {
             checkSpec.setFatal(null); // we don't need the sample of the fatal rule, because the rule has the same parameters
         }
 

@@ -19,9 +19,9 @@ import os
 import socket
 import ssl
 import sys
-from urllib.error import HTTPError, URLError
 import urllib.request
 import zipfile
+from urllib.error import HTTPError, URLError
 
 import jdk
 
@@ -72,23 +72,25 @@ def install_dqo(dest: str, dqo_tag: str, dqo_version: str):
 
 def download_to_file(dqo_tag: str, dqo_version: str, distribution_local_name: str):
     github_url = (
-            "https://github.com/dqops/dqo/releases/download/%s/dqo-distribution-%s-bin.zip"
-            % (dqo_tag, dqo_version)
+        "https://github.com/dqops/dqo/releases/download/%s/dqo-distribution-%s-bin.zip"
+        % (dqo_tag, dqo_version)
     )
 
     if download_to_file_retry(github_url, distribution_local_name, dqo_version):
         return
 
     print("Download from %s failed, attempting another mirror." % github_url)
-    bucket_url = (
-            "https://dqops.com/releases/dqo-distribution-%s-bin.zip"
-            % dqo_version
-    )
+    bucket_url = "https://dqops.com/releases/dqo-distribution-%s-bin.zip" % dqo_version
 
-    if download_to_file_retry(bucket_url, distribution_local_name, dqo_version, retries=1):
+    if download_to_file_retry(
+        bucket_url, distribution_local_name, dqo_version, retries=1
+    ):
         return
 
-    print("Download failed. Check your internet connection and firewall settings.", file=sys.stderr)
+    print(
+        "Download failed. Check your internet connection and firewall settings.",
+        file=sys.stderr,
+    )
     exit(-1)
 
 
@@ -106,17 +108,23 @@ def format_web_error_message(error, timeout):
     return "%s: Download interrupted, reason: %s" % (error_name, reason)
 
 
-def download_to_file_retry(source_url, path, dqo_version, retries=3, chunk_size=1024*1024, timeout=10):
+def download_to_file_retry(
+    source_url, path, dqo_version, retries=3, chunk_size=1024 * 1024, timeout=10
+):
     retries_so_far = 0
 
     while retries_so_far < retries:
         retries_so_far += 1
         try:
-            trying_message = "Trying to download DQOps version %s from %s" % (dqo_version, source_url) \
-                + ((" (try %d/%d)" % (retries_so_far, retries)) if retries > 1 else "")
+            trying_message = "Trying to download DQOps version %s from %s" % (
+                dqo_version,
+                source_url,
+            ) + ((" (try %d/%d)" % (retries_so_far, retries)) if retries > 1 else "")
             print(trying_message)
 
-            download_to_file_once(source_url, path, chunk_size=chunk_size, timeout=timeout)
+            download_to_file_once(
+                source_url, path, chunk_size=chunk_size, timeout=timeout
+            )
             return True
         except (HTTPError, URLError, TimeoutError) as e:
             error_message = format_web_error_message(e, timeout)

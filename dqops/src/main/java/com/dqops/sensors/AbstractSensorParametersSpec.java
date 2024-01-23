@@ -119,7 +119,7 @@ public abstract class AbstractSensorParametersSpec extends AbstractSpec {
      * @return True when the sensor supports data streams.
      */
     @JsonIgnore
-    public boolean getSupportsDataStreams() {
+    public boolean getSupportsDataGrouping() {
        return true;
     }
 

@@ -9,6 +9,3 @@ spec:
       column.
     data_type: integer_list
     required: true
-    sample_values:
-    - 2
-    - 3

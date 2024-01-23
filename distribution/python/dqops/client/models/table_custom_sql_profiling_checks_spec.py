@@ -18,6 +18,9 @@ if TYPE_CHECKING:
     from ..models.table_sql_condition_passed_percent_check_spec import (
         TableSqlConditionPassedPercentCheckSpec,
     )
+    from ..models.table_sql_import_custom_result_check_spec import (
+        TableSqlImportCustomResultCheckSpec,
+    )
 
 
 T = TypeVar("T", bound="TableCustomSqlProfilingChecksSpec")
@@ -33,6 +36,7 @@ class TableCustomSqlProfilingChecksSpec:
         profile_sql_condition_failed_on_table (Union[Unset, TableSqlConditionFailedCheckSpec]):
         profile_sql_condition_passed_percent_on_table (Union[Unset, TableSqlConditionPassedPercentCheckSpec]):
         profile_sql_aggregate_expression_on_table (Union[Unset, TableSqlAggregateExpressionCheckSpec]):
+        profile_import_custom_result_on_table (Union[Unset, TableSqlImportCustomResultCheckSpec]):
     """
 
     custom_checks: Union[Unset, "TableCustomSqlProfilingChecksSpecCustomChecks"] = UNSET
@@ -44,6 +48,9 @@ class TableCustomSqlProfilingChecksSpec:
     ] = UNSET
     profile_sql_aggregate_expression_on_table: Union[
         Unset, "TableSqlAggregateExpressionCheckSpec"
+    ] = UNSET
+    profile_import_custom_result_on_table: Union[
+        Unset, "TableSqlImportCustomResultCheckSpec"
     ] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -72,6 +79,12 @@ class TableCustomSqlProfilingChecksSpec:
                 self.profile_sql_aggregate_expression_on_table.to_dict()
             )
 
+        profile_import_custom_result_on_table: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_import_custom_result_on_table, Unset):
+            profile_import_custom_result_on_table = (
+                self.profile_import_custom_result_on_table.to_dict()
+            )
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -89,6 +102,10 @@ class TableCustomSqlProfilingChecksSpec:
             field_dict[
                 "profile_sql_aggregate_expression_on_table"
             ] = profile_sql_aggregate_expression_on_table
+        if profile_import_custom_result_on_table is not UNSET:
+            field_dict[
+                "profile_import_custom_result_on_table"
+            ] = profile_import_custom_result_on_table
 
         return field_dict
 
@@ -105,6 +122,9 @@ class TableCustomSqlProfilingChecksSpec:
         )
         from ..models.table_sql_condition_passed_percent_check_spec import (
             TableSqlConditionPassedPercentCheckSpec,
+        )
+        from ..models.table_sql_import_custom_result_check_spec import (
+            TableSqlImportCustomResultCheckSpec,
         )
 
         d = src_dict.copy()
@@ -162,11 +182,27 @@ class TableCustomSqlProfilingChecksSpec:
                 )
             )
 
+        _profile_import_custom_result_on_table = d.pop(
+            "profile_import_custom_result_on_table", UNSET
+        )
+        profile_import_custom_result_on_table: Union[
+            Unset, TableSqlImportCustomResultCheckSpec
+        ]
+        if isinstance(_profile_import_custom_result_on_table, Unset):
+            profile_import_custom_result_on_table = UNSET
+        else:
+            profile_import_custom_result_on_table = (
+                TableSqlImportCustomResultCheckSpec.from_dict(
+                    _profile_import_custom_result_on_table
+                )
+            )
+
         table_custom_sql_profiling_checks_spec = cls(
             custom_checks=custom_checks,
             profile_sql_condition_failed_on_table=profile_sql_condition_failed_on_table,
             profile_sql_condition_passed_percent_on_table=profile_sql_condition_passed_percent_on_table,
             profile_sql_aggregate_expression_on_table=profile_sql_aggregate_expression_on_table,
+            profile_import_custom_result_on_table=profile_import_custom_result_on_table,
         )
 
         table_custom_sql_profiling_checks_spec.additional_properties = d

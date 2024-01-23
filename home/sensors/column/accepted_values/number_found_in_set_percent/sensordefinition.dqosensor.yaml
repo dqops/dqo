@@ -10,6 +10,3 @@ spec:
       \ tested column are counted as valid rows."
     data_type: integer_list
     required: true
-    sample_values:
-    - 2
-    - 3

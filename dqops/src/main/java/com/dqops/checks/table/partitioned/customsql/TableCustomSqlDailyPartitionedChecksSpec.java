@@ -22,6 +22,7 @@ import com.dqops.checks.CheckType;
 import com.dqops.checks.table.checkspecs.customsql.TableSqlAggregateExpressionCheckSpec;
 import com.dqops.checks.table.checkspecs.customsql.TableSqlConditionFailedCheckSpec;
 import com.dqops.checks.table.checkspecs.customsql.TableSqlConditionPassedPercentCheckSpec;
+import com.dqops.checks.table.checkspecs.customsql.TableSqlImportCustomResultCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -45,6 +46,7 @@ public class TableCustomSqlDailyPartitionedChecksSpec extends AbstractCheckCateg
             put("daily_partition_sql_condition_failed_on_table", o -> o.dailyPartitionSqlConditionFailedOnTable);
             put("daily_partition_sql_condition_passed_percent_on_table", o -> o.dailyPartitionSqlConditionPassedPercentOnTable);
             put("daily_partition_sql_aggregate_expression_on_table", o -> o.dailyPartitionSqlAggregateExpressionOnTable);
+            put("daily_partition_import_custom_result_on_table", o -> o.dailyPartitionImportCustomResultOnTable);
         }
     };
 
@@ -59,6 +61,9 @@ public class TableCustomSqlDailyPartitionedChecksSpec extends AbstractCheckCateg
 
     @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range. Stores a separate data quality check result for each daily partition.")
     private TableSqlAggregateExpressionCheckSpec dailyPartitionSqlAggregateExpressionOnTable;
+
+    @JsonPropertyDescription("Runs a custom query that retrieves a result of a data quality check performed in the data engineering, whose result (the severity level) is pulled from a separate table.")
+    private TableSqlImportCustomResultCheckSpec dailyPartitionImportCustomResultOnTable;
 
     /**
      * Returns a check specification.
@@ -112,6 +117,24 @@ public class TableCustomSqlDailyPartitionedChecksSpec extends AbstractCheckCateg
         this.setDirtyIf(!Objects.equals(this.dailyPartitionSqlAggregateExpressionOnTable, dailyPartitionSqlAggregateExpressionOnTable));
         this.dailyPartitionSqlAggregateExpressionOnTable = dailyPartitionSqlAggregateExpressionOnTable;
         propagateHierarchyIdToField(dailyPartitionSqlAggregateExpressionOnTable, "daily_partition_sql_aggregate_expression_on_table");
+    }
+
+    /**
+     * Returns a custom check that imports data quality results from custom log tables.
+     * @return Import custom result check.
+     */
+    public TableSqlImportCustomResultCheckSpec getDailyPartitionImportCustomResultOnTable() {
+        return dailyPartitionImportCustomResultOnTable;
+    }
+
+    /**
+     * Sets a custom check that pulls results from a custom table.
+     * @param dailyPartitionImportCustomResultOnTable Import a result from a custom table.
+     */
+    public void setDailyPartitionImportCustomResultOnTable(TableSqlImportCustomResultCheckSpec dailyPartitionImportCustomResultOnTable) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionImportCustomResultOnTable, dailyPartitionImportCustomResultOnTable));
+        this.dailyPartitionImportCustomResultOnTable = dailyPartitionImportCustomResultOnTable;
+        propagateHierarchyIdToField(dailyPartitionImportCustomResultOnTable, "daily_partition_import_custom_result_on_table");
     }
 
     /**

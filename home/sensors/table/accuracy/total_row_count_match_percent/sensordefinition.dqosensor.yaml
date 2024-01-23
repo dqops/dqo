@@ -10,5 +10,3 @@ spec:
       \ as a String."
     data_type: string
     required: true
-    sample_values:
-    - dim_customer

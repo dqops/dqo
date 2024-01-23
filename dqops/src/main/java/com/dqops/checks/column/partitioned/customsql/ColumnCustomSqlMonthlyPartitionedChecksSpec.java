@@ -22,6 +22,7 @@ import com.dqops.checks.CheckType;
 import com.dqops.checks.column.checkspecs.customsql.ColumnSqlAggregateExpressionCheckSpec;
 import com.dqops.checks.column.checkspecs.customsql.ColumnSqlConditionFailedCheckSpec;
 import com.dqops.checks.column.checkspecs.customsql.ColumnSqlConditionPassedPercentCheckSpec;
+import com.dqops.checks.column.checkspecs.customsql.ColumnSqlImportCustomResultCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -45,6 +46,7 @@ public class ColumnCustomSqlMonthlyPartitionedChecksSpec extends AbstractCheckCa
             put("monthly_partition_sql_condition_failed_on_column", o -> o.monthlyPartitionSqlConditionFailedOnColumn);
             put("monthly_partition_sql_condition_passed_percent_on_column", o -> o.monthlyPartitionSqlConditionPassedPercentOnColumn);
             put("monthly_partition_sql_aggregate_expression_on_column", o -> o.monthlyPartitionSqlAggregateExpressionOnColumn);
+            put("monthly_partition_import_custom_result_on_column", o -> o.monthlyPartitionImportCustomResultOnColumn);
         }
     };
 
@@ -59,6 +61,9 @@ public class ColumnCustomSqlMonthlyPartitionedChecksSpec extends AbstractCheckCa
 
     @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range. Stores a separate data quality check result for each monthly partition.")
     private ColumnSqlAggregateExpressionCheckSpec monthlyPartitionSqlAggregateExpressionOnColumn;
+
+    @JsonPropertyDescription("Runs a custom query that retrieves a result of a data quality check performed in the data engineering, whose result (the severity level) is pulled from a separate table.")
+    private ColumnSqlImportCustomResultCheckSpec monthlyPartitionImportCustomResultOnColumn;
 
     /**
      * Returns a check specification.
@@ -112,6 +117,24 @@ public class ColumnCustomSqlMonthlyPartitionedChecksSpec extends AbstractCheckCa
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionSqlAggregateExpressionOnColumn, monthlyPartitionSqlAggregateExpressionOnColumn));
         this.monthlyPartitionSqlAggregateExpressionOnColumn = monthlyPartitionSqlAggregateExpressionOnColumn;
         propagateHierarchyIdToField(monthlyPartitionSqlAggregateExpressionOnColumn, "monthly_partition_sql_aggregate_expression_on_column");
+    }
+
+    /**
+     * Returns a custom check that imports data quality results from custom log tables.
+     * @return Import custom result check.
+     */
+    public ColumnSqlImportCustomResultCheckSpec getMonthlyPartitionImportCustomResultOnColumn() {
+        return monthlyPartitionImportCustomResultOnColumn;
+    }
+
+    /**
+     * Sets a custom check that pulls results from a custom table.
+     * @param monthlyPartitionImportCustomResultOnColumn Import a result from a custom table.
+     */
+    public void setMonthlyPartitionImportCustomResultOnColumn(ColumnSqlImportCustomResultCheckSpec monthlyPartitionImportCustomResultOnColumn) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionImportCustomResultOnColumn, monthlyPartitionImportCustomResultOnColumn));
+        this.monthlyPartitionImportCustomResultOnColumn = monthlyPartitionImportCustomResultOnColumn;
+        propagateHierarchyIdToField(monthlyPartitionImportCustomResultOnColumn, "monthly_partition_import_custom_result_on_column");
     }
 
     /**

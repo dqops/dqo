@@ -1030,6 +1030,12 @@ from .column_sql_condition_passed_percent_check_spec import (
 from .column_sql_condition_passed_percent_sensor_parameters_spec import (
     ColumnSqlConditionPassedPercentSensorParametersSpec,
 )
+from .column_sql_import_custom_result_check_spec import (
+    ColumnSqlImportCustomResultCheckSpec,
+)
+from .column_sql_import_custom_result_sensor_parameters_spec import (
+    ColumnSqlImportCustomResultSensorParametersSpec,
+)
 from .column_statistics_collectors_root_categories_spec import (
     ColumnStatisticsCollectorsRootCategoriesSpec,
 )
@@ -1342,6 +1348,7 @@ from .hierarchy_id_model import HierarchyIdModel
 from .hierarchy_id_model_path_item import HierarchyIdModelPathItem
 from .historic_data_points_grouping import HistoricDataPointsGrouping
 from .import_schema_queue_job_parameters import ImportSchemaQueueJobParameters
+from .import_severity_rule_parameters_spec import ImportSeverityRuleParametersSpec
 from .import_tables_queue_job_parameters import ImportTablesQueueJobParameters
 from .import_tables_queue_job_result import ImportTablesQueueJobResult
 from .import_tables_result import ImportTablesResult
@@ -1746,6 +1753,12 @@ from .table_sql_condition_passed_percent_check_spec import (
 )
 from .table_sql_condition_passed_percent_sensor_parameters_spec import (
     TableSqlConditionPassedPercentSensorParametersSpec,
+)
+from .table_sql_import_custom_result_check_spec import (
+    TableSqlImportCustomResultCheckSpec,
+)
+from .table_sql_import_custom_result_sensor_parameters_spec import (
+    TableSqlImportCustomResultSensorParametersSpec,
 )
 from .table_statistics_collectors_root_categories_spec import (
     TableStatisticsCollectorsRootCategoriesSpec,
@@ -2249,6 +2262,8 @@ __all__ = (
     "ColumnSqlConditionFailedCountSensorParametersSpec",
     "ColumnSqlConditionPassedPercentCheckSpec",
     "ColumnSqlConditionPassedPercentSensorParametersSpec",
+    "ColumnSqlImportCustomResultCheckSpec",
+    "ColumnSqlImportCustomResultSensorParametersSpec",
     "ColumnStatisticsCollectorsRootCategoriesSpec",
     "ColumnStatisticsModel",
     "ColumnStringsExpectedTextsInTopValuesCountSensorParametersSpec",
@@ -2403,6 +2418,7 @@ __all__ = (
     "HierarchyIdModelPathItem",
     "HistoricDataPointsGrouping",
     "ImportSchemaQueueJobParameters",
+    "ImportSeverityRuleParametersSpec",
     "ImportTablesQueueJobParameters",
     "ImportTablesQueueJobResult",
     "ImportTablesResult",
@@ -2636,6 +2652,8 @@ __all__ = (
     "TableSqlConditionFailedCountSensorParametersSpec",
     "TableSqlConditionPassedPercentCheckSpec",
     "TableSqlConditionPassedPercentSensorParametersSpec",
+    "TableSqlImportCustomResultCheckSpec",
+    "TableSqlImportCustomResultSensorParametersSpec",
     "TableStatisticsCollectorsRootCategoriesSpec",
     "TableStatisticsModel",
     "TableTimelinessDailyMonitoringChecksSpec",

@@ -1,0 +1,9 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: table/custom_sql/import_custom_result
+  rule_name: comparison/import_severity
+  help_text: "Runs a custom query that retrieves a result of a data quality check\
+    \ performed in the data engineering, whose result (the severity level) is pulled\
+    \ from a separate table."

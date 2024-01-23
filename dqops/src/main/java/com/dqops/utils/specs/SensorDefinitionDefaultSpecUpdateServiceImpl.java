@@ -104,7 +104,7 @@ public class SensorDefinitionDefaultSpecUpdateServiceImpl implements SensorDefin
                 providerSensorDefinitionSpec.setJavaClassName(abstractSensorParametersSpec.getSensorRunnerClass().getName());
                 providerSensorDefinitionSpec.setSupportsGrouping(
                         sqlTemplate.contains("lib.render_data_grouping_projections") &&
-                                abstractSensorParametersSpec.getSupportsDataStreams());
+                                abstractSensorParametersSpec.getSupportsDataGrouping());
                 providerSensorDefinitionSpec.setSupportsPartitionedChecks(
                         sqlTemplate.contains("lib.render_time_dimension_projection") &&
                                 abstractSensorParametersSpec.getSupportsPartitionedChecks());
@@ -127,7 +127,7 @@ public class SensorDefinitionDefaultSpecUpdateServiceImpl implements SensorDefin
                             abstractSensorParametersSpec.getSensorRunnerClass() == TableAvailabilitySensorRunner.class;
                     providerSensorDefinitionSpec.setType(isSqlTemplateRunner ? ProviderSensorRunnerType.sql_template : ProviderSensorRunnerType.java_class);
                     providerSensorDefinitionSpec.setJavaClassName(abstractSensorParametersSpec.getSensorRunnerClass().getName());
-                    providerSensorDefinitionSpec.setSupportsGrouping(abstractSensorParametersSpec.getSupportsDataStreams());
+                    providerSensorDefinitionSpec.setSupportsGrouping(abstractSensorParametersSpec.getSupportsDataGrouping());
                     providerSensorDefinitionSpec.setSupportsPartitionedChecks(abstractSensorParametersSpec.getSupportsPartitionedChecks());
                 }
             }

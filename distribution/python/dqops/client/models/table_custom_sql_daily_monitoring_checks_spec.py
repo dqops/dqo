@@ -18,6 +18,9 @@ if TYPE_CHECKING:
     from ..models.table_sql_condition_passed_percent_check_spec import (
         TableSqlConditionPassedPercentCheckSpec,
     )
+    from ..models.table_sql_import_custom_result_check_spec import (
+        TableSqlImportCustomResultCheckSpec,
+    )
 
 
 T = TypeVar("T", bound="TableCustomSqlDailyMonitoringChecksSpec")
@@ -33,6 +36,7 @@ class TableCustomSqlDailyMonitoringChecksSpec:
         daily_sql_condition_failed_on_table (Union[Unset, TableSqlConditionFailedCheckSpec]):
         daily_sql_condition_passed_percent_on_table (Union[Unset, TableSqlConditionPassedPercentCheckSpec]):
         daily_sql_aggregate_expression_on_table (Union[Unset, TableSqlAggregateExpressionCheckSpec]):
+        daily_import_custom_result_on_table (Union[Unset, TableSqlImportCustomResultCheckSpec]):
     """
 
     custom_checks: Union[
@@ -46,6 +50,9 @@ class TableCustomSqlDailyMonitoringChecksSpec:
     ] = UNSET
     daily_sql_aggregate_expression_on_table: Union[
         Unset, "TableSqlAggregateExpressionCheckSpec"
+    ] = UNSET
+    daily_import_custom_result_on_table: Union[
+        Unset, "TableSqlImportCustomResultCheckSpec"
     ] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -74,6 +81,12 @@ class TableCustomSqlDailyMonitoringChecksSpec:
                 self.daily_sql_aggregate_expression_on_table.to_dict()
             )
 
+        daily_import_custom_result_on_table: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_import_custom_result_on_table, Unset):
+            daily_import_custom_result_on_table = (
+                self.daily_import_custom_result_on_table.to_dict()
+            )
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -91,6 +104,10 @@ class TableCustomSqlDailyMonitoringChecksSpec:
             field_dict[
                 "daily_sql_aggregate_expression_on_table"
             ] = daily_sql_aggregate_expression_on_table
+        if daily_import_custom_result_on_table is not UNSET:
+            field_dict[
+                "daily_import_custom_result_on_table"
+            ] = daily_import_custom_result_on_table
 
         return field_dict
 
@@ -107,6 +124,9 @@ class TableCustomSqlDailyMonitoringChecksSpec:
         )
         from ..models.table_sql_condition_passed_percent_check_spec import (
             TableSqlConditionPassedPercentCheckSpec,
+        )
+        from ..models.table_sql_import_custom_result_check_spec import (
+            TableSqlImportCustomResultCheckSpec,
         )
 
         d = src_dict.copy()
@@ -166,11 +186,27 @@ class TableCustomSqlDailyMonitoringChecksSpec:
                 )
             )
 
+        _daily_import_custom_result_on_table = d.pop(
+            "daily_import_custom_result_on_table", UNSET
+        )
+        daily_import_custom_result_on_table: Union[
+            Unset, TableSqlImportCustomResultCheckSpec
+        ]
+        if isinstance(_daily_import_custom_result_on_table, Unset):
+            daily_import_custom_result_on_table = UNSET
+        else:
+            daily_import_custom_result_on_table = (
+                TableSqlImportCustomResultCheckSpec.from_dict(
+                    _daily_import_custom_result_on_table
+                )
+            )
+
         table_custom_sql_daily_monitoring_checks_spec = cls(
             custom_checks=custom_checks,
             daily_sql_condition_failed_on_table=daily_sql_condition_failed_on_table,
             daily_sql_condition_passed_percent_on_table=daily_sql_condition_passed_percent_on_table,
             daily_sql_aggregate_expression_on_table=daily_sql_aggregate_expression_on_table,
+            daily_import_custom_result_on_table=daily_import_custom_result_on_table,
         )
 
         table_custom_sql_daily_monitoring_checks_spec.additional_properties = d

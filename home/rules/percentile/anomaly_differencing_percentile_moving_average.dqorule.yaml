@@ -22,3 +22,4 @@ spec:
       \ prediction_time_window parameterin Definitions section."
     data_type: double
     required: true
+    default_value: 0.1

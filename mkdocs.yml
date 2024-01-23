@@ -244,6 +244,7 @@ nav:
         - sql condition failed on table: 'checks/table/custom_sql/sql-condition-failed-on-table.md'
         - sql condition passed percent on table: 'checks/table/custom_sql/sql-condition-passed-percent-on-table.md'
         - sql aggregate expression on table: 'checks/table/custom_sql/sql-aggregate-expression-on-table.md'
+        - import custom result on table: 'checks/table/custom_sql/import-custom-result-on-table.md'
       - schema:
         - 'checks/table/schema/index.md'
         - column count: 'checks/table/schema/column-count.md'
@@ -323,6 +324,7 @@ nav:
         - sql condition failed on column: 'checks/column/custom_sql/sql-condition-failed-on-column.md'
         - sql condition passed percent on column: 'checks/column/custom_sql/sql-condition-passed-percent-on-column.md'
         - sql aggregate expression on column: 'checks/column/custom_sql/sql-aggregate-expression-on-column.md'
+        - import custom result on column: 'checks/column/custom_sql/import-custom-result-on-column.md'
       - datatype:
         - 'checks/column/datatype/index.md'
         - detected datatype in text: 'checks/column/datatype/detected-datatype-in-text.md'

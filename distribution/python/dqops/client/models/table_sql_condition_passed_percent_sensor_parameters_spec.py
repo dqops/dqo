@@ -15,7 +15,7 @@ class TableSqlConditionPassedPercentSensorParametersSpec:
         filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor query. Both the table level filter and a
             sensor query filter are added, separated by an AND operator.
         sql_condition (Union[Unset, str]): SQL condition (expression) that returns true or false. The condition is
-            evaluated for each row. The expression can use {table} placeholder that is replaced with a full table name.
+            evaluated for each row. The expression can use a {table} placeholder that is replaced with a full table name.
     """
 
     filter_: Union[Unset, str] = UNSET

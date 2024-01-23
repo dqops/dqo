@@ -75,7 +75,7 @@ public class TableColumnCountSensorParametersSpec extends AbstractSensorParamete
      */
     @Override
     @JsonIgnore
-    public boolean getSupportsDataStreams() {
+    public boolean getSupportsDataGrouping() {
         return false;
     }
 

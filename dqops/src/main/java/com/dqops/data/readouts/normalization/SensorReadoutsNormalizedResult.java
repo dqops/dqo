@@ -74,6 +74,8 @@ public class SensorReadoutsNormalizedResult {
     private final TextColumn createdByColumn;
     private final TextColumn updatedByColumn;
 
+    private final IntColumn severityColumn;
+
     /**
      * Creates a sensor result dataset, extracting key columns.
      * WARNING: this method has an intended side result - it adds missing columns to the table.
@@ -135,6 +137,10 @@ public class SensorReadoutsNormalizedResult {
         this.updatedAtColumn = TableColumnUtility.getOrAddInstantColumn(table, SensorReadoutsColumnNames.UPDATED_AT_COLUMN_NAME, addColumWhenMissing);
         this.createdByColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.CREATED_BY_COLUMN_NAME, addColumWhenMissing);
         this.updatedByColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.UPDATED_BY_COLUMN_NAME, addColumWhenMissing);
+
+        // this is a special condition, we are storing a severity column only when receiving results from custom data quality checks using custom queries
+        // that return a 'severity' column, to bypass calling the rules
+        this.severityColumn = TableColumnUtility.getOrAddIntColumn(table, CheckResultsColumnNames.SEVERITY_COLUMN_NAME, false);
     }
 
     /**
@@ -504,5 +510,13 @@ public class SensorReadoutsNormalizedResult {
      */
     public TextColumn getUpdatedByColumn() {
         return updatedByColumn;
+    }
+
+    /**
+     * Returns an optional column with the severity status imported from custom checks that want to bypass calling rules.
+     * @return Severity rule.
+     */
+    public IntColumn getSeverityColumn() {
+        return severityColumn;
     }
 }

@@ -30,6 +30,7 @@ import com.dqops.core.incidents.TableIncidentImportBatch;
 import com.dqops.core.jobqueue.*;
 import com.dqops.core.jobqueue.exceptions.DqoQueueJobCancelledException;
 import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.data.checkresults.factory.CheckResultsColumnNames;
 import com.dqops.data.checkresults.snapshot.CheckResultsSnapshot;
 import com.dqops.data.checkresults.snapshot.CheckResultsSnapshotFactory;
 import com.dqops.data.errors.normalization.ErrorsNormalizationService;
@@ -79,6 +80,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.DoubleColumn;
+import tech.tablesaw.api.IntColumn;
 import tech.tablesaw.api.Table;
 
 import java.time.LocalDateTime;
@@ -194,6 +196,8 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
 
         SensorReadoutsSnapshot sensorReadoutsSnapshot = this.sensorReadoutsSnapshotFactory.createSnapshot(connectionName, physicalTableName, userDomainIdentity);
         Table allNormalizedSensorResultsTable = sensorReadoutsSnapshot.getTableDataChanges().getNewOrChangedRows();
+        IntColumn severityColumnTemporary = IntColumn.create(CheckResultsColumnNames.SEVERITY_COLUMN_NAME);
+        allNormalizedSensorResultsTable.addColumns(severityColumnTemporary); // temporary column to allow importing custom severity from custom SQL checks, bypassing rule evaluation, this column is removed before saving
         jobCancellationToken.throwIfCancelled();
 
         CheckResultsSnapshot checkResultsSnapshot = this.checkResultsSnapshotFactory.createSnapshot(connectionName, physicalTableName, userDomainIdentity);
@@ -219,6 +223,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                 allRuleEvaluationResultsTable, allErrorsTable, executionStatistics);
 
         if (sensorReadoutsSnapshot.getTableDataChanges().hasChanges() && !dummySensorExecution) {
+            allNormalizedSensorResultsTable.removeColumns(severityColumnTemporary); // removed, it was temporary
             progressListener.onSavingSensorResults(new SavingSensorResultsEvent(tableSpec, sensorReadoutsSnapshot));
             sensorReadoutsSnapshot.save();
         }

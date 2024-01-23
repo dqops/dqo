@@ -60,6 +60,7 @@ The rule definition YAML file *percentile/anomaly_differencing_percentile_moving
           \ prediction_time_window parameterin Definitions section."
         data_type: double
         required: true
+        default_value: 0.1
     ```
 
 
@@ -236,6 +237,7 @@ The rule definition YAML file *percentile/anomaly_differencing_percentile_moving
           \ exist to run the calculation."
         data_type: double
         required: true
+        default_value: 0.1
     ```
 
 
@@ -412,6 +414,7 @@ The rule definition YAML file *percentile/anomaly_stationary_percentile_moving_a
           \ prediction_time_window parameterin Definitions section."
         data_type: double
         required: true
+        default_value: 0.1
     ```
 
 
@@ -583,6 +586,7 @@ The rule definition YAML file *percentile/anomaly_stationary_percentile_moving_a
           \ exist to run the calculation."
         data_type: double
         required: true
+        default_value: 0.1
     ```
 
 
@@ -755,8 +759,6 @@ The rule definition YAML file *percentile/change_percentile_moving_30_days.dqoru
           \ is a 30 time periods (days, etc.) time window, but at least 10 readouts must\
           \ exist to run the calculation."
         data_type: double
-        sample_values:
-        - 5
       - field_name: percentile_below
         display_name: percentile_below
         help_text: "Probability that the current sensor readout will achieve values lesser\
@@ -767,8 +769,6 @@ The rule definition YAML file *percentile/change_percentile_moving_30_days.dqoru
           \ is a 30 time periods (days, etc.) time window, but at least 10 readouts must\
           \ exist to run the calculation."
         data_type: double
-        sample_values:
-        - 5
     ```
 
 
@@ -953,8 +953,6 @@ The rule definition YAML file *percentile/change_percentile_moving_60_days.dqoru
           \ is a 60 time periods (days, etc.) time window, but at least 20 readouts must\
           \ exist to run the calculation."
         data_type: double
-        sample_values:
-        - 5
       - field_name: percentile_below
         display_name: percentile_below
         help_text: "Probability that the current sensor readout will achieve values lesser\
@@ -965,8 +963,6 @@ The rule definition YAML file *percentile/change_percentile_moving_60_days.dqoru
           \ is a 60 time periods (days, etc.) time window, but at least 20 readouts must\
           \ exist to run the calculation."
         data_type: double
-        sample_values:
-        - 5
     ```
 
 
@@ -1151,8 +1147,6 @@ The rule definition YAML file *percentile/change_percentile_moving_7_days.dqorul
           \ is a 7 time periods (days, etc.) time window, but at least 3 readouts must\
           \ exist to run the calculation."
         data_type: double
-        sample_values:
-        - 5
       - field_name: percentile_below
         display_name: percentile_below
         help_text: "Probability that the current sensor readout will achieve values lesser\
@@ -1163,8 +1157,6 @@ The rule definition YAML file *percentile/change_percentile_moving_7_days.dqorul
           \ is a 7 time periods (days, etc.) time window, but at least 3 readouts must\
           \ exist to run the calculation."
         data_type: double
-        sample_values:
-        - 5
     ```
 
 
@@ -1348,8 +1340,6 @@ The rule definition YAML file *percentile/percentile_moving_30_days.dqorule.yaml
           \ is a 30 time periods (days, etc.) time window, but at least 10 readouts must\
           \ exist to run the calculation."
         data_type: double
-        sample_values:
-        - 5
       - field_name: percentile_below
         display_name: percentile_below
         help_text: "Probability that the current sensor readout will achieve values lesser\
@@ -1360,8 +1350,6 @@ The rule definition YAML file *percentile/percentile_moving_30_days.dqorule.yaml
           \ is a 30 time periods (days, etc.) time window, but at least 10 readouts must\
           \ exist to run the calculation."
         data_type: double
-        sample_values:
-        - 5
     ```
 
 
@@ -1542,8 +1530,6 @@ The rule definition YAML file *percentile/percentile_moving_60_days.dqorule.yaml
           \ is a 60 time periods (days, etc.) time window, but at least 20 readouts must\
           \ exist to run the calculation."
         data_type: double
-        sample_values:
-        - 5
       - field_name: percentile_below
         display_name: percentile_below
         help_text: "Probability that the current sensor readout will achieve values lesser\
@@ -1554,8 +1540,6 @@ The rule definition YAML file *percentile/percentile_moving_60_days.dqorule.yaml
           \ is a 60 time periods (days, etc.) time window, but at least 20 readouts must\
           \ exist to run the calculation."
         data_type: double
-        sample_values:
-        - 5
     ```
 
 
@@ -1736,8 +1720,6 @@ The rule definition YAML file *percentile/percentile_moving_7_days.dqorule.yaml*
           \ is a 7 time periods (days, etc.) time window, but at least 3 readouts must\
           \ exist to run the calculation."
         data_type: double
-        sample_values:
-        - 5
       - field_name: percentile_below
         display_name: percentile_below
         help_text: "Probability that the current sensor readout will achieve values lesser\
@@ -1748,8 +1730,6 @@ The rule definition YAML file *percentile/percentile_moving_7_days.dqorule.yaml*
           \ is a 7 time periods (days, etc.) time window, but at least 3 readouts must\
           \ exist to run the calculation."
         data_type: double
-        sample_values:
-        - 5
     ```
 
 
