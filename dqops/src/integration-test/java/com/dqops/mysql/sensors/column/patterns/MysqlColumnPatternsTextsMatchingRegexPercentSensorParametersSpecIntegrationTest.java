@@ -46,7 +46,7 @@ public class MysqlColumnPatternsTextsMatchingRegexPercentSensorParametersSpecInt
 
     @BeforeEach
     void setUp() {
-		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.string_test_data, ProviderType.bigquery);
+		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.string_test_data, ProviderType.mysql);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnPatternsTextsMatchingRegexPercentSensorParametersSpec();
@@ -56,7 +56,7 @@ public class MysqlColumnPatternsTextsMatchingRegexPercentSensorParametersSpecInt
 
     @Test
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
-        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$");
+        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,4}$");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "email", this.checkSpec);
@@ -66,12 +66,12 @@ public class MysqlColumnPatternsTextsMatchingRegexPercentSensorParametersSpecInt
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(40.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(40.0F, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
-        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$");
+        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,4}$");
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "email", this.checkSpec, CheckTimeScale.daily);
 
@@ -80,12 +80,12 @@ public class MysqlColumnPatternsTextsMatchingRegexPercentSensorParametersSpecInt
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(40.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(40.0F, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
-        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$");
+        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,4}$");
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "email", this.checkSpec, CheckTimeScale.monthly);
 
@@ -94,12 +94,12 @@ public class MysqlColumnPatternsTextsMatchingRegexPercentSensorParametersSpecInt
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(40.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(40.0F, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
-        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$");
+        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,4}$");
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "email", this.checkSpec, CheckTimeScale.daily,"date");
 
@@ -108,12 +108,12 @@ public class MysqlColumnPatternsTextsMatchingRegexPercentSensorParametersSpecInt
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(83.333, (double) resultTable.column(0).get(0), 3);
+        Assertions.assertEquals(83.33333F, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
-        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$");
+        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,4}$");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "email", this.checkSpec, CheckTimeScale.monthly,"date");
@@ -123,6 +123,6 @@ public class MysqlColumnPatternsTextsMatchingRegexPercentSensorParametersSpecInt
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(40.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(40.0F, resultTable.column(0).get(0));
     }
 }

@@ -15,6 +15,7 @@
  */
 package com.dqops.connectors;
 
+import com.dqops.connectors.mysql.MysqlEngineType;
 import com.dqops.core.jobqueue.JobCancellationToken;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
@@ -268,6 +269,7 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
 
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("SELECT * FROM ");
+
         String databaseName = providerSpecificConfiguration.getDatabase();
         sqlBuilder.append(getInformationSchemaName());
         sqlBuilder.append(".COLUMNS ");

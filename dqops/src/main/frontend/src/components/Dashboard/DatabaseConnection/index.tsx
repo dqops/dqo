@@ -40,6 +40,7 @@ import SparkConnection from './SparkConnection';
 import SparkLogo from '../../SvgIcon/svg/spark.svg';
 import DatabricksConnection from './DatabricksConnection';
 import DatabricksLogo from '../../SvgIcon/svg/databricks.svg';
+import SingleStoreDbLogo from '../../SvgIcon/svg/single-store.svg';
 import clsx from 'clsx';
 
 interface IDatabaseConnectionProps {
@@ -262,6 +263,8 @@ const DatabaseConnection = ({
         mysql={database.mysql}
         onChange={(mysql) => onChange({ ...database, mysql })}
         sharedCredentials={sharedCredentials}
+        nameOfDatabase={nameOfDatabase ? nameOfDatabase : ''}
+        onNameOfDatabaseChange={onNameOfDatabaseChange}
       />
     ),
     [ConnectionModelProviderTypeEnum.oracle]: (

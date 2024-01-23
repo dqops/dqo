@@ -21,6 +21,7 @@ import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.bigquery.BigQueryConnectionSpecObjectMother;
 import com.dqops.connectors.databricks.DatabricksConnectionSpecObjectMother;
 import com.dqops.connectors.mysql.MysqlConnectionSpecObjectMother;
+import com.dqops.connectors.mysql.SingleStoreDbConnectionSpecObjectMother;
 import com.dqops.connectors.oracle.OracleConnectionSpecObjectMother;
 import com.dqops.connectors.postgresql.PostgresqlConnectionSpecObjectMother;
 import com.dqops.connectors.presto.PrestoConnectionSpecObjectMother;
@@ -34,7 +35,6 @@ import com.dqops.core.secrets.SecretValueProviderObjectMother;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
 import com.dqops.metadata.sources.*;
-import com.dqops.metadata.sources.TableSpec;
 import com.dqops.sampledata.files.CsvSampleFilesObjectMother;
 import com.dqops.sampledata.files.SampleTableFromCsv;
 import org.junit.jupiter.api.Assertions;
@@ -92,10 +92,11 @@ public class SampleTableMetadataObjectMother {
 
     /**
      * Returns the default schema (physical schema name) where tables are created in a testable database.
-     * @param providerType Provider type.
+     * @param connectionSpec Connection spec with set provider type.
      * @return Schema name.
      */
-    public static String getSchemaForProvider(ProviderType providerType) {
+    public static String getSchemaForProvider(ConnectionSpec connectionSpec) {
+        ProviderType providerType = connectionSpec.getProviderType();
         switch (providerType) {
             case bigquery:
                 return BigQueryConnectionSpecObjectMother.getDatasetName();
@@ -119,8 +120,14 @@ public class SampleTableMetadataObjectMother {
                 return TrinoConnectionSpecObjectMother.getSchemaName();
 
             case mysql:
-                return MysqlConnectionSpecObjectMother.getSchemaName();
-
+                switch(connectionSpec.getMysql().getMysqlEngineType()){
+                    case mysql:
+                        return MysqlConnectionSpecObjectMother.getSchemaName();
+                    case singlestoredb:
+                        return SingleStoreDbConnectionSpecObjectMother.getSchemaName();
+                    default:
+                        throw new RuntimeException("Given enum is not supported : " + connectionSpec.getMysql().getMysqlEngineType());
+                }
             case oracle:
                 return OracleConnectionSpecObjectMother.getSchemaName();
 
@@ -170,7 +177,7 @@ public class SampleTableMetadataObjectMother {
         String connectionName = getConnectionNameForProvider(providerType);
         SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(null);
         ConnectionSpec connectionSpec = connectionSpecRaw.expandAndTrim(SecretValueProviderObjectMother.getInstance(), secretValueLookupContext);
-        String targetSchema = getSchemaForProvider(providerType);
+        String targetSchema = getSchemaForProvider(connectionSpec);
         SampleTableFromCsv sampleTable = CsvSampleFilesObjectMother.getSampleTable(csvFileName);
         PhysicalTableName physicalTableName = new PhysicalTableName(targetSchema, sampleTable.getHashedTableName());
         TableSpec tableSpec = new TableSpec(physicalTableName);
@@ -207,8 +214,20 @@ public class SampleTableMetadataObjectMother {
      * @return Sample table metadata.
      */
     public static SampleTableMetadata createSampleTableMetadataWithNonExistingTable(String schemaName, String tableName, ProviderType providerType) {
-        String connectionName = getConnectionNameForProvider(providerType);
         ConnectionSpec connectionSpecRaw = makeConnectionSpecForProvider(providerType); // in order to support different database versions, we can accept a ConnectionSpec as a parameter
+        return createSampleTableMetadataWithNonExistingTable(schemaName, tableName, connectionSpecRaw);
+    }
+
+    /**
+     * Creates a sample table metadata with a non-existing table that cannot be used for sql execution.
+     * Schema and table name should not point to the existing table.
+     * @param schemaName A schema name.
+     * @param tableName Imagined table name that should not exist in real database.
+     * @param connectionSpecRaw Target connection spec.
+     * @return Sample table metadata.
+     */
+    public static SampleTableMetadata createSampleTableMetadataWithNonExistingTable(String schemaName, String tableName, ConnectionSpec connectionSpecRaw) {
+        String connectionName = getConnectionNameForProvider(connectionSpecRaw.getProviderType());
         SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(null);
         ConnectionSpec connectionSpec = connectionSpecRaw.expandAndTrim(SecretValueProviderObjectMother.getInstance(), secretValueLookupContext);
         TableSpec tableSpec = new TableSpec(new PhysicalTableName(schemaName, tableName));

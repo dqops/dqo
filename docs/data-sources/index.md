@@ -149,6 +149,11 @@ DQOps supports the following data sources.
     <p>Presto</p>
   </a>
 
+  <a href="single-store/" class="four-divs-element">
+    <img src="https://dqops.com/docs/images/data-sources/single-store.svg">
+    <p>SingleStoreDB</p>
+  </a>
+
   <a href="snowflake/" class="four-divs-element">
     <img src="https://dqops.com/docs/images/data-sources/snowflake.svg">
     <p>Snowflake</p>

@@ -78,6 +78,7 @@ nav:
       - PostgreSQL: "data-sources/postgresql.md"
       - Presto: "data-sources/presto.md"
       - Redshift: "data-sources/redshift.md"
+      - SingleStoreDB: "data-sources/single-store.md"
       - Snowflake: "data-sources/snowflake.md"
       - Spark: "data-sources/spark.md"
       - SQL Server: "data-sources/sql-server.md"

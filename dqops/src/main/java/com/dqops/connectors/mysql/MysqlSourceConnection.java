@@ -21,6 +21,7 @@ import com.dqops.connectors.SourceSchemaModel;
 import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
+import com.dqops.connectors.mysql.singlestore.SingleStoreDbSourceConnection;
 import com.dqops.core.jobqueue.JobCancellationToken;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
@@ -121,6 +122,28 @@ public class MysqlSourceConnection extends AbstractJdbcSourceConnection {
      */
     @Override
     public HikariConfig createHikariConfig(SecretValueLookupContext secretValueLookupContext) {
+        MysqlParametersSpec mysqlParametersSpec = this.getConnectionSpec().getMysql();
+
+        switch(mysqlParametersSpec.getMysqlEngineType()){
+            case singlestoredb:
+                return SingleStoreDbSourceConnection.createHikariConfig(
+                        secretValueLookupContext,
+                        mysqlParametersSpec,
+                        this.getSecretValueProvider());
+            case mysql:
+                return createHikariConfigForMysql(secretValueLookupContext);
+            default:
+                throw new RuntimeException("Given enum is not supported : " + mysqlParametersSpec.getMysqlEngineType());
+        }
+    }
+
+    /**
+     * Creates a hikari connection pool config for the connection specification for mysql.
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
+     * @return Hikari config.
+     */
+    private HikariConfig createHikariConfigForMysql(SecretValueLookupContext secretValueLookupContext) {
+
         HikariConfig hikariConfig = new HikariConfig();
         ConnectionSpec connectionSpec = this.getConnectionSpec();
         MysqlParametersSpec mysqlParametersSpec = connectionSpec.getMysql();
@@ -188,6 +211,24 @@ public class MysqlSourceConnection extends AbstractJdbcSourceConnection {
         try (MysqlResultSet mysqlResultSet = new MysqlResultSet(results)) {
             Table resultTable = Table.read().db(mysqlResultSet, sqlQueryStatement);
             return resultTable;
+        }
+    }
+
+    /**
+     * Creates an SQL for listing columns in the given tables.
+     * @param schemaName Schema name (bigquery dataset name).
+     * @param tableNames Table names to list.
+     * @return SQL of the INFORMATION_SCHEMA query.
+     */
+    public String buildListColumnsSql(String schemaName, List<String> tableNames) {
+        MysqlParametersSpec mysqlParametersSpec = getConnectionSpec().getMysql();
+        switch(mysqlParametersSpec.getMysqlEngineType()){
+            case singlestoredb:
+                return SingleStoreDbSourceConnection.buildListColumnsSql(getConnectionSpec(), schemaName, tableNames, this.getInformationSchemaName());
+            case mysql:
+                return super.buildListColumnsSql(schemaName, tableNames);
+            default:
+                throw new RuntimeException("Given enum is not supported : " + mysqlParametersSpec.getMysqlEngineType());
         }
     }
 
