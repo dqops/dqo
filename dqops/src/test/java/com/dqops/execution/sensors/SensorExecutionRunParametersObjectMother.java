@@ -146,9 +146,11 @@ public class SensorExecutionRunParametersObjectMother {
 
         if (timeScale == CheckTimeScale.daily) {
             userTimeWindowFilters.setDailyPartitioningRecentDays(365 * 10 + 3);  // TODO: analyze the last 10 years of data
+            userTimeWindowFilters.setDailyPartitioningIncludeToday(false);
         }
         else if (timeScale == CheckTimeScale.monthly) {
             userTimeWindowFilters.setMonthlyPartitioningRecentMonths(12 * 10);   // TODO: analyze the last 10 years of data
+            userTimeWindowFilters.setMonthlyPartitioningIncludeCurrentMonth(false);
         }
 
         SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(null, connectionSpec, tableSpec, null,
@@ -264,9 +266,11 @@ public class SensorExecutionRunParametersObjectMother {
 
         if (checkTimeScale == CheckTimeScale.daily) {
             userTimeWindowFilters.setDailyPartitioningRecentDays(365 * 10 + 3);  // TODO: analyze the last 10 years of data
+            userTimeWindowFilters.setDailyPartitioningIncludeToday(false);
         }
         else if (checkTimeScale == CheckTimeScale.monthly) {
             userTimeWindowFilters.setMonthlyPartitioningRecentMonths(12 * 10);   // TODO: analyze the last 10 years of data
+            userTimeWindowFilters.setMonthlyPartitioningIncludeCurrentMonth(false);
         }
 
         SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(null, connectionSpec, tableSpec, columnSpec,
