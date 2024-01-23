@@ -93,7 +93,6 @@ const MySQLConnection = ({
     });
   };
 
-  // todo: selection of single store does not set the engine type - bug with nameOfDatabase
   return (
     <SectionWrapper title="MySQL connection parameters" className="mb-4">
       <Select
