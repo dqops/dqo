@@ -219,7 +219,6 @@ const schemaReducer = (state = initialState, action: any) => {
       // updated existing parent 
         if (not_filtered_job_dictionary_state[jobChange.jobId?.jobId]) {
             let newJobState = Object.assign({}, not_filtered_job_dictionary_state[jobChange.jobId?.jobId]);
-            not_filtered_job_dictionary_state[jobChange.jobId?.jobId] = newJobState;
               if (jobChange.status) {
                 newJobState.status = jobChange.status;
               }
@@ -228,7 +227,9 @@ const schemaReducer = (state = initialState, action: any) => {
               }
               if (jobChange.updatedModel) {
                 newJobState = { ...newJobState, ...jobChange.updatedModel };
+                console.log(jobChange.updatedModel, newJobState)
               }
+              not_filtered_job_dictionary_state[jobChange.jobId?.jobId] = {...newJobState};
         }
 
         //updated existing child

@@ -28,23 +28,22 @@ const JobItem = ({
   notifnumber?: number;
   canUserCancelJobs?: boolean
 }) => {
-  const dispatch = useActionDispatch();
-
-  const { job_dictionary_state } = useSelector(
-    (state: IRootState) => state.job || {}
-    );
-
   const [sizeOfNot, setSizeOfNot] = useState<number | undefined>(notifnumber);
+  const [open, setOpen] = useState(false);
+  const [open2, setOpen2] = useState(false);
+  
+  const dispatch = useActionDispatch();
   const reduceCount = () => {
     dispatch(reduceCounter(true, sizeOfNot));
   };
   
-  const job = useMemo(() => {
+  const { job_dictionary_state } = useSelector(
+  (state: IRootState) => state.job || {}
+  );
+  
+  const job = useMemo(() => { 
     return job_dictionary_state[jobId]
-  }, [jobId, job_dictionary_state])
-
-  const [open, setOpen] = useState(false);
-  const [open2, setOpen2] = useState(false);
+  }, [job_dictionary_state[jobId]])
 
   const renderValue = (value: any) => {
     if (typeof value === 'boolean') {
@@ -60,7 +59,7 @@ const JobItem = ({
     await JobApiClient.cancelJob(jobId.toString());
   };
 
-  const getColor = (status: CheckResultsOverviewDataModelStatusesEnum) => {
+  const getColor = (status?: CheckResultsOverviewDataModelStatusesEnum) => {
     switch (status) {
       case 'valid':
         return '#029a80';
@@ -108,7 +107,7 @@ const JobItem = ({
       <AccordionHeader className="!outline-none" onClick={() => setOpen(!open)}>
         <div className="group flex justify-between items-center text-sm w-full text-gray-700 ">
           <div className="flex space-x-1 items-center">
-            <div>{job?.jobType}</div>
+            <div>{(job.jobType !== undefined && String(job.jobType).length !== 0) ? job.jobType.replace(/_/g, " ") : "Error"}</div>
           </div>
           <div className="flex items-center gap-x-2">
             {job.status === DqoJobHistoryEntryModelStatusEnum.running ? (
@@ -131,12 +130,8 @@ const JobItem = ({
                       style={{
                         backgroundColor: getColor(
                           job.parameters?.runChecksParameters?.run_checks_result?.execution_errors && 
-                          job.parameters?.runChecksParameters?.run_checks_result?.execution_errors > 0 ? 'execution_error' :
-                          (job.parameters?.runChecksParameters?.run_checks_result
-                            ?.highest_severity
-                            ? job.parameters?.runChecksParameters
-                                ?.run_checks_result?.highest_severity
-                            : 'error')
+                          job.parameters?.runChecksParameters?.run_checks_result?.execution_errors > 0 ? undefined :
+                          (job.parameters?.runChecksParameters?.run_checks_result?.highest_severity)
                         )
                       }}
                     />
