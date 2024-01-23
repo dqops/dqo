@@ -151,7 +151,7 @@ DQOps supports the following data sources.
 
   <a href="single-store/" class="four-divs-element">
     <img src="https://dqops.com/docs/images/data-sources/single-store.svg">
-    <p>Single Store</p>
+    <p>SingleStoreDB</p>
   </a>
 
   <a href="snowflake/" class="four-divs-element">

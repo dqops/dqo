@@ -21,7 +21,7 @@ import com.dqops.connectors.SourceSchemaModel;
 import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
-import com.dqops.connectors.mysql.singlestore.SingleStoreSourceConnection;
+import com.dqops.connectors.mysql.singlestore.SingleStoreDbSourceConnection;
 import com.dqops.core.jobqueue.JobCancellationToken;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
@@ -125,8 +125,8 @@ public class MysqlSourceConnection extends AbstractJdbcSourceConnection {
         MysqlParametersSpec mysqlParametersSpec = this.getConnectionSpec().getMysql();
 
         switch(mysqlParametersSpec.getMysqlEngineType()){
-            case singlestore:
-                return SingleStoreSourceConnection.createHikariConfig(
+            case singlestoredb:
+                return SingleStoreDbSourceConnection.createHikariConfig(
                         secretValueLookupContext,
                         mysqlParametersSpec,
                         this.getSecretValueProvider());
@@ -223,8 +223,8 @@ public class MysqlSourceConnection extends AbstractJdbcSourceConnection {
     public String buildListColumnsSql(String schemaName, List<String> tableNames) {
         MysqlParametersSpec mysqlParametersSpec = getConnectionSpec().getMysql();
         switch(mysqlParametersSpec.getMysqlEngineType()){
-            case singlestore:
-                return SingleStoreSourceConnection.buildListColumnsSql(getConnectionSpec(), schemaName, tableNames, this.getInformationSchemaName());
+            case singlestoredb:
+                return SingleStoreDbSourceConnection.buildListColumnsSql(getConnectionSpec(), schemaName, tableNames, this.getInformationSchemaName());
             case mysql:
                 return super.buildListColumnsSql(schemaName, tableNames);
             default:

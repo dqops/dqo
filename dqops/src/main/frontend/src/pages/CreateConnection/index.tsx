@@ -9,7 +9,7 @@ import {
   ConnectionModel, 
   ConnectionModelProviderTypeEnum,
   MysqlParametersSpecMysqlEngineTypeEnum,
-  SingleStoreParametersSpecLoadBalancingModeEnum,
+  SingleStoreDbParametersSpecLoadBalancingModeEnum,
   TrinoParametersSpecAthenaAuthenticationModeEnum,
   TrinoParametersSpecTrinoEngineTypeEnum } from '../../api';
 import { BigQueryAuthenticationMode } from '../../shared/enums/bigquery.enum';
@@ -71,10 +71,10 @@ const CreateConnection = () => {
       case ConnectionModelProviderTypeEnum.mysql: {
         copiedDatabase.mysql = {
           port: '3306',
-          mysql_engine_type: (nameOfDatabase?.toLowerCase().replace(" ","") === MysqlParametersSpecMysqlEngineTypeEnum.singlestore 
-            ? MysqlParametersSpecMysqlEngineTypeEnum.singlestore : MysqlParametersSpecMysqlEngineTypeEnum.mysql),
-          single_store_parameters_spec: {
-            load_balancing_mode: SingleStoreParametersSpecLoadBalancingModeEnum.none,
+          mysql_engine_type: (nameOfDatabase?.toLowerCase() === MysqlParametersSpecMysqlEngineTypeEnum.singlestoredb
+            ? MysqlParametersSpecMysqlEngineTypeEnum.singlestoredb : MysqlParametersSpecMysqlEngineTypeEnum.mysql),
+          single_store_db_parameters_spec: {
+            load_balancing_mode: SingleStoreDbParametersSpecLoadBalancingModeEnum.none,
             use_ssl: true
           }
         };

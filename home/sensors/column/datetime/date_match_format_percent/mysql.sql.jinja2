@@ -13,7 +13,7 @@
 {% endmacro -%}
 
 {% macro render_regex(column, regex_pattern) %}
-    {%- if lib.engine_type == 'singlestore' %}{{ column }} RLIKE {{ regex_pattern }}
+    {%- if lib.engine_type == 'singlestoredb' %}{{ column }} RLIKE {{ regex_pattern }}
     {%- else -%}REGEXP_LIKE({{ column }}, {{ regex_pattern }})
     {%- endif -%}
 {% endmacro %}

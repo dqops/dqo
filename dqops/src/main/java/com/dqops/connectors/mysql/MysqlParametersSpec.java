@@ -16,7 +16,7 @@
 package com.dqops.connectors.mysql;
 
 import com.dqops.connectors.ConnectionProviderSpecificParameters;
-import com.dqops.connectors.mysql.singlestore.SingleStoreParametersSpec;
+import com.dqops.connectors.mysql.singlestore.SingleStoreDbParametersSpec;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -74,9 +74,9 @@ public class MysqlParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("SslMode MySQL connection parameter.")
     private MySqlSslMode sslmode;
 
-    @CommandLine.Option(names = {"--single-store-parameters-spec"}, description = "Single Store parameters spec.")
-    @JsonPropertyDescription("Single Store parameters spec.")
-    private SingleStoreParametersSpec singleStoreParametersSpec;
+    @CommandLine.Option(names = {"--single-store-parameters-spec"}, description = "Single Store DB parameters spec.")
+    @JsonPropertyDescription("Single Store DB parameters spec.")
+    private SingleStoreDbParametersSpec singleStoreDbParametersSpec;
 
     @CommandLine.Option(names = {"--mysql-engine"}, description = "MySQL engine type.")
     @JsonPropertyDescription("MySQL engine type. Supports also a ${MYSQL_ENGINE} configuration with a custom environment variable.")
@@ -129,8 +129,8 @@ public class MysqlParametersSpec extends BaseProviderParametersSpec
         switch (mysqlEngineType){
             case mysql:
                 return database;
-            case singlestore:
-                return SingleStoreParametersSpec.DEFAULT_CATALOG_NAME; // database and schema is the same thing for the single store db
+            case singlestoredb:
+                return SingleStoreDbParametersSpec.DEFAULT_CATALOG_NAME; // database and schema is the same thing for the single store db
             default:
                 throw new RuntimeException("Given enum is not supported : " + mysqlEngineType);
         }
@@ -231,20 +231,20 @@ public class MysqlParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
-     * Returns the SingleStoreParametersSpec
-     * @return SingleStoreParametersSpec
+     * Returns the SingleStoreDbParametersSpec
+     * @return SingleStoreDbParametersSpec
      */
-    public SingleStoreParametersSpec getSingleStoreParametersSpec() {
-        return singleStoreParametersSpec;
+    public SingleStoreDbParametersSpec getSingleStoreDbParametersSpec() {
+        return singleStoreDbParametersSpec;
     }
 
     /**
-     * Sets a SingleStoreParametersSpec
-     * @param singleStoreParametersSpec SingleStoreParametersSpec
+     * Sets a SingleStoreDbParametersSpec
+     * @param singleStoreDbParametersSpec SingleStoreDbParametersSpec
      */
-    public void setSingleStoreParametersSpec(SingleStoreParametersSpec singleStoreParametersSpec) {
-        setDirtyIf(!Objects.equals(this.singleStoreParametersSpec, singleStoreParametersSpec));
-        this.singleStoreParametersSpec = singleStoreParametersSpec;
+    public void setSingleStoreDbParametersSpec(SingleStoreDbParametersSpec singleStoreDbParametersSpec) {
+        setDirtyIf(!Objects.equals(this.singleStoreDbParametersSpec, singleStoreDbParametersSpec));
+        this.singleStoreDbParametersSpec = singleStoreDbParametersSpec;
     }
 
 
@@ -300,8 +300,8 @@ public class MysqlParametersSpec extends BaseProviderParametersSpec
         cloned.options = secretValueProvider.expandValue(cloned.options, lookupContext);
         cloned.properties = secretValueProvider.expandProperties(cloned.properties, lookupContext);
 
-        if(cloned.singleStoreParametersSpec != null){
-            cloned.singleStoreParametersSpec = cloned.singleStoreParametersSpec.expandAndTrim(secretValueProvider, lookupContext);
+        if(cloned.singleStoreDbParametersSpec != null){
+            cloned.singleStoreDbParametersSpec = cloned.singleStoreDbParametersSpec.expandAndTrim(secretValueProvider, lookupContext);
         }
         cloned.mysqlEngineType = MysqlEngineType.valueOf(secretValueProvider.expandValue(cloned.mysqlEngineType.toString(), lookupContext));
 

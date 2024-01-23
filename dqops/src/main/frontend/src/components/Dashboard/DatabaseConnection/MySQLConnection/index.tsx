@@ -3,10 +3,10 @@ import React from 'react';
 import {
   MysqlParametersSpec,
   MysqlParametersSpecSslmodeEnum,
-  SingleStoreParametersSpecLoadBalancingModeEnum,
+  SingleStoreDbParametersSpecLoadBalancingModeEnum,
   SharedCredentialListModel,
   MysqlParametersSpecMysqlEngineTypeEnum,
-  SingleStoreParametersSpec
+  SingleStoreDbParametersSpec
 } from '../../../../api';
 import JdbcPropertiesView from '../JdbcProperties';
 import Select from '../../../Select';
@@ -51,15 +51,15 @@ const sslModes = [
 const loadBalancingMode = [
   {
     label: 'None',
-    value: SingleStoreParametersSpecLoadBalancingModeEnum.none
+    value: SingleStoreDbParametersSpecLoadBalancingModeEnum.none
   },
   {
     label: 'Sequential',
-    value: SingleStoreParametersSpecLoadBalancingModeEnum.sequential
+    value: SingleStoreDbParametersSpecLoadBalancingModeEnum.sequential
   },
   {
     label: 'LoadBalance',
-    value: SingleStoreParametersSpecLoadBalancingModeEnum.loadbalance
+    value: SingleStoreDbParametersSpecLoadBalancingModeEnum.loadbalance
   }
 ];
 
@@ -69,8 +69,8 @@ const mysqlEngineType = [
     value: MysqlParametersSpecMysqlEngineTypeEnum.mysql
   },
   {
-    label: 'singlestore',
-    value: MysqlParametersSpecMysqlEngineTypeEnum.singlestore
+    label: 'singlestoredb',
+    value: MysqlParametersSpecMysqlEngineTypeEnum.singlestoredb
   }
 ]
 
@@ -86,9 +86,9 @@ const MySQLConnection = ({
     onChange({
       ...mysql,
       ...obj,
-      single_store_parameters_spec: {
-        ...mysql?.single_store_parameters_spec,
-        ...obj?.single_store_parameters_spec
+      single_store_db_parameters_spec: {
+        ...mysql?.single_store_db_parameters_spec,
+        ...obj?.single_store_db_parameters_spec
       },
     });
   };
@@ -126,33 +126,33 @@ const MySQLConnection = ({
           />
         </>
       }
-      { mysql?.mysql_engine_type === MysqlParametersSpecMysqlEngineTypeEnum.singlestore &&
+      { mysql?.mysql_engine_type === MysqlParametersSpecMysqlEngineTypeEnum.singlestoredb &&
       <>
         <Select
           label="Load-Balancing Mode"
           options={loadBalancingMode}
           className="mb-4"
-          value={mysql?.single_store_parameters_spec?.load_balancing_mode}
+          value={mysql?.single_store_db_parameters_spec?.load_balancing_mode}
           onChange={(value) => handleChange({ 
-            single_store_parameters_spec : { load_balancing_mode: value } 
+            single_store_db_parameters_spec : { load_balancing_mode: value } 
           })}
         />
         <FieldTypeInput
           data={sharedCredentials}
           label="Host Descriptions"
           className="mb-4"
-          value={mysql?.single_store_parameters_spec?.host_descriptions?.join(",")}
+          value={mysql?.single_store_db_parameters_spec?.host_descriptions?.join(",")}
           onChange={(value) => handleChange({ 
-            single_store_parameters_spec: { host_descriptions: value.split(",") } 
+            single_store_db_parameters_spec: { host_descriptions: value.split(",") } 
           })}
         />
         <FieldTypeInput
           data={sharedCredentials}
           label="Database/Schema"
           className="mb-4"
-          value={mysql?.single_store_parameters_spec?.schema}
+          value={mysql?.single_store_db_parameters_spec?.schema}
           onChange={(value) => handleChange({ 
-            single_store_parameters_spec: { schema: value } 
+            single_store_db_parameters_spec: { schema: value } 
           })}
         />
       </>
@@ -194,11 +194,11 @@ const MySQLConnection = ({
         />
       }
 
-      { mysql?.mysql_engine_type === MysqlParametersSpecMysqlEngineTypeEnum.singlestore &&
+      { mysql?.mysql_engine_type === MysqlParametersSpecMysqlEngineTypeEnum.singlestoredb &&
         <Checkbox
-          checked={ mysql?.single_store_parameters_spec?.use_ssl }
+          checked={ mysql?.single_store_db_parameters_spec?.use_ssl }
           onChange={(checked) => handleChange({ 
-            single_store_parameters_spec : { use_ssl: checked } 
+            single_store_db_parameters_spec : { use_ssl: checked } 
           })}
           label="Use SSL"
           labelPosition="left"

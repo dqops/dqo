@@ -20,7 +20,7 @@ import com.dqops.cli.terminal.TerminalReader;
 import com.dqops.cli.terminal.TerminalWriter;
 import com.dqops.connectors.AbstractSqlConnectionProvider;
 import com.dqops.connectors.ProviderDialectSettings;
-import com.dqops.connectors.mysql.singlestore.SingleStoreConnectionProvider;
+import com.dqops.connectors.mysql.singlestore.SingleStoreDbConnectionProvider;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
@@ -111,8 +111,8 @@ public class MysqlConnectionProvider extends AbstractSqlConnectionProvider {
         }
 
         switch(mysqlParametersSpec.getMysqlEngineType()){
-            case singlestore:
-                SingleStoreConnectionProvider.promptForConnectionParameters(connectionSpec, isHeadless, terminalReader);
+            case singlestoredb:
+                SingleStoreDbConnectionProvider.promptForConnectionParameters(connectionSpec, isHeadless, terminalReader);
                 break;
             case mysql:
                 promptForConnectionParametersForMysql(connectionSpec, isHeadless, terminalReader);

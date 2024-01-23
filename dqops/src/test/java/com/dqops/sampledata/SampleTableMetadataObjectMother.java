@@ -21,7 +21,7 @@ import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.bigquery.BigQueryConnectionSpecObjectMother;
 import com.dqops.connectors.databricks.DatabricksConnectionSpecObjectMother;
 import com.dqops.connectors.mysql.MysqlConnectionSpecObjectMother;
-import com.dqops.connectors.mysql.SingleStoreConnectionSpecObjectMother;
+import com.dqops.connectors.mysql.SingleStoreDbConnectionSpecObjectMother;
 import com.dqops.connectors.oracle.OracleConnectionSpecObjectMother;
 import com.dqops.connectors.postgresql.PostgresqlConnectionSpecObjectMother;
 import com.dqops.connectors.presto.PrestoConnectionSpecObjectMother;
@@ -35,7 +35,6 @@ import com.dqops.core.secrets.SecretValueProviderObjectMother;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
 import com.dqops.metadata.sources.*;
-import com.dqops.metadata.sources.TableSpec;
 import com.dqops.sampledata.files.CsvSampleFilesObjectMother;
 import com.dqops.sampledata.files.SampleTableFromCsv;
 import org.junit.jupiter.api.Assertions;
@@ -124,8 +123,8 @@ public class SampleTableMetadataObjectMother {
                 switch(connectionSpec.getMysql().getMysqlEngineType()){
                     case mysql:
                         return MysqlConnectionSpecObjectMother.getSchemaName();
-                    case singlestore:
-                        return SingleStoreConnectionSpecObjectMother.getSchemaName();
+                    case singlestoredb:
+                        return SingleStoreDbConnectionSpecObjectMother.getSchemaName();
                     default:
                         throw new RuntimeException("Given enum is not supported : " + connectionSpec.getMysql().getMysqlEngineType());
                 }

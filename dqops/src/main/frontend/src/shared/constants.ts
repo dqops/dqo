@@ -431,9 +431,9 @@ export const databaseOptions: IDatabaseOption[] = [
   },
   {
     type: ConnectionModelProviderTypeEnum.mysql,
-    name: 'Single Store',
-    iconName: 'singlestore',
-    displayName: 'Single Store'
+    name: 'SingleStoreDB',
+    iconName: 'singlestoredb',
+    displayName: 'SingleStoreDB'
   },
   {
     type: ConnectionModelProviderTypeEnum.spark,

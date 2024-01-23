@@ -10,15 +10,15 @@ public enum MysqlEngineType {
     @JsonProperty("mysql")
     mysql,
 
-    @JsonProperty("singlestore")
-    singlestore;
+    @JsonProperty("singlestoredb")
+    singlestoredb;
 
     public String getDisplayName() {
         switch (this) {
             case mysql:
                 return "MySQL";
-            case singlestore:
-                return "Single Store";
+            case singlestoredb:
+                return "Single Store DB";
             default:
                 throw new RuntimeException("Unsupported enum: " + this.name());
         }
