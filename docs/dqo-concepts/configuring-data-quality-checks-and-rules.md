@@ -250,7 +250,8 @@ for append-only tables, financial data, and very big tables.
 
 
 ## Configure issue severity levels
-The data quality checks in DQOps allow setting different rule thresholds for different data quality issue severity levels.
+The data quality checks in DQOps allow setting different rule thresholds for different 
+[data quality issue severity levels](definition-of-data-quality-checks/index.md#issue-severity-levels).
 There are three severity levels: warning, error, and fatal. The **warning** level notifies the user about a potential 
 issue, the **error** level indicates that the issue should be resolved to maintain data quality KPI score, and 
 the **fatal** level represents a serious issue that can cause the data pipeline to stop.
