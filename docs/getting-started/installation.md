@@ -60,6 +60,20 @@ To start DQOps locally, you need:
     python -m dqops
     ```
 
+    DQOps will download the full [DQOps release package](../dqops-installation/install-dqops-from-release-package.md)
+    from GitHub, or some alternative mirrors.
+
+    When the download of the DQOps distribution starts (a ~400MB zip file), you should see the progress.
+
+    ![dqops starts downloading full distribution](https://dqops.com/docs/images/getting-started/dqops-download-by-pip-started-min.png)
+
+    After the distribution is downloaded and unzipped, DQOps will also download and install Java JRE 17.
+    Once it is done, you should see the following screen.
+
+    ![dqops finishes downloading full distribution](https://dqops.com/docs/images/getting-started/dqops-download-by-pip-finished-min.png)
+
+    In case that download stops due to network issues, DQOps will retry the download, or use an alternative mirror.
+
 2.  Initialize your `DQOps user home` folder.
 
     After installation, you will be asked whether to initialize the `DQOps user home` folder in the default location. 

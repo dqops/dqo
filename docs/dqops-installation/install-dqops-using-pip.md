@@ -120,11 +120,25 @@ After adding the *PyPi* host names to the list of trusted locations, repeat the 
 ## Start DQOps application
 
 1.  Run DQOps to finalize the installation. This process may take some time as the DQOps package must download a full DQOps
-    distribution and also install Java JRE 17.
+    distribution (~400 MB zip file) and install Java JRE 17 during the first start.
 
     ```bash
     python -m dqops
     ```
+
+    DQOps will download the full [DQOps release package](install-dqops-from-release-package.md)
+    from GitHub, or some alternative mirrors.
+
+    When the download of the DQOps distribution starts (a ~400MB zip file), you should see the progress.
+
+    ![dqops starts downloading full distribution](https://dqops.com/docs/images/getting-started/dqops-download-by-pip-started-min.png)
+
+    After the distribution is downloaded and unzipped, DQOps will also download and install Java JRE 17.
+    Once it is done, you should see the following screen.
+
+    ![dqops finishes downloading full distribution](https://dqops.com/docs/images/getting-started/dqops-download-by-pip-finished-min.png) 
+
+    In case that download stops due to network issues, DQOps will retry the download, or use an alternative mirror.
 
     !!! note "Start DQOps using a startup script"
 
