@@ -5,13 +5,16 @@ import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.sources.BaseProviderParametersSpec;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 import picocli.CommandLine;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -83,6 +86,7 @@ public class SingleStoreParametersSpec extends BaseProviderParametersSpec { // t
      * Sets the host descriptions.
      * @param hostDescriptions Host descriptions.
      */
+    @JsonSetter
     public void setHostDescriptions(List<String> hostDescriptions) {
         setDirtyIf(!Objects.equals(this.hostDescriptions, hostDescriptions));
         this.hostDescriptions = hostDescriptions;
@@ -92,6 +96,7 @@ public class SingleStoreParametersSpec extends BaseProviderParametersSpec { // t
      * Sets the host descriptions.
      * @param commaSeparatedHostDescriptions Host descriptions separated by comma character.
      */
+    @JsonIgnore
     public void setHostDescriptions(String commaSeparatedHostDescriptions) {
         setDirtyIf(!Objects.equals(this.hostDescriptions, hostDescriptions));
         this.hostDescriptions = Arrays.stream(commaSeparatedHostDescriptions.split(",")).collect(Collectors.toList());
