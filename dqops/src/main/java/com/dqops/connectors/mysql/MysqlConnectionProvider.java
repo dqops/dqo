@@ -20,6 +20,7 @@ import com.dqops.cli.terminal.TerminalReader;
 import com.dqops.cli.terminal.TerminalWriter;
 import com.dqops.connectors.AbstractSqlConnectionProvider;
 import com.dqops.connectors.ProviderDialectSettings;
+import com.dqops.connectors.mysql.singlestore.SingleStoreConnectionProvider;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
@@ -96,45 +97,34 @@ public class MysqlConnectionProvider extends AbstractSqlConnectionProvider {
      */
     @Override
     public void promptForConnectionParameters(ConnectionSpec connectionSpec, boolean isHeadless, TerminalReader terminalReader, TerminalWriter terminalWriter) {
-
-        // todo: add support of single store from cli commands
-
         MysqlParametersSpec mysqlParametersSpec = connectionSpec.getMysql();
         if (mysqlParametersSpec == null) {
             mysqlParametersSpec = new MysqlParametersSpec();
             connectionSpec.setMysql(mysqlParametersSpec);
         }
 
-        if (Strings.isNullOrEmpty(mysqlParametersSpec.getHost())) {
+        if (mysqlParametersSpec.getMysqlEngineType() == null) {
             if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--mysql-host");
+                throw new CliRequiredParameterMissingException("--mysql-engine");
             }
-
-            mysqlParametersSpec.setHost(terminalReader.prompt("MySQL host name (--mysql-host)", "${MYSQL_HOST}", false));
+            mysqlParametersSpec.setMysqlEngineType(terminalReader.promptEnum("MySQL engine type (--mysql-engine)", MysqlEngineType.class,null, false));
         }
 
-        if (Strings.isNullOrEmpty(mysqlParametersSpec.getPort())) {
-            if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--mysql-port");
-            }
-
-            mysqlParametersSpec.setPort(terminalReader.prompt("MySQL port number (--mysql-port)", "${MYSQL_PORT}", false));
-        }
-
-
-        if (Strings.isNullOrEmpty(mysqlParametersSpec.getDatabase())) {
-            if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--mysql-database");
-            }
-
-            mysqlParametersSpec.setDatabase(terminalReader.prompt("MySQL database name (--mysql-database)", "${MYSQL_DATABASE}", false));
+        switch(mysqlParametersSpec.getMysqlEngineType()){
+            case singlestore:
+                SingleStoreConnectionProvider.promptForConnectionParameters(connectionSpec, isHeadless, terminalReader);
+                break;
+            case mysql:
+                promptForConnectionParametersForMysql(connectionSpec, isHeadless, terminalReader);
+                break;
+            default:
+                throw new RuntimeException("Given enum is not supported : " + mysqlParametersSpec.getMysqlEngineType());
         }
 
         if (Strings.isNullOrEmpty(mysqlParametersSpec.getUser())) {
             if (isHeadless) {
                 throw new CliRequiredParameterMissingException("--mysql-user");
             }
-
             mysqlParametersSpec.setUser(terminalReader.prompt("MySQL user name (--mysql-user)", "${MYSQL_USER}", false));
         }
 
@@ -142,8 +132,40 @@ public class MysqlConnectionProvider extends AbstractSqlConnectionProvider {
             if (isHeadless) {
                 throw new CliRequiredParameterMissingException("--mysql-password");
             }
-
             mysqlParametersSpec.setPassword(terminalReader.prompt("MySQL user password (--mysql-password)", "${MYSQL_PASSWORD}", false));
+        }
+    }
+
+    /**
+     * Delegates the connection configuration to the provider for mysql engine type.
+     *
+     * @param connectionSpec Connection specification to fill.
+     * @param isHeadless     When true and some required parameters are missing then throws an exception {@link CliRequiredParameterMissingException},
+     *                       otherwise prompts the user to fill the answer.
+     * @param terminalReader Terminal reader that may be used to prompt the user.
+     */
+    private void promptForConnectionParametersForMysql(ConnectionSpec connectionSpec, boolean isHeadless, TerminalReader terminalReader) {
+        MysqlParametersSpec mysqlParametersSpec = connectionSpec.getMysql();
+
+        if (Strings.isNullOrEmpty(mysqlParametersSpec.getHost())) {
+            if (isHeadless) {
+                throw new CliRequiredParameterMissingException("--mysql-host");
+            }
+            mysqlParametersSpec.setHost(terminalReader.prompt("MySQL host name (--mysql-host)", "${MYSQL_HOST}", false));
+        }
+
+        if (Strings.isNullOrEmpty(mysqlParametersSpec.getPort())) {
+            if (isHeadless) {
+                throw new CliRequiredParameterMissingException("--mysql-port");
+            }
+            mysqlParametersSpec.setPort(terminalReader.prompt("MySQL port number (--mysql-port)", "${MYSQL_PORT}", false));
+        }
+
+        if (Strings.isNullOrEmpty(mysqlParametersSpec.getDatabase())) {
+            if (isHeadless) {
+                throw new CliRequiredParameterMissingException("--mysql-database");
+            }
+            mysqlParametersSpec.setDatabase(terminalReader.prompt("MySQL database name (--mysql-database)", "${MYSQL_DATABASE}", false));
         }
     }
 

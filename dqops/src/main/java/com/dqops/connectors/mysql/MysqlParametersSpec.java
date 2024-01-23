@@ -130,7 +130,7 @@ public class MysqlParametersSpec extends BaseProviderParametersSpec
             case mysql:
                 return database;
             case singlestore:
-                return "def";   // the catalog name, database and schema is the same thing for the single store db
+                return SingleStoreParametersSpec.DEFAULT_CATALOG_NAME; // database and schema is the same thing for the single store db
             default:
                 throw new RuntimeException("Given enum is not supported : " + mysqlEngineType);
         }

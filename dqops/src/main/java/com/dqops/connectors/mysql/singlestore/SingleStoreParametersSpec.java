@@ -12,8 +12,10 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 import picocli.CommandLine;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Single Store connection parameters.
@@ -42,6 +44,11 @@ public class SingleStoreParametersSpec extends BaseProviderParametersSpec { // t
     @CommandLine.Option(names = {"--single-store-host-descriptions"}, description = "Force enables SSL/TLS on the connection.")
     @JsonPropertyDescription("Force enables SSL/TLS on the connection. Supports also a ${SINGLE_STORE_USE_SSL} configuration with a custom environment variable.")
     private boolean useSsl;
+
+    /**
+     * The default catalog name of single store db.
+     */
+    public static final String DEFAULT_CATALOG_NAME = "def";
 
     /**
      * Returns the failover and load-balancing Mode.
@@ -75,6 +82,15 @@ public class SingleStoreParametersSpec extends BaseProviderParametersSpec { // t
     public void setHostDescriptions(List<String> hostDescriptions) {
         setDirtyIf(!Objects.equals(this.hostDescriptions, hostDescriptions));
         this.hostDescriptions = hostDescriptions;
+    }
+
+    /**
+     * Sets the host descriptions.
+     * @param commaSeparatedHostDescriptions Host descriptions separated by comma character.
+     */
+    public void setHostDescriptions(String commaSeparatedHostDescriptions) {
+        setDirtyIf(!Objects.equals(this.hostDescriptions, hostDescriptions));
+        this.hostDescriptions = Arrays.stream(commaSeparatedHostDescriptions.split(",")).collect(Collectors.toList());
     }
 
     /**
