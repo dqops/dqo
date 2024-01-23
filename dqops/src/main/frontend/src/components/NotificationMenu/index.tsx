@@ -1,74 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, { memo } from 'react';
 import {
   Popover,
   PopoverHandler,
   PopoverContent,
   IconButton
 } from '@material-tailwind/react';
-import SvgIcon from '../SvgIcon';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { setCronScheduler, toggleMenu } from '../../redux/actions/job.actions';
-// import { IError, useError} from '../../contexts/errrorContext';
-import JobItem from './JobItem';
-import ErrorItem from './ErrorItem';
-import { JobApiClient } from '../../services/apiClient';
-import Switch from '../Switch';
-import clsx from 'clsx';
+import { toggleMenu } from '../../redux/actions/job.actions';
+import NotificationMenuContent from './NotificationMenuContent.tsx';
+import NotificationMenuHeader from './NotificationMenuContent.tsx/NotificationMenuHeader';
 
 const NotificationMenu = () => {
-  const {jobList, isOpen, isCronScheduled, userProfile } = useSelector(
-    (state: IRootState) => state.job || {}
-    );
-  const [showNewIcon, setShowNewIcon] = useState(false);
-
+  const { isOpen } = useSelector((state: IRootState) => state.job || {});
   const dispatch = useActionDispatch();
-  // const { errors } = useError();
 
   const toggleOpen = () => {
     dispatch(toggleMenu(!isOpen));
   };
-  const scheduleCron = (bool: boolean) => {
-    dispatch(setCronScheduler(bool));
-  };
-
-  useEffect(() => {
-    const getIsCronSchedulerRunning = async () => {
-      const res = await JobApiClient.isCronSchedulerRunning();
-      scheduleCron(res.data);
-    };
-      getIsCronSchedulerRunning();
-    }, []);
-
-  const startCroner = async () => {
-    await JobApiClient.startCronScheduler();
-  };
-  const stopCroner = async () => {
-    await JobApiClient.stopCronScheduler();
-  };
-
-  const changeStatus = () => {
-    if (isCronScheduled === true) {
-      stopCroner();
-      scheduleCron(false);
-    }
-    if (isCronScheduled === false) {
-      startCroner();
-      scheduleCron(true);
-    }
-  };
-
-  useEffect(() => {
-    setShowNewIcon(true)
-  }, [jobList])
-
-  const notificationCount = () => {
-    let values = 0;
-    Object.values(jobList).forEach((x) => x.forEach(() => values++)) 
-
-    return Object.keys(jobList).length + values;
-  }
 
   return (
     <Popover placement="bottom-end" open={isOpen} handler={toggleOpen}>
@@ -78,58 +28,17 @@ const NotificationMenu = () => {
           ripple={false}
           variant="text"
         >
-          <div className="relative" onClick={() => setShowNewIcon(false)}> 
-            <SvgIcon name="bell" className="w-5 h-5 text-gray-700" />
-            <span
-              className={
-                showNewIcon && Object.keys(jobList).length !== 0
-                  ? 'absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 rounded-full bg-teal-500 text-white px-1 py-0.5 text-xxs'
-                  : ''
-              }
-            >
-              {showNewIcon && Object.keys(jobList).length !== 0 ? 'New' : ''}
-            </span>
-          </div>
+          <NotificationMenuHeader />
         </IconButton>
       </PopoverHandler>
       <PopoverContent
         className="min-w-120 max-w-120 px-0 relative z-50"
         style={{ position: 'relative', zIndex: '100000' }}
       >
-        <div className="border-b border-gray-300 text-gray-700 font-semibold pb-2 text-xl flex flex-col gap-y-2 px-4 relative">
-          <div>
-            Notifications ({notificationCount()})
-          </div>
-          <div className="flex items-center gap-x-3 text-sm">
-            <div className="whitespace-no-wrap">Jobs scheduler </div>
-            <div className={clsx(userProfile.can_manage_scheduler !== true ? "pointer-events-none cursor-not-allowed" : "")}>
-              <Switch
-                checked={isCronScheduled ? isCronScheduled : false}
-                onChange={() => changeStatus()}
-              />
-            </div>
-            {isCronScheduled === false && (
-              <div className="font-light text-xs text-red-500 text-center">
-                (Warning: scheduled jobs will not be executed)
-              </div>
-            )}
-          </div>
-        </div>
-        <div className="overflow-x-hidden max-h-100 py-4 px-4 relative">
-         {/* {error_dictionary_state.map((error, index) => <ErrorItem error={error} key={index}/>)} */}
-          {Object.keys(jobList).reverse().map((jobId: string, index) =>
-          jobId[0] === '-' ? 
-          <ErrorItem errorId={jobId} key={index}/> : 
-              <JobItem
-                jobId={jobId}
-                key={index}
-                canUserCancelJobs={userProfile.can_cancel_jobs}
-              />
-          )}
-        </div>
+        <NotificationMenuContent />
       </PopoverContent>
     </Popover>
   );
 };
 
-export default NotificationMenu;
+export default memo(NotificationMenu);

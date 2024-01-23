@@ -26,24 +26,24 @@ const JobItem = ({
 }: {
   jobId: string;
   notifnumber?: number;
-  canUserCancelJobs?: boolean
+  canUserCancelJobs?: boolean;
 }) => {
   const [sizeOfNot, setSizeOfNot] = useState<number | undefined>(notifnumber);
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
-  
+
   const dispatch = useActionDispatch();
   const reduceCount = () => {
     dispatch(reduceCounter(true, sizeOfNot));
   };
-  
+
   const { job_dictionary_state } = useSelector(
-  (state: IRootState) => state.job || {}
+    (state: IRootState) => state.job || {}
   );
-  
-  const job = useMemo(() => { 
-    return job_dictionary_state[jobId]
-  }, [job_dictionary_state[jobId]])
+
+  const job = useMemo(() => {
+    return job_dictionary_state[jobId];
+  }, [job_dictionary_state[jobId]]);
 
   const renderValue = (value: any) => {
     if (typeof value === 'boolean') {
@@ -75,7 +75,9 @@ const JobItem = ({
         return 'black';
     }
   };
-  const hasInvalidApiKeyError = job?.childs?.some((x) => x.errorMessage?.includes('dqocloud.accesskey'));
+  const hasInvalidApiKeyError = job?.childs?.some((x) =>
+    x.errorMessage?.includes('dqocloud.accesskey')
+  );
 
   const renderStatus = () => {
     if (job.status === DqoJobHistoryEntryModelStatusEnum.succeeded) {
@@ -96,22 +98,34 @@ const JobItem = ({
     if (job.status === DqoJobHistoryEntryModelStatusEnum.cancelled) {
       return <SvgIcon name="failed" className="w-4 h-4 text-red-700" />;
     }
-    if(hasInvalidApiKeyError){
+    if (hasInvalidApiKeyError) {
       return <SvgIcon name="failed" className="w-4 h-4 text-red-700" />;
     }
   };
 
+  if (!job || !job.jobType) {
+    return <></>;
+  }
 
   return (
     <Accordion open={open} style={{ position: 'relative' }}>
       <AccordionHeader className="!outline-none" onClick={() => setOpen(!open)}>
         <div className="group flex justify-between items-center text-sm w-full text-gray-700 ">
           <div className="flex space-x-1 items-center">
-            <div>{(job.jobType !== undefined && String(job.jobType).length !== 0) ? job.jobType.replace(/_/g, " ") : "Error"}</div>
+            <div>
+              {job.jobType !== undefined && String(job.jobType).length !== 0
+                ? job.jobType.replace(/_/g, ' ')
+                : 'Error'}
+            </div>
           </div>
           <div className="flex items-center gap-x-2">
             {job.status === DqoJobHistoryEntryModelStatusEnum.running ? (
-              <div className={clsx(canUserCancelJobs === false ? "pointer-events-none cursor-not-allowed" : "")}
+              <div
+                className={clsx(
+                  canUserCancelJobs === false
+                    ? 'pointer-events-none cursor-not-allowed'
+                    : ''
+                )}
                 onClick={() =>
                   cancelJob(job?.jobId?.jobId ? Number(job.jobId?.jobId) : 0)
                 }
@@ -123,20 +137,25 @@ const JobItem = ({
             )}
             <div className=" relative">
               <div className="flex items-center gap-x-3">
-                {job.jobType === DqoJobHistoryEntryModelJobTypeEnum.run_checks &&
+                {job.jobType ===
+                  DqoJobHistoryEntryModelJobTypeEnum.run_checks &&
                   job.status == DqoJobHistoryEntryModelStatusEnum.succeeded && (
                     <div
                       className="w-3 h-3"
                       style={{
                         backgroundColor: getColor(
-                          job.parameters?.runChecksParameters?.run_checks_result?.execution_errors && 
-                          job.parameters?.runChecksParameters?.run_checks_result?.execution_errors > 0 ? undefined :
-                          (job.parameters?.runChecksParameters?.run_checks_result?.highest_severity)
+                          job.parameters?.runChecksParameters?.run_checks_result
+                            ?.execution_errors &&
+                            job.parameters?.runChecksParameters
+                              ?.run_checks_result?.execution_errors > 0
+                            ? undefined
+                            : job.parameters?.runChecksParameters
+                                ?.run_checks_result?.highest_severity
                         )
                       }}
                     />
                   )}
-                <div className='flex gap-x-2 items-center'>
+                <div className="flex gap-x-2 items-center">
                   {renderStatus()}
                   {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
                 </div>
@@ -156,21 +175,26 @@ const JobItem = ({
                       <div
                         style={{
                           color: getColor(
-                            job.parameters?.runChecksParameters?.run_checks_result?.execution_errors && 
-                            job.parameters?.runChecksParameters?.run_checks_result?.execution_errors > 0 ? 'execution_error' :
-                            (job.parameters?.runChecksParameters?.run_checks_result
-                              ?.highest_severity
+                            job.parameters?.runChecksParameters
+                              ?.run_checks_result?.execution_errors &&
+                              job.parameters?.runChecksParameters
+                                ?.run_checks_result?.execution_errors > 0
+                              ? 'execution_error'
+                              : job.parameters?.runChecksParameters
+                                  ?.run_checks_result?.highest_severity
                               ? job.parameters?.runChecksParameters
                                   ?.run_checks_result?.highest_severity
-                              : 'error')
+                              : 'error'
                           )
                         }}
                       >
-                        {
-                          job.parameters?.runChecksParameters?.run_checks_result?.execution_errors && 
-                          job.parameters?.runChecksParameters?.run_checks_result?.execution_errors > 0 ? "execution error" :
-                          job.parameters?.runChecksParameters?.run_checks_result?.highest_severity
-                        }
+                        {job.parameters?.runChecksParameters?.run_checks_result
+                          ?.execution_errors &&
+                        job.parameters?.runChecksParameters?.run_checks_result
+                          ?.execution_errors > 0
+                          ? 'execution error'
+                          : job.parameters?.runChecksParameters
+                              ?.run_checks_result?.highest_severity}
                       </div>
                     </div>
                     <div className="flex gap-x-2">
@@ -188,8 +212,8 @@ const JobItem = ({
                         {job.parameters?.runChecksParameters?.run_checks_result
                           ?.valid_results === 0
                           ? '-'
-                          : job.parameters?.runChecksParameters?.run_checks_result
-                              ?.valid_results}
+                          : job.parameters?.runChecksParameters
+                              ?.run_checks_result?.valid_results}
                       </div>
                     </div>
                     <div className="flex gap-x-2">
@@ -198,8 +222,8 @@ const JobItem = ({
                         {job.parameters?.runChecksParameters?.run_checks_result
                           ?.warnings === 0
                           ? '-'
-                          : job.parameters?.runChecksParameters?.run_checks_result
-                              ?.warnings}
+                          : job.parameters?.runChecksParameters
+                              ?.run_checks_result?.warnings}
                       </div>
                     </div>
                     <div className="flex gap-x-2">
@@ -208,8 +232,8 @@ const JobItem = ({
                         {job.parameters?.runChecksParameters?.run_checks_result
                           ?.errors === 0
                           ? '-'
-                          : job.parameters?.runChecksParameters?.run_checks_result
-                              ?.errors}
+                          : job.parameters?.runChecksParameters
+                              ?.run_checks_result?.errors}
                       </div>
                     </div>
                     <div className="flex gap-x-2">
@@ -218,8 +242,8 @@ const JobItem = ({
                         {job.parameters?.runChecksParameters?.run_checks_result
                           ?.fatals === 0
                           ? '-'
-                          : job.parameters?.runChecksParameters?.run_checks_result
-                              ?.fatals}
+                          : job.parameters?.runChecksParameters
+                              ?.run_checks_result?.fatals}
                       </div>
                     </div>
                     <div className="flex gap-x-2">
@@ -228,8 +252,8 @@ const JobItem = ({
                         {job.parameters?.runChecksParameters?.run_checks_result
                           ?.execution_errors === 0
                           ? '-'
-                          : job.parameters?.runChecksParameters?.run_checks_result
-                              ?.execution_errors}
+                          : job.parameters?.runChecksParameters
+                              ?.run_checks_result?.execution_errors}
                       </div>
                     </div>
                   </div>
@@ -246,11 +270,12 @@ const JobItem = ({
               <td>Status</td>
               <td>{job?.status}</td>
               {hasInvalidApiKeyError && (
-                    <span className="px-2 text-red-500">
-                      (DQOps Cloud Pairing API Key is invalid. Your trial period has expired or a new version of DQOps was released.{' '}
-                      Please run {"'"}cloud login{"'"} from DQOps shell)
-                    </span>
-                  )}
+                <span className="px-2 text-red-500">
+                  (DQOps Cloud Pairing API Key is invalid. Your trial period has
+                  expired or a new version of DQOps was released. Please run{' '}
+                  {"'"}cloud login{"'"} from DQOps shell)
+                </span>
+              )}
             </tr>
             <tr className="flex justify-between w-108">
               <td>Last Changed</td>
@@ -263,7 +288,11 @@ const JobItem = ({
                 job?.parameters?.runChecksParameters?.check_search_filters
               ).map(([key, value], index) => (
                 <tr key={index} className="flex justify-between w-108">
-                  <td>{key.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/^\w/, (c) => c.toUpperCase())}</td>
+                  <td>
+                    {key
+                      .replace(/([a-z])([A-Z])/g, '$1 $2')
+                      .replace(/^\w/, (c) => c.toUpperCase())}
+                  </td>
                   <td>{renderValue(value)}</td>
                 </tr>
               ))}
@@ -318,7 +347,11 @@ const JobItem = ({
                   ?.statistics_collector_search_filters
               ).map(([key, value], index) => (
                 <tr key={index} className="flex justify-between w-108">
-                  <td>{key.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/^\w/, (c) => c.toUpperCase())}</td>
+                  <td>
+                    {key
+                      .replace(/([a-z])([A-Z])/g, '$1 $2')
+                      .replace(/^\w/, (c) => c.toUpperCase())}
+                  </td>
                   <td>{renderValue(value)}</td>
                 </tr>
               ))}
