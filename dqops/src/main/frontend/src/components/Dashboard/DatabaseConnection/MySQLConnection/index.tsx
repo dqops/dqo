@@ -18,8 +18,8 @@ interface IMySQLConnectionProps {
   mysql?: MysqlParametersSpec;
   onChange?: (obj: MysqlParametersSpec) => void;
   sharedCredentials?: SharedCredentialListModel[];
-  nameOfDatabase: string;
-  onNameOfDatabaseChange: (name: string) => void;
+  nameOfDatabase?: string;
+  onNameOfDatabaseChange?: (name: string) => void;
 }
 
 const sslModes = [
@@ -100,11 +100,11 @@ const MySQLConnection = ({
         label="MySQL Engine Type"
         options={mysqlEngineType}
         className="mb-4"
-        value={ mysql?.mysql_engine_type || nameOfDatabase.toLowerCase().trim() as MysqlParametersSpecMysqlEngineTypeEnum }
+        value={ mysql?.mysql_engine_type || nameOfDatabase?.toLowerCase().trim() as MysqlParametersSpecMysqlEngineTypeEnum }
         onChange={(value) => {
           handleChange({ 
             mysql_engine_type: value}),
-            value && onNameOfDatabaseChange(String(value).replace(/\w/, x => x.toUpperCase())) 
+            value && onNameOfDatabaseChange && onNameOfDatabaseChange(String(value).replace(/\w/, x => x.toUpperCase())) 
           }
         }
       />

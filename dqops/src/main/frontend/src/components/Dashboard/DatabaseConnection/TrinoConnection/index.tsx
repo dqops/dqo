@@ -15,8 +15,8 @@ interface ITrinoConnectionProps {
   trino?: TrinoParametersSpec;
   onChange?: (obj: TrinoParametersSpec) => void;
   sharedCredentials?: SharedCredentialListModel[];
-  nameOfDatabase: string;
-  onNameOfDatabaseChange: (name: string) => void;
+  nameOfDatabase?: string;
+  onNameOfDatabaseChange?: (name: string) => void;
 }
 
 const options = [
@@ -62,12 +62,12 @@ const TrinoConnection = ({
         label="Trino engine type"
         options={options}
         className="mb-4"
-        value={ trino?.trino_engine_type || nameOfDatabase.toLowerCase() as TrinoParametersSpecTrinoEngineTypeEnum }
+        value={ trino?.trino_engine_type || nameOfDatabase && nameOfDatabase.toLowerCase() as TrinoParametersSpecTrinoEngineTypeEnum }
         onChange={(value) => { 
           handleChange({ 
             trino_engine_type: value, 
             catalog: value === TrinoParametersSpecTrinoEngineTypeEnum.trino ? '' : 'awsdatacatalog' }),
-            value && onNameOfDatabaseChange(String(value).replace(/\w/, x => x.toUpperCase()))
+            value && onNameOfDatabaseChange && onNameOfDatabaseChange(String(value).replace(/\w/, x => x.toUpperCase()))
         }}
       />
       { trino?.trino_engine_type === TrinoParametersSpecTrinoEngineTypeEnum.trino && 

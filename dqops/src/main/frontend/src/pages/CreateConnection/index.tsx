@@ -71,9 +71,11 @@ const CreateConnection = () => {
       case ConnectionModelProviderTypeEnum.mysql: {
         copiedDatabase.mysql = {
           port: '3306',
-          mysql_engine_type: (nameOfDatabase?.toLowerCase() as MysqlParametersSpecMysqlEngineTypeEnum),
+          mysql_engine_type: (nameOfDatabase?.toLowerCase().replace(" ","") === MysqlParametersSpecMysqlEngineTypeEnum.singlestore 
+            ? MysqlParametersSpecMysqlEngineTypeEnum.singlestore : MysqlParametersSpecMysqlEngineTypeEnum.mysql),
           single_store_parameters_spec: {
-            load_balancing_mode: SingleStoreParametersSpecLoadBalancingModeEnum.none
+            load_balancing_mode: SingleStoreParametersSpecLoadBalancingModeEnum.none,
+            use_ssl: true
           }
         };
         break;

@@ -33,6 +33,10 @@ import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selec
 import { IRootState } from '../../../redux/reducers';
 import clsx from 'clsx';
 import Input from '../../Input';
+import DatabricksConnection from '../../Dashboard/DatabaseConnection/DatabricksConnection';
+import PrestoConnection from '../../Dashboard/DatabaseConnection/PrestoConnection';
+import SparkConnection from '../../Dashboard/DatabaseConnection/SparkConnection';
+import TrinoConnection from '../../Dashboard/DatabaseConnection/TrinoConnection';
 
 const ConnectionDetail = () => {
   const { connection, checkTypes }: { connection: string, checkTypes: CheckTypes } = useParams();
@@ -215,7 +219,7 @@ const ConnectionDetail = () => {
             />
           )
         }
-        {/* {connectionBasic?.provider_type ===
+        {connectionBasic?.provider_type ===
           ConnectionSpecProviderTypeEnum.mysql && (
             <MySQLConnection
               mysql={connectionBasic?.mysql}
@@ -223,7 +227,7 @@ const ConnectionDetail = () => {
               sharedCredentials = {sharedCredentials}
             />
           )
-        } */}
+        }
         {connectionBasic?.provider_type ===
           ConnectionSpecProviderTypeEnum.oracle && (
             <OracleConnection
@@ -233,6 +237,43 @@ const ConnectionDetail = () => {
             />
           )
         }
+        {connectionBasic?.provider_type ===
+          ConnectionSpecProviderTypeEnum.databricks && (
+            <DatabricksConnection
+              databricks={connectionBasic?.databricks}
+              onChange={(databricks) => onChange({ databricks })}
+              sharedCredentials = {sharedCredentials}
+            />
+          )
+        }
+        {connectionBasic?.provider_type ===
+          ConnectionSpecProviderTypeEnum.presto && (
+            <PrestoConnection
+              presto={connectionBasic?.presto}
+              onChange={(presto) => onChange({ presto })}
+              sharedCredentials = {sharedCredentials}
+            />
+          )
+        }
+        {connectionBasic?.provider_type ===
+          ConnectionSpecProviderTypeEnum.spark && (
+            <SparkConnection
+              spark={connectionBasic?.spark}
+              onChange={(spark) => onChange({ spark })}
+              sharedCredentials = {sharedCredentials}
+            />
+          )
+        }
+        {connectionBasic?.provider_type ===
+          ConnectionSpecProviderTypeEnum.trino && (
+            <TrinoConnection
+              trino={connectionBasic?.trino}
+              onChange={(trino) => onChange({ trino })}
+              sharedCredentials = {sharedCredentials}
+            />
+          )
+        }
+
       </div>
 
       <div className="flex space-x-4 justify-end items-center mt-6 px-4 mb-5">
