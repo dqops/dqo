@@ -214,4 +214,22 @@ public class MysqlSourceConnection extends AbstractJdbcSourceConnection {
         }
     }
 
+    /**
+     * Creates an SQL for listing columns in the given tables.
+     * @param schemaName Schema name (bigquery dataset name).
+     * @param tableNames Table names to list.
+     * @return SQL of the INFORMATION_SCHEMA query.
+     */
+    public String buildListColumnsSql(String schemaName, List<String> tableNames) {
+        MysqlParametersSpec mysqlParametersSpec = getConnectionSpec().getMysql();
+        switch(mysqlParametersSpec.getMysqlEngineType()){
+            case singlestore:
+                return SingleStoreSourceConnection.buildListColumnsSql(getConnectionSpec(), schemaName, tableNames, this.getInformationSchemaName());
+            case mysql:
+                return super.buildListColumnsSql(schemaName, tableNames);
+            default:
+                throw new RuntimeException("Given enum is not supported : " + mysqlParametersSpec.getMysqlEngineType());
+        }
+    }
+
 }

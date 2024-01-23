@@ -1,12 +1,15 @@
 package com.dqops.connectors.mysql.singlestore;
 
+import com.dqops.connectors.ConnectionProviderSpecificParameters;
 import com.dqops.connectors.ConnectorOperationFailedException;
 import com.dqops.connectors.mysql.MysqlParametersSpec;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
+import com.dqops.metadata.sources.ConnectionSpec;
 import com.zaxxer.hikari.HikariConfig;
 import org.apache.parquet.Strings;
 
+import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
@@ -106,6 +109,53 @@ public class SingleStoreSourceConnection {
 
         hikariConfig.setDataSourceProperties(dataSourceProperties);
         return hikariConfig;
+    }
+
+    /**
+     * Creates an SQL for listing columns in the given tables.
+     * @param schemaName Schema name (bigquery dataset name).
+     * @param tableNames Table names to list.
+     * @return SQL of the INFORMATION_SCHEMA query.
+     */
+    public static String buildListColumnsSql(ConnectionSpec connectionSpec, String schemaName, List<String> tableNames, String informationSchemaName) {
+
+        ConnectionProviderSpecificParameters providerSpecificConfiguration = connectionSpec.getProviderSpecificConfiguration();
+        StringBuilder sqlBuilder = new StringBuilder();
+
+        sqlBuilder.append("SELECT ");
+        sqlBuilder.append("TABLE_CATALOG,TABLE_SCHEMA,TABLE_NAME,COLUMN_NAME,ORDINAL_POSITION,COLUMN_DEFAULT,IS_NULLABLE,IS_SPARSE,DATA_TYPE,CHARACTER_MAXIMUM_LENGTH,CHARACTER_OCTET_LENGTH,NUMERIC_PRECISION,NUMERIC_SCALE,CHARACTER_SET_NAME,COLLATION_NAME,CAST(COLUMN_TYPE as CHAR(8192)),COLUMN_KEY,EXTRA,PRIVILEGES,COLUMN_COMMENT,DATETIME_PRECISION");
+//        sqlBuilder.append("*");
+        sqlBuilder.append(" FROM ");
+
+        String databaseName = providerSpecificConfiguration.getDatabase();
+        sqlBuilder.append(informationSchemaName);
+        sqlBuilder.append(".COLUMNS ");
+        sqlBuilder.append("WHERE TABLE_SCHEMA='");
+        sqlBuilder.append(schemaName.replace("'", "''"));
+        sqlBuilder.append("'");
+
+        if (!Strings.isNullOrEmpty(databaseName)) {
+            sqlBuilder.append(" AND TABLE_CATALOG='");
+            sqlBuilder.append(databaseName.replace("'", "''"));
+            sqlBuilder.append("'");
+        }
+
+        if (tableNames != null && tableNames.size() > 0) {
+            sqlBuilder.append(" AND TABLE_NAME IN (");
+            for (int ti = 0; ti < tableNames.size(); ti++) {
+                String tableName = tableNames.get(ti);
+                if (ti > 0) {
+                    sqlBuilder.append(",");
+                }
+                sqlBuilder.append('\'');
+                sqlBuilder.append(tableName.replace("'", "''"));
+                sqlBuilder.append('\'');
+            }
+            sqlBuilder.append(") ");
+        }
+        sqlBuilder.append("ORDER BY TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME, ORDINAL_POSITION");
+        String sql = sqlBuilder.toString();
+        return sql;
     }
 
 }

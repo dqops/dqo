@@ -45,6 +45,10 @@ public class SingleStoreParametersSpec extends BaseProviderParametersSpec { // t
     @JsonPropertyDescription("Force enables SSL/TLS on the connection. Supports also a ${SINGLE_STORE_USE_SSL} configuration with a custom environment variable.")
     private boolean useSsl;
 
+    public SingleStoreParametersSpec() {
+        this.hostDescriptions = new ArrayList<>();
+    }
+
     /**
      * The default catalog name of single store db.
      */

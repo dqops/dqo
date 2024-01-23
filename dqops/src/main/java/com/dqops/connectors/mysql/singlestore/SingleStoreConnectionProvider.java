@@ -18,7 +18,7 @@ public class SingleStoreConnectionProvider {
      */
     public static void promptForConnectionParameters(ConnectionSpec connectionSpec, boolean isHeadless, TerminalReader terminalReader) {
         MysqlParametersSpec mysqlParametersSpec = connectionSpec.getMysql();
-        SingleStoreParametersSpec singleStoreParametersSpec = mysqlParametersSpec.getSingleStoreParametersSpec();
+        SingleStoreParametersSpec singleStoreParametersSpec = mysqlParametersSpec.getSingleStoreParametersSpec() == null ? new SingleStoreParametersSpec() : mysqlParametersSpec.getSingleStoreParametersSpec();
 
         if (singleStoreParametersSpec.getLoadBalancingMode() == null) {
             if (isHeadless) {
