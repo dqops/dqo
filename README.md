@@ -75,13 +75,13 @@ The following list shows selected use cases, with examples and best practices.
   using custom connector for Looker Studio provided by DQOps. Your data quality dashboards will show the data quality
   results organized in a format that is easy to understand by your business sponsors.
 
-- Look at the [categories of data quality checks](https://dqops.com/docs/dqo-concepts/types-of-data-quality-checks/)
+- Look at the [categories of data quality checks](https://dqops.com/docs/dqo-concepts/categories-of-data-quality-checks/)
   that are supported by DQOps.
 
-- Learn how to [detect timeliness and freshness](https://dqops.com/docs/dqo-concepts/types-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues/)
+- Learn how to [detect timeliness and freshness](https://dqops.com/docs/dqo-concepts/categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues/)
   with DQOps.
 
-- Learn how to [measure data quality incrementally](https://dqops.com/docs/dqo-concepts/types-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues/)
+- Learn how to [measure data quality incrementally](https://dqops.com/docs/dqo-concepts/incremental-data-quality-monitoring/)
   using time partitioned checks that are a unique feature of DQOps, allowing to analyze financial data, append-only data,
   or very big tables at a terabyte or petabyte scales.
 
@@ -92,10 +92,10 @@ The following list shows selected use cases, with examples and best practices.
 
 The following examples also show the whole process of configuring data quality checks, both using YAML files,
 or using the [DQOps user interface](https://dqops.com/docs/dqo-concepts/dqops-user-interface-overview/).
-  
+
 - Learn how to [detect database and table availability issues](https://dqops.com/docs/examples/data-availability/detect-table-availability-issues/).
 
-- Learn how configure data volume checks to [detect empty tables](https://dqops.com/docs/examples/data-completeness/detect-empty-tables/).
+- Learn how configure data volume checks to [detect empty or incomplete tables](https://dqops.com/docs/examples/data-completeness/detect-empty-or-incomplete-tables/).
 
 - Detect if [columns contain only accepted values](https://dqops.com/docs/examples/data-consistency/percentage-of-rows-with-a-text-found-in-set/).
 
