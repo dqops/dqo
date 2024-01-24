@@ -78,7 +78,7 @@ public class MysqlParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("Single Store DB parameters spec.")
     private SingleStoreDbParametersSpec singleStoreDbParametersSpec;
 
-    @CommandLine.Option(names = {"--mysql-engine"}, description = "MySQL engine type.")
+    @CommandLine.Option(names = {"--mysql-engine"}, description = "MySQL engine type. Supports also a ${MYSQL_ENGINE} configuration with a custom environment variable.")
     @JsonPropertyDescription("MySQL engine type. Supports also a ${MYSQL_ENGINE} configuration with a custom environment variable.")
     private MysqlEngineType mysqlEngineType;
 

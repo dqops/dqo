@@ -27,7 +27,7 @@ To navigate to the MySQL connection settings:
 
 2. Select MySQL database type.
 
-    ![Selecting SQL Server database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-mysql.png)
+    ![Selecting MySQL database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-mysql.png)
 
 ### **Fill in the connection settings**
 
@@ -38,6 +38,8 @@ After navigating to the MySQL connection settings, you will need to fill in the 
 | MySQL connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                                                             | 
 |---------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Connection name           |                                          | The name of the connection that will be created in DQO. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters.                                 |
+| Parallel jobs limit       |                                          | New limit. Null value will disable limit.                                                                                                                                                                                                                               |
+| Engine Type               | mysql_engine_type                        | MySQL engine type. Supports also a ${MYSQL_ENGINE} configuration with a custom environment variable.                                                                                                                                                                    |
 | Host                      | host                                     | MySQL host name. Supports also a ${MYSQL_HOST} configuration with a custom environment variable.                                                                                                                                                                        |
 | Port                      | port                                     | MySQL port name. The default port is 3306 Supports also a ${MYSQL_PORT} configuration with a custom environment variable.                                                                                                                                               |
 | Database                  | database                                 | MySQL database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                                                           |
@@ -115,6 +117,10 @@ Database provider type (--provider):
  [10] sqlserver
  [11] trino
 Please enter one of the [] values: 3
+MySQL engine type (--mysql-engine):
+ [ 1] mysql
+ [ 2] singlestoredb
+Please enter one of the [] values: 1
 MySQL host (--mysql-host)[${MYSQL_HOST}]: localhost
 MySQL port (--mysql-port) [${MYSQL_PORT}]: 3306
 MySQL database(--mysql-database) [${MYSQL_DATABASE}]: testing
@@ -129,6 +135,7 @@ You can also run the command with parameters to add a connection in just a singl
 ```
 dqo> connection add --name=connection1
 --provider=mysql
+--mysql-engine=mysql
 --mysql-host=localhost
 --mysql-port=3306
 --mysql-database=testing
@@ -172,6 +179,7 @@ spec:
     password: xxx
     properties:
       cacheDefaultTimeZone: "false"
+    mysql_engine_type: mysql
   incident_grouping:
     grouping_level: table_dimension_category
     minimum_severity: warning
