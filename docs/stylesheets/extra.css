@@ -53,3 +53,7 @@
   white-space: nowrap;
   word-break: normal;
 }
+
+p:has(span.center-content) {
+  text-align: center;
+}

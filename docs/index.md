@@ -1,13 +1,87 @@
-# What is DQOps Data Quality Operations Center?
+---
+description: DQOps is an open-source data quality platform for data quality and DataOps teams, providing customizable data quality checks and data quality dashboards.
+---
+# DQOps overview
+
+## What is DQOps Data Quality Operations Center?
+
+!!! abstract "What is DQOps Data Quality Operations Center"
+
+    <br/>
+    <span class="center-content" style="font-size: 1.2rem;font-weight: 500">
+    Open-source data quality platform for **data quality teams** and **data engineering teams**
+    </span>
+    <br/>
+    <br/>
+
+
+!!! info ""
+
+    <br/>
+    <span class="center-content" style="font-size: 0.9rem;">
+    Introducting data quality into the data governance process is a challenging initiative.
+    Different teams and stakeholders have various needs and goals.
+    The data engineering teams are more technical and want to work with code.
+    The data operations team should react quickly to data quality issues, and validate corrected data without going to the code.
+    </span>
+
+    <span class="center-content" style="font-size: 0.9rem;">
+    Finally, business sponsors and the top management don't want to see any code, they don't know the definition of a data quality rule.
+    You only need to show a proof that **data quality issues are handled**, and you are getting better at fixing
+    data quality problems every month. 
+    </span>
+    <br/>
+    <br/>
+
+## Who needs a data quality platform
+<div class="grid cards" markdown>
+
+-   :fontawesome-solid-people-group:{ .lg .middle } __Data Quality Teams__
+
+    ---
+
+    Install [`mkdocs-material`](#) with [`pip`](#) and get up
+    and running in minutes
+
+    [:octicons-arrow-right-24: Getting started](#)
+
+-   :material-tools:{ .lg .middle } __Data Engineering Teams__
+
+    ---
+
+    Focus on your content and generate a responsive and searchable static site
+
+    [:octicons-arrow-right-24: Reference](#)
+
+
+-   :material-desk:{ .lg .middle } __Business Sponsors__
+
+    ---
+
+    Focus on your content and generate a responsive and searchable static site
+
+    [:octicons-arrow-right-24: Reference](#)
+
+
+-   :material-layers-search:{ .lg .middle } __Data Science Teams__
+
+    ---
+
+    Focus on your content and generate a responsive and searchable static site
+
+    [:octicons-arrow-right-24: Reference](#)
+
+
+
+
+</div>
+
+## How DQOps 
 
 DQOps is an **open-source** DataOps friendly data quality monitoring tool with customizable data quality checks and data quality dashboards.
 
 DQOps comes with more than 150 predefined data quality checks which helps you monitor the quality of your data.
 
-!!! note "DQOps is open-source"
-
-    You can start using DQOps right now, installing it as a [pip Python package](dqops-installation/install-dqops-using-pip.md),
-    or run it in [docker](dqops-installation/run-dqops-as-docker-container.md);
 
 
 ## DQOps features
@@ -33,7 +107,6 @@ DQOps comes with more than 150 predefined data quality checks which helps you mo
 Try our [tutorial](./getting-started/index.md) to learn how to start monitoring your data with DQOps.
 
 ## Supported data sources
-
 [![Athena](https://dqops.com/docs/images/connections/athena2.png){ class=glightbox-ignored-image }](data-sources/athena.md)
 &nbsp; &nbsp; &nbsp; [![Google BigQuery](https://dqops.com/docs/images/connections/google-bigquery.png){ class=glightbox-ignored-image }](data-sources/bigquery.md)
 &nbsp; &nbsp; &nbsp; [![Databricks](https://dqops.com/docs/images/connections/databricks.png){ class=glightbox-ignored-image }](data-sources/databricks.md)
@@ -91,6 +164,13 @@ spec:
       labels:
       - This is the column that is analyzed for data quality issues
 ```
+
+## Download now for free
+!!! note "DQOps is open-source"
+
+    You can start using DQOps right now, installing it as a [pip Python package](dqops-installation/install-dqops-using-pip.md),
+    or run it in [docker](dqops-installation/run-dqops-as-docker-container.md);
+
 
 ## Additional resources
 
