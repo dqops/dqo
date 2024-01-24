@@ -113,14 +113,14 @@ The biggest challenge that each data team faces when introducing data quality pr
 The management expects to see the progress and a proof of success. Sharing the data quality KPI with the upper management
 is the best way to gain secure financing for data projects.
 
-!!! tip "Reaching 100% data quality KPI"
+!!! tip "Reaching 100% data quality KPI score"
 
     ![A step-by-step guide to improve data quality](../images/dqops-ebook-open-with-process.png "A step-by-step guide to improve data quality"){ width="300"; align=left }
 
     DQOps team has written an eBook ["A step-by-step guide to improve data quality"](https://dqops.com/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/)
     that describes their experience in data cleansing and data quality monitoring using DQOps. 
 
-    The eBook desribes a full data quality improvement process that allows to reach ~100% data quality KPI within 6-12 months.
+    The eBook desribes a full data quality improvement process that allows to reach ~100% data quality KPI score within 6-12 months.
 
     The process described below is a simplified version of the full process described in the eBook.
 

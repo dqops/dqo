@@ -10,6 +10,8 @@ description: DQOps is an open-source data quality platform for data quality and 
     <br/>
     <span class="center-content" style="font-size: 1.2rem;font-weight: 500">
     Open-source data quality platform for **data quality teams** and **data engineering teams**
+    <br/>
+    to make data quality visible to **business sponsors**
     </span>
     <br/>
     <br/>
@@ -18,93 +20,94 @@ description: DQOps is an open-source data quality platform for data quality and 
 !!! info ""
 
     <br/>
-    <span class="center-content" style="font-size: 0.9rem;">
-    Introducting data quality into the data governance process is a challenging initiative.
-    Different teams and stakeholders have various needs and goals.
-    The data engineering teams are more technical and want to work with code.
-    The data operations team should react quickly to data quality issues, and validate corrected data without going to the code.
+    <span style="font-size: 0.7rem;">
+    Introducing data quality into the data governance process is a challenging initiative. 
+    Different teams and stakeholders have various needs and goals. 
+    The **data engineering** teams are more technical and prefer to measure data quality in code. 
     </span>
 
-    <span class="center-content" style="font-size: 0.9rem;">
-    Finally, business sponsors and the top management don't want to see any code, they don't know the definition of a data quality rule.
-    You only need to show a proof that **data quality issues are handled**, and you are getting better at fixing
-    data quality problems every month. 
+    <span style="font-size: 0.7rem;">
+    The **data operations** team should react quickly to data quality issues and validate corrected data, but they are less technical and need a simple user interface.
+    </span>
+
+    <span style="font-size: 0.7rem;">
+    Finally, business sponsors and the top management don't care about the code. They only want to see a proof 
+    that **data quality issues are handled** and the data quality score is going up, **improving every month**. 
     </span>
     <br/>
     <br/>
 
-## Who needs a data quality platform
-<div class="grid cards" markdown>
+## How DQOps addresses all data quality requirements
+<div class="grid cards grid-columns-150-pct" markdown>
 
--   :fontawesome-solid-people-group:{ .lg .middle } __Data Quality Teams__
+-   :fontawesome-solid-people-group:{ .lg .middle } __Data Quality Operations Teams__
 
     ---
 
-    Install [`mkdocs-material`](#) with [`pip`](#) and get up
-    and running in minutes
+    If you plan to create a data quality operations team, or even designate one person as a data quality specialist, you need a platform for them.
+    The data quality operations team will configure data quality checks, review detected data quality incidents,
+    and forward them to the data engineers or a data source platform owner.
 
-    [:octicons-arrow-right-24: Getting started](#)
+    DQOps comes with a **built-in user interface** designed to manage the whole process in one place, reviewing multiple data quality issues and tables at the same time.
+
+    [:octicons-arrow-right-24: Configure data quality checks in the user interface](dqo-concepts/dqops-user-interface-overview.md)
+
+    [:octicons-arrow-right-24: Manage data quality incident workflows](dqo-concepts/grouping-data-quality-issues-to-incidents.md)
+
+    [:octicons-arrow-right-24: Send notifications to data engineering teams using Slack](integrations/slack/configuring-slack-notifications.md)
 
 -   :material-tools:{ .lg .middle } __Data Engineering Teams__
 
     ---
 
-    Focus on your content and generate a responsive and searchable static site
+    The data engineers need a data quality platform that they can integrate inside the data pipeline code.
+    When a severe data quality issue is detected in a source table, the data pipelines should be stopped and resumed when the problem is fixed.
+    The data quality code should be also easy to version with Git, and modify the configuration without corrupting any file. 
 
-    [:octicons-arrow-right-24: Reference](#)
+    DQOps does not use a database to store the configuration. Instead, all data quality configuration files are stored in YAML files.
+    The platform also provides a Python Client to **automate any operation** visible in the user interface.
 
+    [:octicons-arrow-right-24: Configure data quality checks in code, with code completion](integrations/visual-studio-code/index.md)
+
+    [:octicons-arrow-right-24: Run data quality checks from data pipelines using a Python client](client/index.md)
+
+    [:octicons-arrow-right-24: Integrate DQOps with Apache Airflow](integrations/airflow/index.md) or [Dbt](integrations/dbt/index.md)
 
 -   :material-desk:{ .lg .middle } __Business Sponsors__
 
     ---
 
-    Focus on your content and generate a responsive and searchable static site
+    No data quality project can be started without the support of the top management and business sponsors. 
+    You need to gain their trust that investing in data quality was worth it. Your business sponsors, external vendors that share data
+    with you need to see a reliable data quality score that they understand and trust.
+ 
+    DQOps measures data quality with **Data Quality KPIs**. Every user receives a complimentary Data Quality Data Warehouse hosted by DQOps,
+    and can review the data quality status on data quality dashboards. DQOps supports even [custom data quality dashboards](integrations/looker-studio/creating-custom-data-quality-dashboards.md).
 
-    [:octicons-arrow-right-24: Reference](#)
+    [:octicons-arrow-right-24: Track the current data quality status with data quality dashboards](dqo-concepts/types-of-data-quality-dashboards.md)
 
+    [:octicons-arrow-right-24: Measure data quality with KPIs](dqo-concepts/definition-of-data-quality-kpis.md)
+
+    [:octicons-arrow-right-24: Manage iterative data quality improvement projects](dqo-concepts/definition-of-data-quality-kpis.md#improving-data-quality-with-kpis)
 
 -   :material-layers-search:{ .lg .middle } __Data Science Teams__
 
     ---
 
-    Focus on your content and generate a responsive and searchable static site
+    As a data scientist, you need a data quality platform where you can perform data profiling of new data before you use them as training datasets.
+    The platform should be extensible, because you have many ideas about custom data quality checks, or even using machine learning to detect anomalies in data.
+ 
+    DQOps has over 150+ built-in data quality checks, created as [templated Jinja2 SQL queries](dqo-concepts/definition-of-data-quality-sensors.md),
+    validated by [Python data quality rules](dqo-concepts/definition-of-data-quality-rules.md). **Design custom data quality checks** that the data quality team will supervise,
+    the checks will be visible in the user interface.
 
-    [:octicons-arrow-right-24: Reference](#)
+    [:octicons-arrow-right-24: Profile the data quality of new datasets with 150+ data quality checks](dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)
 
+    [:octicons-arrow-right-24: Verify the data quality status of training data sets](client/index.md#get-table-data-quality-status)
 
-
+    [:octicons-arrow-right-24: Define custom data quality checks and rules](dqo-concepts/definition-of-data-quality-rules.md)
 
 </div>
-
-## How DQOps 
-
-DQOps is an **open-source** DataOps friendly data quality monitoring tool with customizable data quality checks and data quality dashboards.
-
-DQOps comes with more than 150 predefined data quality checks which helps you monitor the quality of your data.
-
-
-
-## DQOps features
-- Intuitive [user interface](dqo-concepts/dqops-user-interface-overview.md) that uses tabs
-  to work on multiple tables at the same time
-- [Command-line](dqo-concepts/command-line-interface.md) interface
-- Support of a number of different [data sources](data-sources/index.md): BigQuery, Snowflake, PostgreSQL, Redshift, SQL Server, MySQL, Spark, Databricks, Oracle and others
-- More than 150 built-in table and column checks with easy customization
-- Table and column-level [data quality checks](dqo-concepts/definition-of-data-quality-checks/index.md) which allows writing your own SQL queries
-- Daily and monthly date [partition testing](dqo-concepts/definition-of-data-quality-checks/partition-checks.md)
-- [Data grouping](dqo-concepts/measuring-data-quality-with-data-grouping.md) by up to 9 different columns
-- Built-in [job scheduler](working-with-dqo/configure-scheduling-of-data-quality-checks/index.md) to run data quality checks
-- Calculation of [data quality KPI scores](dqo-concepts/definition-of-data-quality-kpis.md)
-- More than 50 built-in [data quality dashboards](dqo-concepts/types-of-data-quality-dashboards.md) to answer any question related to data quality
-- [Incremental data quality monitoring](dqo-concepts/incremental-data-quality-monitoring.md) to detect issues early
-- [Compare tables between data sources](working-with-dqo/compare-tables-between-data-sources.md) to measure data accuracy
-- Cloud hosted [Data Quality Data Warehouse](dqo-concepts/architecture/dqops-architecture.md#data-quality-data-warehouse)
-- [Incident](working-with-dqo/managing-data-quality-incidents-with-dqops.md) management
-- Sending incident notifications to [webhooks](./integrations/webhooks/index.md) and [Slack](./integrations/slack/configuring-slack-notifications.md)
-
-## Getting started
-
-Try our [tutorial](./getting-started/index.md) to learn how to start monitoring your data with DQOps.
 
 ## Supported data sources
 [![Athena](https://dqops.com/docs/images/connections/athena2.png){ class=glightbox-ignored-image }](data-sources/athena.md)
@@ -121,24 +124,127 @@ Try our [tutorial](./getting-started/index.md) to learn how to start monitoring 
 &nbsp; &nbsp; &nbsp; [![Trino](https://dqops.com/docs/images/connections/trino1.png){ class=glightbox-ignored-image }](data-sources/trino.md)
 &nbsp; &nbsp; &nbsp; [![SingleStoreDB](https://dqops.com/docs/images/connections/single-store.png){ class=glightbox-ignored-image }](data-sources/single-store.md)
 
+## Getting started
+!!! info "Start with DQOps"
 
-## DQOps user interface
+    <div class="grid cards" markdown>
 
-DQOps has a dynamic user interface for configuration of all data quality checks that is similar to popular database management tools.
-Tabs allow managing data quality checks at the same time on multiple tables. Just imagine that it is a web based
-Visual Studio Code for data quality. 
+    -   :material-book-open-page-variant:{ .lg .middle } __DQOps tutorial__
+    
+        ---
+    
+        Follow the DQOps tutorial to set up the platform, or simply see the whole data quality process with DQOps on examples.
 
-![DQOps supports the most popular data sources](https://dqops.com/docs/images/dqops-data-sources2.png "DQOps supports the most popular data sources"){ loading=lazy } &nbsp; &nbsp; &nbsp; ![DQOps enables quick data profiling](https://dqops.com/docs/images/dqops-profiling.png "DQOps enables quick data profiling"){ loading=lazy }
+        [:octicons-arrow-right-24: Getting started guide](getting-started/index.md)
+
+    -   :material-download:{ .lg .middle } __Download from PyPI or Docker Hub__
+    
+        ---
+    
+        DQOps is **open-source**, you can start on your computer now. Only the complimentary Data Quality Dashboards are hosted by DQOps. 
+    
+        [:octicons-arrow-right-24: Download from PyPI](dqops-installation/install-dqops-using-pip.md) or [Docker Hub](dqops-installation/run-dqops-as-docker-container.md)
+
+    </div>
 
 
-![Checks in DQOps can be quickly edited with intuitive user interface](https://dqops.com/docs/images/dqops-checks-editor.png "Checks in DQOps can be quickly edited with intuitive user interface"){ loading=lazy } &nbsp; &nbsp; &nbsp; ![With DQOps, you can conveniently keep track of the issues that arise during data quality monitoring](https://dqops.com/docs/images/dqops-incidents-management.png "With DQOps, you can conveniently keep track of the issues that arise during data quality monitoring"){ loading=lazy } 
+## DQOps data quality checks
+
+!!! success "Data profiling"
+
+    ![DQOps data profiling interface](https://dqops.com/docs/images/dqops-profiling.png "DQOps captures statistics about data sources (click to enlarge)"){ width="600px"; align=left }
+
+    **Profile data**
+
+    DQOps has two methods of data profiling. The first step is capturing [basic data statistics](working-with-dqo/collecting-basic-data-statistics.md).
+    
+    When you know how the table is structured, you can experiment with [profiling data quality checks](dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)
+    and verify the [initial data quality KPI score](dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md#initial-data-quality-kpi-score) on 
+    [data quality dashboards](dqo-concepts/types-of-data-quality-dashboards.md).
+
+    [:octicons-arrow-right-24: Review data statistics](working-with-dqo/collecting-basic-data-statistics.md)
+
+    [:octicons-arrow-right-24: Use data profiling checks](dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)
+
+    [:octicons-arrow-right-24: Review the initial data quality KPI score on dashboards](dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md#initial-data-quality-kpi-score)
+
+!!! success "Data quality monitoring"
+
+    ![Checks in DQOps can be quickly edited with intuitive user interface](https://dqops.com/docs/images/dqops-checks-editor.png "Checks in DQOps can be quickly edited with intuitive user interface"){ width="600px"; align=left }
+
+    **Activate data quality checks**
+
+    [DQOps user interface](dqo-concepts/dqops-user-interface-overview.md) is designed to resemble popular database management tools. The data sources, tables and columns are on the left.
+    The workspace in the center shows tables and columns in tabs, allowing to open multiple objects and edit many tables at once. 
+
+    The [data quality check editor](dqo-concepts/dqops-user-interface-overview.md#check-editor) shows both the built-in data quality checks and custom data quality checks
+    that you can define in DQOps.
+    
+    You have also other methods of activating data quality checks, such as:
+
+    [:octicons-arrow-right-24: Configure data quality checks in YAML](dqo-concepts/configuring-data-quality-checks-and-rules.md)
+
+    [:octicons-arrow-right-24: Activating multiple checks at once](dqo-concepts/configuring-data-quality-checks-and-rules.md#activate-multiple-checks-at-once)
+    
+    [:octicons-arrow-right-24: Use DQOps shell](dqo-concepts/configuring-data-quality-checks-and-rules.md#activate-multiple-checks-with-the-dqops-shell)
+
 
 ## DQOps dashboards
+!!! success "Data quality KPIs"
 
-DQOps has multiple built-in data quality dashboards for displaying [data quality KPI](./dqo-concepts/definition-of-data-quality-kpis.md)
-and enabling quick identification of tables with data quality issues.
+    ![DQOps dashboards simplify monitoring of data quality KPIs](https://dqops.com/docs/images/dqops-kpis-scorecard-dashboard.png "DQOps dashboards simplify monitoring of data quality KPIs (click to enlarge)"){ width="600px"; align=left }
 
-![DQOps dashboards simplify monitoring of data quality KPIs](https://dqops.com/docs/images/dqops-kpis-scorecard-dashboard.png "DQOps dashboards simplify monitoring of data quality KPIs"){ loading=lazy } &nbsp; &nbsp; &nbsp; ![DQOps dashboards enable quick identification of tables with data quality issues](https://dqops.com/docs/images/dqops-current-completeness-issues-dashboard.png "DQOps dashboards enable quick identification of tables with data quality issues"){ loading=lazy } 
+    **Review data quality KPI scores**
+
+    DQOps measures data quality using a data quality KPI score. The formula is simple and trustworthy, the KPI is the percentage of **passed data quality checks**.
+
+    The [initial data quality KPI](dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md#initial-data-quality-kpi-score) after data profiling,
+    or a [data quality KPI](dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md#when-to-use-monitoring-checks) for monitored data sources
+    are reviewed on data quality dashboards.
+
+    [:octicons-arrow-right-24: Data quality KPI score formula](dqo-concepts/definition-of-data-quality-kpis.md#data-quality-score-formula)
+
+    [:octicons-arrow-right-24: Data quality KPI dashboards](dqo-concepts/types-of-data-quality-dashboards.md#data-quality-kpis)
+
+!!! success "Data quality dashboards"
+
+    ![DQOps dashboards enable quick identification of tables with data quality issues](https://dqops.com/docs/images/dqops-current-completeness-issues-dashboard.png "DQOps dashboards enable quick identification of tables with data quality issues (click to enlarge)"){ width="600px"; align=left }
+
+    **Data quality dashboards**
+
+    DQOps provides a complimentary [Data Quality Data Warehouse](dqo-concepts/architecture/dqops-architecture.md#data-quality-data-warehouse)
+    for every user. The data quality check results captured when monitoring data quality are first stored [locally on your computer in a Hive-compliant data lake](dqo-concepts/data-storage-of-data-quality-results.md).
+    
+    DQOps synchronizes the data to a complimentary [Data Quality Data Warehouse](dqo-concepts/architecture/dqops-architecture.md#data-quality-data-warehouse)
+    that is accessed using a DQOps Looker Studio connector. You can even create [custom data quality dashboards](integrations/looker-studio/creating-custom-data-quality-dashboards.md).
+    
+    [:octicons-arrow-right-24: Data quality data lake table schema](dqo-concepts/data-storage-of-data-quality-results.md#parquet-tables)
+    
+    [:octicons-arrow-right-24: Creating custom data quality dashboards](integrations/looker-studio/creating-custom-data-quality-dashboards.md)
+
+
+## Incident management
+
+!!! success "Data quality incident management"
+
+    ![With DQOps, you can conveniently keep track of the issues that arise during data quality monitoring](https://dqops.com/docs/images/dqops-incidents-management.png "With DQOps, you can conveniently keep track of the issues that arise during data quality monitoring (click to enlarge)"){ width="600px"; align=left }
+
+    **Data quality incident workflows**
+
+    Organizations have separated operations team that are reacting to data quality incidents first, and engineering teams
+    that can fix the problems. The data engineering teams should not be engaged before the data quality issue is confirmed.
+
+    DQOps reduces the effort of monitoring data quality by grouping similar data quality issues into **data quality incidents**.
+    DQOps uses a [data quality incident workflow](dqo-concepts/grouping-data-quality-issues-to-incidents.md#incident-workflow) to
+    create new incidents as `OPEN` (a new incident detected), allowing the data quality operations team to review the problem
+    and assign `ACKNOWLEDGED` incidents to data engineering.
+    
+    [:octicons-arrow-right-24: Data quality incident workflow](dqo-concepts/grouping-data-quality-issues-to-incidents.md)
+        
+    [:octicons-arrow-right-24: Sending notifications to slack](integrations/slack/configuring-slack-notifications.md)
+    
+    [:octicons-arrow-right-24: Sending notifications to any ticketing platform using webhooks](integrations/webhooks/index.md)
+   
 
 ## DQOps is DevOps and DataOps friendly
 
@@ -165,18 +271,70 @@ spec:
       - This is the column that is analyzed for data quality issues
 ```
 
-## Download now for free
-!!! note "DQOps is open-source"
+See how DQOps supports [editing data quality configuration files in Visual Studio Code](integrations/visual-studio-code/index.md),
+validating the structure of files, suggesting data quality checks names and parameters, and even showing help about 150+ data quality
+checks inside Visual Studio Code.
 
-    You can start using DQOps right now, installing it as a [pip Python package](dqops-installation/install-dqops-using-pip.md),
-    or run it in [docker](dqops-installation/run-dqops-as-docker-container.md);
+## DQOps competitive advantages
+<div class="grid cards grid-columns-150-pct" markdown>
 
+-   :fontawesome-solid-bolt-lightning:{ .lg .middle } __Analyze very big tables__
+
+    ---
+
+    DQOps supports incremental data quality monitoring to detect issues only in new data.
+    Additionally, DQOps merges multiple data quality queries into bigger queries to avoid pressure on the monitored data source. 
+    
+    [:octicons-arrow-right-24: Incremental data quality monitoring](dqo-concepts/incremental-data-quality-monitoring.md)
+
+-   :material-dots-grid:{ .lg .middle } __Analyze partitioned data__
+
+    ---
+
+    DQOps can run data quality queries with a *GROUP BY date_column* to analyze partitioned data.
+    You can get a data quality score for every partition.
+
+    [:octicons-arrow-right-24: Analyze partitioned data](dqo-concepts/definition-of-data-quality-checks/partition-checks.md)
+
+-   :material-compare-horizontal:{ .lg .middle } __Compare tables__
+
+    ---
+
+    Data reconciliation is a process of comparing tables to the source-of-truth. 
+    DQOps compares tables across data sources, even if the tables are transformed.
+    You can compare a large fact table to a summary table received from the finance department. 
+
+    [:octicons-arrow-right-24: Compare tables between data sources](working-with-dqo/compare-tables-between-data-sources.md)
+
+-   :material-format-list-group:{ .lg .middle } __Multiple data streams__
+
+    ---
+
+    What if your table contains aggregated data that was received from different suppliers, departments, vendors, or teams?
+    Data quality issues are detected, but who provided you the corrupted data?
+    DQOps answers the question by running data quality checks with grouping, supporting a hierarchy of up to 9 levels.
+
+    [:octicons-arrow-right-24: Use GROUP BY to measure data quality for different data streams](dqo-concepts/measuring-data-quality-with-data-grouping.md)
+
+</div>
 
 ## Additional resources
-
 Want to learn more about data quality? 
 
-Check out eBook ["A step-by-step guide to improve data quality"](https://dqops.com/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/)
-created by the DQOps team based on their experience in data cleansing and data quality monitoring.
+!!! tip "Reaching 100% data quality KPI score"
 
-![A step-by-step guide to improve data quality](./images/dqops-ebook-open-with-process.png "A step-by-step guide to improve data quality"){ loading=lazy }
+    ![A step-by-step guide to improve data quality](images/dqops-ebook-open-with-process.png "A step-by-step guide to improve data quality"){ width="500px"; align=left }
+
+    DQOps team has written an eBook ["A step-by-step guide to improve data quality"](https://dqops.com/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/)
+    that describes their experience in data cleansing and data quality monitoring using DQOps. 
+
+    The eBook desribes a full data quality improvement process that allows to reach a ~100% data quality KPI score within 6-12 months.
+    [Download the eBook](https://dqops.com/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/) to learn the process of managing
+    an iterative data quality project that leads to fixing all data quality issues.
+    
+    ![DQOps data quality improvement process](https://dqops.com/docs/images/dqops-data-quality-improvement-process-min.png){ loading=lazy; width="150px" }
+
+    _Click to zoom in_
+    
+   
+
