@@ -590,7 +590,7 @@ export const DefinitionTree = () => {
   };
 
   return (
-    <div className="fixed left-0 top-16 bottom-0 overflow-y-auto w-80 shadow border-r border-gray-300 p-4 pt-6 bg-white">
+    <div className="fixed left-0 top-16 bottom-0 overflow-y-auto w-80 shadow border-r border-gray-300 p-4 pt-4 bg-white">
       {definitionFirstLevelFolder?.map((x, index) => (
         <div
           key={index}
