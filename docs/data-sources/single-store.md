@@ -21,13 +21,13 @@ To navigate to the SingleStoreDB connection settings:
 
 2. Select SingleStoreDB database type.
 
-   ![Selecting SingleStoreDB database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-singlestore.png)
+   ![Selecting SingleStoreDB database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-singlestore1.png)
 
 ### **Fill in the connection settings**
 
 After navigating to the SingleStoreDB connection settings, you will need to fill in the connection details.
 
-![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-singlestore.png)
+![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-singlestore1.png)
 
 | SingleStoreDB connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                                                                             | 
 |-----------------------------------|------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
