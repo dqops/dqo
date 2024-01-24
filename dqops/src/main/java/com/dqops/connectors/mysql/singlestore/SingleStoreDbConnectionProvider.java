@@ -18,27 +18,26 @@ public class SingleStoreDbConnectionProvider {
      */
     public static void promptForConnectionParameters(ConnectionSpec connectionSpec, boolean isHeadless, TerminalReader terminalReader) {
         MysqlParametersSpec mysqlParametersSpec = connectionSpec.getMysql();
-        SingleStoreDbParametersSpec singleStoreDbParametersSpec = mysqlParametersSpec.getSingleStoreDbParametersSpec() == null ? new SingleStoreDbParametersSpec() : mysqlParametersSpec.getSingleStoreDbParametersSpec();
-
-        if (singleStoreDbParametersSpec.getLoadBalancingMode() == null) {
-            if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--single-store-load-balancing-mode");
-            }
-            singleStoreDbParametersSpec.setLoadBalancingMode(terminalReader.promptEnum("MySQL host name (--mysql-host)", SingleStoreDbLoadBalancingMode.class, null, false));
+        SingleStoreDbParametersSpec singleStoreDbParametersSpec;
+        if(mysqlParametersSpec.getSingleStoreDbParametersSpec() == null){
+            singleStoreDbParametersSpec = new SingleStoreDbParametersSpec();
+            mysqlParametersSpec.setSingleStoreDbParametersSpec(singleStoreDbParametersSpec);
+        } else {
+            singleStoreDbParametersSpec = mysqlParametersSpec.getSingleStoreDbParametersSpec();
         }
 
         if (singleStoreDbParametersSpec.getLoadBalancingMode() == null) {
             if (isHeadless) {
                 throw new CliRequiredParameterMissingException("--single-store-load-balancing-mode");
             }
-            singleStoreDbParametersSpec.setLoadBalancingMode(terminalReader.promptEnum("MySQL host name (--mysql-host)", SingleStoreDbLoadBalancingMode.class, null, false));
+            singleStoreDbParametersSpec.setLoadBalancingMode(terminalReader.promptEnum("Single Store DB balancing mode (--single-store-load-balancing-mode)", SingleStoreDbLoadBalancingMode.class, null, false));
         }
 
         if (singleStoreDbParametersSpec.getHostDescriptions().isEmpty()) {
             if (isHeadless) {
                 throw new CliRequiredParameterMissingException("--single-store-host-descriptions");
             }
-            singleStoreDbParametersSpec.setHostDescriptions(terminalReader.prompt("Single Store DB schema name (--single-store-host-descriptions)", "${SINGLE_STORE_HOST_DESCRIPTIONS}", false));
+            singleStoreDbParametersSpec.setHostDescriptions(terminalReader.prompt("Single Store DB host descriptions (--single-store-host-descriptions)", "${SINGLE_STORE_HOST_DESCRIPTIONS}", false));
         }
 
         if (Strings.isNullOrEmpty(singleStoreDbParametersSpec.getSchema())) {
