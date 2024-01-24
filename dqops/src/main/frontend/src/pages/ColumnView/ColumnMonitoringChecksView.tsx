@@ -13,10 +13,14 @@ import {
 import { useSelector } from 'react-redux';
 import { CheckResultsOverviewDataModel, CheckContainerModel } from '../../api';
 import ColumnActionGroup from './ColumnActionGroup';
-import { CheckResultOverviewApi } from "../../services/apiClient";
-import { useHistory, useParams } from "react-router-dom";
-import { CheckTypes, ROUTES } from "../../shared/routes";
-import { getFirstLevelActiveTab, getFirstLevelState, getSecondLevelTab } from "../../redux/selectors";
+import { CheckResultOverviewApi } from '../../services/apiClient';
+import { useHistory, useParams } from 'react-router-dom';
+import { CheckTypes, ROUTES } from '../../shared/routes';
+import {
+  getFirstLevelActiveTab,
+  getFirstLevelState,
+  getSecondLevelTab
+} from '../../redux/selectors';
 import { setActiveFirstLevelUrl } from '../../redux/actions/source.actions';
 
 const initTabs = [
@@ -31,7 +35,21 @@ const initTabs = [
 ];
 
 const ColumnMonitoringChecksView = () => {
-  const { connection, schema, table, column, tab, checkTypes }: { checkTypes: CheckTypes, connection: string, schema: string, table: string, column: string, tab: 'daily' | 'monthly' } = useParams();
+  const {
+    connection,
+    schema,
+    table,
+    column,
+    tab,
+    checkTypes
+  }: {
+    checkTypes: CheckTypes;
+    connection: string;
+    schema: string;
+    table: string;
+    column: string;
+    tab: 'daily' | 'monthly';
+  } = useParams();
   const [tabs, setTabs] = useState(initTabs);
   const dispatch = useActionDispatch();
   const history = useHistory();
@@ -42,15 +60,23 @@ const ColumnMonitoringChecksView = () => {
     isUpdatedDailyMonitoring,
     isUpdatedMonthlyMonitoring,
     isUpdating,
-    loading,
+    loading
   } = useSelector(getFirstLevelState(checkTypes));
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const activeTab = getSecondLevelTab(checkTypes, tab);
 
-  const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
+  const [checkResultsOverview, setCheckResultsOverview] = useState<
+    CheckResultsOverviewDataModel[]
+  >([]);
 
   const getCheckOverview = () => {
-    CheckResultOverviewApi.getColumnMonitoringChecksOverview(connection, schema, table, column, tab).then((res) => {
+    CheckResultOverviewApi.getColumnMonitoringChecksOverview(
+      connection,
+      schema,
+      table,
+      column,
+      tab
+    ).then((res) => {
       setCheckResultsOverview(res.data);
     });
   };
@@ -133,11 +159,15 @@ const ColumnMonitoringChecksView = () => {
   };
 
   const onDailyMonitoringChange = (ui: CheckContainerModel) => {
-    dispatch(setUpdatedDailyMonitoringChecks(checkTypes, firstLevelActiveTab, ui));
+    dispatch(
+      setUpdatedDailyMonitoringChecks(checkTypes, firstLevelActiveTab, ui)
+    );
   };
 
   const onMonthlyMonitoringChange = (ui: CheckContainerModel) => {
-    dispatch(setUpdatedMonthlyMonitoringChecks(checkTypes, firstLevelActiveTab, ui));
+    dispatch(
+      setUpdatedMonthlyMonitoringChecks(checkTypes, firstLevelActiveTab, ui)
+    );
   };
 
   useEffect(() => {
@@ -175,11 +205,20 @@ const ColumnMonitoringChecksView = () => {
         )
       )
     );
-    history.push(ROUTES.COLUMN_LEVEL_PAGE(checkTypes, connection, schema, table, column, tab));
+    history.push(
+      ROUTES.COLUMN_LEVEL_PAGE(
+        checkTypes,
+        connection,
+        schema,
+        table,
+        column,
+        tab
+      )
+    );
   };
 
   return (
-    <div className="py-2">
+    <div>
       <ColumnActionGroup
         shouldDelete={false}
         onUpdate={onUpdate}
