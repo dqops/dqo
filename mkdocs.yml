@@ -571,12 +571,10 @@ plugins:
       min_length: 50
       max_length: 160
       trim: true
-#  - search
-# replace above search with below commented section on update mkdocs-material to 9.4 at least
-#  - group:
-#      enabled: !ENV ENABLE_SEARCH
-#      plugins:
-#        - search
+  - group:
+      enabled: !ENV ENABLE_SEARCH
+      plugins:
+        - search
 # Markdown extensions
 markdown_extensions:
   - pymdownx.snippets
@@ -596,9 +594,6 @@ markdown_extensions:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
-  - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoji.twemoji
-      emoji_generator: !!python/name:materialx.emoji.to_svg
   - meta
 extra:
   analytics:

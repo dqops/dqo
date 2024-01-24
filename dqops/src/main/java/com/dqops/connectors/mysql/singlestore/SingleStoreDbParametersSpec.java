@@ -33,15 +33,15 @@ public class SingleStoreDbParametersSpec extends BaseProviderParametersSpec {
     };
 
     @CommandLine.Option(names = {"--single-store-load-balancing-mode"}, description = "Failover and Load-Balancing Mode for Single Store DB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    @JsonPropertyDescription("Failover and Load-Balancing Modes for Single Store DB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("SingleStoreDB Failover and Load-Balancing Modes for Single Store DB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private SingleStoreDbLoadBalancingMode loadBalancingMode;
 
     @CommandLine.Option(names = {"--single-store-host-descriptions"}, description = "Host descriptions")
-    @JsonPropertyDescription("Host descriptions. Supports also a ${SINGLE_STORE_HOST_DESCRIPTIONS} configuration with a custom environment variable.")
+    @JsonPropertyDescription("SingleStoreDB Host descriptions. Supports also a ${SINGLE_STORE_HOST_DESCRIPTIONS} configuration with a custom environment variable.")
     private List<String> hostDescriptions;
 
     @CommandLine.Option(names = {"--single-store-schema"}, description = "MySQL database/schema name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    @JsonPropertyDescription("Single Store DB database/schema name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("SingleStoreDB database/schema name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String schema;
 
     @CommandLine.Option(names = {"--single-store-host-descriptions"}, description = "Force enables SSL/TLS on the connection.")
