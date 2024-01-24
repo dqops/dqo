@@ -20,6 +20,7 @@ import com.dqops.connectors.ConnectionProviderRegistryObjectMother;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.bigquery.BigQueryConnectionSpecObjectMother;
 import com.dqops.connectors.databricks.DatabricksConnectionSpecObjectMother;
+import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
 import com.dqops.connectors.mysql.MysqlConnectionSpecObjectMother;
 import com.dqops.connectors.mysql.SingleStoreDbConnectionSpecObjectMother;
 import com.dqops.connectors.oracle.OracleConnectionSpecObjectMother;
@@ -60,6 +61,9 @@ public class SampleTableMetadataObjectMother {
 
             case postgresql:
                 return PostgresqlConnectionSpecObjectMother.create();
+
+            case duckdb:
+                return DuckdbConnectionSpecObjectMother.create();
 
             case redshift:
                 return RedshiftConnectionSpecObjectMother.create();
@@ -106,6 +110,8 @@ public class SampleTableMetadataObjectMother {
 
             case postgresql:
                 return PostgresqlConnectionSpecObjectMother.getSchemaName();
+
+            // todo: duckdb schema
 
             case redshift:
                 return RedshiftConnectionSpecObjectMother.getSchemaName();
