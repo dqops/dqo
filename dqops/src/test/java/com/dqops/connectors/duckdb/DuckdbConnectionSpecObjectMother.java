@@ -43,12 +43,21 @@ public class DuckdbConnectionSpecObjectMother {
 
 			setDuckdb(new DuckdbParametersSpec()
             {{
-                // todo: set params for integraiton tests
+                // todo: set params for integration tests
+                setInMemory(true);
 //                setDatabase();
             }});
         }};
 
         return connectionSpec;
+    }
+
+    /**
+     * Returns the default schema used for a testable DuckDB database. Tables are created in this schema.
+     * @return Schema name.
+     */
+    public static String getSchemaName() {
+        return "main";
     }
 
 }

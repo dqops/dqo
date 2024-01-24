@@ -111,7 +111,8 @@ public class SampleTableMetadataObjectMother {
             case postgresql:
                 return PostgresqlConnectionSpecObjectMother.getSchemaName();
 
-            // todo: duckdb schema
+            case duckdb:
+                return DuckdbConnectionSpecObjectMother.getSchemaName();
 
             case redshift:
                 return RedshiftConnectionSpecObjectMother.getSchemaName();

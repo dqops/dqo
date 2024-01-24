@@ -17,15 +17,20 @@ package com.dqops.connectors.duckdb;
 
 import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
+import com.dqops.connectors.jdbc.JdbcQueryFailedException;
+import com.dqops.core.jobqueue.JobCancellationListenerHandle;
+import com.dqops.core.jobqueue.JobCancellationToken;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.ConnectionSpec;
+import com.dqops.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.sql.Statement;
 import java.util.Properties;
 
 /**
@@ -62,9 +67,12 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
 //        String host = this.getSecretValueProvider().expandValue(duckdbSpec.getHost(), secretValueLookupContext);
         StringBuilder jdbcConnectionBuilder = new StringBuilder();
         jdbcConnectionBuilder.append("jdbc:duckdb:");
+
+        if(duckdbSpec.isInMemory()){
+            jdbcConnectionBuilder.append(":memory:");
+        }
+
 //        jdbcConnectionBuilder.append(host);
-
-
 
 //        jdbcConnectionBuilder.append('/');
 //        String database = this.getSecretValueProvider().expandValue(duckdbSpec.getDatabase(), secretValueLookupContext);
@@ -72,16 +80,15 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
 //            jdbcConnectionBuilder.append(database);
 //        }
 //
-//        String jdbcUrl = jdbcConnectionBuilder.toString();
-//        hikariConfig.setJdbcUrl(jdbcUrl);
-//
+        String jdbcUrl = jdbcConnectionBuilder.toString();
+        hikariConfig.setJdbcUrl(jdbcUrl);
+
         Properties dataSourceProperties = new Properties();
 
         if (duckdbSpec.getProperties() != null) {
             dataSourceProperties.putAll(duckdbSpec.getProperties());
         }
 
-//
 //        String options =  this.getSecretValueProvider().expandValue(duckdbSpec.getOptions(), secretValueLookupContext);
 //        if (!Strings.isNullOrEmpty(options)) {
 //            dataSourceProperties.put("options", options);
@@ -90,4 +97,34 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         hikariConfig.setDataSourceProperties(dataSourceProperties);
         return hikariConfig;
     }
+
+    /**
+     * Executes a provider specific SQL that runs a command DML/DDL command.
+     *
+     * @param sqlStatement SQL DDL or DML statement.
+     * @param jobCancellationToken Job cancellation token, enables cancelling a running query.
+     */
+    @Override
+    public long executeCommand(String sqlStatement, JobCancellationToken jobCancellationToken) {
+        try {
+            try (Statement statement = this.getJdbcConnection().createStatement()) {
+                try (JobCancellationListenerHandle cancellationListenerHandle =
+                             jobCancellationToken.registerCancellationListener(
+                                     cancellationToken -> RunSilently.run(statement::cancel))) {
+                    statement.execute(sqlStatement);
+                    return 0;
+                }
+                finally {
+                    jobCancellationToken.throwIfCancelled();
+                }
+            }
+        }
+        catch (Exception ex) {
+            String connectionName = this.getConnectionSpec().getConnectionName();
+            throw new JdbcQueryFailedException(
+                    String.format("SQL statement failed: %s, connection: %s, SQL: %s", ex.getMessage(), connectionName, sqlStatement),
+                    ex, sqlStatement, connectionName);
+        }
+    }
+
 }

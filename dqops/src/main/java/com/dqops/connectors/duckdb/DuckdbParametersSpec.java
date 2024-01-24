@@ -45,6 +45,11 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
         }
     };
 
+    // todo: current driver sets it automatically when no folder is implicitly set to the connection stirng
+    @CommandLine.Option(names = {"--duckdb-in-memory"}, description = "To use the special value :memory: to create an in-memory database where no data is persisted to disk (i.e., all data is lost when you exit the process). The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("To use the special value :memory: to create an in-memory database where no data is persisted to disk (i.e., all data is lost when you exit the process). The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    private boolean inMemory;
+
     //todo: parameters
 //    @CommandLine.Option(names = {"--postgresql-host"}, description = "DuckDB host name")
 //    @JsonPropertyDescription("PostgreSQL host name. Supports also a ${POSTGRESQL_HOST} configuration with a custom environment variable.")
@@ -62,6 +67,23 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, String> properties;
+
+    /**
+     * Returns an inMemory value.
+     * @return inMemory value.
+     */
+    public boolean isInMemory () {
+        return inMemory;
+    }
+
+    /**
+     * Sets an inMemory value.
+     * @param inMemory inMemory value.
+     */
+    public void setInMemory(boolean inMemory) {
+        setDirtyIf(!Objects.equals(this.inMemory, inMemory));
+        this.inMemory = inMemory;
+    }
 
 //    /**
 //     * Returns the host name.
