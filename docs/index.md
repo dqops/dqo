@@ -1,4 +1,4 @@
-# What is DQOps?
+# What is DQOps Data Quality Operations Center?
 
 DQOps is an **open-source** DataOps friendly data quality monitoring tool with customizable data quality checks and data quality dashboards.
 
@@ -34,21 +34,19 @@ Try our [tutorial](./getting-started/index.md) to learn how to start monitoring 
 
 ## Supported data sources
 
-You can use DQOps with the most popular databases. [Learn here how to connect a data source to DQOps](./data-sources/index.md).
-
-![Athena](https://dqops.com/docs/images/connections/athena2.png)
-&nbsp; &nbsp; &nbsp; ![Google BigQuery](https://dqops.com/docs/images/connections/google-bigquery.png)
-&nbsp; &nbsp; &nbsp; ![Databricks](https://dqops.com/docs/images/connections/databricks.png)
-&nbsp; &nbsp; &nbsp; ![MySQL](https://dqops.com/docs/images/connections/mysql.png)
-&nbsp; &nbsp; &nbsp; ![Oracle](https://dqops.com/docs/images/connections/oracle2.png)
-&nbsp; &nbsp; &nbsp; ![PostgreSQL](https://dqops.com/docs/images/connections/postgresql.png)
-&nbsp; &nbsp; &nbsp; ![Presto](https://dqops.com/docs/images/connections/presto1.png)
-&nbsp; &nbsp; &nbsp; ![Amazon Redshift](https://dqops.com/docs/images/connections/amazon-redshift1.png)
-&nbsp; &nbsp; &nbsp; ![Snowflake](https://dqops.com/docs/images/connections/snowflake.png)
-&nbsp; &nbsp; &nbsp; ![Spark](https://dqops.com/docs/images/connections/spark.png)
-&nbsp; &nbsp; &nbsp; ![Microsoft SQL Server](https://dqops.com/docs/images/connections/microsoft-sql-server.png)
-&nbsp; &nbsp; &nbsp; ![Trino](https://dqops.com/docs/images/connections/trino1.png)
-&nbsp; &nbsp; &nbsp; ![SingleStoreDB](https://dqops.com/docs/images/connections/single-store.png)
+[![Athena](https://dqops.com/docs/images/connections/athena2.png){ class=glightbox-ignored-image }](data-sources/athena.md)
+&nbsp; &nbsp; &nbsp; [![Google BigQuery](https://dqops.com/docs/images/connections/google-bigquery.png){ class=glightbox-ignored-image }](data-sources/bigquery.md)
+&nbsp; &nbsp; &nbsp; [![Databricks](https://dqops.com/docs/images/connections/databricks.png){ class=glightbox-ignored-image }](data-sources/databricks.md)
+&nbsp; &nbsp; &nbsp; [![MySQL](https://dqops.com/docs/images/connections/mysql.png){ class=glightbox-ignored-image }](data-sources/mysql.md)
+&nbsp; &nbsp; &nbsp; [![Oracle](https://dqops.com/docs/images/connections/oracle2.png){ class=glightbox-ignored-image }](data-sources/oracle.md)
+&nbsp; &nbsp; &nbsp; [![PostgreSQL](https://dqops.com/docs/images/connections/postgresql.png){ class=glightbox-ignored-image }](data-sources/postgresql.md)
+&nbsp; &nbsp; &nbsp; [![Presto](https://dqops.com/docs/images/connections/presto1.png){ class=glightbox-ignored-image }](data-sources/presto.md)
+&nbsp; &nbsp; &nbsp; [![Amazon Redshift](https://dqops.com/docs/images/connections/amazon-redshift1.png){ class=glightbox-ignored-image }](data-sources/redshift.md)
+&nbsp; &nbsp; &nbsp; [![Snowflake](https://dqops.com/docs/images/connections/snowflake.png){ class=glightbox-ignored-image }](data-sources/snowflake.md)
+&nbsp; &nbsp; &nbsp; [![Spark](https://dqops.com/docs/images/connections/spark.png){ class=glightbox-ignored-image }](data-sources/spark.md)
+&nbsp; &nbsp; &nbsp; [![Microsoft SQL Server](https://dqops.com/docs/images/connections/microsoft-sql-server.png){ class=glightbox-ignored-image }](data-sources/sql-server.md)
+&nbsp; &nbsp; &nbsp; [![Trino](https://dqops.com/docs/images/connections/trino1.png){ class=glightbox-ignored-image }](data-sources/trino.md)
+&nbsp; &nbsp; &nbsp; [![SingleStoreDB](https://dqops.com/docs/images/connections/single-store.png){ class=glightbox-ignored-image }](data-sources/single-store.md)
 
 
 ## DQOps user interface
