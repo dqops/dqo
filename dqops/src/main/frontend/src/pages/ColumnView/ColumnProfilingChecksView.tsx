@@ -58,19 +58,26 @@ const ColumnProfilingChecksView = ({
   tableName,
   columnName
 }: IProfilingViewProps) => {
-  const { checkTypes, tab }: { checkTypes: CheckTypes, tab: string } = useParams();
-  const { checksUI, isUpdating, isUpdatedChecksUi, loading } = useSelector(getFirstLevelState(checkTypes));
+  const { checkTypes, tab }: { checkTypes: CheckTypes; tab: string } =
+    useParams();
+  const { checksUI, isUpdating, isUpdatedChecksUi, loading } = useSelector(
+    getFirstLevelState(checkTypes)
+  );
   const activeTab = getSecondLevelTab(checkTypes, tab);
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
   );
   const dispatch = useActionDispatch();
-  const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
-  const [columnStatistics, setColumnStatistics] = useState<ColumnStatisticsModel>();
-  const [tableStatistics, setTableStatistics] = useState<TableStatisticsModel>();
+  const [checkResultsOverview, setCheckResultsOverview] = useState<
+    CheckResultsOverviewDataModel[]
+  >([]);
+  const [columnStatistics, setColumnStatistics] =
+    useState<ColumnStatisticsModel>();
+  const [tableStatistics, setTableStatistics] =
+    useState<TableStatisticsModel>();
   const [jobId, setJobId] = useState<number>();
-  
+
   const job = jobId ? job_dictionary_state[jobId] : undefined;
 
   const history = useHistory();
@@ -99,13 +106,16 @@ const ColumnProfilingChecksView = ({
 
   const getTableStatistics = async () => {
     try {
-      await TableApiClient.getTableStatistics(connectionName, schemaName, tableName)
-      .then((res) => setTableStatistics(res.data))
+      await TableApiClient.getTableStatistics(
+        connectionName,
+        schemaName,
+        tableName
+      ).then((res) => setTableStatistics(res.data));
     } catch (err) {
       console.error(err);
     }
   };
-  
+
   useEffect(() => {
     getTableStatistics();
     getColumnStatistics();
@@ -176,20 +186,22 @@ const ColumnProfilingChecksView = ({
       false,
       undefined,
       columnStatistics?.collect_column_statistics_job_template
-    ).then((res) => setJobId(res.data.jobId?.jobId))
+    ).then((res) => setJobId(res.data.jobId?.jobId));
   };
 
   const filteredCollectStatisticsJobs = useMemo(() => {
-    return (job && (
-      job.status === DqoJobHistoryEntryModelStatusEnum.running ||
-      job.status === DqoJobHistoryEntryModelStatusEnum.queued ||
-      job.status === DqoJobHistoryEntryModelStatusEnum.waiting ))
-    }, [job])
+    return (
+      job &&
+      (job.status === DqoJobHistoryEntryModelStatusEnum.running ||
+        job.status === DqoJobHistoryEntryModelStatusEnum.queued ||
+        job.status === DqoJobHistoryEntryModelStatusEnum.waiting)
+    );
+  }, [job]);
 
   useEffect(() => {
     if (job && job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded) {
-      getColumnStatistics()
-      getTableStatistics()
+      getColumnStatistics();
+      getTableStatistics();
     }
   }, [job]);
 
@@ -221,8 +233,7 @@ const ColumnProfilingChecksView = ({
   };
 
   return (
-    <div className="flex flex-col overflow-x-auto overflow-y-hidden"
-    >
+    <div className="flex flex-col overflow-x-auto overflow-y-hidden">
       <ColumnActionGroup
         shouldDelete={false}
         onUpdate={onUpdate}
@@ -230,10 +241,20 @@ const ColumnProfilingChecksView = ({
         isUpdating={isUpdating}
         isStatistics={activeTab === 'statistics'}
         onCollectStatistics={onCollectStatistics}
-        collectStatisticsSpinner = {filteredCollectStatisticsJobs}
+        collectStatisticsSpinner={filteredCollectStatisticsJobs}
       />
-      <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} className='w-full h-12 overflow-hidden max-w-full'/>
-      {activeTab === 'statistics' && <ColumnStatisticsView columnStatisticsProp = {columnStatistics} tableStatisticsProp = {tableStatistics} />}
+      <Tabs
+        tabs={tabs}
+        activeTab={activeTab}
+        onChange={onChangeTab}
+        className="w-full overflow-hidden max-w-full"
+      />
+      {activeTab === 'statistics' && (
+        <ColumnStatisticsView
+          columnStatisticsProp={columnStatistics}
+          tableStatisticsProp={tableStatistics}
+        />
+      )}
       {activeTab === 'advanced' && (
         <DataQualityChecks
           onUpdate={onUpdate}

@@ -175,13 +175,8 @@ const ConnectionPage = () => {
           </div>
         </div>
         {create_success !== 'true' && (
-          <div className="border-b border-gray-300 px-8">
-            <Tabs
-              className="justify-between"
-              tabs={tabs}
-              activeTab={activeTab}
-              onChange={onChangeTab}
-            />
+          <div className="border-b border-gray-300">
+            <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
           </div>
         )}
         {activeTab === 'detail' && <ConnectionDetail />}
