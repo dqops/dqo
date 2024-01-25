@@ -9,7 +9,7 @@ description: DQOps is an open-source data quality platform for data quality and 
 
     <br/>
     <span class="center-content" style="font-size: 1.2rem;font-weight: 500">
-    Open-source data quality platform for **data quality teams** and **data engineering teams**
+    An open-source data quality platform for **data quality teams** and **data engineering teams**
     <br/>
     to make data quality visible to **business sponsors**
     </span>
@@ -21,34 +21,34 @@ description: DQOps is an open-source data quality platform for data quality and 
 
     <br/>
     <span style="font-size: 0.7rem;">
-    Introducing data quality into the data governance process is a challenging initiative. 
-    Different teams and stakeholders have various needs and goals. 
+    Introducing data quality into the data governance process can be a challenging initiative. 
+    Different teams and stakeholders have varying needs and goals. 
     The **data engineering** teams are more technical and prefer to measure data quality in code. 
     </span>
 
     <span style="font-size: 0.7rem;">
-    The **data operations** team should react quickly to data quality issues and validate corrected data, but they are less technical and need a simple user interface.
+    The **data operations** team should be able to respond quickly to data quality issues and validate corrected data, but they are less technical and need a simple user interface.
     </span>
 
     <span style="font-size: 0.7rem;">
-    Finally, business sponsors and the top management don't care about the code. They only want to see a proof 
-    that **data quality issues are handled** and the data quality score is going up, **improving every month**. 
+    Finally, business sponsors and the top management are not interested in the technical details. They only want to see a proof 
+    that **data quality issues are handled** and the data quality score is **improving every month**. 
     </span>
     <br/>
     <br/>
 
-## How DQOps addresses all data quality requirements
+## How DQOps addresses all data quality requirements?
 <div class="grid cards grid-columns-150-pct" markdown>
 
 -   :fontawesome-solid-people-group:{ .lg .middle } __Data Quality Operations Teams__
 
     ---
 
-    If you plan to create a data quality operations team, or even designate one person as a data quality specialist, you need a platform for them.
+    If you plan to create a data quality operations team or designate an individual as a data quality specialist, you need a platform that can support them.
     The data quality operations team will configure data quality checks, review detected data quality incidents,
     and forward them to the data engineers or a data source platform owner.
 
-    DQOps comes with a **built-in user interface** designed to manage the whole process in one place, reviewing multiple data quality issues and tables at the same time.
+    DQOps comes with a **built-in user interface** designed to manage the whole process in one place, allowing you to review multiple data quality issues and tables at the same time.
 
     [:octicons-arrow-right-24: Configure data quality checks in the user interface](dqo-concepts/dqops-user-interface-overview.md)
 
@@ -60,9 +60,9 @@ description: DQOps is an open-source data quality platform for data quality and 
 
     ---
 
-    The data engineers need a data quality platform that they can integrate inside the data pipeline code.
+    The data engineers need a data quality platform that can integrate with the data pipeline code.
     When a severe data quality issue is detected in a source table, the data pipelines should be stopped and resumed when the problem is fixed.
-    The data quality code should be also easy to version with Git, and modify the configuration without corrupting any file. 
+    The data quality code should also be easy to version with Git, and modify the configuration without corrupting any file. 
 
     DQOps does not use a database to store the configuration. Instead, all data quality configuration files are stored in YAML files.
     The platform also provides a Python Client to **automate any operation** visible in the user interface.
@@ -82,7 +82,7 @@ description: DQOps is an open-source data quality platform for data quality and 
     with you need to see a reliable data quality score that they understand and trust.
  
     DQOps measures data quality with **Data Quality KPIs**. Every user receives a complimentary Data Quality Data Warehouse hosted by DQOps,
-    and can review the data quality status on data quality dashboards. DQOps supports even [custom data quality dashboards](integrations/looker-studio/creating-custom-data-quality-dashboards.md).
+    and can review the data quality status on data quality dashboards. DQOps even supports [custom data quality dashboards](integrations/looker-studio/creating-custom-data-quality-dashboards.md).
 
     [:octicons-arrow-right-24: Track the current data quality status with data quality dashboards](dqo-concepts/types-of-data-quality-dashboards.md)
 
@@ -95,11 +95,11 @@ description: DQOps is an open-source data quality platform for data quality and 
     ---
 
     As a data scientist, you need a data quality platform where you can perform data profiling of new data before you use them as training datasets.
-    The platform should be extensible, because you have many ideas about custom data quality checks, or even using machine learning to detect anomalies in data.
+    The platform should be extensible because you may have many ideas about custom data quality checks, or even using machine learning to detect anomalies in data.
  
-    DQOps has over 150+ built-in data quality checks, created as [templated Jinja2 SQL queries](dqo-concepts/definition-of-data-quality-sensors.md),
-    validated by [Python data quality rules](dqo-concepts/definition-of-data-quality-rules.md). **Design custom data quality checks** that the data quality team will supervise,
-    the checks will be visible in the user interface.
+    DQOps has over 150+ built-in data quality checks, created as [templated Jinja2 SQL queries](dqo-concepts/definition-of-data-quality-sensors.md) and
+    validated by [Python data quality rules](dqo-concepts/definition-of-data-quality-rules.md). You can **design custom data quality checks** that the data quality team will supervise,
+    and the checks will be visible in the user interface.
 
     [:octicons-arrow-right-24: Profile the data quality of new datasets with 150+ data quality checks](dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)
 
@@ -118,11 +118,11 @@ description: DQOps is an open-source data quality platform for data quality and 
 &nbsp; &nbsp; &nbsp; [![PostgreSQL](https://dqops.com/docs/images/connections/postgresql.png){ class=glightbox-ignored-image }](data-sources/postgresql.md)
 &nbsp; &nbsp; &nbsp; [![Presto](https://dqops.com/docs/images/connections/presto1.png){ class=glightbox-ignored-image }](data-sources/presto.md)
 &nbsp; &nbsp; &nbsp; [![Amazon Redshift](https://dqops.com/docs/images/connections/amazon-redshift1.png){ class=glightbox-ignored-image }](data-sources/redshift.md)
+&nbsp; &nbsp; &nbsp; [![SingleStoreDB](https://dqops.com/docs/images/connections/single-store.png){ class=glightbox-ignored-image }](data-sources/single-store.md)
 &nbsp; &nbsp; &nbsp; [![Snowflake](https://dqops.com/docs/images/connections/snowflake.png){ class=glightbox-ignored-image }](data-sources/snowflake.md)
 &nbsp; &nbsp; &nbsp; [![Spark](https://dqops.com/docs/images/connections/spark.png){ class=glightbox-ignored-image }](data-sources/spark.md)
 &nbsp; &nbsp; &nbsp; [![Microsoft SQL Server](https://dqops.com/docs/images/connections/microsoft-sql-server.png){ class=glightbox-ignored-image }](data-sources/sql-server.md)
 &nbsp; &nbsp; &nbsp; [![Trino](https://dqops.com/docs/images/connections/trino1.png){ class=glightbox-ignored-image }](data-sources/trino.md)
-&nbsp; &nbsp; &nbsp; [![SingleStoreDB](https://dqops.com/docs/images/connections/single-store.png){ class=glightbox-ignored-image }](data-sources/single-store.md)
 
 ## Getting started
 !!! info "Start with DQOps"
@@ -141,7 +141,7 @@ description: DQOps is an open-source data quality platform for data quality and 
     
         ---
     
-        DQOps is **open-source**, you can start on your computer now. Only the complimentary Data Quality Dashboards are hosted by DQOps. 
+        DQOps is **open-source** that you can start on your computer right now. Only the complimentary Data Quality Dashboards are hosted by DQOps. 
     
         [:octicons-arrow-right-24: Download from PyPI](dqops-installation/install-dqops-using-pip.md) or [Docker Hub](dqops-installation/run-dqops-as-docker-container.md)
 
@@ -178,16 +178,16 @@ DQOps uses [data quality checks](dqo-concepts/definition-of-data-quality-checks/
     **Activate data quality checks**
 
     [DQOps user interface](dqo-concepts/dqops-user-interface-overview.md) is designed to resemble popular database management tools. The data sources, tables and columns are on the left.
-    The workspace in the center shows tables and columns in tabs, allowing to open multiple objects and edit many tables at once. 
+    The workspace in the center shows tables and columns in tabs, which allows you to open multiple objects and edit many tables at once. 
 
     The [data quality check editor](dqo-concepts/dqops-user-interface-overview.md#check-editor) shows both the built-in data quality checks and custom data quality checks
     that you can define in DQOps.
     
-    You have also other methods of activating data quality checks, such as:
+    There are other methods to activate data quality checks. You can:
 
     [:octicons-arrow-right-24: Configure data quality checks in YAML](dqo-concepts/configuring-data-quality-checks-and-rules.md)
 
-    [:octicons-arrow-right-24: Activating multiple checks at once](dqo-concepts/configuring-data-quality-checks-and-rules.md#activate-multiple-checks-at-once)
+    [:octicons-arrow-right-24: Activate multiple checks at once](dqo-concepts/configuring-data-quality-checks-and-rules.md#activate-multiple-checks-at-once)
     
     [:octicons-arrow-right-24: Use DQOps shell](dqo-concepts/configuring-data-quality-checks-and-rules.md#activate-multiple-checks-with-the-dqops-shell)
 
@@ -205,7 +205,7 @@ Over 50 built-in data quality dashboards let you drill-down to the problem.
 
     The [initial data quality KPI](dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md#initial-data-quality-kpi-score) after data profiling,
     or a [data quality KPI](dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md#when-to-use-monitoring-checks) for monitored data sources
-    are reviewed on data quality dashboards.
+    can be reviewed on data quality dashboards.
 
     [:octicons-arrow-right-24: Data quality KPI score formula](dqo-concepts/definition-of-data-quality-kpis.md#data-quality-score-formula)
 
@@ -237,12 +237,12 @@ React to data quality incidents and assign them to the right teams who can fix t
 
     **Data quality incident workflows**
 
-    Organizations have separated operations team that are reacting to data quality incidents first, and engineering teams
+    Organizations have separated operations team that react to data quality incidents first, and engineering teams
     that can fix the problems. The data engineering teams should not be engaged before the data quality issue is confirmed.
 
     DQOps reduces the effort of monitoring data quality by grouping similar data quality issues into **data quality incidents**.
     DQOps uses a [data quality incident workflow](dqo-concepts/grouping-data-quality-issues-to-incidents.md#incident-workflow) to
-    create new incidents as `OPEN` (a new incident detected), allowing the data quality operations team to review the problem
+    create new incidents as `OPEN` when a new incident is detected. This allows the data quality operations team to review the problem
     and assign `ACKNOWLEDGED` incidents to data engineering.
     
     [:octicons-arrow-right-24: Data quality incident workflow](dqo-concepts/grouping-data-quality-issues-to-incidents.md)
