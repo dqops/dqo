@@ -18,7 +18,7 @@ export default function DataDictionaryConfigurationHeader() {
 
   return (
     <thead className="border-b w-full border-b-gray-400 relative flex items-center">
-      <th className="px-6 py-4 text-left block w-100">Dictionary</th>
+      <th className="px-6 py-4 text-left block w-100">Dictionary Name</th>
       {/* <th className="px-6 py-4 text-left block w-100">Credential type</th> */}
       <Button
         label="Add dictionary"
