@@ -357,3 +357,17 @@
 {{ indentation }}ORDER BY {{ render_grouping_column_names() }}
     {%- endif -%}
 {% endmacro %}
+
+{% macro render_date_formats(date_formats) %}
+    {%- if date_formats == 'YYYY-MM-DD'-%}
+        '%Y-%m-%d'
+    {%- elif date_formats == 'MM/DD/YYYY' -%}
+        '%m/%d/%Y'
+    {%- elif date_formats == 'DD/MM/YYYY' -%}
+        '%d/%m/%Y'
+    {%- elif date_formats == 'YYYY/MM/DD'-%}
+        '%Y/%m/%d'
+    {%- elif date_formats == 'Month D, YYYY'-%}
+        '%m %d,%Y'
+    {%- endif -%}
+{% endmacro -%}
