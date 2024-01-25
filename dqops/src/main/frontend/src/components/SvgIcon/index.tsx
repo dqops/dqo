@@ -98,7 +98,8 @@ import { ReactComponent as DatabricksSvg } from './svg/databricks.svg';
 import { ReactComponent as PrestoSvg } from './svg/presto.svg';
 import { ReactComponent as TrinoSvg } from './svg/trino.svg';
 import { ReactComponent as AmazonAthenaSvg } from './svg/amazon-athena.svg';
-import { ReactComponent as SingleStoreDbSvg } from './svg/single-store.svg'
+import { ReactComponent as SingleStoreDbSvg } from './svg/single-store.svg';
+import { ReactComponent as DataDictionarySvg } from './svg/data-dictionary.svg'
 
 const iconsMap: any = {
   bell: BellSvg,
@@ -205,7 +206,8 @@ const iconsMap: any = {
   presto: PrestoSvg,
   trino: TrinoSvg,
   athena: AmazonAthenaSvg,
-  singlestoredb: SingleStoreDbSvg
+  singlestoredb: SingleStoreDbSvg,
+  datadictionary: DataDictionarySvg
 };
 
 interface SvgIconProps {
