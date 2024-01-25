@@ -4,7 +4,7 @@ SELECT
         WHEN COUNT(*) = 0 THEN 0.0
         ELSE 100.0 * SUM(
             CASE
-                WHEN SUBSTRING({{lib.render_target_column('analyzed_table')}} from '[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*') IS NOT NULL
+                WHEN REGEXP_MATCHES({{lib.render_target_column('analyzed_table')}}, '[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*') IS TRUE
                     THEN 1
                 ELSE 0
             END
