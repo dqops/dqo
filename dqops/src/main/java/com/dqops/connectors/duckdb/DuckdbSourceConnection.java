@@ -29,7 +29,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import tech.tablesaw.api.Table;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
@@ -96,6 +99,21 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
 
         hikariConfig.setDataSourceProperties(dataSourceProperties);
         return hikariConfig;
+    }
+
+    /**
+     * Creates the tablesaw's Table from the ResultSet for the query execution
+     * @param results               ResultSet object that contains the data produced by a query
+     * @param sqlQueryStatement     SQL statement that returns a row set.
+     * @return Tabular result captured from the query.
+     * @throws SQLException
+     */
+    @Override
+    protected Table rawTableResultFromResultSet(ResultSet results, String sqlQueryStatement) throws SQLException {
+        try (DuckdbResultSet mysqlResultSet = new DuckdbResultSet(results)) {
+            Table resultTable = Table.read().db(mysqlResultSet, sqlQueryStatement);
+            return resultTable;
+        }
     }
 
     /**
