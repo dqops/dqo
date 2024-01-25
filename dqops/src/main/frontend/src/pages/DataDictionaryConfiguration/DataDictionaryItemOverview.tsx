@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DefinitionLayout from '../../components/DefinitionLayout';
 import TextArea from '../../components/TextArea';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,7 +11,7 @@ import { closeFirstLevelTab } from '../../redux/actions/definition.actions';
 
 export default function DataDictionaryItemOverview() {
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
-  const { credential_name } = useSelector(getFirstLevelSensorState);
+  const { dictionary_name } = useSelector(getFirstLevelSensorState);
   const [dictionaryName, setDictionaryName] = useState('');
   const [textAreaValue, setTextAreaValue] = useState<string>('');
 
@@ -22,22 +22,35 @@ export default function DataDictionaryItemOverview() {
       dictionary_name: dictionaryName,
       file_content: textAreaValue
     }).catch((err) => console.error(err));
-    dispatch(closeFirstLevelTab('/definitions/shared-credential/new'));
+    dispatch(closeFirstLevelTab('/definitions/data-dictionary/new'));
   };
 
   const editDictionary = async () => {
     await DataDictionaryApiClient.updateDictionary(dictionaryName, {
+      dictionary_name: dictionaryName,
       file_content: textAreaValue
     }).catch((err) => console.error(err));
 
     dispatch(
-      closeFirstLevelTab('/definitions/shared-credential/' + credential_name)
+      closeFirstLevelTab('/definitions/data-dictionary/' + dictionary_name)
     );
   };
 
+  useEffect(() => {
+    if (dictionary_name) {
+      const getDictionary = () => {
+        DataDictionaryApiClient.getDictionary(dictionary_name).then((res) => {
+          setDictionaryName(res.data.dictionary_name ?? ''),
+            setTextAreaValue(res.data.file_content ?? '');
+        });
+      };
+      getDictionary();
+    }
+  }, [dictionary_name]);
+
   return (
     <DefinitionLayout>
-      {userProfile.can_manage_and_view_shared_credentials === true ? (
+      {userProfile.can_manage_definitions === true ? (
         <>
           <div className="w-full border-b border-b-gray-400 flex justify-between ">
             <div className="text-xl font-semibold truncate flex items-center pl-5 space-x-2">
@@ -45,13 +58,13 @@ export default function DataDictionaryItemOverview() {
               <Input
                 value={dictionaryName}
                 onChange={(e) => setDictionaryName(e.target.value)}
-                disabled={credential_name}
+                disabled={dictionary_name}
               />
             </div>
             <div className="flex items-center justify-center space-x-1 pr-5 overflow-hidden">
-              {credential_name ? (
+              {dictionary_name ? (
                 <a
-                  href={`/api/credentials/${credential_name}/download`}
+                  href={`/api/credentials/${dictionary_name}/download`}
                   rel="noreferrer"
                   target="_blank"
                 >
@@ -64,17 +77,17 @@ export default function DataDictionaryItemOverview() {
                 </a>
               ) : null}
               <Button
-                label={credential_name ? 'Save' : 'Add dictionary'}
+                label={dictionary_name ? 'Save' : 'Add dictionary'}
                 color="primary"
                 variant="contained"
                 className={'my-3'}
-                onClick={credential_name ? editDictionary : addDictionary}
+                onClick={dictionary_name ? editDictionary : addDictionary}
               />
             </div>
           </div>
           <div className="px-5">
             <TextArea
-              className="w-250 min-h-50 mt-4"
+              className="w-full min-h-120 mt-4"
               value={textAreaValue}
               onChange={(e) => setTextAreaValue(e.target.value)}
             />
