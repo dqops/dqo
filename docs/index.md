@@ -155,7 +155,10 @@ DQOps uses [data quality checks](dqo-concepts/definition-of-data-quality-checks/
 
 !!! success "Data profiling"
 
-    ![DQOps data profiling interface](https://dqops.com/docs/images/dqops-profiling.png "DQOps captures statistics about data sources (click to enlarge)"){ width="600px"; align=left }
+    <div class="grid" markdown>
+
+    ![DQOps data profiling interface](https://dqops.com/docs/images/dqops-profiling.png "DQOps captures statistics about data sources (click to enlarge)"){ loading=lazy }
+    <div>
 
     **Profile data**
 
@@ -171,9 +174,15 @@ DQOps uses [data quality checks](dqo-concepts/definition-of-data-quality-checks/
 
     [:octicons-arrow-right-24: Review the initial data quality KPI score on dashboards](dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md#initial-data-quality-kpi-score)
 
+    </div>
+    </div>
+
 !!! success "Data quality monitoring"
 
-    ![Checks in DQOps can be quickly edited with intuitive user interface](https://dqops.com/docs/images/dqops-checks-editor.png "Checks in DQOps can be quickly edited with intuitive user interface"){ width="600px"; align=left }
+    <div class="grid" markdown>
+
+    ![Checks in DQOps can be quickly edited with intuitive user interface](https://dqops.com/docs/images/dqops-checks-editor.png "Checks in DQOps can be quickly edited with intuitive user interface"){ loading=lazy }
+    <div>
 
     **Activate data quality checks**
 
@@ -191,13 +200,18 @@ DQOps uses [data quality checks](dqo-concepts/definition-of-data-quality-checks/
     
     [:octicons-arrow-right-24: Use DQOps shell](dqo-concepts/configuring-data-quality-checks-and-rules.md#activate-multiple-checks-with-the-dqops-shell)
 
+    </div>
+    </div>
 
 ### Data quality dashboards
 Over 50 built-in data quality dashboards let you drill-down to the problem.
 
 !!! success "Data quality KPIs"
 
-    ![DQOps dashboards simplify monitoring of data quality KPIs](https://dqops.com/docs/images/dqops-kpis-scorecard-dashboard.png "DQOps dashboards simplify monitoring of data quality KPIs (click to enlarge)"){ width="600px"; align=left }
+    <div class="grid" markdown>
+
+    ![DQOps dashboards simplify monitoring of data quality KPIs](https://dqops.com/docs/images/dqops-kpis-scorecard-dashboard.png "DQOps dashboards simplify monitoring of data quality KPIs (click to enlarge)"){ loading=lazy }
+    <div>
 
     **Review data quality KPI scores**
 
@@ -211,9 +225,15 @@ Over 50 built-in data quality dashboards let you drill-down to the problem.
 
     [:octicons-arrow-right-24: Data quality KPI dashboards](dqo-concepts/types-of-data-quality-dashboards.md#data-quality-kpis)
 
+    </div>
+    </div>
+
 !!! success "Data quality dashboards"
 
-    ![DQOps dashboards enable quick identification of tables with data quality issues](https://dqops.com/docs/images/dqops-current-completeness-issues-dashboard.png "DQOps dashboards enable quick identification of tables with data quality issues (click to enlarge)"){ width="600px"; align=left }
+    <div class="grid" markdown>
+
+    ![DQOps dashboards enable quick identification of tables with data quality issues](https://dqops.com/docs/images/dqops-current-completeness-issues-dashboard.png "DQOps dashboards enable quick identification of tables with data quality issues (click to enlarge)"){ loading=lazy }
+    <div>
 
     **Track quality on data quality dashboards**
 
@@ -227,13 +247,18 @@ Over 50 built-in data quality dashboards let you drill-down to the problem.
     
     [:octicons-arrow-right-24: Creating custom data quality dashboards](integrations/looker-studio/creating-custom-data-quality-dashboards.md)
 
+    </div>
+    </div>
 
 ### Data quality incidents
 React to data quality incidents and assign them to the right teams who can fix the problem.
 
 !!! success "Data quality incident management"
 
-    ![With DQOps, you can conveniently keep track of the issues that arise during data quality monitoring](https://dqops.com/docs/images/dqops-incidents-management.png "With DQOps, you can conveniently keep track of the issues that arise during data quality monitoring (click to enlarge)"){ width="600px"; align=left }
+    <div class="grid" markdown>
+
+    ![With DQOps, you can conveniently keep track of the issues that arise during data quality monitoring](https://dqops.com/docs/images/dqops-incidents-management.png "With DQOps, you can conveniently keep track of the issues that arise during data quality monitoring (click to enlarge)"){ loading=lazy }
+    <div>
 
     **Data quality incident workflows**
 
@@ -250,7 +275,9 @@ React to data quality incidents and assign them to the right teams who can fix t
     [:octicons-arrow-right-24: Sending notifications to slack](integrations/slack/configuring-slack-notifications.md)
     
     [:octicons-arrow-right-24: Sending notifications to any ticketing platform using webhooks](integrations/webhooks/index.md)
-   
+
+    </div>
+    </div>
 
 ## DQOps is DevOps and DataOps friendly
 
@@ -329,7 +356,10 @@ Want to learn more about data quality?
 
 !!! tip "Reaching 100% data quality KPI score"
 
-    ![A step-by-step guide to improve data quality](images/dqops-ebook-open-with-process.png "A step-by-step guide to improve data quality"){ width="500px"; align=left }
+    <div class="grid" markdown>
+
+    ![A step-by-step guide to improve data quality](images/dqops-ebook-open-with-process.png "A step-by-step guide to improve data quality"){ loading=lazy }
+    <div>
 
     DQOps team has written an eBook ["A step-by-step guide to improve data quality"](https://dqops.com/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/)
     that describes their experience in data cleansing and data quality monitoring using DQOps. 
@@ -342,5 +372,6 @@ Want to learn more about data quality?
 
     _Click to zoom in_
     
-   
+    </div>
+    </div>
 
