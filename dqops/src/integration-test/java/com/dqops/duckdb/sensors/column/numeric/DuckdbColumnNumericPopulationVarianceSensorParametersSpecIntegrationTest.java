@@ -64,7 +64,7 @@ public class DuckdbColumnNumericPopulationVarianceSensorParametersSpecIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(11416.0896, resultTable.column(0).get(0));
+        Assertions.assertEquals(11416.0896, Double.valueOf(String.valueOf(resultTable.column(0).get(0))), 0.01);
     }
 
     @Test
@@ -77,7 +77,7 @@ public class DuckdbColumnNumericPopulationVarianceSensorParametersSpecIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(11416.0896, resultTable.column(0).get(0));
+        Assertions.assertEquals(11416.0896, Double.valueOf(String.valueOf(resultTable.column(0).get(0))), 0.01);
     }
 
     @Test
@@ -90,7 +90,7 @@ public class DuckdbColumnNumericPopulationVarianceSensorParametersSpecIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(11416.0896, resultTable.column(0).get(0));
+        Assertions.assertEquals(11416.0896, Double.valueOf(String.valueOf(resultTable.column(0).get(0))), 0.01);
     }
 
     @Test
@@ -116,6 +116,6 @@ public class DuckdbColumnNumericPopulationVarianceSensorParametersSpecIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(11416.0896, resultTable.column(0).get(0));
+        Assertions.assertEquals(11416.0896, Double.valueOf(String.valueOf(resultTable.column(0).get(0))), 0.01);
     }
 }

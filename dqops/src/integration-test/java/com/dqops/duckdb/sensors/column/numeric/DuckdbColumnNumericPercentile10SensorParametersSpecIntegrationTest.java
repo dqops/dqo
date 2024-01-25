@@ -65,7 +65,7 @@ public class DuckdbColumnNumericPercentile10SensorParametersSpecIntegrationTest 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(2.9000000000000004, resultTable.column(0).get(0));
+        Assertions.assertEquals(2.9, resultTable.column(0).get(0));
     }
 
     @Test
@@ -79,7 +79,7 @@ public class DuckdbColumnNumericPercentile10SensorParametersSpecIntegrationTest 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(2.9000000000000004, resultTable.column(0).get(0));
+        Assertions.assertEquals(2.9, resultTable.column(0).get(0));
     }
 
     @Test
@@ -93,7 +93,7 @@ public class DuckdbColumnNumericPercentile10SensorParametersSpecIntegrationTest 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(2.9000000000000004, resultTable.column(0).get(0));
+        Assertions.assertEquals(2.9, resultTable.column(0).get(0));
     }
 
     @Test

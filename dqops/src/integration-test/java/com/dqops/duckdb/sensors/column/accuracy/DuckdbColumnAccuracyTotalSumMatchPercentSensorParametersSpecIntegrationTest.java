@@ -48,7 +48,7 @@ public class DuckdbColumnAccuracyTotalSumMatchPercentSensorParametersSpecIntegra
     @BeforeEach
     void setUp() {
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.ip4_test, ProviderType.duckdb);
-        this.sampleTableMetadataReferenced = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.ip6_test, ProviderType.bigquery);
+        this.sampleTableMetadataReferenced = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.ip6_test, ProviderType.duckdb);
         IntegrationTestSampleDataObjectMother.ensureTableExists(this.sampleTableMetadata);
         IntegrationTestSampleDataObjectMother.ensureTableExists(this.sampleTableMetadataReferenced);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
