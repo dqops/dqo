@@ -43,7 +43,6 @@ public class DuckdbConnectionSpecObjectMother {
 
 			setDuckdb(new DuckdbParametersSpec()
             {{
-                // todo: set params for integration tests
                 setInMemory(true);
 //                setDatabase();
             }});

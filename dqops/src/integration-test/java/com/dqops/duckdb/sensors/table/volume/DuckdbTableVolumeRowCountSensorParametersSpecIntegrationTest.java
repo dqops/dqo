@@ -57,8 +57,6 @@ public class DuckdbTableVolumeRowCountSensorParametersSpecIntegrationTest extend
         category.setProfileRowCount(this.checkSpec);
     }
 
-    // todo: check if passes
-
     @Test
     void runSensor_whenSensorExecuted_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForProfilingCheck(
