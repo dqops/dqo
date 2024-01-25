@@ -40,8 +40,8 @@ export default function DataDictionaryItemOverview() {
     if (dictionary_name) {
       const getDictionary = () => {
         DataDictionaryApiClient.getDictionary(dictionary_name).then((res) => {
-          setDictionaryName(res.data.dictionary_name ?? ''),
-            setTextAreaValue(res.data.file_content ?? '');
+          setDictionaryName(res?.data?.dictionary_name ?? ''),
+            setTextAreaValue(res?.data?.file_content ?? '');
         });
       };
       getDictionary();
