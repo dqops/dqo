@@ -24,6 +24,14 @@
     {{ quote_identifier(macro_schema_name) }}.{{ quote_identifier(macro_table_name) }}
 {%- endmacro %}
 
+{%- macro render_referenced_table(referenced_table) -%}
+{%- if referenced_table.find(".") < 0 -%}
+   {{ quote_identifier(macro_schema_name) }}.{{- quote_identifier(referenced_table) -}}
+{%- else -%}
+   {{ referenced_table }}
+{%- endif -%}
+{%- endmacro -%}
+
 {%- macro render_target_column(table_alias_prefix = 'analyzed_table') -%}
     {%- if calculated_column_expression != '' -%}
         ({{ calculated_column_expression | replace('{column}', table_alias_prefix ~ '.' ~ quote_identifier(column_name)) | replace('{table}', render_target_table()) | replace('{alias}', table_alias_prefix) }})
