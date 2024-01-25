@@ -4,14 +4,6 @@
     {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
 {%- endmacro %}
 
-{%- macro render_foreign_table(foreign_table) -%}
-{%- if foreign_table.find(".") < 0 -%}
-   {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
-{%- else -%}
-   {{ foreign_table }}
-{%- endif -%}
-{%- endmacro -%}
-
 SELECT
     SUM(
         CASE
@@ -23,7 +15,7 @@ SELECT
     {{- lib.render_data_grouping_projections('analyzed_table') }}
     {{- lib.render_time_dimension_projection('analyzed_table') }}
 FROM {{ lib.render_target_table() }} AS analyzed_table
-LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
 ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
 {{- lib.render_where_clause() -}}
 {{- lib.render_group_by() -}}
