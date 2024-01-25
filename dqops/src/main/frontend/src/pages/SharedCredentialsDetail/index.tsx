@@ -6,18 +6,16 @@ import Button from '../../components/Button';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../redux/actions/definition.actions';
 import { ROUTES } from '../../shared/routes';
-import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
 import SvgIcon from '../../components/SvgIcon';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
+import SharedCredentailTable from './SharedCredentailTable';
 
 export default function SharedCredentialsDetail() {
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
   const dispatch = useActionDispatch()
   
   const [sharedCredentialList, setSharedCredentialList] = useState<SharedCredentialListModel[]>();
-  const [selectedSharedCredentialToDelete, setSelectedSharedCredentialToDelete] = useState<string>("")
-  const [reshreshIndicator, setRefreshIndicator] = useState<boolean>(false)
   const [loading, setLoading] = useState(false)
 
   const getSharedCredentialList = async () => {
@@ -38,43 +36,27 @@ export default function SharedCredentialsDetail() {
     );
   }
 
-  const updateSharedCredential = async (credential_name : string) => {
-    dispatch(
-      addFirstLevelTab({
-        url: ROUTES.SHARED_CREDENTIALS_DETAIL(credential_name),
-        value: ROUTES.SHARED_CREDENTIALS_DETAIL_VALUE(credential_name),
-        label: "Edit credential",
-        state: {
-          credential_name
-        }
-      })
-    );
-  }
-
-  const deleteSharedCredential = async () => {
-    await SharedCredentialsApi.deleteSharedCredential(selectedSharedCredentialToDelete ?? "")
-    .then(() => setRefreshIndicator(!reshreshIndicator))
+  const deleteSharedCredential = async (credential: string) => {
+    await SharedCredentialsApi.deleteSharedCredential(credential)
+    .then(() => {
+      setLoading(true)
+      getSharedCredentialList()
+    })
     .catch((err) => console.error(err))
       
   }
 
-  // const downloadSharedCredential = async (credential: string) => {
-  //   await SharedCredentialsApi.downloadSharedCredential(credential)
-  //   .then((res) => console.log(res.data))
-  //   .catch((err) => console.error(err))
-  // }
-
   useEffect(() => {
     setLoading(true)
     getSharedCredentialList()
-  }, [reshreshIndicator])
+  }, [])
 
 
   if (loading) {
     return(
     <DefinitionLayout>
         <div className='w-full h-screen flex items-center justify-center'>
-         <SvgIcon name='sync' className='w-6 h-6 animate-spin'/>
+           <SvgIcon name='sync' className='w-6 h-6 animate-spin'/>
         </div>
     </DefinitionLayout>
 )}
@@ -94,35 +76,13 @@ export default function SharedCredentialsDetail() {
                   onClick={addSharedCredential}
                 />
             </thead>
-            <tbody>
-                {sharedCredentialList?.map((credential, index) => 
-                <tr key={index} className='flex items-center'>
-                    <td className='px-6 py-2 text-left block w-100'>{credential.credential_name}</td>
-                    <td className='px-6 py-2 text-left block w-100'>{credential.type}</td>
-                    <td className='px-6 py-2 text-left block max-w-100'>
-                        <Button label='edit' variant='text' color='primary' 
-                        onClick={() => updateSharedCredential(credential.credential_name ?? "")}
-                        />
-                    </td>
-                    <td className="px-6 py-2 text-left block max-w-100">
-                        <Button label='delete' variant='text' color='primary' 
-                        onClick={() => setSelectedSharedCredentialToDelete(credential.credential_name ?? "")}/>
-                    </td>
-                    <td className="px-6 py-2 text-left block max-w-100">
-                        {/* <Button label='download' variant='text' color='primary'
-                        onClick={() => downloadSharedCredential(credential.credential_name ?? "")} /> */}
-                        <a href={`/api/credentials/${credential.credential_name}/download`} rel="noreferrer" target="_blank" className='text-teal-500'>download</a>
-                    </td>
-                </tr>
-                )}
-            </tbody>
+            <SharedCredentailTable sharedCredentialList={sharedCredentialList ?? []} deleteSharedCredential={deleteSharedCredential}/> 
         </table>
         : 
         <div className='w-full h-screen flex items-center justify-center text-red-500 text-2xl'>
          Access denied
         </div> 
       }
-        <ConfirmDialog open={selectedSharedCredentialToDelete?.length!==0} onClose={() => setSelectedSharedCredentialToDelete('')} onConfirm={deleteSharedCredential} message={`Are you sure you want to delete ${selectedSharedCredentialToDelete} credential?`}/>
     </DefinitionLayout>
   )
 }
