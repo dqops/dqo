@@ -37,7 +37,7 @@ description: DQOps is an open-source data quality platform for data quality and 
     <br/>
     <br/>
 
-## How DQOps addresses all data quality requirements
+## How DQOps addresses all data quality requirements?
 <div class="grid cards grid-columns-150-pct" markdown>
 
 -   :fontawesome-solid-people-group:{ .lg .middle } __Data Quality Operations Teams__
@@ -118,11 +118,11 @@ description: DQOps is an open-source data quality platform for data quality and 
 &nbsp; &nbsp; &nbsp; [![PostgreSQL](https://dqops.com/docs/images/connections/postgresql.png){ class=glightbox-ignored-image }](data-sources/postgresql.md)
 &nbsp; &nbsp; &nbsp; [![Presto](https://dqops.com/docs/images/connections/presto1.png){ class=glightbox-ignored-image }](data-sources/presto.md)
 &nbsp; &nbsp; &nbsp; [![Amazon Redshift](https://dqops.com/docs/images/connections/amazon-redshift1.png){ class=glightbox-ignored-image }](data-sources/redshift.md)
+&nbsp; &nbsp; &nbsp; [![SingleStoreDB](https://dqops.com/docs/images/connections/single-store.png){ class=glightbox-ignored-image }](data-sources/single-store.md)
 &nbsp; &nbsp; &nbsp; [![Snowflake](https://dqops.com/docs/images/connections/snowflake.png){ class=glightbox-ignored-image }](data-sources/snowflake.md)
 &nbsp; &nbsp; &nbsp; [![Spark](https://dqops.com/docs/images/connections/spark.png){ class=glightbox-ignored-image }](data-sources/spark.md)
 &nbsp; &nbsp; &nbsp; [![Microsoft SQL Server](https://dqops.com/docs/images/connections/microsoft-sql-server.png){ class=glightbox-ignored-image }](data-sources/sql-server.md)
 &nbsp; &nbsp; &nbsp; [![Trino](https://dqops.com/docs/images/connections/trino1.png){ class=glightbox-ignored-image }](data-sources/trino.md)
-&nbsp; &nbsp; &nbsp; [![SingleStoreDB](https://dqops.com/docs/images/connections/single-store.png){ class=glightbox-ignored-image }](data-sources/single-store.md)
 
 ## Getting started
 !!! info "Start with DQOps"
@@ -141,7 +141,7 @@ description: DQOps is an open-source data quality platform for data quality and 
     
         ---
     
-        DQOps is **open-source**, you can start on your computer now. Only the complimentary Data Quality Dashboards are hosted by DQOps. 
+        DQOps is **open-source** that you can start on your computer right now. Only the complimentary Data Quality Dashboards are hosted by DQOps. 
     
         [:octicons-arrow-right-24: Download from PyPI](dqops-installation/install-dqops-using-pip.md) or [Docker Hub](dqops-installation/run-dqops-as-docker-container.md)
 
