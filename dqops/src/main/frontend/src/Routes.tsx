@@ -46,6 +46,7 @@ import DefaultWebhooksDetail from "./pages/DefaultWebhooksDetail";
 import SharedCredentialsDetail from "./pages/SharedCredentialsDetail";
 import SingleSharedCredential from "./pages/SharedCredentialsDetail/SingleSharedCredential";
 import DataDictionary from "./pages/DataDictionaryConfiguration";
+import DataDictionaryItemOverview from "./pages/DataDictionaryConfiguration/DataDictionaryItemOverview";
 
 const Routes = () => {
   return (
@@ -91,7 +92,7 @@ const Routes = () => {
       <Route exact path={ROUTES.PATTERNS.SHARED_CREDENTIALS_LIST_DETAIL} component={SharedCredentialsDetail}/>
       <Route exact path={ROUTES.PATTERNS.SHARED_CREDENTIALS_DETAIL} component={SingleSharedCredential}/>
       <Route exact path={ROUTES.PATTERNS.DATA_DICTIONARY_LIST_DETAIL} component={DataDictionary}/>
-      {/* <Route exact path={ROUTES.PATTERNS.SHARED_CREDENTIALS_DETAIL} component={SingleSharedCredential}/> */}
+      <Route exact path={ROUTES.PATTERNS.DATA_DICTIONARY_DETAIL} component={DataDictionaryItemOverview}/>
       <Redirect from={ROUTES.PATTERNS.INDEX} to={ROUTES.PATTERNS.HOME} />
       <Route exact path="*" component={NotFound} />
     </Switch>
