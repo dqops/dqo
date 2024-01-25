@@ -65,9 +65,6 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         ConnectionSpec connectionSpec = this.getConnectionSpec();
         DuckdbParametersSpec duckdbSpec = connectionSpec.getDuckdb();
 
-        // todo: connection
-
-//        String host = this.getSecretValueProvider().expandValue(duckdbSpec.getHost(), secretValueLookupContext);
         StringBuilder jdbcConnectionBuilder = new StringBuilder();
         jdbcConnectionBuilder.append("jdbc:duckdb:");
 
@@ -75,14 +72,6 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
             jdbcConnectionBuilder.append(":memory:");
         }
 
-//        jdbcConnectionBuilder.append(host);
-
-//        jdbcConnectionBuilder.append('/');
-//        String database = this.getSecretValueProvider().expandValue(duckdbSpec.getDatabase(), secretValueLookupContext);
-//        if (!Strings.isNullOrEmpty(database)) {
-//            jdbcConnectionBuilder.append(database);
-//        }
-//
         String jdbcUrl = jdbcConnectionBuilder.toString();
         hikariConfig.setJdbcUrl(jdbcUrl);
 
@@ -91,6 +80,8 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         if (duckdbSpec.getProperties() != null) {
             dataSourceProperties.putAll(duckdbSpec.getProperties());
         }
+
+        // todo: connection
 
 //        String options =  this.getSecretValueProvider().expandValue(duckdbSpec.getOptions(), secretValueLookupContext);
 //        if (!Strings.isNullOrEmpty(options)) {

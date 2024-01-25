@@ -22,7 +22,7 @@ import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-// todo: verify if passes
+
 @SpringBootTest
 public class CreateAllSampleTablesDuckdbIntegrationTest extends BaseDuckdbIntegrationTest {
     @Test

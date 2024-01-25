@@ -45,7 +45,6 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
         }
     };
 
-    // todo: current driver sets it automatically when no folder is implicitly set to the connection stirng
     @CommandLine.Option(names = {"--duckdb-in-memory"}, description = "To use the special value :memory: to create an in-memory database where no data is persisted to disk (i.e., all data is lost when you exit the process). The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     @JsonPropertyDescription("To use the special value :memory: to create an in-memory database where no data is persisted to disk (i.e., all data is lost when you exit the process). The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private boolean inMemory;
