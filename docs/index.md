@@ -148,7 +148,10 @@ description: DQOps is an open-source data quality platform for data quality and 
     </div>
 
 
-## DQOps data quality checks
+## Features
+
+### Data quality checks
+DQOps uses [data quality checks](dqo-concepts/definition-of-data-quality-checks/index.md) to capture metrics from data sources and detect data quality issues.
 
 !!! success "Data profiling"
 
@@ -189,7 +192,9 @@ description: DQOps is an open-source data quality platform for data quality and 
     [:octicons-arrow-right-24: Use DQOps shell](dqo-concepts/configuring-data-quality-checks-and-rules.md#activate-multiple-checks-with-the-dqops-shell)
 
 
-## DQOps dashboards
+### Data quality dashboards
+Over 50 built-in data quality dashboards let you drill-down to the problem.
+
 !!! success "Data quality KPIs"
 
     ![DQOps dashboards simplify monitoring of data quality KPIs](https://dqops.com/docs/images/dqops-kpis-scorecard-dashboard.png "DQOps dashboards simplify monitoring of data quality KPIs (click to enlarge)"){ width="600px"; align=left }
@@ -210,7 +215,7 @@ description: DQOps is an open-source data quality platform for data quality and 
 
     ![DQOps dashboards enable quick identification of tables with data quality issues](https://dqops.com/docs/images/dqops-current-completeness-issues-dashboard.png "DQOps dashboards enable quick identification of tables with data quality issues (click to enlarge)"){ width="600px"; align=left }
 
-    **Data quality dashboards**
+    **Track quality on data quality dashboards**
 
     DQOps provides a complimentary [Data Quality Data Warehouse](dqo-concepts/architecture/dqops-architecture.md#data-quality-data-warehouse)
     for every user. The data quality check results captured when monitoring data quality are first stored [locally on your computer in a Hive-compliant data lake](dqo-concepts/data-storage-of-data-quality-results.md).
@@ -223,7 +228,8 @@ description: DQOps is an open-source data quality platform for data quality and 
     [:octicons-arrow-right-24: Creating custom data quality dashboards](integrations/looker-studio/creating-custom-data-quality-dashboards.md)
 
 
-## Incident management
+### Data quality incidents
+React to data quality incidents and assign them to the right teams who can fix the problem.
 
 !!! success "Data quality incident management"
 
@@ -275,7 +281,7 @@ See how DQOps supports [editing data quality configuration files in Visual Studi
 validating the structure of files, suggesting data quality checks names and parameters, and even showing help about 150+ data quality
 checks inside Visual Studio Code.
 
-## DQOps competitive advantages
+## Competitive advantages
 <div class="grid cards grid-columns-150-pct" markdown>
 
 -   :fontawesome-solid-bolt-lightning:{ .lg .middle } __Analyze very big tables__
