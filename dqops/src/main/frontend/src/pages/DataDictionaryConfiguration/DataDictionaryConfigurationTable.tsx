@@ -65,6 +65,9 @@ export default function DataDictionaryConfigurationTable() {
           <td className="px-6 py-2 text-left block w-100">
             {dictionary.dictionary_name}
           </td>
+          <td className="px-6 py-2 text-left block w-100 italic">
+             {'${dictionary://' + dictionary.dictionary_name + "}"}
+          </td>
           <td className="px-6 py-2 text-left block max-w-100">
             <Button
               label="edit"

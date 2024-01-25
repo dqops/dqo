@@ -195,7 +195,7 @@ export const DefinitionTree = () => {
       addFirstLevelTab({
         url: ROUTES.DATA_DICTIONARY_LIST_DETAIL(),
         value: ROUTES.DATA_DICTIONARY_LIST_VALUE(),
-        label: 'Data dictionary'
+        label: 'Data dictionaries'
       })
     );
   };
@@ -712,7 +712,7 @@ export const DefinitionTree = () => {
       >
         <SvgIcon name="datadictionary" className="w-4 h-4 min-w-4 " />
         <div className="text-[14.5px] leading-1.5 whitespace-nowrap flex items-center justify-between">
-          Data dictionary
+          Data dictionaries
         </div>
       </div>
     </div>
