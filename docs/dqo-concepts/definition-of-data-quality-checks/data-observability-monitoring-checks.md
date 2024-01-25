@@ -34,7 +34,7 @@ divided by **daily monitoring** and **monthly monitoring** checks.
 | **_monitoring_** | *monthly*  | Capture the last known end-of-month data quality status.<br/>*Monthly monitoring* checks store the **end-of-month** data quality status for measuring the [data quality KPIs](../definition-of-data-quality-kpis.md). | One data quality monitoring result captured **per month**,<br/>when a *monthly* monitoring check is run again during the same month, the previous result is replaced. | _monthly\_\*_     |
 
 
-## Monitoring checks in DQOps user interface 
+## Monitoring checks in DQOps user interface
 
 ### **Daily monitoring checks**
 The following screen shows the data quality results of the [daily_row_count](../../checks/table/volume/row-count.md#daily-row-count)
@@ -126,7 +126,7 @@ Please review the samples in the [configuring table metadata](../configuring-tab
   how to configure monitoring checks at a *column* level
 
 
-## What's next 
+## What's next
 - Learn how to assess the initial data quality status using [profiling checks](data-profiling-checks.md).
 - Learn how to analyze data quality of partitioned data using [partition checks](partition-checks.md).
 - Read the [configuring table-level monitoring checks](../configuring-data-quality-checks-and-rules.md#table-level-monitoring-checks) and

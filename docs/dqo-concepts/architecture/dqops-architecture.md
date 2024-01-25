@@ -147,7 +147,7 @@ The cloud-hosted side of a DQOps deployment is responsible for hosting data qual
 DQOps provides complimentary cloud infrastructure for users using a FREE DQOps license.
 The DQOps Cloud components are:
 
-### **Data Quality Data Lake** 
+### **Data Quality Data Lake**
 *Data Quality Data Lake* is composed of two GCP storage buckets that store the configuration files and Parquet data files. DQOps local
 instance synchronizes files from the *./sources*, *./sensors*, *./rules*, *./checks*, *./settings* and *./.credentials*
 to the configuration bucket. All files from the *./.data* folder are replicated to the second data bucket.

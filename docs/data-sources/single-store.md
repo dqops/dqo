@@ -171,17 +171,17 @@ apiVersion: dqo/v1
 kind: source
 spec:
   provider_type: mysql
-    mysql:
-      database: def
-      user: user-12345
-      password: <single-store-password>
-      single_store_db_parameters_spec:
-        load_balancing_mode: none
-        host_descriptions:
-        - <host>:<port>
-        schema: database_0c0ab
-        use_ssl: true
-      mysql_engine_type: singlestoredb
+  mysql:
+    database: def
+    user: user-12345
+    password: <single-store-password>
+    single_store_db_parameters_spec:
+      load_balancing_mode: none
+      host_descriptions:
+        - "<host>:<port>"
+      schema: database_0c0ab
+      use_ssl: true
+    mysql_engine_type: singlestoredb
   incident_grouping:
     grouping_level: table_dimension_category
     minimum_severity: warning
