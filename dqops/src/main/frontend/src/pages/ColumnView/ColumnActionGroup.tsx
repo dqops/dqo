@@ -80,7 +80,7 @@ const ColumnActionGroup = ({
             }           
             label={collectStatisticsSpinner
               ? 'Collecting...'
-              : "Collect Statistics"}
+              : "Collect statistics"}
             className={clsx(
               '!h-10 disabled:bg-gray-500 disabled:border-none disabled:text-white whitespace-nowrap gap-x-2 '
             )}
