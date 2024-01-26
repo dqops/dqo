@@ -4,23 +4,23 @@ from .all_checks_patch_parameters import AllChecksPatchParameters
 from .all_checks_patch_parameters_selected_tables_to_columns import (
     AllChecksPatchParametersSelectedTablesToColumns,
 )
-from .anomaly_differencing_percentile_moving_average_rule_01_parameters_spec import (
-    AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec,
+from .anomaly_differencing_percentile_moving_average_rule_error_05_pct_parameters_spec import (
+    AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec,
 )
-from .anomaly_differencing_percentile_moving_average_rule_1_parameters_spec import (
-    AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec,
+from .anomaly_differencing_percentile_moving_average_rule_fatal_01_pct_parameters_spec import (
+    AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec,
 )
-from .anomaly_differencing_percentile_moving_average_rule_05_parameters_spec import (
-    AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec,
+from .anomaly_differencing_percentile_moving_average_rule_warning_1_pct_parameters_spec import (
+    AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec,
 )
-from .anomaly_stationary_percentile_moving_average_rule_01_parameters_spec import (
-    AnomalyStationaryPercentileMovingAverageRule01ParametersSpec,
+from .anomaly_stationary_percentile_moving_average_rule_error_05_pct_parameters_spec import (
+    AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec,
 )
-from .anomaly_stationary_percentile_moving_average_rule_1_parameters_spec import (
-    AnomalyStationaryPercentileMovingAverageRule1ParametersSpec,
+from .anomaly_stationary_percentile_moving_average_rule_fatal_01_pct_parameters_spec import (
+    AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec,
 )
-from .anomaly_stationary_percentile_moving_average_rule_05_parameters_spec import (
-    AnomalyStationaryPercentileMovingAverageRule05ParametersSpec,
+from .anomaly_stationary_percentile_moving_average_rule_warning_1_pct_parameters_spec import (
+    AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec,
 )
 from .athena_authentication_mode import AthenaAuthenticationMode
 from .authenticated_dashboard_model import AuthenticatedDashboardModel
@@ -1291,6 +1291,8 @@ from .dashboard_spec import DashboardSpec
 from .dashboard_spec_parameters import DashboardSpecParameters
 from .dashboards_folder_spec import DashboardsFolderSpec
 from .data_delete_result_partition import DataDeleteResultPartition
+from .data_dictionary_list_model import DataDictionaryListModel
+from .data_dictionary_model import DataDictionaryModel
 from .data_grouping_configuration_list_model import DataGroupingConfigurationListModel
 from .data_grouping_configuration_model import DataGroupingConfigurationModel
 from .data_grouping_configuration_spec import DataGroupingConfigurationSpec
@@ -1402,6 +1404,7 @@ from .mono_dqo_queue_job_id import MonoDqoQueueJobId
 from .mono_object import MonoObject
 from .mono_void import MonoVoid
 from .my_sql_ssl_mode import MySqlSslMode
+from .mysql_engine_type import MysqlEngineType
 from .mysql_parameters_spec import MysqlParametersSpec
 from .mysql_parameters_spec_properties import MysqlParametersSpecProperties
 from .optional import Optional
@@ -1463,6 +1466,8 @@ from .sensor_readouts_list_model import SensorReadoutsListModel
 from .shared_credential_list_model import SharedCredentialListModel
 from .shared_credential_model import SharedCredentialModel
 from .similar_check_model import SimilarCheckModel
+from .single_store_db_load_balancing_mode import SingleStoreDbLoadBalancingMode
+from .single_store_db_parameters_spec import SingleStoreDbParametersSpec
 from .snowflake_parameters_spec import SnowflakeParametersSpec
 from .snowflake_parameters_spec_properties import SnowflakeParametersSpecProperties
 from .sort_direction import SortDirection
@@ -1852,12 +1857,12 @@ from .value_changed_rule_parameters_spec import ValueChangedRuleParametersSpec
 __all__ = (
     "AllChecksPatchParameters",
     "AllChecksPatchParametersSelectedTablesToColumns",
-    "AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec",
-    "AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec",
-    "AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec",
-    "AnomalyStationaryPercentileMovingAverageRule01ParametersSpec",
-    "AnomalyStationaryPercentileMovingAverageRule05ParametersSpec",
-    "AnomalyStationaryPercentileMovingAverageRule1ParametersSpec",
+    "AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec",
+    "AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec",
+    "AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec",
+    "AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec",
+    "AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec",
+    "AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec",
     "AthenaAuthenticationMode",
     "AuthenticatedDashboardModel",
     "BetweenFloatsRuleParametersSpec",
@@ -2373,6 +2378,8 @@ __all__ = (
     "DatabricksParametersSpec",
     "DatabricksParametersSpecProperties",
     "DataDeleteResultPartition",
+    "DataDictionaryListModel",
+    "DataDictionaryModel",
     "DataGroupingConfigurationListModel",
     "DataGroupingConfigurationModel",
     "DataGroupingConfigurationSpec",
@@ -2463,6 +2470,7 @@ __all__ = (
     "MonoDqoQueueJobId",
     "MonoObject",
     "MonoVoid",
+    "MysqlEngineType",
     "MysqlParametersSpec",
     "MysqlParametersSpecProperties",
     "MySqlSslMode",
@@ -2521,6 +2529,8 @@ __all__ = (
     "SharedCredentialListModel",
     "SharedCredentialModel",
     "SimilarCheckModel",
+    "SingleStoreDbLoadBalancingMode",
+    "SingleStoreDbParametersSpec",
     "SnowflakeParametersSpec",
     "SnowflakeParametersSpecProperties",
     "SortDirection",

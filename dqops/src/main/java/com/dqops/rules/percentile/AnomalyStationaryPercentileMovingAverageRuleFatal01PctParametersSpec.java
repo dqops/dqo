@@ -28,24 +28,24 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Data quality rule that verifies if a data quality sensor readout value is probable under
- * the estimated normal distribution based on the previous values gathered within a time window.
+ * Data quality rule that detects anomalies in time series of data quality measures that are stationary over time, such as a percentage of null values.
+ * Stationary measures stay within a well-known range of values.
+ * The rule identifies the top X% of anomalous values, based on the distribution of the changes using a standard deviation.
+ * The rule uses the time window of the last 90 days, but at least 30 historical measures must be present to run the calculation.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class AnomalyStationaryPercentileMovingAverage30DaysRule01ParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<AnomalyStationaryPercentileMovingAverage30DaysRule01ParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
 
 
-    @JsonPropertyDescription("Probability that the current sensor readout will achieve values within" +
-            " the mean according to the distribution of the previous values gathered within the time window." +
-            " In other words, the inter-quantile range around the mean of the estimated normal distribution." +
-            " Set the time window at the threshold level for all severity levels (warning, error, fatal) at once." +
-            " The default is a 30 time periods (days, etc.) time window, but at least 10 readouts must exist" +
+    @JsonPropertyDescription("The probability (in percent) that the current sensor readout (measure) is an anomaly, because the value is outside" +
+            " the regular range of previous readouts." +
+            " The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist" +
             " to run the calculation.")
     @RequiredField
     private Double anomalyPercent = 0.1;
@@ -53,7 +53,7 @@ public class AnomalyStationaryPercentileMovingAverage30DaysRule01ParametersSpec 
     /**
      * Default constructor.
      */
-    public AnomalyStationaryPercentileMovingAverage30DaysRule01ParametersSpec() {
+    public AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec() {
     }
 
     /**
@@ -92,6 +92,6 @@ public class AnomalyStationaryPercentileMovingAverage30DaysRule01ParametersSpec 
      */
     @Override
     public String getRuleDefinitionName() {
-        return "percentile/anomaly_stationary_percentile_moving_average_30_days";
+        return "percentile/anomaly_stationary_percentile_moving_average";
     }
 }

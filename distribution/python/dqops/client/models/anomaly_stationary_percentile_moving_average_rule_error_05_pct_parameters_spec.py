@@ -5,19 +5,18 @@ from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
-T = TypeVar("T", bound="AnomalyStationaryPercentileMovingAverageRule1ParametersSpec")
+T = TypeVar(
+    "T", bound="AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
+)
 
 
 @_attrs_define
-class AnomalyStationaryPercentileMovingAverageRule1ParametersSpec:
+class AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec:
     """
     Attributes:
-        anomaly_percent (Union[Unset, float]): Probability that the current sensor readout will achieve values within
-            the mean according to the distribution of the previous values gathered within the time window. In other words,
-            the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the
-            threshold level for all severity levels (warning, error, fatal) at once. The default is a time window of 90
-            periods (days, etc.), but at least 30 readouts must exist to run the calculation. You can change the default
-            value by modifying prediction_time_window parameterin Definitions section.
+        anomaly_percent (Union[Unset, float]): The probability (in percent) that the current sensor readout (measure) is
+            an anomaly, because the value is outside the regular range of previous readouts. The default time window of 90
+            time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation.
     """
 
     anomaly_percent: Union[Unset, float] = UNSET
@@ -39,14 +38,14 @@ class AnomalyStationaryPercentileMovingAverageRule1ParametersSpec:
         d = src_dict.copy()
         anomaly_percent = d.pop("anomaly_percent", UNSET)
 
-        anomaly_stationary_percentile_moving_average_rule_1_parameters_spec = cls(
+        anomaly_stationary_percentile_moving_average_rule_error_05_pct_parameters_spec = cls(
             anomaly_percent=anomaly_percent,
         )
 
-        anomaly_stationary_percentile_moving_average_rule_1_parameters_spec.additional_properties = (
+        anomaly_stationary_percentile_moving_average_rule_error_05_pct_parameters_spec.additional_properties = (
             d
         )
-        return anomaly_stationary_percentile_moving_average_rule_1_parameters_spec
+        return anomaly_stationary_percentile_moving_average_rule_error_05_pct_parameters_spec
 
     @property
     def additional_keys(self) -> List[str]:

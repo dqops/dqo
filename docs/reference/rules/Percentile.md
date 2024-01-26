@@ -5,9 +5,12 @@ The list of percentile [data quality rules](../../dqo-concepts/definition-of-dat
 ---
 
 ## anomaly differencing percentile moving average
-Data quality rule that verifies if a data quality sensor readout value is probable under
- the estimated normal distribution based on the increments of previous values gathered
- within a time window.
+Data quality rule that detects anomalies in time series of data quality measures that are increasing over time, such as the row count is growing.
+ The rule transforms the recent data quality sensor readouts into a *differencing* stream, converting values to a difference
+ from the previous value. For the following time series of row count values: &amp;#91;100, 105, 110, 116, 126, 122&amp;#93;, the differencing stream is &amp;#91;5, 5, 6, 10, -4&amp;#93;,
+ which are the row count changes since the previous day.
+ The rule identifies the top X% of anomalous values, based on the distribution of the changes using a standard deviation.
+ The rule uses the time window of the last 90 days, but at least 30 historical measures must be present to run the calculation.
 
 **Rule summary**
 
@@ -24,7 +27,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`anomaly_percent`</span>|Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a time window of 90 periods (days, etc.), but at least 30 readouts must exist to run the calculation. You can change the default value by modifying prediction_time_window parameterin Definitions section.|*double*|:material-check-bold:||
+|<span class="no-wrap-code">`anomaly_percent`</span>|The probability (in percent) that the current sensor readout (measure) is an anomaly, because the value is outside the regular range of previous readouts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation.|*double*|:material-check-bold:||
 
 
 
@@ -183,9 +186,12 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ---
 
 ## anomaly differencing percentile moving average 30 days
-Data quality rule that verifies if a data quality sensor readout value is probable under
- the estimated normal distribution based on the increments of previous values gathered
- within a time window.
+Data quality rule that detects anomalies in time series of data quality measures that are increasing over time, such as the row count is growing.
+ The rule transforms the recent data quality sensor readouts into a *differencing* stream, converting values to a difference
+ from the previous value. For the following time series of row count values: &amp;#91;100, 105, 110, 116, 126, 122&amp;#93;, the differencing stream is &amp;#91;5, 5, 6, 10, -4&amp;#93;,
+ which are the row count changes since the previous day.
+ The rule identifies the top X% of anomalous values, based on the distribution of the changes using a standard deviation.
+ The rule uses the time window of the last 30 days, but at least 10 historical measures must be present to run the calculation.
 
 **Rule summary**
 
@@ -202,7 +208,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`anomaly_percent`</span>|Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a time window of 30 periods (days, etc.), but at least 10 readouts must exist to run the calculation.|*double*|:material-check-bold:||
+|<span class="no-wrap-code">`anomaly_percent`</span>|The probability (in percent) that the current sensor readout (measure) is an anomaly, because the value is outside the regular range of previous readouts. The default time window of 30 periods (days, etc.) is required, but at least 10 readouts must exist to run the calculation.|*double*|:material-check-bold:||
 
 
 
@@ -360,8 +366,10 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ---
 
 ## anomaly stationary percentile moving average
-Data quality rule that verifies if a data quality sensor readout value is probable under
- the estimated normal distribution based on the previous values gathered within a time window.
+Data quality rule that detects anomalies in time series of data quality measures that are stationary over time, such as a percentage of null values.
+ Stationary measures stay within a well-known range of values.
+ The rule identifies the top X% of anomalous values, based on the distribution of the changes using a standard deviation.
+ The rule uses the time window of the last 90 days, but at least 30 historical measures must be present to run the calculation.
 
 **Rule summary**
 
@@ -378,7 +386,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`anomaly_percent`</span>|Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a time window of 90 periods (days, etc.), but at least 30 readouts must exist to run the calculation. You can change the default value by modifying prediction_time_window parameterin Definitions section.|*double*|:material-check-bold:||
+|<span class="no-wrap-code">`anomaly_percent`</span>|The probability (in percent) that the current sensor readout (measure) is an anomaly, because the value is outside the regular range of previous readouts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation.|*double*|:material-check-bold:||
 
 
 
@@ -533,8 +541,10 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 ---
 
 ## anomaly stationary percentile moving average 30 days
-Data quality rule that verifies if a data quality sensor readout value is probable under
- the estimated normal distribution based on the previous values gathered within a time window.
+Data quality rule that detects anomalies in time series of data quality measures that are stationary over time, such as a percentage of null values.
+ Stationary measures stay within a well-known range of values.
+ The rule identifies the top X% of anomalous values, based on the distribution of the changes using a standard deviation.
+ The rule uses the time window of the last 30 days, but at least 10 historical measures must be present to run the calculation.
 
 **Rule summary**
 
@@ -551,7 +561,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`anomaly_percent`</span>|Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 30 time periods (days, etc.) time window, but at least 10 readouts must exist to run the calculation.|*double*|:material-check-bold:||
+|<span class="no-wrap-code">`anomaly_percent`</span>|The probability (in percent) that the current sensor readout (measure) is an anomaly, because the value is outside the regular range of previous readouts. The default time window of 30 periods (days, etc.) is required, but at least 10 readouts must exist to run the calculation.|*double*|:material-check-bold:||
 
 
 

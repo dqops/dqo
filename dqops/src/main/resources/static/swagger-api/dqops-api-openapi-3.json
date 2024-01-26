@@ -57,6 +57,10 @@
     "description" : "Default settings management for configuring the default data quality checks that are configured for all imported tables and columns.",
     "extensions" : { }
   }, {
+    "name" : "Dictionaries",
+    "description" : "Operations for managing data dictionary CSV files in DQOps. Data dictionaries can be used in *accepted_values* data quality checks.",
+    "extensions" : { }
+  }, {
     "name" : "Environment",
     "description" : "DQOps environment and configuration controller, provides access to the DQOps configuration, current user's information and issue local API Keys for the calling user.",
     "extensions" : { }
@@ -14897,7 +14901,7 @@
       "get" : {
         "tags" : [ "SharedCredentials" ],
         "summary" : "getAllSharedCredentials",
-        "description" : "Returns a list of all shared credentials that are present in the DQOps user's home .credentials/ folder..",
+        "description" : "Returns a list of all shared credentials that are present in the DQOps user's home .credentials/ folder.",
         "operationId" : "getAllSharedCredentials",
         "responses" : {
           "200" : {
@@ -16297,6 +16301,240 @@
                 "schema" : {
                   "$ref" : "#/components/schemas/SensorFolderModel",
                   "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : { }
+      },
+      "extensions" : { }
+    },
+    "api/dictionaries" : {
+      "get" : {
+        "tags" : [ "Dictionaries" ],
+        "summary" : "getAllDictionaries",
+        "description" : "Returns a list of all data dictionary CSV files that are present in the DQOps user's home dictionaries/ folder.",
+        "operationId" : "getAllDictionaries",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "exampleSetFlag" : false,
+                  "items" : {
+                    "$ref" : "#/components/schemas/DataDictionaryListModel",
+                    "extensions" : { },
+                    "exampleSetFlag" : false
+                  },
+                  "types" : [ "array" ]
+                },
+                "exampleSetFlag" : false
+              }
+            },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : { }
+      },
+      "post" : {
+        "tags" : [ "Dictionaries" ],
+        "summary" : "createDictionary",
+        "description" : "Creates (adds) a new data dictionary CSV file, which creates a file in the DQOps user's home dictionaries/ folder named as the dictionary and with the content that is provided in this call.",
+        "operationId" : "createDictionary",
+        "requestBody" : {
+          "description" : "Data dictionary model",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DataDictionaryModel",
+                "exampleSetFlag" : false
+              },
+              "exampleSetFlag" : false
+            }
+          },
+          "required" : false,
+          "extensions" : { }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "New data dictionary successfully created",
+            "content" : { },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : {
+          "x-codegen-request-body-name" : "body"
+        }
+      },
+      "extensions" : { }
+    },
+    "api/dictionaries/{dictionaryName}" : {
+      "get" : {
+        "tags" : [ "Dictionaries" ],
+        "summary" : "getDictionary",
+        "description" : "Returns the content of a data dictionary CSV file as a model object",
+        "operationId" : "getDictionary",
+        "parameters" : [ {
+          "name" : "dictionaryName",
+          "in" : "path",
+          "description" : "Data dictionary CSV file name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DataDictionaryModel",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : { }
+      },
+      "put" : {
+        "tags" : [ "Dictionaries" ],
+        "summary" : "updateDictionary",
+        "description" : "Updates an existing data dictionary CSV file, replacing the dictionary's file content.",
+        "operationId" : "updateDictionary",
+        "parameters" : [ {
+          "name" : "dictionaryName",
+          "in" : "path",
+          "description" : "Data dictionary file name that will be updated",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
+        "requestBody" : {
+          "description" : "Data dictionary model",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DataDictionaryModel",
+                "exampleSetFlag" : false
+              },
+              "exampleSetFlag" : false
+            }
+          },
+          "required" : false,
+          "extensions" : { }
+        },
+        "responses" : {
+          "204" : {
+            "description" : "Data dictionary successfully updated",
+            "content" : { },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : {
+          "x-codegen-request-body-name" : "body"
+        }
+      },
+      "delete" : {
+        "tags" : [ "Dictionaries" ],
+        "summary" : "deleteDictionary",
+        "description" : "Deletes a data dictionary CSV file from the DQOps user's home dictionaries/ folder.",
+        "operationId" : "deleteDictionary",
+        "parameters" : [ {
+          "name" : "dictionaryName",
+          "in" : "path",
+          "description" : "Data dictionary name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
+        "responses" : {
+          "404" : {
+            "description" : "Data dictionary file not found",
+            "content" : { },
+            "extensions" : { }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ],
+        "extensions" : { }
+      },
+      "extensions" : { }
+    },
+    "api/dictionaries/{dictionaryName}/download" : {
+      "get" : {
+        "tags" : [ "Dictionaries" ],
+        "summary" : "downloadDictionary",
+        "description" : "Downloads a data dictionary CSV file",
+        "operationId" : "downloadDictionary",
+        "parameters" : [ {
+          "name" : "dictionaryName",
+          "in" : "path",
+          "description" : "Data dictionary CSV file name",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "text/csv" : {
+                "schema" : {
+                  "type" : "array",
+                  "exampleSetFlag" : false,
+                  "items" : {
+                    "pattern" : "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$",
+                    "type" : "string",
+                    "format" : "byte",
+                    "extensions" : { },
+                    "exampleSetFlag" : false,
+                    "types" : [ "string" ]
+                  },
+                  "types" : [ "array" ]
                 },
                 "exampleSetFlag" : false
               }
@@ -18906,12 +19144,12 @@
           "description" : "Parameter object for creating pruned patch trees of all checks that fit the filters."
         }
       },
-      "AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec" : {
+      "AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec" : {
         "type" : "object",
         "properties" : {
           "anomaly_percent" : {
             "type" : "number",
-            "description" : "Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a time window of 90 periods (days, etc.), but at least 30 readouts must exist to run the calculation. You can change the default value by modifying prediction_time_window parameterin Definitions section.",
+            "description" : "The probability (in percent) that the current sensor readout (measure) is an anomaly, because the value is outside the regular range of previous readouts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation.",
             "format" : "double",
             "extensions" : { },
             "exampleSetFlag" : false,
@@ -18926,17 +19164,17 @@
             "anomaly_percent" : {
               "type" : "number",
               "format" : "double",
-              "description" : "Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a time window of 90 periods (days, etc.), but at least 30 readouts must exist to run the calculation. You can change the default value by modifying prediction_time_window parameterin Definitions section."
+              "description" : "The probability (in percent) that the current sensor readout (measure) is an anomaly, because the value is outside the regular range of previous readouts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation."
             }
           }
         }
       },
-      "AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec" : {
+      "AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec" : {
         "type" : "object",
         "properties" : {
           "anomaly_percent" : {
             "type" : "number",
-            "description" : "Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a time window of 90 periods (days, etc.), but at least 30 readouts must exist to run the calculation. You can change the default value by modifying prediction_time_window parameterin Definitions section.",
+            "description" : "The probability (in percent) that the current sensor readout (measure) is an anomaly, because the value is outside the regular range of previous readouts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation.",
             "format" : "double",
             "extensions" : { },
             "exampleSetFlag" : false,
@@ -18951,17 +19189,17 @@
             "anomaly_percent" : {
               "type" : "number",
               "format" : "double",
-              "description" : "Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a time window of 90 periods (days, etc.), but at least 30 readouts must exist to run the calculation. You can change the default value by modifying prediction_time_window parameterin Definitions section."
+              "description" : "The probability (in percent) that the current sensor readout (measure) is an anomaly, because the value is outside the regular range of previous readouts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation."
             }
           }
         }
       },
-      "AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec" : {
+      "AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec" : {
         "type" : "object",
         "properties" : {
           "anomaly_percent" : {
             "type" : "number",
-            "description" : "Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a time window of 90 periods (days, etc.), but at least 30 readouts must exist to run the calculation. You can change the default value by modifying prediction_time_window parameterin Definitions section.",
+            "description" : "The probability (in percent) that the current sensor readout (measure) is an anomaly, because the value is outside the regular range of previous readouts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation.",
             "format" : "double",
             "extensions" : { },
             "exampleSetFlag" : false,
@@ -18976,17 +19214,17 @@
             "anomaly_percent" : {
               "type" : "number",
               "format" : "double",
-              "description" : "Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a time window of 90 periods (days, etc.), but at least 30 readouts must exist to run the calculation. You can change the default value by modifying prediction_time_window parameterin Definitions section."
+              "description" : "The probability (in percent) that the current sensor readout (measure) is an anomaly, because the value is outside the regular range of previous readouts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation."
             }
           }
         }
       },
-      "AnomalyStationaryPercentileMovingAverageRule01ParametersSpec" : {
+      "AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec" : {
         "type" : "object",
         "properties" : {
           "anomaly_percent" : {
             "type" : "number",
-            "description" : "Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a time window of 90 periods (days, etc.), but at least 30 readouts must exist to run the calculation. You can change the default value by modifying prediction_time_window parameterin Definitions section.",
+            "description" : "The probability (in percent) that the current sensor readout (measure) is an anomaly, because the value is outside the regular range of previous readouts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation.",
             "format" : "double",
             "extensions" : { },
             "exampleSetFlag" : false,
@@ -19001,17 +19239,17 @@
             "anomaly_percent" : {
               "type" : "number",
               "format" : "double",
-              "description" : "Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a time window of 90 periods (days, etc.), but at least 30 readouts must exist to run the calculation. You can change the default value by modifying prediction_time_window parameterin Definitions section."
+              "description" : "The probability (in percent) that the current sensor readout (measure) is an anomaly, because the value is outside the regular range of previous readouts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation."
             }
           }
         }
       },
-      "AnomalyStationaryPercentileMovingAverageRule05ParametersSpec" : {
+      "AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec" : {
         "type" : "object",
         "properties" : {
           "anomaly_percent" : {
             "type" : "number",
-            "description" : "Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a time window of 90 periods (days, etc.), but at least 30 readouts must exist to run the calculation. You can change the default value by modifying prediction_time_window parameterin Definitions section.",
+            "description" : "The probability (in percent) that the current sensor readout (measure) is an anomaly, because the value is outside the regular range of previous readouts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation.",
             "format" : "double",
             "extensions" : { },
             "exampleSetFlag" : false,
@@ -19026,17 +19264,17 @@
             "anomaly_percent" : {
               "type" : "number",
               "format" : "double",
-              "description" : "Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a time window of 90 periods (days, etc.), but at least 30 readouts must exist to run the calculation. You can change the default value by modifying prediction_time_window parameterin Definitions section."
+              "description" : "The probability (in percent) that the current sensor readout (measure) is an anomaly, because the value is outside the regular range of previous readouts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation."
             }
           }
         }
       },
-      "AnomalyStationaryPercentileMovingAverageRule1ParametersSpec" : {
+      "AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec" : {
         "type" : "object",
         "properties" : {
           "anomaly_percent" : {
             "type" : "number",
-            "description" : "Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a time window of 90 periods (days, etc.), but at least 30 readouts must exist to run the calculation. You can change the default value by modifying prediction_time_window parameterin Definitions section.",
+            "description" : "The probability (in percent) that the current sensor readout (measure) is an anomaly, because the value is outside the regular range of previous readouts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation.",
             "format" : "double",
             "extensions" : { },
             "exampleSetFlag" : false,
@@ -19051,7 +19289,7 @@
             "anomaly_percent" : {
               "type" : "number",
               "format" : "double",
-              "description" : "Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a time window of 90 periods (days, etc.), but at least 30 readouts must exist to run the calculation. You can change the default value by modifying prediction_time_window parameterin Definitions section."
+              "description" : "The probability (in percent) that the current sensor readout (measure) is an anomaly, because the value is outside the regular range of previous readouts. The default time window of 90 time periods (days, etc.) is used, but at least 30 readouts must exist to run the calculation."
             }
           }
         }
@@ -21859,6 +22097,10 @@
             "$ref" : "#/components/schemas/FolderSynchronizationStatus",
             "exampleSetFlag" : false
           },
+          "dictionaries" : {
+            "$ref" : "#/components/schemas/FolderSynchronizationStatus",
+            "exampleSetFlag" : false
+          },
           "data_sensor_readouts" : {
             "$ref" : "#/components/schemas/FolderSynchronizationStatus",
             "exampleSetFlag" : false
@@ -21913,6 +22155,11 @@
             "credentials" : {
               "type" : "string",
               "description" : "The synchronization status of the \".credentials\" folder.",
+              "enum" : [ "unchanged", "changed", "synchronizing" ]
+            },
+            "dictionaries" : {
+              "type" : "string",
+              "description" : "The synchronization status of the \"dictionaries\" folder.",
               "enum" : [ "unchanged", "changed", "synchronizing" ]
             },
             "data_sensor_readouts" : {
@@ -30491,17 +30738,17 @@
             "exampleSetFlag" : false
           },
           "warning" : {
-            "$ref" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec",
+            "$ref" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
           "error" : {
-            "$ref" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec",
+            "$ref" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
           "fatal" : {
-            "$ref" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec",
+            "$ref" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           }
@@ -30555,18 +30802,18 @@
             },
             "warning" : {
               "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-              "$ref" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec",
-              "originalRef" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec"
+              "$ref" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec",
+              "originalRef" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec"
             },
             "error" : {
               "description" : "Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert",
-              "$ref" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec",
-              "originalRef" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec"
+              "$ref" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec",
+              "originalRef" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec"
             },
             "fatal" : {
               "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-              "$ref" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec",
-              "originalRef" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec"
+              "$ref" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec",
+              "originalRef" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec"
             }
           }
         }
@@ -30639,17 +30886,17 @@
             "exampleSetFlag" : false
           },
           "warning" : {
-            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec",
+            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
           "error" : {
-            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec",
+            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
           "fatal" : {
-            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec",
+            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           }
@@ -30703,18 +30950,18 @@
             },
             "warning" : {
               "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec",
-              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec"
+              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec",
+              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
             },
             "error" : {
               "description" : "Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert",
-              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec",
-              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec"
+              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec",
+              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
             },
             "fatal" : {
               "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec",
-              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec"
+              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec",
+              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
             }
           }
         }
@@ -31527,17 +31774,17 @@
             "exampleSetFlag" : false
           },
           "warning" : {
-            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec",
+            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
           "error" : {
-            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec",
+            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
           "fatal" : {
-            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec",
+            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           }
@@ -31591,18 +31838,18 @@
             },
             "warning" : {
               "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec",
-              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec"
+              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec",
+              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
             },
             "error" : {
               "description" : "Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert",
-              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec",
-              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec"
+              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec",
+              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
             },
             "fatal" : {
               "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec",
-              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec"
+              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec",
+              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
             }
           }
         }
@@ -35392,17 +35639,17 @@
             "exampleSetFlag" : false
           },
           "warning" : {
-            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec",
+            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
           "error" : {
-            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec",
+            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
           "fatal" : {
-            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec",
+            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           }
@@ -35456,18 +35703,18 @@
             },
             "warning" : {
               "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec",
-              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec"
+              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec",
+              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
             },
             "error" : {
               "description" : "Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert",
-              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec",
-              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec"
+              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec",
+              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
             },
             "fatal" : {
               "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec",
-              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec"
+              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec",
+              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
             }
           }
         }
@@ -36280,17 +36527,17 @@
             "exampleSetFlag" : false
           },
           "warning" : {
-            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec",
+            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
           "error" : {
-            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec",
+            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
           "fatal" : {
-            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec",
+            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           }
@@ -36344,18 +36591,18 @@
             },
             "warning" : {
               "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec",
-              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec"
+              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec",
+              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
             },
             "error" : {
               "description" : "Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert",
-              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec",
-              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec"
+              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec",
+              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
             },
             "fatal" : {
               "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec",
-              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec"
+              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec",
+              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
             }
           }
         }
@@ -38747,17 +38994,17 @@
             "exampleSetFlag" : false
           },
           "warning" : {
-            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec",
+            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
           "error" : {
-            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec",
+            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
           "fatal" : {
-            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec",
+            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           }
@@ -38811,18 +39058,18 @@
             },
             "warning" : {
               "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec",
-              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec"
+              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec",
+              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
             },
             "error" : {
               "description" : "Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert",
-              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec",
-              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec"
+              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec",
+              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
             },
             "fatal" : {
               "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec",
-              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec"
+              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec",
+              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
             }
           }
         }
@@ -49731,17 +49978,17 @@
             "exampleSetFlag" : false
           },
           "warning" : {
-            "$ref" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec",
+            "$ref" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
           "error" : {
-            "$ref" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec",
+            "$ref" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
           "fatal" : {
-            "$ref" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec",
+            "$ref" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           }
@@ -49795,18 +50042,18 @@
             },
             "warning" : {
               "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-              "$ref" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec",
-              "originalRef" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec"
+              "$ref" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec",
+              "originalRef" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec"
             },
             "error" : {
               "description" : "Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert",
-              "$ref" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec",
-              "originalRef" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec"
+              "$ref" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec",
+              "originalRef" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec"
             },
             "fatal" : {
               "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-              "$ref" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec",
-              "originalRef" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec"
+              "$ref" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec",
+              "originalRef" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec"
             }
           }
         }
@@ -49879,17 +50126,17 @@
             "exampleSetFlag" : false
           },
           "warning" : {
-            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec",
+            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
           "error" : {
-            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec",
+            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
           "fatal" : {
-            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec",
+            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           }
@@ -49943,18 +50190,18 @@
             },
             "warning" : {
               "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec",
-              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec"
+              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec",
+              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
             },
             "error" : {
               "description" : "Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert",
-              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec",
-              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec"
+              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec",
+              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
             },
             "fatal" : {
               "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec",
-              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec"
+              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec",
+              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
             }
           }
         }
@@ -58633,6 +58880,89 @@
           }
         }
       },
+      "DataDictionaryListModel" : {
+        "type" : "object",
+        "properties" : {
+          "dictionary_name" : {
+            "type" : "string",
+            "description" : "Dictionary name. It is the name of a file in the dictionaries/ folder inside the DQOps user's home folder.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "can_edit" : {
+            "type" : "boolean",
+            "description" : "Boolean flag that decides if the current user can update or delete the dictionary file.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "can_access_dictionary" : {
+            "type" : "boolean",
+            "description" : "Boolean flag that decides if the current user see or download the dictionary file.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          }
+        },
+        "description" : "Data dictionary CSV file list model with the basic information about the dictionary.",
+        "exampleSetFlag" : false,
+        "types" : [ "object" ],
+        "jsonSchema" : {
+          "type" : "object",
+          "properties" : {
+            "dictionary_name" : {
+              "type" : "string",
+              "description" : "Dictionary name. It is the name of a file in the dictionaries/ folder inside the DQOps user's home folder."
+            },
+            "can_edit" : {
+              "type" : "boolean",
+              "description" : "Boolean flag that decides if the current user can update or delete the dictionary file."
+            },
+            "can_access_dictionary" : {
+              "type" : "boolean",
+              "description" : "Boolean flag that decides if the current user see or download the dictionary file."
+            }
+          },
+          "description" : "Data dictionary CSV file list model with the basic information about the dictionary."
+        }
+      },
+      "DataDictionaryModel" : {
+        "type" : "object",
+        "properties" : {
+          "dictionary_name" : {
+            "type" : "string",
+            "description" : "Dictionary name. It is the name of a file in the dictionaries/ folder inside the DQOps user's home folder.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "file_content" : {
+            "type" : "string",
+            "description" : "Dictionary CSV file content as a single file.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        },
+        "description" : "Data dictionary CSV file full model used to create and update the dictionary. Contains the content of the CSV file as a text field.",
+        "exampleSetFlag" : false,
+        "types" : [ "object" ],
+        "jsonSchema" : {
+          "type" : "object",
+          "properties" : {
+            "dictionary_name" : {
+              "type" : "string",
+              "description" : "Dictionary name. It is the name of a file in the dictionaries/ folder inside the DQOps user's home folder."
+            },
+            "file_content" : {
+              "type" : "string",
+              "description" : "Dictionary CSV file content as a single file."
+            }
+          },
+          "description" : "Data dictionary CSV file full model used to create and update the dictionary. Contains the content of the CSV file as a text field."
+        }
+      },
       "DataGroupingConfigurationListModel" : {
         "type" : "object",
         "properties" : {
@@ -60115,6 +60445,13 @@
             "$ref" : "#/components/schemas/DqoUserRole",
             "exampleSetFlag" : false
           },
+          "data_quality_data_warehouse_enabled" : {
+            "type" : "boolean",
+            "description" : "True when the account has access to the DQOps Cloud's data quality data lake and data warehouse, allowing to synchronize files and use the data quality data warehouse.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
           "can_manage_account" : {
             "type" : "boolean",
             "description" : "User is the administrator of the account and can perform security related actions, such as managing users.",
@@ -60284,6 +60621,10 @@
               "type" : "string",
               "description" : "User role that limits possible operations that the current user can perform.",
               "enum" : [ "admin", "editor", "operator", "viewer", "none" ]
+            },
+            "data_quality_data_warehouse_enabled" : {
+              "type" : "boolean",
+              "description" : "True when the account has access to the DQOps Cloud's data quality data lake and data warehouse, allowing to synchronize files and use the data quality data warehouse."
             },
             "can_manage_account" : {
               "type" : "boolean",
@@ -62547,6 +62888,15 @@
             "$ref" : "#/components/schemas/MySqlSslMode",
             "exampleSetFlag" : false
           },
+          "single_store_db_parameters_spec" : {
+            "$ref" : "#/components/schemas/SingleStoreDbParametersSpec",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
+          "mysql_engine_type" : {
+            "$ref" : "#/components/schemas/MysqlEngineType",
+            "exampleSetFlag" : false
+          },
           "properties" : {
             "type" : "object",
             "additionalProperties" : {
@@ -62598,6 +62948,16 @@
               "type" : "string",
               "description" : "SslMode MySQL connection parameter.",
               "enum" : [ "DISABLED", "PREFERRED", "REQUIRED", "VERIFY_CA", "VERIFY_IDENTITY" ]
+            },
+            "single_store_db_parameters_spec" : {
+              "description" : "Single Store DB parameters spec.",
+              "$ref" : "#/components/schemas/SingleStoreDbParametersSpec",
+              "originalRef" : "#/components/schemas/SingleStoreDbParametersSpec"
+            },
+            "mysql_engine_type" : {
+              "type" : "string",
+              "description" : "MySQL engine type. Supports also a ${MYSQL_ENGINE} configuration with a custom environment variable.",
+              "enum" : [ "mysql", "singlestoredb" ]
             },
             "properties" : {
               "type" : "object",
@@ -65597,6 +65957,69 @@
           "description" : "Model that identifies a similar check in another category or another type of check (monitoring, partition)."
         }
       },
+      "SingleStoreDbParametersSpec" : {
+        "type" : "object",
+        "properties" : {
+          "load_balancing_mode" : {
+            "$ref" : "#/components/schemas/SingleStoreDbLoadBalancingMode",
+            "exampleSetFlag" : false
+          },
+          "host_descriptions" : {
+            "type" : "array",
+            "description" : "SingleStoreDB Host descriptions. Supports also a ${SINGLE_STORE_HOST_DESCRIPTIONS} configuration with a custom environment variable.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "items" : {
+              "type" : "string",
+              "extensions" : { },
+              "exampleSetFlag" : false,
+              "types" : [ "string" ]
+            },
+            "types" : [ "array" ]
+          },
+          "schema" : {
+            "type" : "string",
+            "description" : "SingleStoreDB database/schema name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "use_ssl" : {
+            "type" : "boolean",
+            "description" : "Force enables SSL/TLS on the connection. Supports also a ${SINGLE_STORE_USE_SSL} configuration with a custom environment variable.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          }
+        },
+        "exampleSetFlag" : false,
+        "types" : [ "object" ],
+        "jsonSchema" : {
+          "type" : "object",
+          "properties" : {
+            "load_balancing_mode" : {
+              "type" : "string",
+              "description" : "SingleStoreDB Failover and Load-Balancing Modes for Single Store DB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.",
+              "enum" : [ "none", "sequential", "loadbalance" ]
+            },
+            "host_descriptions" : {
+              "type" : "array",
+              "description" : "SingleStoreDB Host descriptions. Supports also a ${SINGLE_STORE_HOST_DESCRIPTIONS} configuration with a custom environment variable.",
+              "items" : {
+                "type" : "string"
+              }
+            },
+            "schema" : {
+              "type" : "string",
+              "description" : "SingleStoreDB database/schema name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
+            },
+            "use_ssl" : {
+              "type" : "boolean",
+              "description" : "Force enables SSL/TLS on the connection. Supports also a ${SINGLE_STORE_USE_SSL} configuration with a custom environment variable."
+            }
+          }
+        }
+      },
       "SnowflakeParametersSpec" : {
         "type" : "object",
         "properties" : {
@@ -66333,6 +66756,13 @@
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
           },
+          "dictionaries" : {
+            "type" : "boolean",
+            "description" : "Synchronize the \"dictionaries\" folder.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
           "dataSensorReadouts" : {
             "type" : "boolean",
             "description" : "Synchronize the \".data/sensor_readouts\" folder.",
@@ -66417,6 +66847,10 @@
             "credentials" : {
               "type" : "boolean",
               "description" : "Synchronize the \".credentials\" folder."
+            },
+            "dictionaries" : {
+              "type" : "boolean",
+              "description" : "Synchronize the \"dictionaries\" folder."
             },
             "dataSensorReadouts" : {
               "type" : "boolean",
@@ -66524,7 +66958,7 @@
           "properties" : {
             "folder" : {
               "type" : "string",
-              "enum" : [ "data_sensor_readouts", "data_check_results", "data_statistics", "data_errors", "data_incidents", "sources", "sensors", "rules", "checks", "settings", "credentials", "_indexes", "_local_settings" ]
+              "enum" : [ "data_sensor_readouts", "data_check_results", "data_statistics", "data_errors", "data_incidents", "sources", "sensors", "rules", "checks", "settings", "credentials", "dictionaries", "_indexes", "_local_settings" ]
             },
             "direction" : {
               "type" : "string",
@@ -70876,17 +71310,17 @@
             "exampleSetFlag" : false
           },
           "warning" : {
-            "$ref" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec",
+            "$ref" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
           "error" : {
-            "$ref" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec",
+            "$ref" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
           "fatal" : {
-            "$ref" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec",
+            "$ref" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           }
@@ -70940,18 +71374,18 @@
             },
             "warning" : {
               "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-              "$ref" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec",
-              "originalRef" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec"
+              "$ref" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec",
+              "originalRef" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec"
             },
             "error" : {
               "description" : "Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert",
-              "$ref" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec",
-              "originalRef" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec"
+              "$ref" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec",
+              "originalRef" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec"
             },
             "fatal" : {
               "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-              "$ref" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec",
-              "originalRef" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec"
+              "$ref" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec",
+              "originalRef" : "#/components/schemas/AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec"
             }
           }
         }
@@ -71024,17 +71458,17 @@
             "exampleSetFlag" : false
           },
           "warning" : {
-            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec",
+            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
           "error" : {
-            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec",
+            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
           "fatal" : {
-            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec",
+            "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           }
@@ -71088,18 +71522,18 @@
             },
             "warning" : {
               "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec",
-              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec"
+              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec",
+              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
             },
             "error" : {
               "description" : "Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert",
-              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec",
-              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec"
+              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec",
+              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
             },
             "fatal" : {
               "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec",
-              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec"
+              "$ref" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec",
+              "originalRef" : "#/components/schemas/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
             }
           }
         }
@@ -75435,6 +75869,11 @@
         "exampleSetFlag" : false,
         "enum" : [ "DISABLED", "PREFERRED", "REQUIRED", "VERIFY_CA", "VERIFY_IDENTITY" ]
       },
+      "MysqlEngineType" : {
+        "type" : "string",
+        "exampleSetFlag" : false,
+        "enum" : [ "mysql", "singlestoredb" ]
+      },
       "ParameterDataType" : {
         "type" : "string",
         "exampleSetFlag" : false,
@@ -75475,6 +75914,11 @@
         "exampleSetFlag" : false,
         "enum" : [ "text", "binary" ]
       },
+      "SingleStoreDbLoadBalancingMode" : {
+        "type" : "string",
+        "exampleSetFlag" : false,
+        "enum" : [ "none", "sequential", "loadbalance" ]
+      },
       "SqlServerAuthenticationMode" : {
         "type" : "string",
         "exampleSetFlag" : false,
@@ -75498,7 +75942,7 @@
       "DqoRoot" : {
         "type" : "string",
         "exampleSetFlag" : false,
-        "enum" : [ "data_sensor_readouts", "data_check_results", "data_statistics", "data_errors", "data_incidents", "sources", "sensors", "rules", "checks", "settings", "credentials", "_indexes", "_local_settings" ]
+        "enum" : [ "data_sensor_readouts", "data_check_results", "data_statistics", "data_errors", "data_incidents", "sources", "sensors", "rules", "checks", "settings", "credentials", "dictionaries", "_indexes", "_local_settings" ]
       },
       "ProfilingTimePeriod" : {
         "type" : "string",

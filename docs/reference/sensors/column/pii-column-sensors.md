@@ -78,7 +78,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}} , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                    WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}' ) }}
                         THEN 1
                     ELSE 0
                 END
@@ -367,7 +367,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}} , '((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])')
+                    WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])') }}
                         THEN 1
                     ELSE 0
                 END
@@ -666,12 +666,9 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN
-                        REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                    '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
-                        REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                     '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
-                        THEN 1
+                    WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') }}
+                        OR {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}') }}
+                            THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
@@ -1013,12 +1010,22 @@ The templates used to generate the SQL query for each data source supported by D
 
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    
+    {% macro render_regex(column, regex_pattern) %}
+        {%- if lib.engine_type == 'singlestoredb' %}
+            replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', '') RLIKE {{ lib.make_text_constant(regex_pattern) }}
+        {%- else -%}
+            REGEXP_LIKE(replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', ''), {{ lib.make_text_constant(regex_pattern) }})
+        {%- endif -%}
+    {% endmacro %}
+    
+    
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_LIKE(replace(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                    WHEN {{ render_regex(lib.render_target_column('analyzed_table'), '[0-9]{10,}' ) }}
                         THEN 1
                     ELSE 0
                 END
@@ -1334,8 +1341,8 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9]{5}(?:-[0-9]{4})?')
-                        THEN 1
+                    WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[0-9]{5}(\-[0-9]{4})?' ) }}
+                       THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)

@@ -1,5 +1,5 @@
 # DQOps REST API shared_credentials models reference
-The references of all objects used by [shared_credentials](../operations/shared_credentials.md) REST API operations are listed below.
+The references of all objects used by [shared_credentials](/docs/client/operations/shared_credentials.md) REST API operations are listed below.
 
 
 ## CredentialType
@@ -42,7 +42,7 @@ Shared credentials full model used to create and update the credential. Contains
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">`credential_name`</span>|Credential name. It is the name of a file in the .credentials/ folder inside the DQOps user&#x27;s home folder.|*string*|
-|<span class="no-wrap-code">[`type`](./shared_credentials.md#credentialtype)</span>|Credential type that is based on the detected format of the file. If the file could be parsed as a valid utf-8 string then it is assumed that the credential is a text. Otherwise it is a binary file that could be retrieved only as a base64 value.|*[CredentialType](./shared_credentials.md#credentialtype)*|
+|<span class="no-wrap-code">[`type`](\docs\client\models\shared_credentials.md#credentialtype)</span>|Credential type that is based on the detected format of the file. If the file could be parsed as a valid utf-8 string then it is assumed that the credential is a text. Otherwise it is a binary file that could be retrieved only as a base64 value.|*[CredentialType](\docs\client\models\shared_credentials.md#credentialtype)*|
 |<span class="no-wrap-code">`text_value`</span>|Credential&#x27;s value as a text. Only one value (the text_value or binary_value) should be not empty.|*string*|
 |<span class="no-wrap-code">`binary_value`</span>|Credential&#x27;s value for a binary credential that is stored as a base64 value. Only one value (the text_value or binary_value) should be not empty.|*string*|
 

@@ -225,7 +225,7 @@ spec:
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}')
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[0-9a-fA-F]{8}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{12}') }}
                                 THEN 1
                             ELSE 0
                         END
@@ -246,7 +246,15 @@ spec:
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}')
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9a-fA-F]{8}[ 	
+            
+            -]?[0-9a-fA-F]{4}[ 	
+            
+            -]?[0-9a-fA-F]{4}[ 	
+            
+            -]?[0-9a-fA-F]{4}[ 	
+            
+            -]?[0-9a-fA-F]{12}')
                                 THEN 1
                             ELSE 0
                         END
@@ -790,7 +798,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}')
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[0-9a-fA-F]{8}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{12}') }}
                                 THEN 1
                             ELSE 0
                         END
@@ -810,7 +818,15 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}')
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9a-fA-F]{8}[ 	
+            
+            -]?[0-9a-fA-F]{4}[ 	
+            
+            -]?[0-9a-fA-F]{4}[ 	
+            
+            -]?[0-9a-fA-F]{4}[ 	
+            
+            -]?[0-9a-fA-F]{12}')
                                 THEN 1
                             ELSE 0
                         END
@@ -1453,7 +1469,7 @@ spec:
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}')
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[0-9a-fA-F]{8}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{12}') }}
                                 THEN 1
                             ELSE 0
                         END
@@ -1474,7 +1490,15 @@ spec:
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}')
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9a-fA-F]{8}[ 	
+            
+            -]?[0-9a-fA-F]{4}[ 	
+            
+            -]?[0-9a-fA-F]{4}[ 	
+            
+            -]?[0-9a-fA-F]{4}[ 	
+            
+            -]?[0-9a-fA-F]{12}')
                                 THEN 1
                             ELSE 0
                         END
@@ -2019,7 +2043,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}')
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[0-9a-fA-F]{8}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{12}') }}
                                 THEN 1
                             ELSE 0
                         END
@@ -2039,7 +2063,15 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}')
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9a-fA-F]{8}[ 	
+            
+            -]?[0-9a-fA-F]{4}[ 	
+            
+            -]?[0-9a-fA-F]{4}[ 	
+            
+            -]?[0-9a-fA-F]{4}[ 	
+            
+            -]?[0-9a-fA-F]{12}')
                                 THEN 1
                             ELSE 0
                         END
@@ -2682,7 +2714,7 @@ spec:
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}')
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[0-9a-fA-F]{8}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{12}') }}
                                 THEN 1
                             ELSE 0
                         END
@@ -2703,7 +2735,15 @@ spec:
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}')
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9a-fA-F]{8}[ 	
+            
+            -]?[0-9a-fA-F]{4}[ 	
+            
+            -]?[0-9a-fA-F]{4}[ 	
+            
+            -]?[0-9a-fA-F]{4}[ 	
+            
+            -]?[0-9a-fA-F]{12}')
                                 THEN 1
                             ELSE 0
                         END
@@ -3248,7 +3288,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}')
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[0-9a-fA-F]{8}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{12}') }}
                                 THEN 1
                             ELSE 0
                         END
@@ -3268,7 +3308,15 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}')
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9a-fA-F]{8}[ 	
+            
+            -]?[0-9a-fA-F]{4}[ 	
+            
+            -]?[0-9a-fA-F]{4}[ 	
+            
+            -]?[0-9a-fA-F]{4}[ 	
+            
+            -]?[0-9a-fA-F]{12}')
                                 THEN 1
                             ELSE 0
                         END
@@ -3921,7 +3969,7 @@ spec:
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}')
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[0-9a-fA-F]{8}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{12}') }}
                                 THEN 1
                             ELSE 0
                         END
@@ -3942,7 +3990,15 @@ spec:
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}')
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9a-fA-F]{8}[ 	
+            
+            -]?[0-9a-fA-F]{4}[ 	
+            
+            -]?[0-9a-fA-F]{4}[ 	
+            
+            -]?[0-9a-fA-F]{4}[ 	
+            
+            -]?[0-9a-fA-F]{12}')
                                 THEN 1
                             ELSE 0
                         END
@@ -4501,7 +4557,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}')
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[0-9a-fA-F]{8}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{12}') }}
                                 THEN 1
                             ELSE 0
                         END
@@ -4521,7 +4577,15 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}')
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9a-fA-F]{8}[ 	
+            
+            -]?[0-9a-fA-F]{4}[ 	
+            
+            -]?[0-9a-fA-F]{4}[ 	
+            
+            -]?[0-9a-fA-F]{4}[ 	
+            
+            -]?[0-9a-fA-F]{12}')
                                 THEN 1
                             ELSE 0
                         END
@@ -5172,7 +5236,7 @@ spec:
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}')
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[0-9a-fA-F]{8}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{12}') }}
                                 THEN 1
                             ELSE 0
                         END
@@ -5193,7 +5257,15 @@ spec:
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}')
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9a-fA-F]{8}[ 	
+            
+            -]?[0-9a-fA-F]{4}[ 	
+            
+            -]?[0-9a-fA-F]{4}[ 	
+            
+            -]?[0-9a-fA-F]{4}[ 	
+            
+            -]?[0-9a-fA-F]{12}')
                                 THEN 1
                             ELSE 0
                         END
@@ -5752,7 +5824,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}')
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[0-9a-fA-F]{8}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{12}') }}
                                 THEN 1
                             ELSE 0
                         END
@@ -5772,7 +5844,15 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}')
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9a-fA-F]{8}[ 	
+            
+            -]?[0-9a-fA-F]{4}[ 	
+            
+            -]?[0-9a-fA-F]{4}[ 	
+            
+            -]?[0-9a-fA-F]{4}[ 	
+            
+            -]?[0-9a-fA-F]{12}')
                                 THEN 1
                             ELSE 0
                         END

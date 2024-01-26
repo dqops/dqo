@@ -1,5 +1,5 @@
 # DQOps REST API dashboards models reference
-The references of all objects used by [dashboards](../operations/dashboards.md) REST API operations are listed below.
+The references of all objects used by [dashboards](/docs/client/operations/dashboards.md) REST API operations are listed below.
 
 
 ## DashboardSpec
@@ -47,7 +47,7 @@ List of dashboards.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">`self`</span>|:mm|*List[[DashboardSpec](./dashboards.md#dashboardspec)]*|
+|<span class="no-wrap-code">`self`</span>|:mm|*List[[DashboardSpec](\docs\client\models\dashboards.md#dashboardspec)]*|
 
 
 ___
@@ -61,7 +61,7 @@ List of dashboard folders.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">`self`</span>|:mm|*List[[DashboardsFolderSpec](./dashboards.md#dashboardsfolderspec)]*|
+|<span class="no-wrap-code">`self`</span>|:mm|*List[[DashboardsFolderSpec](\docs\client\models\dashboards.md#dashboardsfolderspec)]*|
 
 
 ___

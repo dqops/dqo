@@ -241,12 +241,9 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN
-                                REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                            '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
-                                REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                             '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
-                                THEN 1
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') }}
+                                OR {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}') }}
+                                    THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -266,12 +263,9 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN
-                                REGEXP_LIKE(analyzed_table.`target_column`,
-                                            '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
-                                REGEXP_LIKE(analyzed_table.`target_column`,
-                                             '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
-                                THEN 1
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}')
+                                OR REGEXP_LIKE(analyzed_table.`target_column`, '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
+                                    THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -945,12 +939,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN
-                                REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                            '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
-                                REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                             '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
-                                THEN 1
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') }}
+                                OR {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}') }}
+                                    THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -969,12 +960,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN
-                                REGEXP_LIKE(analyzed_table.`target_column`,
-                                            '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
-                                REGEXP_LIKE(analyzed_table.`target_column`,
-                                             '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
-                                THEN 1
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}')
+                                OR REGEXP_LIKE(analyzed_table.`target_column`, '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
+                                    THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -1747,12 +1735,9 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN
-                                REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                            '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
-                                REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                             '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
-                                THEN 1
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') }}
+                                OR {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}') }}
+                                    THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -1772,12 +1757,9 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN
-                                REGEXP_LIKE(analyzed_table.`target_column`,
-                                            '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
-                                REGEXP_LIKE(analyzed_table.`target_column`,
-                                             '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
-                                THEN 1
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}')
+                                OR REGEXP_LIKE(analyzed_table.`target_column`, '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
+                                    THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -2452,12 +2434,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN
-                                REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                            '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
-                                REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                             '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
-                                THEN 1
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') }}
+                                OR {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}') }}
+                                    THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -2476,12 +2455,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN
-                                REGEXP_LIKE(analyzed_table.`target_column`,
-                                            '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
-                                REGEXP_LIKE(analyzed_table.`target_column`,
-                                             '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
-                                THEN 1
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}')
+                                OR REGEXP_LIKE(analyzed_table.`target_column`, '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
+                                    THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -3254,12 +3230,9 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN
-                                REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                            '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
-                                REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                             '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
-                                THEN 1
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') }}
+                                OR {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}') }}
+                                    THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -3279,12 +3252,9 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN
-                                REGEXP_LIKE(analyzed_table.`target_column`,
-                                            '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
-                                REGEXP_LIKE(analyzed_table.`target_column`,
-                                             '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
-                                THEN 1
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}')
+                                OR REGEXP_LIKE(analyzed_table.`target_column`, '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
+                                    THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -3959,12 +3929,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN
-                                REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                            '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
-                                REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                             '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
-                                THEN 1
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') }}
+                                OR {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}') }}
+                                    THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -3983,12 +3950,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN
-                                REGEXP_LIKE(analyzed_table.`target_column`,
-                                            '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
-                                REGEXP_LIKE(analyzed_table.`target_column`,
-                                             '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
-                                THEN 1
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}')
+                                OR REGEXP_LIKE(analyzed_table.`target_column`, '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
+                                    THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -4771,12 +4735,9 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN
-                                REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                            '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
-                                REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                             '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
-                                THEN 1
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') }}
+                                OR {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}') }}
+                                    THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -4796,12 +4757,9 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN
-                                REGEXP_LIKE(analyzed_table.`target_column`,
-                                            '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
-                                REGEXP_LIKE(analyzed_table.`target_column`,
-                                             '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
-                                THEN 1
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}')
+                                OR REGEXP_LIKE(analyzed_table.`target_column`, '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
+                                    THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -5490,12 +5448,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN
-                                REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                            '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
-                                REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                             '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
-                                THEN 1
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') }}
+                                OR {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}') }}
+                                    THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -5514,12 +5469,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN
-                                REGEXP_LIKE(analyzed_table.`target_column`,
-                                            '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
-                                REGEXP_LIKE(analyzed_table.`target_column`,
-                                             '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
-                                THEN 1
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}')
+                                OR REGEXP_LIKE(analyzed_table.`target_column`, '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
+                                    THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -6300,12 +6252,9 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN
-                                REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                            '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
-                                REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                             '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
-                                THEN 1
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') }}
+                                OR {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}') }}
+                                    THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -6325,12 +6274,9 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN
-                                REGEXP_LIKE(analyzed_table.`target_column`,
-                                            '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
-                                REGEXP_LIKE(analyzed_table.`target_column`,
-                                             '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
-                                THEN 1
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}')
+                                OR REGEXP_LIKE(analyzed_table.`target_column`, '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
+                                    THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -7019,12 +6965,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN
-                                REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                            '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
-                                REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                             '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
-                                THEN 1
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') }}
+                                OR {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}') }}
+                                    THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -7043,12 +6986,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN
-                                REGEXP_LIKE(analyzed_table.`target_column`,
-                                            '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
-                                REGEXP_LIKE(analyzed_table.`target_column`,
-                                             '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
-                                THEN 1
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}')
+                                OR REGEXP_LIKE(analyzed_table.`target_column`, '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
+                                    THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)

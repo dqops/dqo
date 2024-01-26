@@ -3680,7 +3680,7 @@ The templates used to generate the SQL query for each data source supported by D
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * COUNT(
-                REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]$')
+                {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]$') }}
             ) / COUNT(*)
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}

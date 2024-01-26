@@ -1,5 +1,5 @@
 # DQOps REST API sensors models reference
-The references of all objects used by [sensors](../operations/sensors.md) REST API operations are listed below.
+The references of all objects used by [sensors](/docs/client/operations/sensors.md) REST API operations are listed below.
 
 
 ## ProviderSensorListModel
@@ -11,7 +11,7 @@ Provider sensor list model that is returned by the REST API.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">[`provider_type`](./common.md#providertype)</span>|Provider type.|*[ProviderType](./common.md#providertype)*|
+|<span class="no-wrap-code">[`provider_type`](\docs\client\models\common.md#providertype)</span>|Provider type.|*[ProviderType](\docs\client\models\common.md#providertype)*|
 |<span class="no-wrap-code">`custom`</span>|This connection specific template is a custom sensor template or was customized by the user.|*boolean*|
 |<span class="no-wrap-code">`built_in`</span>|This connection specific template is provided with DQOps as a built-in sensor.|*boolean*|
 |<span class="no-wrap-code">`can_edit`</span>|Boolean flag that decides if the current user can update or delete this object.|*boolean*|
@@ -48,8 +48,8 @@ Sensor folder model that is returned by the REST API.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">`folders`</span>|A dictionary of nested folders with sensors, the keys are the folder names.|*Dict[string, [SensorFolderModel](./sensors.md#sensorfoldermodel)]*|
-|<span class="no-wrap-code">`sensors`</span>|List of sensors defined in this folder.|*List[[SensorListModel](./sensors.md#sensorlistmodel)]*|
+|<span class="no-wrap-code">`folders`</span>|A dictionary of nested folders with sensors, the keys are the folder names.|*Dict[string, [SensorFolderModel](\docs\client\models\sensors.md#sensorfoldermodel)]*|
+|<span class="no-wrap-code">`sensors`</span>|List of sensors defined in this folder.|*List[[SensorListModel](\docs\client\models\sensors.md#sensorlistmodel)]*|
 
 
 ___
@@ -63,8 +63,8 @@ Provider sensor model returned from REST API.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">[`provider_type`](./common.md#providertype)</span>|Provider type.|*[ProviderType](./common.md#providertype)*|
-|<span class="no-wrap-code">[`provider_sensor_definition_spec`](../../reference/yaml/ProviderSensorYaml.md#providersensordefinitionspec)</span>|Provider specific sensor definition specification|*[ProviderSensorDefinitionSpec](../../reference/yaml/ProviderSensorYaml.md#providersensordefinitionspec)*|
+|<span class="no-wrap-code">[`provider_type`](\docs\client\models\common.md#providertype)</span>|Provider type.|*[ProviderType](\docs\client\models\common.md#providertype)*|
+|<span class="no-wrap-code">[`provider_sensor_definition_spec`](\docs\reference\yaml\ProviderSensorYaml\#providersensordefinitionspec)</span>|Provider specific sensor definition specification|*[ProviderSensorDefinitionSpec](\docs\reference\yaml\ProviderSensorYaml\#providersensordefinitionspec)*|
 |<span class="no-wrap-code">`sql_template`</span>|Provider specific Jinja2 SQL template|*string*|
 |<span class="no-wrap-code">`custom`</span>|Whether the provider sensor is a User Home provider sensor|*boolean*|
 |<span class="no-wrap-code">`built_in`</span>|This is a DQOps built-in provider sensor, whose parameters cannot be changed.|*boolean*|
@@ -84,7 +84,7 @@ Sensor model returned from REST API.
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">`full_sensor_name`</span>|Full sensor name.|*string*|
-|<span class="no-wrap-code">[`sensor_definition_spec`](../../reference/yaml/SensorDefinitionYaml.md#sensordefinitionspec)</span>|Sensor definition specification.|*[SensorDefinitionSpec](../../reference/yaml/SensorDefinitionYaml.md#sensordefinitionspec)*|
+|<span class="no-wrap-code">[`sensor_definition_spec`](\docs\reference\yaml\SensorDefinitionYaml\#sensordefinitionspec)</span>|Sensor definition specification.|*[SensorDefinitionSpec](\docs\reference\yaml\SensorDefinitionYaml\#sensordefinitionspec)*|
 |<span class="no-wrap-code">`provider_sensor_list`</span>|Provider sensors list with provider specific sensor definitions.|*List[[ProviderSensorModel](#providersensormodel)]*|
 |<span class="no-wrap-code">`custom`</span>|Whether the sensor is a User Home sensor|*boolean*|
 |<span class="no-wrap-code">`built_in`</span>|This is a DQOps built-in sensor, whose parameters cannot be changed.|*boolean*|

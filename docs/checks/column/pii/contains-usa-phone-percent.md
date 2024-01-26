@@ -228,12 +228,22 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            
+            {% macro render_regex(column, regex_pattern) %}
+                {%- if lib.engine_type == 'singlestoredb' %}
+                    replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', '') RLIKE {{ lib.make_text_constant(regex_pattern) }}
+                {%- else -%}
+                    REGEXP_LIKE(replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', ''), {{ lib.make_text_constant(regex_pattern) }})
+                {%- endif -%}
+            {% endmacro %}
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN {{ render_regex(lib.render_target_column('analyzed_table'), '[0-9]{10,}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -249,12 +259,15 @@ spec:
         === "Rendered SQL for MySQL"
 
             ```sql
+            
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', ''), '[0-9]{10,}')
                                 THEN 1
                             ELSE 0
                         END
@@ -853,12 +866,22 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for MySQL"
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            
+            {% macro render_regex(column, regex_pattern) %}
+                {%- if lib.engine_type == 'singlestoredb' %}
+                    replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', '') RLIKE {{ lib.make_text_constant(regex_pattern) }}
+                {%- else -%}
+                    REGEXP_LIKE(replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', ''), {{ lib.make_text_constant(regex_pattern) }})
+                {%- endif -%}
+            {% endmacro %}
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN {{ render_regex(lib.render_target_column('analyzed_table'), '[0-9]{10,}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -873,12 +896,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for MySQL"
             ```sql
+            
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', ''), '[0-9]{10,}')
                                 THEN 1
                             ELSE 0
                         END
@@ -1576,12 +1602,22 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            
+            {% macro render_regex(column, regex_pattern) %}
+                {%- if lib.engine_type == 'singlestoredb' %}
+                    replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', '') RLIKE {{ lib.make_text_constant(regex_pattern) }}
+                {%- else -%}
+                    REGEXP_LIKE(replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', ''), {{ lib.make_text_constant(regex_pattern) }})
+                {%- endif -%}
+            {% endmacro %}
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN {{ render_regex(lib.render_target_column('analyzed_table'), '[0-9]{10,}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -1597,12 +1633,15 @@ spec:
         === "Rendered SQL for MySQL"
 
             ```sql
+            
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', ''), '[0-9]{10,}')
                                 THEN 1
                             ELSE 0
                         END
@@ -2202,12 +2241,22 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for MySQL"
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            
+            {% macro render_regex(column, regex_pattern) %}
+                {%- if lib.engine_type == 'singlestoredb' %}
+                    replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', '') RLIKE {{ lib.make_text_constant(regex_pattern) }}
+                {%- else -%}
+                    REGEXP_LIKE(replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', ''), {{ lib.make_text_constant(regex_pattern) }})
+                {%- endif -%}
+            {% endmacro %}
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN {{ render_regex(lib.render_target_column('analyzed_table'), '[0-9]{10,}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -2222,12 +2271,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for MySQL"
             ```sql
+            
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', ''), '[0-9]{10,}')
                                 THEN 1
                             ELSE 0
                         END
@@ -2925,12 +2977,22 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            
+            {% macro render_regex(column, regex_pattern) %}
+                {%- if lib.engine_type == 'singlestoredb' %}
+                    replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', '') RLIKE {{ lib.make_text_constant(regex_pattern) }}
+                {%- else -%}
+                    REGEXP_LIKE(replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', ''), {{ lib.make_text_constant(regex_pattern) }})
+                {%- endif -%}
+            {% endmacro %}
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN {{ render_regex(lib.render_target_column('analyzed_table'), '[0-9]{10,}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -2946,12 +3008,15 @@ spec:
         === "Rendered SQL for MySQL"
 
             ```sql
+            
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', ''), '[0-9]{10,}')
                                 THEN 1
                             ELSE 0
                         END
@@ -3551,12 +3616,22 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for MySQL"
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            
+            {% macro render_regex(column, regex_pattern) %}
+                {%- if lib.engine_type == 'singlestoredb' %}
+                    replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', '') RLIKE {{ lib.make_text_constant(regex_pattern) }}
+                {%- else -%}
+                    REGEXP_LIKE(replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', ''), {{ lib.make_text_constant(regex_pattern) }})
+                {%- endif -%}
+            {% endmacro %}
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN {{ render_regex(lib.render_target_column('analyzed_table'), '[0-9]{10,}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -3571,12 +3646,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for MySQL"
             ```sql
+            
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', ''), '[0-9]{10,}')
                                 THEN 1
                             ELSE 0
                         END
@@ -4284,12 +4362,22 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            
+            {% macro render_regex(column, regex_pattern) %}
+                {%- if lib.engine_type == 'singlestoredb' %}
+                    replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', '') RLIKE {{ lib.make_text_constant(regex_pattern) }}
+                {%- else -%}
+                    REGEXP_LIKE(replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', ''), {{ lib.make_text_constant(regex_pattern) }})
+                {%- endif -%}
+            {% endmacro %}
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN {{ render_regex(lib.render_target_column('analyzed_table'), '[0-9]{10,}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -4305,12 +4393,15 @@ spec:
         === "Rendered SQL for MySQL"
 
             ```sql
+            
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', ''), '[0-9]{10,}')
                                 THEN 1
                             ELSE 0
                         END
@@ -4924,12 +5015,22 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for MySQL"
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            
+            {% macro render_regex(column, regex_pattern) %}
+                {%- if lib.engine_type == 'singlestoredb' %}
+                    replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', '') RLIKE {{ lib.make_text_constant(regex_pattern) }}
+                {%- else -%}
+                    REGEXP_LIKE(replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', ''), {{ lib.make_text_constant(regex_pattern) }})
+                {%- endif -%}
+            {% endmacro %}
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN {{ render_regex(lib.render_target_column('analyzed_table'), '[0-9]{10,}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -4944,12 +5045,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for MySQL"
             ```sql
+            
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', ''), '[0-9]{10,}')
                                 THEN 1
                             ELSE 0
                         END
@@ -5655,12 +5759,22 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            
+            {% macro render_regex(column, regex_pattern) %}
+                {%- if lib.engine_type == 'singlestoredb' %}
+                    replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', '') RLIKE {{ lib.make_text_constant(regex_pattern) }}
+                {%- else -%}
+                    REGEXP_LIKE(replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', ''), {{ lib.make_text_constant(regex_pattern) }})
+                {%- endif -%}
+            {% endmacro %}
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN {{ render_regex(lib.render_target_column('analyzed_table'), '[0-9]{10,}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -5676,12 +5790,15 @@ spec:
         === "Rendered SQL for MySQL"
 
             ```sql
+            
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', ''), '[0-9]{10,}')
                                 THEN 1
                             ELSE 0
                         END
@@ -6295,12 +6412,22 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for MySQL"
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            
+            {% macro render_regex(column, regex_pattern) %}
+                {%- if lib.engine_type == 'singlestoredb' %}
+                    replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', '') RLIKE {{ lib.make_text_constant(regex_pattern) }}
+                {%- else -%}
+                    REGEXP_LIKE(replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', ''), {{ lib.make_text_constant(regex_pattern) }})
+                {%- endif -%}
+            {% endmacro %}
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN {{ render_regex(lib.render_target_column('analyzed_table'), '[0-9]{10,}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -6315,12 +6442,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for MySQL"
             ```sql
+            
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', ''), '[0-9]{10,}')
                                 THEN 1
                             ELSE 0
                         END

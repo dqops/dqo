@@ -551,6 +551,57 @@ All parameters supported by the command are listed below.
 
 ___
 
+## dqo cloud sync dictionaries
+
+Synchronize local &quot;dictionaries&quot; folder that synchronizes data dictionary CSV files with DQOps Cloud
+
+
+**Description**
+
+
+Uploads any local changes to the cloud and downloads any changes made to the cloud version of the &quot;dictionaries&quot; folder.
+
+
+
+
+**Command-line synopsis**
+
+```
+$ dqo [dqo options...] cloud sync dictionaries [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
+                         [-of=<outputFormat>]
+
+```
+
+**DQOps shell synopsis**
+
+```
+dqo> cloud sync dictionaries [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
+                         [-of=<outputFormat>]
+
+```
+
+
+
+**Command options**
+
+All parameters supported by the command are listed below.
+
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
+|-----------------------------------------------|-------------|:-----------------:|-----------------|
+|<div id="cloud sync dictionaries-d" class="no-wrap-code">`-d`</div><div id="cloud sync dictionaries--direction" class="no-wrap-code">`--direction`</div>|File synchronization direction| |*full*<br/>*download*<br/>*upload*<br/>|
+|<div id="cloud sync dictionaries-fw" class="no-wrap-code">`-fw`</div><div id="cloud sync dictionaries--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
+|<div id="cloud sync dictionaries--headless" class="no-wrap-code">`--headless`</div><div id="cloud sync dictionaries-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<div id="cloud sync dictionaries-h" class="no-wrap-code">`-h`</div><div id="cloud sync dictionaries--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
+|<div id="cloud sync dictionaries-m" class="no-wrap-code">`-m`</div><div id="cloud sync dictionaries--mode" class="no-wrap-code">`--mode`</div>|Reporting mode (silent, summary, debug)| |*silent*<br/>*summary*<br/>*debug*<br/>|
+|<div id="cloud sync dictionaries-of" class="no-wrap-code">`-of`</div><div id="cloud sync dictionaries--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
+
+
+
+
+
+
+___
+
 ## dqo cloud sync all
 
 Synchronize local files with DQOps Cloud (sources, table rules, custom rules, custom sensors and data - sensor readouts and rule results)

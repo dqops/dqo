@@ -240,20 +240,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro make_text_constant(string) -%}
-                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-            {%- endmacro %}
-            
-            {%- macro render_regex(regex) -%}
-                 {{ make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex) }}
                                 THEN 0
                             ELSE 1
                         END
@@ -905,20 +897,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro make_text_constant(string) -%}
-                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-            {%- endmacro %}
-            
-            {%- macro render_regex(regex) -%}
-                 {{ make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex) }}
                                 THEN 0
                             ELSE 1
                         END
@@ -1668,20 +1652,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro make_text_constant(string) -%}
-                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-            {%- endmacro %}
-            
-            {%- macro render_regex(regex) -%}
-                 {{ make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex) }}
                                 THEN 0
                             ELSE 1
                         END
@@ -2334,20 +2310,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro make_text_constant(string) -%}
-                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-            {%- endmacro %}
-            
-            {%- macro render_regex(regex) -%}
-                 {{ make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex) }}
                                 THEN 0
                             ELSE 1
                         END
@@ -3097,20 +3065,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro make_text_constant(string) -%}
-                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-            {%- endmacro %}
-            
-            {%- macro render_regex(regex) -%}
-                 {{ make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex) }}
                                 THEN 0
                             ELSE 1
                         END
@@ -3763,20 +3723,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro make_text_constant(string) -%}
-                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-            {%- endmacro %}
-            
-            {%- macro render_regex(regex) -%}
-                 {{ make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex) }}
                                 THEN 0
                             ELSE 1
                         END
@@ -4536,20 +4488,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro make_text_constant(string) -%}
-                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-            {%- endmacro %}
-            
-            {%- macro render_regex(regex) -%}
-                 {{ make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex) }}
                                 THEN 0
                             ELSE 1
                         END
@@ -5216,20 +5160,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro make_text_constant(string) -%}
-                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-            {%- endmacro %}
-            
-            {%- macro render_regex(regex) -%}
-                 {{ make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex) }}
                                 THEN 0
                             ELSE 1
                         END
@@ -5987,20 +5923,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro make_text_constant(string) -%}
-                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-            {%- endmacro %}
-            
-            {%- macro render_regex(regex) -%}
-                 {{ make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex) }}
                                 THEN 0
                             ELSE 1
                         END
@@ -6667,20 +6595,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro make_text_constant(string) -%}
-                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-            {%- endmacro %}
-            
-            {%- macro render_regex(regex) -%}
-                 {{ make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex) }}
                                 THEN 0
                             ELSE 1
                         END

@@ -12535,96 +12535,66 @@ definitions:
           \ apply updates only to the fields for which no configuration exists."
     description: "Parameter object for creating pruned patch trees of all checks that\
       \ fit the filters."
-  AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec:
+  AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec:
     type: "object"
     properties:
       anomaly_percent:
         type: "number"
         format: "double"
-        description: "Probability that the current sensor readout will achieve values\
-          \ within the mean according to the distribution of the previous values gathered\
-          \ within the time window. In other words, the inter-quantile range around\
-          \ the mean of the estimated normal distribution. Set the time window at\
-          \ the threshold level for all severity levels (warning, error, fatal) at\
-          \ once. The default is a time window of 90 periods (days, etc.), but at\
-          \ least 30 readouts must exist to run the calculation. You can change the\
-          \ default value by modifying prediction_time_window parameterin Definitions\
-          \ section."
-  AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec:
+        description: "The probability (in percent) that the current sensor readout\
+          \ (measure) is an anomaly, because the value is outside the regular range\
+          \ of previous readouts. The default time window of 90 time periods (days,\
+          \ etc.) is used, but at least 30 readouts must exist to run the calculation."
+  AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec:
     type: "object"
     properties:
       anomaly_percent:
         type: "number"
         format: "double"
-        description: "Probability that the current sensor readout will achieve values\
-          \ within the mean according to the distribution of the previous values gathered\
-          \ within the time window. In other words, the inter-quantile range around\
-          \ the mean of the estimated normal distribution. Set the time window at\
-          \ the threshold level for all severity levels (warning, error, fatal) at\
-          \ once. The default is a time window of 90 periods (days, etc.), but at\
-          \ least 30 readouts must exist to run the calculation. You can change the\
-          \ default value by modifying prediction_time_window parameterin Definitions\
-          \ section."
-  AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec:
+        description: "The probability (in percent) that the current sensor readout\
+          \ (measure) is an anomaly, because the value is outside the regular range\
+          \ of previous readouts. The default time window of 90 time periods (days,\
+          \ etc.) is used, but at least 30 readouts must exist to run the calculation."
+  AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec:
     type: "object"
     properties:
       anomaly_percent:
         type: "number"
         format: "double"
-        description: "Probability that the current sensor readout will achieve values\
-          \ within the mean according to the distribution of the previous values gathered\
-          \ within the time window. In other words, the inter-quantile range around\
-          \ the mean of the estimated normal distribution. Set the time window at\
-          \ the threshold level for all severity levels (warning, error, fatal) at\
-          \ once. The default is a time window of 90 periods (days, etc.), but at\
-          \ least 30 readouts must exist to run the calculation. You can change the\
-          \ default value by modifying prediction_time_window parameterin Definitions\
-          \ section."
-  AnomalyStationaryPercentileMovingAverageRule01ParametersSpec:
+        description: "The probability (in percent) that the current sensor readout\
+          \ (measure) is an anomaly, because the value is outside the regular range\
+          \ of previous readouts. The default time window of 90 time periods (days,\
+          \ etc.) is used, but at least 30 readouts must exist to run the calculation."
+  AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec:
     type: "object"
     properties:
       anomaly_percent:
         type: "number"
         format: "double"
-        description: "Probability that the current sensor readout will achieve values\
-          \ within the mean according to the distribution of the previous values gathered\
-          \ within the time window. In other words, the inter-quantile range around\
-          \ the mean of the estimated normal distribution. Set the time window at\
-          \ the threshold level for all severity levels (warning, error, fatal) at\
-          \ once. The default is a time window of 90 periods (days, etc.), but at\
-          \ least 30 readouts must exist to run the calculation. You can change the\
-          \ default value by modifying prediction_time_window parameterin Definitions\
-          \ section."
-  AnomalyStationaryPercentileMovingAverageRule05ParametersSpec:
+        description: "The probability (in percent) that the current sensor readout\
+          \ (measure) is an anomaly, because the value is outside the regular range\
+          \ of previous readouts. The default time window of 90 time periods (days,\
+          \ etc.) is used, but at least 30 readouts must exist to run the calculation."
+  AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec:
     type: "object"
     properties:
       anomaly_percent:
         type: "number"
         format: "double"
-        description: "Probability that the current sensor readout will achieve values\
-          \ within the mean according to the distribution of the previous values gathered\
-          \ within the time window. In other words, the inter-quantile range around\
-          \ the mean of the estimated normal distribution. Set the time window at\
-          \ the threshold level for all severity levels (warning, error, fatal) at\
-          \ once. The default is a time window of 90 periods (days, etc.), but at\
-          \ least 30 readouts must exist to run the calculation. You can change the\
-          \ default value by modifying prediction_time_window parameterin Definitions\
-          \ section."
-  AnomalyStationaryPercentileMovingAverageRule1ParametersSpec:
+        description: "The probability (in percent) that the current sensor readout\
+          \ (measure) is an anomaly, because the value is outside the regular range\
+          \ of previous readouts. The default time window of 90 time periods (days,\
+          \ etc.) is used, but at least 30 readouts must exist to run the calculation."
+  AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec:
     type: "object"
     properties:
       anomaly_percent:
         type: "number"
         format: "double"
-        description: "Probability that the current sensor readout will achieve values\
-          \ within the mean according to the distribution of the previous values gathered\
-          \ within the time window. In other words, the inter-quantile range around\
-          \ the mean of the estimated normal distribution. Set the time window at\
-          \ the threshold level for all severity levels (warning, error, fatal) at\
-          \ once. The default is a time window of 90 periods (days, etc.), but at\
-          \ least 30 readouts must exist to run the calculation. You can change the\
-          \ default value by modifying prediction_time_window parameterin Definitions\
-          \ section."
+        description: "The probability (in percent) that the current sensor readout\
+          \ (measure) is an anomaly, because the value is outside the regular range\
+          \ of previous readouts. The default time window of 90 time periods (days,\
+          \ etc.) is used, but at least 30 readouts must exist to run the calculation."
   AuthenticatedDashboardModel:
     type: "object"
     properties:
@@ -17428,15 +17398,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec"
+        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec"
       error:
         description: "Default alerting threshold for a set number of rows with negative\
           \ value in a column that raises a data quality alert"
-        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec"
+        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec"
+        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec"
   ColumnDistinctCountAnomalyStationaryPartitionCheckSpec:
     type: "object"
     properties:
@@ -17489,15 +17459,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
       error:
         description: "Default alerting threshold for a set number of rows with negative\
           \ value in a column that raises a data quality alert"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
   ColumnDistinctCountChange1DayCheckSpec:
     type: "object"
     properties:
@@ -17855,15 +17825,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
       error:
         description: "Default alerting threshold for a set number of rows with negative\
           \ value in a column that raises a data quality alert"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
   ColumnDistinctPercentChange1DayCheckSpec:
     type: "object"
     properties:
@@ -19436,15 +19406,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
       error:
         description: "Default alerting threshold for a set number of rows with negative\
           \ value in a column that raises a data quality alert"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
   ColumnMeanChange1DayCheckSpec:
     type: "object"
     properties:
@@ -19802,15 +19772,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
       error:
         description: "Default alerting threshold for a set number of rows with negative\
           \ value in a column that raises a data quality alert"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
   ColumnMedianChange1DayCheckSpec:
     type: "object"
     properties:
@@ -20761,15 +20731,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
       error:
         description: "Default alerting threshold for a set number of rows with negative\
           \ value in a column that raises a data quality alert"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
   ColumnNullPercentChange1DayCheckSpec:
     type: "object"
     properties:
@@ -25171,15 +25141,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec"
+        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec"
       error:
         description: "Default alerting threshold for a set number of rows with negative\
           \ value in a column that raises a data quality alert"
-        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec"
+        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec"
+        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec"
   ColumnSumAnomalyStationaryPartitionCheckSpec:
     type: "object"
     properties:
@@ -25232,15 +25202,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
       error:
         description: "Default alerting threshold for a set number of rows with negative\
           \ value in a column that raises a data quality alert"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
   ColumnSumChange1DayCheckSpec:
     type: "object"
     properties:
@@ -33543,15 +33513,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec"
+        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec"
       error:
         description: "Default alerting threshold for a set number of rows with negative\
           \ value in a column that raises a data quality alert"
-        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec"
+        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec"
+        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec"
   TableRowCountAnomalyStationaryPartitionCheckSpec:
     type: "object"
     properties:
@@ -33604,15 +33574,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
       error:
         description: "Default alerting threshold for a set number of rows with negative\
           \ value in a column that raises a data quality alert"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
   TableRowCountChange1DayCheckSpec:
     type: "object"
     properties:

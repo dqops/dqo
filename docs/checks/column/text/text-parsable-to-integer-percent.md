@@ -210,7 +210,7 @@ spec:
                 CASE
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]$')
+                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]$') }}
                     ) / COUNT(*)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -699,7 +699,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CASE
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]$')
+                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]$') }}
                     ) / COUNT(*)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1286,7 +1286,7 @@ spec:
                 CASE
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]$')
+                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]$') }}
                     ) / COUNT(*)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1776,7 +1776,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CASE
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]$')
+                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]$') }}
                     ) / COUNT(*)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2363,7 +2363,7 @@ spec:
                 CASE
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]$')
+                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]$') }}
                     ) / COUNT(*)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2853,7 +2853,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CASE
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]$')
+                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]$') }}
                     ) / COUNT(*)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3450,7 +3450,7 @@ spec:
                 CASE
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]$')
+                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]$') }}
                     ) / COUNT(*)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3954,7 +3954,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CASE
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]$')
+                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]$') }}
                     ) / COUNT(*)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4549,7 +4549,7 @@ spec:
                 CASE
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]$')
+                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]$') }}
                     ) / COUNT(*)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -5053,7 +5053,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CASE
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]$')
+                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]$') }}
                     ) / COUNT(*)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}

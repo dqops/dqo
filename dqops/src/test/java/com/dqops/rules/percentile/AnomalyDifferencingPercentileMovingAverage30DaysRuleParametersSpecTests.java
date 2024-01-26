@@ -39,7 +39,7 @@ import java.util.Random;
 
 @SpringBootTest
 public class AnomalyDifferencingPercentileMovingAverage30DaysRuleParametersSpecTests extends BaseTest {
-    private AnomalyDifferencingPercentileMovingAverage30DaysRule1ParametersSpec sut;
+    private AnomalyDifferencingPercentileMovingAverage30DaysRuleWarning1PctParametersSpec sut;
     private RuleTimeWindowSettingsSpec timeWindowSettings;
     private LocalDateTime readoutTimestamp;
     private Double[] sensorReadouts;
@@ -49,7 +49,7 @@ public class AnomalyDifferencingPercentileMovingAverage30DaysRuleParametersSpecT
 
     @BeforeEach
     void setUp() {
-        this.sut = new AnomalyDifferencingPercentileMovingAverage30DaysRule1ParametersSpec();
+        this.sut = new AnomalyDifferencingPercentileMovingAverage30DaysRuleWarning1PctParametersSpec();
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_date_and_string_formats, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.timeWindowSettings = RuleTimeWindowSettingsSpecObjectMother.getRealTimeWindowSettings(this.sut.getRuleDefinitionName());

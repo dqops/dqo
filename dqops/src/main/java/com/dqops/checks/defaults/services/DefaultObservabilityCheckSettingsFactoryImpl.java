@@ -46,8 +46,8 @@ import com.dqops.checks.table.monitoring.volume.TableVolumeDailyMonitoringChecks
 import com.dqops.rules.change.ChangePercent1DayRule10ParametersSpec;
 import com.dqops.rules.change.ChangePercentRule10ParametersSpec;
 import com.dqops.rules.comparison.*;
-import com.dqops.rules.percentile.AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec;
-import com.dqops.rules.percentile.AnomalyStationaryPercentileMovingAverageRule1ParametersSpec;
+import com.dqops.rules.percentile.AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec;
+import com.dqops.rules.percentile.AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec;
 import org.springframework.stereotype.Component;
 
 /**
@@ -90,7 +90,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
             setWarning(new ChangePercentRule10ParametersSpec());
         }});
         tableVolume.setDailyRowCountAnomaly(new TableRowCountAnomalyDifferencingCheckSpec() {{
-            setWarning(new AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec());
+            setWarning(new AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec());
         }});
         defaultSettings.getTable().setVolume(tableVolume);
 
@@ -102,10 +102,10 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
 
         ColumnAnomalyDailyMonitoringChecksSpec columnAnomaly = new ColumnAnomalyDailyMonitoringChecksSpec();
         columnAnomaly.setDailySumAnomaly(new ColumnSumAnomalyDifferencingCheckSpec() {{
-            setWarning(new AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec());
+            setWarning(new AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec());
         }});
         columnAnomaly.setDailyMeanAnomaly(new ColumnMeanAnomalyStationaryCheckSpec() {{
-            setWarning(new AnomalyStationaryPercentileMovingAverageRule1ParametersSpec());
+            setWarning(new AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec());
         }});
         defaultSettings.getColumn().setAnomaly(columnAnomaly);
 
@@ -142,7 +142,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         columnNulls.setDailyNullsPercent(new ColumnNullsPercentCheckSpec());
         columnNulls.setDailyNotNullsPercent(new ColumnNotNullsPercentCheckSpec());
         columnNulls.setDailyNullsPercentAnomaly(new ColumnNullPercentAnomalyStationaryCheckSpec() {{
-            setWarning(new AnomalyStationaryPercentileMovingAverageRule1ParametersSpec());
+            setWarning(new AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec());
         }});
         columnNulls.setDailyNullsPercentChange1Day(new ColumnNullPercentChange1DayCheckSpec() {{
             setWarning(new ChangePercent1DayRule10ParametersSpec());
@@ -151,7 +151,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
 
         ColumnUniquenessDailyMonitoringChecksSpec columnUniqueness = new ColumnUniquenessDailyMonitoringChecksSpec();
         columnUniqueness.setDailyDistinctCountAnomaly(new ColumnDistinctCountAnomalyDifferencingCheckSpec() {{
-            setWarning(new AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec());
+            setWarning(new AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec());
         }});
         defaultSettings.getColumn().setUniqueness(columnUniqueness);
 

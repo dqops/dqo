@@ -91,11 +91,11 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
                 [--databricks-options=<options>]
                 [--databricks-password=<password>] [--databricks-port=<port>]
                 [--databricks-user=<user>] [--mysql-database=<database>]
-                [--mysql-host=<host>] [--mysql-options=<options>]
-                [--mysql-password=<password>] [--mysql-port=<port>]
-                [--mysql-sslmode=<sslmode>] [--mysql-user=<user>] [-n=<name>]
-                [-of=<outputFormat>] [--oracle-database=<database>]
-                [--oracle-host=<host>]
+                [--mysql-engine=<mysqlEngineType>] [--mysql-host=<host>]
+                [--mysql-options=<options>] [--mysql-password=<password>]
+                [--mysql-port=<port>] [--mysql-sslmode=<sslmode>]
+                [--mysql-user=<user>] [-n=<name>] [-of=<outputFormat>]
+                [--oracle-database=<database>] [--oracle-host=<host>]
                 [--oracle-initialization-sql=<initializationSql>]
                 [--oracle-options=<options>] [--oracle-password=<password>]
                 [--oracle-port=<port>] [--oracle-user=<user>]
@@ -108,7 +108,9 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
                 [--presto-user=<user>] [--redshift-database=<database>]
                 [--redshift-host=<host>] [--redshift-options=<options>]
                 [--redshift-password=<password>] [--redshift-port=<port>]
-                [--redshift-user=<user>] [--snowflake-account=<account>]
+                [--redshift-user=<user>]
+                [--single-store-parameters-spec=<singleStoreDbParametersSpec>]
+                [--snowflake-account=<account>]
                 [--snowflake-database=<database>]
                 [--snowflake-password=<password>] [--snowflake-role=<role>]
                 [--snowflake-user=<user>] [--snowflake-warehouse=<warehouse>]
@@ -152,11 +154,11 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--databricks-options=<options>]
                 [--databricks-password=<password>] [--databricks-port=<port>]
                 [--databricks-user=<user>] [--mysql-database=<database>]
-                [--mysql-host=<host>] [--mysql-options=<options>]
-                [--mysql-password=<password>] [--mysql-port=<port>]
-                [--mysql-sslmode=<sslmode>] [--mysql-user=<user>] [-n=<name>]
-                [-of=<outputFormat>] [--oracle-database=<database>]
-                [--oracle-host=<host>]
+                [--mysql-engine=<mysqlEngineType>] [--mysql-host=<host>]
+                [--mysql-options=<options>] [--mysql-password=<password>]
+                [--mysql-port=<port>] [--mysql-sslmode=<sslmode>]
+                [--mysql-user=<user>] [-n=<name>] [-of=<outputFormat>]
+                [--oracle-database=<database>] [--oracle-host=<host>]
                 [--oracle-initialization-sql=<initializationSql>]
                 [--oracle-options=<options>] [--oracle-password=<password>]
                 [--oracle-port=<port>] [--oracle-user=<user>]
@@ -169,7 +171,9 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--presto-user=<user>] [--redshift-database=<database>]
                 [--redshift-host=<host>] [--redshift-options=<options>]
                 [--redshift-password=<password>] [--redshift-port=<port>]
-                [--redshift-user=<user>] [--snowflake-account=<account>]
+                [--redshift-user=<user>]
+                [--single-store-parameters-spec=<singleStoreDbParametersSpec>]
+                [--snowflake-account=<account>]
                 [--snowflake-database=<database>]
                 [--snowflake-password=<password>] [--snowflake-role=<role>]
                 [--snowflake-user=<user>] [--snowflake-warehouse=<warehouse>]
@@ -223,6 +227,7 @@ All parameters supported by the command are listed below.
 |<div id="connection add--headless" class="no-wrap-code">`--headless`</div><div id="connection add-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |<div id="connection add-h" class="no-wrap-code">`-h`</div><div id="connection add--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
 |<div id="connection add--mysql-database" class="no-wrap-code">`--mysql-database`</div>|MySQL database name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--mysql-engine" class="no-wrap-code">`--mysql-engine`</div>|MySQL engine type. Supports also a null configuration with a custom environment variable.| |*mysql*<br/>*singlestoredb*<br/>|
 |<div id="connection add--mysql-host" class="no-wrap-code">`--mysql-host`</div>|MySQL host name| ||
 |<div id="connection add--mysql-options" class="no-wrap-code">`--mysql-options`</div>|MySQL connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
 |<div id="connection add--mysql-password" class="no-wrap-code">`--mysql-password`</div>|MySQL database password. The value can be in the null format to use dynamic substitution.| ||
@@ -257,6 +262,7 @@ All parameters supported by the command are listed below.
 |<div id="connection add--redshift-password" class="no-wrap-code">`--redshift-password`</div>|Redshift database password. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--redshift-port" class="no-wrap-code">`--redshift-port`</div>|Redshift port number| ||
 |<div id="connection add--redshift-user" class="no-wrap-code">`--redshift-user`</div>|Redshift user name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--single-store-parameters-spec" class="no-wrap-code">`--single-store-parameters-spec`</div>|Single Store DB parameters spec.| ||
 |<div id="connection add--snowflake-account" class="no-wrap-code">`--snowflake-account`</div>|Snowflake account name, e.q. &lt;account&gt;, &lt;account&gt;-&lt;locator&gt;, &lt;account&gt;.&lt;region&gt; or &lt;account&gt;.&lt;region&gt;.&lt;platform&gt;.| ||
 |<div id="connection add--snowflake-database" class="no-wrap-code">`--snowflake-database`</div>|Snowflake database name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--snowflake-password" class="no-wrap-code">`--snowflake-password`</div>|Snowflake database password. The value can be in the null format to use dynamic substitution.| ||
@@ -382,7 +388,8 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
                    [--databricks-options=<options>]
                    [--databricks-password=<password>]
                    [--databricks-port=<port>] [--databricks-user=<user>]
-                   [--mysql-database=<database>] [--mysql-host=<host>]
+                   [--mysql-database=<database>]
+                   [--mysql-engine=<mysqlEngineType>] [--mysql-host=<host>]
                    [--mysql-options=<options>] [--mysql-password=<password>]
                    [--mysql-port=<port>] [--mysql-sslmode=<sslmode>]
                    [--mysql-user=<user>] [-n=<name>] [-of=<outputFormat>]
@@ -400,7 +407,9 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
                    [--redshift-database=<database>] [--redshift-host=<host>]
                    [--redshift-options=<options>]
                    [--redshift-password=<password>] [--redshift-port=<port>]
-                   [--redshift-user=<user>] [--snowflake-account=<account>]
+                   [--redshift-user=<user>]
+                   [--single-store-parameters-spec=<singleStoreDbParametersSpec>
+                   ] [--snowflake-account=<account>]
                    [--snowflake-database=<database>]
                    [--snowflake-password=<password>] [--snowflake-role=<role>]
                    [--snowflake-user=<user>]
@@ -444,7 +453,8 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--databricks-options=<options>]
                    [--databricks-password=<password>]
                    [--databricks-port=<port>] [--databricks-user=<user>]
-                   [--mysql-database=<database>] [--mysql-host=<host>]
+                   [--mysql-database=<database>]
+                   [--mysql-engine=<mysqlEngineType>] [--mysql-host=<host>]
                    [--mysql-options=<options>] [--mysql-password=<password>]
                    [--mysql-port=<port>] [--mysql-sslmode=<sslmode>]
                    [--mysql-user=<user>] [-n=<name>] [-of=<outputFormat>]
@@ -462,7 +472,9 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--redshift-database=<database>] [--redshift-host=<host>]
                    [--redshift-options=<options>]
                    [--redshift-password=<password>] [--redshift-port=<port>]
-                   [--redshift-user=<user>] [--snowflake-account=<account>]
+                   [--redshift-user=<user>]
+                   [--single-store-parameters-spec=<singleStoreDbParametersSpec>
+                   ] [--snowflake-account=<account>]
                    [--snowflake-database=<database>]
                    [--snowflake-password=<password>] [--snowflake-role=<role>]
                    [--snowflake-user=<user>]
@@ -516,6 +528,7 @@ All parameters supported by the command are listed below.
 |<div id="connection update--headless" class="no-wrap-code">`--headless`</div><div id="connection update-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |<div id="connection update-h" class="no-wrap-code">`-h`</div><div id="connection update--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
 |<div id="connection update--mysql-database" class="no-wrap-code">`--mysql-database`</div>|MySQL database name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--mysql-engine" class="no-wrap-code">`--mysql-engine`</div>|MySQL engine type. Supports also a null configuration with a custom environment variable.| |*mysql*<br/>*singlestoredb*<br/>|
 |<div id="connection update--mysql-host" class="no-wrap-code">`--mysql-host`</div>|MySQL host name| ||
 |<div id="connection update--mysql-options" class="no-wrap-code">`--mysql-options`</div>|MySQL connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
 |<div id="connection update--mysql-password" class="no-wrap-code">`--mysql-password`</div>|MySQL database password. The value can be in the null format to use dynamic substitution.| ||
@@ -549,6 +562,7 @@ All parameters supported by the command are listed below.
 |<div id="connection update--redshift-password" class="no-wrap-code">`--redshift-password`</div>|Redshift database password. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--redshift-port" class="no-wrap-code">`--redshift-port`</div>|Redshift port number| ||
 |<div id="connection update--redshift-user" class="no-wrap-code">`--redshift-user`</div>|Redshift user name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--single-store-parameters-spec" class="no-wrap-code">`--single-store-parameters-spec`</div>|Single Store DB parameters spec.| ||
 |<div id="connection update--snowflake-account" class="no-wrap-code">`--snowflake-account`</div>|Snowflake account name, e.q. &lt;account&gt;, &lt;account&gt;-&lt;locator&gt;, &lt;account&gt;.&lt;region&gt; or &lt;account&gt;.&lt;region&gt;.&lt;platform&gt;.| ||
 |<div id="connection update--snowflake-database" class="no-wrap-code">`--snowflake-database`</div>|Snowflake database name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--snowflake-password" class="no-wrap-code">`--snowflake-password`</div>|Snowflake database password. The value can be in the null format to use dynamic substitution.| ||

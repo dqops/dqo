@@ -225,7 +225,7 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}} , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -246,7 +246,7 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column` , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
                                 THEN 1
                             ELSE 0
                         END
@@ -796,7 +796,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}} , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -816,7 +816,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column` , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
                                 THEN 1
                             ELSE 0
                         END
@@ -1465,7 +1465,7 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}} , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -1486,7 +1486,7 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column` , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
                                 THEN 1
                             ELSE 0
                         END
@@ -2037,7 +2037,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}} , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -2057,7 +2057,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column` , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
                                 THEN 1
                             ELSE 0
                         END
@@ -2706,7 +2706,7 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}} , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -2727,7 +2727,7 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column` , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
                                 THEN 1
                             ELSE 0
                         END
@@ -3278,7 +3278,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}} , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -3298,7 +3298,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column` , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
                                 THEN 1
                             ELSE 0
                         END
@@ -3957,7 +3957,7 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}} , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -3978,7 +3978,7 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column` , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
                                 THEN 1
                             ELSE 0
                         END
@@ -4543,7 +4543,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}} , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -4563,7 +4563,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column` , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
                                 THEN 1
                             ELSE 0
                         END
@@ -5220,7 +5220,7 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}} , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -5241,7 +5241,7 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column` , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
                                 THEN 1
                             ELSE 0
                         END
@@ -5806,7 +5806,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}} , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -5826,7 +5826,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column` , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
                                 THEN 1
                             ELSE 0
                         END

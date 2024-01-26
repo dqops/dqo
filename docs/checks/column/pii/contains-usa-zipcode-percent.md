@@ -233,8 +233,8 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9]{5}(?:-[0-9]{4})?')
-                                THEN 1
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[0-9]{5}(\-[0-9]{4})?' ) }}
+                               THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -254,8 +254,8 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9]{5}(?:-[0-9]{4})?')
-                                THEN 1
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9]{5}(\-[0-9]{4})?')
+                               THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -824,8 +824,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9]{5}(?:-[0-9]{4})?')
-                                THEN 1
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[0-9]{5}(\-[0-9]{4})?' ) }}
+                               THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -844,8 +844,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9]{5}(?:-[0-9]{4})?')
-                                THEN 1
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9]{5}(\-[0-9]{4})?')
+                               THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -1513,8 +1513,8 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9]{5}(?:-[0-9]{4})?')
-                                THEN 1
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[0-9]{5}(\-[0-9]{4})?' ) }}
+                               THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -1534,8 +1534,8 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9]{5}(?:-[0-9]{4})?')
-                                THEN 1
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9]{5}(\-[0-9]{4})?')
+                               THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -2105,8 +2105,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9]{5}(?:-[0-9]{4})?')
-                                THEN 1
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[0-9]{5}(\-[0-9]{4})?' ) }}
+                               THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -2125,8 +2125,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9]{5}(?:-[0-9]{4})?')
-                                THEN 1
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9]{5}(\-[0-9]{4})?')
+                               THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -2794,8 +2794,8 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9]{5}(?:-[0-9]{4})?')
-                                THEN 1
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[0-9]{5}(\-[0-9]{4})?' ) }}
+                               THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -2815,8 +2815,8 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9]{5}(?:-[0-9]{4})?')
-                                THEN 1
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9]{5}(\-[0-9]{4})?')
+                               THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -3386,8 +3386,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9]{5}(?:-[0-9]{4})?')
-                                THEN 1
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[0-9]{5}(\-[0-9]{4})?' ) }}
+                               THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -3406,8 +3406,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9]{5}(?:-[0-9]{4})?')
-                                THEN 1
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9]{5}(\-[0-9]{4})?')
+                               THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -4085,8 +4085,8 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9]{5}(?:-[0-9]{4})?')
-                                THEN 1
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[0-9]{5}(\-[0-9]{4})?' ) }}
+                               THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -4106,8 +4106,8 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9]{5}(?:-[0-9]{4})?')
-                                THEN 1
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9]{5}(\-[0-9]{4})?')
+                               THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -4691,8 +4691,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9]{5}(?:-[0-9]{4})?')
-                                THEN 1
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[0-9]{5}(\-[0-9]{4})?' ) }}
+                               THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -4711,8 +4711,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9]{5}(?:-[0-9]{4})?')
-                                THEN 1
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9]{5}(\-[0-9]{4})?')
+                               THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -5388,8 +5388,8 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9]{5}(?:-[0-9]{4})?')
-                                THEN 1
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[0-9]{5}(\-[0-9]{4})?' ) }}
+                               THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -5409,8 +5409,8 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9]{5}(?:-[0-9]{4})?')
-                                THEN 1
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9]{5}(\-[0-9]{4})?')
+                               THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -5994,8 +5994,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '[0-9]{5}(?:-[0-9]{4})?')
-                                THEN 1
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[0-9]{5}(\-[0-9]{4})?' ) }}
+                               THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -6014,8 +6014,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9]{5}(?:-[0-9]{4})?')
-                                THEN 1
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[0-9]{5}(\-[0-9]{4})?')
+                               THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
