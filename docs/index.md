@@ -217,11 +217,15 @@ Over 50 built-in data quality dashboards let you drill-down to the problem.
 
     DQOps measures data quality using a data quality KPI score. The formula is simple and trustworthy, the KPI is the percentage of **passed data quality checks**.
 
-    The [initial data quality KPI](dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md#initial-data-quality-kpi-score) after data profiling,
-    or a [data quality KPI](dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md#when-to-use-monitoring-checks) for monitored data sources
-    can be reviewed on data quality dashboards.
+    DQOps presents the [data quality KPI scores](dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md#when-to-use-monitoring-checks)
+    for each month, showing the **progress in data quality to business sponsors**.
+
+    Data quality KPIs are also a great way to assess the [initial data quality KPI score](dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md#initial-data-quality-kpi-score)
+    after profiling new data sources to identify areas for improvement.
 
     [:octicons-arrow-right-24: Data quality KPI score formula](dqo-concepts/definition-of-data-quality-kpis.md#data-quality-score-formula)
+
+    [:octicons-arrow-right-24: Measuring the initial quality KPI score](dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md#initial-data-quality-kpi-score)
 
     [:octicons-arrow-right-24: Data quality KPI dashboards](dqo-concepts/types-of-data-quality-dashboards.md#data-quality-kpis)
 
@@ -242,10 +246,14 @@ Over 50 built-in data quality dashboards let you drill-down to the problem.
     
     DQOps synchronizes the data to a complimentary [Data Quality Data Warehouse](dqo-concepts/architecture/dqops-architecture.md#data-quality-data-warehouse)
     that is accessed using a DQOps Looker Studio connector. You can even create [custom data quality dashboards](integrations/looker-studio/creating-custom-data-quality-dashboards.md).
-    
-    [:octicons-arrow-right-24: Data quality data lake table schema](dqo-concepts/data-storage-of-data-quality-results.md#parquet-tables)
-    
+
+    [:octicons-arrow-right-24: Types of data quality dashboards](dqo-concepts/types-of-data-quality-dashboards.md)
+
     [:octicons-arrow-right-24: Creating custom data quality dashboards](integrations/looker-studio/creating-custom-data-quality-dashboards.md)
+
+    [:octicons-arrow-right-24: Data quality data lake table schema](dqo-concepts/data-storage-of-data-quality-results.md#parquet-tables)
+
+    [:octicons-arrow-right-24: Using dashboards for daily data quality monitoring](working-with-dqo/daily-monitoring-of-data-quality.md)
 
     </div>
     </div>

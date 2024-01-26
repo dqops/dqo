@@ -13,6 +13,18 @@ Data quality projects implemented with DQOps receive a complementary Looker Stud
 data warehouse. DQOps customers can ask the vendor to access a custom Looker Studio data source, providing direct access 
 to the data quality lakehouse.
 
+!!! info "Complimentary data quality data warehouse for FREE accounts"
+
+    DQOps provides a complimentary [data quality data lake](architecture/dqops-architecture.md#data-quality-data-lake)
+    and [data quality data warehouse](architecture/dqops-architecture.md#data-quality-data-warehouse) for users
+    who are using a **FREE** license of DQOps Cloud.
+    
+    Due to capacity constraints, a limited number of new users who
+    [register a FREE DQOps Cloud account](https://cloud.dqops.com/registration) are granted access to the
+    data warehouse, allowing them to synchronize data quality results with the data quality data warehouse and
+    use the data quality dashboards for free. New grants are released every day.
+
+
 ## Navigating dashboards
 
 To view dashboards, simply go to the **Data Quality Dashboard** section, and select the dashboard of interest from the tree
