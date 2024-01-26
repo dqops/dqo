@@ -100,7 +100,7 @@ public class UserHomeImpl implements UserHome, Cloneable {
         this.setChecks(new CheckDefinitionListImpl());
         this.setSettings(new SettingsWrapperImpl());
         this.setCredentials(new SharedCredentialListImpl());
-        this.setDictionaries(dictionaries);
+        this.setDictionaries(new DictionaryListImpl());
         this.setFileIndices(new FileIndexListImpl());
         this.setDashboards(new DashboardFolderListSpecWrapperImpl());
         this.setDefaultSchedules(new MonitoringSchedulesWrapperImpl());
