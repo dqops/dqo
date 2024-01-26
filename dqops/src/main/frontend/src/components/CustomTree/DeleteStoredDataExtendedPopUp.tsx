@@ -224,7 +224,7 @@ const DeleteStoredDataExtendedPopUp = ({
               options={['', ...Object.values(CheckTypes)]
                 .map((x) => ({ label: x, value: x }))
                 .filter((_, index) => index !== 2)}
-              label="CheckType (profiling, monitoring, partitioned)"
+              label="Check type (profiling, monitoring, partitioned)"
               value={params.checkType}
               onChange={(value) =>
                 onChangeParams({
