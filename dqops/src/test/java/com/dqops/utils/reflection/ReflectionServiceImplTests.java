@@ -22,6 +22,7 @@ import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountAnomalyDifferencingCheckSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
+import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.fields.ParameterDataType;
 import com.dqops.metadata.fields.ParameterDefinitionSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -422,6 +423,16 @@ public class ReflectionServiceImplTests extends BaseTest {
         //@JsonIgnore
         public CheckTimeScale getCheckTimeScale() {
             return null;
+        }
+
+        /**
+         * Returns an array of supported data type categories. DQOps uses this list when activating default data quality checks.
+         *
+         * @return Array of supported data type categories.
+         */
+        @Override
+        public DataTypeCategory[] getSupportedDataTypeCategories() {
+            return DataTypeCategory.ANY;
         }
     }
 

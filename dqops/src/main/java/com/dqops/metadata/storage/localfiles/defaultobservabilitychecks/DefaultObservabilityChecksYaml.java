@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 /**
  * The configuration of default data quality checks that are activated for all imported tables and columns.
- * The default observability checks are stored in the *$DQO_USER_HOME/settings/defaultchecks.dqochecks.yaml* file in the DQOps user's home folder.
+ * The default observability checks are stored in the *$DQO_USER_HOME/settings/default.dqodefaultchecks.yaml* file in the DQOps user's home folder.
  */
 public class DefaultObservabilityChecksYaml implements InvalidYamlStatusHolder {
     @JsonPropertyDescription("DQOps YAML schema version")

@@ -20,6 +20,7 @@ import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.column.checkspecs.accuracy.*;
+import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -45,7 +46,6 @@ public class ColumnAccuracyMonthlyMonitoringChecksSpec extends AbstractCheckCate
             put("monthly_total_max_match_percent", o -> o.monthlyTotalMaxMatchPercent);
             put("monthly_total_average_match_percent", o -> o.monthlyTotalAverageMatchPercent);
             put("monthly_total_not_null_count_match_percent", o -> o.monthlyTotalNotNullCountMatchPercent);
-
         }
     };
 
@@ -195,5 +195,16 @@ public class ColumnAccuracyMonthlyMonitoringChecksSpec extends AbstractCheckCate
     @JsonIgnore
     public CheckTimeScale getCheckTimeScale() {
         return CheckTimeScale.monthly;
+    }
+
+    /**
+     * Returns an array of supported data type categories. DQOps uses this list when activating default data quality checks.
+     *
+     * @return Array of supported data type categories.
+     */
+    @Override
+    @JsonIgnore
+    public DataTypeCategory[] getSupportedDataTypeCategories() {
+        return DataTypeCategory.ANY;
     }
 }

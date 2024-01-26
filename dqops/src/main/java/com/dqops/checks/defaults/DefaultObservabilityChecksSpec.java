@@ -16,13 +16,17 @@
 
 package com.dqops.checks.defaults;
 
+import com.dqops.checks.*;
+import com.dqops.checks.custom.CustomCategoryCheckSpecMap;
+import com.dqops.checks.custom.CustomCheckSpec;
+import com.dqops.checks.custom.CustomCheckSpecMap;
+import com.dqops.connectors.DataTypeCategory;
 import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.metadata.basespecs.AbstractSpec;
-import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
-import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.metadata.id.*;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.utils.reflection.FieldInfo;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.dqops.utils.serialization.InvalidYamlStatusHolder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -33,6 +37,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
 
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -172,13 +177,133 @@ public class DefaultObservabilityChecksSpec extends AbstractSpec implements Inva
      */
     public void applyOnTable(TableSpec targetTable, ProviderDialectSettings dialectSettings) {
         if (this.profiling != null) {
-            this.profiling.applyOnTable(targetTable, dialectSettings);
+            AbstractRootChecksContainerSpec tableProfilingContainer = targetTable.getTableCheckRootContainer(CheckType.profiling, null, true);
+            DefaultProfilingTableObservabilityCheckSettingsSpec tableProfilingDefaults = this.profiling.getTable();
+            if (tableProfilingDefaults != null && !tableProfilingDefaults.isDefault()) {
+                applyDefaultChecksOnContainer(tableProfilingDefaults, tableProfilingContainer, null, dialectSettings);
+            }
+
+            DefaultProfilingColumnObservabilityCheckSettingsSpec columnProfilingDefaults = this.profiling.getColumn();
+            if (columnProfilingDefaults != null && !columnProfilingDefaults.isDefault()) {
+                for (ColumnSpec targetColumn : targetTable.getColumns().values()) {
+                    AbstractRootChecksContainerSpec columnProfilingContainer = targetColumn.getColumnCheckRootContainer(CheckType.profiling, null, true);
+                    DataTypeCategory dataTypeCategory = dialectSettings.detectColumnType(targetColumn.getTypeSnapshot());
+                    applyDefaultChecksOnContainer(columnProfilingDefaults, columnProfilingContainer, dataTypeCategory, dialectSettings);
+                }
+            }
         }
+
         if (this.monitoringDaily != null) {
-            this.monitoringDaily.applyOnTable(targetTable, dialectSettings);
+            AbstractRootChecksContainerSpec tableDailyMonitoringContainer = targetTable.getTableCheckRootContainer(CheckType.monitoring, CheckTimeScale.daily, true);
+            DefaultDailyMonitoringTableObservabilityCheckSettingsSpec tableMonitoringDailyDefaults = this.monitoringDaily.getTable();
+            if (tableMonitoringDailyDefaults != null && !tableMonitoringDailyDefaults.isDefault()) {
+                applyDefaultChecksOnContainer(tableMonitoringDailyDefaults, tableDailyMonitoringContainer, null, dialectSettings);
+            }
+
+            DefaultDailyMonitoringColumnObservabilityCheckSettingsSpec columnDailyMonitoringDefaults = this.monitoringDaily.getColumn();
+            if (columnDailyMonitoringDefaults != null && !columnDailyMonitoringDefaults.isDefault()) {
+                for (ColumnSpec targetColumn : targetTable.getColumns().values()) {
+                    AbstractRootChecksContainerSpec columnDailyMonitoringContainer = targetColumn.getColumnCheckRootContainer(CheckType.monitoring, CheckTimeScale.daily, true);
+                    DataTypeCategory dataTypeCategory = dialectSettings.detectColumnType(targetColumn.getTypeSnapshot());
+                    applyDefaultChecksOnContainer(columnDailyMonitoringDefaults, columnDailyMonitoringContainer, dataTypeCategory, dialectSettings);
+                }
+            }
         }
+
         if (this.monitoringMonthly != null) {
-            this.monitoringMonthly.applyOnTable(targetTable, dialectSettings);
+            AbstractRootChecksContainerSpec tableMonthlyMonitoringContainer = targetTable.getTableCheckRootContainer(CheckType.monitoring, CheckTimeScale.monthly, true);
+            DefaultMonthlyMonitoringTableObservabilityCheckSettingsSpec tableMonitoringMonthlyDefaults = this.monitoringMonthly.getTable();
+            if (tableMonitoringMonthlyDefaults != null && !tableMonitoringMonthlyDefaults.isDefault()) {
+                applyDefaultChecksOnContainer(tableMonitoringMonthlyDefaults, tableMonthlyMonitoringContainer, null, dialectSettings);
+            }
+
+            DefaultMonthlyMonitoringColumnObservabilityCheckSettingsSpec columnMonthlyMonitoringDefaults = this.monitoringMonthly.getColumn();
+            if (columnMonthlyMonitoringDefaults != null && !columnMonthlyMonitoringDefaults.isDefault()) {
+                for (ColumnSpec targetColumn : targetTable.getColumns().values()) {
+                    AbstractRootChecksContainerSpec columnMonthlyMonitoringContainer = targetColumn.getColumnCheckRootContainer(CheckType.monitoring, CheckTimeScale.monthly, true);
+                    DataTypeCategory dataTypeCategory = dialectSettings.detectColumnType(targetColumn.getTypeSnapshot());
+                    applyDefaultChecksOnContainer(columnMonthlyMonitoringDefaults, columnMonthlyMonitoringContainer, dataTypeCategory, dialectSettings);
+                }
+            }
+        }
+    }
+
+    /**
+     * Copies all configured data quality checks from the check type container with default checks to the target container.
+     * @param defaultChecks Source default checks container.
+     * @param targetChecksContainer Target root checks container to copy the definitions.
+     * @param columnDataTypeCategory Detected data type of a column, if we are applying it on a column.
+     * @param dialectSettings Dialect settings.
+     */
+    public void applyDefaultChecksOnContainer(AbstractRootChecksContainerSpec defaultChecks, AbstractRootChecksContainerSpec targetChecksContainer,
+                                              DataTypeCategory columnDataTypeCategory, ProviderDialectSettings dialectSettings) {
+        if (defaultChecks == null || defaultChecks.isDefault()) {
+            return;
+        }
+
+        ChildHierarchyNodeFieldMap targetContainerChildMap = targetChecksContainer.childMap();
+
+        for (ChildFieldEntry defaultChecksCategoryEntry : defaultChecks.childMap().getChildEntries()) {
+            HierarchyNode defaultCategoryNode = defaultChecksCategoryEntry.getGetChildFunc().apply(defaultChecks);
+            if (defaultCategoryNode instanceof AbstractCheckCategorySpec) {
+                AbstractCheckCategorySpec defaultCheckCategory = (AbstractCheckCategorySpec)defaultCategoryNode;
+
+                if (defaultCheckCategory.isDefault()) {
+                    continue;
+                }
+
+                if (!DataTypeCategory.isDataTypeInList(columnDataTypeCategory, defaultCheckCategory.getSupportedDataTypeCategories())) {
+                    continue;
+                }
+
+                FieldInfo targetContainerCategoryFieldInfo = targetContainerChildMap.getReflectionClassInfo().getFieldByYamlName(defaultChecksCategoryEntry.getChildName());
+                AbstractCheckCategorySpec targetCategoryContainer = (AbstractCheckCategorySpec)targetContainerCategoryFieldInfo.getFieldValueOrNewObject(targetChecksContainer);
+                targetContainerCategoryFieldInfo.setFieldValue(targetCategoryContainer, targetChecksContainer);
+                ChildHierarchyNodeFieldMap targetCategoryChildMap = targetCategoryContainer.childMap();
+
+                for (ChildFieldEntry defaultChecksEntry : defaultCheckCategory.childMap().getChildEntries()) {
+                    HierarchyNode defaultCheckNode = defaultChecksEntry.getGetChildFunc().apply(defaultCheckCategory);
+                    if (defaultCheckNode instanceof AbstractCheckSpec<?,?,?,?>) {
+                        AbstractCheckSpec<?,?,?,?> defaultCheck = (AbstractCheckSpec<?,?,?,?>)defaultCheckNode;
+
+                        if (defaultCheck.isDefault()) {
+                            continue;
+                        }
+
+                        FieldInfo targetCategoryCheckFieldInfo = targetCategoryChildMap.getReflectionClassInfo().getFieldByYamlName(defaultChecksEntry.getChildName());
+                        AbstractCheckSpec<?,?,?,?> targetCheckCloned = defaultCheck.deepClone();
+                        targetCategoryCheckFieldInfo.setFieldValue(targetCheckCloned, targetCategoryContainer);
+                    }
+                }
+
+                CustomCheckSpecMap defaultCategoryCustomChecks = defaultCheckCategory.getCustomChecks();
+                if (defaultCategoryCustomChecks != null && !defaultCategoryCustomChecks.isEmpty()) {
+                    CustomCategoryCheckSpecMap targetCategoryCustomChecks = targetCategoryContainer.getCustomChecks();
+                    if (targetCategoryCustomChecks == null) {
+                        targetCategoryCustomChecks = new CustomCategoryCheckSpecMap();
+                        targetCategoryContainer.setCustomChecks(targetCategoryCustomChecks);
+                    }
+
+                    for (Map.Entry<String, CustomCheckSpec> defaultCategoryCustomCheckKeyValue : defaultCategoryCustomChecks.entrySet()) {
+                        CustomCheckSpec clonedTargetCustomCheck = (CustomCheckSpec)defaultCategoryCustomCheckKeyValue.getValue().deepClone();
+                        targetCategoryCustomChecks.put(defaultCategoryCustomCheckKeyValue.getKey(), clonedTargetCustomCheck);
+                    }
+                }
+            }
+        }
+
+        CustomCheckSpecMap defaultCustomChecks = defaultChecks.getCustom();
+        if (defaultCustomChecks != null && !defaultCustomChecks.isEmpty()) {
+            CustomCheckSpecMap targetCustomChecks = targetChecksContainer.getCustom();
+            if (targetCustomChecks == null) {
+                targetCustomChecks = new CustomCheckSpecMap();
+                targetChecksContainer.setCustom(targetCustomChecks);
+            }
+
+            for (Map.Entry<String, CustomCheckSpec> defaultCustomCheckKeyValue : defaultCustomChecks.entrySet()) {
+                CustomCheckSpec clonedTargetCustomCheck = (CustomCheckSpec)defaultCustomCheckKeyValue.getValue().deepClone();
+                targetCustomChecks.put(defaultCustomCheckKeyValue.getKey(), clonedTargetCustomCheck);
+            }
         }
     }
 
@@ -188,14 +313,30 @@ public class DefaultObservabilityChecksSpec extends AbstractSpec implements Inva
      * @param dialectSettings Dialect settings, to decide if the checks are applicable.
      */
     public void applyOnColumn(ColumnSpec targetColumn, ProviderDialectSettings dialectSettings) {
-        if (this.profiling != null && this.profiling.getColumn() != null) {
-            this.profiling.getColumn().applyOnColumn(targetColumn, dialectSettings);
+        DataTypeCategory dataTypeCategory = dialectSettings.detectColumnType(targetColumn.getTypeSnapshot());
+
+        if (this.profiling != null) {
+            DefaultProfilingColumnObservabilityCheckSettingsSpec columnProfilingDefaults = this.profiling.getColumn();
+            if (columnProfilingDefaults != null && !columnProfilingDefaults.isDefault()) {
+                AbstractRootChecksContainerSpec columnProfilingContainer = targetColumn.getColumnCheckRootContainer(CheckType.profiling, null, true);
+                applyDefaultChecksOnContainer(columnProfilingDefaults, columnProfilingContainer, dataTypeCategory, dialectSettings);
+            }
         }
-        if (this.monitoringDaily != null && this.monitoringDaily.getColumn() != null) {
-            this.monitoringDaily.getColumn().applyOnColumn(targetColumn, dialectSettings);
+
+        if (this.monitoringDaily != null) {
+            DefaultDailyMonitoringColumnObservabilityCheckSettingsSpec columnDailyMonitoringDefaults = this.monitoringDaily.getColumn();
+            if (columnDailyMonitoringDefaults != null && !columnDailyMonitoringDefaults.isDefault()) {
+                AbstractRootChecksContainerSpec columnDailyMonitoringContainer = targetColumn.getColumnCheckRootContainer(CheckType.monitoring, CheckTimeScale.daily, true);
+                applyDefaultChecksOnContainer(columnDailyMonitoringDefaults, columnDailyMonitoringContainer, dataTypeCategory, dialectSettings);
+            }
         }
-        if (this.monitoringMonthly != null && this.monitoringMonthly.getColumn() != null) {
-            this.monitoringMonthly.getColumn().applyOnColumn(targetColumn, dialectSettings);
+
+        if (this.monitoringMonthly != null) {
+            DefaultMonthlyMonitoringColumnObservabilityCheckSettingsSpec columnMonthlyMonitoringDefaults = this.monitoringMonthly.getColumn();
+            if (columnMonthlyMonitoringDefaults != null && !columnMonthlyMonitoringDefaults.isDefault()) {
+                AbstractRootChecksContainerSpec columnMonthlyMonitoringContainer = targetColumn.getColumnCheckRootContainer(CheckType.monitoring, CheckTimeScale.monthly, true);
+                applyDefaultChecksOnContainer(columnMonthlyMonitoringDefaults, columnMonthlyMonitoringContainer, dataTypeCategory, dialectSettings);
+            }
         }
     }
 }

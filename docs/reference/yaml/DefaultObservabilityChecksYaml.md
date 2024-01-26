@@ -4,7 +4,7 @@ The definition of YAML files used by DQOps to configure the data sources, monito
 
 ## DefaultObservabilityChecksYaml
 The configuration of default data quality checks that are activated for all imported tables and columns.
- The default observability checks are stored in the *$DQO_USER_HOME/settings/defaultchecks.dqochecks.yaml* file in the DQOps user&#x27;s home folder.
+ The default observability checks are stored in the *$DQO_USER_HOME/settings/default.dqodefaultchecks.yaml* file in the DQOps user&#x27;s home folder.
 
 
 

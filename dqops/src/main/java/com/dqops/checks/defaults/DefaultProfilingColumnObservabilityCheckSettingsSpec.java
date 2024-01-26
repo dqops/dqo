@@ -335,60 +335,6 @@ public class DefaultProfilingColumnObservabilityCheckSettingsSpec extends Abstra
     }
 
     /**
-     * Applies the checks on a target column, but only if the target column support that category of checks.
-     * Non-numeric column data types (detected by the dialect settings) will not have numeric sensors applied.
-     * @param targetColumn Target column.
-     * @param dialectSettings Dialect settings, to decide if the checks are applicable.
-     */
-    public void applyOnColumn(ColumnSpec targetColumn, ProviderDialectSettings dialectSettings) {
-        DataTypeCategory dataTypeCategory = dialectSettings.detectColumnType(targetColumn.getTypeSnapshot());
-
-        if (this.nulls != null && !this.nulls.isDefault()) {
-            this.getColumnCheckCategories(targetColumn).setNulls(this.nulls.deepClone());
-        }
-
-        if (this.numeric != null && !this.numeric.isDefault() && DataTypeCategory.isNumericType(dataTypeCategory)) {
-            this.getColumnCheckCategories(targetColumn).setNumeric(this.numeric.deepClone());
-        }
-
-        if (this.text != null && !this.text.isDefault() && dataTypeCategory == DataTypeCategory.string) {
-            this.getColumnCheckCategories(targetColumn).setText(this.text.deepClone());
-        }
-
-        if (this.uniqueness != null && !this.uniqueness.isDefault()) {
-            this.getColumnCheckCategories(targetColumn).setUniqueness(this.uniqueness.deepClone());
-        }
-
-        if (this.datetime != null && !this.datetime.isDefault() && DataTypeCategory.hasDate(dataTypeCategory)) {
-            this.getColumnCheckCategories(targetColumn).setDatetime(this.datetime.deepClone());
-        }
-
-        if (this.pii != null && !this.pii.isDefault() && dataTypeCategory == DataTypeCategory.string) {
-            this.getColumnCheckCategories(targetColumn).setPii(this.pii.deepClone());
-        }
-
-        if (this.bool != null && !this.bool.isDefault() && dataTypeCategory == DataTypeCategory.bool) {
-            this.getColumnCheckCategories(targetColumn).setBool(this.bool.deepClone());
-        }
-
-        if (this.datatype != null && !this.datatype.isDefault() && dataTypeCategory == DataTypeCategory.string) {
-            this.getColumnCheckCategories(targetColumn).setDatatype(this.datatype.deepClone());
-        }
-
-        if (this.anomaly != null && !this.anomaly.isDefault() && DataTypeCategory.isNumericType(dataTypeCategory)) {
-            this.getColumnCheckCategories(targetColumn).setAnomaly(this.anomaly.deepClone());
-        }
-
-        if (this.schema != null && !this.schema.isDefault()) {
-            this.getColumnCheckCategories(targetColumn).setSchema(this.schema.deepClone());
-        }
-
-        if (this.getCustom() != null && !this.getCustom().isEmpty()) {
-            this.getColumnCheckCategories(targetColumn).setCustom(this.getCustom().deepClone());
-        }
-    }
-
-    /**
      * Returns the type of checks (profiling, monitoring, partitioned).
      *
      * @return Check type.

@@ -16,6 +16,7 @@
 package com.dqops.checks;
 
 import com.dqops.checks.custom.CustomCategoryCheckSpecMap;
+import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildFieldEntry;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -115,4 +116,11 @@ public abstract class AbstractCheckCategorySpec extends AbstractSpec {
      */
     @JsonIgnore
     public abstract CheckTimeScale getCheckTimeScale();
+
+    /**
+     * Returns an array of supported data type categories. DQOps uses this list when activating default data quality checks.
+     * @return Array of supported data type categories.
+     */
+    @JsonIgnore
+    public abstract DataTypeCategory[] getSupportedDataTypeCategories();
 }
