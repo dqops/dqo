@@ -196,7 +196,7 @@ const TableColumnsView = () => {
                 : 
                 selectedColumns?.length!== 0 ? 
                 'Collect statistics on selected' : 
-                'Collect Statistics'
+                'Collect statistics'
             }
             color={
               filteredJobs
