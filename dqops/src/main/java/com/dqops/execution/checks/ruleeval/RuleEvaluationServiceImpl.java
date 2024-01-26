@@ -45,6 +45,8 @@ import tech.tablesaw.table.TableSliceGroup;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * Service that evaluates rules for each sensor readouts returned by a sensor query.
@@ -128,6 +130,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                             timeGradient,
                             defaultTimeZoneId)
                     : null;
+            HashMap<LocalDateTime, Double> previousExpectedValues = new HashMap<>();
 
             for (int sliceRowIndex = 0; sliceRowIndex < dimensionTableSlice.rowCount() ; sliceRowIndex++) {
                 int allSensorResultsRowIndex = dimensionTableSlice.mappedRowNumber(sliceRowIndex);
@@ -140,7 +143,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                 LocalDateTime timePeriodLocal = timePeriodColumn.get(allSensorResultsRowIndex);
                 HistoricDataPoint[] previousDataPoints = null; // combined data points from current readouts and historic sensor readouts
 
-                if (customSeverity != null) {
+                if (customSeverity == null) {
                     if (historicDataPointGrouping == HistoricDataPointsGrouping.last_n_readouts) {
                         // these checks do not have real time periods, we just take the last data points, also we don't want the current sensor results
                         // because there should be none (only partitioned checks will have previous results from the most recent query), we will find them only in old data
@@ -185,6 +188,20 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                             }
                         } else {
                             previousDataPoints = new HistoricDataPoint[ruleTimeWindowSettings != null ? ruleTimeWindowSettings.getPredictionTimeWindow() : 0];
+                        }
+                    }
+                }
+
+                if (previousDataPoints != null) {
+                    for (int idx = 0; idx < previousDataPoints.length; idx++) {
+                        HistoricDataPoint previousDataPoint = previousDataPoints[idx];
+                        if (previousDataPoint == null) {
+                            continue;
+                        }
+
+                        Double previouslyPredictedExpectedValue = previousExpectedValues.get(previousDataPoint.getLocalDatetime());
+                        if (previouslyPredictedExpectedValue != null) {
+                            previousDataPoint.setExpectedValue(previouslyPredictedExpectedValue);
                         }
                     }
                 }
@@ -343,6 +360,15 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
 
                 if (newActualValue != null) {
                     result.getActualValueColumn().set(targetRowIndex, newActualValue);
+                }
+
+
+                if (expectedValue != null) {
+                    previousExpectedValues.put(timePeriodLocal, expectedValue);
+
+                    if (!Objects.equals(expectedValueFromSensor, expectedValue)) {
+                        expectedValueColumn.set(allSensorResultsRowIndex, expectedValue);  // write back an expected value calculated from the sensor, will allow to use prediction better
+                    }
                 }
             }
         }

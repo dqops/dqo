@@ -33,6 +33,7 @@ class HistoricDataPoint:
     local_datetime: datetime
     back_periods_index: int
     sensor_readout: float
+    expected_value: float
 
 
 class RuleTimeWindowSettingsSpec:
