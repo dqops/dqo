@@ -36,6 +36,7 @@
 		<tablesaw.version>0.43.1</tablesaw.version>
 		<license.licenseName>apache_v2</license.licenseName>
 		<npm.build.script>build</npm.build.script>
+		<duckdb.version>0.9.2</duckdb.version>
 	</properties>
 
 	<licenses>
@@ -1003,6 +1004,32 @@
 						</licenseSet>
 					</licenseSets>
 				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<configuration>
+							<target>
+								<property name="duckdb.version" value="${duckdb.version}"/> 	<!-- set the plugin property to use a variable -->
+								<property name="project.basedir" value="${project.basedir}"/>
+
+								<mkdir dir="${project.basedir}/../home/bin/duckdb/v${duckdb.version}/linux_amd64/"/>
+
+								<get src="http://extensions.duckdb.org/v${duckdb.version}/linux_amd64/httpfs.duckdb_extension.gz"
+									 dest="${project.basedir}/../home/bin/duckdb/v${duckdb.version}/linux_amd64/httpfs.duckdb_extension.gz"
+									 verbose="false"
+									 usetimestamp="true"/>
+<!--								<unzip src="lib/sample.zip" dest="target/archive-contents"/>-->
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
