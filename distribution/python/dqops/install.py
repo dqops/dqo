@@ -16,13 +16,11 @@
 #
 
 import os
-import socket
 import ssl
 import sys
-import urllib.request
 import zipfile
-from urllib.error import HTTPError, URLError
 
+import httpx
 import jdk
 
 # ignore those, they are filled by importing version.py
@@ -70,81 +68,116 @@ def install_dqo(dest: str, dqo_tag: str, dqo_version: str):
         os.remove(distribution_local_name)
 
 
-def download_to_file(dqo_tag: str, dqo_version: str, distribution_local_name: str):
-    github_url = (
-        "https://github.com/dqops/dqo/releases/download/%s/dqo-distribution-%s-bin.zip"
-        % (dqo_tag, dqo_version)
+def http_client() -> httpx.Client:
+    return httpx.Client(
+        http2=True,
+        timeout=httpx.Timeout(5., connect=10., read=6.),
+        follow_redirects=True,
+        headers={
+            "Accept-Encoding": "identity",
+            "Accept-Language": "en-US,en;q=0.9,pl;q=0.8",
+            "Cache-Control": "no-cache, no-transform",
+            "Pragma": "no-cache",
+            "Sec-Ch-Ua": '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
+            "Sec-Ch-Ua-Mobile": "?0",
+            "Sec-Ch-Ua-Platform": '"Windows"',
+            "Sec-Fetch-Dest": "document",
+            "Sec-Fetch-Mode": "navigate",
+            "Sec-Fetch-Site": "cross-site",
+            "Sec-Fetch-User": "?1",
+            "Upgrade-Insecure-Requests": "1",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) " +
+                          "Chrome/120.0.0.0 Safari/537.36",
+        }
     )
 
-    if download_to_file_retry(github_url, distribution_local_name, dqo_version):
-        return
 
-    print("Download from %s failed, attempting another mirror." % github_url)
-    bucket_url = "https://dqops.com/releases/dqo-distribution-%s-bin.zip" % dqo_version
+def download_to_file(dqo_tag: str, dqo_version: str, distribution_local_name: str):
+    github_url = (
+            "https://github.com/dqops/dqo/releases/download/%s/dqo-distribution-%s-bin.zip"
+            % (dqo_tag, dqo_version)
+    )
 
-    if download_to_file_retry(
-        bucket_url, distribution_local_name, dqo_version, retries=1
-    ):
-        return
+    with http_client() as client:
+        if download_to_file_try(client, github_url, distribution_local_name, dqo_version):
+            return
+
+        print("Download from %s failed, attempting another mirror." % github_url)
+
+        if download_to_file_fallback(client, dqo_version, distribution_local_name):
+            return
 
     print(
         "Download failed. Check your internet connection and firewall settings.",
         file=sys.stderr,
     )
-    exit(-1)
+    sys.exit(-1)
 
 
-def format_web_error_message(error, timeout):
-    if isinstance(error, URLError) or isinstance(error, HTTPError):
-        reason = error.reason
-    else:
-        reason = "Exceeded %ds timeout" % timeout
+def download_to_file_fallback(client: httpx.Client, dqo_version: str, distribution_local_name: str):
+    # Set any cookies sent by the resource server.
+    bucket_url = "https://dqops.com/releases/dqo-distribution-%s-bin.zip" % dqo_version
+    head_url = bucket_url
+    client.head(head_url)
 
-    if isinstance(reason, socket.timeout):
-        error_name = "Timeout error"
-    else:
-        error_name = error.__class__.__name__
-
-    return "%s: Download interrupted, reason: %s" % (error_name, reason)
+    return download_to_file_try(client, bucket_url, distribution_local_name, dqo_version)
 
 
-def download_to_file_retry(
-    source_url, path, dqo_version, retries=3, chunk_size=1024 * 1024, timeout=10
-):
-    retries_so_far = 0
+def download_to_file_try(client, source_url, path, dqo_version):
+    try:
+        trying_message = "Trying to download DQOps version %s from %s" % (
+            dqo_version,
+            source_url,
+        )
+        print(trying_message)
 
-    while retries_so_far < retries:
-        retries_so_far += 1
-        try:
-            trying_message = "Trying to download DQOps version %s from %s" % (
-                dqo_version,
-                source_url,
-            ) + ((" (try %d/%d)" % (retries_so_far, retries)) if retries > 1 else "")
-            print(trying_message)
-
-            download_to_file_once(
-                source_url, path, chunk_size=chunk_size, timeout=timeout
-            )
-            return True
-        except (HTTPError, URLError, TimeoutError) as e:
-            error_message = format_web_error_message(e, timeout)
-            print(error_message, file=sys.stderr)
+        return download_to_file_once(client, source_url, path)
+    except Exception as e:
+        print("%s: Download interrupted, reason: %s" % (e.__class__.__name__, e), file=sys.stderr)
 
     return False
 
 
-def download_to_file_once(source_url, path, chunk_size=1024 * 1024, timeout=10):
-    with urllib.request.urlopen(source_url, timeout=timeout) as response:
-        total_size = int(response.info().get("Content-Length").strip())
-        bytes_so_far = 0
+def download_to_file_once(client, source_url, path, chunk_size=1024 * 1024):
+    with open(path, mode="wb") as dest:
+        new_bytes_so_far = 0
+        while True:
+            bytes_so_far = new_bytes_so_far
+            start_byte = bytes_so_far if bytes_so_far > 0 else None
+            new_bytes_so_far, total_size = download_to_file_partial(client, source_url, dest, chunk_size=chunk_size,
+                                                                    start_byte=start_byte)
 
-        with open(path, mode="wb") as dest:
-            while bytes_so_far < total_size:
-                chunk = response.read(chunk_size)
-                bytes_so_far += len(chunk)
+            if new_bytes_so_far == bytes_so_far:
+                print("No progress since last download attempt, abort.")
+                return False
+            elif new_bytes_so_far == total_size:
+                return True
+
+
+def download_to_file_partial(client, source_url, opened_dest, chunk_size=1024 * 1024, start_byte: int = None):
+    if start_byte and start_byte != 0:
+        bytes_so_far = start_byte
+        headers = {"Range": f"bytes={start_byte}-"}
+    else:
+        bytes_so_far = 0
+        headers = None
+
+    try:
+        with client.stream("GET", source_url, headers=headers) as response_stream:
+            total_size = int(response_stream.headers.get("Content-Length").strip()) + (start_byte if start_byte else 0)
+
+            if start_byte and start_byte != 0 and "Content-Range" not in response_stream.headers:
+                # Partial download not allowed, shouldn't attempt further retries.
+                return bytes_so_far, total_size
+
+            for chunk in response_stream.iter_raw(chunk_size=chunk_size):
                 if not chunk:
-                    break
-                dest.write(chunk)
+                    return bytes_so_far, total_size
+
+                chunk_bytes = len(chunk)
+                opened_dest.write(chunk)
+                bytes_so_far += chunk_bytes
+
                 print(
                     "Downloaded %d of %d bytes (%0.2f%%)"
                     % (
@@ -153,6 +186,11 @@ def download_to_file_once(source_url, path, chunk_size=1024 * 1024, timeout=10):
                         round(float(bytes_so_far) / total_size * 100, 2),
                     )
                 )
+
+    except httpx.TimeoutException:
+        pass
+
+    return bytes_so_far, total_size
 
 
 def install_dqo_home_if_missing(dqo_home):
