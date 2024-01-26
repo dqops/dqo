@@ -43,7 +43,7 @@ To start DQOps in a [Shell mode](../dqo-concepts/command-line-interface.md) foll
 3.  Run DQOps Docker image
 
     ```
-    docker run -v [enter the path to your local DQOps user home folder]:/dqo/userhome -it -p 8888:8888 dqops/dqo [--dqo.cloud.api-key=here-our-DQOps-Cloud-API-key]
+    docker run -v [path to local DQOps user home folder]:/dqo/userhome -it -p 8888:8888 dqops/dqo [--dqo.cloud.api-key=here-your-DQOps-Cloud-API-key]
     ```
 
     - The `-v` flag mounts your locally created [`DQOps User Home`](../dqo-concepts/dqops-user-home-folder.md) folder into the container. 

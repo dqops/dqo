@@ -6,6 +6,7 @@ site_description: DQOps is an open-source data quality platform for data quality
 # Docs navigation
 nav:
   - What is DQOps?: "index.md"
+  - Documentation guide: "documentation-guide.md"
   - Getting started:
       - "getting-started/index.md"
       - Installation: "getting-started/installation.md"
@@ -63,7 +64,7 @@ nav:
       - Storing data quality results: "dqo-concepts/data-storage-of-data-quality-results.md"
       - Deployment architecture: "dqo-concepts/architecture/dqops-architecture.md"
       - Quality check execution flow: "dqo-concepts/architecture/data-quality-check-execution-flow.md"
-  - Installing DQOps:
+  - Installation guide:
       - "dqops-installation/index.md"
       - Download DQOps using PIP: "dqops-installation/install-dqops-using-pip.md"
       - Run DQOps in Docker: "dqops-installation/run-dqops-as-docker-container.md"
@@ -84,7 +85,7 @@ nav:
       - Spark: "data-sources/spark.md"
       - SQL Server: "data-sources/sql-server.md"
       - Trino: "data-sources/trino.md"
-  - Use cases:
+  - Use cases and examples:
       - "examples/index.md"
       - Data accuracy:
           - Integrity check between columns in different tables: "examples/data-accuracy/integrity-check-between-columns-in-different-tables.md"

@@ -274,7 +274,7 @@ export const EditProfilingReferenceTable = ({
       }
       //cCompareThreshholdsModel in java fatal returns null
     };
-
+    getResultsData();
     checkIfRowAndColumnCountClicked();
   }, [selectedReference, checksUI]);
 
