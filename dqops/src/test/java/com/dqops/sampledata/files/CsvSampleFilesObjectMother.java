@@ -47,10 +47,7 @@ public class CsvSampleFilesObjectMother {
      */
     public static CsvSampleFileContent loadTableCsv(String fileName) {
         try {
-            String sampleDataFolder = System.getenv("SAMPLE_DATA_FOLDER");
-            Path sampleFilePath = Path.of(sampleDataFolder).resolve(fileName);
-            File sampleFile = sampleFilePath.toFile();
-            Assertions.assertTrue(Files.exists(sampleFilePath));
+            File sampleFile = getFile(fileName);
             HashMap<String, String> columnPhysicalDataTypes = new HashMap<>();
 
             ArrayList<ColumnType> columnTypesToDetect = new ArrayList<>() {{
@@ -138,4 +135,18 @@ public class CsvSampleFilesObjectMother {
 		tables.put(fileName, sampleTable);
         return sampleTable;
     }
+
+    /**
+     * Returns a file object of a csv file in the dqo/sampledata folder.
+     * @param fileName CSV file name inside the dqo/sampledata folder.
+     * @return File object of a csv file.
+     */
+    public static File getFile(String fileName) {
+        String sampleDataFolder = System.getenv("SAMPLE_DATA_FOLDER");
+        Path sampleFilePath = Path.of(sampleDataFolder).resolve(fileName);
+        File sampleFile = sampleFilePath.toFile();
+        Assertions.assertTrue(Files.exists(sampleFilePath));
+        return sampleFile;
+    }
+
 }
