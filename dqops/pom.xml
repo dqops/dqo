@@ -1013,16 +1013,26 @@
 						<phase>generate-sources</phase>
 						<configuration>
 							<target>
-								<property name="duckdb.version" value="${duckdb.version}"/> 	<!-- set the plugin property to use a variable -->
+								<!-- set the plugin property to use the variable -->
+								<property name="duckdb.version" value="${duckdb.version}"/>
 								<property name="project.basedir" value="${project.basedir}"/>
 
-								<mkdir dir="${project.basedir}/../home/bin/duckdb/v${duckdb.version}/linux_amd64/"/>
+								<ant antfile="${project.basedir}/duckdb-extensions-ant-build.xml">
+									<property name="duckdb.platform_name" value="linux_amd64"/>
+								</ant>
+								<ant antfile="${project.basedir}/duckdb-extensions-ant-build.xml">
+									<property name="duckdb.platform_name" value="linux_arm64"/>
+								</ant>
+								<ant antfile="${project.basedir}/duckdb-extensions-ant-build.xml">
+									<property name="duckdb.platform_name" value="osx_amd64"/>
+								</ant>
+								<ant antfile="${project.basedir}/duckdb-extensions-ant-build.xml">
+									<property name="duckdb.platform_name" value="osx_arm64"/>
+								</ant>
+								<ant antfile="${project.basedir}/duckdb-extensions-ant-build.xml">
+									<property name="duckdb.platform_name" value="windows_amd64"/>
+								</ant>
 
-								<get src="http://extensions.duckdb.org/v${duckdb.version}/linux_amd64/httpfs.duckdb_extension.gz"
-									 dest="${project.basedir}/../home/bin/duckdb/v${duckdb.version}/linux_amd64/httpfs.duckdb_extension.gz"
-									 verbose="false"
-									 usetimestamp="true"/>
-<!--								<unzip src="lib/sample.zip" dest="target/archive-contents"/>-->
 							</target>
 						</configuration>
 						<goals>

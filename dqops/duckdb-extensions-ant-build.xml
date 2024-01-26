@@ -1,0 +1,21 @@
+<project name="duckdb_extensions" default="fetch-files" basedir=".">
+    <description>
+        The build file fetches duckdb extensions for the specific duckdb version and platform.
+        The file uses properties set in the pom.xml file.
+    </description>
+
+    <property name="local_platform_path"
+              value="${project.basedir}/../home/bin/duckdb/v${duckdb.version}/${duckdb.platform_name}"/>
+
+    <property name="remote_platform_path"
+              value="http://extensions.duckdb.org/v${duckdb.version}/${duckdb.platform_name}"/>
+
+    <target name="fetch-files">
+        <mkdir dir="${local_platform_path}/"/>
+
+        <get src="${remote_platform_path}/httpfs.duckdb_extension.gz"
+             dest="${local_platform_path}/httpfs.duckdb_extension.gz"
+             verbose="true"
+             usetimestamp="true"/>
+    </target>
+</project>
