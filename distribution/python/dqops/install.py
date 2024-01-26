@@ -71,7 +71,7 @@ def install_dqo(dest: str, dqo_tag: str, dqo_version: str):
 def http_client() -> httpx.Client:
     return httpx.Client(
         http2=True,
-        timeout=httpx.Timeout(5., connect=10., read=6.),
+        timeout=httpx.Timeout(5.0, connect=10.0, read=6.0),
         follow_redirects=True,
         headers={
             "Accept-Encoding": "identity",
@@ -86,20 +86,22 @@ def http_client() -> httpx.Client:
             "Sec-Fetch-Site": "cross-site",
             "Sec-Fetch-User": "?1",
             "Upgrade-Insecure-Requests": "1",
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) " +
-                          "Chrome/120.0.0.0 Safari/537.36",
-        }
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+            + "Chrome/120.0.0.0 Safari/537.36",
+        },
     )
 
 
 def download_to_file(dqo_tag: str, dqo_version: str, distribution_local_name: str):
     github_url = (
-            "https://github.com/dqops/dqo/releases/download/%s/dqo-distribution-%s-bin.zip"
-            % (dqo_tag, dqo_version)
+        "https://github.com/dqops/dqo/releases/download/%s/dqo-distribution-%s-bin.zip"
+        % (dqo_tag, dqo_version)
     )
 
     with http_client() as client:
-        if download_to_file_try(client, github_url, distribution_local_name, dqo_version):
+        if download_to_file_try(
+            client, github_url, distribution_local_name, dqo_version
+        ):
             return
 
         print("Download from %s failed, attempting another mirror." % github_url)
@@ -114,13 +116,17 @@ def download_to_file(dqo_tag: str, dqo_version: str, distribution_local_name: st
     sys.exit(-1)
 
 
-def download_to_file_fallback(client: httpx.Client, dqo_version: str, distribution_local_name: str):
+def download_to_file_fallback(
+    client: httpx.Client, dqo_version: str, distribution_local_name: str
+):
     # Set any cookies sent by the resource server.
     bucket_url = "https://dqops.com/releases/dqo-distribution-%s-bin.zip" % dqo_version
     head_url = bucket_url
     client.head(head_url)
 
-    return download_to_file_try(client, bucket_url, distribution_local_name, dqo_version)
+    return download_to_file_try(
+        client, bucket_url, distribution_local_name, dqo_version
+    )
 
 
 def download_to_file_try(client, source_url, path, dqo_version):
@@ -133,7 +139,10 @@ def download_to_file_try(client, source_url, path, dqo_version):
 
         return download_to_file_once(client, source_url, path)
     except Exception as e:
-        print("%s: Download interrupted, reason: %s" % (e.__class__.__name__, e), file=sys.stderr)
+        print(
+            "%s: Download interrupted, reason: %s" % (e.__class__.__name__, e),
+            file=sys.stderr,
+        )
 
     return False
 
@@ -144,8 +153,9 @@ def download_to_file_once(client, source_url, path, chunk_size=1024 * 1024):
         while True:
             bytes_so_far = new_bytes_so_far
             start_byte = bytes_so_far if bytes_so_far > 0 else None
-            new_bytes_so_far, total_size = download_to_file_partial(client, source_url, dest, chunk_size=chunk_size,
-                                                                    start_byte=start_byte)
+            new_bytes_so_far, total_size = download_to_file_partial(
+                client, source_url, dest, chunk_size=chunk_size, start_byte=start_byte
+            )
 
             if new_bytes_so_far == bytes_so_far:
                 print("No progress since last download attempt, abort.")
@@ -154,7 +164,9 @@ def download_to_file_once(client, source_url, path, chunk_size=1024 * 1024):
                 return True
 
 
-def download_to_file_partial(client, source_url, opened_dest, chunk_size=1024 * 1024, start_byte: int = None):
+def download_to_file_partial(
+    client, source_url, opened_dest, chunk_size=1024 * 1024, start_byte: int = None
+):
     if start_byte and start_byte != 0:
         bytes_so_far = start_byte
         headers = {"Range": f"bytes={start_byte}-"}
@@ -164,9 +176,15 @@ def download_to_file_partial(client, source_url, opened_dest, chunk_size=1024 * 
 
     try:
         with client.stream("GET", source_url, headers=headers) as response_stream:
-            total_size = int(response_stream.headers.get("Content-Length").strip()) + (start_byte if start_byte else 0)
+            total_size = int(response_stream.headers.get("Content-Length").strip()) + (
+                start_byte if start_byte else 0
+            )
 
-            if start_byte and start_byte != 0 and "Content-Range" not in response_stream.headers:
+            if (
+                start_byte
+                and start_byte != 0
+                and "Content-Range" not in response_stream.headers
+            ):
                 # Partial download not allowed, shouldn't attempt further retries.
                 return bytes_so_far, total_size
 

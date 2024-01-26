@@ -124,16 +124,13 @@ public class MysqlSourceConnection extends AbstractJdbcSourceConnection {
     public HikariConfig createHikariConfig(SecretValueLookupContext secretValueLookupContext) {
         MysqlParametersSpec mysqlParametersSpec = this.getConnectionSpec().getMysql();
 
-        switch(mysqlParametersSpec.getMysqlEngineType()){
-            case singlestoredb:
-                return SingleStoreDbSourceConnection.createHikariConfig(
-                        secretValueLookupContext,
-                        mysqlParametersSpec,
-                        this.getSecretValueProvider());
-            case mysql:
-                return createHikariConfigForMysql(secretValueLookupContext);
-            default:
-                throw new RuntimeException("Given enum is not supported : " + mysqlParametersSpec.getMysqlEngineType());
+        if (mysqlParametersSpec.getMysqlEngineType() == MysqlEngineType.singlestoredb) {
+            return SingleStoreDbSourceConnection.createHikariConfig(
+                    secretValueLookupContext,
+                    mysqlParametersSpec,
+                    this.getSecretValueProvider());
+        } else {
+            return createHikariConfigForMysql(secretValueLookupContext);
         }
     }
 
@@ -222,14 +219,10 @@ public class MysqlSourceConnection extends AbstractJdbcSourceConnection {
      */
     public String buildListColumnsSql(String schemaName, List<String> tableNames) {
         MysqlParametersSpec mysqlParametersSpec = getConnectionSpec().getMysql();
-        switch(mysqlParametersSpec.getMysqlEngineType()){
-            case singlestoredb:
-                return SingleStoreDbSourceConnection.buildListColumnsSql(getConnectionSpec(), schemaName, tableNames, this.getInformationSchemaName());
-            case mysql:
-                return super.buildListColumnsSql(schemaName, tableNames);
-            default:
-                throw new RuntimeException("Given enum is not supported : " + mysqlParametersSpec.getMysqlEngineType());
+        if (mysqlParametersSpec.getMysqlEngineType() == MysqlEngineType.singlestoredb) {
+            return SingleStoreDbSourceConnection.buildListColumnsSql(getConnectionSpec(), schemaName, tableNames, this.getInformationSchemaName());
+        } else {
+            return super.buildListColumnsSql(schemaName, tableNames);
         }
     }
-
 }

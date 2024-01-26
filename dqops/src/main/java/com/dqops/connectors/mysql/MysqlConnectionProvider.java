@@ -110,15 +110,10 @@ public class MysqlConnectionProvider extends AbstractSqlConnectionProvider {
             mysqlParametersSpec.setMysqlEngineType(terminalReader.promptEnum("MySQL engine type (--mysql-engine)", MysqlEngineType.class,null, false));
         }
 
-        switch(mysqlParametersSpec.getMysqlEngineType()){
-            case singlestoredb:
-                SingleStoreDbConnectionProvider.promptForConnectionParameters(connectionSpec, isHeadless, terminalReader);
-                break;
-            case mysql:
-                promptForConnectionParametersForMysql(connectionSpec, isHeadless, terminalReader);
-                break;
-            default:
-                throw new RuntimeException("Given enum is not supported : " + mysqlParametersSpec.getMysqlEngineType());
+        if (mysqlParametersSpec.getMysqlEngineType() == MysqlEngineType.singlestoredb) {
+            SingleStoreDbConnectionProvider.promptForConnectionParameters(connectionSpec, isHeadless, terminalReader);
+        } else {
+            promptForConnectionParametersForMysql(connectionSpec, isHeadless, terminalReader);
         }
 
         if (Strings.isNullOrEmpty(mysqlParametersSpec.getUser())) {

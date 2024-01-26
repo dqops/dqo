@@ -25,6 +25,7 @@ class SynchronizeMultipleFoldersDqoQueueJobParameters:
         checks (Union[Unset, bool]): Synchronize the "checks" folder.
         settings (Union[Unset, bool]): Synchronize the "settings" folder.
         credentials (Union[Unset, bool]): Synchronize the ".credentials" folder.
+        dictionaries (Union[Unset, bool]): Synchronize the "dictionaries" folder.
         data_sensor_readouts (Union[Unset, bool]): Synchronize the ".data/sensor_readouts" folder.
         data_check_results (Union[Unset, bool]): Synchronize the ".data/check_results" folder.
         data_statistics (Union[Unset, bool]): Synchronize the ".data/statistics" folder.
@@ -44,6 +45,7 @@ class SynchronizeMultipleFoldersDqoQueueJobParameters:
     checks: Union[Unset, bool] = UNSET
     settings: Union[Unset, bool] = UNSET
     credentials: Union[Unset, bool] = UNSET
+    dictionaries: Union[Unset, bool] = UNSET
     data_sensor_readouts: Union[Unset, bool] = UNSET
     data_check_results: Union[Unset, bool] = UNSET
     data_statistics: Union[Unset, bool] = UNSET
@@ -65,6 +67,7 @@ class SynchronizeMultipleFoldersDqoQueueJobParameters:
         checks = self.checks
         settings = self.settings
         credentials = self.credentials
+        dictionaries = self.dictionaries
         data_sensor_readouts = self.data_sensor_readouts
         data_check_results = self.data_check_results
         data_statistics = self.data_statistics
@@ -95,6 +98,8 @@ class SynchronizeMultipleFoldersDqoQueueJobParameters:
             field_dict["settings"] = settings
         if credentials is not UNSET:
             field_dict["credentials"] = credentials
+        if dictionaries is not UNSET:
+            field_dict["dictionaries"] = dictionaries
         if data_sensor_readouts is not UNSET:
             field_dict["dataSensorReadouts"] = data_sensor_readouts
         if data_check_results is not UNSET:
@@ -138,6 +143,8 @@ class SynchronizeMultipleFoldersDqoQueueJobParameters:
 
         credentials = d.pop("credentials", UNSET)
 
+        dictionaries = d.pop("dictionaries", UNSET)
+
         data_sensor_readouts = d.pop("dataSensorReadouts", UNSET)
 
         data_check_results = d.pop("dataCheckResults", UNSET)
@@ -162,6 +169,7 @@ class SynchronizeMultipleFoldersDqoQueueJobParameters:
             checks=checks,
             settings=settings,
             credentials=credentials,
+            dictionaries=dictionaries,
             data_sensor_readouts=data_sensor_readouts,
             data_check_results=data_check_results,
             data_statistics=data_statistics,

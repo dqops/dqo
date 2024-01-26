@@ -28,6 +28,7 @@ import com.dqops.connectors.bigquery.BigQueryParametersSpec;
 import com.dqops.connectors.bigquery.BigQueryProviderDialectSettings;
 import com.dqops.connectors.databricks.DatabricksParametersSpec;
 import com.dqops.connectors.databricks.DatabricksProviderDialectSettings;
+import com.dqops.connectors.mysql.MysqlEngineType;
 import com.dqops.connectors.mysql.MysqlParametersSpec;
 import com.dqops.connectors.mysql.MysqlProviderDialectSettings;
 import com.dqops.connectors.oracle.OracleParametersSpec;
@@ -647,6 +648,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 }});
                 connectionSpec.setMysql(new MysqlParametersSpec() {{
                     setDatabase("your_my_sql_database");
+                    setMysqlEngineType(MysqlEngineType.mysql);
                 }});
                 connectionSpec.setOracle(new OracleParametersSpec() {{
                     setDatabase("your_oracle_database");
