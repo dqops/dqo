@@ -42,7 +42,7 @@ const initTabs = [
     value: 'labels'
   },
   {
-    label: 'Data Groupings',
+    label: 'Data groupings',
     value: 'data-groupings'
   },
   {
@@ -50,7 +50,7 @@ const initTabs = [
     value: 'timestamps'
   },
   {
-    label: 'Incident Configuration',
+    label: 'Incident configuration',
     value: 'incident_configuration'
   }
 ];

@@ -214,7 +214,7 @@ export const IncidentDetail = () => {
           table
         ),
         state: {},
-        label: 'Incident Configuration'
+        label: 'Incident configuration'
       })
     );
     history.push(
