@@ -29420,6 +29420,11 @@ definitions:
         - "operator"
         - "viewer"
         - "none"
+      data_quality_data_warehouse_enabled:
+        type: "boolean"
+        description: "True when the account has access to the DQOps Cloud's data quality\
+          \ data lake and data warehouse, allowing to synchronize files and use the\
+          \ data quality data warehouse."
       can_manage_account:
         type: "boolean"
         description: "User is the administrator of the account and can perform security\

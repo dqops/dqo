@@ -272,8 +272,8 @@ const JobItem = ({
               {hasInvalidApiKeyError && (
                 <span className="px-2 text-red-500">
                   (DQOps Cloud Pairing API Key is invalid. Your trial period has
-                  expired or a new version of DQOps was released. Please run{' '}
-                  {"'"}cloud login{"'"} from DQOps shell)
+                  expired, or your FREE account was not granted free access to the Data Quality Data Lake due to daily limits, or a new version of DQOps was released. Please run{' '}
+                  {"'"}cloud login{"'"} from DQOps shell or contact DQOps support to request access to the data quality data lake and dashboards)
                 </span>
               )}
             </tr>

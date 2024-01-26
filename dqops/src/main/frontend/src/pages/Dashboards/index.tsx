@@ -118,7 +118,7 @@ const Dashboards = () => {
                 ) : (
                   <div className='pl-4'>
                     {error[tab.value]
-                      ? 'DQOps Cloud Pairing API Key is invalid. Your trial period has expired or a new DQOps version was released. Please run "cloud login" from the DQOps shell to get a new key'
+                      ? 'DQOps Cloud Pairing API Key is invalid. Your trial period has expired, or your FREE account was not granted free access to the Data Quality Data Lake due to daily limits, or a new DQOps version was released. Please run "cloud login" from the DQOps shell to get a new key or contact DQOps support to request access to the data quality data lake and dashboards'
                       : 'Choose a data quality dashboard from the tree'}
                   </div>
                 )}
