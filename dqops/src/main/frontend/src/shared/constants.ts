@@ -133,7 +133,7 @@ export const TABLE_LEVEL_TABS: {
       value: 'labels'
     },
     {
-      label: 'Data Groupings',
+      label: 'Data groupings',
       value: 'data-groupings'
     },
     {
@@ -141,7 +141,7 @@ export const TABLE_LEVEL_TABS: {
       value: 'timestamps'
     },
     {
-      label: 'Incident Configuration',
+      label: 'Incident configuration',
       value: 'incident_configuration'
     }
   ],
