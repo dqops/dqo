@@ -34,15 +34,15 @@ const initTabs = [
     value: 'daily'
   },
   {
+    label: 'Table quality status (daily checks)',
+    value: 'table-quality-status-daily'
+  },
+  {
     label: 'Monthly checks',
     value: 'monthly'
   },
   {
-    label: 'Table quality status daily',
-    value: 'table-quality-status-daily'
-  },
-  {
-    label: 'Table quality status monthly',
+    label: 'Table quality status (monthly checks)',
     value: 'table-quality-status-monthly'
   },
   {
