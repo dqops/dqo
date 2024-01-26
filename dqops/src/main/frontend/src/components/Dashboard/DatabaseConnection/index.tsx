@@ -228,6 +228,15 @@ const DatabaseConnection = ({
         sharedCredentials={sharedCredentials}
       />
     ),
+    [ConnectionModelProviderTypeEnum.duckdb]: (
+      // todo
+      // <DuckDBConnection
+      // duckdb={database.duckdb}
+      //   onChange={(duckdb) => onChange({ ...database, duckdb })}
+      //   sharedCredentials={sharedCredentials}
+      // />
+      <></>
+    ),
     [ConnectionModelProviderTypeEnum.redshift]: (
       <RedshiftConnection
         redshift={database.redshift}
