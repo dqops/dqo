@@ -382,7 +382,7 @@ http://localhost:8888/api/credentials/{credentialName}/download
 
 ___
 ## get_all_shared_credentials
-Returns a list of all shared credentials that are present in the DQOps user&#x27;s home .credentials/ folder..
+Returns a list of all shared credentials that are present in the DQOps user&#x27;s home .credentials/ folder.
 
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/shared_credentials/get_all_shared_credentials.py) to see the source code on GitHub.
 

@@ -171,6 +171,19 @@ Default settings management for configuring the default data quality checks that
 |<span class="no-wrap-code">[`update_default_webhooks`</span>](./defaults.md#update_default_webhooks)|PUT|New configuration of the default webhooks.|
 
 
+## dictionaries
+Operations for managing data dictionary CSV files in DQOps. Data dictionaries can be used in *accepted_values* data quality checks.
+
+|&nbsp;Operation&nbsp;name&nbsp;|&nbsp;HTTP&nbsp;call&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|----------------|------|---------------------------------|
+|<span class="no-wrap-code">[`create_dictionary`</span>](./dictionaries.md#create_dictionary)|POST|Creates (adds) a new data dictionary CSV file, which creates a file in the DQOps user&#x27;s home dictionaries/ folder named as the dictionary and with the content that is provided in this call.|
+|<span class="no-wrap-code">[`delete_dictionary`</span>](./dictionaries.md#delete_dictionary)|DELETE|Deletes a data dictionary CSV file from the DQOps user&#x27;s home dictionaries/ folder.|
+|<span class="no-wrap-code">[`download_dictionary`</span>](./dictionaries.md#download_dictionary)|GET|Downloads a data dictionary CSV file|
+|<span class="no-wrap-code">[`get_all_dictionaries`</span>](./dictionaries.md#get_all_dictionaries)|GET|Returns a list of all data dictionary CSV files that are present in the DQOps user&#x27;s home dictionaries/ folder.|
+|<span class="no-wrap-code">[`get_dictionary`</span>](./dictionaries.md#get_dictionary)|GET|Returns the content of a data dictionary CSV file as a model object|
+|<span class="no-wrap-code">[`update_dictionary`</span>](./dictionaries.md#update_dictionary)|PUT|Updates an existing data dictionary CSV file, replacing the dictionary&#x27;s file content.|
+
+
 ## environment
 DQOps environment and configuration controller, provides access to the DQOps configuration, current user&#x27;s information and issue local API Keys for the calling user.
 
@@ -311,7 +324,7 @@ Operations for managing shared credentials in DQOps. Credentials that are stored
 |<span class="no-wrap-code">[`create_shared_credential`</span>](./shared_credentials.md#create_shared_credential)|POST|Creates (adds) a new shared credential, which creates a file in the DQOps user&#x27;s home .credentials/ folder named as the credential and with the content that is provided in this call.|
 |<span class="no-wrap-code">[`delete_shared_credential`</span>](./shared_credentials.md#delete_shared_credential)|DELETE|Deletes a shared credential file from the DQOps user&#x27;s home .credentials/ folder.|
 |<span class="no-wrap-code">[`download_shared_credential`</span>](./shared_credentials.md#download_shared_credential)|GET|Downloads a shared credential&#x27;s file|
-|<span class="no-wrap-code">[`get_all_shared_credentials`</span>](./shared_credentials.md#get_all_shared_credentials)|GET|Returns a list of all shared credentials that are present in the DQOps user&#x27;s home .credentials/ folder..|
+|<span class="no-wrap-code">[`get_all_shared_credentials`</span>](./shared_credentials.md#get_all_shared_credentials)|GET|Returns a list of all shared credentials that are present in the DQOps user&#x27;s home .credentials/ folder.|
 |<span class="no-wrap-code">[`get_shared_credential`</span>](./shared_credentials.md#get_shared_credential)|GET|Returns a shared credential content|
 |<span class="no-wrap-code">[`update_shared_credential`</span>](./shared_credentials.md#update_shared_credential)|PUT|Updates an existing shared credential, replacing the credential&#x27;s file content.|
 
