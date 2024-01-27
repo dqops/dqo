@@ -19,7 +19,9 @@
               x: item.timePeriod,
               y: item.warningLowerBound
             })),
-             fill: 'start',
+            fill: 'start',
+            cubicInterpolationMode: 'monotone',
+            tension: 0.4,
             borderColor: '#EBE51E',
             backgroundColor: '#EBE51E20'
           }
@@ -32,6 +34,8 @@
               y: item.errorLowerBound
             })),
             fill: 'start',
+            cubicInterpolationMode: 'monotone',
+            tension: 0.4,
             borderColor: '#FF9900',
             backgroundColor: '#FF990050'
           }
@@ -44,6 +48,8 @@
                 y: item.fatalLowerBound
               })),
               fill: 'start',
+              cubicInterpolationMode: 'monotone',
+              tension: 0.4,
               borderColor: '#E3170A',
               backgroundColor: '#E3170ADD'
             }
@@ -68,6 +74,8 @@
                 y: item.expectedValue
               })),
               fill: false,
+              cubicInterpolationMode: 'monotone',
+              tension: 0.4,
               borderColor: 'rgb(201, 203, 207)',
               backgroundColor: 'rgb(201, 203, 207)'
             }
@@ -80,6 +88,8 @@
                 y: item.warningUpperBound
               })),
               fill: 'end',
+              cubicInterpolationMode: 'monotone',
+              tension: 0.4,
               borderColor: '#EBE51E',
               backgroundColor: '#EBE51E20'
             }
@@ -92,6 +102,8 @@
                 y: item.errorUpperBound
               })),
               fill: 'end',
+              cubicInterpolationMode: 'monotone',
+              tension: 0.4,
               borderColor: '#FF9900',
               backgroundColor: '#FF990050'
             }
@@ -104,6 +116,8 @@
                 y: item.fatalUpperBound
               })),
               fill: 'end',
+              cubicInterpolationMode: 'monotone',
+              tension: 0.4,
               borderColor: '#E3170A',
               backgroundColor: '#E3170ADD '
             }
