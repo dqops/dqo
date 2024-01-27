@@ -290,7 +290,8 @@ React to data quality incidents and assign them to the right teams who can fix t
 ## DQOps is DevOps and DataOps friendly
 
 Technical users can manage data quality check configuration at scale by changing YAML files in their editor of choice 
-and version the configuration in Git. An example YAML configuration with the `profile_nulls_count` check configured is shown below.
+and version the configuration in Git. An example below shows how to configure the [`profile_nulls_count`](checks/column/nulls/nulls-count.md#profile-nulls-count)
+data quality check in a DQOps YAML file that you can version in Git.
 
 ```yaml hl_lines="7-15"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -298,7 +299,7 @@ apiVersion: dqo/v1
 kind: table
 spec:
   columns:
-    target_column:
+    target_column_name:
       profiling_checks:
         nulls:
           profile_nulls_count:
@@ -313,8 +314,11 @@ spec:
 ```
 
 See how DQOps supports [editing data quality configuration files in Visual Studio Code](integrations/visual-studio-code/index.md),
-validating the structure of files, suggesting data quality checks names and parameters, and even showing help about 150+ data quality
+validating the structure of files, suggesting data quality checks names and parameters, and even showing the help about 150+ data quality
 checks inside Visual Studio Code.
+
+You can also run data quality checks from data pipelines, and integrate data quality into [Apache Airflow](integrations/airflow/index.md)
+using our [REST API Python client](client/index.md).
 
 ## Competitive advantages
 <div class="grid cards grid-columns-150-pct" markdown>
