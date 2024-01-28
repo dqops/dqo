@@ -77,7 +77,7 @@ export default function NotificationMenuContent() {
           )}
         </div>
       </div>
-      <div className="overflow-x-hidden max-h-100 py-4 px-4 relative min-h-80">
+      <div className="overflow-x-hidden max-h-100 py-4 px-4 relative">
         {/* {error_dictionary_state.map((error, index) => <ErrorItem error={error} key={index}/>)} */}
         {Object.keys(jobList)
           .reverse()
