@@ -184,7 +184,7 @@ DQOps uses [data quality checks](dqo-concepts/definition-of-data-quality-checks/
     ![Checks in DQOps can be quickly edited with intuitive user interface](https://dqops.com/docs/images/dqops-checks-editor.png "Checks in DQOps can be quickly edited with intuitive user interface"){ loading=lazy }
     <div>
 
-    **Activate data quality checks**
+    **Run scheduled data quality checks**
 
     [DQOps user interface](dqo-concepts/dqops-user-interface-overview.md) is designed to resemble popular database management tools. The data sources, tables and columns are on the left.
     The workspace in the center shows tables and columns in tabs, which allows you to open multiple objects and edit many tables at once. 
@@ -202,6 +202,31 @@ DQOps uses [data quality checks](dqo-concepts/definition-of-data-quality-checks/
 
     </div>
     </div>
+
+!!! success "Anomaly detection"
+
+    <div class="grid" markdown>
+
+    ![DQOps detect anomalies in numeric values and data volume](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/numeric-mean-anomaly-partitions-chart-min.png "DQOps detects anomalies in numeric values and data volume"){ loading=lazy }
+    <div>
+
+    **Detect data anomalies**
+
+    All historical metrics, such as a row count, minimum, maximum, and median value, are stored locally to allow time series prediction. 
+
+    Detect outliers such as new minimum or maximum values. Compare metrics such as a sum of values between daily partitions.
+    Detect anomalies between daily partitions, such as an unexpected increase in the number of rows in a partition.
+    
+    DQOps detects the following types of data anomalies:
+
+    [:octicons-arrow-right-24: Detect anomalies in numeric values](dqo-concepts/categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md#data-outliers---new-maximum)
+
+    [:octicons-arrow-right-24: Compare seasonal data to a reference value](dqo-concepts/categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md#compare-to-a-reference-point)
+
+    </div>
+    </div>
+
+
 
 ### Data quality dashboards
 Over 50 built-in data quality dashboards let you drill-down to the problem.
@@ -225,7 +250,7 @@ Over 50 built-in data quality dashboards let you drill-down to the problem.
 
     [:octicons-arrow-right-24: Data quality KPI score formula](dqo-concepts/definition-of-data-quality-kpis.md#data-quality-score-formula)
 
-    [:octicons-arrow-right-24: Measuring the initial quality KPI score](dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md#initial-data-quality-kpi-score)
+    [:octicons-arrow-right-24: Measure the initial data quality KPI score](dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md#initial-data-quality-kpi-score)
 
     [:octicons-arrow-right-24: Data quality KPI dashboards](dqo-concepts/types-of-data-quality-dashboards.md#data-quality-kpis)
 
