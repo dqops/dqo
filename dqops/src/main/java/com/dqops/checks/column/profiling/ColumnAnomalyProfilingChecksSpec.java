@@ -45,6 +45,8 @@ public class ColumnAnomalyProfilingChecksSpec extends AbstractCheckCategorySpec 
             put("profile_sum_anomaly", o -> o.profileSumAnomaly);
             put("profile_mean_anomaly", o -> o.profileMeanAnomaly);
             put("profile_median_anomaly", o -> o.profileMedianAnomaly);
+            put("profile_min_anomaly", o -> o.profileMinAnomaly);
+            put("profile_max_anomaly", o -> o.profileMaxAnomaly);
 
             put("profile_mean_change", o -> o.profileMeanChange);
             put("profile_mean_change_1_day", o -> o.profileMeanChange1Day);
@@ -71,6 +73,14 @@ public class ColumnAnomalyProfilingChecksSpec extends AbstractCheckCategorySpec 
 
     @JsonPropertyDescription("Verifies that the median in a column changes in a rate within a percentile boundary during the last 90 days.")
     private ColumnMedianAnomalyStationaryCheckSpec profileMedianAnomaly;
+
+    @JsonPropertyDescription("Detects new outliers, which are new minimum values, much below the last known minimum value. " +
+            "If the minimum value is constantly changing, detects outliers as the biggest change of the minimum value during the last 90 days.")
+    private ColumnMinAnomalyDifferencingCheckSpec profileMinAnomaly;
+
+    @JsonPropertyDescription("Detects new outliers, which are new maximum values, much above the last known maximum value. " +
+            "If the maximum value is constantly changing, detects outliers as the biggest change of the maximum value during the last 90 days.")
+    private ColumnMaxAnomalyDifferencingCheckSpec profileMaxAnomaly;
 
     @JsonPropertyDescription("Verifies that the mean value in a column changed in a fixed rate since the last readout.")
     private ColumnMeanChangeCheckSpec profileMeanChange;
@@ -169,6 +179,42 @@ public class ColumnAnomalyProfilingChecksSpec extends AbstractCheckCategorySpec 
         this.setDirtyIf(!Objects.equals(this.profileMedianAnomaly, profileMedianAnomaly));
         this.profileMedianAnomaly = profileMedianAnomaly;
         propagateHierarchyIdToField(profileMedianAnomaly, "profile_median_anomaly");
+    }
+
+    /**
+     * Returns a min anomaly for the last 90 days.
+     * @return Min anomaly for the last 90 days.
+     */
+    public ColumnMinAnomalyDifferencingCheckSpec getProfileMinAnomaly() {
+        return profileMinAnomaly;
+    }
+
+    /**
+     * Sets a new minimum anomaly for the last 90 days.
+     * @param profileMinAnomaly New minimum anomaly.
+     */
+    public void setProfileMinAnomaly(ColumnMinAnomalyDifferencingCheckSpec profileMinAnomaly) {
+        this.setDirtyIf(!Objects.equals(this.profileMinAnomaly, profileMinAnomaly));
+        this.profileMinAnomaly = profileMinAnomaly;
+        propagateHierarchyIdToField(profileMinAnomaly, "profile_min_anomaly");
+    }
+
+    /**
+     * Returns a max anomaly for the last 90 days.
+     * @return Max anomaly for the last 90 days.
+     */
+    public ColumnMaxAnomalyDifferencingCheckSpec getProfileMaxAnomaly() {
+        return profileMaxAnomaly;
+    }
+
+    /**
+     * Sets a new maximum anomaly for the last 90 days.
+     * @param profileMaxAnomaly New maximum anomaly.
+     */
+    public void setProfileMaxAnomaly(ColumnMaxAnomalyDifferencingCheckSpec profileMaxAnomaly) {
+        this.setDirtyIf(!Objects.equals(this.profileMaxAnomaly, profileMaxAnomaly));
+        this.profileMaxAnomaly = profileMaxAnomaly;
+        propagateHierarchyIdToField(profileMaxAnomaly, "profile_max_anomaly");
     }
 
     /**

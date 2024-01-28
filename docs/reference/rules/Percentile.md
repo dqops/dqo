@@ -53,17 +53,13 @@ The rule definition YAML file *percentile/anomaly_differencing_percentile_moving
       fields:
       - field_name: anomaly_percent
         display_name: anomaly_percent
-        help_text: "Probability that the current sensor readout will achieve values within\
-          \ the mean according to the distribution of the previous values gathered within\
-          \ the time window. In other words, the inter-quantile range around the mean\
-          \ of the estimated normal distribution. Set the time window at the threshold\
-          \ level for all severity levels (warning, error, fatal) at once. The default\
-          \ is a time window of 90 periods (days, etc.), but at least 30 readouts must\
-          \ exist to run the calculation. You can change the default value by modifying\
-          \ prediction_time_window parameterin Definitions section."
+        help_text: "The probability (in percent) that the current sensor readout (measure)\
+          \ is an anomaly, because the value is outside the regular range of previous\
+          \ readouts. The default time window of 90 time periods (days, etc.) is used,\
+          \ but at least 30 readouts must exist to run the calculation."
         data_type: double
         required: true
-        default_value: 0.1
+        default_value: 0.5
     ```
 
 
@@ -112,6 +108,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -234,16 +231,13 @@ The rule definition YAML file *percentile/anomaly_differencing_percentile_moving
       fields:
       - field_name: anomaly_percent
         display_name: anomaly_percent
-        help_text: "Probability that the current sensor readout will achieve values within\
-          \ the mean according to the distribution of the previous values gathered within\
-          \ the time window. In other words, the inter-quantile range around the mean\
-          \ of the estimated normal distribution. Set the time window at the threshold\
-          \ level for all severity levels (warning, error, fatal) at once. The default\
-          \ is a time window of 30 periods (days, etc.), but at least 10 readouts must\
-          \ exist to run the calculation."
+        help_text: "The probability (in percent) that the current sensor readout (measure)\
+          \ is an anomaly, because the value is outside the regular range of previous\
+          \ readouts. The default time window of 30 periods (days, etc.) is required,\
+          \ but at least 10 readouts must exist to run the calculation."
         data_type: double
         required: true
-        default_value: 0.1
+        default_value: 0.5
     ```
 
 
@@ -292,6 +286,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -412,17 +407,13 @@ The rule definition YAML file *percentile/anomaly_stationary_percentile_moving_a
       fields:
       - field_name: anomaly_percent
         display_name: anomaly_percent
-        help_text: "Probability that the current sensor readout will achieve values within\
-          \ the mean according to the distribution of the previous values gathered within\
-          \ the time window. In other words, the inter-quantile range around the mean\
-          \ of the estimated normal distribution. Set the time window at the threshold\
-          \ level for all severity levels (warning, error, fatal) at once. The default\
-          \ is a time window of 90 periods (days, etc.), but at least 30 readouts must\
-          \ exist to run the calculation. You can change the default value by modifying\
-          \ prediction_time_window parameterin Definitions section."
+        help_text: "The probability (in percent) that the current sensor readout (measure)\
+          \ is an anomaly, because the value is outside the regular range of previous\
+          \ readouts. The default time window of 90 time periods (days, etc.) is used,\
+          \ but at least 30 readouts must exist to run the calculation."
         data_type: double
         required: true
-        default_value: 0.1
+        default_value: 0.5
     ```
 
 
@@ -471,6 +462,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -587,16 +579,13 @@ The rule definition YAML file *percentile/anomaly_stationary_percentile_moving_a
       fields:
       - field_name: anomaly_percent
         display_name: anomaly_percent
-        help_text: "Probability that the current sensor readout will achieve values within\
-          \ the mean according to the distribution of the previous values gathered within\
-          \ the time window. In other words, the inter-quantile range around the mean\
-          \ of the estimated normal distribution. Set the time window at the threshold\
-          \ level for all severity levels (warning, error, fatal) at once. The default\
-          \ is a 30 time periods (days, etc.) time window, but at least 10 readouts must\
-          \ exist to run the calculation."
+        help_text: "The probability (in percent) that the current sensor readout (measure)\
+          \ is an anomaly, because the value is outside the regular range of previous\
+          \ readouts. The default time window of 30 periods (days, etc.) is required,\
+          \ but at least 10 readouts must exist to run the calculation."
         data_type: double
         required: true
-        default_value: 0.1
+        default_value: 0.5
     ```
 
 
@@ -645,6 +634,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -828,6 +818,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -1022,6 +1013,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -1216,6 +1208,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -1409,6 +1402,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -1599,6 +1593,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -1789,6 +1784,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:

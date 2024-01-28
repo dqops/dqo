@@ -16,7 +16,7 @@ A column-level check that ensures that the sum in a monitored column is within a
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_sum_anomaly`</span>](./sum-anomaly.md#profile-sum-anomaly)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the sum in a column changes in a rate within a percentile boundary during the last 90 days.|:material-check-bold:|
 |[<span class="no-wrap-code">`daily_sum_anomaly`</span>](./sum-anomaly.md#daily-sum-anomaly)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the sum in a column changes in a rate within a percentile boundary during the last 90 days.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_sum_anomaly`</span>](./sum-anomaly.md#daily-partition-sum-anomaly)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the sum in a column is within a percentile from measurements made during the last 90 days.|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_partition_sum_anomaly`</span>](./sum-anomaly.md#daily-partition-sum-anomaly)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the sum in a column is within a percentile from measurements made during the last 90 days. Calculates the sum of each daily partition and detect anomalies between daily partitions.|:material-check-bold:|
 
 
 
@@ -28,7 +28,7 @@ A column-level check that ensures that the mean value in a monitored column is w
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_mean_anomaly`</span>](./mean-anomaly.md#profile-mean-anomaly)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the mean value in a column changes in a rate within a percentile boundary during the last 90 days.|:material-check-bold:|
 |[<span class="no-wrap-code">`daily_mean_anomaly`</span>](./mean-anomaly.md#daily-mean-anomaly)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the mean value in a column changes in a rate within a percentile boundary during the last 90 days.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_mean_anomaly`</span>](./mean-anomaly.md#daily-partition-mean-anomaly)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the mean value in a column is within a percentile from measurements made during the last 90 days.|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_partition_mean_anomaly`</span>](./mean-anomaly.md#daily-partition-mean-anomaly)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the mean value in a column is within a percentile from measurements made during the last 90 days. Calculates the mean (average) of each daily partition and detect anomalies between daily partitions.|:material-check-bold:|
 
 
 
@@ -40,7 +40,33 @@ A column-level check that ensures that the median in a monitored column is withi
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_median_anomaly`</span>](./median-anomaly.md#profile-median-anomaly)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the median in a column changes in a rate within a percentile boundary during the last 90 days.| |
 |[<span class="no-wrap-code">`daily_median_anomaly`</span>](./median-anomaly.md#daily-median-anomaly)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the median in a column changes in a rate within a percentile boundary during the last 90 days.| |
-|[<span class="no-wrap-code">`daily_partition_median_anomaly`</span>](./median-anomaly.md#daily-partition-median-anomaly)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the median in a column is within a percentile from measurements made during the last 90 days.| |
+|[<span class="no-wrap-code">`daily_partition_median_anomaly`</span>](./median-anomaly.md#daily-partition-median-anomaly)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the median in a column is within a percentile from measurements made during the last 90 days. Calculates the median of each daily partition and detect anomalies between daily partitions.| |
+
+
+
+### [min anomaly](./min-anomaly.md)
+A column-level check that detects big changes of the minimum value in a numeric column, detecting new data outliers.
+ If the values in the column are slightly changing day-to-day, DQOps detects new minimum values that changed much more than the typical change for the last 90 days.
+
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_min_anomaly`</span>](./min-anomaly.md#profile-min-anomaly)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Detects new outliers, which are new minimum values, much below the last known minimum value. If the minimum value is constantly changing, detects outliers as the biggest change of the minimum value during the last 90 days.|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_min_anomaly`</span>](./min-anomaly.md#daily-min-anomaly)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Detects new outliers, which are new minimum values, much below the last known minimum value. If the minimum value is constantly changing, detects outliers as the biggest change of the minimum value during the last 90 days.|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_partition_min_anomaly`</span>](./min-anomaly.md#daily-partition-min-anomaly)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Detects new outliers, which are new minimum values, much below the last known minimum value. If the minimum value is constantly changing, detects outliers as the biggest change of the minimum value during the last 90 days. Finds the minimum value of each daily partition and detect anomalies between daily partitions.|:material-check-bold:|
+
+
+
+### [max anomaly](./max-anomaly.md)
+A column-level check that detects big changes of the maximum value in a numeric column, detecting new data outliers.
+ If the values in the column are slightly changing day-to-day, DQOps detects new maximum values that changed much more than the typical change for the last 90 days.
+
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_max_anomaly`</span>](./max-anomaly.md#profile-max-anomaly)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Detects new outliers, which are new maximum values, much above the last known maximum value. If the maximum value is constantly changing, detects outliers as the biggest change of the maximum value during the last 90 days.|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_max_anomaly`</span>](./max-anomaly.md#daily-max-anomaly)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Detects new outliers, which are new maximum values, much above the last known maximum value. If the maximum value is constantly changing, detects outliers as the biggest change of the maximum value during the last 90 days.|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_partition_max_anomaly`</span>](./max-anomaly.md#daily-partition-max-anomaly)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Detects new outliers, which are new maximum values, much above the last known maximum value. If the maximum value is constantly changing, detects outliers as the biggest change of the maximum value during the last 90 days. Finds the maximum value of each daily partition and detect anomalies between daily partitions.|:material-check-bold:|
 
 
 

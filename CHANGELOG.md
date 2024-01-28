@@ -5,3 +5,5 @@
 * Custom SQL check for importing data quality results from third-party data quality libraries
 * Small corrections in the documentation
 * Pip startup script supports mirrors and retries when downloading the release package
+* MIN and MAX anomalies checks
+* Improvement in the performance of the notification panel

@@ -107,6 +107,18 @@ A column-level check that ensures that the median in a monitored column is withi
 
 
 
+### [min anomaly](./anomaly/min-anomaly.md)
+A column-level check that detects big changes of the minimum value in a numeric column, detecting new data outliers.
+ If the values in the column are slightly changing day-to-day, DQOps detects new minimum values that changed much more than the typical change for the last 90 days.
+
+
+
+### [max anomaly](./anomaly/max-anomaly.md)
+A column-level check that detects big changes of the maximum value in a numeric column, detecting new data outliers.
+ If the values in the column are slightly changing day-to-day, DQOps detects new maximum values that changed much more than the typical change for the last 90 days.
+
+
+
 ### [mean change](./anomaly/mean-change.md)
 A column-level check that ensures that the mean value in a monitored column has changed by a fixed rate since the last readout.
 

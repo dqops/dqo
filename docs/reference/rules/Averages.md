@@ -112,6 +112,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -276,6 +277,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -440,6 +442,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -602,6 +605,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -756,6 +760,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -910,6 +915,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -1064,6 +1070,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:

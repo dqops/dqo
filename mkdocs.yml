@@ -292,6 +292,8 @@ nav:
         - sum anomaly: 'checks/column/anomaly/sum-anomaly.md'
         - mean anomaly: 'checks/column/anomaly/mean-anomaly.md'
         - median anomaly: 'checks/column/anomaly/median-anomaly.md'
+        - min anomaly: 'checks/column/anomaly/min-anomaly.md'
+        - max anomaly: 'checks/column/anomaly/max-anomaly.md'
         - mean change: 'checks/column/anomaly/mean-change.md'
         - mean change 1 day: 'checks/column/anomaly/mean-change-1-day.md'
         - mean change 7 days: 'checks/column/anomaly/mean-change-7-days.md'

@@ -16873,6 +16873,14 @@
           "description" : "Verifies that the median in a column changes in a rate within a percentile boundary during the last 90 days.",
           "$ref" : "#/definitions/ColumnMedianAnomalyStationaryCheckSpec"
         },
+        "daily_min_anomaly" : {
+          "description" : "Detects new outliers, which are new minimum values, much below the last known minimum value. If the minimum value is constantly changing, detects outliers as the biggest change of the minimum value during the last 90 days.",
+          "$ref" : "#/definitions/ColumnMinAnomalyDifferencingCheckSpec"
+        },
+        "daily_max_anomaly" : {
+          "description" : "Detects new outliers, which are new maximum values, much above the last known maximum value. If the maximum value is constantly changing, detects outliers as the biggest change of the maximum value during the last 90 days.",
+          "$ref" : "#/definitions/ColumnMaxAnomalyDifferencingCheckSpec"
+        },
         "daily_mean_change" : {
           "description" : "Verifies that the mean value in a column changed in a fixed rate since the last readout.",
           "$ref" : "#/definitions/ColumnMeanChangeCheckSpec"
@@ -16934,16 +16942,24 @@
           }
         },
         "daily_partition_sum_anomaly" : {
-          "description" : "Verifies that the sum in a column is within a percentile from measurements made during the last 90 days.",
+          "description" : "Verifies that the sum in a column is within a percentile from measurements made during the last 90 days. Calculates the sum of each daily partition and detect anomalies between daily partitions.",
           "$ref" : "#/definitions/ColumnSumAnomalyStationaryPartitionCheckSpec"
         },
         "daily_partition_mean_anomaly" : {
-          "description" : "Verifies that the mean value in a column is within a percentile from measurements made during the last 90 days.",
+          "description" : "Verifies that the mean value in a column is within a percentile from measurements made during the last 90 days. Calculates the mean (average) of each daily partition and detect anomalies between daily partitions.",
           "$ref" : "#/definitions/ColumnMeanAnomalyStationaryCheckSpec"
         },
         "daily_partition_median_anomaly" : {
-          "description" : "Verifies that the median in a column is within a percentile from measurements made during the last 90 days.",
+          "description" : "Verifies that the median in a column is within a percentile from measurements made during the last 90 days. Calculates the median of each daily partition and detect anomalies between daily partitions.",
           "$ref" : "#/definitions/ColumnMedianAnomalyStationaryCheckSpec"
+        },
+        "daily_partition_min_anomaly" : {
+          "description" : "Detects new outliers, which are new minimum values, much below the last known minimum value. If the minimum value is constantly changing, detects outliers as the biggest change of the minimum value during the last 90 days. Finds the minimum value of each daily partition and detect anomalies between daily partitions.",
+          "$ref" : "#/definitions/ColumnMinAnomalyStationaryCheckSpec"
+        },
+        "daily_partition_max_anomaly" : {
+          "description" : "Detects new outliers, which are new maximum values, much above the last known maximum value. If the maximum value is constantly changing, detects outliers as the biggest change of the maximum value during the last 90 days. Finds the maximum value of each daily partition and detect anomalies between daily partitions.",
+          "$ref" : "#/definitions/ColumnMaxAnomalyStationaryCheckSpec"
         },
         "daily_partition_mean_change" : {
           "description" : "Verifies that the mean value in a column changed in a fixed rate since last readout.",
@@ -17064,6 +17080,14 @@
         "profile_median_anomaly" : {
           "description" : "Verifies that the median in a column changes in a rate within a percentile boundary during the last 90 days.",
           "$ref" : "#/definitions/ColumnMedianAnomalyStationaryCheckSpec"
+        },
+        "profile_min_anomaly" : {
+          "description" : "Detects new outliers, which are new minimum values, much below the last known minimum value. If the minimum value is constantly changing, detects outliers as the biggest change of the minimum value during the last 90 days.",
+          "$ref" : "#/definitions/ColumnMinAnomalyDifferencingCheckSpec"
+        },
+        "profile_max_anomaly" : {
+          "description" : "Detects new outliers, which are new maximum values, much above the last known maximum value. If the maximum value is constantly changing, detects outliers as the biggest change of the maximum value during the last 90 days.",
+          "$ref" : "#/definitions/ColumnMaxAnomalyDifferencingCheckSpec"
         },
         "profile_mean_change" : {
           "description" : "Verifies that the mean value in a column changed in a fixed rate since the last readout.",
@@ -21095,6 +21119,118 @@
       },
       "description" : "Column list model that returns the basic fields from a column specification, excluding nested nodes like a list of activated checks."
     },
+    "ColumnMaxAnomalyDifferencingCheckSpec" : {
+      "type" : "object",
+      "properties" : {
+        "schedule_override" : {
+          "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
+          "$ref" : "#/definitions/MonitoringScheduleSpec"
+        },
+        "comments" : {
+          "type" : "array",
+          "description" : "Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).",
+          "items" : {
+            "$ref" : "#/definitions/CommentSpec"
+          }
+        },
+        "disabled" : {
+          "type" : "boolean",
+          "description" : "Disables the data quality check. Only enabled data quality checks and monitorings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration."
+        },
+        "exclude_from_kpi" : {
+          "type" : "boolean",
+          "description" : "Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation."
+        },
+        "include_in_sla" : {
+          "type" : "boolean",
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
+        },
+        "quality_dimension" : {
+          "type" : "string",
+          "description" : "Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.)."
+        },
+        "display_name" : {
+          "type" : "string",
+          "description" : "Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name."
+        },
+        "data_grouping" : {
+          "type" : "string",
+          "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "parameters" : {
+          "description" : "Data quality check parameters",
+          "$ref" : "#/definitions/ColumnNumericMaxSensorParametersSpec"
+        },
+        "warning" : {
+          "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
+          "$ref" : "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec"
+        },
+        "error" : {
+          "description" : "Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert",
+          "$ref" : "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec"
+        },
+        "fatal" : {
+          "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
+          "$ref" : "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec"
+        }
+      }
+    },
+    "ColumnMaxAnomalyStationaryCheckSpec" : {
+      "type" : "object",
+      "properties" : {
+        "schedule_override" : {
+          "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
+          "$ref" : "#/definitions/MonitoringScheduleSpec"
+        },
+        "comments" : {
+          "type" : "array",
+          "description" : "Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).",
+          "items" : {
+            "$ref" : "#/definitions/CommentSpec"
+          }
+        },
+        "disabled" : {
+          "type" : "boolean",
+          "description" : "Disables the data quality check. Only enabled data quality checks and monitorings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration."
+        },
+        "exclude_from_kpi" : {
+          "type" : "boolean",
+          "description" : "Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation."
+        },
+        "include_in_sla" : {
+          "type" : "boolean",
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
+        },
+        "quality_dimension" : {
+          "type" : "string",
+          "description" : "Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.)."
+        },
+        "display_name" : {
+          "type" : "string",
+          "description" : "Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name."
+        },
+        "data_grouping" : {
+          "type" : "string",
+          "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "parameters" : {
+          "description" : "Data quality check parameters",
+          "$ref" : "#/definitions/ColumnNumericMaxSensorParametersSpec"
+        },
+        "warning" : {
+          "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
+          "$ref" : "#/definitions/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
+        },
+        "error" : {
+          "description" : "Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert",
+          "$ref" : "#/definitions/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
+        },
+        "fatal" : {
+          "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
+          "$ref" : "#/definitions/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
+        }
+      }
+    },
     "ColumnMaxInRangeCheckSpec" : {
       "type" : "object",
       "properties" : {
@@ -21820,6 +21956,118 @@
         "fatal" : {
           "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
           "$ref" : "#/definitions/BetweenFloatsRuleParametersSpec"
+        }
+      }
+    },
+    "ColumnMinAnomalyDifferencingCheckSpec" : {
+      "type" : "object",
+      "properties" : {
+        "schedule_override" : {
+          "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
+          "$ref" : "#/definitions/MonitoringScheduleSpec"
+        },
+        "comments" : {
+          "type" : "array",
+          "description" : "Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).",
+          "items" : {
+            "$ref" : "#/definitions/CommentSpec"
+          }
+        },
+        "disabled" : {
+          "type" : "boolean",
+          "description" : "Disables the data quality check. Only enabled data quality checks and monitorings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration."
+        },
+        "exclude_from_kpi" : {
+          "type" : "boolean",
+          "description" : "Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation."
+        },
+        "include_in_sla" : {
+          "type" : "boolean",
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
+        },
+        "quality_dimension" : {
+          "type" : "string",
+          "description" : "Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.)."
+        },
+        "display_name" : {
+          "type" : "string",
+          "description" : "Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name."
+        },
+        "data_grouping" : {
+          "type" : "string",
+          "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "parameters" : {
+          "description" : "Data quality check parameters",
+          "$ref" : "#/definitions/ColumnNumericMinSensorParametersSpec"
+        },
+        "warning" : {
+          "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
+          "$ref" : "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec"
+        },
+        "error" : {
+          "description" : "Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert",
+          "$ref" : "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec"
+        },
+        "fatal" : {
+          "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
+          "$ref" : "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec"
+        }
+      }
+    },
+    "ColumnMinAnomalyStationaryCheckSpec" : {
+      "type" : "object",
+      "properties" : {
+        "schedule_override" : {
+          "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
+          "$ref" : "#/definitions/MonitoringScheduleSpec"
+        },
+        "comments" : {
+          "type" : "array",
+          "description" : "Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).",
+          "items" : {
+            "$ref" : "#/definitions/CommentSpec"
+          }
+        },
+        "disabled" : {
+          "type" : "boolean",
+          "description" : "Disables the data quality check. Only enabled data quality checks and monitorings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration."
+        },
+        "exclude_from_kpi" : {
+          "type" : "boolean",
+          "description" : "Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation."
+        },
+        "include_in_sla" : {
+          "type" : "boolean",
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
+        },
+        "quality_dimension" : {
+          "type" : "string",
+          "description" : "Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.)."
+        },
+        "display_name" : {
+          "type" : "string",
+          "description" : "Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name."
+        },
+        "data_grouping" : {
+          "type" : "string",
+          "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "parameters" : {
+          "description" : "Data quality check parameters",
+          "$ref" : "#/definitions/ColumnNumericMinSensorParametersSpec"
+        },
+        "warning" : {
+          "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
+          "$ref" : "#/definitions/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
+        },
+        "error" : {
+          "description" : "Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert",
+          "$ref" : "#/definitions/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
+        },
+        "fatal" : {
+          "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
+          "$ref" : "#/definitions/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
         }
       }
     },

@@ -1,29 +1,30 @@
-# mean anomaly data quality checks
+# min anomaly data quality checks
 
-A column-level check that ensures that the mean value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
+A column-level check that detects big changes of the minimum value in a numeric column, detecting new data outliers.
+ If the values in the column are slightly changing day-to-day, DQOps detects new minimum values that changed much more than the typical change for the last 90 days.
 
 
 ___
-The **mean anomaly** data quality check has the following variants for each
+The **min anomaly** data quality check has the following variants for each
 [type of data quality](../../../dqo-concepts/definition-of-data-quality-checks/index.md#types-of-checks) checks supported by DQOps.
 
 
-## profile mean anomaly
+## profile min anomaly
 
 
 **Check description**
 
-Verifies that the mean value in a column changes in a rate within a percentile boundary during the last 90 days.
+Detects new outliers, which are new minimum values, much below the last known minimum value. If the minimum value is constantly changing, detects outliers as the biggest change of the minimum value during the last 90 days.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_mean_anomaly`</span>|[anomaly](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*mean*](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[*anomaly_stationary_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_min_anomaly`</span>|[anomaly](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*min_value*](../../../reference/sensors/column/range-column-sensors.md#min-value)|[*anomaly_differencing_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-differencing-percentile-moving-average)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile mean anomaly data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the profile min anomaly data quality check.
 
-??? example "Managing profile mean anomaly check from DQOps shell"
+??? example "Managing profile min anomaly check from DQOps shell"
 
     === "Activate the check with a warning rule"
 
@@ -31,19 +32,19 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
         providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=profile_mean_anomaly --enable-warning
+        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=profile_min_anomaly --enable-warning
         ```
 
         You can also use patterns to activate the check on all matching tables and columns.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=profile_mean_anomaly --enable-warning
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=profile_min_anomaly --enable-warning
         ```
         
         Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=profile_mean_anomaly --enable-warning
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=profile_min_anomaly --enable-warning
                             -Wanomaly_percent=value
         ```
 
@@ -54,19 +55,19 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
         providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=profile_mean_anomaly --enable-error
+        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=profile_min_anomaly --enable-error
         ```
 
         You can also use patterns to activate the check on all matching tables and columns.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=profile_mean_anomaly --enable-error
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=profile_min_anomaly --enable-error
         ```
         
         Additional rule parameters are passed using the *-Erule_parameter_name=value*.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=profile_mean_anomaly --enable-error
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=profile_min_anomaly --enable-error
                             -Eanomaly_percent=value
         ```
 
@@ -74,23 +75,23 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
     === "Run all configured checks"
 
         Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
-        The following example shows how to run the *profile_mean_anomaly* check on all tables and columns on a single data source.
+        The following example shows how to run the *profile_min_anomaly* check on all tables and columns on a single data source.
 
         ```
-        dqo> check run -c=data_source_name -ch=profile_mean_anomaly
+        dqo> check run -c=data_source_name -ch=profile_min_anomaly
         ```
 
         It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters.
 
         ```
-        dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_mean_anomaly
+        dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_min_anomaly
         ```
 
-        You can also run this check on all tables (and columns)  on which the *profile_mean_anomaly* check is enabled
+        You can also run this check on all tables (and columns)  on which the *profile_min_anomaly* check is enabled
         using patterns to find tables.
 
         ```
-        dqo> check run -c=connection_name -t=schema_prefix*.fact_* -col=column_name_* -ch=profile_mean_anomaly
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_* -col=column_name_* -ch=profile_min_anomaly
         ```
 
 
@@ -108,7 +109,7 @@ spec:
     target_column:
       profiling_checks:
         anomaly:
-          profile_mean_anomaly:
+          profile_min_anomaly:
             warning:
               anomaly_percent: 1.0
             error:
@@ -123,7 +124,7 @@ spec:
 ??? info "Samples of generated SQL queries for each data source type"
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [mean](../../../reference/sensors/column/numeric-column-sensors.md#mean)
+    [min_value](../../../reference/sensors/column/range-column-sensors.md#min-value)
     [data quality sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     ??? example "BigQuery"
@@ -133,7 +134,7 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -145,7 +146,7 @@ spec:
 
             ```sql
             SELECT
-                AVG(analyzed_table.`target_column`) AS actual_value,
+                MIN(analyzed_table.`target_column`) AS actual_value,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
@@ -159,7 +160,7 @@ spec:
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -171,7 +172,7 @@ spec:
 
             ```sql
             SELECT
-                AVG(analyzed_table.`target_column`) AS actual_value,
+                MIN(analyzed_table.`target_column`) AS actual_value,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -185,7 +186,7 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -197,7 +198,7 @@ spec:
 
             ```sql
             SELECT
-                AVG(analyzed_table.`target_column`) AS actual_value,
+                MIN(analyzed_table.`target_column`) AS actual_value,
                 DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
                 FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
             FROM `<target_table>` AS analyzed_table
@@ -211,34 +212,34 @@ spec:
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-               {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-             FROM(
-                 SELECT
-                     original_table.*
-                     {{- lib.render_data_grouping_projections('original_table') }}
-                     {{- lib.render_time_dimension_projection('original_table') }}
-                 FROM {{ lib.render_target_table() }} original_table
-                 {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-             ) analyzed_table
-             {{- lib.render_group_by() -}}
-             {{- lib.render_order_by() -}}
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
             ```
         === "Rendered SQL for Oracle"
 
             ```sql
             SELECT
-                AVG(analyzed_table."target_column") AS actual_value,
+                MIN(analyzed_table."target_column") AS actual_value,
                 time_period,
                 time_period_utc
-             FROM(
-                 SELECT
-                     original_table.*,
+            FROM (
+                SELECT
+                    original_table.*,
                 TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
                 CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-                 FROM "<target_schema>"."<target_table>" original_table
-             ) analyzed_table
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -249,7 +250,7 @@ spec:
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -261,7 +262,7 @@ spec:
 
             ```sql
             SELECT
-                AVG(analyzed_table."target_column") AS actual_value,
+                MIN(analyzed_table."target_column") AS actual_value,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -275,9 +276,9 @@ spec:
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                    {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
                 FROM (
                     SELECT
                         original_table.*
@@ -294,7 +295,7 @@ spec:
 
             ```sql
             SELECT
-                AVG(analyzed_table."target_column") AS actual_value,
+                MIN(analyzed_table."target_column") AS actual_value,
                 time_period,
                 time_period_utc
                 FROM (
@@ -314,7 +315,7 @@ spec:
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -326,7 +327,7 @@ spec:
 
             ```sql
             SELECT
-                AVG(analyzed_table."target_column") AS actual_value,
+                MIN(analyzed_table."target_column") AS actual_value,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -340,7 +341,7 @@ spec:
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -352,7 +353,7 @@ spec:
 
             ```sql
             SELECT
-                AVG(analyzed_table."target_column") AS actual_value,
+                MIN(analyzed_table."target_column") AS actual_value,
                 DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
                 TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -366,7 +367,7 @@ spec:
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -378,7 +379,7 @@ spec:
 
             ```sql
             SELECT
-                AVG(analyzed_table.`target_column`) AS actual_value,
+                MIN(analyzed_table.`target_column`) AS actual_value,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -392,7 +393,7 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -404,7 +405,7 @@ spec:
 
             ```sql
             SELECT
-                AVG(analyzed_table.[target_column]) AS actual_value,
+                MIN(analyzed_table.[target_column]) AS actual_value,
                 DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
                 CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
@@ -416,9 +417,9 @@ spec:
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                    {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
                 FROM (
                     SELECT
                         original_table.*
@@ -435,7 +436,7 @@ spec:
 
             ```sql
             SELECT
-                AVG(analyzed_table."target_column") AS actual_value,
+                MIN(analyzed_table."target_column") AS actual_value,
                 time_period,
                 time_period_utc
                 FROM (
@@ -475,7 +476,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         target_column:
           profiling_checks:
             anomaly:
-              profile_mean_anomaly:
+              profile_min_anomaly:
                 warning:
                   anomaly_percent: 1.0
                 error:
@@ -493,7 +494,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [mean](../../../reference/sensors/column/numeric-column-sensors.md#mean)
+    [min_value](../../../reference/sensors/column/range-column-sensors.md#min-value)
     [sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     ??? example "BigQuery"
@@ -502,7 +503,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -513,7 +514,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for BigQuery"
             ```sql
             SELECT
-                AVG(analyzed_table.`target_column`) AS actual_value,
+                MIN(analyzed_table.`target_column`) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
@@ -528,7 +529,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -539,7 +540,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Databricks"
             ```sql
             SELECT
-                AVG(analyzed_table.`target_column`) AS actual_value,
+                MIN(analyzed_table.`target_column`) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
@@ -554,7 +555,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -565,7 +566,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for MySQL"
             ```sql
             SELECT
-                AVG(analyzed_table.`target_column`) AS actual_value,
+                MIN(analyzed_table.`target_column`) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
                 DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
@@ -580,24 +581,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-               {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-             FROM(
-                 SELECT
-                     original_table.*
-                     {{- lib.render_data_grouping_projections('original_table') }}
-                     {{- lib.render_time_dimension_projection('original_table') }}
-                 FROM {{ lib.render_target_table() }} original_table
-                 {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-             ) analyzed_table
-             {{- lib.render_group_by() -}}
-             {{- lib.render_order_by() -}}
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
             ```
         === "Rendered SQL for Oracle"
             ```sql
             SELECT
-                AVG(analyzed_table."target_column") AS actual_value,
+                MIN(analyzed_table."target_column") AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -605,15 +606,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ,
                 time_period,
                 time_period_utc
-             FROM(
-                 SELECT
-                     original_table.*,
+            FROM (
+                SELECT
+                    original_table.*,
                 original_table."country" AS grouping_level_1,
                 original_table."state" AS grouping_level_2,
                 TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
                 CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-                 FROM "<target_schema>"."<target_table>" original_table
-             ) analyzed_table
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -623,7 +624,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -634,7 +635,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for PostgreSQL"
             ```sql
             SELECT
-                AVG(analyzed_table."target_column") AS actual_value,
+                MIN(analyzed_table."target_column") AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
@@ -649,9 +650,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                    {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
                 FROM (
                     SELECT
                         original_table.*
@@ -667,7 +668,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Presto"
             ```sql
             SELECT
-                AVG(analyzed_table."target_column") AS actual_value,
+                MIN(analyzed_table."target_column") AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -693,7 +694,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -704,7 +705,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Redshift"
             ```sql
             SELECT
-                AVG(analyzed_table."target_column") AS actual_value,
+                MIN(analyzed_table."target_column") AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
@@ -719,7 +720,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -730,7 +731,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Snowflake"
             ```sql
             SELECT
-                AVG(analyzed_table."target_column") AS actual_value,
+                MIN(analyzed_table."target_column") AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
@@ -745,7 +746,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -756,7 +757,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Spark"
             ```sql
             SELECT
-                AVG(analyzed_table.`target_column`) AS actual_value,
+                MIN(analyzed_table.`target_column`) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
@@ -771,7 +772,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -782,7 +783,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for SQL Server"
             ```sql
             SELECT
-                AVG(analyzed_table.[target_column]) AS actual_value,
+                MIN(analyzed_table.[target_column]) AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2,
                 DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
@@ -801,9 +802,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                    {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
                 FROM (
                     SELECT
                         original_table.*
@@ -819,7 +820,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Trino"
             ```sql
             SELECT
-                AVG(analyzed_table."target_column") AS actual_value,
+                MIN(analyzed_table."target_column") AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -843,22 +844,22 @@ Expand the *Configure with data grouping* section to see additional examples for
 ___
 
 
-## daily mean anomaly
+## daily min anomaly
 
 
 **Check description**
 
-Verifies that the mean value in a column changes in a rate within a percentile boundary during the last 90 days.
+Detects new outliers, which are new minimum values, much below the last known minimum value. If the minimum value is constantly changing, detects outliers as the biggest change of the minimum value during the last 90 days.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_mean_anomaly`</span>|[anomaly](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*mean*](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[*anomaly_stationary_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_min_anomaly`</span>|[anomaly](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*min_value*](../../../reference/sensors/column/range-column-sensors.md#min-value)|[*anomaly_differencing_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-differencing-percentile-moving-average)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily mean anomaly data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily min anomaly data quality check.
 
-??? example "Managing daily mean anomaly check from DQOps shell"
+??? example "Managing daily min anomaly check from DQOps shell"
 
     === "Activate the check with a warning rule"
 
@@ -866,19 +867,19 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
         providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=daily_mean_anomaly --enable-warning
+        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=daily_min_anomaly --enable-warning
         ```
 
         You can also use patterns to activate the check on all matching tables and columns.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_mean_anomaly --enable-warning
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_min_anomaly --enable-warning
         ```
         
         Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_mean_anomaly --enable-warning
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_min_anomaly --enable-warning
                             -Wanomaly_percent=value
         ```
 
@@ -889,19 +890,19 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
         providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=daily_mean_anomaly --enable-error
+        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=daily_min_anomaly --enable-error
         ```
 
         You can also use patterns to activate the check on all matching tables and columns.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_mean_anomaly --enable-error
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_min_anomaly --enable-error
         ```
         
         Additional rule parameters are passed using the *-Erule_parameter_name=value*.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_mean_anomaly --enable-error
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_min_anomaly --enable-error
                             -Eanomaly_percent=value
         ```
 
@@ -909,23 +910,23 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
     === "Run all configured checks"
 
         Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
-        The following example shows how to run the *daily_mean_anomaly* check on all tables and columns on a single data source.
+        The following example shows how to run the *daily_min_anomaly* check on all tables and columns on a single data source.
 
         ```
-        dqo> check run -c=data_source_name -ch=daily_mean_anomaly
+        dqo> check run -c=data_source_name -ch=daily_min_anomaly
         ```
 
         It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters.
 
         ```
-        dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_mean_anomaly
+        dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_min_anomaly
         ```
 
-        You can also run this check on all tables (and columns)  on which the *daily_mean_anomaly* check is enabled
+        You can also run this check on all tables (and columns)  on which the *daily_min_anomaly* check is enabled
         using patterns to find tables.
 
         ```
-        dqo> check run -c=connection_name -t=schema_prefix*.fact_* -col=column_name_* -ch=daily_mean_anomaly
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_* -col=column_name_* -ch=daily_min_anomaly
         ```
 
 
@@ -944,7 +945,7 @@ spec:
       monitoring_checks:
         daily:
           anomaly:
-            daily_mean_anomaly:
+            daily_min_anomaly:
               warning:
                 anomaly_percent: 1.0
               error:
@@ -959,7 +960,7 @@ spec:
 ??? info "Samples of generated SQL queries for each data source type"
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [mean](../../../reference/sensors/column/numeric-column-sensors.md#mean)
+    [min_value](../../../reference/sensors/column/range-column-sensors.md#min-value)
     [data quality sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     ??? example "BigQuery"
@@ -969,7 +970,7 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -981,7 +982,7 @@ spec:
 
             ```sql
             SELECT
-                AVG(analyzed_table.`target_column`) AS actual_value,
+                MIN(analyzed_table.`target_column`) AS actual_value,
                 CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
                 TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
@@ -995,7 +996,7 @@ spec:
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1007,7 +1008,7 @@ spec:
 
             ```sql
             SELECT
-                AVG(analyzed_table.`target_column`) AS actual_value,
+                MIN(analyzed_table.`target_column`) AS actual_value,
                 CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
                 TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -1021,7 +1022,7 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1033,7 +1034,7 @@ spec:
 
             ```sql
             SELECT
-                AVG(analyzed_table.`target_column`) AS actual_value,
+                MIN(analyzed_table.`target_column`) AS actual_value,
                 DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
                 FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
             FROM `<target_table>` AS analyzed_table
@@ -1047,34 +1048,34 @@ spec:
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-               {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-             FROM(
-                 SELECT
-                     original_table.*
-                     {{- lib.render_data_grouping_projections('original_table') }}
-                     {{- lib.render_time_dimension_projection('original_table') }}
-                 FROM {{ lib.render_target_table() }} original_table
-                 {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-             ) analyzed_table
-             {{- lib.render_group_by() -}}
-             {{- lib.render_order_by() -}}
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
             ```
         === "Rendered SQL for Oracle"
 
             ```sql
             SELECT
-                AVG(analyzed_table."target_column") AS actual_value,
+                MIN(analyzed_table."target_column") AS actual_value,
                 time_period,
                 time_period_utc
-             FROM(
-                 SELECT
-                     original_table.*,
+            FROM (
+                SELECT
+                    original_table.*,
                 TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS time_period,
                 CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-                 FROM "<target_schema>"."<target_table>" original_table
-             ) analyzed_table
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -1085,7 +1086,7 @@ spec:
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1097,7 +1098,7 @@ spec:
 
             ```sql
             SELECT
-                AVG(analyzed_table."target_column") AS actual_value,
+                MIN(analyzed_table."target_column") AS actual_value,
                 CAST(LOCALTIMESTAMP AS date) AS time_period,
                 CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -1111,9 +1112,9 @@ spec:
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                    {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
                 FROM (
                     SELECT
                         original_table.*
@@ -1130,7 +1131,7 @@ spec:
 
             ```sql
             SELECT
-                AVG(analyzed_table."target_column") AS actual_value,
+                MIN(analyzed_table."target_column") AS actual_value,
                 time_period,
                 time_period_utc
                 FROM (
@@ -1150,7 +1151,7 @@ spec:
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1162,7 +1163,7 @@ spec:
 
             ```sql
             SELECT
-                AVG(analyzed_table."target_column") AS actual_value,
+                MIN(analyzed_table."target_column") AS actual_value,
                 CAST(LOCALTIMESTAMP AS date) AS time_period,
                 CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -1176,7 +1177,7 @@ spec:
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1188,7 +1189,7 @@ spec:
 
             ```sql
             SELECT
-                AVG(analyzed_table."target_column") AS actual_value,
+                MIN(analyzed_table."target_column") AS actual_value,
                 CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
                 TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -1202,7 +1203,7 @@ spec:
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1214,7 +1215,7 @@ spec:
 
             ```sql
             SELECT
-                AVG(analyzed_table.`target_column`) AS actual_value,
+                MIN(analyzed_table.`target_column`) AS actual_value,
                 CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
                 TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -1228,7 +1229,7 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1240,7 +1241,7 @@ spec:
 
             ```sql
             SELECT
-                AVG(analyzed_table.[target_column]) AS actual_value,
+                MIN(analyzed_table.[target_column]) AS actual_value,
                 CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
                 CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
@@ -1252,9 +1253,9 @@ spec:
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                    {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
                 FROM (
                     SELECT
                         original_table.*
@@ -1271,7 +1272,7 @@ spec:
 
             ```sql
             SELECT
-                AVG(analyzed_table."target_column") AS actual_value,
+                MIN(analyzed_table."target_column") AS actual_value,
                 time_period,
                 time_period_utc
                 FROM (
@@ -1312,7 +1313,7 @@ Expand the *Configure with data grouping* section to see additional examples for
           monitoring_checks:
             daily:
               anomaly:
-                daily_mean_anomaly:
+                daily_min_anomaly:
                   warning:
                     anomaly_percent: 1.0
                   error:
@@ -1330,7 +1331,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [mean](../../../reference/sensors/column/numeric-column-sensors.md#mean)
+    [min_value](../../../reference/sensors/column/range-column-sensors.md#min-value)
     [sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     ??? example "BigQuery"
@@ -1339,7 +1340,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1350,7 +1351,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for BigQuery"
             ```sql
             SELECT
-                AVG(analyzed_table.`target_column`) AS actual_value,
+                MIN(analyzed_table.`target_column`) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
                 CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
@@ -1365,7 +1366,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1376,7 +1377,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Databricks"
             ```sql
             SELECT
-                AVG(analyzed_table.`target_column`) AS actual_value,
+                MIN(analyzed_table.`target_column`) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
                 CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
@@ -1391,7 +1392,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1402,7 +1403,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for MySQL"
             ```sql
             SELECT
-                AVG(analyzed_table.`target_column`) AS actual_value,
+                MIN(analyzed_table.`target_column`) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
                 DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
@@ -1417,24 +1418,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-               {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-             FROM(
-                 SELECT
-                     original_table.*
-                     {{- lib.render_data_grouping_projections('original_table') }}
-                     {{- lib.render_time_dimension_projection('original_table') }}
-                 FROM {{ lib.render_target_table() }} original_table
-                 {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-             ) analyzed_table
-             {{- lib.render_group_by() -}}
-             {{- lib.render_order_by() -}}
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
             ```
         === "Rendered SQL for Oracle"
             ```sql
             SELECT
-                AVG(analyzed_table."target_column") AS actual_value,
+                MIN(analyzed_table."target_column") AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -1442,15 +1443,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ,
                 time_period,
                 time_period_utc
-             FROM(
-                 SELECT
-                     original_table.*,
+            FROM (
+                SELECT
+                    original_table.*,
                 original_table."country" AS grouping_level_1,
                 original_table."state" AS grouping_level_2,
                 TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS time_period,
                 CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-                 FROM "<target_schema>"."<target_table>" original_table
-             ) analyzed_table
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -1460,7 +1461,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1471,7 +1472,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for PostgreSQL"
             ```sql
             SELECT
-                AVG(analyzed_table."target_column") AS actual_value,
+                MIN(analyzed_table."target_column") AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
                 CAST(LOCALTIMESTAMP AS date) AS time_period,
@@ -1486,9 +1487,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                    {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
                 FROM (
                     SELECT
                         original_table.*
@@ -1504,7 +1505,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Presto"
             ```sql
             SELECT
-                AVG(analyzed_table."target_column") AS actual_value,
+                MIN(analyzed_table."target_column") AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -1530,7 +1531,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1541,7 +1542,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Redshift"
             ```sql
             SELECT
-                AVG(analyzed_table."target_column") AS actual_value,
+                MIN(analyzed_table."target_column") AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
                 CAST(LOCALTIMESTAMP AS date) AS time_period,
@@ -1556,7 +1557,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1567,7 +1568,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Snowflake"
             ```sql
             SELECT
-                AVG(analyzed_table."target_column") AS actual_value,
+                MIN(analyzed_table."target_column") AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
                 CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
@@ -1582,7 +1583,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1593,7 +1594,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Spark"
             ```sql
             SELECT
-                AVG(analyzed_table.`target_column`) AS actual_value,
+                MIN(analyzed_table.`target_column`) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
                 CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
@@ -1608,7 +1609,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1619,7 +1620,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for SQL Server"
             ```sql
             SELECT
-                AVG(analyzed_table.[target_column]) AS actual_value,
+                MIN(analyzed_table.[target_column]) AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2,
                 CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
@@ -1638,9 +1639,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                    {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
                 FROM (
                     SELECT
                         original_table.*
@@ -1656,7 +1657,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Trino"
             ```sql
             SELECT
-                AVG(analyzed_table."target_column") AS actual_value,
+                MIN(analyzed_table."target_column") AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -1680,22 +1681,22 @@ Expand the *Configure with data grouping* section to see additional examples for
 ___
 
 
-## daily partition mean anomaly
+## daily partition min anomaly
 
 
 **Check description**
 
-Verifies that the mean value in a column is within a percentile from measurements made during the last 90 days. Calculates the mean (average) of each daily partition and detect anomalies between daily partitions.
+Detects new outliers, which are new minimum values, much below the last known minimum value. If the minimum value is constantly changing, detects outliers as the biggest change of the minimum value during the last 90 days. Finds the minimum value of each daily partition and detect anomalies between daily partitions.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_mean_anomaly`</span>|[anomaly](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Consistency|[*mean*](../../../reference/sensors/column/numeric-column-sensors.md#mean)|[*anomaly_stationary_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_partition_min_anomaly`</span>|[anomaly](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Consistency|[*min_value*](../../../reference/sensors/column/range-column-sensors.md#min-value)|[*anomaly_stationary_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|:material-check-bold:|
 
 **Command-line examples**
 
-Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition mean anomaly data quality check.
+Please expand the section below to see the [DQOps command-line](../../../dqo-concepts/command-line-interface.md) examples to run or activate the daily partition min anomaly data quality check.
 
-??? example "Managing daily partition mean anomaly check from DQOps shell"
+??? example "Managing daily partition min anomaly check from DQOps shell"
 
     === "Activate the check with a warning rule"
 
@@ -1703,19 +1704,19 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
         providing the connection name, table name, check name, and all other filters. Activates the warning rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=daily_partition_mean_anomaly --enable-warning
+        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=daily_partition_min_anomaly --enable-warning
         ```
 
         You can also use patterns to activate the check on all matching tables and columns.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_partition_mean_anomaly --enable-warning
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_partition_min_anomaly --enable-warning
         ```
         
         Additional rule parameters are passed using the *-Wrule_parameter_name=value*.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_partition_mean_anomaly --enable-warning
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_partition_min_anomaly --enable-warning
                             -Wanomaly_percent=value
         ```
 
@@ -1726,19 +1727,19 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
         providing the connection name, table name, check name, and all other filters. Activates the error rule with the default parameters.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=daily_partition_mean_anomaly --enable-error
+        dqo> check activate -c=connection_name -t=schema_name.table_name -col=column_name -ch=daily_partition_min_anomaly --enable-error
         ```
 
         You can also use patterns to activate the check on all matching tables and columns.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_partition_mean_anomaly --enable-error
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_partition_min_anomaly --enable-error
         ```
         
         Additional rule parameters are passed using the *-Erule_parameter_name=value*.
 
         ```
-        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_partition_mean_anomaly --enable-error
+        dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_partition_min_anomaly --enable-error
                             -Eanomaly_percent=value
         ```
 
@@ -1746,23 +1747,23 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
     === "Run all configured checks"
 
         Run this data quality check using the [check run](../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
-        The following example shows how to run the *daily_partition_mean_anomaly* check on all tables and columns on a single data source.
+        The following example shows how to run the *daily_partition_min_anomaly* check on all tables and columns on a single data source.
 
         ```
-        dqo> check run -c=data_source_name -ch=daily_partition_mean_anomaly
+        dqo> check run -c=data_source_name -ch=daily_partition_min_anomaly
         ```
 
         It is also possible to run this check on a specific connection and table. In order to do this, use the connection name and the full table name parameters.
 
         ```
-        dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_mean_anomaly
+        dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_min_anomaly
         ```
 
-        You can also run this check on all tables (and columns)  on which the *daily_partition_mean_anomaly* check is enabled
+        You can also run this check on all tables (and columns)  on which the *daily_partition_min_anomaly* check is enabled
         using patterns to find tables.
 
         ```
-        dqo> check run -c=connection_name -t=schema_prefix*.fact_* -col=column_name_* -ch=daily_partition_mean_anomaly
+        dqo> check run -c=connection_name -t=schema_prefix*.fact_* -col=column_name_* -ch=daily_partition_min_anomaly
         ```
 
 
@@ -1786,7 +1787,7 @@ spec:
       partitioned_checks:
         daily:
           anomaly:
-            daily_partition_mean_anomaly:
+            daily_partition_min_anomaly:
               warning:
                 anomaly_percent: 1.0
               error:
@@ -1806,7 +1807,7 @@ spec:
 ??? info "Samples of generated SQL queries for each data source type"
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [mean](../../../reference/sensors/column/numeric-column-sensors.md#mean)
+    [min_value](../../../reference/sensors/column/range-column-sensors.md#min-value)
     [data quality sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     ??? example "BigQuery"
@@ -1816,7 +1817,7 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1828,7 +1829,7 @@ spec:
 
             ```sql
             SELECT
-                AVG(analyzed_table.`target_column`) AS actual_value,
+                MIN(analyzed_table.`target_column`) AS actual_value,
                 CAST(analyzed_table.`date_column` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
@@ -1842,7 +1843,7 @@ spec:
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1854,7 +1855,7 @@ spec:
 
             ```sql
             SELECT
-                AVG(analyzed_table.`target_column`) AS actual_value,
+                MIN(analyzed_table.`target_column`) AS actual_value,
                 CAST(analyzed_table.`date_column` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -1868,7 +1869,7 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1880,7 +1881,7 @@ spec:
 
             ```sql
             SELECT
-                AVG(analyzed_table.`target_column`) AS actual_value,
+                MIN(analyzed_table.`target_column`) AS actual_value,
                 DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00') AS time_period,
                 FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00'))) AS time_period_utc
             FROM `<target_table>` AS analyzed_table
@@ -1894,34 +1895,34 @@ spec:
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-               {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-             FROM(
-                 SELECT
-                     original_table.*
-                     {{- lib.render_data_grouping_projections('original_table') }}
-                     {{- lib.render_time_dimension_projection('original_table') }}
-                 FROM {{ lib.render_target_table() }} original_table
-                 {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-             ) analyzed_table
-             {{- lib.render_group_by() -}}
-             {{- lib.render_order_by() -}}
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
             ```
         === "Rendered SQL for Oracle"
 
             ```sql
             SELECT
-                AVG(analyzed_table."target_column") AS actual_value,
+                MIN(analyzed_table."target_column") AS actual_value,
                 time_period,
                 time_period_utc
-             FROM(
-                 SELECT
-                     original_table.*,
+            FROM (
+                SELECT
+                    original_table.*,
                 TRUNC(CAST(original_table."date_column" AS DATE)) AS time_period,
                 CAST(TRUNC(CAST(original_table."date_column" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-                 FROM "<target_schema>"."<target_table>" original_table
-             ) analyzed_table
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -1932,7 +1933,7 @@ spec:
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1944,7 +1945,7 @@ spec:
 
             ```sql
             SELECT
-                AVG(analyzed_table."target_column") AS actual_value,
+                MIN(analyzed_table."target_column") AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -1958,9 +1959,9 @@ spec:
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                    {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
                 FROM (
                     SELECT
                         original_table.*
@@ -1977,7 +1978,7 @@ spec:
 
             ```sql
             SELECT
-                AVG(analyzed_table."target_column") AS actual_value,
+                MIN(analyzed_table."target_column") AS actual_value,
                 time_period,
                 time_period_utc
                 FROM (
@@ -1997,7 +1998,7 @@ spec:
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2009,7 +2010,7 @@ spec:
 
             ```sql
             SELECT
-                AVG(analyzed_table."target_column") AS actual_value,
+                MIN(analyzed_table."target_column") AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -2023,7 +2024,7 @@ spec:
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2035,7 +2036,7 @@ spec:
 
             ```sql
             SELECT
-                AVG(analyzed_table."target_column") AS actual_value,
+                MIN(analyzed_table."target_column") AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 TO_TIMESTAMP(CAST(analyzed_table."date_column" AS date)) AS time_period_utc
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -2049,7 +2050,7 @@ spec:
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2061,7 +2062,7 @@ spec:
 
             ```sql
             SELECT
-                AVG(analyzed_table.`target_column`) AS actual_value,
+                MIN(analyzed_table.`target_column`) AS actual_value,
                 CAST(analyzed_table.`date_column` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -2075,7 +2076,7 @@ spec:
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2087,7 +2088,7 @@ spec:
 
             ```sql
             SELECT
-                AVG(analyzed_table.[target_column]) AS actual_value,
+                MIN(analyzed_table.[target_column]) AS actual_value,
                 CAST(analyzed_table.[date_column] AS date) AS time_period,
                 CAST((CAST(analyzed_table.[date_column] AS date)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
@@ -2103,9 +2104,9 @@ spec:
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                    {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
                 FROM (
                     SELECT
                         original_table.*
@@ -2122,7 +2123,7 @@ spec:
 
             ```sql
             SELECT
-                AVG(analyzed_table."target_column") AS actual_value,
+                MIN(analyzed_table."target_column") AS actual_value,
                 time_period,
                 time_period_utc
                 FROM (
@@ -2168,7 +2169,7 @@ Expand the *Configure with data grouping* section to see additional examples for
           partitioned_checks:
             daily:
               anomaly:
-                daily_partition_mean_anomaly:
+                daily_partition_min_anomaly:
                   warning:
                     anomaly_percent: 1.0
                   error:
@@ -2191,7 +2192,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [mean](../../../reference/sensors/column/numeric-column-sensors.md#mean)
+    [min_value](../../../reference/sensors/column/range-column-sensors.md#min-value)
     [sensor](../../../dqo-concepts/definition-of-data-quality-sensors.md).
 
     ??? example "BigQuery"
@@ -2200,7 +2201,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2211,7 +2212,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for BigQuery"
             ```sql
             SELECT
-                AVG(analyzed_table.`target_column`) AS actual_value,
+                MIN(analyzed_table.`target_column`) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
                 CAST(analyzed_table.`date_column` AS DATE) AS time_period,
@@ -2226,7 +2227,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2237,7 +2238,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Databricks"
             ```sql
             SELECT
-                AVG(analyzed_table.`target_column`) AS actual_value,
+                MIN(analyzed_table.`target_column`) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
                 CAST(analyzed_table.`date_column` AS DATE) AS time_period,
@@ -2252,7 +2253,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2263,7 +2264,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for MySQL"
             ```sql
             SELECT
-                AVG(analyzed_table.`target_column`) AS actual_value,
+                MIN(analyzed_table.`target_column`) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
                 DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00') AS time_period,
@@ -2278,24 +2279,24 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-               {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-             FROM(
-                 SELECT
-                     original_table.*
-                     {{- lib.render_data_grouping_projections('original_table') }}
-                     {{- lib.render_time_dimension_projection('original_table') }}
-                 FROM {{ lib.render_target_table() }} original_table
-                 {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-             ) analyzed_table
-             {{- lib.render_group_by() -}}
-             {{- lib.render_order_by() -}}
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
             ```
         === "Rendered SQL for Oracle"
             ```sql
             SELECT
-                AVG(analyzed_table."target_column") AS actual_value,
+                MIN(analyzed_table."target_column") AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -2303,15 +2304,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ,
                 time_period,
                 time_period_utc
-             FROM(
-                 SELECT
-                     original_table.*,
+            FROM (
+                SELECT
+                    original_table.*,
                 original_table."country" AS grouping_level_1,
                 original_table."state" AS grouping_level_2,
                 TRUNC(CAST(original_table."date_column" AS DATE)) AS time_period,
                 CAST(TRUNC(CAST(original_table."date_column" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-                 FROM "<target_schema>"."<target_table>" original_table
-             ) analyzed_table
+                FROM "<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -2321,7 +2322,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2332,7 +2333,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for PostgreSQL"
             ```sql
             SELECT
-                AVG(analyzed_table."target_column") AS actual_value,
+                MIN(analyzed_table."target_column") AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
@@ -2347,9 +2348,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                    {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
                 FROM (
                     SELECT
                         original_table.*
@@ -2365,7 +2366,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Presto"
             ```sql
             SELECT
-                AVG(analyzed_table."target_column") AS actual_value,
+                MIN(analyzed_table."target_column") AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -2391,7 +2392,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2402,7 +2403,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Redshift"
             ```sql
             SELECT
-                AVG(analyzed_table."target_column") AS actual_value,
+                MIN(analyzed_table."target_column") AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
@@ -2417,7 +2418,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2428,7 +2429,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Snowflake"
             ```sql
             SELECT
-                AVG(analyzed_table."target_column") AS actual_value,
+                MIN(analyzed_table."target_column") AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
@@ -2443,7 +2444,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2454,7 +2455,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Spark"
             ```sql
             SELECT
-                AVG(analyzed_table.`target_column`) AS actual_value,
+                MIN(analyzed_table.`target_column`) AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
                 CAST(analyzed_table.`date_column` AS DATE) AS time_period,
@@ -2469,7 +2470,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2480,7 +2481,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for SQL Server"
             ```sql
             SELECT
-                AVG(analyzed_table.[target_column]) AS actual_value,
+                MIN(analyzed_table.[target_column]) AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2,
                 CAST(analyzed_table.[date_column] AS date) AS time_period,
@@ -2497,9 +2498,9 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             SELECT
-                AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+                MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                    {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
                 FROM (
                     SELECT
                         original_table.*
@@ -2515,7 +2516,7 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Trino"
             ```sql
             SELECT
-                AVG(analyzed_table."target_column") AS actual_value,
+                MIN(analyzed_table."target_column") AS actual_value,
             
                             analyzed_table.grouping_level_1,
             

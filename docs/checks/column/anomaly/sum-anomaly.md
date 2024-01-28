@@ -1685,7 +1685,7 @@ ___
 
 **Check description**
 
-Verifies that the sum in a column is within a percentile from measurements made during the last 90 days.
+Verifies that the sum in a column is within a percentile from measurements made during the last 90 days. Calculates the sum of each daily partition and detect anomalies between daily partitions.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|

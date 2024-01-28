@@ -586,6 +586,12 @@ from .column_invalid_uuid_format_found_check_spec import (
     ColumnInvalidUuidFormatFoundCheckSpec,
 )
 from .column_list_model import ColumnListModel
+from .column_max_anomaly_differencing_check_spec import (
+    ColumnMaxAnomalyDifferencingCheckSpec,
+)
+from .column_max_anomaly_stationary_check_spec import (
+    ColumnMaxAnomalyStationaryCheckSpec,
+)
 from .column_max_in_range_check_spec import ColumnMaxInRangeCheckSpec
 from .column_mean_anomaly_stationary_check_spec import (
     ColumnMeanAnomalyStationaryCheckSpec,
@@ -603,6 +609,12 @@ from .column_median_change_7_days_check_spec import ColumnMedianChange7DaysCheck
 from .column_median_change_30_days_check_spec import ColumnMedianChange30DaysCheckSpec
 from .column_median_change_check_spec import ColumnMedianChangeCheckSpec
 from .column_median_in_range_check_spec import ColumnMedianInRangeCheckSpec
+from .column_min_anomaly_differencing_check_spec import (
+    ColumnMinAnomalyDifferencingCheckSpec,
+)
+from .column_min_anomaly_stationary_check_spec import (
+    ColumnMinAnomalyStationaryCheckSpec,
+)
 from .column_min_in_range_check_spec import ColumnMinInRangeCheckSpec
 from .column_model import ColumnModel
 from .column_monitoring_checks_root_spec import ColumnMonitoringChecksRootSpec
@@ -2089,6 +2101,8 @@ __all__ = (
     "ColumnInvalidLongitudeCountCheckSpec",
     "ColumnInvalidUuidFormatFoundCheckSpec",
     "ColumnListModel",
+    "ColumnMaxAnomalyDifferencingCheckSpec",
+    "ColumnMaxAnomalyStationaryCheckSpec",
     "ColumnMaxInRangeCheckSpec",
     "ColumnMeanAnomalyStationaryCheckSpec",
     "ColumnMeanChange1DayCheckSpec",
@@ -2102,6 +2116,8 @@ __all__ = (
     "ColumnMedianChange7DaysCheckSpec",
     "ColumnMedianChangeCheckSpec",
     "ColumnMedianInRangeCheckSpec",
+    "ColumnMinAnomalyDifferencingCheckSpec",
+    "ColumnMinAnomalyStationaryCheckSpec",
     "ColumnMinInRangeCheckSpec",
     "ColumnModel",
     "ColumnMonitoringChecksRootSpec",
