@@ -7,3 +7,4 @@ spec:
   help_text: "Detects new outliers, which are new minimum values, much below the last\
     \ known minimum value. If the minimum value is constantly changing, detects outliers\
     \ as the biggest change of the minimum value during the last 90 days."
+  standard: true

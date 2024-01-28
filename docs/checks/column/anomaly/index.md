@@ -38,9 +38,9 @@ A column-level check that ensures that the median in a monitored column is withi
 
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_median_anomaly`</span>](./median-anomaly.md#profile-median-anomaly)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the median in a column changes in a rate within a percentile boundary during the last 90 days.| |
-|[<span class="no-wrap-code">`daily_median_anomaly`</span>](./median-anomaly.md#daily-median-anomaly)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the median in a column changes in a rate within a percentile boundary during the last 90 days.| |
-|[<span class="no-wrap-code">`daily_partition_median_anomaly`</span>](./median-anomaly.md#daily-partition-median-anomaly)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the median in a column is within a percentile from measurements made during the last 90 days. Calculates the median of each daily partition and detect anomalies between daily partitions.| |
+|[<span class="no-wrap-code">`profile_median_anomaly`</span>](./median-anomaly.md#profile-median-anomaly)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the median in a column changes in a rate within a percentile boundary during the last 90 days.|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_median_anomaly`</span>](./median-anomaly.md#daily-median-anomaly)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the median in a column changes in a rate within a percentile boundary during the last 90 days.|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_partition_median_anomaly`</span>](./median-anomaly.md#daily-partition-median-anomaly)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the median in a column is within a percentile from measurements made during the last 90 days. Calculates the median of each daily partition and detect anomalies between daily partitions.|:material-check-bold:|
 
 
 

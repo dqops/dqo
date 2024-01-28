@@ -53,7 +53,7 @@ public class ChangePercent1DayRule10ParametersSpec extends AbstractRuleParameter
 
     @JsonPropertyDescription("When the exact_day parameter is unchecked (exact_day: false), the rule search for the most recent sensor readouts from the past 60 days and compares them. " +
             "If the parameter is selected (exact_day: true), the rule compares only with the results from the past 1 day. If no results are found from that time, no results or errors will be generated.")
-    private Boolean exactDay = false;
+    private Boolean exactDay = true;
 
     /**
      * Gets the maximum accepted absolute value of the change of data quality check readout, relative to the previous readout.

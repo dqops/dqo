@@ -7,3 +7,4 @@ spec:
   help_text: "Detects new outliers, which are new maximum values, much above the last\
     \ known maximum value. If the maximum value is constantly changing, detects outliers\
     \ as the biggest change of the maximum value during the last 90 days."
+  standard: true
