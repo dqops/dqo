@@ -113,6 +113,30 @@ DQOps identifies a data quality issue when the mean value difference since the l
 
 ![One day change of mean value on partitioned data](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/mean-change-anomaly-1-day-chart-min.png){ loading=lazy }
 
+The blue line shows the current value of the mean measure. The gray line is the reference value, called the "expected value".
+The two lines are shifted by one day because DQOps compares values to a measure from the previous day.
+
+The shift of the expected values by seven days is also visible on the 
+chart of the [daily_partition_mean_change_7_days](../../checks/column/anomaly/mean-change-7-days.md#daily-partition-mean-change-7-days)
+data quality check.
+
+![Seven days change of mean value on partitioned data](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/mean-change-anomaly-7-day-chart-min.png){ loading=lazy }
+
+## Anomalies at multiple severity levels
+DQOps supports configuration of the data quality rules for a [data quality check](../definition-of-data-quality-checks/index.md)
+at three [issue severity levels](../definition-of-data-quality-checks/index.md#issue-severity-levels): *warning*, *error*, and *fatal*.
+Each severity level has its own threshold value.
+
+DQOps analyzes the measure (the mean value for this example) using three [data quality rules](../definition-of-data-quality-rules.md),
+passing different parameters to the rule. Because the historical data is limited to ninety days, and the measures do not fit
+
+![Mean anomaly chart at three severity levels](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/anomaly-chart-at-multiple-severity-levels-min.png){ loading=lazy }
+
+DQOps raises more data quality issues than the expected percent of anomalies.
+The reason is that the historical data is limited to ninety days, and the measures do not fit a Gaussian distribution.
+If you face the same problem, change the rule parameter *anomaly_percent*.
+
+
 ## Date partitioned and monitoring checks
 DQOps has two types of anomaly detection data quality checks.
 
