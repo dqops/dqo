@@ -223,7 +223,7 @@ The rule definition YAML file *change/between_change_1_day.dqorule.yaml* with th
           \ with the results from the past 1 day. If no results are found from that time,\
           \ no results or errors will be generated."
         data_type: boolean
-        default_value: "false"
+        default_value: "true"
     ```
 
 
@@ -911,7 +911,7 @@ The rule definition YAML file *change/between_percent_change_1_day.dqorule.yaml*
           \ with the results from the past 1 day. If no results are found from that time,\
           \ no results or errors will be generated."
         data_type: boolean
-        default_value: "false"
+        default_value: "true"
     ```
 
 
@@ -1573,7 +1573,7 @@ The rule definition YAML file *change/change_difference_1_day.dqorule.yaml* with
           \ with the results from the past 1 day. If no results are found from that time,\
           \ no results or errors will be generated."
         data_type: boolean
-        default_value: "false"
+        default_value: "true"
     ```
 
 
@@ -2229,7 +2229,7 @@ The rule definition YAML file *change/change_percent_1_day.dqorule.yaml* with th
           \ only with the results from the past 1 day. If no results are found from that\
           \ time, no results or errors will be generated."
         data_type: boolean
-        default_value: "false"
+        default_value: "true"
     ```
 
 

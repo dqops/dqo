@@ -90,7 +90,7 @@ Use the data monitoring checks to:
 
  - Track the progress of data cleansing projects, measuring the [data quality KPI](../definition-of-data-quality-kpis.md) 
    as a percentage of passed *daily quality checks*. The data quality KPI can be calculated for each [data quality dimension](../data-quality-dimensions.md),
-   and for all data sources, tables, [categories of data quality checks](../categories-of-data-quality-checks/index.md).
+   and for all data sources, tables, [categories of data quality checks](../../categories-of-data-quality-checks/index.md).
 
 ![history of data quality KPI per day an data quality dimension](https://dqops.com/docs/images/concepts/types-of-data-quality-checks/data-quality-kpi-history-current-month-chart-min.png)
 
@@ -109,7 +109,7 @@ The results of *monitoring* data quality checks are used to evaluate the data qu
   the issues will decrease the [data quality KPI score](../definition-of-data-quality-kpis.md). You will have to use the 
   [delete data quality results](../../working-with-dqo/delete-data-quality-results.md) screens to remove these data quality results.
 
-- **Monthly monitoring** checks do not support [anomaly detection data quality checks](../categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md),
+- **Monthly monitoring** checks do not support [anomaly detection data quality checks](../../categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md),
   because when only one data quality result for each data quality check is stored **per month**, there is not enough historical data 
   to use prediction.
 

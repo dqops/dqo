@@ -17,7 +17,7 @@ Verifies that a custom SQL expression is met for each row. Counts the number of 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_sql_condition_passed_percent_on_table`</span>|[custom_sql](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-with-custom-sql.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*sql_condition_passed_percent*](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-condition-passed-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+|<span class="no-wrap-code">`profile_sql_condition_passed_percent_on_table`</span>|[custom_sql](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-with-custom-sql.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*sql_condition_passed_percent*](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-condition-passed-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
@@ -1219,7 +1219,7 @@ Verifies that a minimum percentage of rows passed a custom SQL condition (expres
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_sql_condition_passed_percent_on_table`</span>|[custom_sql](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-with-custom-sql.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*sql_condition_passed_percent*](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-condition-passed-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+|<span class="no-wrap-code">`daily_sql_condition_passed_percent_on_table`</span>|[custom_sql](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-with-custom-sql.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*sql_condition_passed_percent*](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-condition-passed-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
@@ -2423,7 +2423,7 @@ Verifies that a minimum percentage of rows passed a custom SQL condition (expres
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_sql_condition_passed_percent_on_table`</span>|[custom_sql](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-with-custom-sql.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*sql_condition_passed_percent*](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-condition-passed-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+|<span class="no-wrap-code">`monthly_sql_condition_passed_percent_on_table`</span>|[custom_sql](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-with-custom-sql.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*sql_condition_passed_percent*](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-condition-passed-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
@@ -3627,7 +3627,7 @@ Verifies that a minimum percentage of rows passed a custom SQL condition (expres
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_sql_condition_passed_percent_on_table`</span>|[custom_sql](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-with-custom-sql.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*sql_condition_passed_percent*](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-condition-passed-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+|<span class="no-wrap-code">`daily_partition_sql_condition_passed_percent_on_table`</span>|[custom_sql](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-with-custom-sql.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*sql_condition_passed_percent*](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-condition-passed-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
@@ -4853,7 +4853,7 @@ Verifies that a minimum percentage of rows passed a custom SQL condition (expres
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_sql_condition_passed_percent_on_table`</span>|[custom_sql](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-with-custom-sql.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*sql_condition_passed_percent*](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-condition-passed-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+|<span class="no-wrap-code">`monthly_partition_sql_condition_passed_percent_on_table`</span>|[custom_sql](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-with-custom-sql.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*sql_condition_passed_percent*](../../../reference/sensors/table/custom_sql-table-sensors.md#sql-condition-passed-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 

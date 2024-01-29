@@ -216,7 +216,7 @@ used in the [connection.dqoconnection.yaml](../reference/yaml/ConnectionYaml.md)
 
 ## Data dictionaries
 Data dictionaries are CSV files containing text values that can be referenced by data quality checks that
-[compare column values to a set of accepted values](categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md).
+[compare column values to a set of accepted values](../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md).
 Instead of entering the same values for multiple data quality checks, a shared dictionary can be referenced.
 
 The data quality checks that can use *data dictionaries* are:

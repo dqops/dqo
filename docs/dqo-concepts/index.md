@@ -57,12 +57,6 @@ The DQOps YAML schema files allow unprecedented
 [coding experience with Visual Studio Code](../integrations/visual-studio-code/index.md) when managing the
 configuring the data quality checks directly in the editor. Code completion, syntax validation and help hints
 are shown by Visual Studio Code and many other editors when editing DQOps YAML files.
-    
-
-### **[Categories of checks](categories-of-data-quality-checks/index.md)** 
-The most common data quality issues that are detected by DQOps are divided into **categories**.
-Read this section to learn what type of data quality problems are detected by DQOps out-of-the-box.
-For any other type of data quality issue, you can define custom data quality checks.
 
 
 ### **[Running data quality checks](running-data-quality-checks.md)**

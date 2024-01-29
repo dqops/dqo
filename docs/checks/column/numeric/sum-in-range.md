@@ -17,7 +17,7 @@ Verifies that the sum of all values in a column is not outside the expected rang
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_sum_in_range`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Reasonableness|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
+|<span class="no-wrap-code">`profile_sum_in_range`</span>|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Reasonableness|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 
@@ -846,7 +846,7 @@ Verifies that the sum of all values in a column is not outside the expected rang
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_sum_in_range`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Reasonableness|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
+|<span class="no-wrap-code">`daily_sum_in_range`</span>|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Reasonableness|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 
@@ -1677,7 +1677,7 @@ Verifies that the sum of all values in a column does not exceed the expected ran
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_sum_in_range`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Reasonableness|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
+|<span class="no-wrap-code">`monthly_sum_in_range`</span>|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Reasonableness|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 
@@ -2508,7 +2508,7 @@ Verifies that the sum of all values in a column is not outside the expected rang
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_sum_in_range`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Reasonableness|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
+|<span class="no-wrap-code">`daily_partition_sum_in_range`</span>|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Reasonableness|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 
@@ -3361,7 +3361,7 @@ Verifies that the sum of all values in a column is not outside the expected rang
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_sum_in_range`</span>|[numeric](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Reasonableness|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
+|<span class="no-wrap-code">`monthly_partition_sum_in_range`</span>|[numeric](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Reasonableness|[*sum*](../../../reference/sensors/column/numeric-column-sensors.md#sum)|[*between_floats*](../../../reference/rules/Comparison.md#between-floats)| |
 
 **Command-line examples**
 

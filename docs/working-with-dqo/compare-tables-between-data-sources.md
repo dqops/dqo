@@ -112,7 +112,7 @@ To remove an entire table comparison configuration, go to the list of table comp
 
 
 ## Next steps
-- Read the concept of [table comparison (data reconciliation) data quality checks](../dqo-concepts/categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md) supported by DQOps.
+- Read the concept of [table comparison (data reconciliation) data quality checks](../categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md) supported by DQOps.
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../dqops-installation/install-dqops-using-pip.md) or [run DQOps as a Docker container](../dqops-installation/run-dqops-as-docker-container.md).
 - DQOps provide you with summary statistics about your table and column. This information can be valuable in deciding which data quality checks and threshold levels should be set to monitor data quality. For more details about [Basic data statistics, click here](collecting-basic-data-statistics.md).
 - DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](managing-data-quality-incidents-with-dqops.md) and [Slack notifications](../integrations/slack/configuring-slack-notifications.md). 

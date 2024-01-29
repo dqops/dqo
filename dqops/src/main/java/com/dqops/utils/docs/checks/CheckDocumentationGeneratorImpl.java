@@ -108,13 +108,12 @@ public class CheckDocumentationGeneratorImpl implements CheckDocumentationGenera
         }
 
         Template checkCategoryTemplate = HandlebarsDocumentationUtilities.compileTemplate("checks/check_category_index");
-        DocumentationFolder typesOfChecksFolder = new DocumentationFolder("dqo-concepts/categories-of-data-quality-checks");
+        DocumentationFolder typesOfChecksFolder = new DocumentationFolder("categories-of-data-quality-checks");
         typesOfChecksFolder.setLinkName("Categories of checks");
         typesOfChecksFolder.setDirectPath(projectRootPath.resolve("../docs")
                 .resolve(typesOfChecksFolder.getFolderName()).toAbsolutePath().normalize());
 
-        DocumentationFolder currentTypesOfChecksFolder = currentRootFolder.getFolderByName("dqo-concepts")
-                .getFolderByName("categories-of-data-quality-checks");
+        DocumentationFolder currentTypesOfChecksFolder = currentRootFolder.getFolderByName("categories-of-data-quality-checks");
 
         DocumentationMarkdownFile newCategoryIndexFile = typesOfChecksFolder.addNestedFile("index.md");
         DocumentationMarkdownFile currentCategoryIndexFile = currentTypesOfChecksFolder.getFileByName("index.md");
@@ -155,9 +154,9 @@ public class CheckDocumentationGeneratorImpl implements CheckDocumentationGenera
                             listOfColumnChecksBeginMarker + "\n" +
                             "\n" +
                             "## What's next\n" +
-                            "- Learn how to [run data quality checks](../running-data-quality-checks.md#targeting-a-category-of-checks) filtering by a check category name\n" +
-                            "- Learn how to [configure data quality checks](../configuring-data-quality-checks-and-rules.md) and apply alerting rules\n" +
-                            "- Read the definition of [data quality dimensions](../data-quality-dimensions.md) used by DQOps\n"
+                            "- Learn how to [run data quality checks](../dqo-concepts/running-data-quality-checks.md#targeting-a-category-of-checks) filtering by a check category name\n" +
+                            "- Learn how to [configure data quality checks](../dqo-concepts/configuring-data-quality-checks-and-rules.md) and apply alerting rules\n" +
+                            "- Read the definition of [data quality dimensions](../dqo-concepts/data-quality-dimensions.md) used by DQOps\n"
                             );
                 } else {
                     newCategoryFileContent.setFileContent(oldCategoryFileContent.getFileContent());

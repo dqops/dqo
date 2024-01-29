@@ -24,21 +24,21 @@ Indeed, the profiling results show that the mean latitude is 30.28, which is 30Â
 ### Data outliers - new minimum
 An invalid value is present that is far below the minimum value or the maximum value.
 We can detect such outliers by detecting that the minimum or maximum value in a column has changed since the last time 
-[data quality checks were run](../running-data-quality-checks.md).
+[data quality checks were run](../dqo-concepts/running-data-quality-checks.md).
 
 The column data statistics captured in the data profiling module show a minimum value of 3.44, 
 which must be an invalid location for Austin. 
-This value is a minimum value outlier that we can detect by the [daily_min_anomaly](../../checks/column/anomaly/min-anomaly.md#daily-min-anomaly) analyzing
-the whole table by a [monitoring data quality check](../definition-of-data-quality-checks/data-observability-monitoring-checks.md),
-or by the [daily_partition_min_anomaly](../../checks/column/anomaly/min-anomaly.md#daily-partition-min-anomaly)
-when using [partition checks](../definition-of-data-quality-checks/partition-checks.md)
+This value is a minimum value outlier that we can detect by the [daily_min_anomaly](../checks/column/anomaly/min-anomaly.md#daily-min-anomaly) analyzing
+the whole table by a [monitoring data quality check](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md),
+or by the [daily_partition_min_anomaly](../checks/column/anomaly/min-anomaly.md#daily-partition-min-anomaly)
+when using [partition checks](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)
 to find an outstanding minimum value in each daily partition.
 
 The following screen shows the result of detecting a minimum value for each daily partition. 
 Around 30% of daily partitions had this outstanding minimum value.
 Given that approximately 30% of partitions have this minimum value, we cannot call it an outlier.
 If the value 3.44 is indeed an invalid value, it should be detected using 
-the [number_below_min_value](../../checks/column/numeric/number-below-min-value.md#daily-partition-number-below-min-value)
+the [number_below_min_value](../checks/column/numeric/number-below-min-value.md#daily-partition-number-below-min-value)
 data quality checks that find values below a minimum accepted value.
 
 ![Minimum value anomalies in daily partitions chart](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/numeric-column-latitude-minimum-value-outliers-partitions-min.png){ loading=lazy }
@@ -49,7 +49,7 @@ We can confirm that the minimum values in daily partitions are around 30.28 or 3
 
 ### Data outliers - new maximum
 We can also detect abnormal maximum values. A similar 
-[daily_partition_max_anomaly](../../checks/column/anomaly/max-anomaly.md#daily-partition-max-anomaly) data quality check
+[daily_partition_max_anomaly](../checks/column/anomaly/max-anomaly.md#daily-partition-max-anomaly) data quality check
 detects new maximum values and compares them to other maximum values for earlier daily partitions.
 The chart shows three outliers of the maximum latitude (services outside the city area) found for the last three months.
 
@@ -70,10 +70,10 @@ The chart view shows all anomalies of the maximum value in the latitude column.
 
 
 ### Sum of values anomalies
-We can also use a [daily_partition_sum_anomaly](../../checks/column/anomaly/sum-anomaly.md#daily-partition-sum-anomaly)
+We can also use a [daily_partition_sum_anomaly](../checks/column/anomaly/sum-anomaly.md#daily-partition-sum-anomaly)
 to analyze a sum of all values for each daily partition. 
 This type of numeric anomaly can detect missing or duplicate financial records. 
-By activating the [daily_partition_sum_anomaly](../../checks/column/anomaly/sum-anomaly.md#daily-partition-sum-anomaly)
+By activating the [daily_partition_sum_anomaly](../checks/column/anomaly/sum-anomaly.md#daily-partition-sum-anomaly)
 data quality check on a table that stores a list of transactions or line items, we can calculate the total sum of all transactions daily.
 
 
@@ -107,7 +107,7 @@ The type of reference point is identified at the end of the name of the data qua
   This type of check is designed for measures with seasonal dynamics in monthly periods.
 
 The following chart shows the changes in the mean value day-to-day.
-The [daily_partition_mean_change_1_day](../../checks/column/anomaly/mean-change-1-day.md#daily-partition-mean-change-1-day)
+The [daily_partition_mean_change_1_day](../checks/column/anomaly/mean-change-1-day.md#daily-partition-mean-change-1-day)
 data quality check captures a mean (average) value in every daily partition. 
 DQOps identifies a data quality issue when the mean value difference since the last day is more than 1 percent.
 
@@ -117,17 +117,17 @@ The blue line shows the current value of the mean measure. The gray line is the 
 The two lines are shifted by one day because DQOps compares values to a measure from the previous day.
 
 The shift of the expected values by seven days is also visible on the 
-chart of the [daily_partition_mean_change_7_days](../../checks/column/anomaly/mean-change-7-days.md#daily-partition-mean-change-7-days)
+chart of the [daily_partition_mean_change_7_days](../checks/column/anomaly/mean-change-7-days.md#daily-partition-mean-change-7-days)
 data quality check.
 
 ![Seven days change of mean value on partitioned data](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/mean-change-anomaly-7-day-chart-min.png){ loading=lazy }
 
 ## Anomalies at multiple severity levels
-DQOps supports configuration of the data quality rules for a [data quality check](../definition-of-data-quality-checks/index.md)
-at three [issue severity levels](../definition-of-data-quality-checks/index.md#issue-severity-levels): *warning*, *error*, and *fatal*.
+DQOps supports configuration of the data quality rules for a [data quality check](../dqo-concepts/definition-of-data-quality-checks/index.md)
+at three [issue severity levels](../dqo-concepts/definition-of-data-quality-checks/index.md#issue-severity-levels): *warning*, *error*, and *fatal*.
 Each severity level has its own threshold value.
 
-DQOps analyzes the measure (the mean value for this example) using three [data quality rules](../definition-of-data-quality-rules.md),
+DQOps analyzes the measure (the mean value for this example) using three [data quality rules](../dqo-concepts/definition-of-data-quality-rules.md),
 passing different parameters to the rule. Because the historical data is limited to ninety days, and the measures do not fit
 
 ![Mean anomaly chart at three severity levels](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/anomaly-chart-at-multiple-severity-levels-min.png){ loading=lazy }
@@ -140,11 +140,11 @@ If you face the same problem, change the rule parameter *anomaly_percent*.
 ## Date partitioned and monitoring checks
 DQOps has two types of anomaly detection data quality checks.
 
-- [Monitoring checks](../definition-of-data-quality-checks/data-observability-monitoring-checks.md) always analyze
+- [Monitoring checks](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md) always analyze
   all rows in the table, finding a new minimum, maximum, sum, mean, or median value of all records.
   They can detect an anomaly only when a new outlier appears in the table, significantly changing the total measure of all rows.
 
-- [Partition checks](../definition-of-data-quality-checks/partition-checks.md) analyze daily partitions
+- [Partition checks](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md) analyze daily partitions
   or simply groups of rows for the same date.
   Anomaly detection checks on a partition level calculate a minimum, maximum, sum, mean, or median measure for all daily partitions.
   DQOps compares the daily partition measure with the previous days' values.
@@ -159,33 +159,33 @@ to learn how to detect row count changes or an inconsistent number of rows in da
 ## List of anomaly checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |
 |-------------------------|------------------------|-------------|-------|
-|[*sum_anomaly*](../../checks/column/anomaly/sum-anomaly.md)|Consistency|A column-level check that ensures that the sum in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|:material-check-bold:|
-|[*mean_anomaly*](../../checks/column/anomaly/mean-anomaly.md)|Consistency|A column-level check that ensures that the mean value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|:material-check-bold:|
-|[*median_anomaly*](../../checks/column/anomaly/median-anomaly.md)|Consistency|A column-level check that ensures that the median in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|:material-check-bold:|
-|[*min_anomaly*](../../checks/column/anomaly/min-anomaly.md)|Consistency|A column-level check that detects big changes of the minimum value in a numeric column, detecting new data outliers. If the values in the column are slightly changing day-to-day, DQOps detects new minimum values that changed much more than the typical change for the last 90 days.|:material-check-bold:|
-|[*max_anomaly*](../../checks/column/anomaly/max-anomaly.md)|Consistency|A column-level check that detects big changes of the maximum value in a numeric column, detecting new data outliers. If the values in the column are slightly changing day-to-day, DQOps detects new maximum values that changed much more than the typical change for the last 90 days.|:material-check-bold:|
-|[*mean_change*](../../checks/column/anomaly/mean-change.md)|Consistency|A column-level check that ensures that the mean value in a monitored column has changed by a fixed rate since the last readout.| |
-|[*mean_change_1_day*](../../checks/column/anomaly/mean-change-1-day.md)|Consistency|A column-level check that ensures that the mean value in a monitored column has changed by a fixed rate since the last readout from yesterday.| |
-|[*mean_change_7_days*](../../checks/column/anomaly/mean-change-7-days.md)|Consistency|A column-level check that ensures that the mean value in a monitored column has changed by a fixed rate since the last readout from last week.| |
-|[*mean_change_30_days*](../../checks/column/anomaly/mean-change-30-days.md)|Consistency|A column-level check that ensures that the mean value in a monitored column has changed by a fixed rate since the last readout from last month.| |
-|[*median_change*](../../checks/column/anomaly/median-change.md)|Consistency|A column-level check that ensures that the median in a monitored column has changed by a fixed rate since the last readout.| |
-|[*median_change_1_day*](../../checks/column/anomaly/median-change-1-day.md)|Consistency|A column-level check that ensures that the median in a monitored column has changed by a fixed rate since the last readout from yesterday.| |
-|[*median_change_7_days*](../../checks/column/anomaly/median-change-7-days.md)|Consistency|A column-level check that ensures that the median in a monitored column has changed by a fixed rate since the last readout from last week.| |
-|[*median_change_30_days*](../../checks/column/anomaly/median-change-30-days.md)|Consistency|A column-level check that ensures that the median in a monitored column has changed by a fixed rate since the last readout from last month.| |
-|[*sum_change*](../../checks/column/anomaly/sum-change.md)|Consistency|A column-level check that ensures that the sum in a monitored column has changed by a fixed rate since the last readout.| |
-|[*sum_change_1_day*](../../checks/column/anomaly/sum-change-1-day.md)|Consistency|A column-level check that ensures that the sum in a monitored column has changed by a fixed rate since the last readout from yesterday.| |
-|[*sum_change_7_days*](../../checks/column/anomaly/sum-change-7-days.md)|Consistency|A column-level check that ensures that the sum in a monitored column has changed by a fixed rate since the last readout from last week.| |
-|[*sum_change_30_days*](../../checks/column/anomaly/sum-change-30-days.md)|Consistency|A column-level check that ensures that the sum in a monitored column has changed by a fixed rate since the last readout from last month.| |
+|[*sum_anomaly*](../checks/column/anomaly/sum-anomaly.md)|Consistency|A column-level check that ensures that the sum in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|:material-check-bold:|
+|[*mean_anomaly*](../checks/column/anomaly/mean-anomaly.md)|Consistency|A column-level check that ensures that the mean value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|:material-check-bold:|
+|[*median_anomaly*](../checks/column/anomaly/median-anomaly.md)|Consistency|A column-level check that ensures that the median in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|:material-check-bold:|
+|[*min_anomaly*](../checks/column/anomaly/min-anomaly.md)|Consistency|A column-level check that detects big changes of the minimum value in a numeric column, detecting new data outliers. If the values in the column are slightly changing day-to-day, DQOps detects new minimum values that changed much more than the typical change for the last 90 days.|:material-check-bold:|
+|[*max_anomaly*](../checks/column/anomaly/max-anomaly.md)|Consistency|A column-level check that detects big changes of the maximum value in a numeric column, detecting new data outliers. If the values in the column are slightly changing day-to-day, DQOps detects new maximum values that changed much more than the typical change for the last 90 days.|:material-check-bold:|
+|[*mean_change*](../checks/column/anomaly/mean-change.md)|Consistency|A column-level check that ensures that the mean value in a monitored column has changed by a fixed rate since the last readout.| |
+|[*mean_change_1_day*](../checks/column/anomaly/mean-change-1-day.md)|Consistency|A column-level check that ensures that the mean value in a monitored column has changed by a fixed rate since the last readout from yesterday.| |
+|[*mean_change_7_days*](../checks/column/anomaly/mean-change-7-days.md)|Consistency|A column-level check that ensures that the mean value in a monitored column has changed by a fixed rate since the last readout from last week.| |
+|[*mean_change_30_days*](../checks/column/anomaly/mean-change-30-days.md)|Consistency|A column-level check that ensures that the mean value in a monitored column has changed by a fixed rate since the last readout from last month.| |
+|[*median_change*](../checks/column/anomaly/median-change.md)|Consistency|A column-level check that ensures that the median in a monitored column has changed by a fixed rate since the last readout.| |
+|[*median_change_1_day*](../checks/column/anomaly/median-change-1-day.md)|Consistency|A column-level check that ensures that the median in a monitored column has changed by a fixed rate since the last readout from yesterday.| |
+|[*median_change_7_days*](../checks/column/anomaly/median-change-7-days.md)|Consistency|A column-level check that ensures that the median in a monitored column has changed by a fixed rate since the last readout from last week.| |
+|[*median_change_30_days*](../checks/column/anomaly/median-change-30-days.md)|Consistency|A column-level check that ensures that the median in a monitored column has changed by a fixed rate since the last readout from last month.| |
+|[*sum_change*](../checks/column/anomaly/sum-change.md)|Consistency|A column-level check that ensures that the sum in a monitored column has changed by a fixed rate since the last readout.| |
+|[*sum_change_1_day*](../checks/column/anomaly/sum-change-1-day.md)|Consistency|A column-level check that ensures that the sum in a monitored column has changed by a fixed rate since the last readout from yesterday.| |
+|[*sum_change_7_days*](../checks/column/anomaly/sum-change-7-days.md)|Consistency|A column-level check that ensures that the sum in a monitored column has changed by a fixed rate since the last readout from last week.| |
+|[*sum_change_30_days*](../checks/column/anomaly/sum-change-30-days.md)|Consistency|A column-level check that ensures that the sum in a monitored column has changed by a fixed rate since the last readout from last month.| |
 
 
 **Reference and samples**
 
-The full list of all data quality checks in this category is located in the [column/anomaly](../../checks/column/anomaly/index.md) reference.
-The reference section provides YAML code samples that are ready to copy-paste to the [*.dqotable.yaml*](../../reference/yaml/TableYaml.md) files,
-the parameters reference, and samples of data source specific SQL queries generated by [data quality sensors](../definition-of-data-quality-sensors.md)
+The full list of all data quality checks in this category is located in the [column/anomaly](../checks/column/anomaly/index.md) reference.
+The reference section provides YAML code samples that are ready to copy-paste to the [*.dqotable.yaml*](../reference/yaml/TableYaml.md) files,
+the parameters reference, and samples of data source specific SQL queries generated by [data quality sensors](../dqo-concepts/definition-of-data-quality-sensors.md)
 that are used by those checks.
 
 ## What's next
-- Learn how to [run data quality checks](../running-data-quality-checks.md#targeting-a-category-of-checks) filtering by a check category name
-- Learn how to [configure data quality checks](../configuring-data-quality-checks-and-rules.md) and apply alerting rules
-- Read the definition of [data quality dimensions](../data-quality-dimensions.md) used by DQOps
+- Learn how to [run data quality checks](../dqo-concepts/running-data-quality-checks.md#targeting-a-category-of-checks) filtering by a check category name
+- Learn how to [configure data quality checks](../dqo-concepts/configuring-data-quality-checks-and-rules.md) and apply alerting rules
+- Read the definition of [data quality dimensions](../dqo-concepts/data-quality-dimensions.md) used by DQOps
