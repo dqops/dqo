@@ -11,8 +11,6 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 // todo: description
@@ -23,6 +21,7 @@ public class FileFormatSpec extends AbstractSpec {
 
     private static final ChildHierarchyNodeFieldMapImpl<FileFormatSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
+            put("file_paths", o -> o.filePathList);
             put("csv_file_format", o -> o.csvFileFormat);
             put("json_file_format", o -> o.jsonFileFormat);
             put("parquet_file_format", o -> o.parquetFileFormat);
@@ -47,11 +46,11 @@ public class FileFormatSpec extends AbstractSpec {
     // todo  JsonPropertyDescription
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private List<String> filePath;
+    private FilePathListSpec filePathList;
 
-    public FileFormatSpec(String filePath) {
-        this.filePath = new ArrayList<>(){{
-            add(filePath);
+    public FileFormatSpec(String filePaths) {
+        this.filePathList = new FilePathListSpec(){{
+            add(filePaths);
         }};
     }
 
@@ -92,6 +91,17 @@ public class FileFormatSpec extends AbstractSpec {
         propagateHierarchyIdToField(parquetFileFormat, "parquet_file_format");
     }
 
+    // todo
+    public FilePathListSpec getFilePaths() {
+        return filePathList;
+    }
+
+    // todo
+    public void setFilePaths(FilePathListSpec filePathList) {
+        setDirtyIf(!Objects.equals(this.filePathList, filePathList));
+        this.filePathList = filePathList;
+    }
+
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
@@ -107,4 +117,20 @@ public class FileFormatSpec extends AbstractSpec {
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
         return visitor.accept(this, parameter);
     }
+
+    /**
+     * Returns a string representation of the object.
+     * The output describes the target file format spec with its details.
+     */
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (this.filePathList != null) {
+            stringBuilder.append("Files: ");
+            stringBuilder.append(String.join(", ", this.filePathList) );
+        }
+
+        return stringBuilder.toString();
+    }
+
 }

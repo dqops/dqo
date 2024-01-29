@@ -66,10 +66,7 @@ import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
 import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.settings.defaultchecks.DefaultObservabilityCheckWrapper;
 import com.dqops.metadata.sources.*;
-import com.dqops.metadata.sources.fileformat.CsvFileFormatSpec;
-import com.dqops.metadata.sources.fileformat.FileFormatSpec;
-import com.dqops.metadata.sources.fileformat.JsonFileFormatSpec;
-import com.dqops.metadata.sources.fileformat.ParquetFileFormatSpec;
+import com.dqops.metadata.sources.fileformat.*;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rules.AbstractRuleParametersSpec;
@@ -837,4 +834,14 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @return Accept's result.
      */
     R accept(ParquetFileFormatSpec parquetFileFormatSpec, P parameter);
+
+    /**
+     * Accepts a file path list specification.
+     *
+     * @param filePathListSpec File path list specification.
+     * @param parameter Additional parameter.
+     * @return Accept's result.
+     */
+    R accept(FilePathListSpec filePathListSpec, P parameter);
+
 }

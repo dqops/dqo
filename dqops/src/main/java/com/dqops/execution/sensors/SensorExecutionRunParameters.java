@@ -588,6 +588,12 @@ public class SensorExecutionRunParameters {
             stringBuilder.append(this.column.getColumnName());
         }
 
+        // todo: more and better info
+        if (this.table.getFileFormat() != null) {
+            stringBuilder.append(", file format: ");
+            stringBuilder.append(this.table.getFileFormat().toString());
+        }
+
         return stringBuilder.toString();
     }
 }

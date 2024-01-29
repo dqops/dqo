@@ -910,7 +910,7 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder {
             cloned.labels = null;
             cloned.owner = null;
             cloned.comments = null;
-            cloned.fileFormat = null;   // todo: not sure if valid
+//            cloned.fileFormat = null;   // todo: not sure if valid
             cloned.statistics = null;
             cloned.tableComparisons = null;
             if (cloned.timestampColumns != null) {
@@ -955,7 +955,7 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder {
             cloned.tableComparisons = null;
             cloned.labels = null;
             cloned.comments = null;
-            cloned.fileFormat = null;   // todo: not sure if valid
+//            cloned.fileFormat = null;   // todo: not sure if valid
             cloned.statistics = null;
             cloned.incidentGrouping = null;
             cloned.columns = this.columns.trim();
