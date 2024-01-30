@@ -24,8 +24,7 @@ class ParameterDefinitionSpec:
         display_hint (Union[Unset, DisplayHint]):
         required (Union[Unset, bool]): True when the value for the parameter must be provided.
         allowed_values (Union[Unset, List[str]]): List of allowed values for a field that is of an enum type.
-        sample_values (Union[Unset, List[str]]): List of sample values. The sample values are used in the documentation
-            or help messages.
+        default_value (Union[Unset, str]): The default value for a parameter in a custom check or a custom rule.
     """
 
     field_name: Union[Unset, str] = UNSET
@@ -35,7 +34,7 @@ class ParameterDefinitionSpec:
     display_hint: Union[Unset, DisplayHint] = UNSET
     required: Union[Unset, bool] = UNSET
     allowed_values: Union[Unset, List[str]] = UNSET
-    sample_values: Union[Unset, List[str]] = UNSET
+    default_value: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -55,9 +54,7 @@ class ParameterDefinitionSpec:
         if not isinstance(self.allowed_values, Unset):
             allowed_values = self.allowed_values
 
-        sample_values: Union[Unset, List[str]] = UNSET
-        if not isinstance(self.sample_values, Unset):
-            sample_values = self.sample_values
+        default_value = self.default_value
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -76,8 +73,8 @@ class ParameterDefinitionSpec:
             field_dict["required"] = required
         if allowed_values is not UNSET:
             field_dict["allowed_values"] = allowed_values
-        if sample_values is not UNSET:
-            field_dict["sample_values"] = sample_values
+        if default_value is not UNSET:
+            field_dict["default_value"] = default_value
 
         return field_dict
 
@@ -108,7 +105,7 @@ class ParameterDefinitionSpec:
 
         allowed_values = cast(List[str], d.pop("allowed_values", UNSET))
 
-        sample_values = cast(List[str], d.pop("sample_values", UNSET))
+        default_value = d.pop("default_value", UNSET)
 
         parameter_definition_spec = cls(
             field_name=field_name,
@@ -118,7 +115,7 @@ class ParameterDefinitionSpec:
             display_hint=display_hint,
             required=required,
             allowed_values=allowed_values,
-            sample_values=sample_values,
+            default_value=default_value,
         )
 
         parameter_definition_spec.additional_properties = d

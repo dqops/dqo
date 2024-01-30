@@ -9,12 +9,13 @@ class DqoRoot(str, Enum):
     DATA_INCIDENTS = "data_incidents"
     DATA_SENSOR_READOUTS = "data_sensor_readouts"
     DATA_STATISTICS = "data_statistics"
+    DICTIONARIES = "dictionaries"
     RULES = "rules"
     SENSORS = "sensors"
     SETTINGS = "settings"
     SOURCES = "sources"
-    VALUE_11 = "_indexes"
-    VALUE_12 = "_local_settings"
+    VALUE_12 = "_indexes"
+    VALUE_13 = "_local_settings"
 
     def __str__(self) -> str:
         return str(self.value)

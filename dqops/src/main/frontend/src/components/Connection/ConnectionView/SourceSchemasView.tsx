@@ -11,29 +11,22 @@ import ConnectionActionGroup from './ConnectionActionGroup';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import { isEqual } from 'lodash';
-import SourceTablesView from './SourceTablesView';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
+import { CheckTypes, ROUTES } from '../../../shared/routes';
+import { addFirstLevelTab } from '../../../redux/actions/source.actions';
+import { useActionDispatch } from '../../../hooks/useActionDispatch';
 
-interface SourceSchemasViewProps {
-  defaultSchema?: string;
-}
-
-const SourceSchemasView = ({ defaultSchema }: SourceSchemasViewProps) => {
+const SourceSchemasView = () => {
   const { connection }: { connection: string } = useParams();
   const [loading, setLoading] = useState(false);
   const [schemas, setSchemas] = useState<SchemaRemoteModel[]>([]);
-  const [error, setError] = useState<string>()
+  const [error, setError] = useState<string>();
 
-  const [selectedSchema, setSelectedSchema] = useState<string>();
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
   );
-
-  useEffect(() => {
-    if (defaultSchema) {
-      setSelectedSchema(defaultSchema);
-    }
-  }, [defaultSchema]);
+  const history = useHistory();
+  const dispatch = useActionDispatch();
 
   useEffect(() => {
     setLoading(true);
@@ -42,7 +35,7 @@ const SourceSchemasView = ({ defaultSchema }: SourceSchemasViewProps) => {
         setSchemas(res.data);
       })
       .catch((err) => {
-        setError(err.message)
+        setError(err.message);
       })
       .finally(() => {
         setLoading(false);
@@ -50,7 +43,26 @@ const SourceSchemasView = ({ defaultSchema }: SourceSchemasViewProps) => {
   }, [connection]);
 
   const onImportTables = (schema: SchemaRemoteModel) => {
-    setSelectedSchema(schema.schemaName);
+    const url = ROUTES.SCHEMA_LEVEL_PAGE(
+      CheckTypes.SOURCES,
+      connection,
+      schema.schemaName ?? '',
+      'import-tables'
+    );
+    const value = ROUTES.SCHEMA_LEVEL_VALUE(
+      CheckTypes.SOURCES,
+      connection,
+      schema.schemaName ?? ''
+    );
+    dispatch(
+      addFirstLevelTab(CheckTypes.SOURCES, {
+        url,
+        value,
+        state: {},
+        label: schema.schemaName
+      })
+    );
+    history.push(url);
   };
 
   const isExist = (schema: SchemaRemoteModel) => {
@@ -67,16 +79,6 @@ const SourceSchemasView = ({ defaultSchema }: SourceSchemasViewProps) => {
         job.status === DqoJobHistoryEntryModelStatusEnum.waiting)
     );
   };
-
-  if (selectedSchema) {
-    return (
-      <SourceTablesView
-        connectionName={connection}
-        schemaName={selectedSchema ?? ''}
-        onBack={() => setSelectedSchema(undefined)}
-      />
-    );
-  }
 
   return (
     <div className="py-4 px-8">
@@ -122,7 +124,7 @@ const SourceSchemasView = ({ defaultSchema }: SourceSchemasViewProps) => {
                 </td>
               </tr>
             ))}
-            {error ? <div className='text-red-500'>{error}</div> : null}
+            {error ? <div className="text-red-500">{error}</div> : null}
           </tbody>
         </table>
       )}

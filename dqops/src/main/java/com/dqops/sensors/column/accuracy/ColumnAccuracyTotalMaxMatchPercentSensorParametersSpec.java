@@ -113,7 +113,7 @@ public class ColumnAccuracyTotalMaxMatchPercentSensorParametersSpec extends Abst
      */
     @JsonIgnore
     @Override
-    public boolean getSupportsDataStreams() {
+    public boolean getSupportsDataGrouping() {
         return false;
     }
 

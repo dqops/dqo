@@ -50,7 +50,7 @@ const JobChild = ({ job }: { job: DqoJobHistoryEntryModel }) => {
       <AccordionHeader onClick={() => setOpen(!open)}>
         <div className="flex flex-wrap justify-between items-center text-sm w-full text-gray-700">
           <div className="flex flex-wrap space-x-1 items-center">
-            <div className="px-2">{job.jobType} </div>
+            <div className="px-2">{job.jobType}</div>
           </div>
           <div className="flex items-center gap-x-2">
             {job.status === DqoJobHistoryEntryModelStatusEnum.running ? (

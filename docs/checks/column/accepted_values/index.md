@@ -5,9 +5,17 @@ This is a list of accepted_values column data quality checks supported by DQOps 
 
 
 
-
-## **accepted_values**
+## column-level accepted_values checks
 Verifies if all values in the column are from a set of known values, such as country codes.
+
+### [text found in set percent](./text-found-in-set-percent.md)
+A column-level check that calculates the percentage of rows for which the tested text column contains a value from a set of expected values.
+ Columns with null values are also counted as a passing value (the sensor assumes that a &#x27;null&#x27; is also an expected and accepted value).
+ The check raises a data quality issue when the percentage of rows with a not null column value that is not expected (not one of the values in the expected_values set)
+ is below the expected threshold. For example, 99% of rows should have values from the defined domain.
+ This data quality check is useful for checking text columns that have a small number of unique values, and all the values should come from a set of expected values.
+ For example, testing country, state, currency, gender, type, and department columns whose expected values are known.
+
 
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
@@ -17,6 +25,14 @@ Verifies if all values in the column are from a set of known values, such as cou
 |[<span class="no-wrap-code">`daily_partition_text_found_in_set_percent`</span>](./text-found-in-set-percent.md#daily-partition-text-found-in-set-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
 |[<span class="no-wrap-code">`monthly_partition_text_found_in_set_percent`</span>](./text-found-in-set-percent.md#monthly-partition-text-found-in-set-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
 
+
+
+### [number found in set percent](./number-found-in-set-percent.md)
+A column-level check that calculates the percentage of rows for which the tested numeric column contains a value from a set of expected values.
+ Columns with null values are also counted as a passing value (the sensor assumes that a &#x27;null&#x27; is also an expected and accepted value).
+ The check raises a data quality issue when the percentage of rows with a not null column value that is not expected (not one of the values in the expected_values set)
+ is below the expected threshold. For example, 99% of rows should have values from the defined domain.
+ This data quality check is useful for checking numeric columns that store numeric codes (such as status codes) to see if the only values found in the column are from the set of expected values.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -29,6 +45,12 @@ Verifies if all values in the column are from a set of known values, such as cou
 
 
 
+### [expected text values in use count](./expected-text-values-in-use-count.md)
+A column-level check that counts unique values in a text column and counts how many values out of a list of expected string values were found in the column.
+ The check raises a data quality issue when the threshold for the maximum number of missing has been exceeded (too many expected values were not found in the column).
+ This check is useful for analysing columns with a low number of unique values, such as status codes, to detect whether all status codes are used in any row.
+
+
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_expected_text_values_in_use_count`</span>](./expected-text-values-in-use-count.md#profile-expected-text-values-in-use-count)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing).| |
@@ -39,6 +61,14 @@ Verifies if all values in the column are from a set of known values, such as cou
 
 
 
+### [expected texts in top values count](./expected-texts-in-top-values-count.md)
+A column-level check that counts how many expected text values are among the TOP most popular values in the column.
+ The check will first count the number of occurrences of each column&#x27;s value and will pick the TOP X most popular values (configurable by the &#x27;top&#x27; parameter).
+ Then, it will compare the list of most popular values to the given list of expected values that should be most popular.
+ This check will verify how many supposed most popular values (provided in the &#x27;expected_values&#x27; list) were not found in the top X most popular values in the column.
+ This check is useful for analyzing string columns that have several very popular values, these could be the country codes of the countries with the most number of customers.
+
+
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_expected_texts_in_top_values_count`</span>](./expected-texts-in-top-values-count.md#profile-expected-texts-in-top-values-count)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the top X most popular column values contain all values from a list of expected values.| |
@@ -47,6 +77,12 @@ Verifies if all values in the column are from a set of known values, such as cou
 |[<span class="no-wrap-code">`daily_partition_expected_texts_in_top_values_count`</span>](./expected-texts-in-top-values-count.md#daily-partition-expected-texts-in-top-values-count)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the top X most popular column values contain all values from a list of expected values. Stores a separate data quality check result for each daily partition.| |
 |[<span class="no-wrap-code">`monthly_partition_expected_texts_in_top_values_count`</span>](./expected-texts-in-top-values-count.md#monthly-partition-expected-texts-in-top-values-count)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the top X most popular column values contain all values from a list of expected values. Stores a separate data quality check result for each monthly partition.| |
 
+
+
+### [expected numbers in use count](./expected-numbers-in-use-count.md)
+A column-level check that counts unique values in a numeric column and counts how many values out of a list of expected numeric values were found in the column.
+ The check raises a data quality issue when the threshold for the maximum number of missing has been exceeded (too many expected values were not found in the column).
+ This check is useful for analysing columns with a low number of unique values, such as status codes, to detect whether all status codes are used in any row.
 
 
 | Data quality check name | Check type | Description | Standard |

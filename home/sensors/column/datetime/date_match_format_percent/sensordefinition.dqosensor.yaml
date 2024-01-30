@@ -14,3 +14,4 @@ spec:
     - DD-MM-YYYY
     - DD.MM.YYYY
     - YYYY-MM-DD
+    default_value: DD/MM/YYYY

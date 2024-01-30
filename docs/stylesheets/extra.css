@@ -1,6 +1,6 @@
 .md-grid {
-  width: 95%;
-  max-width: 95%;
+  width: 98%;
+  max-width: 98%;
 }
 .md-typeset {
   font-size: 16px;
@@ -15,14 +15,27 @@
   font-size: 1.2em;
 }
 
+.md-sidebar {
+  width: 13.1rem;
+}
+
+@supports selector(::-webkit-scrollbar) {
+    [dir=ltr] .md-sidebar__inner {
+        padding-right: calc(100% - 12.5rem)
+    }
+
+    [dir=rtl] .md-sidebar__inner {
+        padding-left: calc(100% - 12.5rem)
+    }
+}
+
 .md-sidebar__scrollwrap{
   white-space: normal; 
 }
 .md-nav__item {
-  padding-left: 0.6rem;
-  padding-right: 0.2rem;
+  padding-left: 0.2rem;
+  padding-right: 0.1rem;
 }
-
 .four-divs-row {
   display: flex;
   flex-wrap: wrap;
@@ -39,4 +52,16 @@
 .no-wrap-code {
   white-space: nowrap;
   word-break: normal;
+}
+
+p:has(span.center-content) {
+  text-align: center;
+}
+
+.md-typeset .grid-columns-150-pct {
+  grid-template-columns: repeat(auto-fit,minmax(min(100%,24rem),1fr));
+}
+
+.ebook-image-home {
+  padding-top: 40px;
 }

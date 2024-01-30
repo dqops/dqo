@@ -22,6 +22,8 @@ import com.dqops.checks.CheckType;
 import com.dqops.checks.table.checkspecs.customsql.TableSqlAggregateExpressionCheckSpec;
 import com.dqops.checks.table.checkspecs.customsql.TableSqlConditionFailedCheckSpec;
 import com.dqops.checks.table.checkspecs.customsql.TableSqlConditionPassedPercentCheckSpec;
+import com.dqops.checks.table.checkspecs.customsql.TableSqlImportCustomResultCheckSpec;
+import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -45,6 +47,7 @@ public class TableCustomSqlMonthlyPartitionedChecksSpec extends AbstractCheckCat
             put("monthly_partition_sql_condition_failed_on_table", o -> o.monthlyPartitionSqlConditionFailedOnTable);
             put("monthly_partition_sql_condition_passed_percent_on_table", o -> o.monthlyPartitionSqlConditionPassedPercentOnTable);
             put("monthly_partition_sql_aggregate_expression_on_table", o -> o.monthlyPartitionSqlAggregateExpressionOnTable);
+            put("monthly_partition_import_custom_result_on_table", o -> o.monthlyPartitionImportCustomResultOnTable);
         }
     };
 
@@ -59,6 +62,9 @@ public class TableCustomSqlMonthlyPartitionedChecksSpec extends AbstractCheckCat
 
     @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range. Stores a separate data quality check result for each monthly partition.")
     private TableSqlAggregateExpressionCheckSpec monthlyPartitionSqlAggregateExpressionOnTable;
+
+    @JsonPropertyDescription("Runs a custom query that retrieves a result of a data quality check performed in the data engineering, whose result (the severity level) is pulled from a separate table.")
+    private TableSqlImportCustomResultCheckSpec monthlyPartitionImportCustomResultOnTable;
 
     /**
      * Returns a check specification.
@@ -115,6 +121,24 @@ public class TableCustomSqlMonthlyPartitionedChecksSpec extends AbstractCheckCat
     }
 
     /**
+     * Returns a custom check that imports data quality results from custom log tables.
+     * @return Import custom result check.
+     */
+    public TableSqlImportCustomResultCheckSpec getMonthlyPartitionImportCustomResultOnTable() {
+        return monthlyPartitionImportCustomResultOnTable;
+    }
+
+    /**
+     * Sets a custom check that pulls results from a custom table.
+     * @param monthlyPartitionImportCustomResultOnTable Import a result from a custom table.
+     */
+    public void setMonthlyPartitionImportCustomResultOnTable(TableSqlImportCustomResultCheckSpec monthlyPartitionImportCustomResultOnTable) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionImportCustomResultOnTable, monthlyPartitionImportCustomResultOnTable));
+        this.monthlyPartitionImportCustomResultOnTable = monthlyPartitionImportCustomResultOnTable;
+        propagateHierarchyIdToField(monthlyPartitionImportCustomResultOnTable, "monthly_partition_import_custom_result_on_table");
+    }
+
+    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -155,5 +179,16 @@ public class TableCustomSqlMonthlyPartitionedChecksSpec extends AbstractCheckCat
     @JsonIgnore
     public CheckTimeScale getCheckTimeScale() {
         return CheckTimeScale.monthly;
+    }
+
+    /**
+     * Returns an array of supported data type categories. DQOps uses this list when activating default data quality checks.
+     *
+     * @return Array of supported data type categories.
+     */
+    @Override
+    @JsonIgnore
+    public DataTypeCategory[] getSupportedDataTypeCategories() {
+        return DataTypeCategory.ANY;
     }
 }

@@ -22,6 +22,7 @@ import com.dqops.checks.comparison.ComparisonCheckRules;
 import com.dqops.checks.comparison.TableCompareCheckType;
 import com.dqops.checks.table.checkspecs.comparison.TableComparisonColumnCountMatchCheckSpec;
 import com.dqops.checks.table.checkspecs.comparison.TableComparisonRowCountMatchCheckSpec;
+import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -184,5 +185,16 @@ public class TableComparisonProfilingChecksSpec extends AbstractTableComparisonC
     @JsonIgnore
     public CheckTimeScale getCheckTimeScale() {
         return null;
+    }
+
+    /**
+     * Returns an array of supported data type categories. DQOps uses this list when activating default data quality checks.
+     *
+     * @return Array of supported data type categories.
+     */
+    @Override
+    @JsonIgnore
+    public DataTypeCategory[] getSupportedDataTypeCategories() {
+        return DataTypeCategory.ANY;
     }
 }

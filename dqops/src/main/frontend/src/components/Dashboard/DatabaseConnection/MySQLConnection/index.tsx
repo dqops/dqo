@@ -3,17 +3,23 @@ import React from 'react';
 import {
   MysqlParametersSpec,
   MysqlParametersSpecSslmodeEnum,
-  SharedCredentialListModel
+  SingleStoreDbParametersSpecLoadBalancingModeEnum,
+  SharedCredentialListModel,
+  MysqlParametersSpecMysqlEngineTypeEnum,
+  SingleStoreDbParametersSpec
 } from '../../../../api';
 import JdbcPropertiesView from '../JdbcProperties';
 import Select from '../../../Select';
 import SectionWrapper from '../../SectionWrapper';
 import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
+import Checkbox from '../../../Checkbox';
 
 interface IMySQLConnectionProps {
   mysql?: MysqlParametersSpec;
   onChange?: (obj: MysqlParametersSpec) => void;
   sharedCredentials?: SharedCredentialListModel[];
+  nameOfDatabase?: string;
+  onNameOfDatabaseChange?: (name: string) => void;
 }
 
 const sslModes = [
@@ -42,36 +48,126 @@ const sslModes = [
   }
 ];
 
+const loadBalancingMode = [
+  {
+    label: 'None',
+    value: SingleStoreDbParametersSpecLoadBalancingModeEnum.none
+  },
+  {
+    label: 'Sequential',
+    value: SingleStoreDbParametersSpecLoadBalancingModeEnum.sequential
+  },
+  {
+    label: 'LoadBalance',
+    value: SingleStoreDbParametersSpecLoadBalancingModeEnum.loadbalance
+  }
+];
+
+const mysqlEngineType = [
+  {
+    label: 'mysql',
+    value: MysqlParametersSpecMysqlEngineTypeEnum.mysql
+  },
+  {
+    label: 'singlestoredb',
+    value: MysqlParametersSpecMysqlEngineTypeEnum.singlestoredb
+  }
+]
+
 const MySQLConnection = ({
   mysql,
   onChange,
-  sharedCredentials
+  sharedCredentials,
+  nameOfDatabase,
+  onNameOfDatabaseChange
 }: IMySQLConnectionProps) => {
   const handleChange = (obj: Partial<MysqlParametersSpec>) => {
     if (!onChange) return;
-
     onChange({
       ...mysql,
-      ...obj
+      ...obj,
+      single_store_db_parameters_spec: {
+        ...mysql?.single_store_db_parameters_spec,
+        ...obj?.single_store_db_parameters_spec
+      },
     });
   };
 
   return (
     <SectionWrapper title="MySQL connection parameters" className="mb-4">
-      <FieldTypeInput
-        data={sharedCredentials}
-        label="Host"
+      <Select
+        label="MySQL Engine Type"
+        options={mysqlEngineType}
         className="mb-4"
-        value={mysql?.host}
-        onChange={(value) => handleChange({ host: value })}
+        value={ mysql?.mysql_engine_type || nameOfDatabase?.toLowerCase().trim() as MysqlParametersSpecMysqlEngineTypeEnum }
+        onChange={(value) => {
+          handleChange({ 
+            mysql_engine_type: value}),
+            value && onNameOfDatabaseChange && onNameOfDatabaseChange(String(value).replace(/\w/, x => x.toUpperCase())) 
+          }
+        }
       />
-      <FieldTypeInput
-        data={sharedCredentials}
-        label="Port"
-        className="mb-4"
-        value={mysql?.port}
-        onChange={(value) => handleChange({ port: value })}
-      />
+
+      { mysql?.mysql_engine_type === MysqlParametersSpecMysqlEngineTypeEnum.mysql &&
+        <>
+          <FieldTypeInput
+            data={sharedCredentials}
+            label="Host"
+            className="mb-4"
+            value={mysql?.host}
+            onChange={(value) => handleChange({ host: value })}
+          />
+          <FieldTypeInput
+            data={sharedCredentials}
+            label="Port"
+            className="mb-4"
+            value={mysql?.port}
+            onChange={(value) => handleChange({ port: value })}
+          />
+        </>
+      }
+      { mysql?.mysql_engine_type === MysqlParametersSpecMysqlEngineTypeEnum.singlestoredb &&
+      <>
+        <Select
+          label="Load-Balancing Mode"
+          options={loadBalancingMode}
+          className="mb-4"
+          value={mysql?.single_store_db_parameters_spec?.load_balancing_mode}
+          onChange={(value) => handleChange({ 
+            single_store_db_parameters_spec : { load_balancing_mode: value } 
+          })}
+        />
+        <FieldTypeInput
+          data={sharedCredentials}
+          label="Host Descriptions"
+          className="mb-4"
+          value={mysql?.single_store_db_parameters_spec?.host_descriptions?.join(",")}
+          onChange={(value) => handleChange({ 
+            single_store_db_parameters_spec: { host_descriptions: value.split(",") } 
+          })}
+        />
+        <FieldTypeInput
+          data={sharedCredentials}
+          label="Database/Schema"
+          className="mb-4"
+          value={mysql?.single_store_db_parameters_spec?.schema}
+          onChange={(value) => handleChange({ 
+            single_store_db_parameters_spec: { schema: value } 
+          })}
+        />
+      </>
+      }
+
+      { mysql?.mysql_engine_type === MysqlParametersSpecMysqlEngineTypeEnum.mysql &&
+        <FieldTypeInput
+          data={sharedCredentials}
+          label="Database"
+          className="mb-4"
+          value={mysql?.database}
+          onChange={(value) => handleChange({ database: value })}
+        />
+      }
+
       <FieldTypeInput
         data={sharedCredentials}
         label="User name"
@@ -87,20 +183,28 @@ const MySQLConnection = ({
         value={mysql?.password}
         onChange={(value) => handleChange({ password: value })}
       />
-      <FieldTypeInput
-        data={sharedCredentials}
-        label="Database"
-        className="mb-4"
-        value={mysql?.database}
-        onChange={(value) => handleChange({ database: value })}
-      />
-      <Select
-        label="SSL mode"
-        options={sslModes}
-        className="mb-4"
-        value={mysql?.sslmode}
-        onChange={(value) => handleChange({ sslmode: value })}
-      />
+      
+      { mysql?.mysql_engine_type === MysqlParametersSpecMysqlEngineTypeEnum.mysql &&
+        <Select
+          label="SSL mode"
+          options={sslModes}
+          className="mb-4"
+          value={mysql?.sslmode}
+          onChange={(value) => handleChange({ sslmode: value })}
+        />
+      }
+
+      { mysql?.mysql_engine_type === MysqlParametersSpecMysqlEngineTypeEnum.singlestoredb &&
+        <Checkbox
+          checked={ mysql?.single_store_db_parameters_spec?.use_ssl }
+          onChange={(checked) => handleChange({ 
+            single_store_db_parameters_spec : { use_ssl: checked } 
+          })}
+          label="Use SSL"
+          labelPosition="left"
+        />
+      }
+
       <JdbcPropertiesView
         properties={mysql?.properties}
         onChange={(properties) => handleChange({ properties })}

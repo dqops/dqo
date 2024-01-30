@@ -106,6 +106,12 @@ public enum DataTypeCategory {
     @JsonProperty("other")
     other;
 
+
+    /**
+     * All data types without even checking the data type.
+     */
+    public static DataTypeCategory[] ANY = new DataTypeCategory[0];
+
     /**
      * All data types that could be detected (they are not "other"). Null checks support these data types.
      */
@@ -178,6 +184,21 @@ public enum DataTypeCategory {
     };
 
     /**
+     * Just a simple string type (not clob).
+     */
+    public static DataTypeCategory[] STRING = new DataTypeCategory[] {
+            string
+    };
+
+    /**
+     * Just a boolean type or an integer as a fallback.
+     */
+    public static DataTypeCategory[] BOOLEAN = new DataTypeCategory[] {
+            bool,
+            numeric_integer
+    };
+
+    /**
      * Checks if this data type is one of numeric data types.
      * @param dataTypeCategory Data type category to test.
      * @return True when it is a numeric data type.
@@ -193,5 +214,29 @@ public enum DataTypeCategory {
      */
     public static boolean hasDate(DataTypeCategory dataTypeCategory) {
         return dataTypeCategory == datetime_date || dataTypeCategory == datetime_datetime || dataTypeCategory == datetime_instant;
+    }
+
+    /**
+     * Verifies if the <code>dataTypeCategory</code> is on the list of accepted categories.
+     * @param dataTypeCategory Tested data type category.
+     * @param dataTypeCategories Array of accepted data types. If the array is null, we assume that all types match and we return true.
+     * @return True when the <code>dataTypeCategory</code> is on the list.
+     */
+    public static boolean isDataTypeInList(DataTypeCategory dataTypeCategory, DataTypeCategory[] dataTypeCategories) {
+        if (dataTypeCategories == null || dataTypeCategories.length == 0) {
+            return true; // no data type category means that all categories are valid
+        }
+
+        if (dataTypeCategory == null) {
+            return false; // data type not detected, but a list of required type categories is given
+        }
+
+        for (DataTypeCategory expectedCategory : dataTypeCategories) {
+            if (expectedCategory == dataTypeCategory) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

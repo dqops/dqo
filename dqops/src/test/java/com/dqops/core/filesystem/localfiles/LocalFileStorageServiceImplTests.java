@@ -67,7 +67,7 @@ public class LocalFileStorageServiceImplTests extends BaseTest {
     @Test
     void listFolders_whenRootFolder_thenReturnsStandardFolders() {
         List<HomeFolderPath> folders = this.sut.listFolders(new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN), false);
-        Assertions.assertEquals(9, folders.size());
+        Assertions.assertEquals(10, folders.size());
         Assertions.assertTrue(folders.stream().anyMatch(f -> f.getTopFolder().getFileSystemName().equals("sources")));
         Assertions.assertTrue(folders.stream().anyMatch(f -> f.getTopFolder().getFileSystemName().equals("rules")));
         Assertions.assertTrue(folders.stream().anyMatch(f -> f.getTopFolder().getFileSystemName().equals("sensors")));

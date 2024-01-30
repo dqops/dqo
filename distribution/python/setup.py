@@ -120,6 +120,7 @@ try:
         license='http://www.apache.org/licenses/LICENSE-2.0',
         install_requires=['install-jdk>=1.1.0',
                           'httpx>=0.20.0,<0.26.0',
+                          'h2>=4.0.0',
                           'attrs>=21.3.0',
                           'python-dateutil>=2.8.2',
                           'numpy>=1.24.3',

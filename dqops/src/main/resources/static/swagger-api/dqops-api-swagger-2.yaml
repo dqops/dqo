@@ -41,6 +41,9 @@ tags:
 - name: "Defaults"
   description: "Default settings management for configuring the default data quality\
     \ checks that are configured for all imported tables and columns."
+- name: "Dictionaries"
+  description: "Operations for managing data dictionary CSV files in DQOps. Data dictionaries\
+    \ can be used in *accepted_values* data quality checks."
 - name: "Environment"
   description: "DQOps environment and configuration controller, provides access to\
     \ the DQOps configuration, current user's information and issue local API Keys\
@@ -9299,7 +9302,7 @@ paths:
       - "SharedCredentials"
       summary: "getAllSharedCredentials"
       description: "Returns a list of all shared credentials that are present in the\
-        \ DQOps user's home .credentials/ folder.."
+        \ DQOps user's home .credentials/ folder."
       operationId: "getAllSharedCredentials"
       produces:
       - "application/json"
@@ -10399,6 +10402,195 @@ paths:
           description: "OK"
           schema:
             $ref: "#/definitions/SensorFolderModel"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/dictionaries:
+    get:
+      tags:
+      - "Dictionaries"
+      summary: "getAllDictionaries"
+      description: "Returns a list of all data dictionary CSV files that are present\
+        \ in the DQOps user's home dictionaries/ folder."
+      operationId: "getAllDictionaries"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/DataDictionaryListModel"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    post:
+      tags:
+      - "Dictionaries"
+      summary: "createDictionary"
+      description: "Creates (adds) a new data dictionary CSV file, which creates a\
+        \ file in the DQOps user's home dictionaries/ folder named as the dictionary\
+        \ and with the content that is provided in this call."
+      operationId: "createDictionary"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Data dictionary model"
+        required: false
+        schema:
+          $ref: "#/definitions/DataDictionaryModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoVoid"
+        201:
+          description: "New data dictionary successfully created"
+        400:
+          description: "Bad request, adjust before retrying"
+        406:
+          description: "Rejected, missing required fields"
+        409:
+          description: "Data dictionary with the same name already exists"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/dictionaries/{dictionaryName}:
+    get:
+      tags:
+      - "Dictionaries"
+      summary: "getDictionary"
+      description: "Returns the content of a data dictionary CSV file as a model object"
+      operationId: "getDictionary"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "dictionaryName"
+        in: "path"
+        description: "Data dictionary CSV file name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/DataDictionaryModel"
+        404:
+          description: "Data dictionary not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    put:
+      tags:
+      - "Dictionaries"
+      summary: "updateDictionary"
+      description: "Updates an existing data dictionary CSV file, replacing the dictionary's\
+        \ file content."
+      operationId: "updateDictionary"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Data dictionary model"
+        required: false
+        schema:
+          $ref: "#/definitions/DataDictionaryModel"
+      - name: "dictionaryName"
+        in: "path"
+        description: "Data dictionary file name that will be updated"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoVoid"
+        204:
+          description: "Data dictionary successfully updated"
+        400:
+          description: "Bad request, adjust before retrying"
+        404:
+          description: "Data dictionary not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    delete:
+      tags:
+      - "Dictionaries"
+      summary: "deleteDictionary"
+      description: "Deletes a data dictionary CSV file from the DQOps user's home\
+        \ dictionaries/ folder."
+      operationId: "deleteDictionary"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "dictionaryName"
+        in: "path"
+        description: "Data dictionary name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Data dictionary CSV file successfully deleted"
+          schema:
+            $ref: "#/definitions/MonoVoid"
+        404:
+          description: "Data dictionary file not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/dictionaries/{dictionaryName}/download:
+    get:
+      tags:
+      - "Dictionaries"
+      summary: "downloadDictionary"
+      description: "Downloads a data dictionary CSV file"
+      operationId: "downloadDictionary"
+      produces:
+      - "text/csv"
+      parameters:
+      - name: "dictionaryName"
+        in: "path"
+        description: "Data dictionary CSV file name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              type: "string"
+              format: "byte"
+        404:
+          description: "Data dictionary not found"
         500:
           description: "Internal Server Error"
           schema:
@@ -12343,96 +12535,66 @@ definitions:
           \ apply updates only to the fields for which no configuration exists."
     description: "Parameter object for creating pruned patch trees of all checks that\
       \ fit the filters."
-  AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec:
+  AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec:
     type: "object"
     properties:
       anomaly_percent:
         type: "number"
         format: "double"
-        description: "Probability that the current sensor readout will achieve values\
-          \ within the mean according to the distribution of the previous values gathered\
-          \ within the time window. In other words, the inter-quantile range around\
-          \ the mean of the estimated normal distribution. Set the time window at\
-          \ the threshold level for all severity levels (warning, error, fatal) at\
-          \ once. The default is a time window of 90 periods (days, etc.), but at\
-          \ least 30 readouts must exist to run the calculation. You can change the\
-          \ default value by modifying prediction_time_window parameterin Definitions\
-          \ section."
-  AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec:
+        description: "The probability (in percent) that the current sensor readout\
+          \ (measure) is an anomaly, because the value is outside the regular range\
+          \ of previous readouts. The default time window of 90 time periods (days,\
+          \ etc.) is used, but at least 30 readouts must exist to run the calculation."
+  AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec:
     type: "object"
     properties:
       anomaly_percent:
         type: "number"
         format: "double"
-        description: "Probability that the current sensor readout will achieve values\
-          \ within the mean according to the distribution of the previous values gathered\
-          \ within the time window. In other words, the inter-quantile range around\
-          \ the mean of the estimated normal distribution. Set the time window at\
-          \ the threshold level for all severity levels (warning, error, fatal) at\
-          \ once. The default is a time window of 90 periods (days, etc.), but at\
-          \ least 30 readouts must exist to run the calculation. You can change the\
-          \ default value by modifying prediction_time_window parameterin Definitions\
-          \ section."
-  AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec:
+        description: "The probability (in percent) that the current sensor readout\
+          \ (measure) is an anomaly, because the value is outside the regular range\
+          \ of previous readouts. The default time window of 90 time periods (days,\
+          \ etc.) is used, but at least 30 readouts must exist to run the calculation."
+  AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec:
     type: "object"
     properties:
       anomaly_percent:
         type: "number"
         format: "double"
-        description: "Probability that the current sensor readout will achieve values\
-          \ within the mean according to the distribution of the previous values gathered\
-          \ within the time window. In other words, the inter-quantile range around\
-          \ the mean of the estimated normal distribution. Set the time window at\
-          \ the threshold level for all severity levels (warning, error, fatal) at\
-          \ once. The default is a time window of 90 periods (days, etc.), but at\
-          \ least 30 readouts must exist to run the calculation. You can change the\
-          \ default value by modifying prediction_time_window parameterin Definitions\
-          \ section."
-  AnomalyStationaryPercentileMovingAverageRule01ParametersSpec:
+        description: "The probability (in percent) that the current sensor readout\
+          \ (measure) is an anomaly, because the value is outside the regular range\
+          \ of previous readouts. The default time window of 90 time periods (days,\
+          \ etc.) is used, but at least 30 readouts must exist to run the calculation."
+  AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec:
     type: "object"
     properties:
       anomaly_percent:
         type: "number"
         format: "double"
-        description: "Probability that the current sensor readout will achieve values\
-          \ within the mean according to the distribution of the previous values gathered\
-          \ within the time window. In other words, the inter-quantile range around\
-          \ the mean of the estimated normal distribution. Set the time window at\
-          \ the threshold level for all severity levels (warning, error, fatal) at\
-          \ once. The default is a time window of 90 periods (days, etc.), but at\
-          \ least 30 readouts must exist to run the calculation. You can change the\
-          \ default value by modifying prediction_time_window parameterin Definitions\
-          \ section."
-  AnomalyStationaryPercentileMovingAverageRule05ParametersSpec:
+        description: "The probability (in percent) that the current sensor readout\
+          \ (measure) is an anomaly, because the value is outside the regular range\
+          \ of previous readouts. The default time window of 90 time periods (days,\
+          \ etc.) is used, but at least 30 readouts must exist to run the calculation."
+  AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec:
     type: "object"
     properties:
       anomaly_percent:
         type: "number"
         format: "double"
-        description: "Probability that the current sensor readout will achieve values\
-          \ within the mean according to the distribution of the previous values gathered\
-          \ within the time window. In other words, the inter-quantile range around\
-          \ the mean of the estimated normal distribution. Set the time window at\
-          \ the threshold level for all severity levels (warning, error, fatal) at\
-          \ once. The default is a time window of 90 periods (days, etc.), but at\
-          \ least 30 readouts must exist to run the calculation. You can change the\
-          \ default value by modifying prediction_time_window parameterin Definitions\
-          \ section."
-  AnomalyStationaryPercentileMovingAverageRule1ParametersSpec:
+        description: "The probability (in percent) that the current sensor readout\
+          \ (measure) is an anomaly, because the value is outside the regular range\
+          \ of previous readouts. The default time window of 90 time periods (days,\
+          \ etc.) is used, but at least 30 readouts must exist to run the calculation."
+  AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec:
     type: "object"
     properties:
       anomaly_percent:
         type: "number"
         format: "double"
-        description: "Probability that the current sensor readout will achieve values\
-          \ within the mean according to the distribution of the previous values gathered\
-          \ within the time window. In other words, the inter-quantile range around\
-          \ the mean of the estimated normal distribution. Set the time window at\
-          \ the threshold level for all severity levels (warning, error, fatal) at\
-          \ once. The default is a time window of 90 periods (days, etc.), but at\
-          \ least 30 readouts must exist to run the calculation. You can change the\
-          \ default value by modifying prediction_time_window parameterin Definitions\
-          \ section."
+        description: "The probability (in percent) that the current sensor readout\
+          \ (measure) is an anomaly, because the value is outside the regular range\
+          \ of previous readouts. The default time window of 90 time periods (days,\
+          \ etc.) is used, but at least 30 readouts must exist to run the calculation."
   AuthenticatedDashboardModel:
     type: "object"
     properties:
@@ -13531,6 +13693,13 @@ definitions:
         - "unchanged"
         - "changed"
         - "synchronizing"
+      dictionaries:
+        type: "string"
+        description: "The synchronization status of the \"dictionaries\" folder."
+        enum:
+        - "unchanged"
+        - "changed"
+        - "synchronizing"
       data_sensor_readouts:
         type: "string"
         description: "The synchronization status of the \".data/sensor_readouts\"\
@@ -14446,6 +14615,18 @@ definitions:
         description: "Verifies that the median in a column changes in a rate within\
           \ a percentile boundary during the last 90 days."
         $ref: "#/definitions/ColumnMedianAnomalyStationaryCheckSpec"
+      daily_min_anomaly:
+        description: "Detects new outliers, which are new minimum values, much below\
+          \ the last known minimum value. If the minimum value is constantly changing,\
+          \ detects outliers as the biggest change of the minimum value during the\
+          \ last 90 days."
+        $ref: "#/definitions/ColumnMinAnomalyDifferencingCheckSpec"
+      daily_max_anomaly:
+        description: "Detects new outliers, which are new maximum values, much above\
+          \ the last known maximum value. If the maximum value is constantly changing,\
+          \ detects outliers as the biggest change of the maximum value during the\
+          \ last 90 days."
+        $ref: "#/definitions/ColumnMaxAnomalyDifferencingCheckSpec"
       daily_mean_change:
         description: "Verifies that the mean value in a column changed in a fixed\
           \ rate since the last readout."
@@ -14507,16 +14688,33 @@ definitions:
           $ref: "#/definitions/CustomCheckSpec"
       daily_partition_sum_anomaly:
         description: "Verifies that the sum in a column is within a percentile from\
-          \ measurements made during the last 90 days."
+          \ measurements made during the last 90 days. Calculates the sum of each\
+          \ daily partition and detect anomalies between daily partitions."
         $ref: "#/definitions/ColumnSumAnomalyStationaryPartitionCheckSpec"
       daily_partition_mean_anomaly:
         description: "Verifies that the mean value in a column is within a percentile\
-          \ from measurements made during the last 90 days."
+          \ from measurements made during the last 90 days. Calculates the mean (average)\
+          \ of each daily partition and detect anomalies between daily partitions."
         $ref: "#/definitions/ColumnMeanAnomalyStationaryCheckSpec"
       daily_partition_median_anomaly:
         description: "Verifies that the median in a column is within a percentile\
-          \ from measurements made during the last 90 days."
+          \ from measurements made during the last 90 days. Calculates the median\
+          \ of each daily partition and detect anomalies between daily partitions."
         $ref: "#/definitions/ColumnMedianAnomalyStationaryCheckSpec"
+      daily_partition_min_anomaly:
+        description: "Detects new outliers, which are new minimum values, much below\
+          \ the last known minimum value. If the minimum value is constantly changing,\
+          \ detects outliers as the biggest change of the minimum value during the\
+          \ last 90 days. Finds the minimum value of each daily partition and detect\
+          \ anomalies between daily partitions."
+        $ref: "#/definitions/ColumnMinAnomalyStationaryCheckSpec"
+      daily_partition_max_anomaly:
+        description: "Detects new outliers, which are new maximum values, much above\
+          \ the last known maximum value. If the maximum value is constantly changing,\
+          \ detects outliers as the biggest change of the maximum value during the\
+          \ last 90 days. Finds the maximum value of each daily partition and detect\
+          \ anomalies between daily partitions."
+        $ref: "#/definitions/ColumnMaxAnomalyStationaryCheckSpec"
       daily_partition_mean_change:
         description: "Verifies that the mean value in a column changed in a fixed\
           \ rate since last readout."
@@ -14634,6 +14832,18 @@ definitions:
         description: "Verifies that the median in a column changes in a rate within\
           \ a percentile boundary during the last 90 days."
         $ref: "#/definitions/ColumnMedianAnomalyStationaryCheckSpec"
+      profile_min_anomaly:
+        description: "Detects new outliers, which are new minimum values, much below\
+          \ the last known minimum value. If the minimum value is constantly changing,\
+          \ detects outliers as the biggest change of the minimum value during the\
+          \ last 90 days."
+        $ref: "#/definitions/ColumnMinAnomalyDifferencingCheckSpec"
+      profile_max_anomaly:
+        description: "Detects new outliers, which are new maximum values, much above\
+          \ the last known maximum value. If the maximum value is constantly changing,\
+          \ detects outliers as the biggest change of the maximum value during the\
+          \ last 90 days."
+        $ref: "#/definitions/ColumnMaxAnomalyDifferencingCheckSpec"
       profile_mean_change:
         description: "Verifies that the mean value in a column changed in a fixed\
           \ rate since the last readout."
@@ -16282,6 +16492,11 @@ definitions:
           \ etc.) is not outside the expected range. Stores the most recent captured\
           \ value for each day when the data quality check was evaluated."
         $ref: "#/definitions/ColumnSqlAggregateExpressionCheckSpec"
+      daily_import_custom_result_on_column:
+        description: "Runs a custom query that retrieves a result of a data quality\
+          \ check performed in the data engineering, whose result (the severity level)\
+          \ is pulled from a separate table."
+        $ref: "#/definitions/ColumnSqlImportCustomResultCheckSpec"
   ColumnCustomSqlDailyPartitionedChecksSpec:
     type: "object"
     properties:
@@ -16312,6 +16527,11 @@ definitions:
           \ etc.) is not outside the expected range. Stores a separate data quality\
           \ check result for each daily partition."
         $ref: "#/definitions/ColumnSqlAggregateExpressionCheckSpec"
+      daily_partition_import_custom_result_on_column:
+        description: "Runs a custom query that retrieves a result of a data quality\
+          \ check performed in the data engineering, whose result (the severity level)\
+          \ is pulled from a separate table."
+        $ref: "#/definitions/ColumnSqlImportCustomResultCheckSpec"
   ColumnCustomSqlMonthlyMonitoringChecksSpec:
     type: "object"
     properties:
@@ -16342,6 +16562,11 @@ definitions:
           \ etc.) is not outside the expected range. Stores the most recent check\
           \ result for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnSqlAggregateExpressionCheckSpec"
+      monthly_import_custom_result_on_column:
+        description: "Runs a custom query that retrieves a result of a data quality\
+          \ check performed in the data engineering, whose result (the severity level)\
+          \ is pulled from a separate table."
+        $ref: "#/definitions/ColumnSqlImportCustomResultCheckSpec"
   ColumnCustomSqlMonthlyPartitionedChecksSpec:
     type: "object"
     properties:
@@ -16372,6 +16597,11 @@ definitions:
           \ etc.) is not outside the expected range. Stores a separate data quality\
           \ check result for each monthly partition."
         $ref: "#/definitions/ColumnSqlAggregateExpressionCheckSpec"
+      monthly_partition_import_custom_result_on_column:
+        description: "Runs a custom query that retrieves a result of a data quality\
+          \ check performed in the data engineering, whose result (the severity level)\
+          \ is pulled from a separate table."
+        $ref: "#/definitions/ColumnSqlImportCustomResultCheckSpec"
   ColumnCustomSqlProfilingChecksSpec:
     type: "object"
     properties:
@@ -16399,6 +16629,11 @@ definitions:
         description: "Verifies that a custom aggregated SQL expression (MIN, MAX,\
           \ etc.) is not outside the expected range."
         $ref: "#/definitions/ColumnSqlAggregateExpressionCheckSpec"
+      profile_import_custom_result_on_column:
+        description: "Runs a custom query that retrieves a result of a data quality\
+          \ check performed in the data engineering, whose result (the severity level)\
+          \ is pulled from a separate table."
+        $ref: "#/definitions/ColumnSqlImportCustomResultCheckSpec"
   ColumnDailyMonitoringCheckCategoriesSpec:
     type: "object"
     properties:
@@ -17204,15 +17439,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec"
+        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec"
       error:
         description: "Default alerting threshold for a set number of rows with negative\
           \ value in a column that raises a data quality alert"
-        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec"
+        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec"
+        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec"
   ColumnDistinctCountAnomalyStationaryPartitionCheckSpec:
     type: "object"
     properties:
@@ -17265,15 +17500,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
       error:
         description: "Default alerting threshold for a set number of rows with negative\
           \ value in a column that raises a data quality alert"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
   ColumnDistinctCountChange1DayCheckSpec:
     type: "object"
     properties:
@@ -17631,15 +17866,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
       error:
         description: "Default alerting threshold for a set number of rows with negative\
           \ value in a column that raises a data quality alert"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
   ColumnDistinctPercentChange1DayCheckSpec:
     type: "object"
     properties:
@@ -19099,6 +19334,128 @@ definitions:
           \ (results)."
     description: "Column list model that returns the basic fields from a column specification,\
       \ excluding nested nodes like a list of activated checks."
+  ColumnMaxAnomalyDifferencingCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that could be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/ColumnNumericMaxSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec"
+      error:
+        description: "Default alerting threshold for a set number of rows with negative\
+          \ value in a column that raises a data quality alert"
+        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec"
+  ColumnMaxAnomalyStationaryCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that could be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/ColumnNumericMaxSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
+      error:
+        description: "Default alerting threshold for a set number of rows with negative\
+          \ value in a column that raises a data quality alert"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
   ColumnMaxInRangeCheckSpec:
     type: "object"
     properties:
@@ -19212,15 +19569,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
       error:
         description: "Default alerting threshold for a set number of rows with negative\
           \ value in a column that raises a data quality alert"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
   ColumnMeanChange1DayCheckSpec:
     type: "object"
     properties:
@@ -19578,15 +19935,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
       error:
         description: "Default alerting threshold for a set number of rows with negative\
           \ value in a column that raises a data quality alert"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
   ColumnMedianChange1DayCheckSpec:
     type: "object"
     properties:
@@ -19892,6 +20249,128 @@ definitions:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
         $ref: "#/definitions/BetweenFloatsRuleParametersSpec"
+  ColumnMinAnomalyDifferencingCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that could be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/ColumnNumericMinSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec"
+      error:
+        description: "Default alerting threshold for a set number of rows with negative\
+          \ value in a column that raises a data quality alert"
+        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec"
+  ColumnMinAnomalyStationaryCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that could be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/ColumnNumericMinSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
+      error:
+        description: "Default alerting threshold for a set number of rows with negative\
+          \ value in a column that raises a data quality alert"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
   ColumnMinInRangeCheckSpec:
     type: "object"
     properties:
@@ -20537,15 +21016,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
       error:
         description: "Default alerting threshold for a set number of rows with negative\
           \ value in a column that raises a data quality alert"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
   ColumnNullPercentChange1DayCheckSpec:
     type: "object"
     properties:
@@ -24716,6 +25195,90 @@ definitions:
           \ is evaluated for each row. The expression can use {table} and {column}\
           \ placeholder that are replaced with a full table name and the analyzed\
           \ column name."
+  ColumnSqlImportCustomResultCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that could be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Sensor parameters with the custom SQL SELECT statement that\
+          \ queries a log table to get a result of a custom query that retrieves results\
+          \ from other data quality libraries."
+        $ref: "#/definitions/ColumnSqlImportCustomResultSensorParametersSpec"
+      warning:
+        description: "Warning severity import rule. Activate the rule with no parameters\
+          \ to import custom data quality results when the custom query returns a\
+          \ value **1** in the *severity* result column."
+        $ref: "#/definitions/ImportSeverityRuleParametersSpec"
+      error:
+        description: "Error severity import rule. Activate the rule with no parameters\
+          \ to import custom data quality results when the custom query returns a\
+          \ value **2** in the *severity* result column."
+        $ref: "#/definitions/ImportSeverityRuleParametersSpec"
+      fatal:
+        description: "Fatal severity import rule. Activate the rule with no parameters\
+          \ to import custom data quality results when the custom query returns a\
+          \ value **3** in the *severity* result column."
+        $ref: "#/definitions/ImportSeverityRuleParametersSpec"
+  ColumnSqlImportCustomResultSensorParametersSpec:
+    type: "object"
+    properties:
+      filter:
+        type: "string"
+        description: "SQL WHERE clause added to the sensor query. Both the table level\
+          \ filter and a sensor query filter are added, separated by an AND operator."
+      sql_query:
+        type: "string"
+        description: "A custom SELECT statement that queries a logging table with\
+          \ custom results of data quality checks executed by the data pipeline. The\
+          \ query must return a result column named *severity*. The values of the\
+          \ *severity* column must be: 0 - data quality check passed, 1 - warning\
+          \ issue, 2 - error severity issue, 3 - fatal severity issue. The query can\
+          \ return *actual_value* and *expected_value* results that are imported into\
+          \ DQOps data lake. The query can use a {table_name} placeholder that is\
+          \ replaced with a table name for which the results are imported, and a {column_name}\
+          \ placeholder replaced with the column name."
   ColumnStatisticsCollectorsRootCategoriesSpec:
     type: "object"
     properties:
@@ -24863,15 +25426,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec"
+        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec"
       error:
         description: "Default alerting threshold for a set number of rows with negative\
           \ value in a column that raises a data quality alert"
-        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec"
+        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec"
+        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec"
   ColumnSumAnomalyStationaryPartitionCheckSpec:
     type: "object"
     properties:
@@ -24924,15 +25487,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
       error:
         description: "Default alerting threshold for a set number of rows with negative\
           \ value in a column that raises a data quality alert"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
   ColumnSumChange1DayCheckSpec:
     type: "object"
     properties:
@@ -28521,6 +29084,35 @@ definitions:
         type: "boolean"
         description: "True if a whole partition (a parquet file) was deleted instead\
           \ of removing only selected rows."
+  DataDictionaryListModel:
+    type: "object"
+    properties:
+      dictionary_name:
+        type: "string"
+        description: "Dictionary name. It is the name of a file in the dictionaries/\
+          \ folder inside the DQOps user's home folder."
+      can_edit:
+        type: "boolean"
+        description: "Boolean flag that decides if the current user can update or\
+          \ delete the dictionary file."
+      can_access_dictionary:
+        type: "boolean"
+        description: "Boolean flag that decides if the current user see or download\
+          \ the dictionary file."
+    description: "Data dictionary CSV file list model with the basic information about\
+      \ the dictionary."
+  DataDictionaryModel:
+    type: "object"
+    properties:
+      dictionary_name:
+        type: "string"
+        description: "Dictionary name. It is the name of a file in the dictionaries/\
+          \ folder inside the DQOps user's home folder."
+      file_content:
+        type: "string"
+        description: "Dictionary CSV file content as a single file."
+    description: "Data dictionary CSV file full model used to create and update the\
+      \ dictionary. Contains the content of the CSV file as a text field."
   DataGroupingConfigurationListModel:
     type: "object"
     properties:
@@ -29083,6 +29675,11 @@ definitions:
         - "operator"
         - "viewer"
         - "none"
+      data_quality_data_warehouse_enabled:
+        type: "boolean"
+        description: "True when the account has access to the DQOps Cloud's data quality\
+          \ data lake and data warehouse, allowing to synchronize files and use the\
+          \ data quality data warehouse."
       can_manage_account:
         type: "boolean"
         description: "User is the administrator of the account and can perform security\
@@ -29394,6 +29991,8 @@ definitions:
         type: "string"
       tableNamePattern:
         type: "string"
+  ImportSeverityRuleParametersSpec:
+    type: "object"
   ImportTablesQueueJobParameters:
     type: "object"
     properties:
@@ -29895,6 +30494,16 @@ definitions:
         - "REQUIRED"
         - "VERIFY_CA"
         - "VERIFY_IDENTITY"
+      single_store_db_parameters_spec:
+        description: "Single Store DB parameters spec."
+        $ref: "#/definitions/SingleStoreDbParametersSpec"
+      mysql_engine_type:
+        type: "string"
+        description: "MySQL engine type. Supports also a ${MYSQL_ENGINE} configuration\
+          \ with a custom environment variable."
+        enum:
+        - "mysql"
+        - "singlestoredb"
       properties:
         type: "object"
         description: "A dictionary of custom JDBC parameters that are added to the\
@@ -30005,12 +30614,10 @@ definitions:
         description: "List of allowed values for a field that is of an enum type."
         items:
           type: "string"
-      sample_values:
-        type: "array"
-        description: "List of sample values. The sample values are used in the documentation\
-          \ or help messages."
-        items:
-          type: "string"
+      default_value:
+        type: "string"
+        description: "The default value for a parameter in a custom check or a custom\
+          \ rule."
     description: "Defines a single field that is a sensor parameter or a rule parameter."
   PartitionIncrementalTimeWindowSpec:
     type: "object"
@@ -31039,6 +31646,32 @@ definitions:
         description: "The similar check name in another category."
     description: "Model that identifies a similar check in another category or another\
       \ type of check (monitoring, partition)."
+  SingleStoreDbParametersSpec:
+    type: "object"
+    properties:
+      load_balancing_mode:
+        type: "string"
+        description: "SingleStoreDB Failover and Load-Balancing Modes for Single Store\
+          \ DB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use\
+          \ dynamic substitution."
+        enum:
+        - "none"
+        - "sequential"
+        - "loadbalance"
+      host_descriptions:
+        type: "array"
+        description: "SingleStoreDB Host descriptions. Supports also a ${SINGLE_STORE_HOST_DESCRIPTIONS}\
+          \ configuration with a custom environment variable."
+        items:
+          type: "string"
+      schema:
+        type: "string"
+        description: "SingleStoreDB database/schema name. The value can be in the\
+          \ ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
+      use_ssl:
+        type: "boolean"
+        description: "Force enables SSL/TLS on the connection. Supports also a ${SINGLE_STORE_USE_SSL}\
+          \ configuration with a custom environment variable."
   SnowflakeParametersSpec:
     type: "object"
     properties:
@@ -31329,6 +31962,9 @@ definitions:
       credentials:
         type: "boolean"
         description: "Synchronize the \".credentials\" folder."
+      dictionaries:
+        type: "boolean"
+        description: "Synchronize the \"dictionaries\" folder."
       dataSensorReadouts:
         type: "boolean"
         description: "Synchronize the \".data/sensor_readouts\" folder."
@@ -31394,6 +32030,7 @@ definitions:
         - "checks"
         - "settings"
         - "credentials"
+        - "dictionaries"
         - "_indexes"
         - "_local_settings"
       direction:
@@ -32320,6 +32957,11 @@ definitions:
           \ etc.) is not outside the expected range. Stores the most recent captured\
           \ value for each day when the data quality check was evaluated."
         $ref: "#/definitions/TableSqlAggregateExpressionCheckSpec"
+      daily_import_custom_result_on_table:
+        description: "Runs a custom query that retrieves a result of a data quality\
+          \ check performed in the data engineering, whose result (the severity level)\
+          \ is pulled from a separate table."
+        $ref: "#/definitions/TableSqlImportCustomResultCheckSpec"
   TableCustomSqlDailyPartitionedChecksSpec:
     type: "object"
     properties:
@@ -32349,6 +32991,11 @@ definitions:
           \ etc.) is not outside the expected range. Stores a separate data quality\
           \ check result for each daily partition."
         $ref: "#/definitions/TableSqlAggregateExpressionCheckSpec"
+      daily_partition_import_custom_result_on_table:
+        description: "Runs a custom query that retrieves a result of a data quality\
+          \ check performed in the data engineering, whose result (the severity level)\
+          \ is pulled from a separate table."
+        $ref: "#/definitions/TableSqlImportCustomResultCheckSpec"
   TableCustomSqlMonthlyMonitoringChecksSpec:
     type: "object"
     properties:
@@ -32379,6 +33026,11 @@ definitions:
           \ etc.) is not outside the expected range. Stores the most recent value\
           \ for each month when the data quality check was evaluated."
         $ref: "#/definitions/TableSqlAggregateExpressionCheckSpec"
+      monthly_import_custom_result_on_table:
+        description: "Runs a custom query that retrieves a result of a data quality\
+          \ check performed in the data engineering, whose result (the severity level)\
+          \ is pulled from a separate table."
+        $ref: "#/definitions/TableSqlImportCustomResultCheckSpec"
   TableCustomSqlMonthlyPartitionedChecksSpec:
     type: "object"
     properties:
@@ -32408,6 +33060,11 @@ definitions:
           \ etc.) is not outside the expected range. Stores a separate data quality\
           \ check result for each monthly partition."
         $ref: "#/definitions/TableSqlAggregateExpressionCheckSpec"
+      monthly_partition_import_custom_result_on_table:
+        description: "Runs a custom query that retrieves a result of a data quality\
+          \ check performed in the data engineering, whose result (the severity level)\
+          \ is pulled from a separate table."
+        $ref: "#/definitions/TableSqlImportCustomResultCheckSpec"
   TableCustomSqlProfilingChecksSpec:
     type: "object"
     properties:
@@ -32434,6 +33091,11 @@ definitions:
         description: "Verifies that a custom aggregated SQL expression (MIN, MAX,\
           \ etc.) is not outside the expected range."
         $ref: "#/definitions/TableSqlAggregateExpressionCheckSpec"
+      profile_import_custom_result_on_table:
+        description: "Runs a custom query that retrieves a result of a data quality\
+          \ check performed in the data engineering, whose result (the severity level)\
+          \ is pulled from a separate table."
+        $ref: "#/definitions/TableSqlImportCustomResultCheckSpec"
   TableDailyMonitoringCheckCategoriesSpec:
     type: "object"
     properties:
@@ -33136,15 +33798,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec"
+        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec"
       error:
         description: "Default alerting threshold for a set number of rows with negative\
           \ value in a column that raises a data quality alert"
-        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec"
+        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec"
+        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec"
   TableRowCountAnomalyStationaryPartitionCheckSpec:
     type: "object"
     properties:
@@ -33197,15 +33859,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
       error:
         description: "Default alerting threshold for a set number of rows with negative\
           \ value in a column that raises a data quality alert"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
   TableRowCountChange1DayCheckSpec:
     type: "object"
     properties:
@@ -34173,7 +34835,7 @@ definitions:
         description: "SQL aggregate expression that returns a numeric value calculated\
           \ from rows. The expression is evaluated on a whole table or withing a GROUP\
           \ BY clause for daily partitions and/or data groups. The expression can\
-          \ use {table} placeholder that is replaced with a full table name."
+          \ use a {table} placeholder that is replaced with a full table name."
   TableSqlConditionFailedCheckSpec:
     type: "object"
     properties:
@@ -34250,7 +34912,7 @@ definitions:
       sql_condition:
         type: "string"
         description: "SQL condition (expression) that returns true or false. The condition\
-          \ is evaluated for each row. The expression can use {table} placeholder\
+          \ is evaluated for each row. The expression can use a {table} placeholder\
           \ that is replaced with a full table name."
   TableSqlConditionPassedPercentCheckSpec:
     type: "object"
@@ -34328,8 +34990,91 @@ definitions:
       sql_condition:
         type: "string"
         description: "SQL condition (expression) that returns true or false. The condition\
-          \ is evaluated for each row. The expression can use {table} placeholder\
+          \ is evaluated for each row. The expression can use a {table} placeholder\
           \ that is replaced with a full table name."
+  TableSqlImportCustomResultCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that could be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Sensor parameters with the custom SQL SELECT statement that\
+          \ queries a log table to get a result of a custom query that retrieves results\
+          \ from other data quality libraries."
+        $ref: "#/definitions/TableSqlImportCustomResultSensorParametersSpec"
+      warning:
+        description: "Warning severity import rule. Activate the rule with no parameters\
+          \ to import custom data quality results when the custom query returns a\
+          \ value **1** in the *severity* result column."
+        $ref: "#/definitions/ImportSeverityRuleParametersSpec"
+      error:
+        description: "Error severity import rule. Activate the rule with no parameters\
+          \ to import custom data quality results when the custom query returns a\
+          \ value **2** in the *severity* result column."
+        $ref: "#/definitions/ImportSeverityRuleParametersSpec"
+      fatal:
+        description: "Fatal severity import rule. Activate the rule with no parameters\
+          \ to import custom data quality results when the custom query returns a\
+          \ value **3** in the *severity* result column."
+        $ref: "#/definitions/ImportSeverityRuleParametersSpec"
+  TableSqlImportCustomResultSensorParametersSpec:
+    type: "object"
+    properties:
+      filter:
+        type: "string"
+        description: "SQL WHERE clause added to the sensor query. Both the table level\
+          \ filter and a sensor query filter are added, separated by an AND operator."
+      sql_query:
+        type: "string"
+        description: "A custom SELECT statement that queries a logging table with\
+          \ custom results of data quality checks executed by the data pipeline. The\
+          \ query must return a result column named *severity*. The values of the\
+          \ *severity* column must be: 0 - data quality check passed, 1 - warning\
+          \ issue, 2 - error severity issue, 3 - fatal severity issue. The query can\
+          \ return *actual_value* and *expected_value* results that are imported into\
+          \ DQOps data lake. The query can use a {table_name} placeholder that is\
+          \ replaced with a table name for which the results are imported."
   TableStatisticsCollectorsRootCategoriesSpec:
     type: "object"
     properties:

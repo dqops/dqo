@@ -21,6 +21,7 @@ import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.column.checkspecs.bool.ColumnFalsePercentCheckSpec;
 import com.dqops.checks.column.checkspecs.bool.ColumnTruePercentCheckSpec;
+import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -43,7 +44,6 @@ public class ColumnBoolMonthlyMonitoringChecksSpec extends AbstractCheckCategory
         {
             put("monthly_true_percent", o -> o.monthlyTruePercent);
             put("monthly_false_percent", o -> o.monthlyFalsePercent);
-
         }
     };
 
@@ -138,5 +138,16 @@ public class ColumnBoolMonthlyMonitoringChecksSpec extends AbstractCheckCategory
     @JsonIgnore
     public CheckTimeScale getCheckTimeScale() {
         return CheckTimeScale.monthly;
+    }
+
+    /**
+     * Returns an array of supported data type categories. DQOps uses this list when activating default data quality checks.
+     *
+     * @return Array of supported data type categories.
+     */
+    @Override
+    @JsonIgnore
+    public DataTypeCategory[] getSupportedDataTypeCategories() {
+        return DataTypeCategory.BOOLEAN;
     }
 }

@@ -38,19 +38,11 @@ export interface IFilterTemplate {
   activeOffCheck?: boolean;
   selectedCheck?: CheckTemplate
 }
-export interface IJob {
-  errorMessage?: string | undefined;
-  jobId: {
-    parentJobId: any;
-    jobId: number | undefined;
-    createdAt: number | undefined;
-  };
-  jobType: string;
-  parameters: DqoJobEntryParametersModel | undefined;
-  status: DqoJobChangeModelStatusEnum | undefined;
-  statusChangedAt?: number | undefined;
+export type TJobDictionary =  DqoJobHistoryEntryModel & {
   childs: DqoJobHistoryEntryModel[];
 }
+
+export type TJobList = Record<string, string[]>;
 
 enum CheckTypes {
   MONITORING = 'monitoring',
@@ -141,7 +133,7 @@ export const TABLE_LEVEL_TABS: {
       value: 'labels'
     },
     {
-      label: 'Data Groupings',
+      label: 'Data groupings',
       value: 'data-groupings'
     },
     {
@@ -149,7 +141,7 @@ export const TABLE_LEVEL_TABS: {
       value: 'timestamps'
     },
     {
-      label: 'Incident Configuration',
+      label: 'Incident configuration',
       value: 'incident_configuration'
     }
   ],
@@ -181,15 +173,15 @@ export const TABLE_LEVEL_TABS: {
       value: 'daily'
     },
     {
+      label: 'Table quality status (daily checks)',
+      value: 'table-quality-status-daily'
+    },
+    {
       label: 'Monthly checks',
       value: 'monthly'
     },
     {
-      label: 'Table quality status daily',
-      value: 'table-quality-status-daily'
-    },
-    {
-      label: 'Table quality status monthly',
+      label: 'Table quality status (monthly checks)',
       value: 'table-quality-status-monthly'
     },
     {
@@ -207,15 +199,15 @@ export const TABLE_LEVEL_TABS: {
       value: 'daily'
     },
     {
+      label: 'Table quality status (daily checks)',
+      value: 'table-quality-status-daily'
+    },
+    {
       label: 'Monthly checks',
       value: 'monthly'
     },
     {
-      label: 'Table quality status daily',
-      value: 'table-quality-status-daily'
-    },
-    {
-      label: 'Table quality status monthly',
+      label: 'Table quality status (monthly checks)',
       value: 'table-quality-status-monthly'
     },
     {
@@ -428,6 +420,12 @@ export const databaseOptions: IDatabaseOption[] = [
     name: 'Presto',
     iconName: 'presto',
     displayName: 'Presto'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.mysql,
+    name: 'SingleStoreDB',
+    iconName: 'singlestoredb',
+    displayName: 'SingleStoreDB'
   },
   {
     type: ConnectionModelProviderTypeEnum.spark,

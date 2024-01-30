@@ -17,7 +17,7 @@ Verifies that the median in a column changed in a fixed rate since the last read
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_median_change_1_day`</span>|[anomaly](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*change_percent_1_day*](../../../reference/rules/Change.md#change-percent-1-day)| |
+|<span class="no-wrap-code">`profile_median_change_1_day`</span>|[anomaly](../../../categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*change_percent_1_day*](../../../reference/rules/Change.md#change-percent-1-day)| |
 
 **Command-line examples**
 
@@ -113,13 +113,13 @@ spec:
               percentile_value: 0.5
             warning:
               max_percent: 10.0
-              exact_day: false
+              exact_day: true
             error:
               max_percent: 20.0
-              exact_day: false
+              exact_day: true
             fatal:
               max_percent: 50.0
-              exact_day: false
+              exact_day: true
       labels:
       - This is the column that is analyzed for data quality issues
 
@@ -731,13 +731,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                   percentile_value: 0.5
                 warning:
                   max_percent: 10.0
-                  exact_day: false
+                  exact_day: true
                 error:
                   max_percent: 20.0
-                  exact_day: false
+                  exact_day: true
                 fatal:
                   max_percent: 50.0
-                  exact_day: false
+                  exact_day: true
           labels:
           - This is the column that is analyzed for data quality issues
         country:
@@ -1352,7 +1352,7 @@ Verifies that the median in a column changed in a fixed rate since the last read
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_median_change_1_day`</span>|[anomaly](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*change_percent_1_day*](../../../reference/rules/Change.md#change-percent-1-day)| |
+|<span class="no-wrap-code">`daily_median_change_1_day`</span>|[anomaly](../../../categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*change_percent_1_day*](../../../reference/rules/Change.md#change-percent-1-day)| |
 
 **Command-line examples**
 
@@ -1449,13 +1449,13 @@ spec:
                 percentile_value: 0.5
               warning:
                 max_percent: 10.0
-                exact_day: false
+                exact_day: true
               error:
                 max_percent: 20.0
-                exact_day: false
+                exact_day: true
               fatal:
                 max_percent: 50.0
-                exact_day: false
+                exact_day: true
       labels:
       - This is the column that is analyzed for data quality issues
 
@@ -2068,13 +2068,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                     percentile_value: 0.5
                   warning:
                     max_percent: 10.0
-                    exact_day: false
+                    exact_day: true
                   error:
                     max_percent: 20.0
-                    exact_day: false
+                    exact_day: true
                   fatal:
                     max_percent: 50.0
-                    exact_day: false
+                    exact_day: true
           labels:
           - This is the column that is analyzed for data quality issues
         country:
@@ -2689,7 +2689,7 @@ Verifies that the median in a column changed in a fixed rate since the last read
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_median_change_1_day`</span>|[anomaly](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Consistency|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*change_percent_1_day*](../../../reference/rules/Change.md#change-percent-1-day)| |
+|<span class="no-wrap-code">`daily_partition_median_change_1_day`</span>|[anomaly](../../../categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Consistency|[*percentile*](../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[*change_percent_1_day*](../../../reference/rules/Change.md#change-percent-1-day)| |
 
 **Command-line examples**
 
@@ -2791,13 +2791,13 @@ spec:
                 percentile_value: 0.5
               warning:
                 max_percent: 10.0
-                exact_day: false
+                exact_day: true
               error:
                 max_percent: 20.0
-                exact_day: false
+                exact_day: true
               fatal:
                 max_percent: 50.0
-                exact_day: false
+                exact_day: true
       labels:
       - This is the column that is analyzed for data quality issues
     date_column:
@@ -3420,13 +3420,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                     percentile_value: 0.5
                   warning:
                     max_percent: 10.0
-                    exact_day: false
+                    exact_day: true
                   error:
                     max_percent: 20.0
-                    exact_day: false
+                    exact_day: true
                   fatal:
                     max_percent: 50.0
-                    exact_day: false
+                    exact_day: true
           labels:
           - This is the column that is analyzed for data quality issues
         date_column:

@@ -5,9 +5,13 @@ This is a list of datatype column data quality checks supported by DQOps and a b
 
 
 
-
-## **datatype**
+## column-level datatype checks
 Analyzes all values in a text column to detect if all values could be safely parsed to numeric, boolean, date or timestamp data types. Used to analyze tables in the landing zone.
+
+### [detected datatype in text](./detected-datatype-in-text.md)
+A table-level check that scans all values in a string column and detects the data type of all values in a monitored column. The actual_value returned from the sensor can be one of seven codes: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.
+ The check compares the data type detected in all non-null columns to an expected data type. The rule compares the value using equals and requires values in the range 1..7, which are the codes of detected data types.
+
 
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
@@ -17,6 +21,12 @@ Analyzes all values in a text column to detect if all values could be safely par
 |[<span class="no-wrap-code">`daily_partition_detected_datatype_in_text`</span>](./detected-datatype-in-text.md#daily-partition-detected-datatype-in-text)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
 |[<span class="no-wrap-code">`monthly_partition_detected_datatype_in_text`</span>](./detected-datatype-in-text.md#monthly-partition-detected-datatype-in-text)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
 
+
+
+### [detected datatype in text changed](./detected-datatype-in-text-changed.md)
+A table-level check that scans all values in a string column and detects the data type of all values in a monitored column. The actual_value returned from the sensor can be one of seven codes: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.
+ The check compares the data type detected during the current run to the last known data type detected during a previous run. For daily monitoring checks, it will compare the value to yesterday&#x27;s value (or an earlier date).
+ For partitioned checks, it will compare the current data type to the data type in the previous daily or monthly partition. The last partition with data is used for comparison.
 
 
 | Data quality check name | Check type | Description | Standard |

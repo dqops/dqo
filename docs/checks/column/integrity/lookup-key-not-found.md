@@ -17,7 +17,7 @@ Verifies that the number of values in a column that does not match values in ano
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_lookup_key_not_found`</span>|[integrity](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-integrity-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Integrity|[*foreign_key_not_match_count*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_lookup_key_not_found`</span>|[integrity](../../../categories-of-data-quality-checks/how-to-detect-data-integrity-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Integrity|[*foreign_key_not_match_count*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -224,6 +224,57 @@ spec:
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            ON analyzed_table.`target_column` = foreign_table.`customer_id`
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "MySQL"
+
+        === "Sensor template for MySQL"
+
+            ```sql+jinja
+            {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_foreign_table(foreign_table) -%}
+            {%- if foreign_table.find(".") < 0 -%}
+               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+            {%- else -%}
+               {{ foreign_table }}
+            {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MySQL"
+
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table.`customer_id` IS NULL AND analyzed_table.`target_column` IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
+                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
+            FROM `<target_table>` AS analyzed_table
             LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
             GROUP BY time_period, time_period_utc
@@ -836,6 +887,57 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "MySQL"
+
+        === "Sensor template for MySQL"
+            ```sql+jinja
+            {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_foreign_table(foreign_table) -%}
+            {%- if foreign_table.find(".") < 0 -%}
+               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+            {%- else -%}
+               {{ foreign_table }}
+            {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MySQL"
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table.`customer_id` IS NULL AND analyzed_table.`target_column` IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
+            FROM `<target_table>` AS analyzed_table
+            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            ON analyzed_table.`target_column` = foreign_table.`customer_id`
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "Oracle"
 
         === "Sensor template for Oracle"
@@ -1326,7 +1428,7 @@ Verifies that the number of values in a column that does not match values in ano
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_lookup_key_not_found`</span>|[integrity](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-integrity-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Integrity|[*foreign_key_not_match_count*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_lookup_key_not_found`</span>|[integrity](../../../categories-of-data-quality-checks/how-to-detect-data-integrity-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Integrity|[*foreign_key_not_match_count*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -1534,6 +1636,57 @@ spec:
                 CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
                 TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            ON analyzed_table.`target_column` = foreign_table.`customer_id`
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "MySQL"
+
+        === "Sensor template for MySQL"
+
+            ```sql+jinja
+            {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_foreign_table(foreign_table) -%}
+            {%- if foreign_table.find(".") < 0 -%}
+               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+            {%- else -%}
+               {{ foreign_table }}
+            {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MySQL"
+
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table.`customer_id` IS NULL AND analyzed_table.`target_column` IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
+                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+            FROM `<target_table>` AS analyzed_table
             LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
             GROUP BY time_period, time_period_utc
@@ -2147,6 +2300,57 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "MySQL"
+
+        === "Sensor template for MySQL"
+            ```sql+jinja
+            {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_foreign_table(foreign_table) -%}
+            {%- if foreign_table.find(".") < 0 -%}
+               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+            {%- else -%}
+               {{ foreign_table }}
+            {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MySQL"
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table.`customer_id` IS NULL AND analyzed_table.`target_column` IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+            FROM `<target_table>` AS analyzed_table
+            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            ON analyzed_table.`target_column` = foreign_table.`customer_id`
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "Oracle"
 
         === "Sensor template for Oracle"
@@ -2637,7 +2841,7 @@ Verifies that the number of values in a column that does not match values in ano
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_lookup_key_not_found`</span>|[integrity](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-integrity-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Integrity|[*foreign_key_not_match_count*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_lookup_key_not_found`</span>|[integrity](../../../categories-of-data-quality-checks/how-to-detect-data-integrity-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Integrity|[*foreign_key_not_match_count*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -2845,6 +3049,57 @@ spec:
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            ON analyzed_table.`target_column` = foreign_table.`customer_id`
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "MySQL"
+
+        === "Sensor template for MySQL"
+
+            ```sql+jinja
+            {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_foreign_table(foreign_table) -%}
+            {%- if foreign_table.find(".") < 0 -%}
+               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+            {%- else -%}
+               {{ foreign_table }}
+            {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MySQL"
+
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table.`customer_id` IS NULL AND analyzed_table.`target_column` IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
+                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
+            FROM `<target_table>` AS analyzed_table
             LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
             GROUP BY time_period, time_period_utc
@@ -3458,6 +3713,57 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "MySQL"
+
+        === "Sensor template for MySQL"
+            ```sql+jinja
+            {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_foreign_table(foreign_table) -%}
+            {%- if foreign_table.find(".") < 0 -%}
+               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+            {%- else -%}
+               {{ foreign_table }}
+            {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MySQL"
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table.`customer_id` IS NULL AND analyzed_table.`target_column` IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
+            FROM `<target_table>` AS analyzed_table
+            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            ON analyzed_table.`target_column` = foreign_table.`customer_id`
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "Oracle"
 
         === "Sensor template for Oracle"
@@ -3948,7 +4254,7 @@ Verifies that the number of values in a column that does not match values in ano
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_lookup_key_not_found`</span>|[integrity](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-integrity-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Integrity|[*foreign_key_not_match_count*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_partition_lookup_key_not_found`</span>|[integrity](../../../categories-of-data-quality-checks/how-to-detect-data-integrity-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Integrity|[*foreign_key_not_match_count*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -4166,6 +4472,57 @@ spec:
                 CAST(analyzed_table.`date_column` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            ON analyzed_table.`target_column` = foreign_table.`customer_id`
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "MySQL"
+
+        === "Sensor template for MySQL"
+
+            ```sql+jinja
+            {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_foreign_table(foreign_table) -%}
+            {%- if foreign_table.find(".") < 0 -%}
+               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+            {%- else -%}
+               {{ foreign_table }}
+            {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MySQL"
+
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table.`customer_id` IS NULL AND analyzed_table.`target_column` IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
+                DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+            FROM `<target_table>` AS analyzed_table
             LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
             GROUP BY time_period, time_period_utc
@@ -4793,6 +5150,57 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "MySQL"
+
+        === "Sensor template for MySQL"
+            ```sql+jinja
+            {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_foreign_table(foreign_table) -%}
+            {%- if foreign_table.find(".") < 0 -%}
+               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+            {%- else -%}
+               {{ foreign_table }}
+            {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MySQL"
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table.`customer_id` IS NULL AND analyzed_table.`target_column` IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+            FROM `<target_table>` AS analyzed_table
+            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            ON analyzed_table.`target_column` = foreign_table.`customer_id`
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "Oracle"
 
         === "Sensor template for Oracle"
@@ -5281,7 +5689,7 @@ Verifies that the number of values in a column that does not match values in ano
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_lookup_key_not_found`</span>|[integrity](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-integrity-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Integrity|[*foreign_key_not_match_count*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_partition_lookup_key_not_found`</span>|[integrity](../../../categories-of-data-quality-checks/how-to-detect-data-integrity-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Integrity|[*foreign_key_not_match_count*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -5499,6 +5907,57 @@ spec:
                 DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            ON analyzed_table.`target_column` = foreign_table.`customer_id`
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "MySQL"
+
+        === "Sensor template for MySQL"
+
+            ```sql+jinja
+            {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_foreign_table(foreign_table) -%}
+            {%- if foreign_table.find(".") < 0 -%}
+               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+            {%- else -%}
+               {{ foreign_table }}
+            {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MySQL"
+
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table.`customer_id` IS NULL AND analyzed_table.`target_column` IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
+                DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00'))) AS time_period_utc
+            FROM `<target_table>` AS analyzed_table
             LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
             GROUP BY time_period, time_period_utc
@@ -6121,6 +6580,57 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            ON analyzed_table.`target_column` = foreign_table.`customer_id`
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "MySQL"
+
+        === "Sensor template for MySQL"
+            ```sql+jinja
+            {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_foreign_table(foreign_table) -%}
+            {%- if foreign_table.find(".") < 0 -%}
+               {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+            {%- else -%}
+               {{ foreign_table }}
+            {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for MySQL"
+            ```sql
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table.`customer_id` IS NULL AND analyzed_table.`target_column` IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00') AS time_period,
+                FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00'))) AS time_period_utc
+            FROM `<target_table>` AS analyzed_table
             LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc

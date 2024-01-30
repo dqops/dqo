@@ -164,7 +164,7 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
                 break;
 
             default:
-                new RuntimeException("Given enum is not supported : " + trinoSpec.getAthenaAuthenticationMode());
+                throw new RuntimeException("Given enum is not supported : " + trinoSpec.getAthenaAuthenticationMode());
         }
 
         String region = this.getSecretValueProvider().expandValue(trinoSpec.getAthenaRegion(), secretValueLookupContext);

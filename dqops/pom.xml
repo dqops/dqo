@@ -27,7 +27,7 @@
 	</parent>
 	<groupId>com.dqops</groupId>
 	<artifactId>dqo-dqops</artifactId>
-    <version>1.0.0</version>  <!-- DQOps Version, do not touch (changed automatically) -->
+    <version>1.0.1</version>  <!-- DQOps Version, do not touch (changed automatically) -->
 	<packaging>jar</packaging>
 	<name>dqo-dqops</name>
 	<description>DQOps Data Quality Operations Center</description>
@@ -639,6 +639,12 @@
 					<artifactId>slf4j-api</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.singlestore</groupId>
+			<artifactId>singlestore-jdbc-client</artifactId>
+			<version>1.2.1</version>
+			<scope>runtime</scope>
 		</dependency>
 
 		<!-- test dependencies -->

@@ -113,7 +113,7 @@ public class ColumnAccuracyTotalNotNullCountMatchPercentSensorParametersSpec ext
      */
     @JsonIgnore
     @Override
-    public boolean getSupportsDataStreams() {
+    public boolean getSupportsDataGrouping() {
         return false;
     }
 

@@ -10,3 +10,4 @@ spec:
       \ defined by user then default value is 0"
     data_type: integer
     required: true
+    default_value: 0

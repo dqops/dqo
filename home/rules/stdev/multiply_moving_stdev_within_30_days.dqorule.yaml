@@ -19,5 +19,3 @@ spec:
       \ time window, but at least 10 readouts must exist to run the calculation."
     data_type: double
     required: true
-    sample_values:
-    - 1.5

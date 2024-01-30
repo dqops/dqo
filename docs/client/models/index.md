@@ -124,6 +124,14 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*SchemaRemoteModel*](./data_sources.md#schemaremotemodel)|Schema model returned from REST API. Describes a schema on the source database with established connection.|
 
 
+## dictionaries
+
+|&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|------------|---------------------------------|
+|[*DataDictionaryListModel*](./dictionaries.md#datadictionarylistmodel)|Data dictionary CSV file list model with the basic information about the dictionary.|
+|[*DataDictionaryModel*](./dictionaries.md#datadictionarymodel)|Data dictionary CSV full model used to create and update the dictionary file. Contains the content of the CSV file as a text field.|
+
+
 ## environment
 
 |&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|

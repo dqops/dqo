@@ -45,6 +45,8 @@ import tech.tablesaw.table.TableSliceGroup;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * Service that evaluates rules for each sensor readouts returned by a sensor query.
@@ -94,6 +96,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
 
         DoubleColumn actualValueColumn = normalizedSensorResults.getActualValueColumn();
         DoubleColumn expectedValueColumn = normalizedSensorResults.getExpectedValueColumn();
+        IntColumn customSeverityColumn = normalizedSensorResults.getSeverityColumn();
         DateTimeColumn timePeriodColumn = normalizedSensorResults.getTimePeriodColumn();
         RuleEvaluationResult result = RuleEvaluationResult.makeEmptyFromSensorResults(normalizedSensorResults);
 
@@ -127,64 +130,83 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                             timeGradient,
                             defaultTimeZoneId)
                     : null;
+            HashMap<LocalDateTime, Double> previousExpectedValues = new HashMap<>();
 
             for (int sliceRowIndex = 0; sliceRowIndex < dimensionTableSlice.rowCount() ; sliceRowIndex++) {
                 int allSensorResultsRowIndex = dimensionTableSlice.mappedRowNumber(sliceRowIndex);
                 Double actualValue = actualValueColumn.get(allSensorResultsRowIndex);
                 Double expectedValueFromSensor = expectedValueColumn != null && !expectedValueColumn.isMissing(allSensorResultsRowIndex) ?
                         expectedValueColumn.get(allSensorResultsRowIndex) : null;
+                Integer customSeverity = customSeverityColumn != null && !customSeverityColumn.isMissing(allSensorResultsRowIndex) ?
+                        customSeverityColumn.get(allSensorResultsRowIndex) : null;
 
                 LocalDateTime timePeriodLocal = timePeriodColumn.get(allSensorResultsRowIndex);
                 HistoricDataPoint[] previousDataPoints = null; // combined data points from current readouts and historic sensor readouts
 
-                if (historicDataPointGrouping == HistoricDataPointsGrouping.last_n_readouts) {
-                    // these checks do not have real time periods, we just take the last data points, also we don't want the current sensor results
-                    // because there should be none (only partitioned checks will have previous results from the most recent query), we will find them only in old data
+                if (customSeverity == null) {
+                    if (historicDataPointGrouping == HistoricDataPointsGrouping.last_n_readouts) {
+                        // these checks do not have real time periods, we just take the last data points, also we don't want the current sensor results
+                        // because there should be none (only partitioned checks will have previous results from the most recent query), we will find them only in old data
 
-                    if (ruleTimeWindowSettings != null && previousDataPointTimeSeriesCollectorOld != null) {
-                        previousDataPoints = previousDataPointTimeSeriesCollectorOld.getHistoricContinuousResultsBefore(
-                                timePeriodLocal, ruleTimeWindowSettings.getPredictionTimeWindow());
-                    }
-
-                    if (previousDataPoints == null) {
-                        previousDataPoints = new HistoricDataPoint[ruleTimeWindowSettings != null ? ruleTimeWindowSettings.getPredictionTimeWindow() : 0];
-                    }
-                } else {
-                    HistoricDataPoint[] oldDataPoints = null; // old data points retrieved from the last copy (snapshot) of previous readouts
-                    if (ruleTimeWindowSettings != null) {
-                        previousDataPoints = previousDataPointTimeSeriesCollectorCurrent.getHistoricDataPointsBefore(
-                                timePeriodLocal, ruleTimeWindowSettings.getPredictionTimeWindow());
-
-                        if (previousDataPointTimeSeriesCollectorOld != null) {
-                            oldDataPoints = previousDataPointTimeSeriesCollectorOld.getHistoricDataPointsBefore(
+                        if (ruleTimeWindowSettings != null && previousDataPointTimeSeriesCollectorOld != null) {
+                            previousDataPoints = previousDataPointTimeSeriesCollectorOld.getHistoricContinuousResultsBefore(
                                     timePeriodLocal, ruleTimeWindowSettings.getPredictionTimeWindow());
                         }
-                    }
 
-                    if (previousDataPoints != null) {
-                        int countNotNull = 0;
-                        for (int hIdx = 0; hIdx < previousDataPoints.length; hIdx++) {
-                            if (previousDataPoints[hIdx] == null) {
-                                // check if we have historic data from previous sensor runs
-                                if (oldDataPoints != null) {
-                                    previousDataPoints[hIdx] = oldDataPoints[hIdx];
+                        if (previousDataPoints == null) {
+                            previousDataPoints = new HistoricDataPoint[ruleTimeWindowSettings != null ? ruleTimeWindowSettings.getPredictionTimeWindow() : 0];
+                        }
+                    } else {
+                        HistoricDataPoint[] oldDataPoints = null; // old data points retrieved from the last copy (snapshot) of previous readouts
+                        if (ruleTimeWindowSettings != null) {
+                            previousDataPoints = previousDataPointTimeSeriesCollectorCurrent.getHistoricDataPointsBefore(
+                                    timePeriodLocal, ruleTimeWindowSettings.getPredictionTimeWindow());
+
+                            if (previousDataPointTimeSeriesCollectorOld != null) {
+                                oldDataPoints = previousDataPointTimeSeriesCollectorOld.getHistoricDataPointsBefore(
+                                        timePeriodLocal, ruleTimeWindowSettings.getPredictionTimeWindow());
+                            }
+                        }
+
+                        if (previousDataPoints != null) {
+                            int countNotNull = 0;
+                            for (int hIdx = 0; hIdx < previousDataPoints.length; hIdx++) {
+                                if (previousDataPoints[hIdx] == null) {
+                                    // check if we have historic data from previous sensor runs
+                                    if (oldDataPoints != null) {
+                                        previousDataPoints[hIdx] = oldDataPoints[hIdx];
+                                    }
+                                }
+
+                                if (previousDataPoints[hIdx] != null) {
+                                    countNotNull++;
                                 }
                             }
 
-                            if (previousDataPoints[hIdx] != null) {
-                                countNotNull++;
+                            if (countNotNull < ruleTimeWindowSettings.getMinPeriodsWithReadouts()) {
+                                continue; // we will skip this readout, we cannot calculate a value because there is not enough sensor readouts
                             }
+                        } else {
+                            previousDataPoints = new HistoricDataPoint[ruleTimeWindowSettings != null ? ruleTimeWindowSettings.getPredictionTimeWindow() : 0];
                         }
-
-                        if (countNotNull < ruleTimeWindowSettings.getMinPeriodsWithReadouts()) {
-                            continue; // we will skip this readout, we cannot calculate a value because there is not enough sensor readouts
-                        }
-                    } else {
-                        previousDataPoints = new HistoricDataPoint[ruleTimeWindowSettings != null ? ruleTimeWindowSettings.getPredictionTimeWindow() : 0];
                     }
                 }
 
-                Integer highestSeverity = null;
+                if (previousDataPoints != null) {
+                    for (int idx = 0; idx < previousDataPoints.length; idx++) {
+                        HistoricDataPoint previousDataPoint = previousDataPoints[idx];
+                        if (previousDataPoint == null) {
+                            continue;
+                        }
+
+                        Double previouslyPredictedExpectedValue = previousExpectedValues.get(previousDataPoint.getLocalDatetime());
+                        if (previouslyPredictedExpectedValue != null) {
+                            previousDataPoint.setExpectedValue(previouslyPredictedExpectedValue);
+                        }
+                    }
+                }
+
+                Integer highestSeverity = customSeverity;
                 AbstractRuleParametersSpec fatalRule = checkSpec.getFatal();
                 AbstractRuleParametersSpec errorRule = checkSpec.getError();
                 AbstractRuleParametersSpec warningRule = checkSpec.getWarning();
@@ -195,7 +217,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                 RuleExecutionResult ruleExecutionResultError = null;
                 RuleExecutionResult ruleExecutionResultWarning = null;
 
-                if (fatalRule != null) {
+                if (customSeverity == null && fatalRule != null) {
                     RuleExecutionRunParameters ruleRunParametersFatal = new RuleExecutionRunParameters(actualValue, expectedValueFromSensor,
                             fatalRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings);
                     ruleExecutionResultFatal = this.ruleRunner.executeRule(executionContext, ruleRunParametersFatal, sensorRunParameters);
@@ -211,9 +233,11 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                     if (ruleExecutionResultFatal.getNewActualValue() != null) {
                         newActualValue = ruleExecutionResultFatal.getNewActualValue();
                     }
+                } else if (fatalRule == null && customSeverity != null && customSeverity == 3) {
+                    highestSeverity = null; // clearing the custom severity, because importing a custom severity at "fatal" severity level is disabled
                 }
 
-                if (errorRule != null) {
+                if (customSeverity == null && errorRule != null) {
                     RuleExecutionRunParameters ruleRunParametersError = new RuleExecutionRunParameters(actualValue, expectedValueFromSensor,
                             errorRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings);
                     ruleExecutionResultError = this.ruleRunner.executeRule(executionContext, ruleRunParametersError, sensorRunParameters);
@@ -229,9 +253,11 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                     if (newActualValue == null && ruleExecutionResultError.getNewActualValue() != null) {
                         newActualValue = ruleExecutionResultError.getNewActualValue();
                     }
+                } else if (errorRule == null && customSeverity != null && customSeverity == 2) {
+                    highestSeverity = null; // clearing the custom severity, because importing a custom severity at "error" severity level is disabled
                 }
 
-                if (warningRule != null) {
+                if (customSeverity == null && warningRule != null) {
                     RuleExecutionRunParameters ruleRunParametersWarning = new RuleExecutionRunParameters(actualValue, expectedValueFromSensor,
                             warningRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings);
                     ruleExecutionResultWarning = this.ruleRunner.executeRule(executionContext, ruleRunParametersWarning, sensorRunParameters);
@@ -247,20 +273,26 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                     if (newActualValue == null && ruleExecutionResultWarning.getNewActualValue() != null) {
                         newActualValue = ruleExecutionResultWarning.getNewActualValue();
                     }
+                } else if (warningRule == null && customSeverity != null && customSeverity == 1) {
+                    highestSeverity = null; // clearing the custom severity, because importing a custom severity at "warning" severity level is disabled
                 }
 
                 boolean hasRuleResult;
-                if (warningRule == null && errorRule == null && fatalRule == null) {
-                    // no rules are enabled, we are appending the check result as passed, but excluding it from KPI
-                    hasRuleResult = false;
-                } else {
+                if (customSeverity != null) {
                     hasRuleResult = true;
-                    if ((ruleExecutionResultFatal == null || ruleExecutionResultFatal.getPassed() == null) &&
-                            (ruleExecutionResultError == null || ruleExecutionResultError.getPassed() == null) &&
-                            (ruleExecutionResultWarning == null || ruleExecutionResultWarning.getPassed() == null)) {
-                        // no rule managed to evaluate, the result is inconclusive, no rule returned any result,
-                        // probably not enough historical data to calculate, we are not adding a check result row
-                        continue;
+                } else {
+                    if (warningRule == null && errorRule == null && fatalRule == null) {
+                        // no rules are enabled, we are appending the check result as passed, but excluding it from KPI
+                        hasRuleResult = false;
+                    } else {
+                        hasRuleResult = true;
+                        if ((ruleExecutionResultFatal == null || ruleExecutionResultFatal.getPassed() == null) &&
+                                (ruleExecutionResultError == null || ruleExecutionResultError.getPassed() == null) &&
+                                (ruleExecutionResultWarning == null || ruleExecutionResultWarning.getPassed() == null)) {
+                            // no rule managed to evaluate, the result is inconclusive, no rule returned any result,
+                            // probably not enough historical data to calculate, we are not adding a check result row
+                            continue;
+                        }
                     }
                 }
 
@@ -328,6 +360,15 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
 
                 if (newActualValue != null) {
                     result.getActualValueColumn().set(targetRowIndex, newActualValue);
+                }
+
+
+                if (expectedValue != null) {
+                    previousExpectedValues.put(timePeriodLocal, expectedValue);
+
+                    if (!Objects.equals(expectedValueFromSensor, expectedValue)) {
+                        expectedValueColumn.set(allSensorResultsRowIndex, expectedValue);  // write back an expected value calculated from the sensor, will allow to use prediction better
+                    }
                 }
             }
         }

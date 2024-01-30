@@ -204,7 +204,7 @@ The results of *partitioned* data quality checks are used to evaluate the data q
   the issues will decrease the [data quality KPI score](../definition-of-data-quality-kpis.md). You will have to use the
   [delete data quality results](../../working-with-dqo/delete-data-quality-results.md) screens to remove these data quality results.
 
-- *Monthly partitioned* checks do not support [anomaly detection data quality checks](../categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md),
+- *Monthly partitioned* checks do not support [anomaly detection data quality checks](../../categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md),
   because when only one data quality result for each data quality check is stored **per month**, there is not enough historical data
   to use prediction.
 

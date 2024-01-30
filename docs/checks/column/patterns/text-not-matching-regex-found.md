@@ -17,7 +17,7 @@ Verifies that the number of text values not matching the custom regular expressi
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_text_not_matching_regex_found`</span>|[patterns](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*text_not_matching_regex_count*](../../../reference/sensors/column/patterns-column-sensors.md#text-not-matching-regex-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_text_not_matching_regex_found`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*text_not_matching_regex_count*](../../../reference/sensors/column/patterns-column-sensors.md#text-not-matching-regex-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -240,20 +240,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro make_text_constant(string) -%}
-                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-            {%- endmacro %}
-            
-            {%- macro render_regex(regex) -%}
-                 {{ make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex) }}
                                 THEN 0
                             ELSE 1
                         END
@@ -905,20 +897,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro make_text_constant(string) -%}
-                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-            {%- endmacro %}
-            
-            {%- macro render_regex(regex) -%}
-                 {{ make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex) }}
                                 THEN 0
                             ELSE 1
                         END
@@ -1444,7 +1428,7 @@ Verifies that the number of text values not matching the custom regular expressi
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_text_not_matching_regex_found`</span>|[patterns](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*text_not_matching_regex_count*](../../../reference/sensors/column/patterns-column-sensors.md#text-not-matching-regex-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_text_not_matching_regex_found`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*text_not_matching_regex_count*](../../../reference/sensors/column/patterns-column-sensors.md#text-not-matching-regex-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -1668,20 +1652,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro make_text_constant(string) -%}
-                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-            {%- endmacro %}
-            
-            {%- macro render_regex(regex) -%}
-                 {{ make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex) }}
                                 THEN 0
                             ELSE 1
                         END
@@ -2334,20 +2310,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro make_text_constant(string) -%}
-                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-            {%- endmacro %}
-            
-            {%- macro render_regex(regex) -%}
-                 {{ make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex) }}
                                 THEN 0
                             ELSE 1
                         END
@@ -2873,7 +2841,7 @@ Verifies that the number of text values not matching the custom regular expressi
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_text_not_matching_regex_found`</span>|[patterns](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*text_not_matching_regex_count*](../../../reference/sensors/column/patterns-column-sensors.md#text-not-matching-regex-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_text_not_matching_regex_found`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*text_not_matching_regex_count*](../../../reference/sensors/column/patterns-column-sensors.md#text-not-matching-regex-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -3097,20 +3065,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro make_text_constant(string) -%}
-                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-            {%- endmacro %}
-            
-            {%- macro render_regex(regex) -%}
-                 {{ make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex) }}
                                 THEN 0
                             ELSE 1
                         END
@@ -3763,20 +3723,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro make_text_constant(string) -%}
-                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-            {%- endmacro %}
-            
-            {%- macro render_regex(regex) -%}
-                 {{ make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex) }}
                                 THEN 0
                             ELSE 1
                         END
@@ -4302,7 +4254,7 @@ Verifies that the number of text values not matching the custom regular expressi
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_text_not_matching_regex_found`</span>|[patterns](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*text_not_matching_regex_count*](../../../reference/sensors/column/patterns-column-sensors.md#text-not-matching-regex-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_partition_text_not_matching_regex_found`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*text_not_matching_regex_count*](../../../reference/sensors/column/patterns-column-sensors.md#text-not-matching-regex-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -4536,20 +4488,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro make_text_constant(string) -%}
-                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-            {%- endmacro %}
-            
-            {%- macro render_regex(regex) -%}
-                 {{ make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex) }}
                                 THEN 0
                             ELSE 1
                         END
@@ -5216,20 +5160,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro make_text_constant(string) -%}
-                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-            {%- endmacro %}
-            
-            {%- macro render_regex(regex) -%}
-                 {{ make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex) }}
                                 THEN 0
                             ELSE 1
                         END
@@ -5753,7 +5689,7 @@ Verifies that the number of text values not matching the custom regular expressi
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_text_not_matching_regex_found`</span>|[patterns](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*text_not_matching_regex_count*](../../../reference/sensors/column/patterns-column-sensors.md#text-not-matching-regex-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_partition_text_not_matching_regex_found`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*text_not_matching_regex_count*](../../../reference/sensors/column/patterns-column-sensors.md#text-not-matching-regex-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -5987,20 +5923,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro make_text_constant(string) -%}
-                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-            {%- endmacro %}
-            
-            {%- macro render_regex(regex) -%}
-                 {{ make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex) }}
                                 THEN 0
                             ELSE 1
                         END
@@ -6667,20 +6595,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro make_text_constant(string) -%}
-                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-            {%- endmacro %}
-            
-            {%- macro render_regex(regex) -%}
-                 {{ make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex) }}
                                 THEN 0
                             ELSE 1
                         END

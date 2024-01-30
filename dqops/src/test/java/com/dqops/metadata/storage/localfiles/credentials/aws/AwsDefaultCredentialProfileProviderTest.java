@@ -61,15 +61,13 @@ public class AwsDefaultCredentialProfileProviderTest extends BaseTest {
         Path defaultAwsCredentialsPath = userHomePath.resolve(BuiltInFolderNames.CREDENTIALS)
                 .resolve(DefaultCloudCredentialFileNames.AWS_DEFAULT_CREDENTIALS_NAME);
 
-        if (!Files.exists(defaultAwsCredentialsPath)) {
-            Files.writeString(defaultAwsCredentialsPath, DefaultCloudCredentialFileContent.AWS_DEFAULT_CREDENTIALS_INITIAL_CONTENT);
+        Files.writeString(defaultAwsCredentialsPath, DefaultCloudCredentialFileContent.AWS_DEFAULT_CREDENTIALS_INITIAL_CONTENT);
 
-            String credentialFileContent = DefaultCloudCredentialFileContent.AWS_DEFAULT_CREDENTIALS_INITIAL_CONTENT
-                    .replace("PLEASE_REPLACE_WITH_YOUR_AWS_ACCESS_KEY_ID", "my_custom_access_key_id")
-                    .replace("PLEASE_REPLACE_WITH_YOUR_AWS_SECRET_ACCESS_KEY", "my_custom_secret_access_key");
+        String credentialFileContent = DefaultCloudCredentialFileContent.AWS_DEFAULT_CREDENTIALS_INITIAL_CONTENT
+                .replace("PLEASE_REPLACE_WITH_YOUR_AWS_ACCESS_KEY_ID", "my_custom_access_key_id")
+                .replace("PLEASE_REPLACE_WITH_YOUR_AWS_SECRET_ACCESS_KEY", "my_custom_secret_access_key");
 
-            Files.writeString(defaultAwsCredentialsPath, credentialFileContent);
-        }
+        Files.writeString(defaultAwsCredentialsPath, credentialFileContent);
 
         Optional<Profile> profile = this.sut.provideProfile(secretValueLookupContext);
 

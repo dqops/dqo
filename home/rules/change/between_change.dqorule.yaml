@@ -14,11 +14,7 @@ spec:
     display_name: from
     help_text: Minimum accepted change with regards to the previous readout (inclusive).
     data_type: double
-    sample_values:
-    - 10
   - field_name: to
     display_name: to
     help_text: Maximum accepted change with regards to the previous readout (inclusive).
     data_type: double
-    sample_values:
-    - 20

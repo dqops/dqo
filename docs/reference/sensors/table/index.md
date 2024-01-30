@@ -29,6 +29,7 @@
 
 | Sensor name | Description |
 |-------------|-------------|
+|[*import_custom_result*](./custom_sql-table-sensors.md#import-custom-result)|Table level sensor that uses a custom SQL SELECT statement to retrieve a result of running a custom data quality check that was hardcoded in the data pipeline, and the result was stored in a separate table. The SQL query that is configured in this external data quality results importer must be a complete SELECT statement that queries a dedicated table (created by the data engineers) that stores the results of custom data quality checks.|
 |[*sql_aggregated_expression*](./custom_sql-table-sensors.md#sql-aggregated-expression)|Table level sensor that executes a given SQL expression on a table.|
 |[*sql_condition_failed_count*](./custom_sql-table-sensors.md#sql-condition-failed-count)|Table level sensor that uses a custom SQL condition (an SQL expression that returns a boolean value) to count rows that do not meet the condition.|
 |[*sql_condition_failed_percent*](./custom_sql-table-sensors.md#sql-condition-failed-percent)|Table level sensor that uses a custom SQL condition (an SQL expression that returns a boolean value) to count the percentage of rows that do not meet the condition.|

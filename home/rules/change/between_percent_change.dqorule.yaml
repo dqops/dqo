@@ -14,11 +14,7 @@ spec:
     display_name: from_percent
     help_text: Minimum accepted change relative to the previous readout (inclusive).
     data_type: double
-    sample_values:
-    - 10
   - field_name: to_percent
     display_name: to_percent
     help_text: Maximum accepted change relative to the previous readout (inclusive).
     data_type: double
-    sample_values:
-    - 20

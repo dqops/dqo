@@ -129,6 +129,12 @@ export default function UserProfile({ name, email }: UserProfile) {
 
         <div className="font-bold h-8 ml-1">Account limits:</div>
         <div className="flex justify-between items-center">
+          <div className="ml-1">Data quality dashboards:</div>
+          <div className="mr-1">
+            {userProfile?.data_quality_data_warehouse_enabled ? 'enabled' : 'disabled'}
+          </div>
+        </div>
+        <div className="flex justify-between items-center">
           <div className="ml-1">Users:</div>
           <div className="mr-1">
             {userProfile?.users_limit ? userProfile.users_limit : '-'}
@@ -163,7 +169,7 @@ export default function UserProfile({ name, email }: UserProfile) {
           </div>
         </div>
         <div className="flex justify-between items-center">
-          <div className="ml-1">Months in warehouse:</div>
+          <div className="ml-1">Months in data quality warehouse:</div>
           <div className="mr-1">
             {userProfile?.months_limit ? userProfile.months_limit : '-'}
           </div>

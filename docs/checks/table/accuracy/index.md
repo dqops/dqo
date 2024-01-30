@@ -5,9 +5,13 @@ This is a list of accuracy table data quality checks supported by DQOps and a br
 
 
 
-
-## **accuracy**
+## table-level accuracy checks
 Compares the tested table with another (reference) table.
+
+### [total row count match percent](./total-row-count-match-percent.md)
+A table-level check that compares the row count of the current (tested) table with the row count of another table that is referenced. This check ensures that the difference between the row counts is below the maximum accepted percentage of difference.
+ This check runs an SQL query with an INNER JOIN clause to join another (referenced) table that must be defined in the same database.
+
 
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|

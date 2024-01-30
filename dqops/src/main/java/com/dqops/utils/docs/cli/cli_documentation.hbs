@@ -63,7 +63,7 @@ All parameters supported by the command are listed below.
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-{{#each options}}|{{#each names}}<div id="{{qualifiedName}}{{this}}" class="no-wrap-code">`{{this}}`</div>{{/each}}|{{#each description}}{{replace this ":mm" "\:mm"}}{{/each}}|{{checkmark required}}|{{#each acceptedValues}}*{{this}}*<br/>{{/each}}|
+{{#each options}}|{{#each names}}<div id="{{qualifiedName}}{{this}}" class="no-wrap-code">`{{this}}`</div>{{/each}}|{{#each description}}{{{replace this ":mm" "\:mm"}}}{{/each}}|{{checkmark required}}|{{#each acceptedValues}}*{{this}}*<br/>{{/each}}|
 {{else}}
 {{/each}}
 {{else}}

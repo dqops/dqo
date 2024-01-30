@@ -180,6 +180,15 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec
         assert getChild(fieldName) != null && getChild(fieldName).getHierarchyId().equals(childHierarchyId);
     }
 
+
+    /**
+     * Returns the child map and the reflection info. It is a public method to be used when reflection is used by different classses.
+     * @return Child node information.
+     */
+    public final ChildHierarchyNodeFieldMap childMap() {
+        return getChildMap();
+    }
+
     /**
      * Returns an iterable that iterates over child nodes.
      *

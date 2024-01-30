@@ -1,6 +1,7 @@
-{% set macro_database_name =  connection.mysql.database -%}
+{% set macro_database_name = connection.mysql.database -%}
 {% set macro_schema_name = target_table.schema_name -%}
 {% set macro_table_name = target_table.table_name -%}
+{% set engine_type = connection.mysql.mysql_engine_type -%}
 {% set time_series = effective_time_series | default(none, true) -%}
 {% set time_window_filter = effective_time_window_filter | default(none, true) -%}
 {% set timestamp_column_data_type = table.columns[time_series.timestamp_column].type_snapshot.column_type | upper | default(none, true) -%}
@@ -425,3 +426,14 @@
 {{ indentation }}ORDER BY {{ render_grouping_column_names() }}
     {%- endif -%}
 {% endmacro %}
+
+{% macro render_regex(column, regex_pattern) %}
+    {%- if engine_type == 'singlestoredb' %}{{ column }} RLIKE {{ make_text_constant(regex_pattern) }}
+    {%- else -%}REGEXP_LIKE({{ column }}, {{ make_text_constant(regex_pattern) }})
+    {%- endif -%}
+{% endmacro %}
+
+{%- macro make_text_constant(string) -%}
+    {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
+{%- endmacro %}
+

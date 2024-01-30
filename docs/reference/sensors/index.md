@@ -30,6 +30,7 @@
 
 | Sensor name | Description |
 |-------------|-------------|
+|[*import_custom_result*](./table/custom_sql-table-sensors.md#import-custom-result)|Table level sensor that uses a custom SQL SELECT statement to retrieve a result of running a custom data quality check that was hardcoded in the data pipeline, and the result was stored in a separate table. The SQL query that is configured in this external data quality results importer must be a complete SELECT statement that queries a dedicated table (created by the data engineers) that stores the results of custom data quality checks.|
 |[*sql_aggregated_expression*](./table/custom_sql-table-sensors.md#sql-aggregated-expression)|Table level sensor that executes a given SQL expression on a table.|
 |[*sql_condition_failed_count*](./table/custom_sql-table-sensors.md#sql-condition-failed-count)|Table level sensor that uses a custom SQL condition (an SQL expression that returns a boolean value) to count rows that do not meet the condition.|
 |[*sql_condition_failed_percent*](./table/custom_sql-table-sensors.md#sql-condition-failed-percent)|Table level sensor that uses a custom SQL condition (an SQL expression that returns a boolean value) to count the percentage of rows that do not meet the condition.|
@@ -201,6 +202,7 @@
 
 | Sensor name | Description |
 |-------------|-------------|
+|[*import_custom_result*](./column/custom_sql-column-sensors.md#import-custom-result)|Column level sensor that uses a custom SQL SELECT statement to retrieve a result of running a custom data quality check on a column by a custom data quality check, hardcoded in the data pipeline. The result is retrieved by querying a separate **logging table**, whose schema is not fixed. The logging table should have columns that identify a table and a column for which they store custom data quality check results, and a *severity* column of the data quality issue. The SQL query that is configured in this external data quality results importer must be a complete SELECT statement that queries a dedicated logging table, created by the data engineering team.|
 |[*sql_aggregated_expression*](./column/custom_sql-column-sensors.md#sql-aggregated-expression)|Column level sensor that executes a given SQL expression on a column.|
 |[*sql_condition_failed_count*](./column/custom_sql-column-sensors.md#sql-condition-failed-count)|Column level sensor that uses a custom SQL condition (an SQL expression that returns a boolean value) to count rows that do not meet the condition.|
 |[*sql_condition_failed_percent*](./column/custom_sql-column-sensors.md#sql-condition-failed-percent)|Column level sensor that uses a custom SQL condition (an SQL expression that returns a boolean value) to count the percentage of rows that do not meet the condition.|

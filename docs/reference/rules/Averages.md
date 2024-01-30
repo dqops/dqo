@@ -55,6 +55,7 @@ The rule definition YAML file *averages/between_percent_moving_average_30_days.d
           \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
           \ exist to run the calculation."
         data_type: double
+        default_value: 10.0
       - field_name: max_percent_below
         display_name: max_percent_below
         help_text: "Maximum percent (e.q. 3%) that the current sensor readout could be\
@@ -63,6 +64,7 @@ The rule definition YAML file *averages/between_percent_moving_average_30_days.d
           \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
           \ exist to run the calculation."
         data_type: double
+        default_value: 10.0
     ```
 
 
@@ -110,6 +112,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -217,6 +220,7 @@ The rule definition YAML file *averages/between_percent_moving_average_60_days.d
           \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
           \ exist to run the calculation."
         data_type: double
+        default_value: 10.0
       - field_name: max_percent_below
         display_name: max_percent_below
         help_text: "Maximum percent (e.q. 3%) that the current sensor readout could be\
@@ -225,6 +229,7 @@ The rule definition YAML file *averages/between_percent_moving_average_60_days.d
           \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
           \ exist to run the calculation."
         data_type: double
+        default_value: 10.0
     ```
 
 
@@ -272,6 +277,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -379,6 +385,7 @@ The rule definition YAML file *averages/between_percent_moving_average_7_days.dq
           \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
           \ exist to run the calculation."
         data_type: double
+        default_value: 10.0
       - field_name: max_percent_below
         display_name: max_percent_below
         help_text: "Maximum percent (e.q. 3%) that the current sensor readout could be\
@@ -387,6 +394,7 @@ The rule definition YAML file *averages/between_percent_moving_average_7_days.dq
           \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
           \ exist to run the calculation."
         data_type: double
+        default_value: 10.0
     ```
 
 
@@ -434,6 +442,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -541,8 +550,6 @@ The rule definition YAML file *averages/percent_moving_average.dqorule.yaml* wit
           \ default is a 14 time periods (days, etc.) time window, but at least 7 readouts\
           \ must exist to run the calculation."
         data_type: double
-        sample_values:
-        - 10.0
       - field_name: max_percent_below
         display_name: max_percent_below
         help_text: "Maximum percent (e.q. 3%) that the current sensor readout could be\
@@ -551,8 +558,6 @@ The rule definition YAML file *averages/percent_moving_average.dqorule.yaml* wit
           \ default is a 14 time periods (days, etc.) time window, but at least 7 readouts\
           \ must exist to run the calculation."
         data_type: double
-        sample_values:
-        - 10.0
     ```
 
 
@@ -600,6 +605,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -707,6 +713,7 @@ The rule definition YAML file *averages/within_percent_moving_average_30_days.dq
           \ exist to run the calculation."
         data_type: double
         required: true
+        default_value: 10.0
     ```
 
 
@@ -753,6 +760,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -860,6 +868,7 @@ The rule definition YAML file *averages/within_percent_moving_average_60_days.dq
           \ exist to run the calculation."
         data_type: double
         required: true
+        default_value: 10.0
     ```
 
 
@@ -906,6 +915,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -1013,6 +1023,7 @@ The rule definition YAML file *averages/within_percent_moving_average_7_days.dqo
           \ exist to run the calculation."
         data_type: double
         required: true
+        default_value: 10.0
     ```
 
 
@@ -1059,6 +1070,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:

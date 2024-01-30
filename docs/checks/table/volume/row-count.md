@@ -18,7 +18,7 @@ Verifies that the tested table has at least a minimum accepted number of rows. T
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_row_count`</span>|[volume](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Completeness|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_row_count`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Completeness|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -817,7 +817,7 @@ Verifies that the tested table has at least a minimum accepted number of rows. T
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_row_count`</span>|[volume](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Completeness|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_row_count`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Completeness|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -1618,7 +1618,7 @@ Verifies that the tested table has at least a minimum accepted number of rows. T
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_row_count`</span>|[volume](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Completeness|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_row_count`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Completeness|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -2419,7 +2419,7 @@ Verifies that each daily partition in the tested table has at least a minimum ac
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_row_count`</span>|[volume](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Completeness|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_partition_row_count`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Completeness|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -3242,7 +3242,7 @@ Verifies that each monthly partition in the tested table has at least a minimum 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_row_count`</span>|[volume](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Completeness|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_partition_row_count`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Completeness|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
 
 **Command-line examples**
 

@@ -14,14 +14,10 @@ spec:
     display_name: from_percent
     help_text: Minimum accepted change relative to the previous readout (inclusive).
     data_type: double
-    sample_values:
-    - 10
   - field_name: to_percent
     display_name: to_percent
     help_text: Maximum accepted change relative to the previous readout (inclusive).
     data_type: double
-    sample_values:
-    - 20
   - field_name: exact_day
     display_name: exact_day
     help_text: "When the exact_day parameter is unchecked (exact_day: false), rule\
@@ -30,3 +26,4 @@ spec:
       \ with the results from the past 1 day. If no results are found from that time,\
       \ no results or errors will be generated."
     data_type: boolean
+    default_value: "true"

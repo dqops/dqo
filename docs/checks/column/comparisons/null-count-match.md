@@ -18,7 +18,7 @@ Verifies that percentage of the difference between the count of null values in a
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_null_count_match`</span>|[comparisons](../../../dqo-concepts/categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Accuracy|[*null_count*](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_null_count_match`</span>|[comparisons](../../../categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Accuracy|[*null_count*](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -593,7 +593,7 @@ Verifies that percentage of the difference between the count of null values in a
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_null_count_match`</span>|[comparisons](../../../dqo-concepts/categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Accuracy|[*null_count*](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_null_count_match`</span>|[comparisons](../../../categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Accuracy|[*null_count*](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -1169,7 +1169,7 @@ Verifies that percentage of the difference between the count of null values in a
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_null_count_match`</span>|[comparisons](../../../dqo-concepts/categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Accuracy|[*null_count*](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_null_count_match`</span>|[comparisons](../../../categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Accuracy|[*null_count*](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -1745,7 +1745,7 @@ Verifies that percentage of the difference between the count of null values in a
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_null_count_match`</span>|[comparisons](../../../dqo-concepts/categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Accuracy|[*null_count*](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_partition_null_count_match`</span>|[comparisons](../../../categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Accuracy|[*null_count*](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -2335,7 +2335,7 @@ Verifies that percentage of the difference between the count of null values in a
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_null_count_match`</span>|[comparisons](../../../dqo-concepts/categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Accuracy|[*null_count*](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_partition_null_count_match`</span>|[comparisons](../../../categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Accuracy|[*null_count*](../../../reference/sensors/column/nulls-column-sensors.md#null-count)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 

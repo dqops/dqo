@@ -20,6 +20,7 @@ import com.dqops.connectors.ConnectionProviderRegistry;
 import com.dqops.connectors.SourceConnection;
 import com.dqops.core.jobqueue.JobCancellationToken;
 import com.dqops.core.secrets.SecretValueLookupContext;
+import com.dqops.data.checkresults.factory.CheckResultsColumnNames;
 import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
 import com.dqops.data.statistics.factory.StatisticsColumnNames;
 import com.dqops.execution.ExecutionContext;
@@ -242,6 +243,11 @@ public class JinjaSqlTemplateSensorRunner extends AbstractSensorRunner {
                     .toArray(Column<?>[]::new);
             if (dataStreamLevelColumns.length > 0) {
                 sensorResultRows.addColumns(dataStreamLevelColumns);
+            }
+
+            Column<?> severityColumn = TableColumnUtility.findColumn(multiSensorTableResult, CheckResultsColumnNames.SEVERITY_COLUMN_NAME);
+            if (severityColumn != null) {
+                sensorResultRows.addColumns(severityColumn);
             }
         }
 

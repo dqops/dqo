@@ -16,7 +16,7 @@ class TableSqlAggregatedExpressionSensorParametersSpec:
             sensor query filter are added, separated by an AND operator.
         sql_expression (Union[Unset, str]): SQL aggregate expression that returns a numeric value calculated from rows.
             The expression is evaluated on a whole table or withing a GROUP BY clause for daily partitions and/or data
-            groups. The expression can use {table} placeholder that is replaced with a full table name.
+            groups. The expression can use a {table} placeholder that is replaced with a full table name.
     """
 
     filter_: Union[Unset, str] = UNSET

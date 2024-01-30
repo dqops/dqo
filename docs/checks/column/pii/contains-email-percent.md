@@ -17,7 +17,7 @@ Verifies that the percentage of rows that contains valid emails in a column does
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_contains_email_percent`</span>|[pii](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*contains_email_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-email-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_contains_email_percent`</span>|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*contains_email_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-email-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -225,7 +225,7 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}} , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -246,7 +246,7 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column` , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
                                 THEN 1
                             ELSE 0
                         END
@@ -796,7 +796,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}} , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -816,7 +816,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column` , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
                                 THEN 1
                             ELSE 0
                         END
@@ -1256,7 +1256,7 @@ Verifies that the percentage of rows that contains emails in a column does not e
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_contains_email_percent`</span>|[pii](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*contains_email_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-email-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_contains_email_percent`</span>|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*contains_email_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-email-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -1465,7 +1465,7 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}} , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -1486,7 +1486,7 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column` , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
                                 THEN 1
                             ELSE 0
                         END
@@ -2037,7 +2037,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}} , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -2057,7 +2057,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column` , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
                                 THEN 1
                             ELSE 0
                         END
@@ -2497,7 +2497,7 @@ Verifies that the percentage of rows that contains emails in a column does not e
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_contains_email_percent`</span>|[pii](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*contains_email_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-email-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_contains_email_percent`</span>|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*contains_email_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-email-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -2706,7 +2706,7 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}} , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -2727,7 +2727,7 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column` , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
                                 THEN 1
                             ELSE 0
                         END
@@ -3278,7 +3278,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}} , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -3298,7 +3298,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column` , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
                                 THEN 1
                             ELSE 0
                         END
@@ -3738,7 +3738,7 @@ Verifies that the percentage of rows that contains emails in a column does not e
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_contains_email_percent`</span>|[pii](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*contains_email_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-email-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_partition_contains_email_percent`</span>|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*contains_email_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-email-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -3957,7 +3957,7 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}} , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -3978,7 +3978,7 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column` , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
                                 THEN 1
                             ELSE 0
                         END
@@ -4543,7 +4543,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}} , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -4563,7 +4563,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column` , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
                                 THEN 1
                             ELSE 0
                         END
@@ -5001,7 +5001,7 @@ Verifies that the percentage of rows that contains emails in a column does not e
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_contains_email_percent`</span>|[pii](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*contains_email_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-email-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_partition_contains_email_percent`</span>|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*contains_email_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-email-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -5220,7 +5220,7 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}} , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -5241,7 +5241,7 @@ spec:
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column` , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
                                 THEN 1
                             ELSE 0
                         END
@@ -5806,7 +5806,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{lib.render_target_column('analyzed_table')}} , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -5826,7 +5826,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table.`target_column` , '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
+                            WHEN REGEXP_LIKE(analyzed_table.`target_column`, '[A-Za-z0-9_][A-Za-z0-9_.-]*[@]{1}[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]([.]{1}([A-Za-z]{2,3})){1,2}')
                                 THEN 1
                             ELSE 0
                         END

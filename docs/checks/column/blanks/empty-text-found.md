@@ -17,7 +17,7 @@ Verifies that empty strings in a column does not exceed the maximum accepted cou
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_empty_text_found`</span>|[blanks](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Completeness|[*empty_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_empty_text_found`</span>|[blanks](../../../categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Completeness|[*empty_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -1250,7 +1250,7 @@ Verifies that the number of empty strings in a column does not exceed the maximu
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_empty_text_found`</span>|[blanks](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Completeness|[*empty_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_empty_text_found`</span>|[blanks](../../../categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Completeness|[*empty_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -2485,7 +2485,7 @@ Verifies that the number of empty strings in a column does not exceed the maximu
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_empty_text_found`</span>|[blanks](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Completeness|[*empty_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_empty_text_found`</span>|[blanks](../../../categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Completeness|[*empty_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -3720,7 +3720,7 @@ Verifies that the number of empty strings in a column does not exceed the maximu
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_empty_text_found`</span>|[blanks](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Completeness|[*empty_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_partition_empty_text_found`</span>|[blanks](../../../categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Completeness|[*empty_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -4977,7 +4977,7 @@ Verifies that the number of empty strings in a column does not exceed the maximu
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_empty_text_found`</span>|[blanks](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Completeness|[*empty_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_partition_empty_text_found`</span>|[blanks](../../../categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Completeness|[*empty_text_count*](../../../reference/sensors/column/blanks-column-sensors.md#empty-text-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 

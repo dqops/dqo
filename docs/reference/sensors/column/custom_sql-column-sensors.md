@@ -4,6 +4,129 @@ All [data quality sensors](../../../dqo-concepts/definition-of-data-quality-sens
 ---
 
 
+## import custom result
+Column level sensor that uses a custom SQL SELECT statement to retrieve a result of running a custom data quality check on a column by a custom
+ data quality check, hardcoded in the data pipeline. The result is retrieved by querying a separate **logging table**, whose schema is not fixed.
+ The logging table should have columns that identify a table and a column for which they store custom data quality check results, and a *severity* column of the data quality issue.
+ The SQL query that is configured in this external data quality results importer must be
+ a complete SELECT statement that queries a dedicated logging table, created by the data engineering team.
+
+**Sensor summary**
+
+The import custom result sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| column | custom_sql | <span class="no-wrap-code">`column/custom_sql/import_custom_result`</span> | [*sensors/column/custom_sql*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/custom_sql/) |
+
+
+**Sensor parameters**
+
+| Field name | Description | Allowed data type | Required | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|<span class="no-wrap-code">`sql_query`</span>|A custom SELECT statement that queries a logging table with custom results of data quality checks executed by the data pipeline. The query must return a result column named *severity*. The values of the *severity* column must be: 0 - data quality check passed, 1 - warning issue, 2 - error severity issue, 3 - fatal severity issue. The query can return *actual_value* and *expected_value* results that are imported into DQOps data lake. The query can use a {table_name} placeholder that is replaced with a table name for which the results are imported, and a {column_name} placeholder replaced with the column name.|*string*|:material-check-bold:||
+
+
+
+
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
+=== "BigQuery"
+
+    ```sql+jinja
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    {{ parameters.sql_query | replace('{table_name}', target_table.table_name)
+                            | replace('{schema_name}', target_table.schema_name)
+                            | replace('{column_name}', column_name) }}
+    ```
+=== "Databricks"
+
+    ```sql+jinja
+    {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+    {{ parameters.sql_query | replace('{table_name}', target_table.table_name)
+                            | replace('{schema_name}', target_table.schema_name)
+                            | replace('{column_name}', column_name) }}
+    ```
+=== "MySQL"
+
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    {{ parameters.sql_query | replace('{table_name}', target_table.table_name)
+                            | replace('{schema_name}', target_table.schema_name)
+                            | replace('{column_name}', column_name) }}
+    ```
+=== "Oracle"
+
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    {{ parameters.sql_query | replace('{table_name}', target_table.table_name)
+                            | replace('{schema_name}', target_table.schema_name)
+                            | replace('{column_name}', column_name) }}
+    ```
+=== "PostgreSQL"
+
+    ```sql+jinja
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    {{ parameters.sql_query | replace('{table_name}', target_table.table_name)
+                            | replace('{schema_name}', target_table.schema_name)
+                            | replace('{column_name}', column_name) }}
+    ```
+=== "Presto"
+
+    ```sql+jinja
+    {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+    {{ parameters.sql_query | replace('{table_name}', target_table.table_name)
+                            | replace('{schema_name}', target_table.schema_name)
+                            | replace('{column_name}', column_name) }}
+    ```
+=== "Redshift"
+
+    ```sql+jinja
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    {{ parameters.sql_query | replace('{table_name}', target_table.table_name)
+                            | replace('{schema_name}', target_table.schema_name)
+                            | replace('{column_name}', column_name) }}
+    ```
+=== "Snowflake"
+
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    {{ parameters.sql_query | replace('{table_name}', target_table.table_name)
+                            | replace('{schema_name}', target_table.schema_name)
+                            | replace('{column_name}', column_name) }}
+    ```
+=== "Spark"
+
+    ```sql+jinja
+    {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+    {{ parameters.sql_query | replace('{table_name}', target_table.table_name)
+                            | replace('{schema_name}', target_table.schema_name)
+                            | replace('{column_name}', column_name) }}
+    ```
+=== "SQL Server"
+
+    ```sql+jinja
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    {{ parameters.sql_query | replace('{table_name}', target_table.table_name)
+                            | replace('{schema_name}', target_table.schema_name)
+                            | replace('{column_name}', column_name) }}
+    ```
+=== "Trino"
+
+    ```sql+jinja
+    {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+    {{ parameters.sql_query | replace('{table_name}', target_table.table_name)
+                            | replace('{schema_name}', target_table.schema_name)
+                            | replace('{column_name}', column_name) }}
+    ```
+___
+
+
+
 ## sql aggregated expression
 Column level sensor that executes a given SQL expression on a column.
 

@@ -12,6 +12,7 @@ interface IStringListFieldProps {
   tooltipText?: string;
   onChange: (value: string[]) => void;
   onSave?: () => void;
+  disabled?: boolean;
 }
 
 const StringListField = ({
@@ -19,6 +20,7 @@ const StringListField = ({
   value,
   tooltipText,
   onChange,
+  disabled
 }: IStringListFieldProps) => {
   const [open, setOpen] = useState(false);
   const [labels, setLabels] = useState<string[]>([]);
@@ -65,7 +67,7 @@ const StringListField = ({
         <SvgIcon
           name="edit"
           className="w-4 h-4 text-gray-700 cursor-pointer"
-          onClick={() => setOpen(true)}
+          onClick={() => !disabled && setOpen(true)}
         />
       </div>
       <Dialog open={open} handler={() => setOpen(false)}>

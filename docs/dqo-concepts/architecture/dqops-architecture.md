@@ -1,5 +1,5 @@
 # DQOps architecture
-This guide shows the components of a DQOps environment, and what are the possible deployment options for a SaaS hosted, on-premise or a hybrid environment.
+This guide shows the components of a DQOps environment, and what are the possible deployment options for a SaaS-hosted, on-premise, or hybrid environment.
 
 ## Overview
 
@@ -13,35 +13,35 @@ editing YAML files. Technical users should be able to manage data quality check 
 files in their editor of choice and version the configuration in Git. Non-technical users should be able to 
 configure data quality checks from the browser.
 
-DQOps achieves its principal idea by separating the platform into four core components:
+DQOps implements its principal idea by separating the platform into four core components:
 
 - `DQOps runtime` - All-in-one data quality engine that contains both
-    * an embedded web server hosting the user interface and the REST API for integration with external tools
-    * command-line shell interface for running commands
+    * an embedded web server hosting the user interface and the REST API for integration with external tools,
+    * command-line shell interface for running commands.
   
 
-- `DQOps user home` - Local folder storing the configuration of activated data quality checks and a local copy of all
+- `DQOps user home` - Local folder that stores the configuration of activated data quality checks and a local copy of all
   data quality results, enabling offline and hybrid deployment models.
   The data model is described in the [Data storage](../data-storage-of-data-quality-results.md) documentation.
 
  
 - `DQOps Cloud` - DQOps hosted cloud backend for exposing data quality dashboards which has the following components:
-    * **Data Quality Data Lake** - Storage buckets with a copy of data quality check configuration and a copy of
+    * **Data Quality Data Lake** - Storage buckets with a copy of the data quality check configuration and a copy of
       data quality results. Each user who created a DQOps Cloud account receives a private data lake. 
     * **Data Quality Data Warehouse** - BigQuery external and native tables storing all data quality sensor readouts, data quality
-      check results, errors, incidents. A private BigQuery dataset is created for each user.
+      check results, errors, and incidents. A private BigQuery dataset is created for each user.
     * **Data Quality Dashboards** - Dashboards developed by DQOps that present data quality issues and KPIs. The dashboards
       are designed using Looker Studio. They are accessing the Data Quality Data Warehouse using a dedicated
       DQOps Looker Studio Community Connector. 
 
 
-- `Python client` - DQOps python client provides typed access to all [operations](../../client/operations/index.md) supported by DQOps user interface, enabling
+- `Python client` - The DQOps python client provides typed access to all [operations](../../client/operations/index.md) supported by the DQOps user interface, enabling
   complex automation of all operations. The client supports:
-    * running data quality checks from external tools
-    * importing metadata
-    * managing data quality results
-    * detecting the data quality status of monitored tables
-    * changing the configuration of data quality checks
+    * running data quality checks from external tools,
+    * importing metadata,
+    * managing data quality results,
+    * detecting the data quality status of monitored tables,
+    * changing the configuration of data quality checks.
 
 
 - `Looker Studio Dashboards` - a set of data quality dashboards that are using a Looker Studio Community Connector for DQOps.
@@ -70,10 +70,10 @@ The following diagram shows all DQOps core components in action:
 ![DQOps deployment as a PyPi package](https://dqops.com/docs/images/architecture/DQOPs-pypi-package-instance-components-min.png)
 
 The DQOps local instance (in the middle of the diagram) is a running DQOps instance that references a local
-`DQOps user home` folder with the metadata, data quality check configuration and results.
+`DQOps user home` folder with the metadata, data quality check configuration, and results.
 
 Internally, DQOps distribution uses another folder that contains the definition of built-in data quality checks,
-sensors and rules. It is a local copy of the [DQOps home source folder](https://github.com/dqops/dqo/tree/develop/home).
+sensors, and rules. It is a local copy of the [DQOps home source folder](https://github.com/dqops/dqo/tree/develop/home).
 
 DQOps communicates with the DQOps Cloud, replicating the content of the `DQOps user home` folder to the 
 Data Quality Data Lake. The parquet files with the data quality check results are then loaded to a Data Quality Data Warehouse
@@ -89,7 +89,7 @@ DQOps components working locally are described below, following the top-down ord
 sensors, rules, and dashboard configuration files. The folders in the `DQOps home` are:
 
 - `$DQO_HOME/sensors` - Jinja2 SQL templates for data quality sensors, these are SQL SELECT statements that capture
-  metrics from monitored data sources, such as the row count on a table level or a nulls count on a column level.
+  metrics from monitored data sources, such as the row count on a table level or nulls count on a column level.
 
 - `$DQO_HOME/rules` - Python functions that are called by DQOps to verify metrics obtained by running sensor queries on the
   monitored data source.
@@ -104,10 +104,9 @@ sensors, rules, and dashboard configuration files. The folders in the `DQOps hom
 
 - `$DQO_HOME/settings` - This folder contains the default list of the built-in data quality dashboards stored in the
   [settings/dashboardslist.dqodashboards.yaml](../../reference/yaml/DashboardYaml.md) file. The original 
-  *dashboardslist.dqodashboards.yaml* file can be found on GitHub
-  [here](https://github.com/dqops/dqo/blob/develop/home/settings/dashboardslist.dqodashboards.yaml).
+  *[dashboardslist.dqodashboards.yaml* file can be found on GitHub following the link](https://github.com/dqops/dqo/blob/develop/home/settings/dashboardslist.dqodashboards.yaml).
 
-- `$DQO_HOME/lib` - Python engine entry point modules that are rendering SQL queries from Jinja2 templates and evaluate 
+- `$DQO_HOME/lib` - Python engine entry point modules that render SQL queries from Jinja2 templates and evaluate 
   the data quality rules. DQOps Java JVM runtime starts two Python processes to run the 
   [evaluate_rules.py](https://github.com/dqops/dqo/blob/develop/home/lib/evaluate_rules.py) and the
   [evaluate_templates.py](https://github.com/dqops/dqo/blob/develop/home/lib/evaluate_templates.py) modules. 
@@ -122,15 +121,15 @@ sensors, rules, and dashboard configuration files. The folders in the `DQOps hom
 
 DQOps runs as a Java JVM process that starts two additional Python processes to run the Jinja2 template engine
 and call data quality rules as Python functions. 
-DQOps java process also exposes a http web server. The default port is 8888, but it could be changed 
+DQOps java process also exposes an http web server. The default port is 8888, but it could be changed 
 by setting the [--server.port](../../command-line-interface/dqo.md) startup parameter.
 
 
 ### **DQOps user home**
 
 The *DQOps user home* folder (abbreviated as the *$D.U.H*) is the location where DQOps stores YAML metadata files, custom definitions for data quality checks
-and the data folders. The detailed description of the folder is [here](../data-storage-of-data-quality-results.md).
-DQOps uses the current working folder as the *DQOps user home*, unless a different folder was specified
+and the data folders. You can find more [detailed description of the DQOps user home folder here](../data-storage-of-data-quality-results.md).
+DQOps uses the current working folder as the *DQOps user home* unless a different folder was specified
 by setting the `$DQO_USER_HOME` environment variable or passing a *--dqo.user.home=&lt;alternative_user_home_location&gt;* startup parameter.
 
 The structure of the *DQOps user home* folder is fully described in the [DQOps use home](../dqops-user-home-folder.md) article.
@@ -138,54 +137,54 @@ The structure of the *DQOps user home* folder is fully described in the [DQOps u
 
 ### **Git repository**
 
-*DQOps user home* folder can be integrated with a full DataOps process by pushing the content of the *DQOps user home* to a Git repository manually.
+The *DQOps user home* folder can be integrated with a full DataOps process by pushing the content of the *DQOps user home* to a Git repository manually.
 The *.gitignore* file excludes folders that should not be stored in the code repository.
-The excluded folders are: *.data/*, *.credentials/*, *.logs/* and *.index/*.
+The excluded folders are *.data/*, *.credentials/*, *.logs/* and *.index/*.
 
 ## DQOps Cloud
 
-The cloud hosted side of a DQOps deployment is responsible for hosting data quality dashboards.
-DQOps provides a complimentary cloud infrastructure for users using a FREE DQOps license.
+The cloud-hosted side of a DQOps deployment is responsible for hosting data quality dashboards.
+DQOps provides complimentary cloud infrastructure for users using a FREE DQOps license.
 The DQOps Cloud components are:
 
-### **Data Quality Data Lake** 
+### **Data Quality Data Lake**
 *Data Quality Data Lake* is composed of two GCP storage buckets that store the configuration files and Parquet data files. DQOps local
-instance will synchronize files from the *./sources*, *./sensors*, *./rules*, *./checks*, *./settings* and *./.credentials*
+instance synchronizes files from the *./sources*, *./sensors*, *./rules*, *./checks*, *./settings* and *./.credentials*
 to the configuration bucket. All files from the *./.data* folder are replicated to the second data bucket.
  
 ### **Data Quality Data Warehouse**
-*Data Quality Data Warehouse*is a private data quality data warehouse is set up for each DQOps Cloud account. The warehouse
+*Data Quality Data Warehouse* is a private data quality data warehouse that is set up for each DQOps Cloud account. The warehouse
 uses the Parquet files that were replicated from the *./.data* folder as external tables. DQOps Cloud continuously loads
 these parquet files (the data quality results) to BigQuery native tables. Direct access to the Data Quality Data Warehouse
 requires a DQOps Cloud ENTERPRISE license.
 
 ### **Data Quality Dashboards**
-DQOps provides *Data Quality Dashboards* over most common data quality activities. The dashboards are
-developed with Google Looker Studio and are accessing the customer's data quality data warehouse using
+DQOps provides *Data Quality Dashboards* over the most common data quality activities. The dashboards are
+developed with Google Looker Studio and access the customer's data quality data warehouse using
 a Looker Studio Community Connector provided by DQOps. The links and configuration parameters to the built-in dashboards
 are defined in the [$DQO_HOME/settings/dashboardslist.dqodashboards.yaml](https://github.com/dqops/dqo/blob/develop/home/settings/dashboardslist.dqodashboards.yaml) file.
 Please check the [data quality dashboard customization](../../working-with-dqo/review-the-data-quality-results-on-dashboards.md) manual
 to learn how to change the built-in dashboards or add custom dashboards. 
 
-Please contact [DQOps sales](https://dqops.com/contact-us/) to discuss other deployment options, including an on-premise installation.
+Please contact [DQOps sales](https://dqops.com/contact-us/) to discuss other deployment options, including on-premise installation.
 
 
 ## DQOps client interfaces
-DQOps provides various multiple ways to interact with the system. The data quality engineers have a choice to work with
-the user-friendly user interface or edit the YAML files directly in a text editor.
+DQOps provides various ways to interact with the system. The data quality engineers have a choice of using
+the user-friendly interface or edit the YAML files directly in a text editor.
 
 ### **User interface**
-Each DQOps instance starts an embedded web server that is hosting the user interface locally.
+Each DQOps instance starts an embedded web server that hosts the user interface locally.
 The user interface interacts with the DQOps REST API.
 
 ### **Command-line interface**
 When DQOps is started as a Python package in a console window, a [cli mode](../command-line-interface.md) is activated.
 The shell mode supports running various operations from the command line, especially importing metadata of data sources
-and running data quality checks. All DQOPs cli commands are documented [here](../../command-line-interface/index.md).
+and running data quality checks. For a [full documentation of all DQOPs cli commands follow the link](../../command-line-interface/index.md).
 
 ### **REST API**
 The web server that is embedded in DQOps exposes REST API endpoints for all operations.
-The REST API can be used from external clients to run data quality checks.
+The REST API can be used by external clients to run data quality checks.
 Additionally, when complex automation of all data quality activities is required, DQOps REST API can be used directly.
 A full description of all REST API operations is included in the [DQOps Python Client](../../client/index.md) documentation.
 
@@ -200,15 +199,15 @@ DQOps can be used in Airflow's DAGs using DQOps operators. The most important DQ
 
 - [run_checks_operator](../../integrations/airflow/run-checks-operator.md) that executes
   data quality checks as part of a DAG data pipeline. The operator can be executed before a data load operation to assess the quality
-  of data sources and after the data loading operation to verify the loaded data. The DQOps operators are able to stop the data
-  pipeline if any **fatal** severity data quality issues were detected.
+  of data sources and after the data loading operation to verify the loaded data. The DQOps operators can stop the data
+  pipeline if any **fatal** severity data quality issues are detected.
 
 - [assert_table_status_operator](../../integrations/airflow/table-status-operator.md) verifies
-  the status of a source table that was already analyzed for data quality issues as a separate process.
+  the status of a source table that has already been analyzed for data quality issues as a separate process.
 
 
 ### **Direct file modifications**
-The files in the *DQOps user home* can be edited directly. Especially, DQOps provides the YAML file schema for Visual Studio Code,
+The files in the *DQOps user home* can be edited directly. Especially, DQOps provides the YAML file schema for the Visual Studio Code,
 enabling out-of-the-box code completion support for the [connection.dqoconnection.yaml](../../reference/yaml/ConnectionYaml.md) and the
 [&lt;schema_name&gt;.&lt;table_name&gt;.dqotable.yaml](../../reference/yaml/TableYaml.md) table files.
 
@@ -231,37 +230,36 @@ The following command will start DQOps as a docker container:
 
 The only important differences are:
 
-- *DQOps user home* folder must be mounted as a volume to the */dqo/userhome* folder inside the container
+- *DQOps user home* folder must be mounted as a volume to the */dqo/userhome* folder inside the container.
 
-- the web server port *8888* must be exposed from the container using the *-p 8888:8888* parameter
+- The web server port *8888* must be exposed from the container using the *-p 8888:8888* parameter.
 
 - DQOps should be started in a headless mode (without the command-line shell).
-  Starting DQOps in a server mode  is activated by providing 
-  the [run](../../command-line-interface/run.md) command to activate a server mode
+  Starting DQOps in a server mode is activated with the [run](../../command-line-interface/run.md) command.
 
 - the DQOps Cloud Pairing API Key must be given ahead of time in the *--dqo.cloud.api-key=* parameter
   because DQOps will not be able to ask the user to log in to DQOps Cloud when the command-line interface is disabled.
   The DQOps Cloud Pairing API Key is found on the [https://cloud.dqops.com/account](https://cloud.dqops.com/account) page.
 
 For detailed steps required to start DQOps as a docker container, please read the 
-[run dqo as docker container](../../dqops-installation/run-dqops-as-docker-container.md) manual. 
+[run dqo as a docker container](../../dqops-installation/run-dqops-as-docker-container.md) manual. 
 
 
 ## Local and hybrid deployment components
 
 ### **DQOps SaaS and hybrid deployments**
-Paid instances of DQOps can fully utilize all DQOps Cloud features, including support for user roles, SSO integration
+Paid instances of DQOps can fully utilize all DQOps Cloud features, including support for user roles, SSO integration,
 and hybrid deployments.
 
 DQOps deployment without a SaaS hosted DQOps instance is shown below.
 
 ![DQOps on-premise deployment](https://dqops.com/docs/images/architecture/DQOps-architecture-components-on-premise-min.png)
 
-The additional components shown on this diagram are the DQOps SaaS Servers that provide the user management and
+The additional components shown in this diagram are the DQOps SaaS Servers that provide the user management and
 the data quality data warehouse management operations.
 
 ### **Hybrid deployments**
-Paid subscriptions of DQOps are offered a DQOps instance hosted in the DQOps cloud.
+Paid DQOps subscriptions offer a DQOps instance hosted in the DQOps cloud.
 The DQOps cloud instance can cooperate with additional on-premise instances that are synchronizing with the shared
 DQOps Cloud Data Lake.
 
@@ -269,7 +267,7 @@ A hybrid deployment is presented below.
 
 ![DQOps Cloud hybrid deployment](https://dqops.com/docs/images/architecture/DQOps-architecture-components-hybrid-min.png)
 
-A cloud hosted VM running the DQOps instance is hosted in the cloud by DQOps. The users authorized to use the instance
+A cloud-hosted VM running the DQOps instance is hosted in the cloud by DQOps. The users authorized to use the instance
 are redirected to the DQOps Cloud login page to authenticate. It is also possible to configure a custom OpenID connector
 to authenticate through the customer's login page.
 

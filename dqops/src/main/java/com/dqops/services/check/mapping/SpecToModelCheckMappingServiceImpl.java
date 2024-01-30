@@ -73,6 +73,7 @@ import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Service that creates a model from the data quality check specifications,
@@ -1035,36 +1036,50 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
             switch (fieldInfo.getDataType()) {
                 case string_type:
                     fieldModel.setStringValue((String) fieldValue);
+                    parameterDefinitionSpec.setDefaultValue(fieldValue.toString());
                     break;
                 case boolean_type:
                     fieldModel.setBooleanValue((Boolean) fieldValue);
+                    parameterDefinitionSpec.setDefaultValue(fieldValue.toString());
                     break;
                 case integer_type:
                     fieldModel.setIntegerValue((Integer) fieldValue);
+                    parameterDefinitionSpec.setDefaultValue(fieldValue.toString());
                     break;
                 case long_type:
                     fieldModel.setLongValue((Long) fieldValue);
+                    parameterDefinitionSpec.setDefaultValue(fieldValue.toString());
                     break;
                 case double_type:
                     fieldModel.setDoubleValue((Double) fieldValue);
+                    parameterDefinitionSpec.setDefaultValue(fieldValue.toString());
                     break;
                 case datetime_type:
                     fieldModel.setDatetimeValue((LocalDateTime) fieldValue);
+                    parameterDefinitionSpec.setDefaultValue(fieldValue.toString());
                     break;
                 case column_name_type:
                     fieldModel.setColumnNameValue((String) fieldValue);
+                    parameterDefinitionSpec.setDefaultValue(fieldValue.toString());
                     break;
                 case enum_type:
                     fieldModel.setEnumValue((String) fieldValue);
+                    parameterDefinitionSpec.setDefaultValue(fieldValue.toString());
                     break;
                 case string_list_type:
-                    fieldModel.setStringListValue((List<String>) fieldValue);
+                    List<String> listOfStrings = (List<String>) fieldValue;
+                    fieldModel.setStringListValue(listOfStrings);
+                    parameterDefinitionSpec.setDefaultValue(String.join(",", listOfStrings));
                     break;
                 case integer_list_type:
-                    fieldModel.setIntegerListValue((List<Long>) fieldValue);
+                    List<Long> listOfIntegers = (List<Long>) fieldValue;
+                    fieldModel.setIntegerListValue(listOfIntegers);
+                    parameterDefinitionSpec.setDefaultValue(String.join(",",
+                            listOfIntegers.stream().map(v -> v.toString()).collect(Collectors.toList())));
                     break;
                 case date_type:
                     fieldModel.setDateValue((LocalDate) fieldValue);
+                    parameterDefinitionSpec.setDefaultValue(fieldValue.toString());
                     break;
                 default:
                     throw new UnsupportedOperationException("Unsupported type: " + fieldInfo.getDataType().toString());
@@ -1085,6 +1100,10 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         FieldModel fieldModel = new FieldModel();
         fieldModel.setDefinition(parameterDefinitionSpec);
         fieldModel.setOptional(!parameterDefinitionSpec.isRequired());
+
+        if (fieldValue == null && parameterDefinitionSpec.getDefaultValue() != null) {
+            fieldValue = parameterDefinitionSpec.getDefaultValue();
+        }
 
         if (fieldValue != null) {
             try {

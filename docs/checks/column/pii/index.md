@@ -5,9 +5,12 @@ This is a list of pii column data quality checks supported by DQOps and a brief 
 
 
 
-
-## **pii**
+## column-level pii checks
 Checks for the presence of sensitive or personally identifiable information (PII) in a column such as email, phone, zip code, IP4 and IP6 addresses.
+
+### [contains usa phone percent](./contains-usa-phone-percent.md)
+Column check that calculates the percentage of rows that contains USA phone number values in a monitored column.
+
 
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
@@ -17,6 +20,10 @@ Checks for the presence of sensitive or personally identifiable information (PII
 |[<span class="no-wrap-code">`daily_partition_contains_usa_phone_percent`</span>](./contains-usa-phone-percent.md#daily-partition-contains-usa-phone-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of rows that contains USA phone number in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
 |[<span class="no-wrap-code">`monthly_partition_contains_usa_phone_percent`</span>](./contains-usa-phone-percent.md#monthly-partition-contains-usa-phone-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of rows that contains USA phone number in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
 
+
+
+### [contains email percent](./contains-email-percent.md)
+Column check that calculates the percentage of rows that contains valid email values in a monitored column.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -29,6 +36,10 @@ Checks for the presence of sensitive or personally identifiable information (PII
 
 
 
+### [contains usa zipcode percent](./contains-usa-zipcode-percent.md)
+Column check that calculates the percentage of rows that contains USA zip code values in a monitored column.
+
+
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_contains_usa_zipcode_percent`</span>](./contains-usa-zipcode-percent.md#profile-contains-usa-zipcode-percent)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of rows that contains USA zip code in a column does not exceed the maximum accepted percentage.| |
@@ -39,6 +50,10 @@ Checks for the presence of sensitive or personally identifiable information (PII
 
 
 
+### [contains ip4 percent](./contains-ip4-percent.md)
+Column check that calculates the percentage of rows that contains valid IP4 address values in a monitored column.
+
+
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_contains_ip4_percent`</span>](./contains-ip4-percent.md#profile-contains-ip4-percent)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of rows that contains valid IP4 address values in a column does not fall below the minimum accepted percentage.| |
@@ -47,6 +62,10 @@ Checks for the presence of sensitive or personally identifiable information (PII
 |[<span class="no-wrap-code">`daily_partition_contains_ip4_percent`</span>](./contains-ip4-percent.md#daily-partition-contains-ip4-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of rows that contains IP4 address values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each daily partition.| |
 |[<span class="no-wrap-code">`monthly_partition_contains_ip4_percent`</span>](./contains-ip4-percent.md#monthly-partition-contains-ip4-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of rows that contains IP4 address values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.| |
 
+
+
+### [contains ip6 percent](./contains-ip6-percent.md)
+Column check that calculates the percentage of rows that contains valid IP6 address values in a monitored column.
 
 
 | Data quality check name | Check type | Description | Standard |

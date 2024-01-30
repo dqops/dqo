@@ -1,11 +1,9 @@
-# 1.0.0
-* Apache Spark connector
-* Databricks connector
-* Initial versions of Apache Trino and Presto connectors
-* Updates to dashboards - cross-filtering configured
-* Refactoring towards supporting multiple data domains at the same time
-* Fixes in the UI - table status overview screen, filtering checks related to incidents
-* Support activating and deactivating multiple data quality checks from UI
-* Additional navigation screens for jumping between schemas and tables
-* COMPLETE DOCUMENTATION with examples
-
+# 1.0.1
+* Data dictionaries
+* More efficient watching for running jobs in the notification panel
+* SingleStoreDB connector based on MySQL with integration tests
+* Custom SQL check for importing data quality results from third-party data quality libraries
+* Small corrections in the documentation
+* Pip startup script supports mirrors and retries when downloading the release package
+* MIN and MAX anomalies checks
+* Improvement in the performance of the notification panel

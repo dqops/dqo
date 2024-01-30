@@ -64,7 +64,8 @@ public class BetweenPercentMovingAverage60DaysRuleParametersSpecTests extends Ba
         for (int i = 0; i < this.sensorReadouts.length; i++) {
             this.sensorReadouts[i] = 20.0;
         }
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
+                this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts, null);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.8,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
@@ -83,7 +84,8 @@ public class BetweenPercentMovingAverage60DaysRuleParametersSpecTests extends Ba
         for (int i = 0; i < this.sensorReadouts.length; i++) {
             this.sensorReadouts[i] = 20.0;
         }
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
+                this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts, null);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(21.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
@@ -102,7 +104,8 @@ public class BetweenPercentMovingAverage60DaysRuleParametersSpecTests extends Ba
         for (int i = 0; i < this.sensorReadouts.length; i++) {
             this.sensorReadouts[i] = 20.0;
         }
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
+                this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts, null);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(22.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
@@ -124,7 +127,8 @@ public class BetweenPercentMovingAverage60DaysRuleParametersSpecTests extends Ba
             }
             this.sensorReadouts[i] = 20.0;
         }
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
+                this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts, null);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.8,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
@@ -143,7 +147,8 @@ public class BetweenPercentMovingAverage60DaysRuleParametersSpecTests extends Ba
         for (int i = 0; i < this.sensorReadouts.length; i++) {
             this.sensorReadouts[i] = (i % 2 == 1) ? 22.0 : 18.0; // the average will be 20.0
         }
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
+                this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts, null);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.8,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
@@ -156,7 +161,8 @@ public class BetweenPercentMovingAverage60DaysRuleParametersSpecTests extends Ba
 
     @Test
     void executeRule_whenActualValueIsNull_thenReturnsPassed() {
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
+                this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts, null);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(null,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);

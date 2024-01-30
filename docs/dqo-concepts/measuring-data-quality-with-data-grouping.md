@@ -402,6 +402,15 @@ identification of the source of the data quality issue.
 | **2023-10-07** |  94.8% |  94.9% |  95.4% |
 | **2023-10-08** |  94.7% | **0%** |  95.2% |
 
+## Review data groups on dashboards
+
+DQOps has multiple built-in [**data quality dashboards**](types-of-data-quality-dashboards.md) that allows you to view and filter 
+data quality issues for different data groups. 
+
+Below is an example of **Current table status** dashboard showing grouping by different product categories. 
+
+![Data grouping on current table status dashboard.png](https://dqops.com/docs/images/concepts/data-grouping-on-current-table-status-dashboard.png)
+
 
 ## What's next
 - Learn how DQOps calculated [data quality KPIs](definition-of-data-quality-kpis.md)

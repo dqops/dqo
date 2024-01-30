@@ -3,17 +3,20 @@
 {{helpText}}
 
 {{#each checkTargets}}
-{{#if (gt checkTargets.length 1)}}## {{capitalizeFirst this}} checks{{/if}}
 {{#each checks}}
 {{#if (eq target ../this)}}
-{{#if (gt checkTargets.length 1)}}#{{/if}}## **{{categoryName}}**
+## {{../this}}-level {{categoryName}} checks
 {{categoryHelp}}
 {{#each checkGroups}}
+### [{{primaryCheckName}}](/docs/checks/{{target}}/{{categoryName}}/{{replace primaryCheckName " " "-"}})
+{{checkSpecClassJavaDoc}}
+
+{{#if (eq checks.length 1)}}
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 {{#each allChecks}}|[<span class="no-wrap-code">`{{checkName}}`</span>](/docs/checks/{{target}}/{{categoryName}}/{{replace primaryCheckName " " "-"}}.md#{{replace checkName "_" "-"}})|[{{checkType}}](/docs/dqo-concepts/definition-of-data-quality-checks/{{checkTypeConceptPage}})|{{checkHelp}}|{{checkmark standard}}|
 {{/each}}
-
+{{/if}}
 {{/each}}
 {{else}}
 {{/if}}

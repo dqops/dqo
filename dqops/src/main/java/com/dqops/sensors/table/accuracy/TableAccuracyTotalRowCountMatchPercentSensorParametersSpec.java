@@ -92,7 +92,7 @@ public class TableAccuracyTotalRowCountMatchPercentSensorParametersSpec extends 
      */
     @Override
     @JsonIgnore
-    public boolean getSupportsDataStreams() {
+    public boolean getSupportsDataGrouping() {
         return false;
     }
 

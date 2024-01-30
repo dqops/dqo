@@ -29,7 +29,8 @@ export const SynchronizeButton = () => {
         dataErrors: true,
         dataIncidents: true,
         settings: true,
-        credentials: true
+        credentials: true,
+        dictionaries: true
       });
       if (res.data) {
         setJobId(res.data.jobId?.jobId);

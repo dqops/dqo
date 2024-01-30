@@ -15,9 +15,9 @@ const ChecksPage = () => {
   }
 
   return (
-    <ConnectionLayout>
+    <>
 
-    </ConnectionLayout>
+    </>
   );
 };
 

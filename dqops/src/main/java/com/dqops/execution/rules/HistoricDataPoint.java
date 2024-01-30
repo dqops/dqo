@@ -51,6 +51,11 @@ public class HistoricDataPoint {
     private Double sensorReadout;
 
     /**
+     * Previously predicted expected value.
+     */
+    private Double expectedValue;
+
+    /**
      * Default (empty) constructor.
      */
     public HistoricDataPoint() {
@@ -62,8 +67,9 @@ public class HistoricDataPoint {
      * @param localDatetime Local date time of the readout.
      * @param backPeriodsIndex Index of the time period related to the current time period.
      * @param sensorReadout Sensor readout from the past.
+     * @param expectedValue Previously predicted expected value.
      */
-    public HistoricDataPoint(Instant timestampUtc, LocalDateTime localDatetime, int backPeriodsIndex, Double sensorReadout) {
+    public HistoricDataPoint(Instant timestampUtc, LocalDateTime localDatetime, int backPeriodsIndex, Double sensorReadout, Double expectedValue) {
         this.timestampUtc = timestampUtc;
         this.localDatetime = localDatetime;
         this.backPeriodsIndex = backPeriodsIndex;
@@ -132,5 +138,21 @@ public class HistoricDataPoint {
      */
     public void setSensorReadout(Double sensorReadout) {
         this.sensorReadout = sensorReadout;
+    }
+
+    /**
+     * Returns the previously predicted expected value.
+     * @return Previously predicted expected value.
+     */
+    public Double getExpectedValue() {
+        return expectedValue;
+    }
+
+    /**
+     * Stores a previously predicted expected value.
+     * @param expectedValue Previously predicted expected value.
+     */
+    public void setExpectedValue(Double expectedValue) {
+        this.expectedValue = expectedValue;
     }
 }

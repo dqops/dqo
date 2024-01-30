@@ -1738,7 +1738,7 @@ http://localhost:8888/api/jobs/synchronize
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"direction\":\"full\",\"forceRefreshNativeTables\":false,\"detectCronSchedules\":false,\"sources\":true,\"sensors\":true,\"rules\":true,\"checks\":true,\"settings\":true,\"credentials\":true,\"dataSensorReadouts\":true,\"dataCheckResults\":true,\"dataStatistics\":true,\"dataErrors\":true,\"dataIncidents\":true,\"synchronizeFolderWithLocalChanges\":false}"
+		"{\"direction\":\"full\",\"forceRefreshNativeTables\":false,\"detectCronSchedules\":false,\"sources\":true,\"sensors\":true,\"rules\":true,\"checks\":true,\"settings\":true,\"credentials\":true,\"dictionaries\":true,\"dataSensorReadouts\":true,\"dataCheckResults\":true,\"dataStatistics\":true,\"dataErrors\":true,\"dataIncidents\":true,\"synchronizeFolderWithLocalChanges\":false}"
 	
     ```
 
@@ -1764,6 +1764,7 @@ http://localhost:8888/api/jobs/synchronize
 		checks=True,
 		settings=True,
 		credentials=True,
+		dictionaries=True,
 		data_sensor_readouts=True,
 		data_check_results=True,
 		data_statistics=True,
@@ -1801,6 +1802,7 @@ http://localhost:8888/api/jobs/synchronize
 		checks=True,
 		settings=True,
 		credentials=True,
+		dictionaries=True,
 		data_sensor_readouts=True,
 		data_check_results=True,
 		data_statistics=True,
@@ -1841,6 +1843,7 @@ http://localhost:8888/api/jobs/synchronize
 		checks=True,
 		settings=True,
 		credentials=True,
+		dictionaries=True,
 		data_sensor_readouts=True,
 		data_check_results=True,
 		data_statistics=True,
@@ -1881,6 +1884,7 @@ http://localhost:8888/api/jobs/synchronize
 		checks=True,
 		settings=True,
 		credentials=True,
+		dictionaries=True,
 		data_sensor_readouts=True,
 		data_check_results=True,
 		data_statistics=True,

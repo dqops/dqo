@@ -22,6 +22,8 @@ import com.dqops.checks.CheckType;
 import com.dqops.checks.column.checkspecs.customsql.ColumnSqlAggregateExpressionCheckSpec;
 import com.dqops.checks.column.checkspecs.customsql.ColumnSqlConditionFailedCheckSpec;
 import com.dqops.checks.column.checkspecs.customsql.ColumnSqlConditionPassedPercentCheckSpec;
+import com.dqops.checks.column.checkspecs.customsql.ColumnSqlImportCustomResultCheckSpec;
+import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -45,6 +47,7 @@ public class ColumnCustomSqlProfilingChecksSpec extends AbstractCheckCategorySpe
             put("profile_sql_condition_failed_on_column", o -> o.profileSqlConditionFailedOnColumn);
             put("profile_sql_condition_passed_percent_on_column", o -> o.profileSqlConditionPassedPercentOnColumn);
             put("profile_sql_aggregate_expression_on_column", o -> o.profileSqlAggregateExpressionOnColumn);
+            put("profile_import_custom_result_on_column", o -> o.profileImportCustomResultOnColumn);
         }
     };
 
@@ -57,6 +60,9 @@ public class ColumnCustomSqlProfilingChecksSpec extends AbstractCheckCategorySpe
 
     @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range.")
     private ColumnSqlAggregateExpressionCheckSpec profileSqlAggregateExpressionOnColumn;
+
+    @JsonPropertyDescription("Runs a custom query that retrieves a result of a data quality check performed in the data engineering, whose result (the severity level) is pulled from a separate table.")
+    private ColumnSqlImportCustomResultCheckSpec profileImportCustomResultOnColumn;
 
     /**
      * Returns a check specification.
@@ -113,6 +119,24 @@ public class ColumnCustomSqlProfilingChecksSpec extends AbstractCheckCategorySpe
     }
 
     /**
+     * Returns a custom check that imports data quality results from custom log tables.
+     * @return Import custom result check.
+     */
+    public ColumnSqlImportCustomResultCheckSpec getProfileImportCustomResultOnColumn() {
+        return profileImportCustomResultOnColumn;
+    }
+
+    /**
+     * Sets a custom check that pulls results from a custom table.
+     * @param profileImportCustomResultOnColumn Import a result from a custom table.
+     */
+    public void setProfileImportCustomResultOnColumn(ColumnSqlImportCustomResultCheckSpec profileImportCustomResultOnColumn) {
+        this.setDirtyIf(!Objects.equals(this.profileImportCustomResultOnColumn, profileImportCustomResultOnColumn));
+        this.profileImportCustomResultOnColumn = profileImportCustomResultOnColumn;
+        propagateHierarchyIdToField(profileImportCustomResultOnColumn, "profile_import_custom_result_on_column");
+    }
+
+    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -153,5 +177,16 @@ public class ColumnCustomSqlProfilingChecksSpec extends AbstractCheckCategorySpe
     @JsonIgnore
     public CheckTimeScale getCheckTimeScale() {
         return null;
+    }
+
+    /**
+     * Returns an array of supported data type categories. DQOps uses this list when activating default data quality checks.
+     *
+     * @return Array of supported data type categories.
+     */
+    @Override
+    @JsonIgnore
+    public DataTypeCategory[] getSupportedDataTypeCategories() {
+        return DataTypeCategory.ANY;
     }
 }

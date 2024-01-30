@@ -114,6 +114,10 @@ public class SampleStringsRegistry {
         return "sample_credential";
     }
 
+    public static String getDictionary() {
+        return "sample_dictionary";
+    }
+
     public static String getTableComparison() {
         return "sample_table_comparison";
     }
@@ -147,6 +151,8 @@ public class SampleStringsRegistry {
     }
 
     public static String getJobId() { return "123123124324324"; }
+
+    public static String getDictionaryName() { return "status_codes.csv"; };
 
     /**
      * Gets sample string fitting the parameter.
@@ -216,6 +222,8 @@ public class SampleStringsRegistry {
             return getMonthEnd();
         } else if (parameterNameLower.contains("job_id")) {
             return getJobId();
+        } else if (parameterNameLower.contains("dictionary_name")) {
+            return getDictionaryName();
         }
 
         throw new IllegalArgumentException("No value found fitting the parameter \"" + parameterName + "\".");

@@ -250,7 +250,8 @@ for append-only tables, financial data, and very big tables.
 
 
 ## Configure issue severity levels
-The data quality checks in DQOps allow setting different rule thresholds for different data quality issue severity levels.
+The data quality checks in DQOps allow setting different rule thresholds for different 
+[data quality issue severity levels](definition-of-data-quality-checks/index.md#issue-severity-levels).
 There are three severity levels: warning, error, and fatal. The **warning** level notifies the user about a potential 
 issue, the **error** level indicates that the issue should be resolved to maintain data quality KPI score, and 
 the **fatal** level represents a serious issue that can cause the data pipeline to stop.
@@ -347,13 +348,13 @@ The following example shows how to use the
 check that uses an `expected_values` parameter which is an array of strings that are the valid values expected in the column.
 This check counts the percentage of rows that have one of the expected values stored in the *country* column.
 
-``` { .yaml .annotate linenums="1" hl_lines="14-17" }
+``` { .yaml .annotate linenums="1" hl_lines="14-18" }
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
   columns:
-    country:
+    currency:
       type_snapshot:
         column_type: STRING
         nullable: true
@@ -363,8 +364,9 @@ spec:
             daily_text_found_in_set_percent:
               parameters:
                 expected_values:
-                  - "US" # (1)!
-                  - "UK"
+                  - "USD" # (1)!
+                  - "EUR"
+                  - "GBP"
               error:
                 min_percent: 100
 ```
@@ -374,6 +376,46 @@ spec:
 The `parameters` node is present in every data quality check, but it is not saved to the *.dqotable.yaml* file
 when no parameters are specified.
 
+
+## Referencing data dictionaries
+Instead of entering the same set of expected values as a parameter to data quality checks that use lists of accepted values,
+it is possible to move the list of values to a data dictionary. 
+[Data dictionaries](dqops-user-home-folder.md#data-dictionaries) are CSV files stored in the *[DQOps user home](dqops-user-home-folder.md)/dictionaries*
+folder.
+
+The list of values in the `expected_values` parameter of the [daily_text_found_in_set_percent](../checks/column/accepted_values/text-found-in-set-percent.md#daily-text-found-in-set-percent) data quality check
+can be replaced by a token that references the dictionary file. The token format is `${dictionary://<dictionary_file_name>}`.
+It is advised to wrap the token value in double quotes as shown in the example below.
+
+``` { .yaml .annotate linenums="1" hl_lines="16" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  columns:
+    currency:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+      monitoring_checks:
+        daily:
+          accepted_values:
+            daily_text_found_in_set_percent:
+              parameters:
+                expected_values:
+                  - "${dictionary://currencies.csv}" # (1)!
+              error:
+                min_percent: 100
+```
+
+1.  Data dictionary expansion formula `"${dictionary://<dictionary_file_name>}"` replaced by a list of dictionary entries
+    when DQOps runs a [data quality check](definition-of-data-quality-checks/index.md). 
+
+A data quality check can reference multiple dictionaries in separate lines. DQOps aggregates all values from all dictionaries,
+adding also standalone values included in the list.
+
+The definition of custom data dictionaries is described in the [data dictionaries](dqops-user-home-folder.md#data-dictionaries)
+section of the *DQOps user home* folder concept.
 
 ## Configuring column-level checks
 The list of columns is stored in the `spec.columns` node in the *.dqotable.yaml* file.

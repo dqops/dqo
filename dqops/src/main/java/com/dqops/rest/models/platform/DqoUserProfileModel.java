@@ -103,6 +103,12 @@ public class DqoUserProfileModel {
     private DqoUserRole accountRole;
 
     /**
+     * True when the account has access to the DQOps Cloud's data quality data lake and data warehouse, allowing to synchronize files and use the data quality data warehouse.
+     */
+    @JsonPropertyDescription("True when the account has access to the DQOps Cloud's data quality data lake and data warehouse, allowing to synchronize files and use the data quality data warehouse.")
+    private boolean dataQualityDataWarehouseEnabled;
+
+    /**
      * User is the administrator of the account and can perform security related actions, such as managing users.
      */
     @JsonPropertyDescription("User is the administrator of the account and can perform security related actions, such as managing users.")
@@ -236,6 +242,8 @@ public class DqoUserProfileModel {
             model.setConnectionTablesLimit(dqoCloudApiKey.getApiKeyPayload().getLimits().get(DqoCloudLimit.CONNECTION_TABLES_LIMIT));
             model.setTablesLimit(dqoCloudApiKey.getApiKeyPayload().getLimits().get(DqoCloudLimit.TABLES_LIMIT));
             model.setJobsLimit(dqoCloudApiKey.getApiKeyPayload().getLimits().get(DqoCloudLimit.JOBS_LIMIT));
+            model.setDataQualityDataWarehouseEnabled(dqoCloudApiKey.getApiKeyPayload().getDataQualityDataWarehouse() == null ||
+                    dqoCloudApiKey.getApiKeyPayload().getDataQualityDataWarehouse() == true);
             model.setCanChangeOwnPassword(true);
         } else {
             model.setTenant("Standalone");
@@ -269,6 +277,7 @@ public class DqoUserProfileModel {
             setCanCompareTables(true);
             setCanManageUsers(false);
             setCanManageAndViewSharedCredentials(true);
+            setDataQualityDataWarehouseEnabled(false);
             setTenant("Standalone");
             setLicenseType(DqoCloudLicenseType.FREE.name());
             setJobsLimit(1);

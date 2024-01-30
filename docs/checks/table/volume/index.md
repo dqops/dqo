@@ -5,9 +5,13 @@ This is a list of volume table data quality checks supported by DQOps and a brie
 
 
 
-
-## **volume**
+## table-level volume checks
 Evaluates the overall quality of the table by verifying the number of rows.
+
+### [row count](./row-count.md)
+A table-level check that ensures that the tested table has at least a minimum accepted number of rows.
+ The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the table is not empty.
+
 
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
@@ -19,12 +23,20 @@ Evaluates the overall quality of the table by verifying the number of rows.
 
 
 
+### [row count anomaly](./row-count-anomaly.md)
+A table-level check that ensures that the row count is within a two-tailed percentile from measurements made during the last 90 days.
+
+
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_row_count_anomaly`</span>](./row-count-anomaly.md#profile-row-count-anomaly)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 90 days.| |
 |[<span class="no-wrap-code">`daily_row_count_anomaly`</span>](./row-count-anomaly.md#daily-row-count-anomaly)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during the last 90 days.| |
 |[<span class="no-wrap-code">`daily_partition_row_count_anomaly`</span>](./row-count-anomaly.md#daily-partition-row-count-anomaly)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the total row count of the tested table is within a percentile from measurements made during the last 90 days.| |
 
+
+
+### [row count change](./row-count-change.md)
+A table-level check that ensures that the row count changed by a fixed rate since the last readout.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -37,6 +49,10 @@ Evaluates the overall quality of the table by verifying the number of rows.
 
 
 
+### [row count change 1 day](./row-count-change-1-day.md)
+A table-level check that ensures that the row count changed by a fixed rate since the last readout from yesterday.
+
+
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_row_count_change_1_day`</span>](./row-count-change-1-day.md#profile-row-count-change-1-day)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from yesterday. Allows for exact match to readouts from yesterday or past readouts lookup.| |
@@ -45,12 +61,20 @@ Evaluates the overall quality of the table by verifying the number of rows.
 
 
 
+### [row count change 7 days](./row-count-change-7-days.md)
+A table-level check that ensures that the row count changed by a fixed rate since the last readout from last week.
+
+
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_row_count_change_7_days`</span>](./row-count-change-7-days.md#profile-row-count-change-7-days)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last week. Allows for exact match to readouts from 7 days ago or past readouts lookup.| |
 |[<span class="no-wrap-code">`daily_row_count_change_7_days`</span>](./row-count-change-7-days.md#daily-row-count-change-7-days)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from the last week. Allows for exact match to readouts from 7 days ago or past readouts lookup.| |
 |[<span class="no-wrap-code">`daily_partition_row_count_change_7_days`</span>](./row-count-change-7-days.md#daily-partition-row-count-change-7-days)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last week. Allows for exact match to readouts from 7 days ago or past readouts lookup.| |
 
+
+
+### [row count change 30 days](./row-count-change-30-days.md)
+A table-level check that ensures that the row count changed by a fixed rate since the last readout from last month.
 
 
 | Data quality check name | Check type | Description | Standard |

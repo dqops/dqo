@@ -21,7 +21,7 @@ Daily partitioned check calculating the longest time a row waited to be loaded, 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_reload_lag`</span>|[timeliness](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Timeliness|[*partition_reload_lag*](../../../reference/sensors/table/timeliness-table-sensors.md#partition-reload-lag)|[*max_days*](../../../reference/rules/Comparison.md#max-days)| |
+|<span class="no-wrap-code">`daily_partition_reload_lag`</span>|[timeliness](../../../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Timeliness|[*partition_reload_lag*](../../../reference/sensors/table/timeliness-table-sensors.md#partition-reload-lag)|[*max_days*](../../../reference/rules/Comparison.md#max-days)| |
 
 **Command-line examples**
 
@@ -1750,7 +1750,7 @@ Monthly partitioned check calculating the longest time a row waited to be loaded
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_reload_lag`</span>|[timeliness](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Timeliness|[*partition_reload_lag*](../../../reference/sensors/table/timeliness-table-sensors.md#partition-reload-lag)|[*max_days*](../../../reference/rules/Comparison.md#max-days)| |
+|<span class="no-wrap-code">`monthly_partition_reload_lag`</span>|[timeliness](../../../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Timeliness|[*partition_reload_lag*](../../../reference/sensors/table/timeliness-table-sensors.md#partition-reload-lag)|[*max_days*](../../../reference/rules/Comparison.md#max-days)| |
 
 **Command-line examples**
 

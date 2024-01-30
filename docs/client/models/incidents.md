@@ -115,8 +115,8 @@ Data quality incident model shown on an incident details screen.
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">`incident_id`</span>|Incident ID - the primary key that identifies each data quality incident.|*string*|
 |<span class="no-wrap-code">`connection`</span>|Connection name affected by a data quality incident.|*string*|
-|<span class="no-wrap-code">`year`</span>|The year when the incident was first seen. This value is required to load an incident&#x27;s monthly partition.|*integer*|
-|<span class="no-wrap-code">`month`</span>|The month when the incident was first seen. This value is required to load an incident&#x27;s monthly partition.|*integer*|
+|<span class="no-wrap-code">`year`</span>|The year when the incident was first seen. This value is required to load an incident's monthly partition.|*integer*|
+|<span class="no-wrap-code">`month`</span>|The month when the incident was first seen. This value is required to load an incident's monthly partition.|*integer*|
 |<span class="no-wrap-code">`schema`</span>|Schema name affected by a data quality incident.|*string*|
 |<span class="no-wrap-code">`table`</span>|Table name affected by a data quality incident.|*string*|
 |<span class="no-wrap-code">`table_priority`</span>|Table priority of the table that was affected by a data quality incident.|*integer*|

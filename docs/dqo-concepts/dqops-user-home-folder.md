@@ -59,10 +59,11 @@ $DQO_USER_HOME
 ├───.index(6) 
 ├───.logs(7)
 ├───checks(8)
-├───rules(9)                                                                 
-├───sensors(10)
-├───settings(11)
-└───sources(12)                                                                
+├───dictionaries(9)
+├───rules(10)                                                                 
+├───sensors(11)
+├───settings(12)
+└───sources(13)                                                                
 ```
 
 1.   A marker file that is created only to identify the `DQOps user home` root and confirm that the folder was fully initialized.
@@ -87,31 +88,33 @@ $DQO_USER_HOME
      In case that an error is reported when running DQOps, the content of the folder should be sent to the DQOps support.
      Please review all the *--logging.\** and *--dqo.logging.\** parameters passed to DQOps as 
      the [entry point parameters](../command-line-interface/dqo.md) to learn how to configure logging. 
-8.   The *.checks* folder stores the definition of custom data quality [checks](definition-of-data-quality-checks/index.md).
-9.   The *.rules* folder stores the definition of custom and overwritten data quality [rules](definition-of-data-quality-rules.md).
-10.  The *.sensors* folder stores the definition of custom and overwritten data quality [sensors](definition-of-data-quality-sensors.md).
-11.  The *.settings* folder stores shared settings that can be committed to Git. The shared settings include the list
+8.   The *checks* folder stores the definition of custom data quality [checks](definition-of-data-quality-checks/index.md).
+9.   The *dictionaries* folder stores custom data dictionaries (CSV files) that can be referenced in [accepted_values](../checks/column/accepted_values/index.md).
+10.  The *rules* folder stores the definition of custom and overwritten data quality [rules](definition-of-data-quality-rules.md).
+11.  The *sensors* folder stores the definition of custom and overwritten data quality [sensors](definition-of-data-quality-sensors.md).
+12.  The *settings* folder stores shared settings that can be committed to Git. The shared settings include the list
      of custom data quality dashboards or the default configuration of data observability checks that are applied on
      all imported data sources.
-12.  The *.sources* folder is the most important folder in the `DQOps user home`. It is the folder where DQOps stores
+13.  The *.sources* folder is the most important folder in the `DQOps user home`. It is the folder where DQOps stores
      the connection parameters to the data sources and the data quality checks configuration for all monitored tables.
 
 The files stored directly in the `DQOps user home` folder and all folders are described below.
 
-| File&nbsp;or&nbsp;folder&nbsp;name | Description                                                                                                                  | Stored&nbsp;in&nbsp;Git  |
-|------------------------------------|------------------------------------------------------------------------------------------------------------------------------|:------------------------:|
-| *.DQO_USER_HOME*                   | A marker file that is created only to identify the `DQOps user home` root and confirm that the folder was fully initialized. |     :material-check:     |
-| *.gitignore*                       | Git ignore file that lists files and folders that should not be stored in Git.                                               |     :material-check:     |
-| *.localsettings.dqosettings.yaml*  | [.localsettings.dqosettings.yaml](../reference/yaml/LocalSettingsYaml.md) file contains settings that are private for the current DQOps instance and should not be stored in the Git repository or shared with other DQOps instances. The most important parameters in the local settings file are a *DQOps Cloud Pairing Key* and a local instance key used to sign DQOps API keys. |                          |
-| *.credentials*                     | The *.credentials* folder stores secrets and passwords as regular text or binary files. |                          |
+| File&nbsp;or&nbsp;folder&nbsp;name | Description                                                                                                                                                                                                                                                                                                                                                                                                                                         | Stored&nbsp;in&nbsp;Git  |
+|------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:------------------------:|
+| *.DQO_USER_HOME*                   | A marker file that is created only to identify the `DQOps user home` root and confirm that the folder was fully initialized.                                                                                                                                                                                                                                                                                                                        |     :material-check:     |
+| *.gitignore*                       | Git ignore file that lists files and folders that should not be stored in Git.                                                                                                                                                                                                                                                                                                                                                                      |     :material-check:     |
+| *.localsettings.dqosettings.yaml*  | [.localsettings.dqosettings.yaml](../reference/yaml/LocalSettingsYaml.md) file contains settings that are private for the current DQOps instance and should not be stored in the Git repository or shared with other DQOps instances. The most important parameters in the local settings file are a *DQOps Cloud Pairing Key* and a local instance key used to sign DQOps API keys.                                                                |                          |
+| *.credentials*                     | The *.credentials* folder stores secrets and passwords as regular text or binary files.                                                                                                                                                                                                                                                                                                                                                             |                          |
 | *.data*                            | The *.data* folder is a local copy of the data quality data lake, storing all current and historical data quality results, statistics, execution errors and incidents. The content of this folder is replicated to the *DQOps Cloud Data Lake* as documented in the [DQOps architecture](architecture/dqops-architecture.md). The content of the folder is described in the [data storage](data-storage-of-data-quality-results.md) concept manual. |                          |
-| *.index*                           | The *.index* folder is used internally by DQOps to track the file synchronization status between the local `DQOps user home` folder and the DQOps Cloud Data Lake. The files in this folder should not be modified manually. |                          |
-| *.logs*                            | The *.logs* folder stores error logs locally. The files in the folder are rotated to save space. In case that an error is reported when running DQOps, the content of the folder should be sent to the DQOps support. Please review all the *--logging.\** and *--dqo.logging.\** parameters passed to DQOps as the [entry point parameters](../command-line-interface/dqo.md) to learn how to configure logging. |                          |
-| *checks*                           | The *.checks* folder stores the definition of custom data quality [checks](definition-of-data-quality-checks/index.md). |     :material-check:     |
-| *rules*                            | The *.rules* folder stores the definition of custom and overwritten data quality [rules](definition-of-data-quality-rules.md). |     :material-check:     |
-| *sensors*                          | The *.sensors* folder stores the definition of custom and overwritten data quality [sensors](definition-of-data-quality-sensors.md). |     :material-check:     |
-| *settings*                         | The *.settings* folder stores shared settings that can be committed to Git. The shared settings include the list of custom data quality dashboards or the default configuration of data observability checks that are applied on all imported data sources. |     :material-check:     |
-| **sources**                        |  The *.sources* folder is the most important folder in the `DQOps user home`. It is the folder where DQOps stores the connection parameters to the data sources and the data quality checks configuration for all monitored tables. |     :material-check:     |
+| *.index*                           | The *.index* folder is used internally by DQOps to track the file synchronization status between the local `DQOps user home` folder and the DQOps Cloud Data Lake. The files in this folder should not be modified manually.                                                                                                                                                                                                                        |                          |
+| *.logs*                            | The *.logs* folder stores error logs locally. The files in the folder are rotated to save space. In case that an error is reported when running DQOps, the content of the folder should be sent to the DQOps support. Please review all the *--logging.\** and *--dqo.logging.\** parameters passed to DQOps as the [entry point parameters](../command-line-interface/dqo.md) to learn how to configure logging.                                   |                          |
+| *checks*                           | The *checks* folder stores the definition of custom data quality [checks](definition-of-data-quality-checks/index.md).                                                                                                                                                                                                                                                                                                                              |     :material-check:     |
+| *dictionaries*                     | The *dictionaries* folder stores custom data dictionaries that are CSV files with values. The dictionaries can be referenced in data quality checks in the [accepted_values](../checks/column/accepted_values/index.md) category using a `${dictionary://filename.csv}` token.                                                                                                                                                                      |     :material-check:     |
+| *rules*                            | The *rules* folder stores the definition of custom and overwritten data quality [rules](definition-of-data-quality-rules.md).                                                                                                                                                                                                                                                                                                                       |     :material-check:     |
+| *sensors*                          | The *sensors* folder stores the definition of custom and overwritten data quality [sensors](definition-of-data-quality-sensors.md).                                                                                                                                                                                                                                                                                                                 |     :material-check:     |
+| *settings*                         | The *settings* folder stores shared settings that can be committed to Git. The shared settings include the list of custom data quality dashboards or the default configuration of data observability checks that are applied on all imported data sources.                                                                                                                                                                                          |     :material-check:     |
+| **sources**                        | The *sources* folder is the most important folder in the `DQOps user home`. It is the folder where DQOps stores the connection parameters to the data sources and the data quality checks configuration for all monitored tables.                                                                                                                                                                                                                   |     :material-check:     |
 
 
 ## Data sources
@@ -201,15 +204,76 @@ $DQO_USER_HOME
 ```
 
 1.  A sample shared credential named *db_password.txt*. It can be referenced in the
-    [connection.dqoconnection.yaml](../reference/yaml/ConnectionYaml.md) file as *${credential://db_password.txt}*.
+    [connection.dqoconnection.yaml](../reference/yaml/ConnectionYaml.md) file as `${credential://db_password.txt}`.
 2.  The name of the default GCP application credentials that is used by the BigQuery connector if the GCP default
     credentials are not available otherwise. It should be a key generated for a GCP service account. The service account
     whose key was generated must have correct permissions to run queries on the BigQuery data set that is monitored.
     This file must be created manually, it is not created during the DQOps user home initialization.
 
-The example *db_password.txt* credential can be referenced as a *${credential://db_password.txt}* expression
+The example *db_password.txt* credential can be referenced as a `${credential://db_password.txt}` expression
 used in the [connection.dqoconnection.yaml](../reference/yaml/ConnectionYaml.md) file.
 
+
+## Data dictionaries
+Data dictionaries are CSV files containing text values that can be referenced by data quality checks that
+[compare column values to a set of accepted values](../categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md).
+Instead of entering the same values for multiple data quality checks, a shared dictionary can be referenced.
+
+The data quality checks that can use *data dictionaries* are:
+
+- [text_found_in_set_percent](../checks/column/accepted_values/text-found-in-set-percent.md)
+
+- [expected_text_values_in_use_count](../checks/column/accepted_values/expected-text-values-in-use-count.md)
+
+- [expected_texts_in_top_values_count](../checks/column/accepted_values/expected-texts-in-top-values-count.md)
+
+A sample *currencies.csv* dictionary file is shown in the folder structure below.
+
+``` { .asc .annotate hl_lines="4" }
+$DQO_USER_HOME
+├───...
+├───dictionaries(1)
+│   └───currencies.csv(2)
+├───...                                                                   
+```
+
+1.  The *dictionaries* folder for storing custom dictionaries.
+2.  A sample dictionary file.
+
+The data dictionary file is referenced in the [*.dqotable.yaml*](../reference/yaml/TableYaml.md) files as
+`${dictionary://<file_name>}`. For example, the *currencies.csv* file shown above is referenced as `${dictionary://currencies.csv}`.
+
+DQOps does not support headers in the CSV files. All lines in the uploaded file must contain values. Additionally, 
+when multiple values separated by a comma (`,` character) are present in a single line, DQOps aggregates all values.
+
+The following three CSV files compared in the tabs below are equivalent. DQOps will concatenate the values to be used in the
+[text_found_in_set_percent](../checks/column/accepted_values/text-found-in-set-percent.md) data quality check 
+using a combined condition `<column> IN ('USD', 'EUR', 'GBP')`.
+
+=== "One value per line"
+
+    ``` { .asc }
+    USD
+    EUR
+    GBP
+    ```
+
+=== "All value in a single line, separated by a comma"
+
+    ``` { .asc }
+    USD,EUR,GBP
+    ```
+
+=== "Multiple lines, some lines contain multiple values separated by a comma"
+
+    ``` { .asc }
+    USD,EUR
+    GBP
+    ```
+
+An example of referencing a data dictionary in a data quality check is shown in the 
+[referencing data dictionary](configuring-data-quality-checks-and-rules.md#referencing-data-dictionaries) section of
+the configuration of data quality checks article.
 
 ## Custom sensors
 Custom data quality [sensors](definition-of-data-quality-sensors.md) are defined in the *sensors* folder.
@@ -389,7 +453,7 @@ $DQO_USER_HOME
 ├───...
 ├───settings
 │   ├───dashboardslist.dqodashboards.yaml(1)
-│   ├───defaultchecks.dqochecks.yaml(2)
+│   ├───default.dqodefaultchecks.yaml(2)
 │   ├───defaultnotifications.dqonotifications.yaml(3)
 │   └───defaultschedules.dqoschedules.yaml(4)
 └───...   
@@ -408,7 +472,7 @@ The default configuration files are listed below.
 | File&nbsp;name                                                                                | Description                                                                                                                                                                                                                                                                                                                                                          |
 |-----------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | *[dashboardslist.dqodashboards.yaml](../reference/yaml/DashboardYaml.md)*                     | The configuration of custom data quality dashboards. Adding custom dashboards is documented in the [creating custom dashboards](../integrations/looker-studio/creating-custom-data-quality-dashboards.md) manual.                                                                                                                                                    |
-| *[defaultchecks.dqochecks.yaml](../reference/yaml/DefaultObservabilityChecksYaml.md)*         | The configuration of the default checks that are activated on imported tables and columns to detect common issues and observe the data source.                                                                                                                                                                                                                       |
+| *[default.dqodefaultchecks.yaml](../reference/yaml/DefaultObservabilityChecksYaml.md)*         | The configuration of the default checks that are activated on imported tables and columns to detect common issues and observe the data source.                                                                                                                                                                                                                       |
 | *[defaultnotifications.dqonotifications.yaml](../reference/yaml/DefaultNotificationsYaml.md)* | The configuration of the webhooks where the [notification of incidents](../integrations/webhooks/index.md) are POST'ed when data quality incidents are created or reassigned.                                                                                                                                                                                        |                                   
 | *[defaultschedules.dqoschedules.yaml](../reference/yaml/DefaultSchedulesYaml.md)*             | The default configuration of CRON schedules for running data quality checks in regular intervals. <br/> **NOTE: The CRON schedules defined in this file are copied to the *connection.dqoconnection.yaml* file when a new connection is imported in DQOps. Changes to this file will not change the schedules of running checks for already imported data sources.** |
 

@@ -6,14 +6,14 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.anomaly_stationary_percentile_moving_average_rule_01_parameters_spec import (
-        AnomalyStationaryPercentileMovingAverageRule01ParametersSpec,
+    from ..models.anomaly_stationary_percentile_moving_average_rule_error_05_pct_parameters_spec import (
+        AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec,
     )
-    from ..models.anomaly_stationary_percentile_moving_average_rule_1_parameters_spec import (
-        AnomalyStationaryPercentileMovingAverageRule1ParametersSpec,
+    from ..models.anomaly_stationary_percentile_moving_average_rule_fatal_01_pct_parameters_spec import (
+        AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec,
     )
-    from ..models.anomaly_stationary_percentile_moving_average_rule_05_parameters_spec import (
-        AnomalyStationaryPercentileMovingAverageRule05ParametersSpec,
+    from ..models.anomaly_stationary_percentile_moving_average_rule_warning_1_pct_parameters_spec import (
+        AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec,
     )
     from ..models.column_uniqueness_distinct_count_sensor_parameters_spec import (
         ColumnUniquenessDistinctCountSensorParametersSpec,
@@ -51,9 +51,9 @@ class ColumnDistinctCountAnomalyStationaryPartitionCheckSpec:
             quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent
             table.
         parameters (Union[Unset, ColumnUniquenessDistinctCountSensorParametersSpec]):
-        warning (Union[Unset, AnomalyStationaryPercentileMovingAverageRule1ParametersSpec]):
-        error (Union[Unset, AnomalyStationaryPercentileMovingAverageRule05ParametersSpec]):
-        fatal (Union[Unset, AnomalyStationaryPercentileMovingAverageRule01ParametersSpec]):
+        warning (Union[Unset, AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec]):
+        error (Union[Unset, AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec]):
+        fatal (Union[Unset, AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec]):
     """
 
     schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
@@ -68,13 +68,13 @@ class ColumnDistinctCountAnomalyStationaryPartitionCheckSpec:
         Unset, "ColumnUniquenessDistinctCountSensorParametersSpec"
     ] = UNSET
     warning: Union[
-        Unset, "AnomalyStationaryPercentileMovingAverageRule1ParametersSpec"
+        Unset, "AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
     ] = UNSET
     error: Union[
-        Unset, "AnomalyStationaryPercentileMovingAverageRule05ParametersSpec"
+        Unset, "AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
     ] = UNSET
     fatal: Union[
-        Unset, "AnomalyStationaryPercentileMovingAverageRule01ParametersSpec"
+        Unset, "AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
     ] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -145,14 +145,14 @@ class ColumnDistinctCountAnomalyStationaryPartitionCheckSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.anomaly_stationary_percentile_moving_average_rule_01_parameters_spec import (
-            AnomalyStationaryPercentileMovingAverageRule01ParametersSpec,
+        from ..models.anomaly_stationary_percentile_moving_average_rule_error_05_pct_parameters_spec import (
+            AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec,
         )
-        from ..models.anomaly_stationary_percentile_moving_average_rule_1_parameters_spec import (
-            AnomalyStationaryPercentileMovingAverageRule1ParametersSpec,
+        from ..models.anomaly_stationary_percentile_moving_average_rule_fatal_01_pct_parameters_spec import (
+            AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec,
         )
-        from ..models.anomaly_stationary_percentile_moving_average_rule_05_parameters_spec import (
-            AnomalyStationaryPercentileMovingAverageRule05ParametersSpec,
+        from ..models.anomaly_stationary_percentile_moving_average_rule_warning_1_pct_parameters_spec import (
+            AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec,
         )
         from ..models.column_uniqueness_distinct_count_sensor_parameters_spec import (
             ColumnUniquenessDistinctCountSensorParametersSpec,
@@ -198,41 +198,35 @@ class ColumnDistinctCountAnomalyStationaryPartitionCheckSpec:
 
         _warning = d.pop("warning", UNSET)
         warning: Union[
-            Unset, AnomalyStationaryPercentileMovingAverageRule1ParametersSpec
+            Unset, AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec
         ]
         if isinstance(_warning, Unset):
             warning = UNSET
         else:
-            warning = (
-                AnomalyStationaryPercentileMovingAverageRule1ParametersSpec.from_dict(
-                    _warning
-                )
+            warning = AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec.from_dict(
+                _warning
             )
 
         _error = d.pop("error", UNSET)
         error: Union[
-            Unset, AnomalyStationaryPercentileMovingAverageRule05ParametersSpec
+            Unset, AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec
         ]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = (
-                AnomalyStationaryPercentileMovingAverageRule05ParametersSpec.from_dict(
-                    _error
-                )
+            error = AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec.from_dict(
+                _error
             )
 
         _fatal = d.pop("fatal", UNSET)
         fatal: Union[
-            Unset, AnomalyStationaryPercentileMovingAverageRule01ParametersSpec
+            Unset, AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec
         ]
         if isinstance(_fatal, Unset):
             fatal = UNSET
         else:
-            fatal = (
-                AnomalyStationaryPercentileMovingAverageRule01ParametersSpec.from_dict(
-                    _fatal
-                )
+            fatal = AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec.from_dict(
+                _fatal
             )
 
         column_distinct_count_anomaly_stationary_partition_check_spec = cls(

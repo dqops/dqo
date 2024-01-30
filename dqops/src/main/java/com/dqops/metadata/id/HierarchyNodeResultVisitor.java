@@ -34,6 +34,8 @@ import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairSpec;
 import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairsListSpec;
 import com.dqops.metadata.credentials.SharedCredentialList;
 import com.dqops.metadata.credentials.SharedCredentialWrapper;
+import com.dqops.metadata.dictionaries.DictionaryListImpl;
+import com.dqops.metadata.dictionaries.DictionaryWrapperImpl;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
 import com.dqops.checks.table.monitoring.TableMonitoringChecksSpec;
 import com.dqops.metadata.comments.CommentSpec;
@@ -780,4 +782,19 @@ public interface HierarchyNodeResultVisitor<P, R> {
      */
     R accept(DefaultIncidentWebhookNotificationsWrapper defaultIncidentWebhookNotificationsWrapper, P parameter);
 
+    /**
+     * Accepts a data dictionary list.
+     * @param dictionaryWrappers Data dictionary list.
+     * @param parameter Visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(DictionaryListImpl dictionaryWrappers, P parameter);
+
+    /**
+     * Accepts a single data dictionary wrapper.
+     * @param dictionaryWrapper Data dictionary wrapper.
+     * @param parameter Visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(DictionaryWrapperImpl dictionaryWrapper, P parameter);
 }

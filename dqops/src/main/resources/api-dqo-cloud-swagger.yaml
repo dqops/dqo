@@ -104,6 +104,27 @@ paths:
             $ref: "#/definitions/TenantAccessTokenModel"
       security:
       - api_key: []
+  /api/v1/accesstokenissue/rw/dictionaries:
+    get:
+      tags:
+      - "AccessTokenIssue"
+      summary: "issueBucketDictionariesRWAccessToken"
+      description: "Issues a Google Storage access token for accessing the tenant's\
+        \ folder with custom term dictionaries (dictionaries folder)"
+      operationId: "issueBucketDictionariesRWAccessToken"
+      parameters:
+      - name: "dataDomain"
+        in: "query"
+        description: "The name of the data domain"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/TenantAccessTokenModel"
+      security:
+      - api_key: []
   /api/v1/accesstokenissue/rw/error_samples:
     get:
       tags:
@@ -683,6 +704,17 @@ definitions:
         type: "string"
         description: "Write-only property used to update the password. This field\
           \ does not return the current password."
+      dataDomainRoles:
+        type: "object"
+        description: "Dictionary of roles assigned at a data domain level."
+        additionalProperties:
+          type: "string"
+          enum:
+          - "admin"
+          - "editor"
+          - "operator"
+          - "viewer"
+          - "none"
     description: "DQOps Cloud user model that describes a user in multi-user SaaS\
       \ deployments."
   RefreshTableRequest:
@@ -708,6 +740,7 @@ definitions:
         - "checks"
         - "settings"
         - "credentials"
+        - "dictionaries"
       connections:
         type: "array"
         description: "Optional list of connection names that were modified and the\

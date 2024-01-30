@@ -74,16 +74,16 @@ You can switch between the Table and Column checks using the tabs. For more info
 After making the necessary modifications, click on the **Save** button to save the changes. The new default checks configuration will be 
 set on every newly imported table. 
 
-### **Modification of the defaultchecks.dqochecks.yaml file**
+### **Modification of the default.dqodefaultchecks.yaml file**
 
-The default checks configuration can be also modified by editing the configuration file `defaultchecks.dqochecks.yaml` in Visual Studio Code.
+The default checks configuration can be also modified by editing the configuration file `default.dqodefaultchecks.yaml` in Visual Studio Code.
 The file is located in the `userhome/settings/` folder.
 
 Thanks to the DQOps YAML schema files, configuring data quality checks in Visual Studio Code is very simple. 
 Code completion, syntax validation and help hints are shown by Visual Studio Code and many other editors when editing DQOps YAML files.
 You can read more about [integration of DQOps with Visual Studio Code](../integrations/visual-studio-code/index.md).
 
-Below is an example of default checks configuration in the `defaultchecks.dqochecks.yaml` file. 
+Below is an example of default checks configuration in the `default.dqodefaultchecks.yaml` file. 
 
 ```yaml
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/DefaultObservabilityChecksYaml-schema.json

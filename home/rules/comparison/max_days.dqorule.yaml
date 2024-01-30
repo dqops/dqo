@@ -12,3 +12,4 @@ spec:
       (inclusive).
     data_type: double
     required: true
+    default_value: 1.0

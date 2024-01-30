@@ -12,3 +12,4 @@ spec:
       (inclusive).
     data_type: long
     required: true
+    default_value: 1

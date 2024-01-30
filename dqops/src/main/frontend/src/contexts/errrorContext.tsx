@@ -3,6 +3,8 @@ import axios from 'axios';
 import ErrorModal from '../components/ErrorModal';
 import { LogErrorsApi } from "../services/apiClient";
 import { LogShippingApi } from "../api";
+import { useActionDispatch } from '../hooks/useActionDispatch';
+import { setError } from '../redux/actions/job.actions';
 
 const ErrorContext = React.createContext({} as any);
 
@@ -16,6 +18,7 @@ function ErrorProvider({ children }: any) {
   const [errors, setErrors] = useState<IError[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>()
+  const dispatch = useActionDispatch();
 
   useEffect(() => {
     axios.interceptors.response.use(undefined, async (error) => {
@@ -26,11 +29,12 @@ function ErrorProvider({ children }: any) {
         return; // handled elsewhere
       }
 
-      const newError = {
+      const newError : IError = {
         name: response?.data?.error,
         message: response?.data?.trace,
         date: response?.data?.timestamp
       };
+      dispatch(setError(newError))
 
       if (newError.name) {
         setErrors([...errors, newError]);

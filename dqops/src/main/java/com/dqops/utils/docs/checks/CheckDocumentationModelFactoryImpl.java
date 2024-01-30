@@ -28,6 +28,7 @@ import com.dqops.connectors.bigquery.BigQueryParametersSpec;
 import com.dqops.connectors.bigquery.BigQueryProviderDialectSettings;
 import com.dqops.connectors.databricks.DatabricksParametersSpec;
 import com.dqops.connectors.databricks.DatabricksProviderDialectSettings;
+import com.dqops.connectors.mysql.MysqlEngineType;
 import com.dqops.connectors.mysql.MysqlParametersSpec;
 import com.dqops.connectors.mysql.MysqlProviderDialectSettings;
 import com.dqops.connectors.oracle.OracleParametersSpec;
@@ -440,11 +441,12 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         String errorYaml = checkSpec.getError() != null ? this.jsonSerializer.serialize(checkSpec.getError()) : null;
         String fatalYaml = checkSpec.getFatal() != null ? this.jsonSerializer.serialize(checkSpec.getFatal()) : null;
 
-        if (Objects.equals(warningYaml, errorYaml)) {
+        boolean isImportSeverityRule = Objects.equals(ruleDocumentationModel.getRuleName(), "import_severity");
+        if (!isImportSeverityRule && Objects.equals(warningYaml, errorYaml)) {
             checkSpec.setWarning(null); // we don't need the sample of the warning, because the rule has the same parameters
         }
 
-        if (Objects.equals(fatalYaml, errorYaml)) {
+        if (!isImportSeverityRule && Objects.equals(fatalYaml, errorYaml)) {
             checkSpec.setFatal(null); // we don't need the sample of the fatal rule, because the rule has the same parameters
         }
 
@@ -646,6 +648,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 }});
                 connectionSpec.setMysql(new MysqlParametersSpec() {{
                     setDatabase("your_my_sql_database");
+                    setMysqlEngineType(MysqlEngineType.mysql);
                 }});
                 connectionSpec.setOracle(new OracleParametersSpec() {{
                     setDatabase("your_oracle_database");

@@ -82,6 +82,11 @@ public enum DqoRoot {
     credentials,
 
     /**
+     * Data dictionaries (CSV files) in the dictionaries/ folder that are synchronized to DQOps Cloud.
+     */
+    dictionaries,
+
+    /**
      * Local file indexes.
      */
     _indexes,
@@ -124,6 +129,10 @@ public enum DqoRoot {
 
         if (Objects.equals(folder1, BuiltInFolderNames.CREDENTIALS)) {
             return credentials;
+        }
+
+        if (Objects.equals(folder1, BuiltInFolderNames.DICTIONARIES)) {
+            return dictionaries;
         }
 
         if (Objects.equals(folder1, BuiltInFolderNames.INDEX)) {

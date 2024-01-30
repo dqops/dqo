@@ -66,7 +66,7 @@ const TableProfilingsView = () => {
   }
 
   return (
-    <ConnectionLayout>
+    <>
       <div className="relative">
         <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 min-h-14 max-w-full">
           <div className="flex items-center space-x-2" style={{ maxWidth: `calc(100% - 180px)` }}>
@@ -95,7 +95,7 @@ const TableProfilingsView = () => {
           loading={loading}
         />
       </div>
-    </ConnectionLayout>
+    </>
   );
 };
 

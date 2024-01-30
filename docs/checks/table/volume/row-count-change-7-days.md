@@ -17,7 +17,7 @@ Verifies that the total row count of the tested table has changed by a fixed rat
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_row_count_change_7_days`</span>|[volume](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*change_percent_7_days*](../../../reference/rules/Change.md#change-percent-7-days)| |
+|<span class="no-wrap-code">`profile_row_count_change_7_days`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*change_percent_7_days*](../../../reference/rules/Change.md#change-percent-7-days)| |
 
 **Command-line examples**
 
@@ -830,7 +830,7 @@ Verifies that the total row count of the tested table has changed by a fixed rat
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_row_count_change_7_days`</span>|[volume](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*change_percent_7_days*](../../../reference/rules/Change.md#change-percent-7-days)| |
+|<span class="no-wrap-code">`daily_row_count_change_7_days`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*change_percent_7_days*](../../../reference/rules/Change.md#change-percent-7-days)| |
 
 **Command-line examples**
 
@@ -1645,7 +1645,7 @@ Verifies that the total row count of the tested table has changed by a fixed rat
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_row_count_change_7_days`</span>|[volume](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Consistency|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*change_percent_7_days*](../../../reference/rules/Change.md#change-percent-7-days)| |
+|<span class="no-wrap-code">`daily_partition_row_count_change_7_days`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Consistency|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*change_percent_7_days*](../../../reference/rules/Change.md#change-percent-7-days)| |
 
 **Command-line examples**
 

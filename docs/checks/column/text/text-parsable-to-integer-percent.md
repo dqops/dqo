@@ -17,7 +17,7 @@ Verifies that the percentage text values that are parsable to an integer value i
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_text_parsable_to_integer_percent`</span>|[text](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*text_parsable_to_integer_percent*](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-integer-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+|<span class="no-wrap-code">`profile_text_parsable_to_integer_percent`</span>|[text](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*text_parsable_to_integer_percent*](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-integer-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
@@ -210,7 +210,7 @@ spec:
                 CASE
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]$')
+                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]$') }}
                     ) / COUNT(*)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -699,7 +699,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CASE
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]$')
+                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]$') }}
                     ) / COUNT(*)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1092,7 +1092,7 @@ Verifies that the percentage text values that are parsable to an integer value i
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_text_parsable_to_integer_percent`</span>|[text](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*text_parsable_to_integer_percent*](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-integer-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+|<span class="no-wrap-code">`daily_text_parsable_to_integer_percent`</span>|[text](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*text_parsable_to_integer_percent*](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-integer-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
@@ -1286,7 +1286,7 @@ spec:
                 CASE
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]$')
+                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]$') }}
                     ) / COUNT(*)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -1776,7 +1776,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CASE
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]$')
+                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]$') }}
                     ) / COUNT(*)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2169,7 +2169,7 @@ Verifies that the percentage text values that are parsable to an integer value i
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_text_parsable_to_integer_percent`</span>|[text](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*text_parsable_to_integer_percent*](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-integer-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+|<span class="no-wrap-code">`monthly_text_parsable_to_integer_percent`</span>|[text](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*text_parsable_to_integer_percent*](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-integer-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
@@ -2363,7 +2363,7 @@ spec:
                 CASE
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]$')
+                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]$') }}
                     ) / COUNT(*)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2853,7 +2853,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CASE
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]$')
+                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]$') }}
                     ) / COUNT(*)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3246,7 +3246,7 @@ Verifies that the percentage text values that are parsable to an integer value i
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_text_parsable_to_integer_percent`</span>|[text](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*text_parsable_to_integer_percent*](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-integer-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+|<span class="no-wrap-code">`daily_partition_text_parsable_to_integer_percent`</span>|[text](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*text_parsable_to_integer_percent*](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-integer-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
@@ -3450,7 +3450,7 @@ spec:
                 CASE
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]$')
+                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]$') }}
                     ) / COUNT(*)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -3954,7 +3954,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CASE
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]$')
+                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]$') }}
                     ) / COUNT(*)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4345,7 +4345,7 @@ Verifies that the percentage text values that are parsable to an integer value i
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_text_parsable_to_integer_percent`</span>|[text](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*text_parsable_to_integer_percent*](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-integer-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
+|<span class="no-wrap-code">`monthly_partition_text_parsable_to_integer_percent`</span>|[text](../../../categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*text_parsable_to_integer_percent*](../../../reference/sensors/column/text-column-sensors.md#text-parsable-to-integer-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)| |
 
 **Command-line examples**
 
@@ -4549,7 +4549,7 @@ spec:
                 CASE
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]$')
+                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]$') }}
                     ) / COUNT(*)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -5053,7 +5053,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CASE
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
-                        REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9]$')
+                        {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[0-9]$') }}
                     ) / COUNT(*)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}

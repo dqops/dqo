@@ -76,7 +76,7 @@ public class TableColumnListOrderedHashSensorParametersSpec extends AbstractSens
      */
     @Override
     @JsonIgnore
-    public boolean getSupportsDataStreams() {
+    public boolean getSupportsDataGrouping() {
         return false;
     }
 

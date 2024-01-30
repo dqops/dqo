@@ -85,6 +85,11 @@ public final class BuiltInFolderNames {
     public static final String CREDENTIALS = ".credentials";
 
     /**
+     * Data dictionaries folder to store dictionary CSV files used in some checks.
+     */
+    public static final String DICTIONARIES = "dictionaries";
+
+    /**
      * Local log folder inside the user home that stores logs.
      */
     public static final String LOGS = ".logs";

@@ -77,7 +77,7 @@ public class ColumnColumnTypeHashSensorParametersSpec extends AbstractSensorPara
      */
     @Override
     @JsonIgnore
-    public boolean getSupportsDataStreams() {
+    public boolean getSupportsDataGrouping() {
         return false;
     }
 

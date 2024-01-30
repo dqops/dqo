@@ -76,7 +76,7 @@ public class TableAvailabilitySensorParametersSpec extends AbstractSensorParamet
      */
     @Override
     @JsonIgnore
-    public boolean getSupportsDataStreams() {
+    public boolean getSupportsDataGrouping() {
         return false;
     }
 

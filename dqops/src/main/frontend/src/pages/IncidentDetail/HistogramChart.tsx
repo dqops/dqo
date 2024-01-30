@@ -58,9 +58,7 @@ export const HistogramChart = ({
   }, [connection, year, month, incidentId]);
 
   useEffect(() => {
-    if (days !== undefined) {
-      onChangeFilter({ days: days });
-    }
+    onChangeFilter({ days: days });
   }, [days]);
 
   useEffect(() => {
@@ -91,9 +89,9 @@ export const HistogramChart = ({
         {Object.keys(histograms?.columns || {}).map((column, index) => (
           <div
             className={clsx('flex gap-2 mb-2 cursor-pointer', {
-              'font-bold text-gray-700': histogramFilter.column === column,
+              'font-bold text-gray-700': histogramFilter?.column === column,
               'text-gray-500':
-                histogramFilter.column && histogramFilter.column !== column
+                histogramFilter?.column && histogramFilter?.column !== column
             })}
             key={index}
             onClick={() =>
@@ -114,14 +112,14 @@ export const HistogramChart = ({
         {Object.keys(histograms?.checks || {}).map((check, index) => (
           <div
             className={clsx('flex gap-2 mb-2 cursor-pointer', {
-              'font-bold text-gray-700': histogramFilter.check === check,
+              'font-bold text-gray-700': histogramFilter?.check === check,
               'text-gray-500':
-                histogramFilter.check && histogramFilter.check !== check
+                histogramFilter?.check && histogramFilter?.check !== check
             })}
             key={index}
             onClick={() =>
               onChangeFilter({
-                check: histogramFilter.check === check ? '' : check
+                check: histogramFilter?.check === check ? '' : check
               })
             }
           >

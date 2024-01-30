@@ -16,6 +16,7 @@ spec:
       ago (inclusive).
     data_type: double
     required: true
+    default_value: 10.0
   - field_name: exact_day
     display_name: exact_day
     help_text: "When the exact_day parameter is unchecked (exact_day: false), rule\
@@ -24,3 +25,4 @@ spec:
       \ with the results from the past 7 days. If no results are found from that time,\
       \ no results or errors will be generated."
     data_type: boolean
+    default_value: "false"

@@ -211,4 +211,4 @@ stored in the [*$DQO_USER_HOME/checks/\*\*/\*.dqocheck.yaml*](../../reference/ya
 - [Learn more about monitoring checks](data-observability-monitoring-checks.md)
 - [Learn more about partition checks](partition-checks.md)
 - Review the list of common data quality problems detected by DQOps, 
-  divided into [categories of data quality checks](../categories-of-data-quality-checks/index.md)
+  divided into [categories of data quality checks](../../categories-of-data-quality-checks/index.md)

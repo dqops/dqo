@@ -15,6 +15,7 @@
  */
 package com.dqops.data.errors.normalization;
 
+import com.dqops.data.checkresults.factory.CheckResultsColumnNames;
 import com.dqops.data.errors.factory.ErrorSource;
 import com.dqops.data.errors.factory.ErrorsColumnNames;
 import com.dqops.data.normalization.CommonColumnNames;
@@ -24,12 +25,14 @@ import com.dqops.data.readouts.normalization.SensorReadoutsNormalizedResult;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
+import com.dqops.utils.tables.TableColumnUtility;
 import com.google.common.hash.Hashing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.*;
+import tech.tablesaw.columns.Column;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -113,6 +116,12 @@ public class ErrorsNormalizationServiceImpl implements ErrorsNormalizationServic
                 sensorExecutionResult, sensorRunParameters);
         normalizedSensorReadout.getIdColumn().setName(ErrorsColumnNames.READOUT_ID_COLUMN_NAME); // renaming the ID column
         Table table = normalizedSensorReadout.getTable();
+
+        // remove a severity column if present
+        Column<?> severityColumn = TableColumnUtility.findColumn(table, CheckResultsColumnNames.SEVERITY_COLUMN_NAME);
+        if (severityColumn != null) {
+            table.removeColumns(severityColumn);
+        }
 
         // adding remaining columns
         TextColumn errorMessageColumn = TextColumn.create(ErrorsColumnNames.ERROR_MESSAGE_COLUMN_NAME, table.rowCount());

@@ -21,6 +21,7 @@ import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.metadata.storage.localfiles.checkdefinitions.FileCheckDefinitionListImpl;
 import com.dqops.metadata.storage.localfiles.credentials.FileSharedCredentialListImpl;
 import com.dqops.metadata.storage.localfiles.dashboards.FileDashboardFolderListSpecWrapperImpl;
+import com.dqops.metadata.storage.localfiles.dictionaries.FileDictionaryListImpl;
 import com.dqops.metadata.storage.localfiles.fileindices.FileFileIndexListImpl;
 import com.dqops.metadata.storage.localfiles.defaultschedules.FileMonitoringSchedulesWrapperImpl;
 import com.dqops.metadata.storage.localfiles.defaultobservabilitychecks.FileObservabilityCheckWrapperImpl;
@@ -52,6 +53,7 @@ public class FileUserHomeImpl extends UserHomeImpl {
      * @param checks Custom checks list.
      * @param settings Settings.
      * @param credentials Credentials.
+     * @param dictionaries Data dictionaries.
      * @param fileIndices File indices list.
      * @param dashboards Custom dashboards.
      * @param userHomeContext User home context.
@@ -63,13 +65,14 @@ public class FileUserHomeImpl extends UserHomeImpl {
                             FileCheckDefinitionListImpl checks,
                             FileSettingsWrapperImpl settings,
                             FileSharedCredentialListImpl credentials,
+                            FileDictionaryListImpl dictionaries,
                             FileFileIndexListImpl fileIndices,
                             FileDashboardFolderListSpecWrapperImpl dashboards,
                             FileMonitoringSchedulesWrapperImpl monitoringSchedules,
                             FileObservabilityCheckWrapperImpl observabilityCheck,
                             FileDefaultIncidentWebhookNotificationsWrapperImpl notificationWebhooks,
                             UserHomeContext userHomeContext) {
-        super(userIdentity, sources, sensors, rules, checks, settings, credentials, fileIndices, dashboards,
+        super(userIdentity, sources, sensors, rules, checks, settings, credentials, dictionaries, fileIndices, dashboards,
                 monitoringSchedules, observabilityCheck, notificationWebhooks);
         this.userHomeContext = userHomeContext;
 		this.homeFolder = userHomeContext.getHomeRoot(); // just a convenience
@@ -90,6 +93,7 @@ public class FileUserHomeImpl extends UserHomeImpl {
         FolderTreeNode indexFolder = userHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.INDEX);
         FolderTreeNode settingsFolder = userHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.SETTINGS);
         FolderTreeNode credentialsFolder = userHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.CREDENTIALS);
+        FolderTreeNode dictionariesFolder = userHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.DICTIONARIES);
         FolderTreeNode localSettingsFolder = userHomeContext.getHomeRoot();
 
         FileConnectionListImpl dataSources = new FileConnectionListImpl(sourcesFolder, yamlSerializer);
@@ -98,13 +102,15 @@ public class FileUserHomeImpl extends UserHomeImpl {
         FileCheckDefinitionListImpl checks = new FileCheckDefinitionListImpl(checksFolder, yamlSerializer);
         FileSettingsWrapperImpl settings = new FileSettingsWrapperImpl(localSettingsFolder, yamlSerializer);
         FileSharedCredentialListImpl credentials = new FileSharedCredentialListImpl(credentialsFolder);
+        FileDictionaryListImpl dictionaries = new FileDictionaryListImpl(dictionariesFolder);
         FileFileIndexListImpl fileIndices = new FileFileIndexListImpl(indexFolder, jsonSerializer);
         FileDashboardFolderListSpecWrapperImpl dashboards = new FileDashboardFolderListSpecWrapperImpl(settingsFolder, yamlSerializer);
         FileMonitoringSchedulesWrapperImpl monitoringSchedules = new FileMonitoringSchedulesWrapperImpl(settingsFolder, yamlSerializer);
         FileObservabilityCheckWrapperImpl observabilityCheckSettings = new FileObservabilityCheckWrapperImpl(settingsFolder, yamlSerializer);
         FileDefaultIncidentWebhookNotificationsWrapperImpl notificationWebhooks = new FileDefaultIncidentWebhookNotificationsWrapperImpl(settingsFolder, yamlSerializer);
 
-        return new FileUserHomeImpl(userHomeContext.getUserIdentity(), dataSources, sensors, rules, checks, settings, credentials, fileIndices, dashboards,
+        return new FileUserHomeImpl(userHomeContext.getUserIdentity(), dataSources,
+                sensors, rules, checks, settings, credentials, dictionaries, fileIndices, dashboards,
                 monitoringSchedules, observabilityCheckSettings, notificationWebhooks, userHomeContext);
     }
 

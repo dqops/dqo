@@ -52,6 +52,11 @@ public class KnownIndexNames {
     public static final String CREDENTIALS = BuiltInFolderNames.CREDENTIALS;
 
     /**
+     * Data dictionaries index.
+     */
+    private static final String DICTIONARIES = BuiltInFolderNames.DICTIONARIES;
+
+    /**
      * Sensor readouts data index.
      */
     public static final String SENSOR_READOUTS = "sensor_readouts";

@@ -17,7 +17,7 @@ Verifies that the percentage of strings matching the custom regular expression p
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_texts_matching_regex_percent`</span>|[patterns](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*texts_matching_regex_percent*](../../../reference/sensors/column/patterns-column-sensors.md#texts-matching-regex-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_texts_matching_regex_percent`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*texts_matching_regex_percent*](../../../reference/sensors/column/patterns-column-sensors.md#texts-matching-regex-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -241,20 +241,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro make_text_constant(string) -%}
-                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-            {%- endmacro -%}
-            
-            {%- macro render_regex(regex) -%}
-                 {{ make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -904,20 +896,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro make_text_constant(string) -%}
-                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-            {%- endmacro -%}
-            
-            {%- macro render_regex(regex) -%}
-                 {{ make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -1440,7 +1424,7 @@ Verifies that the percentage of strings matching the custom regular expression p
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_texts_matching_regex_percent`</span>|[patterns](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*texts_matching_regex_percent*](../../../reference/sensors/column/patterns-column-sensors.md#texts-matching-regex-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_texts_matching_regex_percent`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*texts_matching_regex_percent*](../../../reference/sensors/column/patterns-column-sensors.md#texts-matching-regex-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -1665,20 +1649,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro make_text_constant(string) -%}
-                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-            {%- endmacro -%}
-            
-            {%- macro render_regex(regex) -%}
-                 {{ make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -2329,20 +2305,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro make_text_constant(string) -%}
-                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-            {%- endmacro -%}
-            
-            {%- macro render_regex(regex) -%}
-                 {{ make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -2865,7 +2833,7 @@ Verifies that the percentage of strings matching the custom regular expression p
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_texts_matching_regex_percent`</span>|[patterns](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*texts_matching_regex_percent*](../../../reference/sensors/column/patterns-column-sensors.md#texts-matching-regex-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_texts_matching_regex_percent`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*texts_matching_regex_percent*](../../../reference/sensors/column/patterns-column-sensors.md#texts-matching-regex-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -3090,20 +3058,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro make_text_constant(string) -%}
-                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-            {%- endmacro -%}
-            
-            {%- macro render_regex(regex) -%}
-                 {{ make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -3754,20 +3714,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro make_text_constant(string) -%}
-                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-            {%- endmacro -%}
-            
-            {%- macro render_regex(regex) -%}
-                 {{ make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -4290,7 +4242,7 @@ Verifies that the percentage of strings matching the custom regular expression p
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_texts_matching_regex_percent`</span>|[patterns](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*texts_matching_regex_percent*](../../../reference/sensors/column/patterns-column-sensors.md#texts-matching-regex-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_partition_texts_matching_regex_percent`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*texts_matching_regex_percent*](../../../reference/sensors/column/patterns-column-sensors.md#texts-matching-regex-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -4525,20 +4477,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro make_text_constant(string) -%}
-                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-            {%- endmacro -%}
-            
-            {%- macro render_regex(regex) -%}
-                 {{ make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -5203,20 +5147,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro make_text_constant(string) -%}
-                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-            {%- endmacro -%}
-            
-            {%- macro render_regex(regex) -%}
-                 {{ make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -5737,7 +5673,7 @@ Verifies that the percentage of strings matching the custom regular expression p
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_texts_matching_regex_percent`</span>|[patterns](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*texts_matching_regex_percent*](../../../reference/sensors/column/patterns-column-sensors.md#texts-matching-regex-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_partition_texts_matching_regex_percent`</span>|[patterns](../../../categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*texts_matching_regex_percent*](../../../reference/sensors/column/patterns-column-sensors.md#texts-matching-regex-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -5972,20 +5908,12 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro make_text_constant(string) -%}
-                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-            {%- endmacro -%}
-            
-            {%- macro render_regex(regex) -%}
-                 {{ make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -6650,20 +6578,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {%- macro make_text_constant(string) -%}
-                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
-            {%- endmacro -%}
-            
-            {%- macro render_regex(regex) -%}
-                 {{ make_text_constant(regex) }}
-            {%- endmacro -%}
-            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                            WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex ) }}
                                 THEN 1
                             ELSE 0
                         END
