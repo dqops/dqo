@@ -69,7 +69,7 @@ spec:
   columns: {}
 ```
 
-# User interface
+### User interface
 The table availability monitoring can be also enabled in the [check editor](../dqo-concepts/dqops-user-interface-overview.md#check-editor).
 
 ![Table availability detection configuration in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-availability-check-detection-editor-min.png)
