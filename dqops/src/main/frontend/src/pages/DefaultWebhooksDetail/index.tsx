@@ -38,7 +38,7 @@ export default function DefaultWebhooksDetail() {
     },[])
 
     return (
-    <DefinitionLayout>
+    <>
          <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14 items-center flex-shrink-0">
           <div className="flex items-center justify-between w-full">
             <div className="text-xl font-semibold truncate">Default webhooks configuration</div>
@@ -79,6 +79,6 @@ export default function DefaultWebhooksDetail() {
             disabled={userProfile.can_manage_definitions !== true}
           />
         </SectionWrapper>
-    </DefinitionLayout>
+    </>
   )
 }

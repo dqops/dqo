@@ -71,7 +71,7 @@ const Dashboards = () => {
   }, [dashboardTooltipState.label]);
 
   return (
-    <DashboardLayout>
+    <>
       <div className="flex-1 h-full flex flex-col">
         <PageTabs
           tabs={tabs}
@@ -176,7 +176,7 @@ const Dashboards = () => {
         }}
         message="The definition of this object was deleted in the DQOps user home. The tab will be closed."
       />
-    </DashboardLayout>
+    </>
   );
 };
 

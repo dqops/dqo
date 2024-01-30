@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { ReactNode, useEffect, useMemo } from 'react';
 
 import Header from '../Header';
 import IncidentsTree from './IncidentsTree';
@@ -13,12 +13,16 @@ import {
 import { TabOption } from '../PageTabs/tab';
 import ConfirmDialog from '../CustomTree/ConfirmDialog';
 import { useTree } from '../../contexts/treeContext';
+import { ROUTES } from '../../shared/routes';
+import IncidentDetail from '../../pages/IncidentDetail';
+import Incidents from '../../pages/Incidents';
+import IncidentConnection from '../../pages/IncidentConnection';
 
 interface LayoutProps {
-  children?: any;
+  route: string;
 }
 
-const IncidentsLayout = ({ children }: LayoutProps) => {
+const IncidentsLayout = ({ route }: LayoutProps) => {
   const { objectNotFound, setObjectNotFound } = useTree()
   
   const { tabs: pageTabs, activeTab } = useSelector(
@@ -55,6 +59,21 @@ const IncidentsLayout = ({ children }: LayoutProps) => {
     }
   }, [activeTab]);
 
+  const getComponent = () => {
+    switch (route) {
+      case ROUTES.PATTERNS.INCIDENT_DETAIL:
+        return <IncidentDetail/>;
+      case ROUTES.PATTERNS.INCIDENTS:
+        return <Incidents/>;
+      case ROUTES.PATTERNS.INCIDENT_CONNECTION:
+        return <IncidentConnection/>;  
+      default:
+        return null;
+    }
+  };
+
+  const renderComponent: ReactNode = getComponent();
+
   return (
     <div
       className="flex min-h-screen h-full overflow-hidden "
@@ -82,7 +101,7 @@ const IncidentsLayout = ({ children }: LayoutProps) => {
               limit={7}
             />
             <div className="bg-white border border-gray-300 flex-auto min-h-0 overflow-auto">
-              {!!activeTab && activeTab !== '/incidents/new-tab' && <div>{children}</div>}
+              {!!activeTab && activeTab !== '/incidents/new-tab' && <>{renderComponent}</>}
             </div>
           </div>
         </div>

@@ -267,7 +267,7 @@ export const SensorDetail = () => {
   };
 
   return (
-    <DefinitionLayout>
+    <>
       <div className="relative">
         <SensorActionGroup
           onSave={onCreateSensor}
@@ -337,7 +337,7 @@ export const SensorDetail = () => {
         onConfirm={onDelete}
         message={`Are you sure you want to delete the sensor ${full_sensor_name}`}
       />
-    </DefinitionLayout>
+    </>
   );
 };
 

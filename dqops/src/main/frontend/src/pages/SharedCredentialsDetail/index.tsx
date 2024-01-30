@@ -54,16 +54,16 @@ export default function SharedCredentialsDetail() {
 
   if (loading) {
     return(
-    <DefinitionLayout>
+    <>
         <div className='w-full h-screen flex items-center justify-center'>
            <SvgIcon name='sync' className='w-6 h-6 animate-spin'/>
         </div>
-    </DefinitionLayout>
+    </>
 )}
 
 
   return (
-    <DefinitionLayout>
+    <>
       {userProfile.can_manage_and_view_shared_credentials === true ? 
           <table className='w-full '>
             <thead className='border-b w-full border-b-gray-400 relative flex items-center'>
@@ -83,6 +83,6 @@ export default function SharedCredentialsDetail() {
          Access denied
         </div> 
       }
-    </DefinitionLayout>
+    </>
   )
 }
