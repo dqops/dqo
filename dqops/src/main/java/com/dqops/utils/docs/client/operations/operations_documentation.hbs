@@ -43,18 +43,27 @@ Follow the [link]({{clientSourceUrl}}) to see the source code on GitHub.
 {{#if usageExamples}}
 **Usage examples**
 {{#each usageExamples}}
+
 === "{{{executionMethod.navbarHeader}}}"
+    ### **Execution**
 
     ```{{{executionMethod.codeFormatting}}}
     {{{renderedExample}}}
     ```
-{{/each}}
-{{/if}}
 
-{{#if returnValueSample}}
-??? "Return value sample"
-    ```js
-    {{{returnValueSample}}}
+    {{#if (or returnValueSampleJson returnValueSamplePython)}}
+    ### **Return value sample**
+    {{#if (eq executionMethod.codeFormatting "python")}}
+    ```python
+    {{{indent returnValueSamplePython 1}}}
     ```
+    {{/if}}
+    {{#if (eq executionMethod.codeFormatting "bash")}}
+    ```js
+    {{{returnValueSampleJson}}}
+    ```
+    {{/if}}
+    {{/if}}
+{{/each}}
 {{/if}}
 {{/each}}
