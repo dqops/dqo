@@ -73,7 +73,7 @@ const ConnectionPage = () => {
   );
   const history = useHistory();
   const location = useLocation() as any;
-  const { import_schema, create_success, schema } = qs.parse(location.search);
+  const { import_schema, create_success } = qs.parse(location.search);
 
   const { isUpdatedConnectionBasic } = useSelector(
     getFirstLevelState(checkTypes)
@@ -184,11 +184,7 @@ const ConnectionPage = () => {
         {activeTab === 'comments' && <ConnectionCommentView />}
         {activeTab === 'labels' && <ConnectionLabelsView />}
         {activeTab === 'schemas' &&
-          (import_schema === 'true' ? (
-            <SourceSchemasView defaultSchema={schema as string} />
-          ) : (
-            <SchemasView />
-          ))}
+          (import_schema === 'true' ? <SourceSchemasView /> : <SchemasView />)}
         {activeTab === 'data-groupings' && (
           <ConnectionDefaultGroupingConfiguration />
         )}
