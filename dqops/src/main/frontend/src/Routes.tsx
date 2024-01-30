@@ -50,6 +50,7 @@ import DataDictionaryItemOverview from "./pages/DataDictionaryConfiguration/Data
 import ConnectionLayout from "./components/ConnectionLayout";
 import DefinitionLayout from "./components/DefinitionLayout";
 import DashboardLayout from "./components/DashboardLayout";
+import IncidentsLayout from "./components/IncidentsLayout";
 
 const Routes = () => {
   return (
@@ -60,8 +61,9 @@ const Routes = () => {
       <Route exact path={ROUTES.PATTERNS.DASHBOARDS} render={() => <DashboardLayout route={ROUTES.PATTERNS.DASHBOARDS} />} />
 
       {/* Incident Layout Pages */}
-      <Route exact path={ROUTES.PATTERNS.INCIDENT_DETAIL} component={IncidentDetail} />
-      <Route exact path={ROUTES.PATTERNS.INCIDENTS} component={Incidents} />
+      <Route exact path={ROUTES.PATTERNS.INCIDENT_DETAIL} render={() => <IncidentsLayout route={ROUTES.PATTERNS.INCIDENT_DETAIL}/>} />
+      <Route exact path={ROUTES.PATTERNS.INCIDENTS} render={() => <IncidentsLayout route={ROUTES.PATTERNS.INCIDENTS}/>} />
+      <Route exact path={ROUTES.PATTERNS.INCIDENT_CONNECTION} render={() => <IncidentsLayout route={ROUTES.PATTERNS.INCIDENT_CONNECTION}/>} />
 
       {/* Definition Layout Pages */}
       <Route exact path={ROUTES.PATTERNS.SENSOR_DETAIL} render={() => <DefinitionLayout route={ROUTES.PATTERNS.SENSOR_DETAIL} />} />
