@@ -111,7 +111,7 @@ const ContextMenu = ({
         url,
         value,
         state: {},
-        label: `${schema} (remote)`
+        label: schema
       })
     );
     history.push(url);

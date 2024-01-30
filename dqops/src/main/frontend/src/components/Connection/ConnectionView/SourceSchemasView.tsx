@@ -59,7 +59,7 @@ const SourceSchemasView = () => {
         url,
         value,
         state: {},
-        label: `${schema.schemaName} (remote)`
+        label: schema.schemaName
       })
     );
     history.push(url);

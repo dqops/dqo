@@ -45,7 +45,7 @@ const SchemasView = () => {
         url,
         value,
         state: {},
-        label: `${schema.schema_name} (remote)`
+        label: schema.schema_name
       })
     );
     history.push(url);
