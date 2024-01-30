@@ -21,7 +21,10 @@ We are expecting that the majority of service requests are reported in Austin, w
 The city center is at  30°16′2″N, so the values in the latitude column should be around that value.
 Indeed, the profiling results show that the mean latitude is 30.28, which is 30° 16' 48"N, and it is not far away.
 
-### Data outliers - new minimum
+## Data outliers
+Data outliers are new minimum or maximum values outside the regular range.
+
+### New minimum
 An invalid value is present that is far below the minimum value or the maximum value.
 We can detect such outliers by detecting that the minimum or maximum value in a column has changed since the last time 
 [data quality checks were run](../dqo-concepts/running-data-quality-checks.md).
@@ -47,13 +50,16 @@ We can confirm that the minimum values in daily partitions are around 30.28 or 3
 
 ![Minimum value anomalies in daily partitions results](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/numeric-column-latitude-minimum-value-outliers-partitions-results-min.png){ loading=lazy }
 
-### Data outliers - new maximum
+### New maximum
 We can also detect abnormal maximum values. A similar 
 [daily_partition_max_anomaly](../checks/column/anomaly/max-anomaly.md#daily-partition-max-anomaly) data quality check
 detects new maximum values and compares them to other maximum values for earlier daily partitions.
 The chart shows three outliers of the maximum latitude (services outside the city area) found for the last three months.
 
 ![New maximum value anomaly in daily partitioned data chart](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/numeric-column-latitude-maximum-value-outliers-partitions-min.png){ loading=lazy }
+
+## Aggregate value changed 
+A significant change in an aggregate value, such as an average or sum of values, is another type of data anomaly.
 
 ### Typical values out of range
 Another type of anomaly is a shift of the typical value, such as the mean (average) value or a median value in the column. 

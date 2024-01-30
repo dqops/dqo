@@ -219,7 +219,7 @@ DQOps uses [data quality checks](dqo-concepts/definition-of-data-quality-checks/
     
     DQOps detects the following types of data anomalies:
 
-    [:octicons-arrow-right-24: Detect anomalies in numeric values](categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md#data-outliers---new-maximum)
+    [:octicons-arrow-right-24: Detect anomalies in numeric values](categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md#new-maximum)
 
     [:octicons-arrow-right-24: Compare seasonal data to a reference value](categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md#compare-to-a-reference-point)
 
