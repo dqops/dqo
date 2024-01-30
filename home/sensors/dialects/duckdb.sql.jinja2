@@ -21,7 +21,11 @@
 {% endmacro %}
 
 {%- macro render_target_table() -%}
-    {{ quote_identifier(macro_schema_name) }}.{{ quote_identifier(macro_table_name) }}
+{%- if table.file_format.file_path_list | length > 0 -%}
+   '{{ table.file_format.file_path_list[0] }}' {# todo: build a multiple filepaths string instead of the first filepath #}
+{%- else -%}
+   {{ quote_identifier(macro_schema_name) }}.{{ quote_identifier(macro_table_name) }}
+{%- endif -%}
 {%- endmacro %}
 
 {%- macro render_referenced_table(referenced_table) -%}
