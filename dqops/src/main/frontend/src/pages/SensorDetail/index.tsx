@@ -97,7 +97,7 @@ export const SensorDetail = () => {
   );
 
   useEffect(() => {
-    if (!sensorDetail && (type !== 'create' || copied === true)) {
+    if (full_sensor_name !== undefined && !sensorDetail && (type !== 'create' || copied === true)) {
       dispatch(getSensor(full_sensor_name));
     }
   }, [full_sensor_name, sensorDetail, type]);
@@ -105,11 +105,13 @@ export const SensorDetail = () => {
     if (type === 'create' && copied !== true) {
       setSensorName('');
     } else {
-      setSensorName(
-        String(full_sensor_name).split('/')[
-          String(full_sensor_name).split('/').length - 1
-        ] + '_copy'
-      );
+      if (full_sensor_name !== undefined) {
+        setSensorName(
+          String(full_sensor_name).split('/')[
+            String(full_sensor_name).split('/').length - 1
+          ] + '_copy'
+        );
+      }
     }
   }, [type, copied]);
 
