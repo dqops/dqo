@@ -10,15 +10,12 @@ import { CustomTreeNode } from '../../shared/interfaces';
 import { TREE_LEVEL } from '../../shared/enums';
 import { useTree } from '../../contexts/treeContext';
 import { useHistory, useParams } from 'react-router-dom';
-import { ROUTES } from '../../shared/routes';
+import { CheckTypes, ROUTES } from '../../shared/routes';
 import DeleteStoredDataExtendedPopUp from './DeleteStoredDataExtendedPopUp';
 import { RUN_CHECK_TIME_WINDOW_FILTERS } from '../../shared/constants';
 import { TimeWindowFilterParameters, RunChecksParameters } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
-import {
-  addFirstLevelTab,
-  setActiveFirstLevelTab
-} from '../../redux/actions/source.actions';
+import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
 
@@ -98,15 +95,26 @@ const ContextMenu = ({
 
   const importTables = () => {
     const [connection, schema] = node.id.toString().split('.');
+    const url = ROUTES.SCHEMA_LEVEL_PAGE(
+      CheckTypes.SOURCES,
+      connection,
+      schema ?? '',
+      'import-tables'
+    );
+    const value = ROUTES.SCHEMA_LEVEL_VALUE(
+      CheckTypes.SOURCES,
+      connection,
+      schema ?? ''
+    );
     dispatch(
-      setActiveFirstLevelTab(
-        checkTypes,
-        ROUTES.SCHEMA_LEVEL_VALUE(checkTypes, connection, schema)
-      )
+      addFirstLevelTab(CheckTypes.SOURCES, {
+        url,
+        value,
+        state: {},
+        label: `${schema} (remote)`
+      })
     );
-    history.push(
-      `${ROUTES.SCHEMA_LEVEL_PAGE(checkTypes, connection, schema, 'tables')}`
-    );
+    history.push(url);
   };
 
   const openPopover = (e: MouseEvent) => {

@@ -29,13 +29,26 @@ const SchemasView = () => {
   }, [connection]);
 
   const onImportTables = (schema: SchemaModel) => {
-    history.push(
-      `${ROUTES.CONNECTION_DETAIL(
-        checkTypes,
-        connection,
-        'schemas'
-      )}?import_schema=true&import_table=true&schema=${schema.schema_name}`
+    const url = ROUTES.SCHEMA_LEVEL_PAGE(
+      CheckTypes.SOURCES,
+      connection,
+      schema.schema_name ?? '',
+      'import-tables'
     );
+    const value = ROUTES.SCHEMA_LEVEL_VALUE(
+      CheckTypes.SOURCES,
+      connection,
+      schema.schema_name ?? ''
+    );
+    dispatch(
+      addFirstLevelTab(CheckTypes.SOURCES, {
+        url,
+        value,
+        state: {},
+        label: `${schema.schema_name} (remote)`
+      })
+    );
+    history.push(url);
   };
 
   const goToSchemas = () => {
@@ -82,7 +95,7 @@ const SchemasView = () => {
                 <Button
                   label={item.schema_name}
                   variant="text"
-                  className='underline'
+                  className="underline"
                   onClick={() => goToTable(item.schema_name ?? '', 'tables')}
                 />
               </td>
