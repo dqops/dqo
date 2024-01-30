@@ -200,7 +200,7 @@ export const RuleDetail = () => {
   };
 
   return (
-    <DefinitionLayout>
+    <>
       <div className="relative">
         <RuleActionGroup
           onSave={onCreateRule}
@@ -248,7 +248,7 @@ export const RuleDetail = () => {
         onConfirm={onDelete}
         message={`Are you sure you want to delete the rule ${full_rule_name}`}
       />
-    </DefinitionLayout>
+    </>
   );
 };
 

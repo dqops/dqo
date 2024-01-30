@@ -49,7 +49,7 @@ export default function DataDictionaryItemOverview() {
   }, [dictionary_name]);
 
   return (
-    <DefinitionLayout>
+    <>
       {userProfile.can_manage_definitions === true ? (
         <>
           <div className="w-full border-b border-b-gray-400 flex justify-between ">
@@ -98,6 +98,6 @@ export default function DataDictionaryItemOverview() {
           Access denied
         </div>
       )}
-    </DefinitionLayout>
+    </>
   );
 }

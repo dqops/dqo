@@ -48,12 +48,13 @@ import SingleSharedCredential from "./pages/SharedCredentialsDetail/SingleShared
 import DataDictionary from "./pages/DataDictionaryConfiguration";
 import DataDictionaryItemOverview from "./pages/DataDictionaryConfiguration/DataDictionaryItemOverview";
 import ConnectionLayout from "./components/ConnectionLayout";
+import DefinitionLayout from "./components/DefinitionLayout";
 
 const Routes = () => {
   return (
     <Switch>
       <Route exact path={ROUTES.PATTERNS.HOME} component={HomePage} />
-      
+
       {/* Dashboard Layout pages */}
       <Route exact path={ROUTES.PATTERNS.DASHBOARDS} component={Dashboards} />
 
@@ -62,20 +63,20 @@ const Routes = () => {
       <Route exact path={ROUTES.PATTERNS.INCIDENTS} component={Incidents} />
 
       {/* Definition Layout Pages */}
-      <Route exact path={ROUTES.PATTERNS.SENSOR_DETAIL} component={SensorDetail} />
-      <Route exact path={ROUTES.PATTERNS.RULE_DETAIL} component={RuleDetail} />
-      <Route exact path={ROUTES.PATTERNS.CHECK_DETAIL} component={CheckDetail} />
-      <Route exact path={ROUTES.PATTERNS.CHECK_DEFAULT_DETAIL} component={DefaultCheckDetail} />
-      <Route exact path={ROUTES.PATTERNS.DEFINITIONS} component={Definitions} />
-      <Route exact path={ROUTES.PATTERNS.INCIDENT_CONNECTION} component={IncidentConnection} />
-      <Route exact path={ROUTES.PATTERNS.USERS_LIST_DETAIL} component={UserListDetail} />
-      <Route exact path={ROUTES.PATTERNS.USER_DETAIL} component={UserDetail} />
-      <Route exact path={ROUTES.PATTERNS.SCHEDULES_DEFAULT_DETAIL} component={DefaultSchedules} />
-      <Route exact path={ROUTES.PATTERNS.WEBHOOKS_DEFAULT_DETAIL} component={DefaultWebhooksDetail}/>
-      <Route exact path={ROUTES.PATTERNS.SHARED_CREDENTIALS_LIST_DETAIL} component={SharedCredentialsDetail}/>
-      <Route exact path={ROUTES.PATTERNS.SHARED_CREDENTIALS_DETAIL} component={SingleSharedCredential}/>
-      <Route exact path={ROUTES.PATTERNS.DATA_DICTIONARY_LIST_DETAIL} component={DataDictionary}/>
-      <Route exact path={ROUTES.PATTERNS.DATA_DICTIONARY_DETAIL} component={DataDictionaryItemOverview}/>
+      <Route exact path={ROUTES.PATTERNS.SENSOR_DETAIL} render={() => <DefinitionLayout route={ROUTES.PATTERNS.SENSOR_DETAIL} />} />
+      <Route exact path={ROUTES.PATTERNS.RULE_DETAIL} render={() => <DefinitionLayout route={ROUTES.PATTERNS.RULE_DETAIL} />} />
+      <Route exact path={ROUTES.PATTERNS.CHECK_DETAIL} render={() => <DefinitionLayout route={ROUTES.PATTERNS.CHECK_DETAIL} />} />
+      <Route exact path={ROUTES.PATTERNS.CHECK_DEFAULT_DETAIL} render={() => <DefinitionLayout route={ROUTES.PATTERNS.CHECK_DEFAULT_DETAIL} />} />
+      <Route exact path={ROUTES.PATTERNS.DEFINITIONS} render={() => <DefinitionLayout route={ROUTES.PATTERNS.DEFINITIONS} />} />
+      <Route exact path={ROUTES.PATTERNS.INCIDENT_CONNECTION} render={() => <DefinitionLayout route={ROUTES.PATTERNS.INCIDENT_CONNECTION} />} />
+      <Route exact path={ROUTES.PATTERNS.USERS_LIST_DETAIL} render={() => <DefinitionLayout route={ROUTES.PATTERNS.USERS_LIST_DETAIL} />} />
+      <Route exact path={ROUTES.PATTERNS.USER_DETAIL} render={() => <DefinitionLayout route={ROUTES.PATTERNS.USER_DETAIL} />} />
+      <Route exact path={ROUTES.PATTERNS.SCHEDULES_DEFAULT_DETAIL} render={() => <DefinitionLayout route={ROUTES.PATTERNS.SCHEDULES_DEFAULT_DETAIL} />} />
+      <Route exact path={ROUTES.PATTERNS.WEBHOOKS_DEFAULT_DETAIL} render={() => <DefinitionLayout route={ROUTES.PATTERNS.WEBHOOKS_DEFAULT_DETAIL} />} />
+      <Route exact path={ROUTES.PATTERNS.SHARED_CREDENTIALS_LIST_DETAIL} render={() => <DefinitionLayout route={ROUTES.PATTERNS.SHARED_CREDENTIALS_LIST_DETAIL} />} />
+      <Route exact path={ROUTES.PATTERNS.SHARED_CREDENTIALS_DETAIL} render={() => <DefinitionLayout route={ROUTES.PATTERNS.SHARED_CREDENTIALS_DETAIL} />} />
+      <Route exact path={ROUTES.PATTERNS.DATA_DICTIONARY_LIST_DETAIL} render={() => <DefinitionLayout route={ROUTES.PATTERNS.DATA_DICTIONARY_LIST_DETAIL} />} />
+      <Route exact path={ROUTES.PATTERNS.DATA_DICTIONARY_DETAIL} render={() => <DefinitionLayout route={ROUTES.PATTERNS.DATA_DICTIONARY_DETAIL} />} />
 
       {/* Connction Layout pages */}
       <Route exact path={ROUTES.PATTERNS.CREATE} render={() => <ConnectionLayout route={ROUTES.PATTERNS.CREATE} />} />

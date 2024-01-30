@@ -103,7 +103,7 @@ export default function SingleSharedCredential() {
   };
 
   return (
-    <DefinitionLayout>
+    <>
       {userProfile.can_manage_and_view_shared_credentials === true ? (
         <>
           <div className="w-full border-b border-b-gray-400 flex justify-between ">
@@ -177,6 +177,6 @@ export default function SingleSharedCredential() {
           Access denied
         </div>
       )}
-    </DefinitionLayout>
+    </>
   );
 }
