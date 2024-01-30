@@ -49,6 +49,7 @@ import DataDictionary from "./pages/DataDictionaryConfiguration";
 import DataDictionaryItemOverview from "./pages/DataDictionaryConfiguration/DataDictionaryItemOverview";
 import ConnectionLayout from "./components/ConnectionLayout";
 import DefinitionLayout from "./components/DefinitionLayout";
+import DashboardLayout from "./components/DashboardLayout";
 
 const Routes = () => {
   return (
@@ -56,7 +57,7 @@ const Routes = () => {
       <Route exact path={ROUTES.PATTERNS.HOME} component={HomePage} />
 
       {/* Dashboard Layout pages */}
-      <Route exact path={ROUTES.PATTERNS.DASHBOARDS} component={Dashboards} />
+      <Route exact path={ROUTES.PATTERNS.DASHBOARDS} render={() => <DashboardLayout route={ROUTES.PATTERNS.DASHBOARDS} />} />
 
       {/* Incident Layout Pages */}
       <Route exact path={ROUTES.PATTERNS.INCIDENT_DETAIL} component={IncidentDetail} />
