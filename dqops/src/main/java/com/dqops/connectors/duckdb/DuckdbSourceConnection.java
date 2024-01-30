@@ -18,6 +18,7 @@ package com.dqops.connectors.duckdb;
 import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
 import com.dqops.connectors.jdbc.JdbcQueryFailedException;
+import com.dqops.core.filesystem.localfiles.HomeLocationFindService;
 import com.dqops.core.jobqueue.JobCancellationListenerHandle;
 import com.dqops.core.jobqueue.JobCancellationToken;
 import com.dqops.core.secrets.SecretValueLookupContext;
@@ -34,6 +35,8 @@ import tech.tablesaw.api.Table;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -42,16 +45,23 @@ import java.util.Properties;
 @Component("duckdb-connection")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
+
+    private final HomeLocationFindService homeLocationFindService;
+
     /**
      * Injection constructor for the duckdb connection.
-     * @param jdbcConnectionPool Jdbc connection pool.
-     * @param secretValueProvider Secret value provider for the environment variable expansion.
+     *
+     * @param jdbcConnectionPool      Jdbc connection pool.
+     * @param secretValueProvider     Secret value provider for the environment variable expansion.
+     * @param homeLocationFindService
      */
     @Autowired
     public DuckdbSourceConnection(JdbcConnectionPool jdbcConnectionPool,
                                   SecretValueProvider secretValueProvider,
-                                  DuckdbConnectionProvider duckdbConnectionProvider) {
+                                  DuckdbConnectionProvider duckdbConnectionProvider,
+                                  HomeLocationFindService homeLocationFindService) {
         super(jdbcConnectionPool, secretValueProvider, duckdbConnectionProvider);
+        this.homeLocationFindService = homeLocationFindService;
     }
 
     /**
@@ -134,6 +144,40 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                     String.format("SQL statement failed: %s, connection: %s, SQL: %s", ex.getMessage(), connectionName, sqlStatement),
                     ex, sqlStatement, connectionName);
         }
+    }
+
+    @Override
+    public void open(SecretValueLookupContext secretValueLookupContext) {
+        super.open(secretValueLookupContext);
+        registerExtensions();
+    }
+
+    private void registerExtensions(){
+
+        StringBuilder setCustomRepository = new StringBuilder();
+        setCustomRepository.append("SET extension_directory = ");
+        setCustomRepository.append("'");
+        setCustomRepository.append(homeLocationFindService.getDqoHomePath());
+        setCustomRepository.append("/bin/duckdb");
+        setCustomRepository.append("'");
+
+        this.executeCommand(setCustomRepository.toString(), JobCancellationToken.createDummyJobCancellationToken());
+
+        List<String> availableExtensionList = getAvailableExtensions();
+
+        availableExtensionList.stream().forEach(extensionName -> {
+            // todo: some try catch when extension is not available
+            String installExtensionQuery = "INSTALL " + extensionName;
+            this.executeCommand(installExtensionQuery, JobCancellationToken.createDummyJobCancellationToken());
+
+            String loadExtensionQuery = "LOAD " + extensionName;
+            this.executeCommand(loadExtensionQuery, JobCancellationToken.createDummyJobCancellationToken());
+        });
+
+    }
+
+    private List<String> getAvailableExtensions(){
+        return Arrays.asList("httpfs");
     }
 
 }

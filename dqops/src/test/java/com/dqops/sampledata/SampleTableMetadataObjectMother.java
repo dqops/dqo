@@ -36,6 +36,8 @@ import com.dqops.core.secrets.SecretValueProviderObjectMother;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
 import com.dqops.metadata.sources.*;
+import com.dqops.metadata.sources.fileformat.CsvFileFormatSpec;
+import com.dqops.metadata.sources.fileformat.FileFormatSpec;
 import com.dqops.sampledata.files.CsvSampleFilesObjectMother;
 import com.dqops.sampledata.files.SampleTableFromCsv;
 import org.junit.jupiter.api.Assertions;
@@ -191,23 +193,8 @@ public class SampleTableMetadataObjectMother {
         DataGroupingConfigurationSpec dataGroupingConfigurationSpec = new DataGroupingConfigurationSpec();
         tableSpec.getGroupings().put(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME, dataGroupingConfigurationSpec);
         tableSpec.setDefaultGroupingName(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME);
-        ConnectionProvider connectionProvider = ConnectionProviderRegistryObjectMother.getConnectionProvider(providerType);
 
-        for (Column<?> dataColumn : sampleTable.getTable().columns()) {
-            ColumnSpec columnSpec = new ColumnSpec();
-            String userProposedDataType = sampleTable.getPhysicalColumnTypes().get(dataColumn.name());
-            if (userProposedDataType != null) {
-                ColumnTypeSnapshotSpec userProposedType = ColumnTypeSnapshotSpec.fromType(userProposedDataType);
-                columnSpec.setTypeSnapshot(userProposedType);
-            }
-            else {
-                ColumnTypeSnapshotSpec providerProposedTypeSnapshot = connectionProvider
-                        .proposePhysicalColumnType(connectionSpec, dataColumn);
-                columnSpec.setTypeSnapshot(providerProposedTypeSnapshot);
-            }
-
-            tableSpec.getColumns().put(dataColumn.name(), columnSpec);
-        }
+        fillColumnSpecsInTableSpec(tableSpec, sampleTable, connectionSpec);
 
         return new SampleTableMetadata(connectionName, connectionSpec, tableSpec, sampleTable);
     }
@@ -243,6 +230,63 @@ public class SampleTableMetadataObjectMother {
         tableSpec.setDefaultGroupingName(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME);
 
         return new SampleTableMetadata(connectionName, connectionSpec, tableSpec, null);
+    }
+
+    /**
+     * Creates a sample table metadata adapted for the tested connection spec.
+     * The physical table name will match the desired name for a table in a tested database.
+     * The method allows to test e.g. different database versions.
+     * @param csvFileName Sample data CSV file name (a file name in the dqo/sampledata folder).
+     * @param connectionSpecRaw Target connection spec.
+     * @return Sample table metadata.
+     */
+    public static SampleTableMetadata createSampleTableMetadataForLocalCsvFile(String csvFileName,
+                                                                               ConnectionSpec connectionSpecRaw) {
+        ProviderType providerType = connectionSpecRaw.getProviderType();
+        String connectionName = getConnectionNameForProvider(providerType);
+        SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(null);
+        ConnectionSpec connectionSpec = connectionSpecRaw.expandAndTrim(SecretValueProviderObjectMother.getInstance(), secretValueLookupContext);
+        SampleTableFromCsv sampleTable = CsvSampleFilesObjectMother.getSampleTable(csvFileName);
+
+        FileFormatSpec fileFormatSpec = new FileFormatSpec(CsvSampleFilesObjectMother.getFile(csvFileName).toString());
+        fileFormatSpec.setCsvFileFormat(new CsvFileFormatSpec());
+        TableSpec tableSpec = new TableSpec();
+        tableSpec.setFileFormat(fileFormatSpec);
+        tableSpec.setPhysicalTableName(new PhysicalTableName("a_random_schema_name", "a_random_table_name"));
+
+        DataGroupingConfigurationSpec dataGroupingConfigurationSpec = new DataGroupingConfigurationSpec();
+        tableSpec.getGroupings().put(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME, dataGroupingConfigurationSpec);
+        tableSpec.setDefaultGroupingName(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME);
+
+        fillColumnSpecsInTableSpec(tableSpec, sampleTable, connectionSpec);
+
+        return new SampleTableMetadata(connectionName, connectionSpec, tableSpec, sampleTable);
+    }
+
+    /**
+     * Fills column specifications basing on the sample data from csv file.
+     * @param tableSpec The table spec that will be filled.
+     * @param sampleTable The sample table from csv with the column details.
+     * @param connectionSpec The connection spec for the
+     */
+    private static void fillColumnSpecsInTableSpec(TableSpec tableSpec, SampleTableFromCsv sampleTable, ConnectionSpec connectionSpec){
+        ConnectionProvider connectionProvider = ConnectionProviderRegistryObjectMother.getConnectionProvider(connectionSpec.getProviderType());
+
+        for (Column<?> dataColumn : sampleTable.getTable().columns()) {
+            ColumnSpec columnSpec = new ColumnSpec();
+            String userProposedDataType = sampleTable.getPhysicalColumnTypes().get(dataColumn.name());
+            if (userProposedDataType != null) {
+                ColumnTypeSnapshotSpec userProposedType = ColumnTypeSnapshotSpec.fromType(userProposedDataType);
+                columnSpec.setTypeSnapshot(userProposedType);
+            }
+            else {
+                ColumnTypeSnapshotSpec providerProposedTypeSnapshot = connectionProvider
+                        .proposePhysicalColumnType(connectionSpec, dataColumn);
+                columnSpec.setTypeSnapshot(providerProposedTypeSnapshot);
+            }
+
+            tableSpec.getColumns().put(dataColumn.name(), columnSpec);
+        }
     }
 
 }
