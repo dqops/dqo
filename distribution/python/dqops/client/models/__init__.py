@@ -1387,8 +1387,8 @@ from .max_diff_percent_rule_0_parameters_spec import MaxDiffPercentRule0Paramete
 from .max_diff_percent_rule_1_parameters_spec import MaxDiffPercentRule1ParametersSpec
 from .max_diff_percent_rule_5_parameters_spec import MaxDiffPercentRule5ParametersSpec
 from .max_failures_rule_0_parameters_spec import MaxFailuresRule0ParametersSpec
+from .max_failures_rule_1_parameters_spec import MaxFailuresRule1ParametersSpec
 from .max_failures_rule_5_parameters_spec import MaxFailuresRule5ParametersSpec
-from .max_failures_rule_10_parameters_spec import MaxFailuresRule10ParametersSpec
 from .max_missing_rule_0_error_parameters_spec import MaxMissingRule0ErrorParametersSpec
 from .max_missing_rule_0_warning_parameters_spec import (
     MaxMissingRule0WarningParametersSpec,
@@ -2466,7 +2466,7 @@ __all__ = (
     "MaxDiffPercentRule1ParametersSpec",
     "MaxDiffPercentRule5ParametersSpec",
     "MaxFailuresRule0ParametersSpec",
-    "MaxFailuresRule10ParametersSpec",
+    "MaxFailuresRule1ParametersSpec",
     "MaxFailuresRule5ParametersSpec",
     "MaxMissingRule0ErrorParametersSpec",
     "MaxMissingRule0WarningParametersSpec",

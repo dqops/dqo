@@ -5,11 +5,11 @@ from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
-T = TypeVar("T", bound="MaxFailuresRule10ParametersSpec")
+T = TypeVar("T", bound="MaxFailuresRule1ParametersSpec")
 
 
 @_attrs_define
-class MaxFailuresRule10ParametersSpec:
+class MaxFailuresRule1ParametersSpec:
     """
     Attributes:
         max_failures (Union[Unset, int]): Maximum number of consecutive days with check failures. A check is failed when
@@ -35,12 +35,12 @@ class MaxFailuresRule10ParametersSpec:
         d = src_dict.copy()
         max_failures = d.pop("max_failures", UNSET)
 
-        max_failures_rule_10_parameters_spec = cls(
+        max_failures_rule_1_parameters_spec = cls(
             max_failures=max_failures,
         )
 
-        max_failures_rule_10_parameters_spec.additional_properties = d
-        return max_failures_rule_10_parameters_spec
+        max_failures_rule_1_parameters_spec.additional_properties = d
+        return max_failures_rule_1_parameters_spec
 
     @property
     def additional_keys(self) -> List[str]:

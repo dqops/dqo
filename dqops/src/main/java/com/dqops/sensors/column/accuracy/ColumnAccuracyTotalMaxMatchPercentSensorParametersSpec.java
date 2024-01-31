@@ -43,12 +43,14 @@ public class ColumnAccuracyTotalMaxMatchPercentSensorParametersSpec extends Abst
         }
     };
 
-    @JsonPropertyDescription("This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.")
-    @SampleValues(values = { "dim_customer" })
+    @JsonPropertyDescription("The name of the reference table. DQOps accepts the name in two forms: a fully qualified name including the schema name, " +
+            "for example landing_zone.customer_raw, or only a table name. When only a table name is used, " +
+            "DQOps assumes that the table is in the same schema as the analyzed table, and prefixes the name with the schema and optionally database name.")
+    @SampleValues(values = { "landing_zone.customer_raw" })
     @RequiredField
     private String referencedTable;
 
-    @JsonPropertyDescription("This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.")
+    @JsonPropertyDescription("The name of a column in the reference table. DQOps calculates an aggregate value on that column and compares it with the value in the analyzed table.")
     @SampleValues(values = { "customer_id" })
     @RequiredField
     private String referencedColumn;

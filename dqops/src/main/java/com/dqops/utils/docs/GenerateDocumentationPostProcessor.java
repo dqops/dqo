@@ -255,6 +255,7 @@ public class GenerateDocumentationPostProcessor {
                 "########## END INCLUDE CHECK REFERENCE");
 
         DocumentationFolder newTypesOfChecksFolder = renderedDocumentation.getFolderByName("categories-of-data-quality-checks");
+        newTypesOfChecksFolder.sortByLabelRecursive(Comparator.naturalOrder());
         List<String> renderedCheckTypesIndexYaml = newTypesOfChecksFolder.generateMkDocsNavigation(2);
         FileContentIndexReplaceUtility.replaceContentLines(projectRoot.resolve("../mkdocs.yml"),
                 renderedCheckTypesIndexYaml,

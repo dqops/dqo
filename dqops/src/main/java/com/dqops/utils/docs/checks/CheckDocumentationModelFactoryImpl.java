@@ -35,6 +35,7 @@ import com.dqops.connectors.oracle.OracleParametersSpec;
 import com.dqops.connectors.oracle.OracleProviderDialectSettings;
 import com.dqops.connectors.postgresql.PostgresqlParametersSpec;
 import com.dqops.connectors.postgresql.PostgresqlProviderDialectSettings;
+import com.dqops.connectors.presto.PrestoParametersSpec;
 import com.dqops.connectors.presto.PrestoProviderDialectSettings;
 import com.dqops.connectors.redshift.RedshiftParametersSpec;
 import com.dqops.connectors.redshift.RedshiftProviderDialectSettings;
@@ -44,6 +45,7 @@ import com.dqops.connectors.spark.SparkParametersSpec;
 import com.dqops.connectors.spark.SparkProviderDialectSettings;
 import com.dqops.connectors.sqlserver.SqlServerParametersSpec;
 import com.dqops.connectors.sqlserver.SqlServerProviderDialectSettings;
+import com.dqops.connectors.trino.TrinoParametersSpec;
 import com.dqops.connectors.trino.TrinoProviderDialectSettings;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.execution.checks.EffectiveSensorRuleNames;
@@ -657,6 +659,12 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
 
                 connectionSpec.setDatabricks(new DatabricksParametersSpec() {{
                     setCatalog("your_databricks_catalog");
+                }});
+                connectionSpec.setTrino(new TrinoParametersSpec() {{
+                    setCatalog("your_trino_catalog");
+                }});
+                connectionSpec.setPresto(new PrestoParametersSpec() {{
+                    setDatabase("your_trino_database");
                 }});
 
                 connectionSpec.setProviderType(providerType);

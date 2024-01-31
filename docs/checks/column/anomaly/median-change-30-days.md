@@ -418,7 +418,7 @@ spec:
                     ) AS actual_value,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -695,7 +695,7 @@ spec:
                     ) AS actual_value,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -1050,7 +1050,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ) AS actual_value,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -1335,7 +1335,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ) AS actual_value,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -1754,7 +1754,7 @@ spec:
                     ) AS actual_value,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -2031,7 +2031,7 @@ spec:
                     ) AS actual_value,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -2387,7 +2387,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ) AS actual_value,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -2672,7 +2672,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ) AS actual_value,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -3101,7 +3101,7 @@ spec:
                     ) AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST(CAST(analyzed_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -3378,7 +3378,7 @@ spec:
                     ) AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST(CAST(analyzed_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -3744,7 +3744,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ) AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST(CAST(analyzed_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -4029,7 +4029,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ) AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST(CAST(analyzed_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```

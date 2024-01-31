@@ -10,11 +10,11 @@ if TYPE_CHECKING:
     from ..models.max_failures_rule_0_parameters_spec import (
         MaxFailuresRule0ParametersSpec,
     )
+    from ..models.max_failures_rule_1_parameters_spec import (
+        MaxFailuresRule1ParametersSpec,
+    )
     from ..models.max_failures_rule_5_parameters_spec import (
         MaxFailuresRule5ParametersSpec,
-    )
-    from ..models.max_failures_rule_10_parameters_spec import (
-        MaxFailuresRule10ParametersSpec,
     )
     from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
     from ..models.table_availability_sensor_parameters_spec import (
@@ -52,8 +52,8 @@ class TableAvailabilityCheckSpec:
             table.
         parameters (Union[Unset, TableAvailabilitySensorParametersSpec]):
         warning (Union[Unset, MaxFailuresRule0ParametersSpec]):
-        error (Union[Unset, MaxFailuresRule5ParametersSpec]):
-        fatal (Union[Unset, MaxFailuresRule10ParametersSpec]):
+        error (Union[Unset, MaxFailuresRule1ParametersSpec]):
+        fatal (Union[Unset, MaxFailuresRule5ParametersSpec]):
     """
 
     schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
@@ -66,8 +66,8 @@ class TableAvailabilityCheckSpec:
     data_grouping: Union[Unset, str] = UNSET
     parameters: Union[Unset, "TableAvailabilitySensorParametersSpec"] = UNSET
     warning: Union[Unset, "MaxFailuresRule0ParametersSpec"] = UNSET
-    error: Union[Unset, "MaxFailuresRule5ParametersSpec"] = UNSET
-    fatal: Union[Unset, "MaxFailuresRule10ParametersSpec"] = UNSET
+    error: Union[Unset, "MaxFailuresRule1ParametersSpec"] = UNSET
+    fatal: Union[Unset, "MaxFailuresRule5ParametersSpec"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -141,11 +141,11 @@ class TableAvailabilityCheckSpec:
         from ..models.max_failures_rule_0_parameters_spec import (
             MaxFailuresRule0ParametersSpec,
         )
+        from ..models.max_failures_rule_1_parameters_spec import (
+            MaxFailuresRule1ParametersSpec,
+        )
         from ..models.max_failures_rule_5_parameters_spec import (
             MaxFailuresRule5ParametersSpec,
-        )
-        from ..models.max_failures_rule_10_parameters_spec import (
-            MaxFailuresRule10ParametersSpec,
         )
         from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
         from ..models.table_availability_sensor_parameters_spec import (
@@ -194,18 +194,18 @@ class TableAvailabilityCheckSpec:
             warning = MaxFailuresRule0ParametersSpec.from_dict(_warning)
 
         _error = d.pop("error", UNSET)
-        error: Union[Unset, MaxFailuresRule5ParametersSpec]
+        error: Union[Unset, MaxFailuresRule1ParametersSpec]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = MaxFailuresRule5ParametersSpec.from_dict(_error)
+            error = MaxFailuresRule1ParametersSpec.from_dict(_error)
 
         _fatal = d.pop("fatal", UNSET)
-        fatal: Union[Unset, MaxFailuresRule10ParametersSpec]
+        fatal: Union[Unset, MaxFailuresRule5ParametersSpec]
         if isinstance(_fatal, Unset):
             fatal = UNSET
         else:
-            fatal = MaxFailuresRule10ParametersSpec.from_dict(_fatal)
+            fatal = MaxFailuresRule5ParametersSpec.from_dict(_fatal)
 
         table_availability_check_spec = cls(
             schedule_override=schedule_override,

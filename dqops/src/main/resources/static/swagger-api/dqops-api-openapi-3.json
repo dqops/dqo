@@ -23354,14 +23354,14 @@
           },
           "referenced_table" : {
             "type" : "string",
-            "description" : "This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.",
+            "description" : "The name of the reference table. DQOps accepts the name in two forms: a fully qualified name including the schema name, for example landing_zone.customer_raw, or only a table name. When only a table name is used, DQOps assumes that the table is in the same schema as the analyzed table, and prefixes the name with the schema and optionally database name.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "referenced_column" : {
             "type" : "string",
-            "description" : "This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.",
+            "description" : "The name of a column in the reference table. DQOps calculates an aggregate value on that column and compares it with the value in the analyzed table.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
@@ -23378,11 +23378,11 @@
             },
             "referenced_table" : {
               "type" : "string",
-              "description" : "This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String."
+              "description" : "The name of the reference table. DQOps accepts the name in two forms: a fully qualified name including the schema name, for example landing_zone.customer_raw, or only a table name. When only a table name is used, DQOps assumes that the table is in the same schema as the analyzed table, and prefixes the name with the schema and optionally database name."
             },
             "referenced_column" : {
               "type" : "string",
-              "description" : "This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String."
+              "description" : "The name of a column in the reference table. DQOps calculates an aggregate value on that column and compares it with the value in the analyzed table."
             }
           }
         }
@@ -23547,14 +23547,14 @@
           },
           "referenced_table" : {
             "type" : "string",
-            "description" : "This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.",
+            "description" : "The name of the reference table. DQOps accepts the name in two forms: a fully qualified name including the schema name, for example landing_zone.customer_raw, or only a table name. When only a table name is used, DQOps assumes that the table is in the same schema as the analyzed table, and prefixes the name with the schema and optionally database name.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "referenced_column" : {
             "type" : "string",
-            "description" : "This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.",
+            "description" : "The name of a column in the reference table. DQOps calculates an aggregate value on that column and compares it with the value in the analyzed table.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
@@ -23571,11 +23571,11 @@
             },
             "referenced_table" : {
               "type" : "string",
-              "description" : "This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String."
+              "description" : "The name of the reference table. DQOps accepts the name in two forms: a fully qualified name including the schema name, for example landing_zone.customer_raw, or only a table name. When only a table name is used, DQOps assumes that the table is in the same schema as the analyzed table, and prefixes the name with the schema and optionally database name."
             },
             "referenced_column" : {
               "type" : "string",
-              "description" : "This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String."
+              "description" : "The name of a column in the reference table. DQOps calculates an aggregate value on that column and compares it with the value in the analyzed table."
             }
           }
         }
@@ -23740,14 +23740,14 @@
           },
           "referenced_table" : {
             "type" : "string",
-            "description" : "This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.",
+            "description" : "The name of the reference table. DQOps accepts the name in two forms: a fully qualified name including the schema name, for example landing_zone.customer_raw, or only a table name. When only a table name is used, DQOps assumes that the table is in the same schema as the analyzed table, and prefixes the name with the schema and optionally database name.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "referenced_column" : {
             "type" : "string",
-            "description" : "This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.",
+            "description" : "The name of a column in the reference table. DQOps calculates an aggregate value on that column and compares it with the value in the analyzed table.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
@@ -23764,11 +23764,11 @@
             },
             "referenced_table" : {
               "type" : "string",
-              "description" : "This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String."
+              "description" : "The name of the reference table. DQOps accepts the name in two forms: a fully qualified name including the schema name, for example landing_zone.customer_raw, or only a table name. When only a table name is used, DQOps assumes that the table is in the same schema as the analyzed table, and prefixes the name with the schema and optionally database name."
             },
             "referenced_column" : {
               "type" : "string",
-              "description" : "This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String."
+              "description" : "The name of a column in the reference table. DQOps calculates an aggregate value on that column and compares it with the value in the analyzed table."
             }
           }
         }
@@ -23933,14 +23933,14 @@
           },
           "referenced_table" : {
             "type" : "string",
-            "description" : "This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.",
+            "description" : "The name of the reference table. DQOps accepts the name in two forms: a fully qualified name including the schema name, for example landing_zone.customer_raw, or only a table name. When only a table name is used, DQOps assumes that the table is in the same schema as the analyzed table, and prefixes the name with the schema and optionally database name.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "referenced_column" : {
             "type" : "string",
-            "description" : "This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.",
+            "description" : "The name of a column in the reference table. DQOps calculates an aggregate value on that column and compares it with the value in the analyzed table.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
@@ -23957,11 +23957,11 @@
             },
             "referenced_table" : {
               "type" : "string",
-              "description" : "This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String."
+              "description" : "The name of the reference table. DQOps accepts the name in two forms: a fully qualified name including the schema name, for example landing_zone.customer_raw, or only a table name. When only a table name is used, DQOps assumes that the table is in the same schema as the analyzed table, and prefixes the name with the schema and optionally database name."
             },
             "referenced_column" : {
               "type" : "string",
-              "description" : "This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String."
+              "description" : "The name of a column in the reference table. DQOps calculates an aggregate value on that column and compares it with the value in the analyzed table."
             }
           }
         }
@@ -24126,14 +24126,14 @@
           },
           "referenced_table" : {
             "type" : "string",
-            "description" : "This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.",
+            "description" : "The name of the reference table. DQOps accepts the name in two forms: a fully qualified name including the schema name, for example landing_zone.customer_raw, or only a table name. When only a table name is used, DQOps assumes that the table is in the same schema as the analyzed table, and prefixes the name with the schema and optionally database name.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "referenced_column" : {
             "type" : "string",
-            "description" : "This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.",
+            "description" : "The name of a column in the reference table. DQOps calculates an aggregate value on that column and compares it with the value in the analyzed table.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
@@ -24150,11 +24150,11 @@
             },
             "referenced_table" : {
               "type" : "string",
-              "description" : "This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String."
+              "description" : "The name of the reference table. DQOps accepts the name in two forms: a fully qualified name including the schema name, for example landing_zone.customer_raw, or only a table name. When only a table name is used, DQOps assumes that the table is in the same schema as the analyzed table, and prefixes the name with the schema and optionally database name."
             },
             "referenced_column" : {
               "type" : "string",
-              "description" : "This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String."
+              "description" : "The name of a column in the reference table. DQOps calculates an aggregate value on that column and compares it with the value in the analyzed table."
             }
           }
         }
@@ -63075,7 +63075,7 @@
           }
         }
       },
-      "MaxFailuresRule10ParametersSpec" : {
+      "MaxFailuresRule1ParametersSpec" : {
         "type" : "object",
         "properties" : {
           "max_failures" : {
@@ -67920,7 +67920,7 @@
           },
           "referenced_table" : {
             "type" : "string",
-            "description" : "This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.",
+            "description" : "The name of the reference table. DQOps accepts the name in two forms: a fully qualified name including the schema name, for example landing_zone.customer_raw, or only a table name. When only a table name is used, DQOps assumes that the table is in the same schema as the analyzed table, and prefixes the name with the schema and optionally database name.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
@@ -67937,7 +67937,7 @@
             },
             "referenced_table" : {
               "type" : "string",
-              "description" : "This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String."
+              "description" : "The name of the reference table. DQOps accepts the name in two forms: a fully qualified name including the schema name, for example landing_zone.customer_raw, or only a table name. When only a table name is used, DQOps assumes that the table is in the same schema as the analyzed table, and prefixes the name with the schema and optionally database name."
             }
           }
         }
@@ -68015,12 +68015,12 @@
             "exampleSetFlag" : false
           },
           "error" : {
-            "$ref" : "#/components/schemas/MaxFailuresRule5ParametersSpec",
+            "$ref" : "#/components/schemas/MaxFailuresRule1ParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
           "fatal" : {
-            "$ref" : "#/components/schemas/MaxFailuresRule10ParametersSpec",
+            "$ref" : "#/components/schemas/MaxFailuresRule5ParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           }
@@ -68079,13 +68079,13 @@
             },
             "error" : {
               "description" : "Default alerting threshold with the maximum number of consecutive table availability issues that raises a data quality error (alert)",
-              "$ref" : "#/components/schemas/MaxFailuresRule5ParametersSpec",
-              "originalRef" : "#/components/schemas/MaxFailuresRule5ParametersSpec"
+              "$ref" : "#/components/schemas/MaxFailuresRule1ParametersSpec",
+              "originalRef" : "#/components/schemas/MaxFailuresRule1ParametersSpec"
             },
             "fatal" : {
               "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-              "$ref" : "#/components/schemas/MaxFailuresRule10ParametersSpec",
-              "originalRef" : "#/components/schemas/MaxFailuresRule10ParametersSpec"
+              "$ref" : "#/components/schemas/MaxFailuresRule5ParametersSpec",
+              "originalRef" : "#/components/schemas/MaxFailuresRule5ParametersSpec"
             }
           }
         }

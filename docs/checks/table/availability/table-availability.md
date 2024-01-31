@@ -112,9 +112,9 @@ spec:
         warning:
           max_failures: 0
         error:
-          max_failures: 5
+          max_failures: 1
         fatal:
-          max_failures: 10
+          max_failures: 5
   columns: {}
 
 ```
@@ -323,7 +323,7 @@ spec:
                         *,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+                    FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
@@ -516,7 +516,7 @@ spec:
                         *,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+                    FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
@@ -630,9 +630,9 @@ spec:
           warning:
             max_failures: 0
           error:
-            max_failures: 5
+            max_failures: 1
           fatal:
-            max_failures: 10
+            max_failures: 5
   columns: {}
 
 ```
@@ -841,7 +841,7 @@ spec:
                         *,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+                    FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
@@ -1034,7 +1034,7 @@ spec:
                         *,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+                    FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
@@ -1148,9 +1148,9 @@ spec:
           warning:
             max_failures: 0
           error:
-            max_failures: 5
+            max_failures: 1
           fatal:
-            max_failures: 10
+            max_failures: 5
   columns: {}
 
 ```
@@ -1359,7 +1359,7 @@ spec:
                         *,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+                    FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
@@ -1552,7 +1552,7 @@ spec:
                         *,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+                    FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
