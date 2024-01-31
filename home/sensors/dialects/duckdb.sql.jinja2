@@ -22,7 +22,7 @@
 
 {%- macro render_target_table() -%}
 {%- if table.file_format.file_path_list | length > 0 -%}
-   '{{ table.file_format.file_path_list[0] }}' {# todo: build a multiple filepaths string instead of the first filepath #}
+   {{ table_from_files }}
 {%- else -%}
    {{ quote_identifier(macro_schema_name) }}.{{ quote_identifier(macro_table_name) }}
 {%- endif -%}
@@ -30,7 +30,7 @@
 
 {%- macro render_referenced_table(referenced_table) -%}
 {%- if referenced_table.find(".") < 0 -%}
-   {{ quote_identifier(macro_schema_name) }}.{{- quote_identifier(referenced_table) -}}
+   {{ quote_identifier(macro_schema_name) }}.{{- quote_identifier(referenced_table) -}} {# todo: table_from_files for referenced table #}
 {%- else -%}
    {{ referenced_table }}
 {%- endif -%}

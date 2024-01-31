@@ -36,7 +36,6 @@ import com.dqops.core.secrets.SecretValueProviderObjectMother;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
 import com.dqops.metadata.sources.*;
-import com.dqops.metadata.sources.fileformat.CsvFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.FileFormatSpec;
 import com.dqops.sampledata.files.CsvSampleFilesObjectMother;
 import com.dqops.sampledata.files.SampleTableFromCsv;
@@ -241,15 +240,14 @@ public class SampleTableMetadataObjectMother {
      * @return Sample table metadata.
      */
     public static SampleTableMetadata createSampleTableMetadataForLocalCsvFile(String csvFileName,
-                                                                               ConnectionSpec connectionSpecRaw) {
+                                                                               ConnectionSpec connectionSpecRaw,
+                                                                               FileFormatSpec fileFormatSpec) {
         ProviderType providerType = connectionSpecRaw.getProviderType();
         String connectionName = getConnectionNameForProvider(providerType);
         SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(null);
         ConnectionSpec connectionSpec = connectionSpecRaw.expandAndTrim(SecretValueProviderObjectMother.getInstance(), secretValueLookupContext);
         SampleTableFromCsv sampleTable = CsvSampleFilesObjectMother.getSampleTable(csvFileName);
 
-        FileFormatSpec fileFormatSpec = new FileFormatSpec(CsvSampleFilesObjectMother.getFile(csvFileName).toString());
-        fileFormatSpec.setCsvFileFormat(new CsvFileFormatSpec());
         TableSpec tableSpec = new TableSpec();
         tableSpec.setFileFormat(fileFormatSpec);
         tableSpec.setPhysicalTableName(new PhysicalTableName("a_random_schema_name", "a_random_table_name"));

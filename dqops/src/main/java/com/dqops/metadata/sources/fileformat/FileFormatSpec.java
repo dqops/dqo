@@ -102,6 +102,23 @@ public class FileFormatSpec extends AbstractSpec {
         this.filePathList = filePathList;
     }
 
+    public String getTablePropertiesString(){
+        if(csvFileFormat != null){
+            return csvFileFormat.buildSourceTablePropertiesString(filePathList);
+        }
+
+        // todo
+//        if(jsonFileFormat != null){
+//
+//        }
+//
+//        if(parquetFileFormat != null){
+//
+//        }
+
+        throw new RuntimeException("Cant create table string.");
+    }
+
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;

@@ -33,6 +33,10 @@ public class DuckdbReadCsvIntegrationTest extends BaseDuckdbIntegrationTest {
 
     @BeforeEach
     void setUp() {
+        ConnectionSpec connectionSpec = new ConnectionSpec(){{
+            setProviderType(ProviderType.duckdb);
+            setDuckdb(new DuckdbParametersSpec());
+        }};
 
         ConnectionSpec connectionSpec = new ConnectionSpec();
         connectionSpec.setProviderType(ProviderType.duckdb);
