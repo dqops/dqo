@@ -102,9 +102,9 @@ public class FileFormatSpec extends AbstractSpec {
         this.filePathList = filePathList;
     }
 
-    public String getTablePropertiesString(){
+    public String getTableOptionsString(){
         if(csvFileFormat != null){
-            return csvFileFormat.buildSourceTablePropertiesString(filePathList);
+            return csvFileFormat.buildSourceTableOptionsString(filePathList);
         }
 
         // todo

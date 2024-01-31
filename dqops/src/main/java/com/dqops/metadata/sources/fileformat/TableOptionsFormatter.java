@@ -5,11 +5,11 @@ import com.google.common.base.CaseFormat;
 import java.util.List;
 import java.util.Map;
 
-public class TablePropertiesFormatter {
+public class TableOptionsFormatter {
 
     StringBuilder sourceTable;
 
-    public TablePropertiesFormatter(String methodName, List<String> filePathList) {
+    public TableOptionsFormatter(String methodName, List<String> filePathList) {
         this.sourceTable = new StringBuilder();
         sourceTable.append(methodName);
         sourceTable.append("(");
