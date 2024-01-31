@@ -30321,7 +30321,7 @@ definitions:
         description: "Maximum number of consecutive days with check failures. A check\
           \ is failed when a sensor query fails due to a connection error, missing\
           \ or corrupted table."
-  MaxFailuresRule10ParametersSpec:
+  MaxFailuresRule1ParametersSpec:
     type: "object"
     properties:
       max_failures:
@@ -32219,11 +32219,11 @@ definitions:
       error:
         description: "Default alerting threshold with the maximum number of consecutive\
           \ table availability issues that raises a data quality error (alert)"
-        $ref: "#/definitions/MaxFailuresRule5ParametersSpec"
+        $ref: "#/definitions/MaxFailuresRule1ParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxFailuresRule10ParametersSpec"
+        $ref: "#/definitions/MaxFailuresRule5ParametersSpec"
   TableAvailabilityDailyMonitoringChecksSpec:
     type: "object"
     properties:
