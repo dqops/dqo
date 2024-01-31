@@ -3,6 +3,7 @@ package com.dqops.metadata.sources.fileformat;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 class TableOptionsFormatterTest {
@@ -95,6 +96,31 @@ class TableOptionsFormatterTest {
                 csv_file(
                   'file_one.csv',
                   string_field = 'text value'
+                )""",
+                output);
+    }
+
+    @Test
+    void formatMapWhenSet_mapIsGiven_formatsIt() {
+        TableOptionsFormatter tableOptionsFormatter = new TableOptionsFormatter("csv_file",
+                List.of("file_one.csv"));
+
+        LinkedHashMap<String, String> linkedHashMap = new LinkedHashMap<>();
+
+        linkedHashMap.put("NAME", "VARCHAR");
+        linkedHashMap.put("VALUE", "INTEGER");
+
+        tableOptionsFormatter.formatMapWhenSet("columns", linkedHashMap);
+
+        String output = tableOptionsFormatter.toString();
+
+        Assertions.assertEquals("""
+                csv_file(
+                  'file_one.csv',
+                  columns = {
+                    'NAME': 'VARCHAR',
+                    'VALUE': 'INTEGER'
+                  }
                 )""",
                 output);
     }

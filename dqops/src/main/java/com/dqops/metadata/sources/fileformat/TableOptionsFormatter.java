@@ -8,7 +8,7 @@ import java.util.Map;
 public class TableOptionsFormatter {
 
     private final StringBuilder sourceTable;
-    private final String commaNewLine = ",\n  ";
+    private final String commaNewLineIdentTwo  = ",\n  ";
 
     public TableOptionsFormatter(String methodName, List<String> filePathList) {
         this.sourceTable = new StringBuilder();
@@ -34,26 +34,29 @@ public class TableOptionsFormatter {
 
     public <T> void formatValueWhenSet(String fieldName, T value){
         if(value != null){
-            sourceTable.append(commaNewLine)
+            sourceTable.append(commaNewLineIdentTwo)
                     .append(makeSnakeCase(fieldName)).append(" = ").append(value);
         }
     }
 
     public void formatStringWhenSet(String fieldName, String value){
         if(value != null){
-            sourceTable.append(commaNewLine)
+            sourceTable.append(commaNewLineIdentTwo)
                     .append(makeSnakeCase(fieldName)).append(" = '").append(value).append("'");
         }
     }
 
     public void formatMapWhenSet(String fieldName, Map<String, String> value){
         if(value != null && !value.isEmpty()){
-            sourceTable.append(",");
+            sourceTable.append(commaNewLineIdentTwo);
             sourceTable.append(makeSnakeCase(fieldName)).append(" = {");
-            value.forEach((k, v) -> {
-                sourceTable.append("'").append(k).append("': '").append(v).append("',");
+
+            Map.Entry<String, String> firstEntry = value.entrySet().stream().findFirst().get();
+            sourceTable.append("\n    '").append(firstEntry.getKey()).append("': '").append(firstEntry.getValue()).append("'");
+            value.entrySet().stream().skip(1).forEach(stringStringEntry -> {
+                sourceTable.append(",\n    '").append(stringStringEntry.getKey()).append("': '").append(stringStringEntry.getValue()).append("'");
             });
-            sourceTable.append("}");
+            sourceTable.append("\n  }");
         }
     }
 
