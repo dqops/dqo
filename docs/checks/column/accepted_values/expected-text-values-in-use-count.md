@@ -101,7 +101,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="7-18"
+```yaml hl_lines="7-20"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -116,8 +116,10 @@ spec:
               - USD
               - GBP
               - EUR
-            error:
+            warning:
               max_missing: 0
+            error:
+              max_missing: 1
             fatal:
               max_missing: 2
       labels:
@@ -870,7 +872,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 30-35"
+    ```yaml hl_lines="5-15 32-37"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -894,8 +896,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                   - USD
                   - GBP
                   - EUR
-                error:
+                warning:
                   max_missing: 0
+                error:
+                  max_missing: 1
                 fatal:
                   max_missing: 2
           labels:
@@ -1758,7 +1762,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="7-19"
+```yaml hl_lines="7-21"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -1774,8 +1778,10 @@ spec:
                 - USD
                 - GBP
                 - EUR
-              error:
+              warning:
                 max_missing: 0
+              error:
+                max_missing: 1
               fatal:
                 max_missing: 2
       labels:
@@ -2528,7 +2534,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 31-36"
+    ```yaml hl_lines="5-15 33-38"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -2553,8 +2559,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     - USD
                     - GBP
                     - EUR
-                  error:
+                  warning:
                     max_missing: 0
+                  error:
+                    max_missing: 1
                   fatal:
                     max_missing: 2
           labels:
@@ -3417,7 +3425,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="7-19"
+```yaml hl_lines="7-21"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -3433,8 +3441,10 @@ spec:
                 - USD
                 - GBP
                 - EUR
-              error:
+              warning:
                 max_missing: 0
+              error:
+                max_missing: 1
               fatal:
                 max_missing: 2
       labels:
@@ -4187,7 +4197,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 31-36"
+    ```yaml hl_lines="5-15 33-38"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -4212,8 +4222,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     - USD
                     - GBP
                     - EUR
-                  error:
+                  warning:
                     max_missing: 0
+                  error:
+                    max_missing: 1
                   fatal:
                     max_missing: 2
           labels:
@@ -5076,7 +5088,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="12-24"
+```yaml hl_lines="12-26"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -5097,8 +5109,10 @@ spec:
                 - USD
                 - GBP
                 - EUR
-              error:
+              warning:
                 max_missing: 0
+              error:
+                max_missing: 1
               fatal:
                 max_missing: 2
       labels:
@@ -5860,7 +5874,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-20 41-46"
+    ```yaml hl_lines="10-20 43-48"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -5890,8 +5904,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     - USD
                     - GBP
                     - EUR
-                  error:
+                  warning:
                     max_missing: 0
+                  error:
+                    max_missing: 1
                   fatal:
                     max_missing: 2
           labels:
@@ -6757,7 +6773,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="12-24"
+```yaml hl_lines="12-26"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -6778,8 +6794,10 @@ spec:
                 - USD
                 - GBP
                 - EUR
-              error:
+              warning:
                 max_missing: 0
+              error:
+                max_missing: 1
               fatal:
                 max_missing: 2
       labels:
@@ -7541,7 +7559,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-20 41-46"
+    ```yaml hl_lines="10-20 43-48"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -7571,8 +7589,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     - USD
                     - GBP
                     - EUR
-                  error:
+                  warning:
                     max_missing: 0
+                  error:
+                    max_missing: 1
                   fatal:
                     max_missing: 2
           labels:
